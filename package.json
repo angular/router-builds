@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "2.0.0-ea628e3",
+  "version": "2.0.0-dd50124",
   "description": "",
   "main": "index.js",
   "jsnext:main": "esm/index.js",
@@ -8,8 +8,8 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "2.0.0-ea628e3",
-    "@angular/common": "2.0.0-ea628e3",
-    "@angular/platform-browser": "2.0.0-ea628e3"
+    "@angular/core": "2.0.0-dd50124",
+    "@angular/common": "2.0.0-dd50124",
+    "@angular/platform-browser": "2.0.0-dd50124"
   }
 }
