@@ -340,6 +340,7 @@ var FunctionWrapper = (function () {
     function FunctionWrapper() {
     }
     FunctionWrapper.apply = function (fn, posArgs) { return fn.apply(null, posArgs); };
+    FunctionWrapper.bind = function (fn, scope) { return fn.bind(scope); };
     return FunctionWrapper;
 }());
 exports.FunctionWrapper = FunctionWrapper;

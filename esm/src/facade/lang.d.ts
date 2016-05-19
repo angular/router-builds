@@ -124,6 +124,7 @@ export declare class RegExpMatcherWrapper {
 }
 export declare class FunctionWrapper {
     static apply(fn: Function, posArgs: any): any;
+    static bind(fn: Function, scope: any): Function;
 }
 export declare function looseIdentical(a: any, b: any): boolean;
 export declare function getMapKey<T>(value: T): T;

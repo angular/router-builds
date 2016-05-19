@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-a01a54c
+ * @license AngularJS v2.0.0-6e62217
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/PromiseObservable'), require('rxjs/operator/toPromise'), require('rxjs/Observable'), require('@angular/common'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/observable/PromiseObservable', 'rxjs/operator/toPromise', 'rxjs/Observable', '@angular/common', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.core, global.Rx, global.Rx, global.Rx.Observable.prototype, global.Rx, global.ng.common, global.ng.platformBrowser));
-}(this, function (exports, _angular_core, rxjs_Subject, rxjs_observable_PromiseObservable, rxjs_operator_toPromise, rxjs_Observable, _angular_common, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/PromiseObservable'), require('rxjs/operator/toPromise'), require('rxjs/Observable'), require('@angular/common')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/observable/PromiseObservable', 'rxjs/operator/toPromise', 'rxjs/Observable', '@angular/common'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.core, global.Rx, global.Rx, global.Rx.Observable.prototype, global.Rx, global.ng.common));
+}(this, function (exports, _angular_core, rxjs_Subject, rxjs_observable_PromiseObservable, rxjs_operator_toPromise, rxjs_Observable, _angular_common) {
     'use strict';
     var globalScope;
     if (typeof window === 'undefined') {
@@ -1643,10 +1643,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
      * ```
      */
-    var ROUTER_PROVIDERS = [
-        ROUTER_PROVIDERS_COMMON,
-        /*@ts2dart_Provider*/ { provide: _angular_common.PlatformLocation, useClass: _angular_platformBrowser.BrowserPlatformLocation },
-    ];
+    // TODO: merge with router_providers_common.ts
+    var ROUTER_PROVIDERS = [ROUTER_PROVIDERS_COMMON];
     var RouterOutlet = (function () {
         function RouterOutlet(parentOutletMap, _location, name) {
             this._location = _location;

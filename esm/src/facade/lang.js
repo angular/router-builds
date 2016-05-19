@@ -277,6 +277,7 @@ export class RegExpMatcherWrapper {
 }
 export class FunctionWrapper {
     static apply(fn, posArgs) { return fn.apply(null, posArgs); }
+    static bind(fn, scope) { return fn.bind(scope); }
 }
 // JS has NaN !== NaN
 export function looseIdentical(a, b) {
