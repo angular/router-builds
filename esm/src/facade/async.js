@@ -86,7 +86,7 @@ export class EventEmitter extends Subject {
      */
     constructor(isAsync = true) {
         super();
-        this._isAsync = isAsync;
+        this.__isAsync = isAsync;
     }
     emit(value) { super.next(value); }
     /**
@@ -98,27 +98,27 @@ export class EventEmitter extends Subject {
         let errorFn = (err) => null;
         let completeFn = () => null;
         if (generatorOrNext && typeof generatorOrNext === 'object') {
-            schedulerFn = this._isAsync ? (value) => { setTimeout(() => generatorOrNext.next(value)); } :
+            schedulerFn = this.__isAsync ? (value) => { setTimeout(() => generatorOrNext.next(value)); } :
                     (value) => { generatorOrNext.next(value); };
             if (generatorOrNext.error) {
-                errorFn = this._isAsync ? (err) => { setTimeout(() => generatorOrNext.error(err)); } :
+                errorFn = this.__isAsync ? (err) => { setTimeout(() => generatorOrNext.error(err)); } :
                         (err) => { generatorOrNext.error(err); };
             }
             if (generatorOrNext.complete) {
-                completeFn = this._isAsync ? () => { setTimeout(() => generatorOrNext.complete()); } :
+                completeFn = this.__isAsync ? () => { setTimeout(() => generatorOrNext.complete()); } :
                         () => { generatorOrNext.complete(); };
             }
         }
         else {
-            schedulerFn = this._isAsync ? (value) => { setTimeout(() => generatorOrNext(value)); } :
+            schedulerFn = this.__isAsync ? (value) => { setTimeout(() => generatorOrNext(value)); } :
                     (value) => { generatorOrNext(value); };
             if (error) {
                 errorFn =
-                    this._isAsync ? (err) => { setTimeout(() => error(err)); } : (err) => { error(err); };
+                    this.__isAsync ? (err) => { setTimeout(() => error(err)); } : (err) => { error(err); };
             }
             if (complete) {
                 completeFn =
-                    this._isAsync ? () => { setTimeout(() => complete()); } : () => { complete(); };
+                    this.__isAsync ? () => { setTimeout(() => complete()); } : () => { complete(); };
             }
         }
         return super.subscribe(schedulerFn, errorFn, completeFn);

@@ -25,14 +25,4 @@ export declare class ExceptionHandler {
     constructor(_logger: any, _rethrowException?: boolean);
     static exceptionToString(exception: any, stackTrace?: any, reason?: string): string;
     call(exception: any, stackTrace?: any, reason?: string): void;
-    /** @internal */
-    _extractMessage(exception: any): string;
-    /** @internal */
-    _longStackTrace(stackTrace: any): any;
-    /** @internal */
-    _findContext(exception: any): any;
-    /** @internal */
-    _findOriginalException(exception: any): any;
-    /** @internal */
-    _findOriginalStack(exception: any): any;
 }

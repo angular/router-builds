@@ -1,20 +1,5 @@
-import { ComponentResolver } from '@angular/core';
-import { RouterOutlet } from './directives/router_outlet';
-import { Type } from './facade/lang';
 import { Observable } from './facade/async';
-import { RouterUrlSerializer } from './router_url_serializer';
-import { Location } from '@angular/common';
 import { RouteSegment, UrlTree, RouteTree } from './segments';
-/**
- * @internal
- */
-export declare class RouterOutletMap {
-    /** @internal */
-    _outlets: {
-        [name: string]: RouterOutlet;
-    };
-    registerOutlet(name: string, outlet: RouterOutlet): void;
-}
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
@@ -32,10 +17,6 @@ export declare class Router {
     private _urlTree;
     private _locationSubscription;
     private _changes;
-    /**
-     * @internal
-     */
-    constructor(_rootComponent: Object, _rootComponentType: Type, _componentResolver: ComponentResolver, _urlSerializer: RouterUrlSerializer, _routerOutletMap: RouterOutletMap, _location: Location);
     /**
      * Returns the current url tree.
      */
@@ -69,10 +50,6 @@ export declare class Router {
      * ```
      */
     navigate(commands: any[], segment?: RouteSegment): Promise<void>;
-    /**
-     * @internal
-     */
-    dispose(): void;
     /**
      * Applies an array of commands to the current url tree and creates
      * a new url tree.

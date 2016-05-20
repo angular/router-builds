@@ -107,7 +107,7 @@ var EventEmitter = (function (_super) {
     function EventEmitter(isAsync) {
         if (isAsync === void 0) { isAsync = true; }
         _super.call(this);
-        this._isAsync = isAsync;
+        this.__isAsync = isAsync;
     }
     EventEmitter.prototype.emit = function (value) { _super.prototype.next.call(this, value); };
     /**
@@ -119,27 +119,27 @@ var EventEmitter = (function (_super) {
         var errorFn = function (err) { return null; };
         var completeFn = function () { return null; };
         if (generatorOrNext && typeof generatorOrNext === 'object') {
-            schedulerFn = this._isAsync ? function (value) { setTimeout(function () { return generatorOrNext.next(value); }); } :
+            schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext.next(value); }); } :
                 function (value) { generatorOrNext.next(value); };
             if (generatorOrNext.error) {
-                errorFn = this._isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
+                errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
                     function (err) { generatorOrNext.error(err); };
             }
             if (generatorOrNext.complete) {
-                completeFn = this._isAsync ? function () { setTimeout(function () { return generatorOrNext.complete(); }); } :
+                completeFn = this.__isAsync ? function () { setTimeout(function () { return generatorOrNext.complete(); }); } :
                     function () { generatorOrNext.complete(); };
             }
         }
         else {
-            schedulerFn = this._isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
+            schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
                 function (value) { generatorOrNext(value); };
             if (error) {
                 errorFn =
-                    this._isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
+                    this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
             }
             if (complete) {
                 completeFn =
-                    this._isAsync ? function () { setTimeout(function () { return complete(); }); } : function () { complete(); };
+                    this.__isAsync ? function () { setTimeout(function () { return complete(); }); } : function () { complete(); };
             }
         }
         return _super.prototype.subscribe.call(this, schedulerFn, errorFn, completeFn);

@@ -1,7 +1,5 @@
 import { ComponentFactory, Type } from '@angular/core';
 export declare class Tree<T> {
-    /** @internal */
-    _root: TreeNode<T>;
     constructor(root: TreeNode<T>);
     root: T;
     parent(t: T): T;
@@ -39,10 +37,6 @@ export declare class RouteSegment {
         [key: string]: string;
     };
     outlet: string;
-    /** @internal */
-    _type: Type;
-    /** @internal */
-    _componentFactory: ComponentFactory<any>;
     constructor(urlSegments: UrlSegment[], parameters: {
         [key: string]: string;
     }, outlet: string, type: Type, componentFactory: ComponentFactory<any>);

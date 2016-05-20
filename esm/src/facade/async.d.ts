@@ -67,8 +67,7 @@ export declare class ObservableWrapper {
  * Once a reference implementation of the spec is available, switch to it.
  */
 export declare class EventEmitter<T> extends Subject<T> {
-    /** @internal */
-    _isAsync: boolean;
+    __isAsync: boolean;
     /**
      * Creates an instance of [EventEmitter], which depending on [isAsync],
      * delivers events synchronously or asynchronously.
