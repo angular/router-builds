@@ -122,9 +122,9 @@ export class Router {
      */
     serializeUrl(url) { return this._urlSerializer.serialize(url); }
     _setUpLocationChangeListener() {
-        this._locationSubscription = this._location.subscribe((change) => { this._navigate(this._urlSerializer.parse(change['url'])); });
+        this._locationSubscription = this._location.subscribe((change) => { this._navigate(this._urlSerializer.parse(change['url']), change['pop']); });
     }
-    _navigate(url) {
+    _navigate(url, pop) {
         this._urlTree = url;
         return recognize(this._componentResolver, this._rootComponentType, url, this._routeTree)
             .then(currTree => {
@@ -133,7 +133,9 @@ export class Router {
                 .then(updated => {
                 if (updated) {
                     this._routeTree = currTree;
-                    this._location.go(this._urlSerializer.serialize(this._urlTree));
+                    if (isBlank(pop) || !pop) {
+                        this._location.go(this._urlSerializer.serialize(this._urlTree));
+                    }
                     this._changes.emit(null);
                 }
             });

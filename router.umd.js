@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-ebe1472
+ * @license AngularJS v2.0.0-595bcdd
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1289,9 +1289,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         Router.prototype.serializeUrl = function (url) { return this._urlSerializer.serialize(url); };
         Router.prototype._setUpLocationChangeListener = function () {
             var _this = this;
-            this._locationSubscription = this._location.subscribe(function (change) { _this._navigate(_this._urlSerializer.parse(change['url'])); });
+            this._locationSubscription = this._location.subscribe(function (change) { _this._navigate(_this._urlSerializer.parse(change['url']), change['pop']); });
         };
-        Router.prototype._navigate = function (url) {
+        Router.prototype._navigate = function (url, pop) {
             var _this = this;
             this._urlTree = url;
             return recognize(this._componentResolver, this._rootComponentType, url, this._routeTree)
@@ -1301,7 +1301,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                     .then(function (updated) {
                     if (updated) {
                         _this._routeTree = currTree;
-                        _this._location.go(_this._urlSerializer.serialize(_this._urlTree));
+                        if (isBlank(pop) || !pop) {
+                            _this._location.go(_this._urlSerializer.serialize(_this._urlTree));
+                        }
                         _this._changes.emit(null);
                     }
                 });
