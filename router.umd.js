@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-55921be
+ * @license AngularJS v2.0.0-5a9eda7
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1758,10 +1758,10 @@ var __extends = (this && this.__extends) || function (d, b) {
      *
      * ```
      * import {Component} from '@angular/core';
-     * import {ROUTER_DIRECTIVES, Routes} from '@angular/router-deprecated';
+     * import {ROUTER_DIRECTIVES, Routes} from '@angular/router';
      *
      * @Component({directives: [ROUTER_DIRECTIVES]})
-     * @RouteConfig([
+     * @Routes([
      *  {...},
      * ])
      * class AppCmp {

@@ -17,10 +17,10 @@ export { ROUTER_PROVIDERS } from './src/router_providers';
  *
  * ```
  * import {Component} from '@angular/core';
- * import {ROUTER_DIRECTIVES, Routes} from '@angular/router-deprecated';
+ * import {ROUTER_DIRECTIVES, Routes} from '@angular/router';
  *
  * @Component({directives: [ROUTER_DIRECTIVES]})
- * @RouteConfig([
+ * @Routes([
  *  {...},
  * ])
  * class AppCmp {
