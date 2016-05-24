@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-c43636f
+ * @license AngularJS v2.0.0-0f0a8ad
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -563,7 +563,13 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      * ```
      *
-     * Use Rx.Observable but provides an adapter to make it work as specified here:
+     * The events payload can be accessed by the parameter `$event` on the components output event handler:
+     *
+     * ```
+     * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>
+     * ```
+     *
+     * Uses Rx.Observable but provides an adapter to make it work as specified here:
      * https://github.com/jhusain/observable-spec
      *
      * Once a reference implementation of the spec is available, switch to it.
