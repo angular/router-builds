@@ -8,6 +8,9 @@ var base_wrapped_exception_1 = require('./base_wrapped_exception');
 var exception_handler_1 = require('./exception_handler');
 var exception_handler_2 = require('./exception_handler');
 exports.ExceptionHandler = exception_handler_2.ExceptionHandler;
+/**
+ * @stable
+ */
 var BaseException = (function (_super) {
     __extends(BaseException, _super);
     function BaseException(message) {
@@ -22,6 +25,7 @@ var BaseException = (function (_super) {
 exports.BaseException = BaseException;
 /**
  * Wraps an exception and provides additional context or information.
+ * @stable
  */
 var WrappedException = (function (_super) {
     __extends(WrappedException, _super);

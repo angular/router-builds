@@ -5,7 +5,7 @@ import { ListWrapper, StringMapWrapper } from './facade/collection';
 import { PromiseWrapper } from './facade/promise';
 import { BaseException } from '@angular/core';
 import { DEFAULT_OUTLET_NAME } from './constants';
-import { reflector } from '@angular/core';
+import { reflector } from './core_private';
 export function recognize(componentResolver, rootComponent, url, existingTree) {
     let matched = new _MatchResult(rootComponent, [url.root], {}, rootNode(url).children, []);
     return _constructSegment(componentResolver, matched, rootNode(existingTree))

@@ -103,6 +103,7 @@ exports.ObservableWrapper = ObservableWrapper;
  * https://github.com/jhusain/observable-spec
  *
  * Once a reference implementation of the spec is available, switch to it.
+ * @stable
  */
 var EventEmitter = (function (_super) {
     __extends(EventEmitter, _super);

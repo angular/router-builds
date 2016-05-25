@@ -84,6 +84,7 @@ export class ObservableWrapper {
  * https://github.com/jhusain/observable-spec
  *
  * Once a reference implementation of the spec is available, switch to it.
+ * @stable
  */
 export class EventEmitter extends Subject {
     /**

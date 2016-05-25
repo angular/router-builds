@@ -33,6 +33,7 @@ var _ArrayLogger = (function () {
  * bootstrap(MyApp, [provide(ExceptionHandler, {useClass: MyExceptionHandler})])
  *
  * ```
+ * @stable
  */
 var ExceptionHandler = (function () {
     function ExceptionHandler(_logger, _rethrowException) {

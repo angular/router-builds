@@ -6,7 +6,7 @@ var collection_1 = require('./facade/collection');
 var promise_1 = require('./facade/promise');
 var core_1 = require('@angular/core');
 var constants_1 = require('./constants');
-var core_2 = require('@angular/core');
+var core_private_1 = require('./core_private');
 function recognize(componentResolver, rootComponent, url, existingTree) {
     var matched = new _MatchResult(rootComponent, [url.root], {}, segments_1.rootNode(url).children, []);
     return _constructSegment(componentResolver, matched, segments_1.rootNode(existingTree))
@@ -169,7 +169,7 @@ var _MatchResult = (function () {
     return _MatchResult;
 }());
 function _readMetadata(componentType) {
-    var metadata = core_2.reflector.annotations(componentType).filter(function (f) { return f instanceof metadata_1.RoutesMetadata; });
+    var metadata = core_private_1.reflector.annotations(componentType).filter(function (f) { return f instanceof metadata_1.RoutesMetadata; });
     return collection_1.ListWrapper.first(metadata);
 }
 //# sourceMappingURL=recognize.js.map

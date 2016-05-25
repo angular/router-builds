@@ -49,6 +49,7 @@ export declare function lockMode(): void;
  * One important assertion this disables verifies that a change detection pass
  * does not result in additional changes to any bindings (also known as
  * unidirectional data flow).
+ * @stable
  */
 export declare function enableProdMode(): void;
 export declare function assertionsEnabled(): boolean;

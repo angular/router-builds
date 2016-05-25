@@ -18,6 +18,7 @@
  * bootstrap(MyApp, [provide(ExceptionHandler, {useClass: MyExceptionHandler})])
  *
  * ```
+ * @stable
  */
 export declare class ExceptionHandler {
     private _logger;
