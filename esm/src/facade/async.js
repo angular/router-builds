@@ -91,7 +91,7 @@ export class EventEmitter extends Subject {
      * Creates an instance of [EventEmitter], which depending on [isAsync],
      * delivers events synchronously or asynchronously.
      */
-    constructor(isAsync = true) {
+    constructor(isAsync = false) {
         super();
         this.__isAsync = isAsync;
     }
