@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "2.0.0-a206395",
+  "version": "2.0.0-6da7967",
   "description": "",
   "main": "index.js",
   "jsnext:main": "esm/index.js",
@@ -8,9 +8,9 @@
   "author": "angular",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": "2.0.0-a206395",
-    "@angular/common": "2.0.0-a206395",
-    "@angular/platform-browser": "2.0.0-a206395"
+    "@angular/core": "2.0.0-6da7967",
+    "@angular/common": "2.0.0-6da7967",
+    "@angular/platform-browser": "2.0.0-6da7967"
   },
   "repository": {
     "type": "git",
