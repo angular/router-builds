@@ -112,7 +112,7 @@ var EventEmitter = (function (_super) {
      * delivers events synchronously or asynchronously.
      */
     function EventEmitter(isAsync) {
-        if (isAsync === void 0) { isAsync = false; }
+        if (isAsync === void 0) { isAsync = true; }
         _super.call(this);
         this.__isAsync = isAsync;
     }
