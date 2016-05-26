@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-172a566
+ * @license AngularJS v2.0.0-3a62023
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1703,10 +1703,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
     ];
     var RouterLink = (function () {
-        function RouterLink(_routeSegment, _router) {
+        function RouterLink(_routeSegment, _router, _locationStrategy) {
             var _this = this;
             this._routeSegment = _routeSegment;
             this._router = _router;
+            this._locationStrategy = _locationStrategy;
             this._commands = [];
             this.isActive = false;
             // because auxiliary links take existing primary and auxiliary routes into account,
@@ -1728,18 +1729,20 @@ var __extends = (this && this.__extends) || function (d, b) {
             enumerable: true,
             configurable: true
         });
-        RouterLink.prototype.onClick = function () {
-            // If no target, or if target is _self, prevent default browser behavior
-            if (!isString(this.target) || this.target == '_self') {
-                this._router.navigate(this._commands, this._routeSegment);
-                return false;
+        RouterLink.prototype.onClick = function (button, ctrlKey, metaKey) {
+            if (button != 0 || ctrlKey || metaKey) {
+                return true;
             }
-            return true;
+            if (isString(this.target) && this.target != '_self') {
+                return true;
+            }
+            this._router.navigate(this._commands, this._routeSegment);
+            return false;
         };
         RouterLink.prototype._updateTargetUrlAndHref = function () {
             var tree = this._router.createUrlTree(this._commands, this._routeSegment);
             if (isPresent(tree)) {
-                this.href = this._router.serializeUrl(tree);
+                this.href = this._locationStrategy.prepareExternalUrl(this._router.serializeUrl(tree));
                 this.isActive = this._router.urlTree.contains(tree);
             }
             else {
@@ -1754,13 +1757,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     RouterLink.ctorParameters = [
         { type: RouteSegment, },
         { type: Router, },
+        { type: _angular_common.LocationStrategy, },
     ];
     RouterLink.propDecorators = {
         'target': [{ type: _angular_core.Input },],
         'href': [{ type: _angular_core.HostBinding },],
         'isActive': [{ type: _angular_core.HostBinding, args: ['class.router-link-active',] },],
         'routerLink': [{ type: _angular_core.Input },],
-        'onClick': [{ type: _angular_core.HostListener, args: ["click",] },],
+        'onClick': [{ type: _angular_core.HostListener, args: ["click", ["$event.button", "$event.ctrlKey", "$event.metaKey"],] },],
     };
     /**
      * A list of directives. To use the router directives like {@link RouterOutlet} and

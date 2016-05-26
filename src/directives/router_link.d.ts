@@ -1,6 +1,7 @@
 import { OnDestroy } from '@angular/core';
 import { Router } from '../router';
 import { RouteSegment } from '../segments';
+import { LocationStrategy } from '@angular/common';
 /**
  * The RouterLink directive lets you link to specific parts of your app.
  *
@@ -34,14 +35,15 @@ import { RouteSegment } from '../segments';
 export declare class RouterLink implements OnDestroy {
     private _routeSegment;
     private _router;
+    private _locationStrategy;
     target: string;
     private _commands;
     private _subscription;
     href: string;
     isActive: boolean;
-    constructor(_routeSegment: RouteSegment, _router: Router);
+    constructor(_routeSegment: RouteSegment, _router: Router, _locationStrategy: LocationStrategy);
     ngOnDestroy(): void;
     routerLink: any[] | any;
-    onClick(): boolean;
+    onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
     private _updateTargetUrlAndHref();
 }

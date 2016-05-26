@@ -3,10 +3,12 @@ import { Router } from '../router';
 import { RouteSegment } from '../segments';
 import { isString, isArray, isPresent } from '../facade/lang';
 import { ObservableWrapper } from '../facade/async';
+import { LocationStrategy } from '@angular/common';
 export class RouterLink {
-    constructor(_routeSegment, _router) {
+    constructor(_routeSegment, _router, _locationStrategy) {
         this._routeSegment = _routeSegment;
         this._router = _router;
+        this._locationStrategy = _locationStrategy;
         this._commands = [];
         this.isActive = false;
         // because auxiliary links take existing primary and auxiliary routes into account,
@@ -24,18 +26,20 @@ export class RouterLink {
         }
         this._updateTargetUrlAndHref();
     }
-    onClick() {
-        // If no target, or if target is _self, prevent default browser behavior
-        if (!isString(this.target) || this.target == '_self') {
-            this._router.navigate(this._commands, this._routeSegment);
-            return false;
+    onClick(button, ctrlKey, metaKey) {
+        if (button != 0 || ctrlKey || metaKey) {
+            return true;
         }
-        return true;
+        if (isString(this.target) && this.target != '_self') {
+            return true;
+        }
+        this._router.navigate(this._commands, this._routeSegment);
+        return false;
     }
     _updateTargetUrlAndHref() {
         let tree = this._router.createUrlTree(this._commands, this._routeSegment);
         if (isPresent(tree)) {
-            this.href = this._router.serializeUrl(tree);
+            this.href = this._locationStrategy.prepareExternalUrl(this._router.serializeUrl(tree));
             this.isActive = this._router.urlTree.contains(tree);
         }
         else {
@@ -49,12 +53,13 @@ RouterLink.decorators = [
 RouterLink.ctorParameters = [
     { type: RouteSegment, },
     { type: Router, },
+    { type: LocationStrategy, },
 ];
 RouterLink.propDecorators = {
     'target': [{ type: Input },],
     'href': [{ type: HostBinding },],
     'isActive': [{ type: HostBinding, args: ['class.router-link-active',] },],
     'routerLink': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ["click",] },],
+    'onClick': [{ type: HostListener, args: ["click", ["$event.button", "$event.ctrlKey", "$event.metaKey"],] },],
 };
 //# sourceMappingURL=router_link.js.map
