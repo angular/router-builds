@@ -87,5 +87,5 @@ export declare class Router {
      */
     serializeUrl(url: UrlTree): string;
     private _setUpLocationChangeListener();
-    private _navigate(url, pop?);
+    private _navigate(url, preventPushState?);
 }

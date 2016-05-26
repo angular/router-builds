@@ -140,7 +140,7 @@ var Router = (function () {
         var _this = this;
         this._locationSubscription = this._location.subscribe(function (change) { _this._navigate(_this._urlSerializer.parse(change['url']), change['pop']); });
     };
-    Router.prototype._navigate = function (url, pop) {
+    Router.prototype._navigate = function (url, preventPushState) {
         var _this = this;
         this._urlTree = url;
         return recognize_1.recognize(this._componentResolver, this._rootComponentType, url, this._routeTree)
@@ -150,8 +150,14 @@ var Router = (function () {
                 .then(function (updated) {
                 if (updated) {
                     _this._routeTree = currTree;
-                    if (lang_1.isBlank(pop) || !pop) {
-                        _this._location.go(_this._urlSerializer.serialize(_this._urlTree));
+                    if (lang_1.isBlank(preventPushState) || !preventPushState) {
+                        var path = _this._urlSerializer.serialize(_this._urlTree);
+                        if (_this._location.isCurrentPathEqualTo(path)) {
+                            _this._location.replaceState(path);
+                        }
+                        else {
+                            _this._location.go(path);
+                        }
                     }
                     _this._changes.emit(null);
                 }
