@@ -3,8 +3,6 @@ var core_1 = require('@angular/core');
 var lang_1 = require('./facade/lang');
 var collection_1 = require('./facade/collection');
 var async_1 = require('./facade/async');
-var collection_2 = require('./facade/collection');
-var core_2 = require('@angular/core');
 var recognize_1 = require('./recognize');
 var link_1 = require('./link');
 var segments_1 = require('./segments');
@@ -223,9 +221,9 @@ var _ActivateSegments = (function () {
             {};
         currNode.children.forEach(function (c) {
             _this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
-            collection_2.StringMapWrapper.delete(prevChildren, c.value.outlet);
+            collection_1.StringMapWrapper.delete(prevChildren, c.value.outlet);
         });
-        collection_2.StringMapWrapper.forEach(prevChildren, function (v, k) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
+        collection_1.StringMapWrapper.forEach(prevChildren, function (v, k) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
     };
     _ActivateSegments.prototype.activateSegments = function (currNode, prevNode, parentOutletMap, components) {
         var curr = currNode.value;
@@ -255,10 +253,10 @@ var _ActivateSegments = (function () {
         var outlet = outletMap._outlets[segment.outlet];
         if (lang_1.isBlank(outlet)) {
             if (segment.outlet == constants_1.DEFAULT_OUTLET_NAME) {
-                throw new core_2.BaseException("Cannot find default outlet");
+                throw new core_1.BaseException("Cannot find default outlet");
             }
             else {
-                throw new core_2.BaseException("Cannot find the outlet " + segment.outlet);
+                throw new core_1.BaseException("Cannot find the outlet " + segment.outlet);
             }
         }
         return outlet;
@@ -266,7 +264,7 @@ var _ActivateSegments = (function () {
     _ActivateSegments.prototype.deactivateOutlet = function (outlet, components) {
         var _this = this;
         if (lang_1.isPresent(outlet) && outlet.isActivated) {
-            collection_2.StringMapWrapper.forEach(outlet.outletMap._outlets, function (v, k) { return _this.deactivateOutlet(v, components); });
+            collection_1.StringMapWrapper.forEach(outlet.outletMap._outlets, function (v, k) { return _this.deactivateOutlet(v, components); });
             if (this.performMutation) {
                 outlet.deactivate();
             }

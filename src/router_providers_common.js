@@ -4,8 +4,6 @@ var common_1 = require('@angular/common');
 var router_1 = require('./router');
 var segments_1 = require('./segments');
 var router_url_serializer_1 = require('./router_url_serializer');
-var core_2 = require('@angular/core');
-var core_3 = require('@angular/core');
 /**
  * The Platform agnostic ROUTER PROVIDERS
  */
@@ -16,13 +14,13 @@ exports.ROUTER_PROVIDERS_COMMON = [
     /*@ts2dart_Provider*/ {
         provide: router_1.Router,
         useFactory: routerFactory,
-        deps: /*@ts2dart_const*/ [core_2.ApplicationRef, core_1.ComponentResolver, router_url_serializer_1.RouterUrlSerializer, router_1.RouterOutletMap, common_1.Location],
+        deps: /*@ts2dart_const*/ [core_1.ApplicationRef, core_1.ComponentResolver, router_url_serializer_1.RouterUrlSerializer, router_1.RouterOutletMap, common_1.Location],
     },
     /*@ts2dart_Provider*/ { provide: segments_1.RouteSegment, useFactory: function (r) { return r.routeTree.root; }, deps: [router_1.Router] }
 ];
 function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
     if (app.componentTypes.length == 0) {
-        throw new core_3.BaseException("Bootstrap at least one component before injecting Router.");
+        throw new core_1.BaseException("Bootstrap at least one component before injecting Router.");
     }
     // TODO: vsavkin this should not be null
     var router = new router_1.Router(null, app.componentTypes[0], componentResolver, urlSerializer, routerOutletMap, location);

@@ -1,9 +1,7 @@
-import { provide, ReflectiveInjector } from '@angular/core';
+import { BaseException, provide, ReflectiveInjector } from '@angular/core';
 import { isBlank, isPresent } from './facade/lang';
-import { ListWrapper } from './facade/collection';
+import { ListWrapper, StringMapWrapper } from './facade/collection';
 import { EventEmitter, PromiseWrapper, ObservableWrapper } from './facade/async';
-import { StringMapWrapper } from './facade/collection';
-import { BaseException } from '@angular/core';
 import { recognize } from './recognize';
 import { link } from './link';
 import { routeSegmentComponentFactory, RouteSegment, rootNode, createEmptyRouteTree } from './segments';
