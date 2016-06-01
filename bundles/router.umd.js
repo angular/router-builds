@@ -1793,7 +1793,6 @@ var __extends = (this && this.__extends) || function (d, b) {
      * ```
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink];
-    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.Router = Router;
     exports.RouterOutletMap = RouterOutletMap;
     exports.RouteSegment = RouteSegment;
@@ -1806,4 +1805,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.RouterUrlSerializer = RouterUrlSerializer;
     exports.DefaultRouterUrlSerializer = DefaultRouterUrlSerializer;
     exports.ROUTER_PROVIDERS = ROUTER_PROVIDERS;
+    exports.RouterOutlet = RouterOutlet;
+    exports.RouterLink = RouterLink;
+    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
 }));

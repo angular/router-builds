@@ -23,26 +23,9 @@ exports.DefaultRouterUrlSerializer = router_url_serializer_1.DefaultRouterUrlSer
 var router_providers_1 = require('./src/router_providers');
 exports.ROUTER_PROVIDERS = router_providers_1.ROUTER_PROVIDERS;
 var router_outlet_1 = require('./src/directives/router_outlet');
+exports.RouterOutlet = router_outlet_1.RouterOutlet;
 var router_link_1 = require('./src/directives/router_link');
-/**
- * A list of directives. To use the router directives like {@link RouterOutlet} and
- * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your
- * component.
- *
- * ```
- * import {Component} from '@angular/core';
- * import {ROUTER_DIRECTIVES, Routes} from '@angular/router';
- *
- * @Component({directives: [ROUTER_DIRECTIVES]})
- * @Routes([
- *  {...},
- * ])
- * class AppCmp {
- *    // ...
- * }
- *
- * bootstrap(AppCmp);
- * ```
- */
-exports.ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterLink];
+exports.RouterLink = router_link_1.RouterLink;
+var router_directives_1 = require("./src/directives/router_directives");
+exports.ROUTER_DIRECTIVES = router_directives_1.ROUTER_DIRECTIVES;
 //# sourceMappingURL=index.js.map
