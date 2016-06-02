@@ -1,1 +1,1 @@
-{"__symbolic":"module","metadata":{"ROUTER_PROVIDERS":[{"__symbolic":"reference","name":"ROUTER_PROVIDERS_COMMON","module":"./router_providers_common"}]}}
+{"__symbolic":"module","metadata":{"ROUTER_PROVIDERS":[{"__symbolic":"reference","module":"./router_providers_common","name":"ROUTER_PROVIDERS_COMMON"}]}}

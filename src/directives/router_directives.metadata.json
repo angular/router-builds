@@ -1,1 +1,1 @@
-{"__symbolic":"module","metadata":{"ROUTER_DIRECTIVES":[{"__symbolic":"reference","name":"RouterOutlet","module":"./router_outlet"},{"__symbolic":"reference","name":"RouterLink","module":"./router_link"}]}}
+{"__symbolic":"module","metadata":{"ROUTER_DIRECTIVES":[{"__symbolic":"reference","module":"./router_outlet","name":"RouterOutlet"},{"__symbolic":"reference","module":"./router_link","name":"RouterLink"}]}}
