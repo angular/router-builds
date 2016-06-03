@@ -30,7 +30,7 @@ var _ArrayLogger = (function () {
  *   }
  * }
  *
- * bootstrap(MyApp, [provide(ExceptionHandler, {useClass: MyExceptionHandler})])
+ * bootstrap(MyApp, {provide: ExceptionHandler, useClass: MyExceptionHandler}])
  *
  * ```
  * @stable

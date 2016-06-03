@@ -16,7 +16,7 @@ exports.ROUTER_PROVIDERS_COMMON = [
         useFactory: routerFactory,
         deps: /*@ts2dart_const*/ [core_1.ApplicationRef, core_1.ComponentResolver, router_url_serializer_1.RouterUrlSerializer, router_1.RouterOutletMap, common_1.Location],
     },
-    /*@ts2dart_Provider*/ { provide: segments_1.RouteSegment, useFactory: function (r) { return r.routeTree.root; }, deps: [router_1.Router] }
+    /*@ts2dart_Provider*/ { provide: segments_1.RouteSegment, useFactory: routeSegmentFactory, deps: [router_1.Router] }
 ];
 function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
     if (app.componentTypes.length == 0) {
@@ -26,5 +26,8 @@ function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, l
     var router = new router_1.Router(null, app.componentTypes[0], componentResolver, urlSerializer, routerOutletMap, location);
     app.registerDisposeListener(function () { return router.dispose(); });
     return router;
+}
+function routeSegmentFactory(router) {
+    return router.routeTree.root;
 }
 //# sourceMappingURL=router_providers_common.js.map

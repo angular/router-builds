@@ -1406,7 +1406,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
         };
         _ActivateSegments.prototype.activateNewSegments = function (outletMap, curr, prev, outlet) {
-            var resolved = _angular_core.ReflectiveInjector.resolve([_angular_core.provide(RouterOutletMap, { useValue: outletMap }), _angular_core.provide(RouteSegment, { useValue: curr })]);
+            var resolved = _angular_core.ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: RouteSegment, useValue: curr }]);
             var ref = outlet.activate(routeSegmentComponentFactory(curr), resolved, outletMap);
             if (hasLifecycleHook("routerOnActivate", ref.instance)) {
                 ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);
@@ -1629,7 +1629,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             useFactory: routerFactory,
             deps: /*@ts2dart_const*/ [_angular_core.ApplicationRef, _angular_core.ComponentResolver, RouterUrlSerializer, RouterOutletMap, _angular_common.Location],
         },
-        /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: function (r) { return r.routeTree.root; }, deps: [Router] }
+        /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: routeSegmentFactory, deps: [Router] }
     ];
     function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
         if (app.componentTypes.length == 0) {
@@ -1640,8 +1640,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         app.registerDisposeListener(function () { return router.dispose(); });
         return router;
     }
+    function routeSegmentFactory(router) {
+        return router.routeTree.root;
+    }
     /**
-     * A list of {@link Provider}s. To use the router, you must add this to your application.
+     * A list of providers. To use the router, you must add this to your application.
      *
      * ```
      * import {Component} from '@angular/core';

@@ -1,4 +1,4 @@
-import { BaseException, provide, ReflectiveInjector } from '@angular/core';
+import { BaseException, ReflectiveInjector } from '@angular/core';
 import { isBlank, isPresent } from './facade/lang';
 import { ListWrapper, StringMapWrapper } from './facade/collection';
 import { EventEmitter, PromiseWrapper, ObservableWrapper } from './facade/async';
@@ -215,7 +215,7 @@ class _ActivateSegments {
         }
     }
     activateNewSegments(outletMap, curr, prev, outlet) {
-        let resolved = ReflectiveInjector.resolve([provide(RouterOutletMap, { useValue: outletMap }), provide(RouteSegment, { useValue: curr })]);
+        let resolved = ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: RouteSegment, useValue: curr }]);
         let ref = outlet.activate(routeSegmentComponentFactory(curr), resolved, outletMap);
         if (hasLifecycleHook("routerOnActivate", ref.instance)) {
             ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);

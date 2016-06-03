@@ -28,7 +28,7 @@ class _ArrayLogger {
  *   }
  * }
  *
- * bootstrap(MyApp, [provide(ExceptionHandler, {useClass: MyExceptionHandler})])
+ * bootstrap(MyApp, {provide: ExceptionHandler, useClass: MyExceptionHandler}])
  *
  * ```
  * @stable

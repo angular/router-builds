@@ -242,7 +242,7 @@ var _ActivateSegments = (function () {
         }
     };
     _ActivateSegments.prototype.activateNewSegments = function (outletMap, curr, prev, outlet) {
-        var resolved = core_1.ReflectiveInjector.resolve([core_1.provide(RouterOutletMap, { useValue: outletMap }), core_1.provide(segments_1.RouteSegment, { useValue: curr })]);
+        var resolved = core_1.ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: segments_1.RouteSegment, useValue: curr }]);
         var ref = outlet.activate(segments_1.routeSegmentComponentFactory(curr), resolved, outletMap);
         if (lifecycle_reflector_1.hasLifecycleHook("routerOnActivate", ref.instance)) {
             ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);
