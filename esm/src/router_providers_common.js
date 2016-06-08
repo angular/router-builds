@@ -17,7 +17,7 @@ export const ROUTER_PROVIDERS_COMMON = [
     },
     /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: routeSegmentFactory, deps: [Router] }
 ];
-function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
+export function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
     if (app.componentTypes.length == 0) {
         throw new BaseException("Bootstrap at least one component before injecting Router.");
     }
@@ -26,7 +26,7 @@ function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, l
     app.registerDisposeListener(() => router.dispose());
     return router;
 }
-function routeSegmentFactory(router) {
+export function routeSegmentFactory(router) {
     return router.routeTree.root;
 }
 //# sourceMappingURL=router_providers_common.js.map

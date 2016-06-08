@@ -27,7 +27,9 @@ function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, l
     app.registerDisposeListener(function () { return router.dispose(); });
     return router;
 }
+exports.routerFactory = routerFactory;
 function routeSegmentFactory(router) {
     return router.routeTree.root;
 }
+exports.routeSegmentFactory = routeSegmentFactory;
 //# sourceMappingURL=router_providers_common.js.map
