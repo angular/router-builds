@@ -86,7 +86,7 @@ export class UrlSegment {
 }
 function _serializeParams(params) {
     let res = "";
-    StringMapWrapper.forEach(params, (v, k) => res += `;${k}=${v}`);
+    StringMapWrapper.forEach(params, (v /** TODO #9100 */, k /** TODO #9100 */) => res += `;${k}=${v}`);
     return res;
 }
 export class RouteSegment {

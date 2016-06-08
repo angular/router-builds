@@ -17,7 +17,7 @@ export class BaseException extends Error {
  * @stable
  */
 export class WrappedException extends BaseWrappedException {
-    constructor(_wrapperMessage, _originalException, _originalStack, _context) {
+    constructor(_wrapperMessage, _originalException /** TODO #9100 */, _originalStack /** TODO #9100 */, _context /** TODO #9100 */) {
         super(_wrapperMessage);
         this._wrapperMessage = _wrapperMessage;
         this._originalException = _originalException;

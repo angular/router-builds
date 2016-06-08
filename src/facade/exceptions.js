@@ -29,7 +29,7 @@ exports.BaseException = BaseException;
  */
 var WrappedException = (function (_super) {
     __extends(WrappedException, _super);
-    function WrappedException(_wrapperMessage, _originalException, _originalStack, _context) {
+    function WrappedException(_wrapperMessage, _originalException /** TODO #9100 */, _originalStack /** TODO #9100 */, _context /** TODO #9100 */) {
         _super.call(this, _wrapperMessage);
         this._wrapperMessage = _wrapperMessage;
         this._originalException = _originalException;

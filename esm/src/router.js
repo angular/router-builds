@@ -193,7 +193,7 @@ class _ActivateSegments {
             this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
             StringMapWrapper.delete(prevChildren, c.value.outlet);
         });
-        StringMapWrapper.forEach(prevChildren, (v, k) => this.deactivateOutlet(outletMap._outlets[k], components));
+        StringMapWrapper.forEach(prevChildren, (v /** TODO #9100 */, k /** TODO #9100 */) => this.deactivateOutlet(outletMap._outlets[k], components));
     }
     activateSegments(currNode, prevNode, parentOutletMap, components) {
         let curr = currNode.value;
@@ -233,7 +233,7 @@ class _ActivateSegments {
     }
     deactivateOutlet(outlet, components) {
         if (isPresent(outlet) && outlet.isActivated) {
-            StringMapWrapper.forEach(outlet.outletMap._outlets, (v, k) => this.deactivateOutlet(v, components));
+            StringMapWrapper.forEach(outlet.outletMap._outlets, (v /** TODO #9100 */, k /** TODO #9100 */) => this.deactivateOutlet(v, components));
             if (this.performMutation) {
                 outlet.deactivate();
             }

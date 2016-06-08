@@ -105,8 +105,8 @@ export class EventEmitter extends Subject {
         let errorFn = (err) => null;
         let completeFn = () => null;
         if (generatorOrNext && typeof generatorOrNext === 'object') {
-            schedulerFn = this.__isAsync ? (value) => { setTimeout(() => generatorOrNext.next(value)); } :
-                    (value) => { generatorOrNext.next(value); };
+            schedulerFn = this.__isAsync ? (value /** TODO #9100 */) => { setTimeout(() => generatorOrNext.next(value)); } :
+                    (value /** TODO #9100 */) => { generatorOrNext.next(value); };
             if (generatorOrNext.error) {
                 errorFn = this.__isAsync ? (err) => { setTimeout(() => generatorOrNext.error(err)); } :
                         (err) => { generatorOrNext.error(err); };
@@ -117,8 +117,8 @@ export class EventEmitter extends Subject {
             }
         }
         else {
-            schedulerFn = this.__isAsync ? (value) => { setTimeout(() => generatorOrNext(value)); } :
-                    (value) => { generatorOrNext(value); };
+            schedulerFn = this.__isAsync ? (value /** TODO #9100 */) => { setTimeout(() => generatorOrNext(value)); } :
+                    (value /** TODO #9100 */) => { generatorOrNext(value); };
             if (error) {
                 errorFn =
                     this.__isAsync ? (err) => { setTimeout(() => error(err)); } : (err) => { error(err); };

@@ -144,7 +144,7 @@ function _update(node, commands) {
 }
 function _stringify(params) {
     let res = {};
-    StringMapWrapper.forEach(params, (v, k) => res[k] = v.toString());
+    StringMapWrapper.forEach(params, (v /** TODO #9100 */, k /** TODO #9100 */) => res[k] = v.toString());
     return res;
 }
 function _compare(path, params, segment) {

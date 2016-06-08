@@ -116,7 +116,7 @@ var UrlSegment = (function () {
 exports.UrlSegment = UrlSegment;
 function _serializeParams(params) {
     var res = "";
-    collection_1.StringMapWrapper.forEach(params, function (v, k) { return res += ";" + k + "=" + v; });
+    collection_1.StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res += ";" + k + "=" + v; });
     return res;
 }
 var RouteSegment = (function () {

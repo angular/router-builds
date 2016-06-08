@@ -53,7 +53,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return Array.isArray(obj);
     }
     function noop() { }
-    function stringify(token) {
+    function stringify(token /** TODO #9100 */) {
         if (typeof token === 'string') {
             return token;
         }
@@ -469,7 +469,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         function PromiseWrapper() {
         }
         PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-        PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
+        PromiseWrapper.reject = function (obj, _ /** TODO #9100 */) { return Promise.reject(obj); };
         // Note: We can't rename this method into `catch`, as this is not a valid
         // method name in Dart.
         PromiseWrapper.catchError = function (promise, onError) {
@@ -596,8 +596,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             var errorFn = function (err) { return null; };
             var completeFn = function () { return null; };
             if (generatorOrNext && typeof generatorOrNext === 'object') {
-                schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext.next(value); }); } :
-                    function (value) { generatorOrNext.next(value); };
+                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext.next(value); }); } :
+                    function (value /** TODO #9100 */) { generatorOrNext.next(value); };
                 if (generatorOrNext.error) {
                     errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
                         function (err) { generatorOrNext.error(err); };
@@ -608,8 +608,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }
             }
             else {
-                schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
-                    function (value) { generatorOrNext(value); };
+                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext(value); }); } :
+                    function (value /** TODO #9100 */) { generatorOrNext(value); };
                 if (error) {
                     errorFn =
                         this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
@@ -731,7 +731,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     function _serializeParams(params) {
         var res = "";
-        StringMapWrapper.forEach(params, function (v, k) { return res += ";" + k + "=" + v; });
+        StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res += ";" + k + "=" + v; });
         return res;
     }
     var RouteSegment = (function () {
@@ -1130,7 +1130,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function _stringify(params) {
         var res = {};
-        StringMapWrapper.forEach(params, function (v, k) { return res[k] = v.toString(); });
+        StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res[k] = v.toString(); });
         return res;
     }
     function _compare(path, params, segment) {
@@ -1384,7 +1384,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 _this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
                 StringMapWrapper.delete(prevChildren, c.value.outlet);
             });
-            StringMapWrapper.forEach(prevChildren, function (v, k) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
+            StringMapWrapper.forEach(prevChildren, function (v /** TODO #9100 */, k /** TODO #9100 */) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
         };
         _ActivateSegments.prototype.activateSegments = function (currNode, prevNode, parentOutletMap, components) {
             var curr = currNode.value;
@@ -1425,7 +1425,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         _ActivateSegments.prototype.deactivateOutlet = function (outlet, components) {
             var _this = this;
             if (isPresent(outlet) && outlet.isActivated) {
-                StringMapWrapper.forEach(outlet.outletMap._outlets, function (v, k) { return _this.deactivateOutlet(v, components); });
+                StringMapWrapper.forEach(outlet.outletMap._outlets, function (v /** TODO #9100 */, k /** TODO #9100 */) { return _this.deactivateOutlet(v, components); });
                 if (this.performMutation) {
                     outlet.deactivate();
                 }

@@ -220,7 +220,7 @@ var _ActivateSegments = (function () {
             _this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
             collection_1.StringMapWrapper.delete(prevChildren, c.value.outlet);
         });
-        collection_1.StringMapWrapper.forEach(prevChildren, function (v, k) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
+        collection_1.StringMapWrapper.forEach(prevChildren, function (v /** TODO #9100 */, k /** TODO #9100 */) { return _this.deactivateOutlet(outletMap._outlets[k], components); });
     };
     _ActivateSegments.prototype.activateSegments = function (currNode, prevNode, parentOutletMap, components) {
         var curr = currNode.value;
@@ -261,7 +261,7 @@ var _ActivateSegments = (function () {
     _ActivateSegments.prototype.deactivateOutlet = function (outlet, components) {
         var _this = this;
         if (lang_1.isPresent(outlet) && outlet.isActivated) {
-            collection_1.StringMapWrapper.forEach(outlet.outletMap._outlets, function (v, k) { return _this.deactivateOutlet(v, components); });
+            collection_1.StringMapWrapper.forEach(outlet.outletMap._outlets, function (v /** TODO #9100 */, k /** TODO #9100 */) { return _this.deactivateOutlet(v, components); });
             if (this.performMutation) {
                 outlet.deactivate();
             }

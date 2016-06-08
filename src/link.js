@@ -148,7 +148,7 @@ function _update(node, commands) {
 }
 function _stringify(params) {
     var res = {};
-    collection_1.StringMapWrapper.forEach(params, function (v, k) { return res[k] = v.toString(); });
+    collection_1.StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res[k] = v.toString(); });
     return res;
 }
 function _compare(path, params, segment) {

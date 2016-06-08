@@ -14,7 +14,7 @@ var PromiseWrapper = (function () {
     function PromiseWrapper() {
     }
     PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-    PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
+    PromiseWrapper.reject = function (obj, _ /** TODO #9100 */) { return Promise.reject(obj); };
     // Note: We can't rename this method into `catch`, as this is not a valid
     // method name in Dart.
     PromiseWrapper.catchError = function (promise, onError) {

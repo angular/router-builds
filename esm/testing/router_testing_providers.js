@@ -21,6 +21,6 @@ export const ROUTER_FAKE_PROVIDERS = [
         useFactory: routerFactory,
         deps: /*@ts2dart_const*/ [ComponentResolver, RouterUrlSerializer, RouterOutletMap, Location]
     },
-    /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: (r) => r.routeTree.root, deps: [Router] }
+    /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: (r /** TODO #9100 */) => r.routeTree.root, deps: [Router] }
 ];
 //# sourceMappingURL=router_testing_providers.js.map
