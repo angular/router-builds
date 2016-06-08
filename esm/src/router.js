@@ -7,9 +7,6 @@ import { link } from './link';
 import { routeSegmentComponentFactory, RouteSegment, rootNode, createEmptyRouteTree } from './segments';
 import { hasLifecycleHook } from './lifecycle_reflector';
 import { DEFAULT_OUTLET_NAME } from './constants';
-/**
- * @internal
- */
 export class RouterOutletMap {
     constructor() {
         /** @internal */

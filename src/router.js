@@ -8,9 +8,6 @@ var link_1 = require('./link');
 var segments_1 = require('./segments');
 var lifecycle_reflector_1 = require('./lifecycle_reflector');
 var constants_1 = require('./constants');
-/**
- * @internal
- */
 var RouterOutletMap = (function () {
     function RouterOutletMap() {
         /** @internal */

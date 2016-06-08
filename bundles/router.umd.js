@@ -1174,9 +1174,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         return name in type.prototype;
     }
-    /**
-     * @internal
-     */
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
             /** @internal */

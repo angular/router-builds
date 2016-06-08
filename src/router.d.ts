@@ -1,5 +1,9 @@
+import { RouterOutlet } from './directives/router_outlet';
 import { Observable } from './facade/async';
 import { RouteSegment, UrlTree, RouteTree } from './segments';
+export declare class RouterOutletMap {
+    registerOutlet(name: string, outlet: RouterOutlet): void;
+}
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
