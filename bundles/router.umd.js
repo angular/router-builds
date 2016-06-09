@@ -1700,9 +1700,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return RouterOutlet;
     }());
+    /** @nocollapse */
     RouterOutlet.decorators = [
         { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
     ];
+    /** @nocollapse */
     RouterOutlet.ctorParameters = [
         { type: RouterOutletMap, },
         { type: _angular_core.ViewContainerRef, },
@@ -1757,14 +1759,17 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return RouterLink;
     }());
+    /** @nocollapse */
     RouterLink.decorators = [
         { type: _angular_core.Directive, args: [{ selector: '[routerLink]' },] },
     ];
+    /** @nocollapse */
     RouterLink.ctorParameters = [
         { type: RouteSegment, },
         { type: Router, },
         { type: _angular_common.LocationStrategy, },
     ];
+    /** @nocollapse */
     RouterLink.propDecorators = {
         'target': [{ type: _angular_core.Input },],
         'href': [{ type: _angular_core.HostBinding },],

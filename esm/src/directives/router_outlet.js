@@ -29,9 +29,11 @@ export class RouterOutlet {
         return this._activated;
     }
 }
+/** @nocollapse */
 RouterOutlet.decorators = [
     { type: Directive, args: [{ selector: 'router-outlet' },] },
 ];
+/** @nocollapse */
 RouterOutlet.ctorParameters = [
     { type: RouterOutletMap, },
     { type: ViewContainerRef, },

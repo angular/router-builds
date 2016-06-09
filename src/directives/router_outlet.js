@@ -37,9 +37,11 @@ var RouterOutlet = (function () {
         this._activated = this._location.createComponent(factory, this._location.length, inj, []);
         return this._activated;
     };
+    /** @nocollapse */
     RouterOutlet.decorators = [
         { type: core_1.Directive, args: [{ selector: 'router-outlet' },] },
     ];
+    /** @nocollapse */
     RouterOutlet.ctorParameters = [
         { type: router_1.RouterOutletMap, },
         { type: core_1.ViewContainerRef, },

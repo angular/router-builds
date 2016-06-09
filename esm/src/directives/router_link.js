@@ -47,14 +47,17 @@ export class RouterLink {
         }
     }
 }
+/** @nocollapse */
 RouterLink.decorators = [
     { type: Directive, args: [{ selector: '[routerLink]' },] },
 ];
+/** @nocollapse */
 RouterLink.ctorParameters = [
     { type: RouteSegment, },
     { type: Router, },
     { type: LocationStrategy, },
 ];
+/** @nocollapse */
 RouterLink.propDecorators = {
     'target': [{ type: Input },],
     'href': [{ type: HostBinding },],

@@ -6,6 +6,7 @@ import { RouterUrlSerializer, DefaultRouterUrlSerializer } from '../src/router_u
 import { Component, ComponentResolver } from '@angular/core';
 class FakeAppRootCmp {
 }
+/** @nocollapse */
 FakeAppRootCmp.decorators = [
     { type: Component, args: [{ selector: 'fake-app-root-comp', template: `<span></span>` },] },
 ];

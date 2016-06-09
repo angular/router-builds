@@ -52,14 +52,17 @@ var RouterLink = (function () {
             this.isActive = false;
         }
     };
+    /** @nocollapse */
     RouterLink.decorators = [
         { type: core_1.Directive, args: [{ selector: '[routerLink]' },] },
     ];
+    /** @nocollapse */
     RouterLink.ctorParameters = [
         { type: segments_1.RouteSegment, },
         { type: router_1.Router, },
         { type: common_1.LocationStrategy, },
     ];
+    /** @nocollapse */
     RouterLink.propDecorators = {
         'target': [{ type: core_1.Input },],
         'href': [{ type: core_1.HostBinding },],
