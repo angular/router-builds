@@ -19,7 +19,6 @@ tmp
 *.dart.precompiled.js
 *.js_
 *.js.deps
-*.js.map
 
 # Files created by the template compiler
 **/*.ngfactory.ts
