@@ -1,12 +1,12 @@
 "use strict";
-var segments_1 = require('./segments');
-var metadata_1 = require('./metadata/metadata');
-var lang_1 = require('./facade/lang');
-var collection_1 = require('./facade/collection');
-var promise_1 = require('./facade/promise');
 var core_1 = require('@angular/core');
 var constants_1 = require('./constants');
 var core_private_1 = require('./core_private');
+var collection_1 = require('./facade/collection');
+var lang_1 = require('./facade/lang');
+var promise_1 = require('./facade/promise');
+var metadata_1 = require('./metadata/metadata');
+var segments_1 = require('./segments');
 function recognize(componentResolver, rootComponent, url, existingTree) {
     var matched = new _MatchResult(rootComponent, [url.root], {}, segments_1.rootNode(url).children, []);
     return _constructSegment(componentResolver, matched, segments_1.rootNode(existingTree))
@@ -37,8 +37,7 @@ function _recognizeMany(componentResolver, parentComponent, urls, existingSegmen
     return promise_1.PromiseWrapper.all(recognized).then(collection_1.ListWrapper.flatten);
 }
 function _constructSegment(componentResolver, matched, existingSegment) {
-    return componentResolver.resolveComponent(matched.component)
-        .then(function (factory) {
+    return componentResolver.resolveComponent(matched.component).then(function (factory) {
         var segment = _createOrReuseSegment(matched, factory, existingSegment);
         var existingChildren = lang_1.isPresent(existingSegment) ? existingSegment.children : [];
         if (matched.leftOverUrl.length > 0) {
@@ -63,13 +62,12 @@ function _createOrReuseSegment(matched, factory, segmentNode) {
     }
 }
 function _recognizeLeftOvers(componentResolver, parentComponent, existingSegments) {
-    return componentResolver.resolveComponent(parentComponent)
-        .then(function (factory) {
+    return componentResolver.resolveComponent(parentComponent).then(function (factory) {
         var metadata = _readMetadata(factory.componentType);
         if (lang_1.isBlank(metadata)) {
             return [];
         }
-        var r = metadata.routes.filter(function (r) { return r.path == "" || r.path == "/"; });
+        var r = metadata.routes.filter(function (r) { return r.path == '' || r.path == '/'; });
         if (r.length === 0) {
             return promise_1.PromiseWrapper.resolve([]);
         }
@@ -79,8 +77,7 @@ function _recognizeLeftOvers(componentResolver, parentComponent, existingSegment
             var existingChildren = lang_1.isPresent(segmentWithMatchingOutlet_1) ? segmentWithMatchingOutlet_1.children : [];
             return _recognizeLeftOvers(componentResolver, r[0].component, existingChildren)
                 .then(function (children) {
-                return componentResolver.resolveComponent(r[0].component)
-                    .then(function (factory) {
+                return componentResolver.resolveComponent(r[0].component).then(function (factory) {
                     var segment = _createOrReuseSegment(new _MatchResult(r[0].component, [], {}, [], []), factory, segmentWithMatchingOutlet_1);
                     return [new segments_1.TreeNode(segment, children)];
                 });
@@ -96,15 +93,15 @@ function _match(metadata, url) {
             return matchingResult;
         }
     }
-    var availableRoutes = metadata.routes.map(function (r) { return ("'" + r.path + "'"); }).join(", ");
+    var availableRoutes = metadata.routes.map(function (r) { return ("'" + r.path + "'"); }).join(', ');
     throw new core_1.BaseException("Cannot match any routes. Current segment: '" + url.value + "'. Available routes: [" + availableRoutes + "].");
 }
 function _matchWithParts(route, url) {
-    var path = route.path.startsWith("/") ? route.path.substring(1) : route.path;
-    if (path == "*") {
+    var path = route.path.startsWith('/') ? route.path.substring(1) : route.path;
+    if (path == '*') {
         return new _MatchResult(route.component, [], null, [], []);
     }
-    var parts = path.split("/");
+    var parts = path.split('/');
     var positionalParams = {};
     var consumedUrlSegments = [];
     var lastParent = null;
@@ -116,7 +113,7 @@ function _matchWithParts(route, url) {
         var p_1 = parts[i];
         var isLastSegment = i === parts.length - 1;
         var isLastParent = i === parts.length - 2;
-        var isPosParam = p_1.startsWith(":");
+        var isPosParam = p_1.startsWith(':');
         if (!isPosParam && p_1 != current.value.segment)
             return null;
         if (isLastSegment) {

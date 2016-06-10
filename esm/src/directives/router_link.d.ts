@@ -1,7 +1,7 @@
+import { LocationStrategy } from '@angular/common';
 import { OnDestroy } from '@angular/core';
 import { Router } from '../router';
 import { RouteSegment } from '../segments';
-import { LocationStrategy } from '@angular/common';
 /**
  * The RouterLink directive lets you link to specific parts of your app.
  *

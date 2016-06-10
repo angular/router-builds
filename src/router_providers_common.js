@@ -1,9 +1,9 @@
 "use strict";
-var core_1 = require('@angular/core');
 var common_1 = require('@angular/common');
+var core_1 = require('@angular/core');
 var router_1 = require('./router');
-var segments_1 = require('./segments');
 var router_url_serializer_1 = require('./router_url_serializer');
+var segments_1 = require('./segments');
 /**
  * The Platform agnostic ROUTER PROVIDERS
  */
@@ -20,7 +20,7 @@ exports.ROUTER_PROVIDERS_COMMON = [
 ];
 function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
     if (app.componentTypes.length == 0) {
-        throw new core_1.BaseException("Bootstrap at least one component before injecting Router.");
+        throw new core_1.BaseException('Bootstrap at least one component before injecting Router.');
     }
     // TODO: vsavkin this should not be null
     var router = new router_1.Router(null, app.componentTypes[0], componentResolver, urlSerializer, routerOutletMap, location);

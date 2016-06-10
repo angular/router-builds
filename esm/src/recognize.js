@@ -1,11 +1,11 @@
-import { RouteSegment, TreeNode, rootNode, RouteTree, equalUrlSegments } from './segments';
-import { RoutesMetadata } from './metadata/metadata';
-import { isBlank, isPresent, stringify } from './facade/lang';
-import { ListWrapper, StringMapWrapper } from './facade/collection';
-import { PromiseWrapper } from './facade/promise';
 import { BaseException } from '@angular/core';
 import { DEFAULT_OUTLET_NAME } from './constants';
 import { reflector } from './core_private';
+import { ListWrapper, StringMapWrapper } from './facade/collection';
+import { isBlank, isPresent, stringify } from './facade/lang';
+import { PromiseWrapper } from './facade/promise';
+import { RoutesMetadata } from './metadata/metadata';
+import { RouteSegment, RouteTree, TreeNode, equalUrlSegments, rootNode } from './segments';
 export function recognize(componentResolver, rootComponent, url, existingTree) {
     let matched = new _MatchResult(rootComponent, [url.root], {}, rootNode(url).children, []);
     return _constructSegment(componentResolver, matched, rootNode(existingTree))
@@ -35,8 +35,7 @@ function _recognizeMany(componentResolver, parentComponent, urls, existingSegmen
     return PromiseWrapper.all(recognized).then(ListWrapper.flatten);
 }
 function _constructSegment(componentResolver, matched, existingSegment) {
-    return componentResolver.resolveComponent(matched.component)
-        .then(factory => {
+    return componentResolver.resolveComponent(matched.component).then(factory => {
         let segment = _createOrReuseSegment(matched, factory, existingSegment);
         let existingChildren = isPresent(existingSegment) ? existingSegment.children : [];
         if (matched.leftOverUrl.length > 0) {
@@ -61,13 +60,12 @@ function _createOrReuseSegment(matched, factory, segmentNode) {
     }
 }
 function _recognizeLeftOvers(componentResolver, parentComponent, existingSegments) {
-    return componentResolver.resolveComponent(parentComponent)
-        .then(factory => {
+    return componentResolver.resolveComponent(parentComponent).then(factory => {
         let metadata = _readMetadata(factory.componentType);
         if (isBlank(metadata)) {
             return [];
         }
-        let r = metadata.routes.filter(r => r.path == "" || r.path == "/");
+        let r = metadata.routes.filter(r => r.path == '' || r.path == '/');
         if (r.length === 0) {
             return PromiseWrapper.resolve([]);
         }
@@ -77,8 +75,7 @@ function _recognizeLeftOvers(componentResolver, parentComponent, existingSegment
             let existingChildren = isPresent(segmentWithMatchingOutlet) ? segmentWithMatchingOutlet.children : [];
             return _recognizeLeftOvers(componentResolver, r[0].component, existingChildren)
                 .then(children => {
-                return componentResolver.resolveComponent(r[0].component)
-                    .then(factory => {
+                return componentResolver.resolveComponent(r[0].component).then(factory => {
                     let segment = _createOrReuseSegment(new _MatchResult(r[0].component, [], {}, [], []), factory, segmentWithMatchingOutlet);
                     return [new TreeNode(segment, children)];
                 });
@@ -93,15 +90,15 @@ function _match(metadata, url) {
             return matchingResult;
         }
     }
-    let availableRoutes = metadata.routes.map(r => `'${r.path}'`).join(", ");
+    let availableRoutes = metadata.routes.map(r => `'${r.path}'`).join(', ');
     throw new BaseException(`Cannot match any routes. Current segment: '${url.value}'. Available routes: [${availableRoutes}].`);
 }
 function _matchWithParts(route, url) {
-    let path = route.path.startsWith("/") ? route.path.substring(1) : route.path;
-    if (path == "*") {
+    let path = route.path.startsWith('/') ? route.path.substring(1) : route.path;
+    if (path == '*') {
         return new _MatchResult(route.component, [], null, [], []);
     }
-    let parts = path.split("/");
+    let parts = path.split('/');
     let positionalParams = {};
     let consumedUrlSegments = [];
     let lastParent = null;
@@ -113,7 +110,7 @@ function _matchWithParts(route, url) {
         let p = parts[i];
         let isLastSegment = i === parts.length - 1;
         let isLastParent = i === parts.length - 2;
-        let isPosParam = p.startsWith(":");
+        let isPosParam = p.startsWith(':');
         if (!isPosParam && p != current.value.segment)
             return null;
         if (isLastSegment) {

@@ -1,7 +1,7 @@
-import { TreeNode, UrlSegment, rootNode, UrlTree } from './segments';
-import { isBlank, isPresent, isString, isStringMap } from './facade/lang';
-import { BaseException } from './facade/exceptions';
 import { ListWrapper, StringMapWrapper } from './facade/collection';
+import { BaseException } from './facade/exceptions';
+import { isBlank, isPresent, isString, isStringMap } from './facade/lang';
+import { TreeNode, UrlSegment, UrlTree, rootNode } from './segments';
 export function link(segment, routeTree, urlTree, commands) {
     if (commands.length === 0)
         return urlTree;
@@ -18,7 +18,7 @@ export function link(segment, routeTree, urlTree, commands) {
 }
 function _navigateToRoot(normalizedChange) {
     return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
-        normalizedChange.commands[0] == "/";
+        normalizedChange.commands[0] == '/';
 }
 class _NormalizedNavigationCommands {
     constructor(isAbsolute, numberOfDoubleDots, commands) {
@@ -28,7 +28,7 @@ class _NormalizedNavigationCommands {
     }
 }
 function _normalizeCommands(commands) {
-    if (isString(commands[0]) && commands.length === 1 && commands[0] == "/") {
+    if (isString(commands[0]) && commands.length === 1 && commands[0] == '/') {
         return new _NormalizedNavigationCommands(true, 0, commands);
     }
     let numberOfDoubleDots = 0;
@@ -45,12 +45,12 @@ function _normalizeCommands(commands) {
             let cc = parts[j];
             // first exp is treated in a special way
             if (i == 0) {
-                if (j == 0 && cc == ".") {
+                if (j == 0 && cc == '.') {
                 }
-                else if (j == 0 && cc == "") {
+                else if (j == 0 && cc == '') {
                     isAbsolute = true;
                 }
-                else if (cc == "..") {
+                else if (cc == '..') {
                     numberOfDoubleDots++;
                 }
                 else if (cc != '') {
@@ -74,7 +74,7 @@ function _findUrlSegment(segment, routeTree, urlTree, numberOfDoubleDots) {
     let urlSegment = ListWrapper.last(s.urlSegments);
     let path = urlTree.pathFromRoot(urlSegment);
     if (path.length <= numberOfDoubleDots) {
-        throw new BaseException("Invalid number of '../'");
+        throw new BaseException('Invalid number of \'../\'');
     }
     return path[path.length - 1 - numberOfDoubleDots];
 }
@@ -171,13 +171,13 @@ function _updateMany(nodes, commands) {
 function _segment(commands) {
     if (!isString(commands[0]))
         return commands[0];
-    let parts = commands[0].toString().split(":");
+    let parts = commands[0].toString().split(':');
     return parts.length > 1 ? parts[1] : commands[0];
 }
 function _outlet(commands) {
     if (!isString(commands[0]))
         return null;
-    let parts = commands[0].toString().split(":");
+    let parts = commands[0].toString().split(':');
     return parts.length > 1 ? parts[0] : null;
 }
 //# sourceMappingURL=link.js.map

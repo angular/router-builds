@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/PromiseObservable'), require('rxjs/operator/toPromise'), require('rxjs/Observable'), require('@angular/common')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/observable/PromiseObservable', 'rxjs/operator/toPromise', 'rxjs/Observable', '@angular/common'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.core, global.Rx, global.Rx, global.Rx.Observable.prototype, global.Rx, global.ng.common));
-}(this, function (exports, _angular_core, rxjs_Subject, rxjs_observable_PromiseObservable, rxjs_operator_toPromise, rxjs_Observable, _angular_common) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/PromiseObservable'), require('rxjs/operator/toPromise'), require('rxjs/Observable')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/observable/PromiseObservable', 'rxjs/operator/toPromise', 'rxjs/Observable'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx, global.Rx, global.Rx.Observable.prototype, global.Rx));
+}(this, function (exports, _angular_common, _angular_core, rxjs_Subject, rxjs_observable_PromiseObservable, rxjs_operator_toPromise, rxjs_Observable) {
     'use strict';
     var globalScope;
     if (typeof window === 'undefined') {
@@ -44,7 +44,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return obj === undefined || obj === null;
     }
     function isString(obj) {
-        return typeof obj === "string";
+        return typeof obj === 'string';
     }
     function isStringMap(obj) {
         return typeof obj === 'object' && obj !== null;
@@ -67,7 +67,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return token.overriddenName;
         }
         var res = token.toString();
-        var newLineIndex = res.indexOf("\n");
+        var newLineIndex = res.indexOf('\n');
         return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
     }
     var NumberParseError = (function (_super) {
@@ -87,7 +87,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         NumberWrapper.parseIntAutoRadix = function (text) {
             var result = parseInt(text);
             if (isNaN(result)) {
-                throw new NumberParseError("Invalid integer literal when parsing " + text);
+                throw new NumberParseError('Invalid integer literal when parsing ' + text);
             }
             return result;
         };
@@ -108,8 +108,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     return result;
                 }
             }
-            throw new NumberParseError("Invalid integer literal when parsing " + text + " in base " +
-                radix);
+            throw new NumberParseError('Invalid integer literal when parsing ' + text + ' in base ' + radix);
         };
         // TODO: NaN is a valid literal but is returned by parseFloat to indicate an error.
         NumberWrapper.parseFloat = function (text) { return parseFloat(text); };
@@ -163,6 +162,182 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return RegExpWrapper;
     }());
+    var PromiseCompleter = (function () {
+        function PromiseCompleter() {
+            var _this = this;
+            this.promise = new Promise(function (res, rej) {
+                _this.resolve = res;
+                _this.reject = rej;
+            });
+        }
+        return PromiseCompleter;
+    }());
+    var PromiseWrapper = (function () {
+        function PromiseWrapper() {
+        }
+        PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
+        PromiseWrapper.reject = function (obj, _ /** TODO #9100 */) { return Promise.reject(obj); };
+        // Note: We can't rename this method into `catch`, as this is not a valid
+        // method name in Dart.
+        PromiseWrapper.catchError = function (promise, onError) {
+            return promise.catch(onError);
+        };
+        PromiseWrapper.all = function (promises) {
+            if (promises.length == 0)
+                return Promise.resolve([]);
+            return Promise.all(promises);
+        };
+        PromiseWrapper.then = function (promise, success, rejection) {
+            return promise.then(success, rejection);
+        };
+        PromiseWrapper.wrap = function (computation) {
+            return new Promise(function (res, rej) {
+                try {
+                    res(computation());
+                }
+                catch (e) {
+                    rej(e);
+                }
+            });
+        };
+        PromiseWrapper.scheduleMicrotask = function (computation) {
+            PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function (_) { });
+        };
+        PromiseWrapper.isPromise = function (obj) { return obj instanceof Promise; };
+        PromiseWrapper.completer = function () { return new PromiseCompleter(); };
+        return PromiseWrapper;
+    }());
+    var ObservableWrapper = (function () {
+        function ObservableWrapper() {
+        }
+        // TODO(vsavkin): when we use rxnext, try inferring the generic type from the first arg
+        ObservableWrapper.subscribe = function (emitter, onNext, onError, onComplete) {
+            if (onComplete === void 0) { onComplete = function () { }; }
+            onError = (typeof onError === 'function') && onError || noop;
+            onComplete = (typeof onComplete === 'function') && onComplete || noop;
+            return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });
+        };
+        ObservableWrapper.isObservable = function (obs) { return !!obs.subscribe; };
+        /**
+         * Returns whether `obs` has any subscribers listening to events.
+         */
+        ObservableWrapper.hasSubscribers = function (obs) { return obs.observers.length > 0; };
+        ObservableWrapper.dispose = function (subscription) { subscription.unsubscribe(); };
+        /**
+         * @deprecated - use callEmit() instead
+         */
+        ObservableWrapper.callNext = function (emitter, value) { emitter.next(value); };
+        ObservableWrapper.callEmit = function (emitter, value) { emitter.emit(value); };
+        ObservableWrapper.callError = function (emitter, error) { emitter.error(error); };
+        ObservableWrapper.callComplete = function (emitter) { emitter.complete(); };
+        ObservableWrapper.fromPromise = function (promise) {
+            return rxjs_observable_PromiseObservable.PromiseObservable.create(promise);
+        };
+        ObservableWrapper.toPromise = function (obj) { return rxjs_operator_toPromise.toPromise.call(obj); };
+        return ObservableWrapper;
+    }());
+    /**
+     * Use by directives and components to emit custom Events.
+     *
+     * ### Examples
+     *
+     * In the following example, `Zippy` alternatively emits `open` and `close` events when its
+     * title gets clicked:
+     *
+     * ```
+     * @Component({
+     *   selector: 'zippy',
+     *   template: `
+     *   <div class="zippy">
+     *     <div (click)="toggle()">Toggle</div>
+     *     <div [hidden]="!visible">
+     *       <ng-content></ng-content>
+     *     </div>
+     *  </div>`})
+     * export class Zippy {
+     *   visible: boolean = true;
+     *   @Output() open: EventEmitter<any> = new EventEmitter();
+     *   @Output() close: EventEmitter<any> = new EventEmitter();
+     *
+     *   toggle() {
+     *     this.visible = !this.visible;
+     *     if (this.visible) {
+     *       this.open.emit(null);
+     *     } else {
+     *       this.close.emit(null);
+     *     }
+     *   }
+     * }
+     * ```
+     *
+     * The events payload can be accessed by the parameter `$event` on the components output event
+     * handler:
+     *
+     * ```
+     * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>
+     * ```
+     *
+     * Uses Rx.Observable but provides an adapter to make it work as specified here:
+     * https://github.com/jhusain/observable-spec
+     *
+     * Once a reference implementation of the spec is available, switch to it.
+     * @stable
+     */
+    var EventEmitter = (function (_super) {
+        __extends(EventEmitter, _super);
+        /**
+         * Creates an instance of [EventEmitter], which depending on [isAsync],
+         * delivers events synchronously or asynchronously.
+         */
+        function EventEmitter(isAsync) {
+            if (isAsync === void 0) { isAsync = false; }
+            _super.call(this);
+            this.__isAsync = isAsync;
+        }
+        EventEmitter.prototype.emit = function (value) { _super.prototype.next.call(this, value); };
+        /**
+         * @deprecated - use .emit(value) instead
+         */
+        EventEmitter.prototype.next = function (value) { _super.prototype.next.call(this, value); };
+        EventEmitter.prototype.subscribe = function (generatorOrNext, error, complete) {
+            var schedulerFn;
+            var errorFn = function (err) { return null; };
+            var completeFn = function () { return null; };
+            if (generatorOrNext && typeof generatorOrNext === 'object') {
+                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+                    setTimeout(function () { return generatorOrNext.next(value); });
+                } : function (value /** TODO #9100 */) { generatorOrNext.next(value); };
+                if (generatorOrNext.error) {
+                    errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
+                        function (err) { generatorOrNext.error(err); };
+                }
+                if (generatorOrNext.complete) {
+                    completeFn = this.__isAsync ? function () { setTimeout(function () { return generatorOrNext.complete(); }); } :
+                        function () { generatorOrNext.complete(); };
+                }
+            }
+            else {
+                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+                    setTimeout(function () { return generatorOrNext(value); });
+                } : function (value /** TODO #9100 */) { generatorOrNext(value); };
+                if (error) {
+                    errorFn =
+                        this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
+                }
+                if (complete) {
+                    completeFn =
+                        this.__isAsync ? function () { setTimeout(function () { return complete(); }); } : function () { complete(); };
+                }
+            }
+            return _super.prototype.subscribe.call(this, schedulerFn, errorFn, completeFn);
+        };
+        return EventEmitter;
+    }(rxjs_Subject.Subject));
+    /**
+     * Name of the default outlet outlet.
+     * @type {string}
+     */
+    var DEFAULT_OUTLET_NAME = '__DEFAULT';
     var Map$1 = global$1.Map;
     var Set = global$1.Set;
     // Safari and Internet Explorer do not support the iterable parameter to the
@@ -455,179 +630,28 @@ var __extends = (this && this.__extends) || function (d, b) {
             };
         }
     })();
-    var PromiseCompleter = (function () {
-        function PromiseCompleter() {
-            var _this = this;
-            this.promise = new Promise(function (res, rej) {
-                _this.resolve = res;
-                _this.reject = rej;
-            });
-        }
-        return PromiseCompleter;
-    }());
-    var PromiseWrapper = (function () {
-        function PromiseWrapper() {
-        }
-        PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-        PromiseWrapper.reject = function (obj, _ /** TODO #9100 */) { return Promise.reject(obj); };
-        // Note: We can't rename this method into `catch`, as this is not a valid
-        // method name in Dart.
-        PromiseWrapper.catchError = function (promise, onError) {
-            return promise.catch(onError);
-        };
-        PromiseWrapper.all = function (promises) {
-            if (promises.length == 0)
-                return Promise.resolve([]);
-            return Promise.all(promises);
-        };
-        PromiseWrapper.then = function (promise, success, rejection) {
-            return promise.then(success, rejection);
-        };
-        PromiseWrapper.wrap = function (computation) {
-            return new Promise(function (res, rej) {
-                try {
-                    res(computation());
-                }
-                catch (e) {
-                    rej(e);
-                }
-            });
-        };
-        PromiseWrapper.scheduleMicrotask = function (computation) {
-            PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function (_) { });
-        };
-        PromiseWrapper.isPromise = function (obj) { return obj instanceof Promise; };
-        PromiseWrapper.completer = function () { return new PromiseCompleter(); };
-        return PromiseWrapper;
-    }());
-    var ObservableWrapper = (function () {
-        function ObservableWrapper() {
-        }
-        // TODO(vsavkin): when we use rxnext, try inferring the generic type from the first arg
-        ObservableWrapper.subscribe = function (emitter, onNext, onError, onComplete) {
-            if (onComplete === void 0) { onComplete = function () { }; }
-            onError = (typeof onError === "function") && onError || noop;
-            onComplete = (typeof onComplete === "function") && onComplete || noop;
-            return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });
-        };
-        ObservableWrapper.isObservable = function (obs) { return !!obs.subscribe; };
-        /**
-         * Returns whether `obs` has any subscribers listening to events.
-         */
-        ObservableWrapper.hasSubscribers = function (obs) { return obs.observers.length > 0; };
-        ObservableWrapper.dispose = function (subscription) { subscription.unsubscribe(); };
-        /**
-         * @deprecated - use callEmit() instead
-         */
-        ObservableWrapper.callNext = function (emitter, value) { emitter.next(value); };
-        ObservableWrapper.callEmit = function (emitter, value) { emitter.emit(value); };
-        ObservableWrapper.callError = function (emitter, error) { emitter.error(error); };
-        ObservableWrapper.callComplete = function (emitter) { emitter.complete(); };
-        ObservableWrapper.fromPromise = function (promise) {
-            return rxjs_observable_PromiseObservable.PromiseObservable.create(promise);
-        };
-        ObservableWrapper.toPromise = function (obj) { return rxjs_operator_toPromise.toPromise.call(obj); };
-        return ObservableWrapper;
-    }());
+    function hasLifecycleHook(name, obj) {
+        if (isBlank(obj))
+            return false;
+        var type = obj.constructor;
+        if (!(type instanceof Type))
+            return false;
+        return name in type.prototype;
+    }
     /**
-     * Use by directives and components to emit custom Events.
-     *
-     * ### Examples
-     *
-     * In the following example, `Zippy` alternatively emits `open` and `close` events when its
-     * title gets clicked:
-     *
-     * ```
-     * @Component({
-     *   selector: 'zippy',
-     *   template: `
-     *   <div class="zippy">
-     *     <div (click)="toggle()">Toggle</div>
-     *     <div [hidden]="!visible">
-     *       <ng-content></ng-content>
-     *     </div>
-     *  </div>`})
-     * export class Zippy {
-     *   visible: boolean = true;
-     *   @Output() open: EventEmitter<any> = new EventEmitter();
-     *   @Output() close: EventEmitter<any> = new EventEmitter();
-     *
-     *   toggle() {
-     *     this.visible = !this.visible;
-     *     if (this.visible) {
-     *       this.open.emit(null);
-     *     } else {
-     *       this.close.emit(null);
-     *     }
-     *   }
-     * }
-     * ```
-     *
-     * The events payload can be accessed by the parameter `$event` on the components output event handler:
-     *
-     * ```
-     * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>
-     * ```
-     *
-     * Uses Rx.Observable but provides an adapter to make it work as specified here:
-     * https://github.com/jhusain/observable-spec
-     *
-     * Once a reference implementation of the spec is available, switch to it.
      * @stable
      */
-    var EventEmitter = (function (_super) {
-        __extends(EventEmitter, _super);
-        /**
-         * Creates an instance of [EventEmitter], which depending on [isAsync],
-         * delivers events synchronously or asynchronously.
-         */
-        function EventEmitter(isAsync) {
-            if (isAsync === void 0) { isAsync = false; }
-            _super.call(this);
-            this.__isAsync = isAsync;
+    var BaseException$1 = (function (_super) {
+        __extends(BaseException$1, _super);
+        function BaseException$1(message) {
+            if (message === void 0) { message = '--'; }
+            _super.call(this, message);
+            this.message = message;
+            this.stack = (new Error(message)).stack;
         }
-        EventEmitter.prototype.emit = function (value) { _super.prototype.next.call(this, value); };
-        /**
-         * @deprecated - use .emit(value) instead
-         */
-        EventEmitter.prototype.next = function (value) { _super.prototype.next.call(this, value); };
-        EventEmitter.prototype.subscribe = function (generatorOrNext, error, complete) {
-            var schedulerFn;
-            var errorFn = function (err) { return null; };
-            var completeFn = function () { return null; };
-            if (generatorOrNext && typeof generatorOrNext === 'object') {
-                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext.next(value); }); } :
-                    function (value /** TODO #9100 */) { generatorOrNext.next(value); };
-                if (generatorOrNext.error) {
-                    errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
-                        function (err) { generatorOrNext.error(err); };
-                }
-                if (generatorOrNext.complete) {
-                    completeFn = this.__isAsync ? function () { setTimeout(function () { return generatorOrNext.complete(); }); } :
-                        function () { generatorOrNext.complete(); };
-                }
-            }
-            else {
-                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext(value); }); } :
-                    function (value /** TODO #9100 */) { generatorOrNext(value); };
-                if (error) {
-                    errorFn =
-                        this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
-                }
-                if (complete) {
-                    completeFn =
-                        this.__isAsync ? function () { setTimeout(function () { return complete(); }); } : function () { complete(); };
-                }
-            }
-            return _super.prototype.subscribe.call(this, schedulerFn, errorFn, completeFn);
-        };
-        return EventEmitter;
-    }(rxjs_Subject.Subject));
-    /**
-     * Name of the default outlet outlet.
-     * @type {string}
-     */
-    var DEFAULT_OUTLET_NAME = "__DEFAULT";
+        BaseException$1.prototype.toString = function () { return this.message; };
+        return BaseException$1;
+    }(Error));
     var Tree = (function () {
         function Tree(root) {
             this._root = root;
@@ -724,13 +748,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.outlet = outlet;
         }
         UrlSegment.prototype.toString = function () {
-            var outletPrefix = isBlank(this.outlet) ? "" : this.outlet + ":";
+            var outletPrefix = isBlank(this.outlet) ? '' : this.outlet + ":";
             return "" + outletPrefix + this.segment + _serializeParams(this.parameters);
         };
         return UrlSegment;
     }());
     function _serializeParams(params) {
-        var res = "";
+        var res = '';
         StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res += ";" + k + "=" + v; });
         return res;
     }
@@ -754,14 +778,14 @@ var __extends = (this && this.__extends) || function (d, b) {
             configurable: true
         });
         Object.defineProperty(RouteSegment.prototype, "stringifiedUrlSegments", {
-            get: function () { return this.urlSegments.map(function (s) { return s.toString(); }).join("/"); },
+            get: function () { return this.urlSegments.map(function (s) { return s.toString(); }).join('/'); },
             enumerable: true,
             configurable: true
         });
         return RouteSegment;
     }());
     function createEmptyRouteTree(type) {
-        var root = new RouteSegment([new UrlSegment("", {}, null)], {}, DEFAULT_OUTLET_NAME, type, null);
+        var root = new RouteSegment([new UrlSegment('', {}, null)], {}, DEFAULT_OUTLET_NAME, type, null);
         return new RouteTree(new TreeNode(root, []));
     }
     function equalUrlSegments(a, b) {
@@ -780,212 +804,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function routeSegmentComponentFactory(a) {
         return a._componentFactory;
     }
-    /**
-     * See {@link RouteMetadata} for more information.
-     * @ts2dart_const
-     */
-    var Route = (function () {
-        function Route(_a) {
-            var _b = _a === void 0 ? {} : _a, path = _b.path, component = _b.component;
-            this.path = path;
-            this.component = component;
-        }
-        Route.prototype.toString = function () { return "@Route(" + this.path + ", " + stringify(this.component) + ")"; };
-        return Route;
-    }());
-    /**
-     * Defines routes for a given component.
-     *
-     * It takes an array of {@link RouteMetadata}s.
-     * @ts2dart_const
-     */
-    var RoutesMetadata = (function () {
-        function RoutesMetadata(routes) {
-            this.routes = routes;
-        }
-        RoutesMetadata.prototype.toString = function () { return "@Routes(" + this.routes + ")"; };
-        return RoutesMetadata;
-    }());
-    var makeDecorator = _angular_core.__core_private__.makeDecorator;
-    var reflector = _angular_core.__core_private__.reflector;
-    function recognize(componentResolver, rootComponent, url, existingTree) {
-        var matched = new _MatchResult(rootComponent, [url.root], {}, rootNode(url).children, []);
-        return _constructSegment(componentResolver, matched, rootNode(existingTree))
-            .then(function (roots) { return new RouteTree(roots[0]); });
-    }
-    function _recognize(componentResolver, parentComponent, url, existingSegments) {
-        var metadata = _readMetadata(parentComponent); // should read from the factory instead
-        if (isBlank(metadata)) {
-            throw new _angular_core.BaseException("Component '" + stringify(parentComponent) + "' does not have route configuration");
-        }
-        var match;
-        try {
-            match = _match(metadata, url);
-        }
-        catch (e) {
-            return PromiseWrapper.reject(e, null);
-        }
-        var segmentsWithRightOutlet = existingSegments.filter(function (r) { return r.value.outlet == match.outlet; });
-        var segmentWithRightOutlet = segmentsWithRightOutlet.length > 0 ? segmentsWithRightOutlet[0] : null;
-        var main = _constructSegment(componentResolver, match, segmentWithRightOutlet);
-        var aux = _recognizeMany(componentResolver, parentComponent, match.aux, existingSegments)
-            .then(_checkOutletNameUniqueness);
-        return PromiseWrapper.all([main, aux]).then(ListWrapper.flatten);
-    }
-    function _recognizeMany(componentResolver, parentComponent, urls, existingSegments) {
-        var recognized = urls.map(function (u) { return _recognize(componentResolver, parentComponent, u, existingSegments); });
-        return PromiseWrapper.all(recognized).then(ListWrapper.flatten);
-    }
-    function _constructSegment(componentResolver, matched, existingSegment) {
-        return componentResolver.resolveComponent(matched.component)
-            .then(function (factory) {
-            var segment = _createOrReuseSegment(matched, factory, existingSegment);
-            var existingChildren = isPresent(existingSegment) ? existingSegment.children : [];
-            if (matched.leftOverUrl.length > 0) {
-                return _recognizeMany(componentResolver, factory.componentType, matched.leftOverUrl, existingChildren)
-                    .then(function (children) { return [new TreeNode(segment, children)]; });
-            }
-            else {
-                return _recognizeLeftOvers(componentResolver, factory.componentType, existingChildren)
-                    .then(function (children) { return [new TreeNode(segment, children)]; });
-            }
-        });
-    }
-    function _createOrReuseSegment(matched, factory, segmentNode) {
-        var segment = isPresent(segmentNode) ? segmentNode.value : null;
-        if (isPresent(segment) && equalUrlSegments(segment.urlSegments, matched.consumedUrlSegments) &&
-            StringMapWrapper.equals(segment.parameters, matched.parameters) &&
-            segment.outlet == matched.outlet && factory.componentType == segment.type) {
-            return segment;
-        }
-        else {
-            return new RouteSegment(matched.consumedUrlSegments, matched.parameters, matched.outlet, factory.componentType, factory);
-        }
-    }
-    function _recognizeLeftOvers(componentResolver, parentComponent, existingSegments) {
-        return componentResolver.resolveComponent(parentComponent)
-            .then(function (factory) {
-            var metadata = _readMetadata(factory.componentType);
-            if (isBlank(metadata)) {
-                return [];
-            }
-            var r = metadata.routes.filter(function (r) { return r.path == "" || r.path == "/"; });
-            if (r.length === 0) {
-                return PromiseWrapper.resolve([]);
-            }
-            else {
-                var segmentsWithMatchingOutlet = existingSegments.filter(function (r) { return r.value.outlet == DEFAULT_OUTLET_NAME; });
-                var segmentWithMatchingOutlet_1 = segmentsWithMatchingOutlet.length > 0 ? segmentsWithMatchingOutlet[0] : null;
-                var existingChildren = isPresent(segmentWithMatchingOutlet_1) ? segmentWithMatchingOutlet_1.children : [];
-                return _recognizeLeftOvers(componentResolver, r[0].component, existingChildren)
-                    .then(function (children) {
-                    return componentResolver.resolveComponent(r[0].component)
-                        .then(function (factory) {
-                        var segment = _createOrReuseSegment(new _MatchResult(r[0].component, [], {}, [], []), factory, segmentWithMatchingOutlet_1);
-                        return [new TreeNode(segment, children)];
-                    });
-                });
-            }
-        });
-    }
-    function _match(metadata, url) {
-        for (var _i = 0, _a = metadata.routes; _i < _a.length; _i++) {
-            var r = _a[_i];
-            var matchingResult = _matchWithParts(r, url);
-            if (isPresent(matchingResult)) {
-                return matchingResult;
-            }
-        }
-        var availableRoutes = metadata.routes.map(function (r) { return ("'" + r.path + "'"); }).join(", ");
-        throw new _angular_core.BaseException("Cannot match any routes. Current segment: '" + url.value + "'. Available routes: [" + availableRoutes + "].");
-    }
-    function _matchWithParts(route, url) {
-        var path = route.path.startsWith("/") ? route.path.substring(1) : route.path;
-        if (path == "*") {
-            return new _MatchResult(route.component, [], null, [], []);
-        }
-        var parts = path.split("/");
-        var positionalParams = {};
-        var consumedUrlSegments = [];
-        var lastParent = null;
-        var lastSegment = null;
-        var current = url;
-        for (var i = 0; i < parts.length; ++i) {
-            if (isBlank(current))
-                return null;
-            var p_1 = parts[i];
-            var isLastSegment = i === parts.length - 1;
-            var isLastParent = i === parts.length - 2;
-            var isPosParam = p_1.startsWith(":");
-            if (!isPosParam && p_1 != current.value.segment)
-                return null;
-            if (isLastSegment) {
-                lastSegment = current;
-            }
-            if (isLastParent) {
-                lastParent = current;
-            }
-            if (isPosParam) {
-                positionalParams[p_1.substring(1)] = current.value.segment;
-            }
-            consumedUrlSegments.push(current.value);
-            current = ListWrapper.first(current.children);
-        }
-        var p = lastSegment.value.parameters;
-        var parameters = StringMapWrapper.merge(p, positionalParams);
-        var axuUrlSubtrees = isPresent(lastParent) ? lastParent.children.slice(1) : [];
-        return new _MatchResult(route.component, consumedUrlSegments, parameters, lastSegment.children, axuUrlSubtrees);
-    }
-    function _checkOutletNameUniqueness(nodes) {
-        var names = {};
-        nodes.forEach(function (n) {
-            var segmentWithSameOutletName = names[n.value.outlet];
-            if (isPresent(segmentWithSameOutletName)) {
-                var p = segmentWithSameOutletName.stringifiedUrlSegments;
-                var c = n.value.stringifiedUrlSegments;
-                throw new _angular_core.BaseException("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
-            }
-            names[n.value.outlet] = n.value;
-        });
-        return nodes;
-    }
-    var _MatchResult = (function () {
-        function _MatchResult(component, consumedUrlSegments, parameters, leftOverUrl, aux) {
-            this.component = component;
-            this.consumedUrlSegments = consumedUrlSegments;
-            this.parameters = parameters;
-            this.leftOverUrl = leftOverUrl;
-            this.aux = aux;
-        }
-        Object.defineProperty(_MatchResult.prototype, "outlet", {
-            get: function () {
-                return this.consumedUrlSegments.length === 0 || isBlank(this.consumedUrlSegments[0].outlet) ?
-                    DEFAULT_OUTLET_NAME :
-                    this.consumedUrlSegments[0].outlet;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return _MatchResult;
-    }());
-    function _readMetadata(componentType) {
-        var metadata = reflector.annotations(componentType).filter(function (f) { return f instanceof RoutesMetadata; });
-        return ListWrapper.first(metadata);
-    }
-    /**
-     * @stable
-     */
-    var BaseException$1 = (function (_super) {
-        __extends(BaseException$1, _super);
-        function BaseException$1(message) {
-            if (message === void 0) { message = "--"; }
-            _super.call(this, message);
-            this.message = message;
-            this.stack = (new Error(message)).stack;
-        }
-        BaseException$1.prototype.toString = function () { return this.message; };
-        return BaseException$1;
-    }(Error));
     function link(segment, routeTree, urlTree, commands) {
         if (commands.length === 0)
             return urlTree;
@@ -1002,7 +820,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function _navigateToRoot(normalizedChange) {
         return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
-            normalizedChange.commands[0] == "/";
+            normalizedChange.commands[0] == '/';
     }
     var _NormalizedNavigationCommands = (function () {
         function _NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, commands) {
@@ -1013,7 +831,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return _NormalizedNavigationCommands;
     }());
     function _normalizeCommands(commands) {
-        if (isString(commands[0]) && commands.length === 1 && commands[0] == "/") {
+        if (isString(commands[0]) && commands.length === 1 && commands[0] == '/') {
             return new _NormalizedNavigationCommands(true, 0, commands);
         }
         var numberOfDoubleDots = 0;
@@ -1030,12 +848,12 @@ var __extends = (this && this.__extends) || function (d, b) {
                 var cc = parts[j];
                 // first exp is treated in a special way
                 if (i == 0) {
-                    if (j == 0 && cc == ".") {
+                    if (j == 0 && cc == '.') {
                     }
-                    else if (j == 0 && cc == "") {
+                    else if (j == 0 && cc == '') {
                         isAbsolute = true;
                     }
-                    else if (cc == "..") {
+                    else if (cc == '..') {
                         numberOfDoubleDots++;
                     }
                     else if (cc != '') {
@@ -1059,7 +877,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         var urlSegment = ListWrapper.last(s.urlSegments);
         var path = urlTree.pathFromRoot(urlSegment);
         if (path.length <= numberOfDoubleDots) {
-            throw new BaseException$1("Invalid number of '../'");
+            throw new BaseException$1('Invalid number of \'../\'');
         }
         return path[path.length - 1 - numberOfDoubleDots];
     }
@@ -1157,22 +975,203 @@ var __extends = (this && this.__extends) || function (d, b) {
     function _segment(commands) {
         if (!isString(commands[0]))
             return commands[0];
-        var parts = commands[0].toString().split(":");
+        var parts = commands[0].toString().split(':');
         return parts.length > 1 ? parts[1] : commands[0];
     }
     function _outlet(commands) {
         if (!isString(commands[0]))
             return null;
-        var parts = commands[0].toString().split(":");
+        var parts = commands[0].toString().split(':');
         return parts.length > 1 ? parts[0] : null;
     }
-    function hasLifecycleHook(name, obj) {
-        if (isBlank(obj))
-            return false;
-        var type = obj.constructor;
-        if (!(type instanceof Type))
-            return false;
-        return name in type.prototype;
+    var makeDecorator = _angular_core.__core_private__.makeDecorator;
+    var reflector = _angular_core.__core_private__.reflector;
+    /**
+     * See {@link RouteMetadata} for more information.
+     * @ts2dart_const
+     */
+    var Route = (function () {
+        function Route(_a) {
+            var _b = _a === void 0 ? {} : _a, path = _b.path, component = _b.component;
+            this.path = path;
+            this.component = component;
+        }
+        Route.prototype.toString = function () { return "@Route(" + this.path + ", " + stringify(this.component) + ")"; };
+        return Route;
+    }());
+    /**
+     * Defines routes for a given component.
+     *
+     * It takes an array of {@link RouteMetadata}s.
+     * @ts2dart_const
+     */
+    var RoutesMetadata = (function () {
+        function RoutesMetadata(routes) {
+            this.routes = routes;
+        }
+        RoutesMetadata.prototype.toString = function () { return "@Routes(" + this.routes + ")"; };
+        return RoutesMetadata;
+    }());
+    function recognize(componentResolver, rootComponent, url, existingTree) {
+        var matched = new _MatchResult(rootComponent, [url.root], {}, rootNode(url).children, []);
+        return _constructSegment(componentResolver, matched, rootNode(existingTree))
+            .then(function (roots) { return new RouteTree(roots[0]); });
+    }
+    function _recognize(componentResolver, parentComponent, url, existingSegments) {
+        var metadata = _readMetadata(parentComponent); // should read from the factory instead
+        if (isBlank(metadata)) {
+            throw new _angular_core.BaseException("Component '" + stringify(parentComponent) + "' does not have route configuration");
+        }
+        var match;
+        try {
+            match = _match(metadata, url);
+        }
+        catch (e) {
+            return PromiseWrapper.reject(e, null);
+        }
+        var segmentsWithRightOutlet = existingSegments.filter(function (r) { return r.value.outlet == match.outlet; });
+        var segmentWithRightOutlet = segmentsWithRightOutlet.length > 0 ? segmentsWithRightOutlet[0] : null;
+        var main = _constructSegment(componentResolver, match, segmentWithRightOutlet);
+        var aux = _recognizeMany(componentResolver, parentComponent, match.aux, existingSegments)
+            .then(_checkOutletNameUniqueness);
+        return PromiseWrapper.all([main, aux]).then(ListWrapper.flatten);
+    }
+    function _recognizeMany(componentResolver, parentComponent, urls, existingSegments) {
+        var recognized = urls.map(function (u) { return _recognize(componentResolver, parentComponent, u, existingSegments); });
+        return PromiseWrapper.all(recognized).then(ListWrapper.flatten);
+    }
+    function _constructSegment(componentResolver, matched, existingSegment) {
+        return componentResolver.resolveComponent(matched.component).then(function (factory) {
+            var segment = _createOrReuseSegment(matched, factory, existingSegment);
+            var existingChildren = isPresent(existingSegment) ? existingSegment.children : [];
+            if (matched.leftOverUrl.length > 0) {
+                return _recognizeMany(componentResolver, factory.componentType, matched.leftOverUrl, existingChildren)
+                    .then(function (children) { return [new TreeNode(segment, children)]; });
+            }
+            else {
+                return _recognizeLeftOvers(componentResolver, factory.componentType, existingChildren)
+                    .then(function (children) { return [new TreeNode(segment, children)]; });
+            }
+        });
+    }
+    function _createOrReuseSegment(matched, factory, segmentNode) {
+        var segment = isPresent(segmentNode) ? segmentNode.value : null;
+        if (isPresent(segment) && equalUrlSegments(segment.urlSegments, matched.consumedUrlSegments) &&
+            StringMapWrapper.equals(segment.parameters, matched.parameters) &&
+            segment.outlet == matched.outlet && factory.componentType == segment.type) {
+            return segment;
+        }
+        else {
+            return new RouteSegment(matched.consumedUrlSegments, matched.parameters, matched.outlet, factory.componentType, factory);
+        }
+    }
+    function _recognizeLeftOvers(componentResolver, parentComponent, existingSegments) {
+        return componentResolver.resolveComponent(parentComponent).then(function (factory) {
+            var metadata = _readMetadata(factory.componentType);
+            if (isBlank(metadata)) {
+                return [];
+            }
+            var r = metadata.routes.filter(function (r) { return r.path == '' || r.path == '/'; });
+            if (r.length === 0) {
+                return PromiseWrapper.resolve([]);
+            }
+            else {
+                var segmentsWithMatchingOutlet = existingSegments.filter(function (r) { return r.value.outlet == DEFAULT_OUTLET_NAME; });
+                var segmentWithMatchingOutlet_1 = segmentsWithMatchingOutlet.length > 0 ? segmentsWithMatchingOutlet[0] : null;
+                var existingChildren = isPresent(segmentWithMatchingOutlet_1) ? segmentWithMatchingOutlet_1.children : [];
+                return _recognizeLeftOvers(componentResolver, r[0].component, existingChildren)
+                    .then(function (children) {
+                    return componentResolver.resolveComponent(r[0].component).then(function (factory) {
+                        var segment = _createOrReuseSegment(new _MatchResult(r[0].component, [], {}, [], []), factory, segmentWithMatchingOutlet_1);
+                        return [new TreeNode(segment, children)];
+                    });
+                });
+            }
+        });
+    }
+    function _match(metadata, url) {
+        for (var _i = 0, _a = metadata.routes; _i < _a.length; _i++) {
+            var r = _a[_i];
+            var matchingResult = _matchWithParts(r, url);
+            if (isPresent(matchingResult)) {
+                return matchingResult;
+            }
+        }
+        var availableRoutes = metadata.routes.map(function (r) { return ("'" + r.path + "'"); }).join(', ');
+        throw new _angular_core.BaseException("Cannot match any routes. Current segment: '" + url.value + "'. Available routes: [" + availableRoutes + "].");
+    }
+    function _matchWithParts(route, url) {
+        var path = route.path.startsWith('/') ? route.path.substring(1) : route.path;
+        if (path == '*') {
+            return new _MatchResult(route.component, [], null, [], []);
+        }
+        var parts = path.split('/');
+        var positionalParams = {};
+        var consumedUrlSegments = [];
+        var lastParent = null;
+        var lastSegment = null;
+        var current = url;
+        for (var i = 0; i < parts.length; ++i) {
+            if (isBlank(current))
+                return null;
+            var p_1 = parts[i];
+            var isLastSegment = i === parts.length - 1;
+            var isLastParent = i === parts.length - 2;
+            var isPosParam = p_1.startsWith(':');
+            if (!isPosParam && p_1 != current.value.segment)
+                return null;
+            if (isLastSegment) {
+                lastSegment = current;
+            }
+            if (isLastParent) {
+                lastParent = current;
+            }
+            if (isPosParam) {
+                positionalParams[p_1.substring(1)] = current.value.segment;
+            }
+            consumedUrlSegments.push(current.value);
+            current = ListWrapper.first(current.children);
+        }
+        var p = lastSegment.value.parameters;
+        var parameters = StringMapWrapper.merge(p, positionalParams);
+        var axuUrlSubtrees = isPresent(lastParent) ? lastParent.children.slice(1) : [];
+        return new _MatchResult(route.component, consumedUrlSegments, parameters, lastSegment.children, axuUrlSubtrees);
+    }
+    function _checkOutletNameUniqueness(nodes) {
+        var names = {};
+        nodes.forEach(function (n) {
+            var segmentWithSameOutletName = names[n.value.outlet];
+            if (isPresent(segmentWithSameOutletName)) {
+                var p = segmentWithSameOutletName.stringifiedUrlSegments;
+                var c = n.value.stringifiedUrlSegments;
+                throw new _angular_core.BaseException("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
+            }
+            names[n.value.outlet] = n.value;
+        });
+        return nodes;
+    }
+    var _MatchResult = (function () {
+        function _MatchResult(component, consumedUrlSegments, parameters, leftOverUrl, aux) {
+            this.component = component;
+            this.consumedUrlSegments = consumedUrlSegments;
+            this.parameters = parameters;
+            this.leftOverUrl = leftOverUrl;
+            this.aux = aux;
+        }
+        Object.defineProperty(_MatchResult.prototype, "outlet", {
+            get: function () {
+                return this.consumedUrlSegments.length === 0 || isBlank(this.consumedUrlSegments[0].outlet) ?
+                    DEFAULT_OUTLET_NAME :
+                    this.consumedUrlSegments[0].outlet;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return _MatchResult;
+    }());
+    function _readMetadata(componentType) {
+        var metadata = reflector.annotations(componentType).filter(function (f) { return f instanceof RoutesMetadata; });
+        return ListWrapper.first(metadata);
     }
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
@@ -1337,8 +1336,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             var prevRoot = isPresent(this.prevTree) ? rootNode(this.prevTree) : null;
             var currRoot = rootNode(this.currTree);
-            return this.canDeactivate(currRoot, prevRoot, parentOutletMap, rootComponent)
-                .then(function (res) {
+            return this.canDeactivate(currRoot, prevRoot, parentOutletMap, rootComponent).then(function (res) {
                 _this.performMutation = true;
                 if (res) {
                     _this.activateChildSegments(currRoot, prevRoot, parentOutletMap, [rootComponent]);
@@ -1358,7 +1356,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var curr = PromiseWrapper.resolve(true);
             var _loop_2 = function(p) {
                 curr = curr.then(function (_) {
-                    if (hasLifecycleHook("routerCanDeactivate", p)) {
+                    if (hasLifecycleHook('routerCanDeactivate', p)) {
                         return p.routerCanDeactivate(_this.prevTree, _this.currTree);
                     }
                     else {
@@ -1374,12 +1372,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         _ActivateSegments.prototype.activateChildSegments = function (currNode, prevNode, outletMap, components) {
             var _this = this;
-            var prevChildren = isPresent(prevNode) ?
-                prevNode.children.reduce(function (m, c) {
-                    m[c.value.outlet] = c;
-                    return m;
-                }, {}) :
-                {};
+            var prevChildren = isPresent(prevNode) ? prevNode.children.reduce(function (m, c) {
+                m[c.value.outlet] = c;
+                return m;
+            }, {}) : {};
             currNode.children.forEach(function (c) {
                 _this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
                 StringMapWrapper.delete(prevChildren, c.value.outlet);
@@ -1405,7 +1401,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         _ActivateSegments.prototype.activateNewSegments = function (outletMap, curr, prev, outlet) {
             var resolved = _angular_core.ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: RouteSegment, useValue: curr }]);
             var ref = outlet.activate(routeSegmentComponentFactory(curr), resolved, outletMap);
-            if (hasLifecycleHook("routerOnActivate", ref.instance)) {
+            if (hasLifecycleHook('routerOnActivate', ref.instance)) {
                 ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);
             }
             return ref.instance;
@@ -1436,280 +1432,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return _ActivateSegments;
     }());
-    /**
-     * Defines routes for a given component.
-     *
-     * It takes an array of {@link RouteMetadata}s.
-     */
-    var Routes = makeDecorator(RoutesMetadata);
-    /**
-     * Defines a way to serialize/deserialize a url tree.
-     */
-    var RouterUrlSerializer = (function () {
-        function RouterUrlSerializer() {
-        }
-        return RouterUrlSerializer;
-    }());
-    /**
-     * A default implementation of the serialization.
-     */
-    var DefaultRouterUrlSerializer = (function (_super) {
-        __extends(DefaultRouterUrlSerializer, _super);
-        function DefaultRouterUrlSerializer() {
-            _super.apply(this, arguments);
-        }
-        DefaultRouterUrlSerializer.prototype.parse = function (url) {
-            var root = new _UrlParser().parse(url);
-            return new UrlTree(root);
-        };
-        DefaultRouterUrlSerializer.prototype.serialize = function (tree) { return _serializeUrlTreeNode(rootNode(tree)); };
-        return DefaultRouterUrlSerializer;
-    }(RouterUrlSerializer));
-    function _serializeUrlTreeNode(node) {
-        return "" + node.value + _serializeChildren(node);
-    }
-    function _serializeUrlTreeNodes(nodes) {
-        var main = nodes[0].value.toString();
-        var auxNodes = nodes.slice(1);
-        var aux = auxNodes.length > 0 ? "(" + auxNodes.map(_serializeUrlTreeNode).join("//") + ")" : "";
-        var children = _serializeChildren(nodes[0]);
-        return "" + main + aux + children;
-    }
-    function _serializeChildren(node) {
-        if (node.children.length > 0) {
-            return "/" + _serializeUrlTreeNodes(node.children);
-        }
-        else {
-            return "";
-        }
-    }
-    var SEGMENT_RE = RegExpWrapper.create('^[^\\/\\(\\)\\?;=&#]+');
-    function matchUrlSegment(str) {
-        var match = RegExpWrapper.firstMatch(SEGMENT_RE, str);
-        return isPresent(match) ? match[0] : '';
-    }
-    var QUERY_PARAM_VALUE_RE = RegExpWrapper.create('^[^\\(\\)\\?;&#]+');
-    function matchUrlQueryParamValue(str) {
-        var match = RegExpWrapper.firstMatch(QUERY_PARAM_VALUE_RE, str);
-        return isPresent(match) ? match[0] : '';
-    }
-    var _UrlParser = (function () {
-        function _UrlParser() {
-        }
-        _UrlParser.prototype.peekStartsWith = function (str) { return this._remaining.startsWith(str); };
-        _UrlParser.prototype.capture = function (str) {
-            if (!this._remaining.startsWith(str)) {
-                throw new _angular_core.BaseException("Expected \"" + str + "\".");
-            }
-            this._remaining = this._remaining.substring(str.length);
-        };
-        _UrlParser.prototype.parse = function (url) {
-            this._remaining = url;
-            if (url == '' || url == '/') {
-                return new TreeNode(new UrlSegment('', {}, null), []);
-            }
-            else {
-                return this.parseRoot();
-            }
-        };
-        _UrlParser.prototype.parseRoot = function () {
-            var segments = this.parseSegments();
-            return new TreeNode(new UrlSegment('', {}, null), segments);
-        };
-        _UrlParser.prototype.parseSegments = function (outletName) {
-            if (outletName === void 0) { outletName = null; }
-            if (this._remaining.length == 0) {
-                return [];
-            }
-            if (this.peekStartsWith('/')) {
-                this.capture('/');
-            }
-            var path = matchUrlSegment(this._remaining);
-            this.capture(path);
-            if (path.indexOf(":") > -1) {
-                var parts = path.split(":");
-                outletName = parts[0];
-                path = parts[1];
-            }
-            var matrixParams = {};
-            if (this.peekStartsWith(';')) {
-                matrixParams = this.parseMatrixParams();
-            }
-            var aux = [];
-            if (this.peekStartsWith('(')) {
-                aux = this.parseAuxiliaryRoutes();
-            }
-            var children = [];
-            if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
-                this.capture('/');
-                children = this.parseSegments();
-            }
-            var segment = new UrlSegment(path, matrixParams, outletName);
-            var node = new TreeNode(segment, children);
-            return [node].concat(aux);
-        };
-        _UrlParser.prototype.parseQueryParams = function () {
-            var params = {};
-            this.capture('?');
-            this.parseQueryParam(params);
-            while (this._remaining.length > 0 && this.peekStartsWith('&')) {
-                this.capture('&');
-                this.parseQueryParam(params);
-            }
-            return params;
-        };
-        _UrlParser.prototype.parseMatrixParams = function () {
-            var params = {};
-            while (this._remaining.length > 0 && this.peekStartsWith(';')) {
-                this.capture(';');
-                this.parseParam(params);
-            }
-            return params;
-        };
-        _UrlParser.prototype.parseParam = function (params) {
-            var key = matchUrlSegment(this._remaining);
-            if (isBlank(key)) {
-                return;
-            }
-            this.capture(key);
-            var value = "true";
-            if (this.peekStartsWith('=')) {
-                this.capture('=');
-                var valueMatch = matchUrlSegment(this._remaining);
-                if (isPresent(valueMatch)) {
-                    value = valueMatch;
-                    this.capture(value);
-                }
-            }
-            params[key] = value;
-        };
-        _UrlParser.prototype.parseQueryParam = function (params) {
-            var key = matchUrlSegment(this._remaining);
-            if (isBlank(key)) {
-                return;
-            }
-            this.capture(key);
-            var value = "true";
-            if (this.peekStartsWith('=')) {
-                this.capture('=');
-                var valueMatch = matchUrlQueryParamValue(this._remaining);
-                if (isPresent(valueMatch)) {
-                    value = valueMatch;
-                    this.capture(value);
-                }
-            }
-            params[key] = value;
-        };
-        _UrlParser.prototype.parseAuxiliaryRoutes = function () {
-            var segments = [];
-            this.capture('(');
-            while (!this.peekStartsWith(')') && this._remaining.length > 0) {
-                segments = segments.concat(this.parseSegments("aux"));
-                if (this.peekStartsWith('//')) {
-                    this.capture('//');
-                }
-            }
-            this.capture(')');
-            return segments;
-        };
-        return _UrlParser;
-    }());
-    /**
-     * The Platform agnostic ROUTER PROVIDERS
-     */
-    var ROUTER_PROVIDERS_COMMON = [
-        RouterOutletMap,
-        /*@ts2dart_Provider*/ { provide: RouterUrlSerializer, useClass: DefaultRouterUrlSerializer },
-        /*@ts2dart_Provider*/ { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy }, _angular_common.Location,
-        /*@ts2dart_Provider*/ {
-            provide: Router,
-            useFactory: routerFactory,
-            deps: /*@ts2dart_const*/ [_angular_core.ApplicationRef, _angular_core.ComponentResolver, RouterUrlSerializer, RouterOutletMap, _angular_common.Location],
-        },
-        /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: routeSegmentFactory, deps: [Router] }
-    ];
-    function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
-        if (app.componentTypes.length == 0) {
-            throw new _angular_core.BaseException("Bootstrap at least one component before injecting Router.");
-        }
-        // TODO: vsavkin this should not be null
-        var router = new Router(null, app.componentTypes[0], componentResolver, urlSerializer, routerOutletMap, location);
-        app.registerDisposeListener(function () { return router.dispose(); });
-        return router;
-    }
-    function routeSegmentFactory(router) {
-        return router.routeTree.root;
-    }
-    /**
-     * A list of providers. To use the router, you must add this to your application.
-     *
-     * ```
-     * import {Component} from '@angular/core';
-     * import {
-     *   ROUTER_DIRECTIVES,
-     *   ROUTER_PROVIDERS,
-     *   Routes
-     * } from '@angular/router';
-     *
-     * @Component({directives: [ROUTER_DIRECTIVES]})
-     * @Routes([
-     *  {...},
-     * ])
-     * class AppCmp {
-     *   // ...
-     * }
-     *
-     * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
-     * ```
-     */
-    // TODO: merge with router_providers_common.ts
-    var ROUTER_PROVIDERS = [ROUTER_PROVIDERS_COMMON];
-    var RouterOutlet = (function () {
-        function RouterOutlet(parentOutletMap, _location, name) {
-            this._location = _location;
-            parentOutletMap.registerOutlet(isBlank(name) ? DEFAULT_OUTLET_NAME : name, this);
-        }
-        RouterOutlet.prototype.deactivate = function () {
-            this._activated.destroy();
-            this._activated = null;
-        };
-        Object.defineProperty(RouterOutlet.prototype, "component", {
-            /**
-             * Returns the loaded component.
-             */
-            get: function () { return isPresent(this._activated) ? this._activated.instance : null; },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(RouterOutlet.prototype, "isActivated", {
-            /**
-             * Returns true is the outlet is not empty.
-             */
-            get: function () { return isPresent(this._activated); },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * Called by the Router to instantiate a new component.
-         */
-        RouterOutlet.prototype.activate = function (factory, providers, outletMap) {
-            this.outletMap = outletMap;
-            var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this._location.parentInjector);
-            this._activated = this._location.createComponent(factory, this._location.length, inj, []);
-            return this._activated;
-        };
-        return RouterOutlet;
-    }());
-    /** @nocollapse */
-    RouterOutlet.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
-    ];
-    /** @nocollapse */
-    RouterOutlet.ctorParameters = [
-        { type: RouterOutletMap, },
-        { type: _angular_core.ViewContainerRef, },
-        { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
-    ];
     var RouterLink = (function () {
         function RouterLink(_routeSegment, _router, _locationStrategy) {
             var _this = this;
@@ -1775,8 +1497,54 @@ var __extends = (this && this.__extends) || function (d, b) {
         'href': [{ type: _angular_core.HostBinding },],
         'isActive': [{ type: _angular_core.HostBinding, args: ['class.router-link-active',] },],
         'routerLink': [{ type: _angular_core.Input },],
-        'onClick': [{ type: _angular_core.HostListener, args: ["click", ["$event.button", "$event.ctrlKey", "$event.metaKey"],] },],
+        'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
+    var RouterOutlet = (function () {
+        function RouterOutlet(parentOutletMap, _location, name) {
+            this._location = _location;
+            parentOutletMap.registerOutlet(isBlank(name) ? DEFAULT_OUTLET_NAME : name, this);
+        }
+        RouterOutlet.prototype.deactivate = function () {
+            this._activated.destroy();
+            this._activated = null;
+        };
+        Object.defineProperty(RouterOutlet.prototype, "component", {
+            /**
+             * Returns the loaded component.
+             */
+            get: function () { return isPresent(this._activated) ? this._activated.instance : null; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+            /**
+             * Returns true is the outlet is not empty.
+             */
+            get: function () { return isPresent(this._activated); },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * Called by the Router to instantiate a new component.
+         */
+        RouterOutlet.prototype.activate = function (factory, providers, outletMap) {
+            this.outletMap = outletMap;
+            var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this._location.parentInjector);
+            this._activated = this._location.createComponent(factory, this._location.length, inj, []);
+            return this._activated;
+        };
+        return RouterOutlet;
+    }());
+    /** @nocollapse */
+    RouterOutlet.decorators = [
+        { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+    ];
+    /** @nocollapse */
+    RouterOutlet.ctorParameters = [
+        { type: RouterOutletMap, },
+        { type: _angular_core.ViewContainerRef, },
+        { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
+    ];
     /**
      * A list of directives. To use the router directives like {@link RouterOutlet} and
      * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your
@@ -1798,19 +1566,247 @@ var __extends = (this && this.__extends) || function (d, b) {
      * ```
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink];
-    exports.Router = Router;
-    exports.RouterOutletMap = RouterOutletMap;
-    exports.RouteSegment = RouteSegment;
-    exports.UrlSegment = UrlSegment;
-    exports.Tree = Tree;
-    exports.UrlTree = UrlTree;
-    exports.RouteTree = RouteTree;
+    /**
+     * Defines routes for a given component.
+     *
+     * It takes an array of {@link RouteMetadata}s.
+     */
+    var Routes = makeDecorator(RoutesMetadata);
+    /**
+     * Defines a way to serialize/deserialize a url tree.
+     */
+    var RouterUrlSerializer = (function () {
+        function RouterUrlSerializer() {
+        }
+        return RouterUrlSerializer;
+    }());
+    /**
+     * A default implementation of the serialization.
+     */
+    var DefaultRouterUrlSerializer = (function (_super) {
+        __extends(DefaultRouterUrlSerializer, _super);
+        function DefaultRouterUrlSerializer() {
+            _super.apply(this, arguments);
+        }
+        DefaultRouterUrlSerializer.prototype.parse = function (url) {
+            var root = new _UrlParser().parse(url);
+            return new UrlTree(root);
+        };
+        DefaultRouterUrlSerializer.prototype.serialize = function (tree) { return _serializeUrlTreeNode(rootNode(tree)); };
+        return DefaultRouterUrlSerializer;
+    }(RouterUrlSerializer));
+    function _serializeUrlTreeNode(node) {
+        return "" + node.value + _serializeChildren(node);
+    }
+    function _serializeUrlTreeNodes(nodes) {
+        var main = nodes[0].value.toString();
+        var auxNodes = nodes.slice(1);
+        var aux = auxNodes.length > 0 ? "(" + auxNodes.map(_serializeUrlTreeNode).join("//") + ")" : '';
+        var children = _serializeChildren(nodes[0]);
+        return "" + main + aux + children;
+    }
+    function _serializeChildren(node) {
+        if (node.children.length > 0) {
+            return "/" + _serializeUrlTreeNodes(node.children);
+        }
+        else {
+            return '';
+        }
+    }
+    var SEGMENT_RE = RegExpWrapper.create('^[^\\/\\(\\)\\?;=&#]+');
+    function matchUrlSegment(str) {
+        var match = RegExpWrapper.firstMatch(SEGMENT_RE, str);
+        return isPresent(match) ? match[0] : '';
+    }
+    var QUERY_PARAM_VALUE_RE = RegExpWrapper.create('^[^\\(\\)\\?;&#]+');
+    function matchUrlQueryParamValue(str) {
+        var match = RegExpWrapper.firstMatch(QUERY_PARAM_VALUE_RE, str);
+        return isPresent(match) ? match[0] : '';
+    }
+    var _UrlParser = (function () {
+        function _UrlParser() {
+        }
+        _UrlParser.prototype.peekStartsWith = function (str) { return this._remaining.startsWith(str); };
+        _UrlParser.prototype.capture = function (str) {
+            if (!this._remaining.startsWith(str)) {
+                throw new _angular_core.BaseException("Expected \"" + str + "\".");
+            }
+            this._remaining = this._remaining.substring(str.length);
+        };
+        _UrlParser.prototype.parse = function (url) {
+            this._remaining = url;
+            if (url == '' || url == '/') {
+                return new TreeNode(new UrlSegment('', {}, null), []);
+            }
+            else {
+                return this.parseRoot();
+            }
+        };
+        _UrlParser.prototype.parseRoot = function () {
+            var segments = this.parseSegments();
+            return new TreeNode(new UrlSegment('', {}, null), segments);
+        };
+        _UrlParser.prototype.parseSegments = function (outletName) {
+            if (outletName === void 0) { outletName = null; }
+            if (this._remaining.length == 0) {
+                return [];
+            }
+            if (this.peekStartsWith('/')) {
+                this.capture('/');
+            }
+            var path = matchUrlSegment(this._remaining);
+            this.capture(path);
+            if (path.indexOf(':') > -1) {
+                var parts = path.split(':');
+                outletName = parts[0];
+                path = parts[1];
+            }
+            var matrixParams = {};
+            if (this.peekStartsWith(';')) {
+                matrixParams = this.parseMatrixParams();
+            }
+            var aux = [];
+            if (this.peekStartsWith('(')) {
+                aux = this.parseAuxiliaryRoutes();
+            }
+            var children = [];
+            if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
+                this.capture('/');
+                children = this.parseSegments();
+            }
+            var segment = new UrlSegment(path, matrixParams, outletName);
+            var node = new TreeNode(segment, children);
+            return [node].concat(aux);
+        };
+        _UrlParser.prototype.parseQueryParams = function () {
+            var params = {};
+            this.capture('?');
+            this.parseQueryParam(params);
+            while (this._remaining.length > 0 && this.peekStartsWith('&')) {
+                this.capture('&');
+                this.parseQueryParam(params);
+            }
+            return params;
+        };
+        _UrlParser.prototype.parseMatrixParams = function () {
+            var params = {};
+            while (this._remaining.length > 0 && this.peekStartsWith(';')) {
+                this.capture(';');
+                this.parseParam(params);
+            }
+            return params;
+        };
+        _UrlParser.prototype.parseParam = function (params) {
+            var key = matchUrlSegment(this._remaining);
+            if (isBlank(key)) {
+                return;
+            }
+            this.capture(key);
+            var value = 'true';
+            if (this.peekStartsWith('=')) {
+                this.capture('=');
+                var valueMatch = matchUrlSegment(this._remaining);
+                if (isPresent(valueMatch)) {
+                    value = valueMatch;
+                    this.capture(value);
+                }
+            }
+            params[key] = value;
+        };
+        _UrlParser.prototype.parseQueryParam = function (params) {
+            var key = matchUrlSegment(this._remaining);
+            if (isBlank(key)) {
+                return;
+            }
+            this.capture(key);
+            var value = 'true';
+            if (this.peekStartsWith('=')) {
+                this.capture('=');
+                var valueMatch = matchUrlQueryParamValue(this._remaining);
+                if (isPresent(valueMatch)) {
+                    value = valueMatch;
+                    this.capture(value);
+                }
+            }
+            params[key] = value;
+        };
+        _UrlParser.prototype.parseAuxiliaryRoutes = function () {
+            var segments = [];
+            this.capture('(');
+            while (!this.peekStartsWith(')') && this._remaining.length > 0) {
+                segments = segments.concat(this.parseSegments('aux'));
+                if (this.peekStartsWith('//')) {
+                    this.capture('//');
+                }
+            }
+            this.capture(')');
+            return segments;
+        };
+        return _UrlParser;
+    }());
+    /**
+     * The Platform agnostic ROUTER PROVIDERS
+     */
+    var ROUTER_PROVIDERS_COMMON = [
+        RouterOutletMap,
+        /*@ts2dart_Provider*/ { provide: RouterUrlSerializer, useClass: DefaultRouterUrlSerializer },
+        /*@ts2dart_Provider*/ { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy }, _angular_common.Location,
+        /*@ts2dart_Provider*/ {
+            provide: Router,
+            useFactory: routerFactory,
+            deps: /*@ts2dart_const*/ [_angular_core.ApplicationRef, _angular_core.ComponentResolver, RouterUrlSerializer, RouterOutletMap, _angular_common.Location],
+        },
+        /*@ts2dart_Provider*/ { provide: RouteSegment, useFactory: routeSegmentFactory, deps: [Router] }
+    ];
+    function routerFactory(app, componentResolver, urlSerializer, routerOutletMap, location) {
+        if (app.componentTypes.length == 0) {
+            throw new _angular_core.BaseException('Bootstrap at least one component before injecting Router.');
+        }
+        // TODO: vsavkin this should not be null
+        var router = new Router(null, app.componentTypes[0], componentResolver, urlSerializer, routerOutletMap, location);
+        app.registerDisposeListener(function () { return router.dispose(); });
+        return router;
+    }
+    function routeSegmentFactory(router) {
+        return router.routeTree.root;
+    }
+    /**
+     * A list of providers. To use the router, you must add this to your application.
+     *
+     * ```
+     * import {Component} from '@angular/core';
+     * import {
+     *   ROUTER_DIRECTIVES,
+     *   ROUTER_PROVIDERS,
+     *   Routes
+     * } from '@angular/router';
+     *
+     * @Component({directives: [ROUTER_DIRECTIVES]})
+     * @Routes([
+     *  {...},
+     * ])
+     * class AppCmp {
+     *   // ...
+     * }
+     *
+     * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
+     * ```
+     */
+    // TODO: merge with router_providers_common.ts
+    var ROUTER_PROVIDERS = [ROUTER_PROVIDERS_COMMON];
+    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
+    exports.RouterLink = RouterLink;
+    exports.RouterOutlet = RouterOutlet;
     exports.Routes = Routes;
     exports.Route = Route;
-    exports.RouterUrlSerializer = RouterUrlSerializer;
-    exports.DefaultRouterUrlSerializer = DefaultRouterUrlSerializer;
+    exports.Router = Router;
+    exports.RouterOutletMap = RouterOutletMap;
     exports.ROUTER_PROVIDERS = ROUTER_PROVIDERS;
-    exports.RouterOutlet = RouterOutlet;
-    exports.RouterLink = RouterLink;
-    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
+    exports.DefaultRouterUrlSerializer = DefaultRouterUrlSerializer;
+    exports.RouterUrlSerializer = RouterUrlSerializer;
+    exports.RouteSegment = RouteSegment;
+    exports.RouteTree = RouteTree;
+    exports.Tree = Tree;
+    exports.UrlSegment = UrlSegment;
+    exports.UrlTree = UrlTree;
 }));

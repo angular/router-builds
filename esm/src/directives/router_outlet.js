@@ -1,7 +1,7 @@
-import { Directive, ViewContainerRef, Attribute, ReflectiveInjector } from '@angular/core';
-import { RouterOutletMap } from '../router';
+import { Attribute, Directive, ReflectiveInjector, ViewContainerRef } from '@angular/core';
 import { DEFAULT_OUTLET_NAME } from '../constants';
-import { isPresent, isBlank } from '../facade/lang';
+import { isBlank, isPresent } from '../facade/lang';
+import { RouterOutletMap } from '../router';
 export class RouterOutlet {
     constructor(parentOutletMap, _location, name) {
         this._location = _location;

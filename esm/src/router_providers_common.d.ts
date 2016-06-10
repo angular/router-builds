@@ -1,8 +1,8 @@
-import { ApplicationRef, ComponentResolver } from '@angular/core';
 import { Location } from '@angular/common';
+import { ApplicationRef, ComponentResolver } from '@angular/core';
 import { Router, RouterOutletMap } from './router';
-import { RouteSegment } from './segments';
 import { RouterUrlSerializer } from './router_url_serializer';
+import { RouteSegment } from './segments';
 /**
  * The Platform agnostic ROUTER PROVIDERS
  */

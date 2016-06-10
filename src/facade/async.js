@@ -4,17 +4,17 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var lang_1 = require('./lang');
-var promise_1 = require('./promise');
-exports.PromiseWrapper = promise_1.PromiseWrapper;
-exports.PromiseCompleter = promise_1.PromiseCompleter;
 var Subject_1 = require('rxjs/Subject');
 var PromiseObservable_1 = require('rxjs/observable/PromiseObservable');
 var toPromise_1 = require('rxjs/operator/toPromise');
+var lang_1 = require('./lang');
 var Observable_1 = require('rxjs/Observable');
 exports.Observable = Observable_1.Observable;
 var Subject_2 = require('rxjs/Subject');
 exports.Subject = Subject_2.Subject;
+var promise_1 = require('./promise');
+exports.PromiseCompleter = promise_1.PromiseCompleter;
+exports.PromiseWrapper = promise_1.PromiseWrapper;
 var TimerWrapper = (function () {
     function TimerWrapper() {
     }
@@ -35,8 +35,8 @@ var ObservableWrapper = (function () {
     // TODO(vsavkin): when we use rxnext, try inferring the generic type from the first arg
     ObservableWrapper.subscribe = function (emitter, onNext, onError, onComplete) {
         if (onComplete === void 0) { onComplete = function () { }; }
-        onError = (typeof onError === "function") && onError || lang_1.noop;
-        onComplete = (typeof onComplete === "function") && onComplete || lang_1.noop;
+        onError = (typeof onError === 'function') && onError || lang_1.noop;
+        onComplete = (typeof onComplete === 'function') && onComplete || lang_1.noop;
         return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });
     };
     ObservableWrapper.isObservable = function (obs) { return !!obs.subscribe; };
@@ -93,7 +93,8 @@ exports.ObservableWrapper = ObservableWrapper;
  * }
  * ```
  *
- * The events payload can be accessed by the parameter `$event` on the components output event handler:
+ * The events payload can be accessed by the parameter `$event` on the components output event
+ * handler:
  *
  * ```
  * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>
@@ -126,8 +127,9 @@ var EventEmitter = (function (_super) {
         var errorFn = function (err) { return null; };
         var completeFn = function () { return null; };
         if (generatorOrNext && typeof generatorOrNext === 'object') {
-            schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext.next(value); }); } :
-                function (value /** TODO #9100 */) { generatorOrNext.next(value); };
+            schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+                setTimeout(function () { return generatorOrNext.next(value); });
+            } : function (value /** TODO #9100 */) { generatorOrNext.next(value); };
             if (generatorOrNext.error) {
                 errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
                     function (err) { generatorOrNext.error(err); };
@@ -138,8 +140,9 @@ var EventEmitter = (function (_super) {
             }
         }
         else {
-            schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) { setTimeout(function () { return generatorOrNext(value); }); } :
-                function (value /** TODO #9100 */) { generatorOrNext(value); };
+            schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+                setTimeout(function () { return generatorOrNext(value); });
+            } : function (value /** TODO #9100 */) { generatorOrNext(value); };
             if (error) {
                 errorFn =
                     this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };

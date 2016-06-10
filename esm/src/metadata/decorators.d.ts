@@ -1,4 +1,4 @@
-import { RoutesMetadata, RouteMetadata } from "./metadata";
+import { RouteMetadata, RoutesMetadata } from './metadata';
 /**
  * Defines routes for a given component.
  *

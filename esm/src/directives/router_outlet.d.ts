@@ -1,4 +1,4 @@
-import { ResolvedReflectiveProvider, ViewContainerRef, ComponentRef, ComponentFactory } from '@angular/core';
+import { ComponentFactory, ComponentRef, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
 import { RouterOutletMap } from '../router';
 /**
  * A router outlet is a placeholder that Angular dynamically fills based on the application's route.

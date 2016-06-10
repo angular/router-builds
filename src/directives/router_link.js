@@ -1,10 +1,10 @@
 "use strict";
+var common_1 = require('@angular/common');
 var core_1 = require('@angular/core');
+var async_1 = require('../facade/async');
+var lang_1 = require('../facade/lang');
 var router_1 = require('../router');
 var segments_1 = require('../segments');
-var lang_1 = require('../facade/lang');
-var async_1 = require('../facade/async');
-var common_1 = require('@angular/common');
 var RouterLink = (function () {
     function RouterLink(_routeSegment, _router, _locationStrategy) {
         var _this = this;
@@ -68,7 +68,7 @@ var RouterLink = (function () {
         'href': [{ type: core_1.HostBinding },],
         'isActive': [{ type: core_1.HostBinding, args: ['class.router-link-active',] },],
         'routerLink': [{ type: core_1.Input },],
-        'onClick': [{ type: core_1.HostListener, args: ["click", ["$event.button", "$event.ctrlKey", "$event.metaKey"],] },],
+        'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
     return RouterLink;
 }());

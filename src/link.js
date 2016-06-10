@@ -1,8 +1,8 @@
 "use strict";
-var segments_1 = require('./segments');
-var lang_1 = require('./facade/lang');
-var exceptions_1 = require('./facade/exceptions');
 var collection_1 = require('./facade/collection');
+var exceptions_1 = require('./facade/exceptions');
+var lang_1 = require('./facade/lang');
+var segments_1 = require('./segments');
 function link(segment, routeTree, urlTree, commands) {
     if (commands.length === 0)
         return urlTree;
@@ -20,7 +20,7 @@ function link(segment, routeTree, urlTree, commands) {
 exports.link = link;
 function _navigateToRoot(normalizedChange) {
     return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
-        normalizedChange.commands[0] == "/";
+        normalizedChange.commands[0] == '/';
 }
 var _NormalizedNavigationCommands = (function () {
     function _NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, commands) {
@@ -31,7 +31,7 @@ var _NormalizedNavigationCommands = (function () {
     return _NormalizedNavigationCommands;
 }());
 function _normalizeCommands(commands) {
-    if (lang_1.isString(commands[0]) && commands.length === 1 && commands[0] == "/") {
+    if (lang_1.isString(commands[0]) && commands.length === 1 && commands[0] == '/') {
         return new _NormalizedNavigationCommands(true, 0, commands);
     }
     var numberOfDoubleDots = 0;
@@ -48,12 +48,12 @@ function _normalizeCommands(commands) {
             var cc = parts[j];
             // first exp is treated in a special way
             if (i == 0) {
-                if (j == 0 && cc == ".") {
+                if (j == 0 && cc == '.') {
                 }
-                else if (j == 0 && cc == "") {
+                else if (j == 0 && cc == '') {
                     isAbsolute = true;
                 }
-                else if (cc == "..") {
+                else if (cc == '..') {
                     numberOfDoubleDots++;
                 }
                 else if (cc != '') {
@@ -77,7 +77,7 @@ function _findUrlSegment(segment, routeTree, urlTree, numberOfDoubleDots) {
     var urlSegment = collection_1.ListWrapper.last(s.urlSegments);
     var path = urlTree.pathFromRoot(urlSegment);
     if (path.length <= numberOfDoubleDots) {
-        throw new exceptions_1.BaseException("Invalid number of '../'");
+        throw new exceptions_1.BaseException('Invalid number of \'../\'');
     }
     return path[path.length - 1 - numberOfDoubleDots];
 }
@@ -148,7 +148,9 @@ function _update(node, commands) {
 }
 function _stringify(params) {
     var res = {};
-    collection_1.StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res[k] = v.toString(); });
+    collection_1.StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) {
+        return res[k] = v.toString();
+    });
     return res;
 }
 function _compare(path, params, segment) {
@@ -175,13 +177,13 @@ function _updateMany(nodes, commands) {
 function _segment(commands) {
     if (!lang_1.isString(commands[0]))
         return commands[0];
-    var parts = commands[0].toString().split(":");
+    var parts = commands[0].toString().split(':');
     return parts.length > 1 ? parts[1] : commands[0];
 }
 function _outlet(commands) {
     if (!lang_1.isString(commands[0]))
         return null;
-    var parts = commands[0].toString().split(":");
+    var parts = commands[0].toString().split(':');
     return parts.length > 1 ? parts[0] : null;
 }
 //# sourceMappingURL=link.js.map

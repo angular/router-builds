@@ -1,12 +1,12 @@
 import { BaseException, ReflectiveInjector } from '@angular/core';
-import { isBlank, isPresent } from './facade/lang';
-import { ListWrapper, StringMapWrapper } from './facade/collection';
-import { EventEmitter, PromiseWrapper, ObservableWrapper } from './facade/async';
-import { recognize } from './recognize';
-import { link } from './link';
-import { routeSegmentComponentFactory, RouteSegment, rootNode, createEmptyRouteTree } from './segments';
-import { hasLifecycleHook } from './lifecycle_reflector';
 import { DEFAULT_OUTLET_NAME } from './constants';
+import { EventEmitter, ObservableWrapper, PromiseWrapper } from './facade/async';
+import { ListWrapper, StringMapWrapper } from './facade/collection';
+import { isBlank, isPresent } from './facade/lang';
+import { hasLifecycleHook } from './lifecycle_reflector';
+import { link } from './link';
+import { recognize } from './recognize';
+import { RouteSegment, createEmptyRouteTree, rootNode, routeSegmentComponentFactory } from './segments';
 export class RouterOutletMap {
     constructor() {
         /** @internal */
@@ -153,8 +153,7 @@ class _ActivateSegments {
     activate(parentOutletMap, rootComponent) {
         let prevRoot = isPresent(this.prevTree) ? rootNode(this.prevTree) : null;
         let currRoot = rootNode(this.currTree);
-        return this.canDeactivate(currRoot, prevRoot, parentOutletMap, rootComponent)
-            .then(res => {
+        return this.canDeactivate(currRoot, prevRoot, parentOutletMap, rootComponent).then(res => {
             this.performMutation = true;
             if (res) {
                 this.activateChildSegments(currRoot, prevRoot, parentOutletMap, [rootComponent]);
@@ -172,7 +171,7 @@ class _ActivateSegments {
         let curr = PromiseWrapper.resolve(true);
         for (let p of ListWrapper.reversed(path)) {
             curr = curr.then(_ => {
-                if (hasLifecycleHook("routerCanDeactivate", p)) {
+                if (hasLifecycleHook('routerCanDeactivate', p)) {
                     return p.routerCanDeactivate(this.prevTree, this.currTree);
                 }
                 else {
@@ -183,12 +182,10 @@ class _ActivateSegments {
         return curr;
     }
     activateChildSegments(currNode, prevNode, outletMap, components) {
-        let prevChildren = isPresent(prevNode) ?
-            prevNode.children.reduce((m, c) => {
-                m[c.value.outlet] = c;
-                return m;
-            }, {}) :
-            {};
+        let prevChildren = isPresent(prevNode) ? prevNode.children.reduce((m, c) => {
+            m[c.value.outlet] = c;
+            return m;
+        }, {}) : {};
         currNode.children.forEach(c => {
             this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
             StringMapWrapper.delete(prevChildren, c.value.outlet);
@@ -214,7 +211,7 @@ class _ActivateSegments {
     activateNewSegments(outletMap, curr, prev, outlet) {
         let resolved = ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: RouteSegment, useValue: curr }]);
         let ref = outlet.activate(routeSegmentComponentFactory(curr), resolved, outletMap);
-        if (hasLifecycleHook("routerOnActivate", ref.instance)) {
+        if (hasLifecycleHook('routerOnActivate', ref.instance)) {
             ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);
         }
         return ref.instance;

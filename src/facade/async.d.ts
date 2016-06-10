@@ -1,8 +1,8 @@
-export { PromiseWrapper, PromiseCompleter } from './promise';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 export { Observable } from 'rxjs/Observable';
 export { Subject } from 'rxjs/Subject';
+export { PromiseCompleter, PromiseWrapper } from './promise';
 export declare class TimerWrapper {
     static setTimeout(fn: (...args: any[]) => void, millis: number): number;
     static clearTimeout(id: number): void;
@@ -61,7 +61,8 @@ export declare class ObservableWrapper {
  * }
  * ```
  *
- * The events payload can be accessed by the parameter `$event` on the components output event handler:
+ * The events payload can be accessed by the parameter `$event` on the components output event
+ * handler:
  *
  * ```
  * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>

@@ -1,6 +1,6 @@
 "use strict";
-var router_outlet_1 = require("./router_outlet");
-var router_link_1 = require("./router_link");
+var router_link_1 = require('./router_link');
+var router_outlet_1 = require('./router_outlet');
 /**
  * A list of directives. To use the router directives like {@link RouterOutlet} and
  * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your

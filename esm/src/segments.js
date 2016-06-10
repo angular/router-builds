@@ -1,6 +1,6 @@
-import { StringMapWrapper, ListWrapper } from './facade/collection';
-import { isBlank, isPresent, stringify, NumberWrapper } from './facade/lang';
 import { DEFAULT_OUTLET_NAME } from './constants';
+import { ListWrapper, StringMapWrapper } from './facade/collection';
+import { NumberWrapper, isBlank, isPresent, stringify } from './facade/lang';
 export class Tree {
     constructor(root) {
         this._root = root;
@@ -80,12 +80,12 @@ export class UrlSegment {
         this.outlet = outlet;
     }
     toString() {
-        let outletPrefix = isBlank(this.outlet) ? "" : `${this.outlet}:`;
+        let outletPrefix = isBlank(this.outlet) ? '' : `${this.outlet}:`;
         return `${outletPrefix}${this.segment}${_serializeParams(this.parameters)}`;
     }
 }
 function _serializeParams(params) {
-    let res = "";
+    let res = '';
     StringMapWrapper.forEach(params, (v /** TODO #9100 */, k /** TODO #9100 */) => res += `;${k}=${v}`);
     return res;
 }
@@ -104,10 +104,10 @@ export class RouteSegment {
         return isPresent(this.parameters) ? NumberWrapper.parseFloat(this.parameters[param]) : null;
     }
     get type() { return this._type; }
-    get stringifiedUrlSegments() { return this.urlSegments.map(s => s.toString()).join("/"); }
+    get stringifiedUrlSegments() { return this.urlSegments.map(s => s.toString()).join('/'); }
 }
 export function createEmptyRouteTree(type) {
-    let root = new RouteSegment([new UrlSegment("", {}, null)], {}, DEFAULT_OUTLET_NAME, type, null);
+    let root = new RouteSegment([new UrlSegment('', {}, null)], {}, DEFAULT_OUTLET_NAME, type, null);
     return new RouteTree(new TreeNode(root, []));
 }
 export function serializeRouteSegmentTree(tree) {
@@ -115,7 +115,7 @@ export function serializeRouteSegmentTree(tree) {
 }
 function _serializeRouteSegmentTree(node) {
     let v = node.value;
-    let children = node.children.map(c => _serializeRouteSegmentTree(c)).join(", ");
+    let children = node.children.map(c => _serializeRouteSegmentTree(c)).join(', ');
     return `${v.outlet}:${v.stringifiedUrlSegments}(${stringify(v.type)}) [${children}]`;
 }
 export function equalUrlSegments(a, b) {

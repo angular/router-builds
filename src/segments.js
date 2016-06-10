@@ -4,9 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var constants_1 = require('./constants');
 var collection_1 = require('./facade/collection');
 var lang_1 = require('./facade/lang');
-var constants_1 = require('./constants');
 var Tree = (function () {
     function Tree(root) {
         this._root = root;
@@ -108,14 +108,14 @@ var UrlSegment = (function () {
         this.outlet = outlet;
     }
     UrlSegment.prototype.toString = function () {
-        var outletPrefix = lang_1.isBlank(this.outlet) ? "" : this.outlet + ":";
+        var outletPrefix = lang_1.isBlank(this.outlet) ? '' : this.outlet + ":";
         return "" + outletPrefix + this.segment + _serializeParams(this.parameters);
     };
     return UrlSegment;
 }());
 exports.UrlSegment = UrlSegment;
 function _serializeParams(params) {
-    var res = "";
+    var res = '';
     collection_1.StringMapWrapper.forEach(params, function (v /** TODO #9100 */, k /** TODO #9100 */) { return res += ";" + k + "=" + v; });
     return res;
 }
@@ -139,7 +139,7 @@ var RouteSegment = (function () {
         configurable: true
     });
     Object.defineProperty(RouteSegment.prototype, "stringifiedUrlSegments", {
-        get: function () { return this.urlSegments.map(function (s) { return s.toString(); }).join("/"); },
+        get: function () { return this.urlSegments.map(function (s) { return s.toString(); }).join('/'); },
         enumerable: true,
         configurable: true
     });
@@ -147,7 +147,7 @@ var RouteSegment = (function () {
 }());
 exports.RouteSegment = RouteSegment;
 function createEmptyRouteTree(type) {
-    var root = new RouteSegment([new UrlSegment("", {}, null)], {}, constants_1.DEFAULT_OUTLET_NAME, type, null);
+    var root = new RouteSegment([new UrlSegment('', {}, null)], {}, constants_1.DEFAULT_OUTLET_NAME, type, null);
     return new RouteTree(new TreeNode(root, []));
 }
 exports.createEmptyRouteTree = createEmptyRouteTree;
@@ -157,7 +157,7 @@ function serializeRouteSegmentTree(tree) {
 exports.serializeRouteSegmentTree = serializeRouteSegmentTree;
 function _serializeRouteSegmentTree(node) {
     var v = node.value;
-    var children = node.children.map(function (c) { return _serializeRouteSegmentTree(c); }).join(", ");
+    var children = node.children.map(function (c) { return _serializeRouteSegmentTree(c); }).join(', ');
     return v.outlet + ":" + v.stringifiedUrlSegments + "(" + lang_1.stringify(v.type) + ") [" + children + "]";
 }
 function equalUrlSegments(a, b) {

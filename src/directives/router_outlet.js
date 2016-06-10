@@ -1,8 +1,8 @@
 "use strict";
 var core_1 = require('@angular/core');
-var router_1 = require('../router');
 var constants_1 = require('../constants');
 var lang_1 = require('../facade/lang');
+var router_1 = require('../router');
 var RouterOutlet = (function () {
     function RouterOutlet(parentOutletMap, _location, name) {
         this._location = _location;

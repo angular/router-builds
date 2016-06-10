@@ -14,7 +14,7 @@ exports.ExceptionHandler = exception_handler_2.ExceptionHandler;
 var BaseException = (function (_super) {
     __extends(BaseException, _super);
     function BaseException(message) {
-        if (message === void 0) { message = "--"; }
+        if (message === void 0) { message = '--'; }
         _super.call(this, message);
         this.message = message;
         this.stack = (new Error(message)).stack;

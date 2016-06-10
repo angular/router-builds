@@ -1,9 +1,9 @@
-import { Directive, HostListener, HostBinding, Input } from '@angular/core';
+import { LocationStrategy } from '@angular/common';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { ObservableWrapper } from '../facade/async';
+import { isArray, isPresent, isString } from '../facade/lang';
 import { Router } from '../router';
 import { RouteSegment } from '../segments';
-import { isString, isArray, isPresent } from '../facade/lang';
-import { ObservableWrapper } from '../facade/async';
-import { LocationStrategy } from '@angular/common';
 export class RouterLink {
     constructor(_routeSegment, _router, _locationStrategy) {
         this._routeSegment = _routeSegment;
@@ -63,6 +63,6 @@ RouterLink.propDecorators = {
     'href': [{ type: HostBinding },],
     'isActive': [{ type: HostBinding, args: ['class.router-link-active',] },],
     'routerLink': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ["click", ["$event.button", "$event.ctrlKey", "$event.metaKey"],] },],
+    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
 };
 //# sourceMappingURL=router_link.js.map
