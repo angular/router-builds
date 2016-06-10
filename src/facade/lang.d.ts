@@ -57,7 +57,7 @@ export declare function isPresent(obj: any): boolean;
 export declare function isBlank(obj: any): boolean;
 export declare function isBoolean(obj: any): boolean;
 export declare function isNumber(obj: any): boolean;
-export declare function isString(obj: any): boolean;
+export declare function isString(obj: any): obj is String;
 export declare function isFunction(obj: any): boolean;
 export declare function isType(obj: any): boolean;
 export declare function isStringMap(obj: any): boolean;
