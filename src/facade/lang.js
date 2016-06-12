@@ -114,13 +114,13 @@ function isArray(obj) {
     return Array.isArray(obj);
 }
 exports.isArray = isArray;
-function isDate(obj /** TODO #9100 */) {
+function isDate(obj) {
     return obj instanceof exports.Date && !isNaN(obj.valueOf());
 }
 exports.isDate = isDate;
 function noop() { }
 exports.noop = noop;
-function stringify(token /** TODO #9100 */) {
+function stringify(token) {
     if (typeof token === 'string') {
         return token;
     }
@@ -140,15 +140,15 @@ function stringify(token /** TODO #9100 */) {
 exports.stringify = stringify;
 // serialize / deserialize enum exist only for consistency with dart API
 // enums in typescript don't need to be serialized
-function serializeEnum(val /** TODO #9100 */) {
+function serializeEnum(val) {
     return val;
 }
 exports.serializeEnum = serializeEnum;
-function deserializeEnum(val /** TODO #9100 */, values) {
+function deserializeEnum(val, values) {
     return val;
 }
 exports.deserializeEnum = deserializeEnum;
-function resolveEnumToken(enumValue /** TODO #9100 */, val /** TODO #9100 */) {
+function resolveEnumToken(enumValue, val) {
     return enumValue[val];
 }
 exports.resolveEnumToken = resolveEnumToken;
@@ -196,7 +196,7 @@ var StringWrapper = (function () {
     };
     StringWrapper.replaceAllMapped = function (s, from, cb) {
         return s.replace(from, function () {
-            var matches = []; /** TODO #9100 */
+            var matches = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 matches[_i - 0] = arguments[_i];
             }
@@ -345,7 +345,7 @@ var FunctionWrapper = (function () {
 }());
 exports.FunctionWrapper = FunctionWrapper;
 // JS has NaN !== NaN
-function looseIdentical(a /** TODO #9100 */, b /** TODO #9100 */) {
+function looseIdentical(a, b) {
     return a === b || typeof a === 'number' && typeof b === 'number' && isNaN(a) && isNaN(b);
 }
 exports.looseIdentical = looseIdentical;

@@ -8,7 +8,7 @@ export class PromiseCompleter {
 }
 export class PromiseWrapper {
     static resolve(obj) { return Promise.resolve(obj); }
-    static reject(obj, _ /** TODO #9100 */) { return Promise.reject(obj); }
+    static reject(obj, _) { return Promise.reject(obj); }
     // Note: We can't rename this method into `catch`, as this is not a valid
     // method name in Dart.
     static catchError(promise, onError) {

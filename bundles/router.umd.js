@@ -53,7 +53,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return Array.isArray(obj);
     }
     function noop() { }
-    function stringify(token /** TODO #9100 */) {
+    function stringify(token) {
         if (typeof token === 'string') {
             return token;
         }
@@ -176,7 +176,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         function PromiseWrapper() {
         }
         PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-        PromiseWrapper.reject = function (obj, _ /** TODO #9100 */) { return Promise.reject(obj); };
+        PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
         // Note: We can't rename this method into `catch`, as this is not a valid
         // method name in Dart.
         PromiseWrapper.catchError = function (promise, onError) {

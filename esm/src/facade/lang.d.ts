@@ -64,7 +64,7 @@ export declare function isStringMap(obj: any): boolean;
 export declare function isStrictStringMap(obj: any): boolean;
 export declare function isPromise(obj: any): boolean;
 export declare function isArray(obj: any): boolean;
-export declare function isDate(obj: any): boolean;
+export declare function isDate(obj: any): obj is Date;
 export declare function noop(): void;
 export declare function stringify(token: any): string;
 export declare function serializeEnum(val: any): number;
@@ -85,8 +85,8 @@ export declare class StringWrapper {
     static compare(a: string, b: string): number;
 }
 export declare class StringJoiner {
-    parts: any[];
-    constructor(parts?: any[]);
+    parts: string[];
+    constructor(parts?: string[]);
     add(part: string): void;
     toString(): string;
 }
