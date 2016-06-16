@@ -1570,6 +1570,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Defines routes for a given component.
      *
      * It takes an array of {@link RouteMetadata}s.
+     * @Annotation
      */
     var Routes = makeDecorator(RoutesMetadata);
     /**
