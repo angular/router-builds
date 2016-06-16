@@ -153,6 +153,4 @@ export declare function evalExpression(sourceUrl: string, expr: string, declarat
 }): any;
 export declare function isPrimitive(obj: any): boolean;
 export declare function hasConstructor(value: Object, type: Type): boolean;
-export declare function bitWiseOr(values: number[]): number;
-export declare function bitWiseAnd(values: number[]): number;
 export declare function escape(s: string): string;

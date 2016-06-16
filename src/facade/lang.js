@@ -465,14 +465,6 @@ function hasConstructor(value, type) {
     return value.constructor === type;
 }
 exports.hasConstructor = hasConstructor;
-function bitWiseOr(values) {
-    return values.reduce(function (a, b) { return a | b; });
-}
-exports.bitWiseOr = bitWiseOr;
-function bitWiseAnd(values) {
-    return values.reduce(function (a, b) { return a & b; });
-}
-exports.bitWiseAnd = bitWiseAnd;
 function escape(s) {
     return _global.encodeURI(s);
 }
