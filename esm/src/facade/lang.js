@@ -229,6 +229,7 @@ export class NumberWrapper {
     // TODO: NaN is a valid literal but is returned by parseFloat to indicate an error.
     static parseFloat(text) { return parseFloat(text); }
     static get NaN() { return NaN; }
+    static isNumeric(value) { return !isNaN(value - parseFloat(value)); }
     static isNaN(value) { return isNaN(value); }
     static isInteger(value) { return Number.isInteger(value); }
 }

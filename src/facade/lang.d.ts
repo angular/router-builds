@@ -103,6 +103,7 @@ export declare class NumberWrapper {
     static parseInt(text: string, radix: number): number;
     static parseFloat(text: string): number;
     static NaN: number;
+    static isNumeric(value: any): boolean;
     static isNaN(value: any): boolean;
     static isInteger(value: any): boolean;
 }
