@@ -36,33 +36,6 @@ function getTypeNameForDebugging(type) {
 exports.getTypeNameForDebugging = getTypeNameForDebugging;
 exports.Math = _global.Math;
 exports.Date = _global.Date;
-var _devMode = true;
-var _modeLocked = false;
-function lockMode() {
-    _modeLocked = true;
-}
-exports.lockMode = lockMode;
-/**
- * Disable Angular's development mode, which turns off assertions and other
- * checks within the framework.
- *
- * One important assertion this disables verifies that a change detection pass
- * does not result in additional changes to any bindings (also known as
- * unidirectional data flow).
- * @stable
- */
-function enableProdMode() {
-    if (_modeLocked) {
-        // Cannot use BaseException as that ends up importing from facade/lang.
-        throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-}
-exports.enableProdMode = enableProdMode;
-function assertionsEnabled() {
-    return _devMode;
-}
-exports.assertionsEnabled = assertionsEnabled;
 // TODO: remove calls to assert in production environment
 // Note: Can't just export this and import in in other files
 // as `assert` is a reserved keyword in Dart

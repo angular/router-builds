@@ -41,18 +41,6 @@ export interface ConcreteType extends Type {
 export declare function getTypeNameForDebugging(type: Type): string;
 export declare var Math: any;
 export declare var Date: DateConstructor;
-export declare function lockMode(): void;
-/**
- * Disable Angular's development mode, which turns off assertions and other
- * checks within the framework.
- *
- * One important assertion this disables verifies that a change detection pass
- * does not result in additional changes to any bindings (also known as
- * unidirectional data flow).
- * @stable
- */
-export declare function enableProdMode(): void;
-export declare function assertionsEnabled(): boolean;
 export declare function isPresent(obj: any): boolean;
 export declare function isBlank(obj: any): boolean;
 export declare function isBoolean(obj: any): boolean;
