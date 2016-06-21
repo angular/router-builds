@@ -1,4 +1,6 @@
-import { ComponentResolver } from '@angular/core';
-import { Type } from './facade/lang';
-import { RouteTree, UrlTree } from './segments';
-export declare function recognize(componentResolver: ComponentResolver, rootComponent: Type, url: UrlTree, existingTree: RouteTree): Promise<RouteTree>;
+import { Type } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { RouterConfig } from './config';
+import { RouterStateSnapshot } from './router_state';
+import { UrlTree } from './url_tree';
+export declare function recognize(rootComponentType: Type, config: RouterConfig, urlTree: UrlTree, url: string): Observable<RouterStateSnapshot>;

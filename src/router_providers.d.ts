@@ -1,23 +1,21 @@
+import * as common from './common_router_providers';
+import { RouterConfig } from './config';
 /**
- * A list of providers. To use the router, you must add this to your application.
+ * A list of {@link Provider}s. To use the router, you must add this to your application.
+ *
+ * ### Example
  *
  * ```
- * import {Component} from '@angular/core';
- * import {
- *   ROUTER_DIRECTIVES,
- *   ROUTER_PROVIDERS,
- *   Routes
- * } from '@angular/router';
- *
  * @Component({directives: [ROUTER_DIRECTIVES]})
- * @Routes([
- *  {...},
- * ])
  * class AppCmp {
  *   // ...
  * }
  *
- * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
+ * const router = [
+ *   {path: '/home', component: Home}
+ * ];
+ *
+ * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
  */
-export declare const ROUTER_PROVIDERS: any[];
+export declare function provideRouter(config: RouterConfig, opts?: common.ExtraOptions): any[];

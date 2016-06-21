@@ -1,17 +1,12 @@
-import { LocationStrategy } from '@angular/common';
-import { OnDestroy } from '@angular/core';
-import { Router } from '../router';
-import { RouteSegment } from '../segments';
+import { OnChanges } from '@angular/core';
+import { UrlTree } from '../url_tree';
 /**
  * The RouterLink directive lets you link to specific parts of your app.
  *
  * Consider the following route configuration:
 
  * ```
- * @Routes([
- *   { path: '/user', component: UserCmp }
- * ]);
- * class MyComp {}
+ * [{ path: '/user', component: UserCmp }]
  * ```
  *
  * When linking to this `User` route, you can write:
@@ -28,22 +23,22 @@ import { RouteSegment } from '../segments';
  * If the segment begins with `/`, the router will look up the route from the root of the app.
  * If the segment begins with `./`, or doesn't begin with a slash, the router will
  * instead look in the current component's children for the route.
- * And if the segment begins with `../`, the router will go up one segment in the url.
- *
- * See {@link Router.createUrlTree} for more information.
+ * And if the segment begins with `../`, the router will go up one level.
  */
-export declare class RouterLink implements OnDestroy {
-    private _routeSegment;
-    private _router;
-    private _locationStrategy;
+export declare class RouterLink implements OnChanges {
+    private router;
+    private route;
+    private locationStrategy;
     target: string;
-    private _commands;
-    private _subscription;
+    private commands;
+    queryParams: {
+        [k: string]: any;
+    };
+    fragment: string;
     href: string;
-    isActive: boolean;
-    constructor(_routeSegment: RouteSegment, _router: Router, _locationStrategy: LocationStrategy);
-    ngOnDestroy(): void;
-    routerLink: any[] | any;
+    urlTree: UrlTree;
+    routerLink: any[] | string;
+    ngOnChanges(changes: {}): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
-    private _updateTargetUrlAndHref();
+    private updateTargetUrlAndHref();
 }

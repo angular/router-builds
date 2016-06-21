@@ -1,27 +1,30 @@
 "use strict";
-var router_providers_common_1 = require('./router_providers_common');
+var common_1 = require('@angular/common');
+var platform_browser_1 = require('@angular/platform-browser');
+var common = require('./common_router_providers');
 /**
- * A list of providers. To use the router, you must add this to your application.
+ * A list of {@link Provider}s. To use the router, you must add this to your application.
+ *
+ * ### Example
  *
  * ```
- * import {Component} from '@angular/core';
- * import {
- *   ROUTER_DIRECTIVES,
- *   ROUTER_PROVIDERS,
- *   Routes
- * } from '@angular/router';
- *
  * @Component({directives: [ROUTER_DIRECTIVES]})
- * @Routes([
- *  {...},
- * ])
  * class AppCmp {
  *   // ...
  * }
  *
- * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
+ * const router = [
+ *   {path: '/home', component: Home}
+ * ];
+ *
+ * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
  */
-// TODO: merge with router_providers_common.ts
-exports.ROUTER_PROVIDERS = [router_providers_common_1.ROUTER_PROVIDERS_COMMON];
+function provideRouter(config, opts) {
+    if (opts === void 0) { opts = {}; }
+    return [
+        { provide: common_1.PlatformLocation, useClass: platform_browser_1.BrowserPlatformLocation }
+    ].concat(common.provideRouter(config, opts));
+}
+exports.provideRouter = provideRouter;
 //# sourceMappingURL=router_providers.js.map

@@ -1,68 +1,62 @@
-import { LocationStrategy } from '@angular/common';
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
-import { ObservableWrapper } from '../facade/async';
-import { isArray, isPresent, isString } from '../facade/lang';
-import { Router } from '../router';
-import { RouteSegment } from '../segments';
-export class RouterLink {
-    constructor(_routeSegment, _router, _locationStrategy) {
-        this._routeSegment = _routeSegment;
-        this._router = _router;
-        this._locationStrategy = _locationStrategy;
-        this._commands = [];
-        this.isActive = false;
-        // because auxiliary links take existing primary and auxiliary routes into account,
-        // we need to update the link whenever params or other routes change.
-        this._subscription =
-            ObservableWrapper.subscribe(_router.changes, (_) => { this._updateTargetUrlAndHref(); });
+"use strict";
+const common_1 = require('@angular/common');
+const core_1 = require('@angular/core');
+const router_1 = require('../router');
+const router_state_1 = require('../router_state');
+class RouterLink {
+    /**
+     * @internal
+     */
+    constructor(router, route, locationStrategy) {
+        this.router = router;
+        this.route = route;
+        this.locationStrategy = locationStrategy;
+        this.commands = [];
     }
-    ngOnDestroy() { ObservableWrapper.dispose(this._subscription); }
     set routerLink(data) {
-        if (isArray(data)) {
-            this._commands = data;
+        if (Array.isArray(data)) {
+            this.commands = data;
         }
         else {
-            this._commands = [data];
+            this.commands = [data];
         }
-        this._updateTargetUrlAndHref();
     }
+    ngOnChanges(changes) { this.updateTargetUrlAndHref(); }
     onClick(button, ctrlKey, metaKey) {
-        if (button != 0 || ctrlKey || metaKey) {
+        if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        if (isString(this.target) && this.target != '_self') {
+        if (typeof this.target === 'string' && this.target != '_self') {
             return true;
         }
-        this._router.navigate(this._commands, this._routeSegment);
+        this.router.navigateByUrl(this.urlTree);
         return false;
     }
-    _updateTargetUrlAndHref() {
-        let tree = this._router.createUrlTree(this._commands, this._routeSegment);
-        if (isPresent(tree)) {
-            this.href = this._locationStrategy.prepareExternalUrl(this._router.serializeUrl(tree));
-            this.isActive = this._router.urlTree.contains(tree);
-        }
-        else {
-            this.isActive = false;
+    updateTargetUrlAndHref() {
+        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        if (this.urlTree) {
+            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }
     }
 }
 /** @nocollapse */
 RouterLink.decorators = [
-    { type: Directive, args: [{ selector: '[routerLink]' },] },
+    { type: core_1.Directive, args: [{ selector: '[routerLink]' },] },
 ];
 /** @nocollapse */
 RouterLink.ctorParameters = [
-    { type: RouteSegment, },
-    { type: Router, },
-    { type: LocationStrategy, },
+    { type: router_1.Router, },
+    { type: router_state_1.ActivatedRoute, },
+    { type: common_1.LocationStrategy, },
 ];
 /** @nocollapse */
 RouterLink.propDecorators = {
-    'target': [{ type: Input },],
-    'href': [{ type: HostBinding },],
-    'isActive': [{ type: HostBinding, args: ['class.router-link-active',] },],
-    'routerLink': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    'target': [{ type: core_1.Input },],
+    'queryParams': [{ type: core_1.Input },],
+    'fragment': [{ type: core_1.Input },],
+    'href': [{ type: core_1.HostBinding },],
+    'routerLink': [{ type: core_1.Input },],
+    'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
 };
+exports.RouterLink = RouterLink;
 //# sourceMappingURL=router_link.js.map

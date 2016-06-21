@@ -1,88 +1,156 @@
-import { BaseException, ReflectiveInjector } from '@angular/core';
-import { DEFAULT_OUTLET_NAME } from './constants';
-import { EventEmitter, ObservableWrapper, PromiseWrapper } from './facade/async';
-import { ListWrapper, StringMapWrapper } from './facade/collection';
-import { isBlank, isPresent } from './facade/lang';
-import { hasLifecycleHook } from './lifecycle_reflector';
-import { link } from './link';
-import { recognize } from './recognize';
-import { RouteSegment, createEmptyRouteTree, rootNode, routeSegmentComponentFactory } from './segments';
-export class RouterOutletMap {
-    constructor() {
-        /** @internal */
-        this._outlets = {};
+"use strict";
+require('rxjs/add/operator/map');
+require('rxjs/add/operator/mergeMap');
+require('rxjs/add/operator/mergeAll');
+require('rxjs/add/operator/every');
+require('rxjs/add/observable/from');
+const core_1 = require('@angular/core');
+const Observable_1 = require('rxjs/Observable');
+const Subject_1 = require('rxjs/Subject');
+const of_1 = require('rxjs/observable/of');
+const apply_redirects_1 = require('./apply_redirects');
+const config_1 = require('./config');
+const create_router_state_1 = require('./create_router_state');
+const create_url_tree_1 = require('./create_url_tree');
+const recognize_1 = require('./recognize');
+const resolve_1 = require('./resolve');
+const router_outlet_map_1 = require('./router_outlet_map');
+const router_state_1 = require('./router_state');
+const shared_1 = require('./shared');
+const url_tree_1 = require('./url_tree');
+const collection_1 = require('./utils/collection');
+/**
+ * An event triggered when a navigation starts
+ */
+class NavigationStart {
+    constructor(id, url) {
+        this.id = id;
+        this.url = url;
     }
-    registerOutlet(name, outlet) { this._outlets[name] = outlet; }
+    toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
 }
+exports.NavigationStart = NavigationStart;
+/**
+ * An event triggered when a navigation ends successfully
+ */
+class NavigationEnd {
+    constructor(id, url, urlAfterRedirects) {
+        this.id = id;
+        this.url = url;
+        this.urlAfterRedirects = urlAfterRedirects;
+    }
+    toString() {
+        return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
+    }
+}
+exports.NavigationEnd = NavigationEnd;
+/**
+ * An event triggered when a navigation is canceled
+ */
+class NavigationCancel {
+    constructor(id, url) {
+        this.id = id;
+        this.url = url;
+    }
+    toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
+}
+exports.NavigationCancel = NavigationCancel;
+/**
+ * An event triggered when a navigation fails due to unexpected error
+ */
+class NavigationError {
+    constructor(id, url, error) {
+        this.id = id;
+        this.url = url;
+        this.error = error;
+    }
+    toString() {
+        return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
+    }
+}
+exports.NavigationError = NavigationError;
+/**
+ * An event triggered when routes are recognized
+ */
+class RoutesRecognized {
+    constructor(id, url, urlAfterRedirects, state) {
+        this.id = id;
+        this.url = url;
+        this.urlAfterRedirects = urlAfterRedirects;
+        this.state = state;
+    }
+    toString() {
+        return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
+    }
+}
+exports.RoutesRecognized = RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
- *
- * You can see the state of the router by inspecting the read-only fields `router.urlTree`
- * and `router.routeTree`.
  */
-export class Router {
+class Router {
     /**
      * @internal
      */
-    constructor(_rootComponent, _rootComponentType, _componentResolver, _urlSerializer, _routerOutletMap, _location) {
-        this._rootComponent = _rootComponent;
-        this._rootComponentType = _rootComponentType;
-        this._componentResolver = _componentResolver;
-        this._urlSerializer = _urlSerializer;
-        this._routerOutletMap = _routerOutletMap;
-        this._location = _location;
-        this._changes = new EventEmitter();
-        this._routeTree = createEmptyRouteTree(this._rootComponentType);
-        this._setUpLocationChangeListener();
-        this.navigateByUrl(this._location.path());
-    }
-    /**
-     * Returns the current url tree.
-     */
-    get urlTree() { return this._urlTree; }
-    /**
-     * Returns the current route tree.
-     */
-    get routeTree() { return this._routeTree; }
-    /**
-     * An observable or url changes from the router.
-     */
-    get changes() { return this._changes; }
-    /**
-     * Navigate based on the provided url. This navigation is always absolute.
-     *
-     * ### Usage
-     *
-     * ```
-     * router.navigateByUrl("/team/33/user/11");
-     * ```
-     */
-    navigateByUrl(url) {
-        return this._navigate(this._urlSerializer.parse(url));
-    }
-    /**
-     * Navigate based on the provided array of commands and a starting point.
-     * If no segment is provided, the navigation is absolute.
-     *
-     * ### Usage
-     *
-     * ```
-     * router.navigate(['team', 33, 'team', '11], segment);
-     * ```
-     */
-    navigate(commands, segment) {
-        return this._navigate(this.createUrlTree(commands, segment));
+    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
+        this.rootComponentType = rootComponentType;
+        this.resolver = resolver;
+        this.urlSerializer = urlSerializer;
+        this.outletMap = outletMap;
+        this.location = location;
+        this.injector = injector;
+        this.navigationId = 0;
+        this.resetConfig(config);
+        this.routerEvents = new Subject_1.Subject();
+        this.currentUrlTree = url_tree_1.createEmptyUrlTree();
+        this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
      * @internal
      */
-    dispose() { ObservableWrapper.dispose(this._locationSubscription); }
+    initialNavigation() {
+        this.setUpLocationChangeListener();
+        this.navigateByUrl(this.location.path());
+    }
+    /**
+     * Returns the current route state.
+     */
+    get routerState() { return this.currentRouterState; }
+    /**
+     * Returns the current url.
+     */
+    get url() { return this.serializeUrl(this.currentUrlTree); }
+    /**
+     * Returns an observable of route events
+     */
+    get events() { return this.routerEvents; }
+    /**
+     * Resets the configuration used for navigation and generating links.
+     *
+     * ### Usage
+     *
+     * ```
+     * router.resetConfig([
+     *  { path: 'team/:id', component: TeamCmp, children: [
+     *    { path: 'simple', component: SimpleCmp },
+     *    { path: 'user/:name', component: UserCmp }
+     *  ] }
+     * ]);
+     * ```
+     */
+    resetConfig(config) {
+        config_1.validateConfig(config);
+        this.config = config;
+    }
+    /**
+     * @internal
+     */
+    dispose() { this.locationSubscription.unsubscribe(); }
     /**
      * Applies an array of commands to the current url tree and creates
      * a new url tree.
      *
-     * When given a segment, applies the given commands starting from the segment.
-     * When not given a segment, applies the given command starting from the root.
+     * When given an activate route, applies the given commands starting from the route.
+     * When not given a route, applies the given command starting from the root.
      *
      * ### Usage
      *
@@ -96,148 +164,382 @@ export class Router {
      * // you can collapse static fragments like this
      * router.createUrlTree(['/team/33/user', userId]);
      *
-     * // assuming the current url is `/team/33/user/11` and the segment points to `user/11`
+     * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
      *
      * // navigate to /team/33/user/11/details
-     * router.createUrlTree(['details'], segment);
+     * router.createUrlTree(['details'], {relativeTo: route});
      *
      * // navigate to /team/33/user/22
-     * router.createUrlTree(['../22'], segment);
+     * router.createUrlTree(['../22'], {relativeTo: route});
      *
      * // navigate to /team/44/user/22
-     * router.createUrlTree(['../../team/44/user/22'], segment);
+     * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands, segment) {
-        let s = isPresent(segment) ? segment : this._routeTree.root;
-        return link(s, this._routeTree, this.urlTree, commands);
+    createUrlTree(commands, { relativeTo, queryParams, fragment } = {}) {
+        const a = relativeTo ? relativeTo : this.routerState.root;
+        return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
+    }
+    /**
+     * Navigate based on the provided url. This navigation is always absolute.
+     *
+     * Returns a promise that:
+     * - is resolved with 'true' when navigation succeeds
+     * - is resolved with 'false' when navigation fails
+     * - is rejected when an error happens
+     *
+     * ### Usage
+     *
+     * ```
+     * router.navigateByUrl("/team/33/user/11");
+     * ```
+     */
+    navigateByUrl(url) {
+        if (url instanceof url_tree_1.UrlTree) {
+            return this.scheduleNavigation(url, false);
+        }
+        else {
+            const urlTree = this.urlSerializer.parse(url);
+            return this.scheduleNavigation(urlTree, false);
+        }
+    }
+    /**
+     * Navigate based on the provided array of commands and a starting point.
+     * If no starting route is provided, the navigation is absolute.
+     *
+     * Returns a promise that:
+     * - is resolved with 'true' when navigation succeeds
+     * - is resolved with 'false' when navigation fails
+     * - is rejected when an error happens
+     *
+     * ### Usage
+     *
+     * ```
+     * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
+     * ```
+     */
+    navigate(commands, extras = {}) {
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), false);
     }
     /**
      * Serializes a {@link UrlTree} into a string.
      */
-    serializeUrl(url) { return this._urlSerializer.serialize(url); }
-    _setUpLocationChangeListener() {
-        this._locationSubscription = this._location.subscribe((change) => { this._navigate(this._urlSerializer.parse(change['url']), change['pop']); });
+    serializeUrl(url) { return this.urlSerializer.serialize(url); }
+    /**
+     * Parse a string into a {@link UrlTree}.
+     */
+    parseUrl(url) { return this.urlSerializer.parse(url); }
+    scheduleNavigation(url, preventPushState) {
+        const id = ++this.navigationId;
+        this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+        return Promise.resolve().then((_) => this.runNavigate(url, preventPushState, id));
     }
-    _navigate(url, preventPushState) {
-        this._urlTree = url;
-        return recognize(this._componentResolver, this._rootComponentType, url, this._routeTree)
-            .then(currTree => {
-            return new _ActivateSegments(currTree, this._routeTree)
-                .activate(this._routerOutletMap, this._rootComponent)
-                .then(updated => {
-                if (updated) {
-                    this._routeTree = currTree;
-                    if (isBlank(preventPushState) || !preventPushState) {
-                        let path = this._urlSerializer.serialize(this._urlTree);
-                        if (this._location.isCurrentPathEqualTo(path)) {
-                            this._location.replaceState(path);
-                        }
-                        else {
-                            this._location.go(path);
-                        }
-                    }
-                    this._changes.emit(null);
+    setUpLocationChangeListener() {
+        this.locationSubscription = this.location.subscribe((change) => {
+            return this.scheduleNavigation(this.urlSerializer.parse(change['url']), change['pop']);
+        });
+    }
+    runNavigate(url, preventPushState, id) {
+        if (id !== this.navigationId) {
+            this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
+            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+            return Promise.resolve(false);
+        }
+        return new Promise((resolvePromise, rejectPromise) => {
+            let updatedUrl;
+            let state;
+            apply_redirects_1.applyRedirects(url, this.config)
+                .mergeMap(u => {
+                updatedUrl = u;
+                return recognize_1.recognize(this.rootComponentType, this.config, updatedUrl, this.serializeUrl(updatedUrl));
+            })
+                .mergeMap((newRouterStateSnapshot) => {
+                this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(updatedUrl), newRouterStateSnapshot));
+                return resolve_1.resolve(this.resolver, newRouterStateSnapshot);
+            })
+                .map((routerStateSnapshot) => {
+                return create_router_state_1.createRouterState(routerStateSnapshot, this.currentRouterState);
+            })
+                .map((newState) => {
+                state = newState;
+            })
+                .mergeMap(_ => {
+                return new GuardChecks(state.snapshot, this.currentRouterState.snapshot, this.injector)
+                    .check(this.outletMap);
+            })
+                .forEach((shouldActivate) => {
+                if (!shouldActivate || id !== this.navigationId) {
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+                    return Promise.resolve(false);
                 }
+                new ActivateRoutes(state, this.currentRouterState).activate(this.outletMap);
+                this.currentUrlTree = updatedUrl;
+                this.currentRouterState = state;
+                if (!preventPushState) {
+                    let path = this.urlSerializer.serialize(updatedUrl);
+                    if (this.location.isCurrentPathEqualTo(path)) {
+                        this.location.replaceState(path);
+                    }
+                    else {
+                        this.location.go(path);
+                    }
+                }
+                return Promise.resolve(true);
+            })
+                .then(() => {
+                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(updatedUrl)));
+                resolvePromise(true);
+            }, e => {
+                this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
+                rejectPromise(e);
             });
         });
     }
 }
-class _ActivateSegments {
-    constructor(currTree, prevTree) {
-        this.currTree = currTree;
-        this.prevTree = prevTree;
-        this.deactivations = [];
-        this.performMutation = true;
+exports.Router = Router;
+class CanActivate {
+    constructor(route) {
+        this.route = route;
     }
-    activate(parentOutletMap, rootComponent) {
-        let prevRoot = isPresent(this.prevTree) ? rootNode(this.prevTree) : null;
-        let currRoot = rootNode(this.currTree);
-        return this.canDeactivate(currRoot, prevRoot, parentOutletMap, rootComponent).then(res => {
-            this.performMutation = true;
-            if (res) {
-                this.activateChildSegments(currRoot, prevRoot, parentOutletMap, [rootComponent]);
+}
+class CanDeactivate {
+    constructor(component, route) {
+        this.component = component;
+        this.route = route;
+    }
+}
+class GuardChecks {
+    constructor(future, curr, injector) {
+        this.future = future;
+        this.curr = curr;
+        this.injector = injector;
+        this.checks = [];
+    }
+    check(parentOutletMap) {
+        const futureRoot = this.future._root;
+        const currRoot = this.curr ? this.curr._root : null;
+        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+        if (this.checks.length === 0)
+            return of_1.of(true);
+        return Observable_1.Observable.from(this.checks)
+            .map(s => {
+            if (s instanceof CanActivate) {
+                return this.runCanActivate(s.route);
             }
-            return res;
+            else if (s instanceof CanDeactivate) {
+                return this.runCanDeactivate(s.component, s.route);
+            }
+            else {
+                throw new Error('Cannot be reached');
+            }
+        })
+            .mergeAll()
+            .every(result => result === true);
+    }
+    traverseChildRoutes(futureNode, currNode, outletMap) {
+        const prevChildren = nodeChildrenAsMap(currNode);
+        futureNode.children.forEach(c => {
+            this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap);
+            delete prevChildren[c.value.outlet];
         });
+        collection_1.forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(v, outletMap._outlets[k]));
     }
-    canDeactivate(currRoot, prevRoot, outletMap, rootComponent) {
-        this.performMutation = false;
-        this.activateChildSegments(currRoot, prevRoot, outletMap, [rootComponent]);
-        let allPaths = PromiseWrapper.all(this.deactivations.map(r => this.checkCanDeactivatePath(r)));
-        return allPaths.then((values) => values.filter(v => v).length === values.length);
-    }
-    checkCanDeactivatePath(path) {
-        let curr = PromiseWrapper.resolve(true);
-        for (let p of ListWrapper.reversed(path)) {
-            curr = curr.then(_ => {
-                if (hasLifecycleHook('routerCanDeactivate', p)) {
-                    return p.routerCanDeactivate(this.prevTree, this.currTree);
-                }
-                else {
-                    return _;
-                }
-            });
-        }
-        return curr;
-    }
-    activateChildSegments(currNode, prevNode, outletMap, components) {
-        let prevChildren = isPresent(prevNode) ? prevNode.children.reduce((m, c) => {
-            m[c.value.outlet] = c;
-            return m;
-        }, {}) : {};
-        currNode.children.forEach(c => {
-            this.activateSegments(c, prevChildren[c.value.outlet], outletMap, components);
-            StringMapWrapper.delete(prevChildren, c.value.outlet);
-        });
-        StringMapWrapper.forEach(prevChildren, (v /** TODO #9100 */, k /** TODO #9100 */) => this.deactivateOutlet(outletMap._outlets[k], components));
-    }
-    activateSegments(currNode, prevNode, parentOutletMap, components) {
-        let curr = currNode.value;
-        let prev = isPresent(prevNode) ? prevNode.value : null;
-        let outlet = this.getOutlet(parentOutletMap, currNode.value);
-        if (curr === prev) {
-            this.activateChildSegments(currNode, prevNode, outlet.outletMap, components.concat([outlet.component]));
+    traverseRoutes(futureNode, currNode, parentOutletMap) {
+        const future = futureNode.value;
+        const curr = currNode ? currNode.value : null;
+        const outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
+        // reusing the node
+        if (curr && future._routeConfig === curr._routeConfig) {
+            if (!collection_1.shallowEqual(future.params, curr.params)) {
+                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(future));
+            }
+            // If we have a component, we need to go through an outlet.
+            if (future.component) {
+                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null);
+            }
+            else {
+                this.traverseChildRoutes(futureNode, currNode, parentOutletMap);
+            }
         }
         else {
-            this.deactivateOutlet(outlet, components);
-            if (this.performMutation) {
-                let outletMap = new RouterOutletMap();
-                let component = this.activateNewSegments(outletMap, curr, prev, outlet);
-                this.activateChildSegments(currNode, prevNode, outletMap, components.concat([component]));
+            if (curr) {
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    this.deactivateOutletAndItChildren(curr, outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
             }
-        }
-    }
-    activateNewSegments(outletMap, curr, prev, outlet) {
-        let resolved = ReflectiveInjector.resolve([{ provide: RouterOutletMap, useValue: outletMap }, { provide: RouteSegment, useValue: curr }]);
-        let ref = outlet.activate(routeSegmentComponentFactory(curr), resolved, outletMap);
-        if (hasLifecycleHook('routerOnActivate', ref.instance)) {
-            ref.instance.routerOnActivate(curr, prev, this.currTree, this.prevTree);
-        }
-        return ref.instance;
-    }
-    getOutlet(outletMap, segment) {
-        let outlet = outletMap._outlets[segment.outlet];
-        if (isBlank(outlet)) {
-            if (segment.outlet == DEFAULT_OUTLET_NAME) {
-                throw new BaseException(`Cannot find default outlet`);
+            this.checks.push(new CanActivate(future));
+            // If we have a component, we need to go through an outlet.
+            if (future.component) {
+                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null);
             }
             else {
-                throw new BaseException(`Cannot find the outlet ${segment.outlet}`);
+                this.traverseChildRoutes(futureNode, null, parentOutletMap);
             }
         }
-        return outlet;
     }
-    deactivateOutlet(outlet, components) {
-        if (isPresent(outlet) && outlet.isActivated) {
-            StringMapWrapper.forEach(outlet.outletMap._outlets, (v /** TODO #9100 */, k /** TODO #9100 */) => this.deactivateOutlet(v, components));
-            if (this.performMutation) {
-                outlet.deactivate();
+    deactivateOutletAndItChildren(route, outlet) {
+        if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
+            this.checks.push(new CanDeactivate(outlet.component, route));
+        }
+    }
+    deactivateOutletMap(outletMap) {
+        collection_1.forEach(outletMap._outlets, (v) => {
+            if (v.isActivated) {
+                this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
+            }
+        });
+    }
+    runCanActivate(future) {
+        const canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
+        if (!canActivate || canActivate.length === 0)
+            return of_1.of(true);
+        return Observable_1.Observable.from(canActivate)
+            .map(c => {
+            const guard = this.injector.get(c);
+            if (guard.canActivate) {
+                return wrapIntoObservable(guard.canActivate(future, this.future));
             }
             else {
-                this.deactivations.push(components.concat([outlet.component]));
+                return wrapIntoObservable(guard(future, this.future));
+            }
+        })
+            .mergeAll()
+            .every(result => result === true);
+    }
+    runCanDeactivate(component, curr) {
+        const canDeactivate = curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+        if (!canDeactivate || canDeactivate.length === 0)
+            return of_1.of(true);
+        return Observable_1.Observable.from(canDeactivate)
+            .map(c => {
+            const guard = this.injector.get(c);
+            if (guard.canDeactivate) {
+                return wrapIntoObservable(guard.canDeactivate(component, curr, this.curr));
+            }
+            else {
+                return wrapIntoObservable(guard(component, curr, this.curr));
+            }
+        })
+            .mergeAll()
+            .every(result => result === true);
+    }
+}
+function wrapIntoObservable(value) {
+    if (value instanceof Observable_1.Observable) {
+        return value;
+    }
+    else {
+        return of_1.of(value);
+    }
+}
+class ActivateRoutes {
+    constructor(futureState, currState) {
+        this.futureState = futureState;
+        this.currState = currState;
+    }
+    activate(parentOutletMap) {
+        const futureRoot = this.futureState._root;
+        const currRoot = this.currState ? this.currState._root : null;
+        pushQueryParamsAndFragment(this.futureState);
+        this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+    }
+    activateChildRoutes(futureNode, currNode, outletMap) {
+        const prevChildren = nodeChildrenAsMap(currNode);
+        futureNode.children.forEach(c => {
+            this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
+            delete prevChildren[c.value.outlet];
+        });
+        collection_1.forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(outletMap._outlets[k]));
+    }
+    activateRoutes(futureNode, currNode, parentOutletMap) {
+        const future = futureNode.value;
+        const curr = currNode ? currNode.value : null;
+        // reusing the node
+        if (future === curr) {
+            // advance the route to push the parameters
+            router_state_1.advanceActivatedRoute(future);
+            // If we have a normal route, we need to go through an outlet.
+            if (future.component) {
+                const outlet = getOutlet(parentOutletMap, futureNode.value);
+                this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+            }
+            else {
+                this.activateChildRoutes(futureNode, currNode, parentOutletMap);
+            }
+        }
+        else {
+            if (curr) {
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    const outlet = getOutlet(parentOutletMap, futureNode.value);
+                    this.deactivateOutletAndItChildren(outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
+            }
+            // if we have a normal route, we need to advance the route
+            // and place the component into the outlet. After that recurse.
+            if (future.component) {
+                router_state_1.advanceActivatedRoute(future);
+                const outlet = getOutlet(parentOutletMap, futureNode.value);
+                const outletMap = new router_outlet_map_1.RouterOutletMap();
+                this.placeComponentIntoOutlet(outletMap, future, outlet);
+                this.activateChildRoutes(futureNode, null, outletMap);
+            }
+            else {
+                router_state_1.advanceActivatedRoute(future);
+                this.activateChildRoutes(futureNode, null, parentOutletMap);
             }
         }
     }
+    placeComponentIntoOutlet(outletMap, future, outlet) {
+        const resolved = core_1.ReflectiveInjector.resolve([
+            { provide: router_state_1.ActivatedRoute, useValue: future },
+            { provide: router_outlet_map_1.RouterOutletMap, useValue: outletMap }
+        ]);
+        outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
+    }
+    deactivateOutletAndItChildren(outlet) {
+        if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
+            outlet.deactivate();
+        }
+    }
+    deactivateOutletMap(outletMap) {
+        collection_1.forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
+    }
+}
+function pushQueryParamsAndFragment(state) {
+    if (!collection_1.shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
+        state.queryParams.next(state.snapshot.queryParams);
+    }
+    if (state.snapshot.fragment !== state.fragment.value) {
+        state.fragment.next(state.snapshot.fragment);
+    }
+}
+function nodeChildrenAsMap(node) {
+    return node ? node.children.reduce((m, c) => {
+        m[c.value.outlet] = c;
+        return m;
+    }, {}) : {};
+}
+function getOutlet(outletMap, route) {
+    let outlet = outletMap._outlets[route.outlet];
+    if (!outlet) {
+        const componentName = route.component.name;
+        if (route.outlet === shared_1.PRIMARY_OUTLET) {
+            throw new Error(`Cannot find primary outlet to load '${componentName}'`);
+        }
+        else {
+            throw new Error(`Cannot find the outlet ${route.outlet} to load '${componentName}'`);
+        }
+    }
+    return outlet;
 }
 //# sourceMappingURL=router.js.map

@@ -1,42 +1,48 @@
-import { Attribute, Directive, ReflectiveInjector, ViewContainerRef } from '@angular/core';
-import { DEFAULT_OUTLET_NAME } from '../constants';
-import { isBlank, isPresent } from '../facade/lang';
-import { RouterOutletMap } from '../router';
-export class RouterOutlet {
-    constructor(parentOutletMap, _location, name) {
-        this._location = _location;
-        parentOutletMap.registerOutlet(isBlank(name) ? DEFAULT_OUTLET_NAME : name, this);
+"use strict";
+const core_1 = require('@angular/core');
+const router_outlet_map_1 = require('../router_outlet_map');
+const shared_1 = require('../shared');
+class RouterOutlet {
+    /**
+     * @internal
+     */
+    constructor(parentOutletMap, location, name) {
+        this.location = location;
+        parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
+    }
+    get isActivated() { return !!this.activated; }
+    get component() {
+        if (!this.activated)
+            throw new Error('Outlet is not activated');
+        return this.activated.instance;
+    }
+    get activatedRoute() {
+        if (!this.activated)
+            throw new Error('Outlet is not activated');
+        return this._activatedRoute;
     }
     deactivate() {
-        this._activated.destroy();
-        this._activated = null;
+        if (this.activated) {
+            this.activated.destroy();
+            this.activated = null;
+        }
     }
-    /**
-     * Returns the loaded component.
-     */
-    get component() { return isPresent(this._activated) ? this._activated.instance : null; }
-    /**
-     * Returns true is the outlet is not empty.
-     */
-    get isActivated() { return isPresent(this._activated); }
-    /**
-     * Called by the Router to instantiate a new component.
-     */
-    activate(factory, providers, outletMap) {
+    activate(factory, activatedRoute, providers, outletMap) {
         this.outletMap = outletMap;
-        let inj = ReflectiveInjector.fromResolvedProviders(providers, this._location.parentInjector);
-        this._activated = this._location.createComponent(factory, this._location.length, inj, []);
-        return this._activated;
+        this._activatedRoute = activatedRoute;
+        const inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
+        this.activated = this.location.createComponent(factory, this.location.length, inj, []);
     }
 }
 /** @nocollapse */
 RouterOutlet.decorators = [
-    { type: Directive, args: [{ selector: 'router-outlet' },] },
+    { type: core_1.Directive, args: [{ selector: 'router-outlet' },] },
 ];
 /** @nocollapse */
 RouterOutlet.ctorParameters = [
-    { type: RouterOutletMap, },
-    { type: ViewContainerRef, },
-    { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
+    { type: router_outlet_map_1.RouterOutletMap, },
+    { type: core_1.ViewContainerRef, },
+    { type: undefined, decorators: [{ type: core_1.Attribute, args: ['name',] },] },
 ];
+exports.RouterOutlet = RouterOutlet;
 //# sourceMappingURL=router_outlet.js.map
