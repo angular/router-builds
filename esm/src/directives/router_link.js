@@ -1,9 +1,8 @@
-"use strict";
-const common_1 = require('@angular/common');
-const core_1 = require('@angular/core');
-const router_1 = require('../router');
-const router_state_1 = require('../router_state');
-class RouterLink {
+import { LocationStrategy } from '@angular/common';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Router } from '../router';
+import { ActivatedRoute } from '../router_state';
+export class RouterLink {
     /**
      * @internal
      */
@@ -41,22 +40,21 @@ class RouterLink {
 }
 /** @nocollapse */
 RouterLink.decorators = [
-    { type: core_1.Directive, args: [{ selector: '[routerLink]' },] },
+    { type: Directive, args: [{ selector: '[routerLink]' },] },
 ];
 /** @nocollapse */
 RouterLink.ctorParameters = [
-    { type: router_1.Router, },
-    { type: router_state_1.ActivatedRoute, },
-    { type: common_1.LocationStrategy, },
+    { type: Router, },
+    { type: ActivatedRoute, },
+    { type: LocationStrategy, },
 ];
 /** @nocollapse */
 RouterLink.propDecorators = {
-    'target': [{ type: core_1.Input },],
-    'queryParams': [{ type: core_1.Input },],
-    'fragment': [{ type: core_1.Input },],
-    'href': [{ type: core_1.HostBinding },],
-    'routerLink': [{ type: core_1.Input },],
-    'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    'target': [{ type: Input },],
+    'queryParams': [{ type: Input },],
+    'fragment': [{ type: Input },],
+    'href': [{ type: HostBinding },],
+    'routerLink': [{ type: Input },],
+    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
 };
-exports.RouterLink = RouterLink;
 //# sourceMappingURL=router_link.js.map

@@ -1,14 +1,13 @@
-"use strict";
-const core_1 = require('@angular/core');
-const router_outlet_map_1 = require('../router_outlet_map');
-const shared_1 = require('../shared');
-class RouterOutlet {
+import { Attribute, Directive, ReflectiveInjector, ViewContainerRef } from '@angular/core';
+import { RouterOutletMap } from '../router_outlet_map';
+import { PRIMARY_OUTLET } from '../shared';
+export class RouterOutlet {
     /**
      * @internal
      */
     constructor(parentOutletMap, location, name) {
         this.location = location;
-        parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
+        parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
     }
     get isActivated() { return !!this.activated; }
     get component() {
@@ -30,19 +29,18 @@ class RouterOutlet {
     activate(factory, activatedRoute, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
-        const inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
+        const inj = ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
     }
 }
 /** @nocollapse */
 RouterOutlet.decorators = [
-    { type: core_1.Directive, args: [{ selector: 'router-outlet' },] },
+    { type: Directive, args: [{ selector: 'router-outlet' },] },
 ];
 /** @nocollapse */
 RouterOutlet.ctorParameters = [
-    { type: router_outlet_map_1.RouterOutletMap, },
-    { type: core_1.ViewContainerRef, },
-    { type: undefined, decorators: [{ type: core_1.Attribute, args: ['name',] },] },
+    { type: RouterOutletMap, },
+    { type: ViewContainerRef, },
+    { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
 ];
-exports.RouterOutlet = RouterOutlet;
 //# sourceMappingURL=router_outlet.js.map

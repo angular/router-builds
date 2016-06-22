@@ -1,8 +1,7 @@
-"use strict";
-const Observable_1 = require('rxjs/Observable');
-const of_1 = require('rxjs/observable/of');
-const shared_1 = require('./shared');
-const url_tree_1 = require('./url_tree');
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { PRIMARY_OUTLET } from './shared';
+import { UrlPathWithParams, UrlSegment, UrlTree, mapChildren } from './url_tree';
 class NoMatch {
     constructor(segment = null) {
         this.segment = segment;
@@ -13,36 +12,35 @@ class GlobalRedirect {
         this.paths = paths;
     }
 }
-function applyRedirects(urlTree, config) {
+export function applyRedirects(urlTree, config) {
     try {
-        return createUrlTree(urlTree, expandSegment(config, urlTree.root, shared_1.PRIMARY_OUTLET));
+        return createUrlTree(urlTree, expandSegment(config, urlTree.root, PRIMARY_OUTLET));
     }
     catch (e) {
         if (e instanceof GlobalRedirect) {
-            return createUrlTree(urlTree, new url_tree_1.UrlSegment([], { [shared_1.PRIMARY_OUTLET]: new url_tree_1.UrlSegment(e.paths, {}) }));
+            return createUrlTree(urlTree, new UrlSegment([], { [PRIMARY_OUTLET]: new UrlSegment(e.paths, {}) }));
         }
         else if (e instanceof NoMatch) {
-            return new Observable_1.Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segment}'`)));
+            return new Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segment}'`)));
         }
         else {
-            return new Observable_1.Observable((obs) => obs.error(e));
+            return new Observable((obs) => obs.error(e));
         }
     }
 }
-exports.applyRedirects = applyRedirects;
 function createUrlTree(urlTree, root) {
-    return of_1.of(new url_tree_1.UrlTree(root, urlTree.queryParams, urlTree.fragment));
+    return of(new UrlTree(root, urlTree.queryParams, urlTree.fragment));
 }
 function expandSegment(routes, segment, outlet) {
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-        return new url_tree_1.UrlSegment([], expandSegmentChildren(routes, segment));
+        return new UrlSegment([], expandSegmentChildren(routes, segment));
     }
     else {
         return expandPathsWithParams(segment, routes, segment.pathsWithParams, outlet, true);
     }
 }
 function expandSegmentChildren(routes, segment) {
-    return url_tree_1.mapChildren(segment, (child, childOutlet) => expandSegment(routes, child, childOutlet));
+    return mapChildren(segment, (child, childOutlet) => expandSegment(routes, child, childOutlet));
 }
 function expandPathsWithParams(segment, routes, paths, outlet, allowRedirects) {
     for (let r of routes) {
@@ -57,7 +55,7 @@ function expandPathsWithParams(segment, routes, paths, outlet, allowRedirects) {
     throw new NoMatch(segment);
 }
 function expandPathsWithParamsAgainstRoute(segment, routes, route, paths, outlet, allowRedirects) {
-    if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
+    if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
         throw new NoMatch();
     if (route.redirectTo && !allowRedirects)
         throw new NoMatch();
@@ -82,7 +80,7 @@ function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
         throw new GlobalRedirect(newPaths);
     }
     else {
-        return new url_tree_1.UrlSegment(newPaths, {});
+        return new UrlSegment(newPaths, {});
     }
 }
 function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet) {
@@ -97,22 +95,22 @@ function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, r
 }
 function matchPathsWithParamsAgainstRoute(segment, route, paths) {
     if (route.path === '**') {
-        return new url_tree_1.UrlSegment(paths, {});
+        return new UrlSegment(paths, {});
     }
     else {
         const { consumedPaths, lastChild } = match(segment, route, paths);
         const childConfig = route.children ? route.children : [];
         const slicedPath = paths.slice(lastChild);
         if (childConfig.length === 0 && slicedPath.length === 0) {
-            return new url_tree_1.UrlSegment(consumedPaths, {});
+            return new UrlSegment(consumedPaths, {});
         }
         else if (slicedPath.length === 0 && segment.hasChildren()) {
             const children = expandSegmentChildren(childConfig, segment);
-            return new url_tree_1.UrlSegment(consumedPaths, children);
+            return new UrlSegment(consumedPaths, children);
         }
         else {
-            const cs = expandPathsWithParams(segment, childConfig, slicedPath, shared_1.PRIMARY_OUTLET, true);
-            return new url_tree_1.UrlSegment(consumedPaths.concat(cs.pathsWithParams), cs.children);
+            const cs = expandPathsWithParams(segment, childConfig, slicedPath, PRIMARY_OUTLET, true);
+            return new UrlSegment(consumedPaths.concat(cs.pathsWithParams), cs.children);
         }
     }
 }
@@ -178,7 +176,7 @@ function findOrCreatePath(part, paths) {
         return r;
     }
     else {
-        return new url_tree_1.UrlPathWithParams(part, {});
+        return new UrlPathWithParams(part, {});
     }
 }
 //# sourceMappingURL=apply_redirects.js.map

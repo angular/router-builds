@@ -1,11 +1,9 @@
-"use strict";
-const shared_1 = require('./shared');
-const collection_1 = require('./utils/collection');
-function createEmptyUrlTree() {
+import { PRIMARY_OUTLET } from './shared';
+import { forEach, shallowEqual } from './utils/collection';
+export function createEmptyUrlTree() {
     return new UrlTree(new UrlSegment([], {}), {}, null);
 }
-exports.createEmptyUrlTree = createEmptyUrlTree;
-function containsTree(container, containee, exact) {
+export function containsTree(container, containee, exact) {
     if (exact) {
         return equalSegments(container.root, containee.root);
     }
@@ -13,7 +11,6 @@ function containsTree(container, containee, exact) {
         return containsSegment(container.root, containee.root);
     }
 }
-exports.containsTree = containsTree;
 function equalSegments(container, containee) {
     if (!equalPath(container.pathsWithParams, containee.pathsWithParams))
         return false;
@@ -55,13 +52,13 @@ function containsSegmentHelper(container, containee, containeePaths) {
         const next = containeePaths.slice(container.pathsWithParams.length);
         if (!equalPath(container.pathsWithParams, current))
             return false;
-        return containsSegmentHelper(container.children[shared_1.PRIMARY_OUTLET], containee, next);
+        return containsSegmentHelper(container.children[PRIMARY_OUTLET], containee, next);
     }
 }
 /**
  * A URL in the tree form.
  */
-class UrlTree {
+export class UrlTree {
     /**
      * @internal
      */
@@ -72,39 +69,35 @@ class UrlTree {
     }
     toString() { return new DefaultUrlSerializer().serialize(this); }
 }
-exports.UrlTree = UrlTree;
-class UrlSegment {
+export class UrlSegment {
     constructor(pathsWithParams, children) {
         this.pathsWithParams = pathsWithParams;
         this.children = children;
         this.parent = null;
-        collection_1.forEach(children, (v, k) => v.parent = this);
+        forEach(children, (v, k) => v.parent = this);
     }
     hasChildren() { return Object.keys(this.children).length > 0; }
     toString() { return serializePaths(this); }
 }
-exports.UrlSegment = UrlSegment;
-class UrlPathWithParams {
+export class UrlPathWithParams {
     constructor(path, parameters) {
         this.path = path;
         this.parameters = parameters;
     }
     toString() { return serializePath(this); }
 }
-exports.UrlPathWithParams = UrlPathWithParams;
-function equalPathsWithParams(a, b) {
+export function equalPathsWithParams(a, b) {
     if (a.length !== b.length)
         return false;
     for (let i = 0; i < a.length; ++i) {
         if (a[i].path !== b[i].path)
             return false;
-        if (!collection_1.shallowEqual(a[i].parameters, b[i].parameters))
+        if (!shallowEqual(a[i].parameters, b[i].parameters))
             return false;
     }
     return true;
 }
-exports.equalPathsWithParams = equalPathsWithParams;
-function equalPath(a, b) {
+export function equalPath(a, b) {
     if (a.length !== b.length)
         return false;
     for (let i = 0; i < a.length; ++i) {
@@ -113,47 +106,43 @@ function equalPath(a, b) {
     }
     return true;
 }
-exports.equalPath = equalPath;
-function mapChildren(segment, fn) {
+export function mapChildren(segment, fn) {
     const newChildren = {};
-    collection_1.forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet === shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, (child, childOutlet) => {
+        if (childOutlet === PRIMARY_OUTLET) {
             newChildren[childOutlet] = fn(child, childOutlet);
         }
     });
-    collection_1.forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet !== shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, (child, childOutlet) => {
+        if (childOutlet !== PRIMARY_OUTLET) {
             newChildren[childOutlet] = fn(child, childOutlet);
         }
     });
     return newChildren;
 }
-exports.mapChildren = mapChildren;
-function mapChildrenIntoArray(segment, fn) {
+export function mapChildrenIntoArray(segment, fn) {
     let res = [];
-    collection_1.forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet === shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, (child, childOutlet) => {
+        if (childOutlet === PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
     });
-    collection_1.forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet !== shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, (child, childOutlet) => {
+        if (childOutlet !== PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
     });
     return res;
 }
-exports.mapChildrenIntoArray = mapChildrenIntoArray;
 /**
  * Defines a way to serialize/deserialize a url tree.
  */
-class UrlSerializer {
+export class UrlSerializer {
 }
-exports.UrlSerializer = UrlSerializer;
 /**
  * A default implementation of the serialization.
  */
-class DefaultUrlSerializer {
+export class DefaultUrlSerializer {
     parse(url) {
         const p = new UrlParser(url);
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
@@ -165,17 +154,15 @@ class DefaultUrlSerializer {
         return `${segment}${query}${fragment}`;
     }
 }
-exports.DefaultUrlSerializer = DefaultUrlSerializer;
-function serializePaths(segment) {
+export function serializePaths(segment) {
     return segment.pathsWithParams.map(p => serializePath(p)).join('/');
 }
-exports.serializePaths = serializePaths;
 function serializeSegment(segment, root) {
-    if (segment.children[shared_1.PRIMARY_OUTLET] && root) {
-        const primary = serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false);
+    if (segment.children[PRIMARY_OUTLET] && root) {
+        const primary = serializeSegment(segment.children[PRIMARY_OUTLET], false);
         const children = [];
-        collection_1.forEach(segment.children, (v, k) => {
-            if (k !== shared_1.PRIMARY_OUTLET) {
+        forEach(segment.children, (v, k) => {
+            if (k !== PRIMARY_OUTLET) {
                 children.push(`${k}:${serializeSegment(v, false)}`);
             }
         });
@@ -188,8 +175,8 @@ function serializeSegment(segment, root) {
     }
     else if (segment.hasChildren() && !root) {
         const children = mapChildrenIntoArray(segment, (v, k) => {
-            if (k === shared_1.PRIMARY_OUTLET) {
-                return [serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false)];
+            if (k === PRIMARY_OUTLET) {
+                return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
             else {
                 return [`${k}:${serializeSegment(v, false)}`];
@@ -201,10 +188,9 @@ function serializeSegment(segment, root) {
         return serializePaths(segment);
     }
 }
-function serializePath(path) {
+export function serializePath(path) {
     return `${path.path}${serializeParams(path.parameters)}`;
 }
-exports.serializePath = serializePath;
 function serializeParams(params) {
     return pairs(params).map(p => `;${p.first}=${p.second}`).join('');
 }
@@ -285,7 +271,7 @@ class UrlParser {
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
-        res[shared_1.PRIMARY_OUTLET] = new UrlSegment(paths, children);
+        res[PRIMARY_OUTLET] = new UrlSegment(paths, children);
         return res;
     }
     parsePathWithParams() {
@@ -371,10 +357,10 @@ class UrlParser {
                 this.capture(':');
             }
             else if (allowPrimary) {
-                outletName = shared_1.PRIMARY_OUTLET;
+                outletName = PRIMARY_OUTLET;
             }
             const children = this.parseSegmentChildren();
-            segments[outletName] = Object.keys(children).length === 1 ? children[shared_1.PRIMARY_OUTLET] :
+            segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegment([], children);
             if (this.peekStartsWith('//')) {
                 this.capture('//');

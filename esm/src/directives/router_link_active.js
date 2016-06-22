@@ -1,9 +1,8 @@
-"use strict";
-const core_1 = require('@angular/core');
-const router_1 = require('../router');
-const url_tree_1 = require('../url_tree');
-const router_link_1 = require('./router_link');
-class RouterLinkActive {
+import { ContentChildren, Directive, ElementRef, Input, Renderer } from '@angular/core';
+import { NavigationEnd, Router } from '../router';
+import { containsTree } from '../url_tree';
+import { RouterLink } from './router_link';
+export class RouterLinkActive {
     /**
      * @internal
      */
@@ -14,7 +13,7 @@ class RouterLinkActive {
         this.classes = [];
         this.routerLinkActiveOptions = { exact: true };
         this.subscription = router.events.subscribe(s => {
-            if (s instanceof router_1.NavigationEnd) {
+            if (s instanceof NavigationEnd) {
                 this.update();
             }
         });
@@ -37,25 +36,24 @@ class RouterLinkActive {
         if (!this.links || this.links.length === 0)
             return;
         const currentUrlTree = this.router.parseUrl(this.router.url);
-        const isActive = this.links.reduce((res, link) => res || url_tree_1.containsTree(currentUrlTree, link.urlTree, this.routerLinkActiveOptions.exact), false);
+        const isActive = this.links.reduce((res, link) => res || containsTree(currentUrlTree, link.urlTree, this.routerLinkActiveOptions.exact), false);
         this.classes.forEach(c => this.renderer.setElementClass(this.element.nativeElement, c, isActive));
     }
 }
 /** @nocollapse */
 RouterLinkActive.decorators = [
-    { type: core_1.Directive, args: [{ selector: '[routerLinkActive]' },] },
+    { type: Directive, args: [{ selector: '[routerLinkActive]' },] },
 ];
 /** @nocollapse */
 RouterLinkActive.ctorParameters = [
-    { type: router_1.Router, },
-    { type: core_1.ElementRef, },
-    { type: core_1.Renderer, },
+    { type: Router, },
+    { type: ElementRef, },
+    { type: Renderer, },
 ];
 /** @nocollapse */
 RouterLinkActive.propDecorators = {
-    'links': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLink,] },],
-    'routerLinkActiveOptions': [{ type: core_1.Input },],
-    'routerLinkActive': [{ type: core_1.Input },],
+    'links': [{ type: ContentChildren, args: [RouterLink,] },],
+    'routerLinkActiveOptions': [{ type: Input },],
+    'routerLinkActive': [{ type: Input },],
 };
-exports.RouterLinkActive = RouterLinkActive;
 //# sourceMappingURL=router_link_active.js.map

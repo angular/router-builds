@@ -1,8 +1,6 @@
-"use strict";
-function validateConfig(config) {
+export function validateConfig(config) {
     config.forEach(validateNode);
 }
-exports.validateConfig = validateConfig;
 function validateNode(route) {
     if (!!route.redirectTo && !!route.children) {
         throw new Error(`Invalid configuration of route '${route.path}': redirectTo and children cannot be used together`);

@@ -1,9 +1,8 @@
-"use strict";
-const BehaviorSubject_1 = require('rxjs/BehaviorSubject');
-const shared_1 = require('./shared');
-const url_tree_1 = require('./url_tree');
-const collection_1 = require('./utils/collection');
-const tree_1 = require('./utils/tree');
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { PRIMARY_OUTLET } from './shared';
+import { UrlPathWithParams } from './url_tree';
+import { shallowEqual } from './utils/collection';
+import { Tree, TreeNode } from './utils/tree';
 /**
  * The state of the router.
  *
@@ -19,7 +18,7 @@ const tree_1 = require('./utils/tree');
  * }
  * ```
  */
-class RouterState extends tree_1.Tree {
+export class RouterState extends Tree {
     /**
      * @internal
      */
@@ -31,24 +30,22 @@ class RouterState extends tree_1.Tree {
     }
     toString() { return this.snapshot.toString(); }
 }
-exports.RouterState = RouterState;
-function createEmptyState(urlTree, rootComponent) {
+export function createEmptyState(urlTree, rootComponent) {
     const snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    const emptyUrl = new BehaviorSubject_1.BehaviorSubject([new url_tree_1.UrlPathWithParams('', {})]);
-    const emptyParams = new BehaviorSubject_1.BehaviorSubject({});
-    const emptyQueryParams = new BehaviorSubject_1.BehaviorSubject({});
-    const fragment = new BehaviorSubject_1.BehaviorSubject('');
-    const activated = new ActivatedRoute(emptyUrl, emptyParams, shared_1.PRIMARY_OUTLET, rootComponent, snapshot.root);
+    const emptyUrl = new BehaviorSubject([new UrlPathWithParams('', {})]);
+    const emptyParams = new BehaviorSubject({});
+    const emptyQueryParams = new BehaviorSubject({});
+    const fragment = new BehaviorSubject('');
+    const activated = new ActivatedRoute(emptyUrl, emptyParams, PRIMARY_OUTLET, rootComponent, snapshot.root);
     activated.snapshot = snapshot.root;
-    return new RouterState(new tree_1.TreeNode(activated, []), emptyQueryParams, fragment, snapshot);
+    return new RouterState(new TreeNode(activated, []), emptyQueryParams, fragment, snapshot);
 }
-exports.createEmptyState = createEmptyState;
 function createEmptyStateSnapshot(urlTree, rootComponent) {
     const emptyParams = {};
     const emptyQueryParams = {};
     const fragment = '';
-    const activated = new ActivatedRouteSnapshot([], emptyParams, shared_1.PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1);
-    return new RouterStateSnapshot('', new tree_1.TreeNode(activated, []), emptyQueryParams, fragment);
+    const activated = new ActivatedRouteSnapshot([], emptyParams, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1);
+    return new RouterStateSnapshot('', new TreeNode(activated, []), emptyQueryParams, fragment);
 }
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
@@ -65,7 +62,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  */
-class ActivatedRoute {
+export class ActivatedRoute {
     /**
      * @internal
      */
@@ -80,7 +77,6 @@ class ActivatedRoute {
         return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
     }
 }
-exports.ActivatedRoute = ActivatedRoute;
 /**
  * Contains the information about a component loaded in an outlet at a particular moment in time.
  *
@@ -94,7 +90,7 @@ exports.ActivatedRoute = ActivatedRoute;
  * }
  * ```
  */
-class ActivatedRouteSnapshot {
+export class ActivatedRouteSnapshot {
     /**
      * @internal
      */
@@ -113,7 +109,6 @@ class ActivatedRouteSnapshot {
         return `Route(url:'${url}', path:'${matched}')`;
     }
 }
-exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
 /**
  * The state of the router at a particular moment in time.
  *
@@ -127,7 +122,7 @@ exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
  * }
  * ```
  */
-class RouterStateSnapshot extends tree_1.Tree {
+export class RouterStateSnapshot extends Tree {
     /**
      * @internal
      */
@@ -139,7 +134,6 @@ class RouterStateSnapshot extends tree_1.Tree {
     }
     toString() { return serializeNode(this._root); }
 }
-exports.RouterStateSnapshot = RouterStateSnapshot;
 function serializeNode(node) {
     const c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(", ")} } ` : '';
     return `${node.value}${c}`;
@@ -149,8 +143,8 @@ function serializeNode(node) {
  * So we push new values into the observables only when they are not the initial values.
  * And we detect that by checking if the snapshot field is set.
  */
-function advanceActivatedRoute(route) {
-    if (route.snapshot && !collection_1.shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+export function advanceActivatedRoute(route) {
+    if (route.snapshot && !shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
         route.snapshot = route._futureSnapshot;
         route.url.next(route.snapshot.url);
         route.params.next(route.snapshot.params);
@@ -159,5 +153,4 @@ function advanceActivatedRoute(route) {
         route.snapshot = route._futureSnapshot;
     }
 }
-exports.advanceActivatedRoute = advanceActivatedRoute;
 //# sourceMappingURL=router_state.js.map

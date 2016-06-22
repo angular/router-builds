@@ -1,7 +1,6 @@
-"use strict";
-const common_1 = require('@angular/common');
-const platform_browser_1 = require('@angular/platform-browser');
-const common = require('./common_router_providers');
+import { PlatformLocation } from '@angular/common';
+import { BrowserPlatformLocation } from '@angular/platform-browser';
+import * as common from './common_router_providers';
 /**
  * A list of {@link Provider}s. To use the router, you must add this to your application.
  *
@@ -20,11 +19,10 @@ const common = require('./common_router_providers');
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
  */
-function provideRouter(config, opts = {}) {
+export function provideRouter(config, opts = {}) {
     return [
-        { provide: common_1.PlatformLocation, useClass: platform_browser_1.BrowserPlatformLocation },
+        { provide: PlatformLocation, useClass: BrowserPlatformLocation },
         ...common.provideRouter(config, opts)
     ];
 }
-exports.provideRouter = provideRouter;
 //# sourceMappingURL=router_providers.js.map

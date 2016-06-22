@@ -1,5 +1,4 @@
-"use strict";
-function shallowEqual(a, b) {
+export function shallowEqual(a, b) {
     const k1 = Object.keys(a);
     const k2 = Object.keys(b);
     if (k1.length != k2.length) {
@@ -14,8 +13,7 @@ function shallowEqual(a, b) {
     }
     return true;
 }
-exports.shallowEqual = shallowEqual;
-function flatten(a) {
+export function flatten(a) {
     const target = [];
     for (let i = 0; i < a.length; ++i) {
         for (let j = 0; j < a[i].length; ++j) {
@@ -24,20 +22,16 @@ function flatten(a) {
     }
     return target;
 }
-exports.flatten = flatten;
-function first(a) {
+export function first(a) {
     return a.length > 0 ? a[0] : null;
 }
-exports.first = first;
-function last(a) {
+export function last(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
-exports.last = last;
-function and(bools) {
+export function and(bools) {
     return bools.reduce((a, b) => a && b, true);
 }
-exports.and = and;
-function merge(m1, m2) {
+export function merge(m1, m2) {
     var m = {};
     for (var attr in m1) {
         if (m1.hasOwnProperty(attr)) {
@@ -51,13 +45,11 @@ function merge(m1, m2) {
     }
     return m;
 }
-exports.merge = merge;
-function forEach(map, callback) {
+export function forEach(map, callback) {
     for (var prop in map) {
         if (map.hasOwnProperty(prop)) {
             callback(map[prop], prop);
         }
     }
 }
-exports.forEach = forEach;
 //# sourceMappingURL=collection.js.map

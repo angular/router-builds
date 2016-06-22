@@ -1,33 +1,31 @@
-"use strict";
-const Observable_1 = require('rxjs/Observable');
-const of_1 = require('rxjs/observable/of');
-const router_state_1 = require('./router_state');
-const shared_1 = require('./shared');
-const url_tree_1 = require('./url_tree');
-const collection_1 = require('./utils/collection');
-const tree_1 = require('./utils/tree');
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
+import { PRIMARY_OUTLET } from './shared';
+import { mapChildrenIntoArray } from './url_tree';
+import { last, merge } from './utils/collection';
+import { TreeNode } from './utils/tree';
 class NoMatch {
     constructor(segment = null) {
         this.segment = segment;
     }
 }
-function recognize(rootComponentType, config, urlTree, url) {
+export function recognize(rootComponentType, config, urlTree, url) {
     try {
-        const children = processSegment(config, urlTree.root, {}, shared_1.PRIMARY_OUTLET);
-        const root = new router_state_1.ActivatedRouteSnapshot([], {}, shared_1.PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1);
-        const rootNode = new tree_1.TreeNode(root, children);
-        return of_1.of(new router_state_1.RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
+        const children = processSegment(config, urlTree.root, {}, PRIMARY_OUTLET);
+        const root = new ActivatedRouteSnapshot([], {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1);
+        const rootNode = new TreeNode(root, children);
+        return of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
     }
     catch (e) {
         if (e instanceof NoMatch) {
-            return new Observable_1.Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segment}'`)));
+            return new Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segment}'`)));
         }
         else {
-            return new Observable_1.Observable((obs) => obs.error(e));
+            return new Observable((obs) => obs.error(e));
         }
     }
 }
-exports.recognize = recognize;
 function processSegment(config, segment, extraParams, outlet) {
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
         return processSegmentChildren(config, segment, extraParams);
@@ -37,16 +35,16 @@ function processSegment(config, segment, extraParams, outlet) {
     }
 }
 function processSegmentChildren(config, segment, extraParams) {
-    const children = url_tree_1.mapChildrenIntoArray(segment, (child, childOutlet) => processSegment(config, child, extraParams, childOutlet));
+    const children = mapChildrenIntoArray(segment, (child, childOutlet) => processSegment(config, child, extraParams, childOutlet));
     checkOutletNameUniqueness(children);
     sortActivatedRouteSnapshots(children);
     return children;
 }
 function sortActivatedRouteSnapshots(nodes) {
     nodes.sort((a, b) => {
-        if (a.value.outlet === shared_1.PRIMARY_OUTLET)
+        if (a.value.outlet === PRIMARY_OUTLET)
             return -1;
-        if (b.value.outlet === shared_1.PRIMARY_OUTLET)
+        if (b.value.outlet === PRIMARY_OUTLET)
             return 1;
         return a.value.outlet.localeCompare(b.value.outlet);
     });
@@ -66,27 +64,27 @@ function processPathsWithParams(config, segment, pathIndex, paths, extraParams, 
 function processPathsWithParamsAgainstRoute(route, segment, pathIndex, paths, parentExtraParams, outlet) {
     if (route.redirectTo)
         throw new NoMatch();
-    if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
+    if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
         throw new NoMatch();
     if (route.path === '**') {
-        const params = paths.length > 0 ? collection_1.last(paths).parameters : {};
-        const snapshot = new router_state_1.ActivatedRouteSnapshot(paths, collection_1.merge(parentExtraParams, params), outlet, route.component, route, segment, -1);
-        return new tree_1.TreeNode(snapshot, []);
+        const params = paths.length > 0 ? last(paths).parameters : {};
+        const snapshot = new ActivatedRouteSnapshot(paths, merge(parentExtraParams, params), outlet, route.component, route, segment, -1);
+        return new TreeNode(snapshot, []);
     }
     const { consumedPaths, parameters, extraParams, lastChild } = match(segment, route, paths, parentExtraParams);
-    const snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, segment, pathIndex + lastChild - 1);
+    const snapshot = new ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, segment, pathIndex + lastChild - 1);
     const slicedPath = paths.slice(lastChild);
     const childConfig = route.children ? route.children : [];
     if (childConfig.length === 0 && slicedPath.length === 0) {
-        return new tree_1.TreeNode(snapshot, []);
+        return new TreeNode(snapshot, []);
     }
     else if (slicedPath.length === 0 && segment.hasChildren()) {
         const children = processSegmentChildren(childConfig, segment, extraParams);
-        return new tree_1.TreeNode(snapshot, children);
+        return new TreeNode(snapshot, children);
     }
     else {
-        const child = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, shared_1.PRIMARY_OUTLET);
-        return new tree_1.TreeNode(snapshot, [child]);
+        const child = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, PRIMARY_OUTLET);
+        return new TreeNode(snapshot, [child]);
     }
 }
 function match(segment, route, paths, parentExtraParams) {
@@ -120,7 +118,7 @@ function match(segment, route, paths, parentExtraParams) {
     if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
         throw new NoMatch();
     }
-    const parameters = collection_1.merge(parentExtraParams, collection_1.merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters));
+    const parameters = merge(parentExtraParams, merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters));
     const extraParams = route.component ? {} : parameters;
     return { consumedPaths, lastChild: currentIndex, parameters, extraParams };
 }

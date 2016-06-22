@@ -1,39 +1,37 @@
-"use strict";
-require('rxjs/add/operator/map');
-require('rxjs/add/operator/mergeMap');
-require('rxjs/add/operator/mergeAll');
-require('rxjs/add/operator/every');
-require('rxjs/add/observable/from');
-const core_1 = require('@angular/core');
-const Observable_1 = require('rxjs/Observable');
-const Subject_1 = require('rxjs/Subject');
-const of_1 = require('rxjs/observable/of');
-const apply_redirects_1 = require('./apply_redirects');
-const config_1 = require('./config');
-const create_router_state_1 = require('./create_router_state');
-const create_url_tree_1 = require('./create_url_tree');
-const recognize_1 = require('./recognize');
-const resolve_1 = require('./resolve');
-const router_outlet_map_1 = require('./router_outlet_map');
-const router_state_1 = require('./router_state');
-const shared_1 = require('./shared');
-const url_tree_1 = require('./url_tree');
-const collection_1 = require('./utils/collection');
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/every';
+import 'rxjs/add/observable/from';
+import { ReflectiveInjector } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { of } from 'rxjs/observable/of';
+import { applyRedirects } from './apply_redirects';
+import { validateConfig } from './config';
+import { createRouterState } from './create_router_state';
+import { createUrlTree } from './create_url_tree';
+import { recognize } from './recognize';
+import { resolve } from './resolve';
+import { RouterOutletMap } from './router_outlet_map';
+import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
+import { PRIMARY_OUTLET } from './shared';
+import { UrlTree, createEmptyUrlTree } from './url_tree';
+import { forEach, shallowEqual } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  */
-class NavigationStart {
+export class NavigationStart {
     constructor(id, url) {
         this.id = id;
         this.url = url;
     }
     toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
 }
-exports.NavigationStart = NavigationStart;
 /**
  * An event triggered when a navigation ends successfully
  */
-class NavigationEnd {
+export class NavigationEnd {
     constructor(id, url, urlAfterRedirects) {
         this.id = id;
         this.url = url;
@@ -43,22 +41,20 @@ class NavigationEnd {
         return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
     }
 }
-exports.NavigationEnd = NavigationEnd;
 /**
  * An event triggered when a navigation is canceled
  */
-class NavigationCancel {
+export class NavigationCancel {
     constructor(id, url) {
         this.id = id;
         this.url = url;
     }
     toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
 }
-exports.NavigationCancel = NavigationCancel;
 /**
  * An event triggered when a navigation fails due to unexpected error
  */
-class NavigationError {
+export class NavigationError {
     constructor(id, url, error) {
         this.id = id;
         this.url = url;
@@ -68,11 +64,10 @@ class NavigationError {
         return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
     }
 }
-exports.NavigationError = NavigationError;
 /**
  * An event triggered when routes are recognized
  */
-class RoutesRecognized {
+export class RoutesRecognized {
     constructor(id, url, urlAfterRedirects, state) {
         this.id = id;
         this.url = url;
@@ -83,11 +78,10 @@ class RoutesRecognized {
         return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
 }
-exports.RoutesRecognized = RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
  */
-class Router {
+export class Router {
     /**
      * @internal
      */
@@ -100,9 +94,9 @@ class Router {
         this.injector = injector;
         this.navigationId = 0;
         this.resetConfig(config);
-        this.routerEvents = new Subject_1.Subject();
-        this.currentUrlTree = url_tree_1.createEmptyUrlTree();
-        this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
+        this.routerEvents = new Subject();
+        this.currentUrlTree = createEmptyUrlTree();
+        this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
      * @internal
@@ -138,7 +132,7 @@ class Router {
      * ```
      */
     resetConfig(config) {
-        config_1.validateConfig(config);
+        validateConfig(config);
         this.config = config;
     }
     /**
@@ -178,7 +172,7 @@ class Router {
      */
     createUrlTree(commands, { relativeTo, queryParams, fragment } = {}) {
         const a = relativeTo ? relativeTo : this.routerState.root;
-        return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
+        return createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     }
     /**
      * Navigate based on the provided url. This navigation is always absolute.
@@ -195,7 +189,7 @@ class Router {
      * ```
      */
     navigateByUrl(url) {
-        if (url instanceof url_tree_1.UrlTree) {
+        if (url instanceof UrlTree) {
             return this.scheduleNavigation(url, false);
         }
         else {
@@ -248,17 +242,17 @@ class Router {
         return new Promise((resolvePromise, rejectPromise) => {
             let updatedUrl;
             let state;
-            apply_redirects_1.applyRedirects(url, this.config)
+            applyRedirects(url, this.config)
                 .mergeMap(u => {
                 updatedUrl = u;
-                return recognize_1.recognize(this.rootComponentType, this.config, updatedUrl, this.serializeUrl(updatedUrl));
+                return recognize(this.rootComponentType, this.config, updatedUrl, this.serializeUrl(updatedUrl));
             })
                 .mergeMap((newRouterStateSnapshot) => {
                 this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(updatedUrl), newRouterStateSnapshot));
-                return resolve_1.resolve(this.resolver, newRouterStateSnapshot);
+                return resolve(this.resolver, newRouterStateSnapshot);
             })
                 .map((routerStateSnapshot) => {
-                return create_router_state_1.createRouterState(routerStateSnapshot, this.currentRouterState);
+                return createRouterState(routerStateSnapshot, this.currentRouterState);
             })
                 .map((newState) => {
                 state = newState;
@@ -296,7 +290,6 @@ class Router {
         });
     }
 }
-exports.Router = Router;
 class CanActivate {
     constructor(route) {
         this.route = route;
@@ -320,8 +313,8 @@ class GuardChecks {
         const currRoot = this.curr ? this.curr._root : null;
         this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
         if (this.checks.length === 0)
-            return of_1.of(true);
-        return Observable_1.Observable.from(this.checks)
+            return of(true);
+        return Observable.from(this.checks)
             .map(s => {
             if (s instanceof CanActivate) {
                 return this.runCanActivate(s.route);
@@ -342,7 +335,7 @@ class GuardChecks {
             this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap);
             delete prevChildren[c.value.outlet];
         });
-        collection_1.forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(v, outletMap._outlets[k]));
+        forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(v, outletMap._outlets[k]));
     }
     traverseRoutes(futureNode, currNode, parentOutletMap) {
         const future = futureNode.value;
@@ -350,7 +343,7 @@ class GuardChecks {
         const outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (!collection_1.shallowEqual(future.params, curr.params)) {
+            if (!shallowEqual(future.params, curr.params)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(future));
             }
             // If we have a component, we need to go through an outlet.
@@ -388,7 +381,7 @@ class GuardChecks {
         }
     }
     deactivateOutletMap(outletMap) {
-        collection_1.forEach(outletMap._outlets, (v) => {
+        forEach(outletMap._outlets, (v) => {
             if (v.isActivated) {
                 this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
             }
@@ -397,8 +390,8 @@ class GuardChecks {
     runCanActivate(future) {
         const canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
-            return of_1.of(true);
-        return Observable_1.Observable.from(canActivate)
+            return of(true);
+        return Observable.from(canActivate)
             .map(c => {
             const guard = this.injector.get(c);
             if (guard.canActivate) {
@@ -414,8 +407,8 @@ class GuardChecks {
     runCanDeactivate(component, curr) {
         const canDeactivate = curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
-            return of_1.of(true);
-        return Observable_1.Observable.from(canDeactivate)
+            return of(true);
+        return Observable.from(canDeactivate)
             .map(c => {
             const guard = this.injector.get(c);
             if (guard.canDeactivate) {
@@ -430,11 +423,11 @@ class GuardChecks {
     }
 }
 function wrapIntoObservable(value) {
-    if (value instanceof Observable_1.Observable) {
+    if (value instanceof Observable) {
         return value;
     }
     else {
-        return of_1.of(value);
+        return of(value);
     }
 }
 class ActivateRoutes {
@@ -454,7 +447,7 @@ class ActivateRoutes {
             this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
             delete prevChildren[c.value.outlet];
         });
-        collection_1.forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(outletMap._outlets[k]));
+        forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(outletMap._outlets[k]));
     }
     activateRoutes(futureNode, currNode, parentOutletMap) {
         const future = futureNode.value;
@@ -462,7 +455,7 @@ class ActivateRoutes {
         // reusing the node
         if (future === curr) {
             // advance the route to push the parameters
-            router_state_1.advanceActivatedRoute(future);
+            advanceActivatedRoute(future);
             // If we have a normal route, we need to go through an outlet.
             if (future.component) {
                 const outlet = getOutlet(parentOutletMap, futureNode.value);
@@ -486,22 +479,22 @@ class ActivateRoutes {
             // if we have a normal route, we need to advance the route
             // and place the component into the outlet. After that recurse.
             if (future.component) {
-                router_state_1.advanceActivatedRoute(future);
+                advanceActivatedRoute(future);
                 const outlet = getOutlet(parentOutletMap, futureNode.value);
-                const outletMap = new router_outlet_map_1.RouterOutletMap();
+                const outletMap = new RouterOutletMap();
                 this.placeComponentIntoOutlet(outletMap, future, outlet);
                 this.activateChildRoutes(futureNode, null, outletMap);
             }
             else {
-                router_state_1.advanceActivatedRoute(future);
+                advanceActivatedRoute(future);
                 this.activateChildRoutes(futureNode, null, parentOutletMap);
             }
         }
     }
     placeComponentIntoOutlet(outletMap, future, outlet) {
-        const resolved = core_1.ReflectiveInjector.resolve([
-            { provide: router_state_1.ActivatedRoute, useValue: future },
-            { provide: router_outlet_map_1.RouterOutletMap, useValue: outletMap }
+        const resolved = ReflectiveInjector.resolve([
+            { provide: ActivatedRoute, useValue: future },
+            { provide: RouterOutletMap, useValue: outletMap }
         ]);
         outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
     }
@@ -512,11 +505,11 @@ class ActivateRoutes {
         }
     }
     deactivateOutletMap(outletMap) {
-        collection_1.forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
+        forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
     }
 }
 function pushQueryParamsAndFragment(state) {
-    if (!collection_1.shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
+    if (!shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
         state.queryParams.next(state.snapshot.queryParams);
     }
     if (state.snapshot.fragment !== state.fragment.value) {
@@ -533,7 +526,7 @@ function getOutlet(outletMap, route) {
     let outlet = outletMap._outlets[route.outlet];
     if (!outlet) {
         const componentName = route.component.name;
-        if (route.outlet === shared_1.PRIMARY_OUTLET) {
+        if (route.outlet === PRIMARY_OUTLET) {
             throw new Error(`Cannot find primary outlet to load '${componentName}'`);
         }
         else {

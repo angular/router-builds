@@ -1,5 +1,4 @@
-"use strict";
-class Tree {
+export class Tree {
     constructor(root) {
         this._root = root;
     }
@@ -26,7 +25,6 @@ class Tree {
     pathFromRoot(t) { return findPath(t, this._root, []).map(s => s.value); }
     contains(tree) { return contains(this._root, tree._root); }
 }
-exports.Tree = Tree;
 function findNode(expected, c) {
     if (expected === c.value)
         return c;
@@ -61,12 +59,11 @@ function contains(tree, subtree) {
     }
     return true;
 }
-class TreeNode {
+export class TreeNode {
     constructor(value, children) {
         this.value = value;
         this.children = children;
     }
     toString() { return `TreeNode(${this.value})`; }
 }
-exports.TreeNode = TreeNode;
 //# sourceMappingURL=tree.js.map

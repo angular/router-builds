@@ -1,14 +1,13 @@
-"use strict";
-const shared_1 = require('./shared');
-const url_tree_1 = require('./url_tree');
-const collection_1 = require('./utils/collection');
-function createUrlTree(route, urlTree, commands, queryParams, fragment) {
+import { PRIMARY_OUTLET } from './shared';
+import { UrlPathWithParams, UrlSegment, UrlTree } from './url_tree';
+import { forEach, shallowEqual } from './utils/collection';
+export function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     if (commands.length === 0) {
         return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
     }
     const normalizedCommands = normalizeCommands(commands);
     if (navigateToRoot(normalizedCommands)) {
-        return tree(urlTree.root, new url_tree_1.UrlSegment([], {}), urlTree, queryParams, fragment);
+        return tree(urlTree.root, new UrlSegment([], {}), urlTree, queryParams, fragment);
     }
     const startingPosition = findStartingPosition(normalizedCommands, urlTree, route);
     const segment = startingPosition.processChildren ?
@@ -16,20 +15,19 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
         updateSegment(startingPosition.segment, startingPosition.index, normalizedCommands.commands);
     return tree(startingPosition.segment, segment, urlTree, queryParams, fragment);
 }
-exports.createUrlTree = createUrlTree;
 function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
     const q = queryParams ? stringify(queryParams) : urlTree.queryParams;
     const f = fragment ? fragment : urlTree.fragment;
     if (urlTree.root === oldSegment) {
-        return new url_tree_1.UrlTree(newSegment, q, f);
+        return new UrlTree(newSegment, q, f);
     }
     else {
-        return new url_tree_1.UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), q, f);
+        return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), q, f);
     }
 }
 function replaceSegment(current, oldSegment, newSegment) {
     const children = {};
-    collection_1.forEach(current.children, (c, outletName) => {
+    forEach(current.children, (c, outletName) => {
         if (c === oldSegment) {
             children[outletName] = newSegment;
         }
@@ -37,7 +35,7 @@ function replaceSegment(current, oldSegment, newSegment) {
             children[outletName] = replaceSegment(c, oldSegment, newSegment);
         }
     });
-    return new url_tree_1.UrlSegment(current.pathsWithParams, children);
+    return new UrlSegment(current.pathsWithParams, children);
 }
 function navigateToRoot(normalizedChange) {
     return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
@@ -118,13 +116,13 @@ function getPath(command) {
 }
 function getOutlet(commands) {
     if (!(typeof commands[0] === 'string'))
-        return shared_1.PRIMARY_OUTLET;
+        return PRIMARY_OUTLET;
     const parts = commands[0].toString().split(':');
-    return parts.length > 1 ? parts[0] : shared_1.PRIMARY_OUTLET;
+    return parts.length > 1 ? parts[0] : PRIMARY_OUTLET;
 }
 function updateSegment(segment, startIndex, commands) {
     if (!segment) {
-        segment = new url_tree_1.UrlSegment([], {});
+        segment = new UrlSegment([], {});
     }
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
         return updateSegmentChildren(segment, startIndex, commands);
@@ -132,7 +130,7 @@ function updateSegment(segment, startIndex, commands) {
     const m = prefixedWith(segment, startIndex, commands);
     const slicedCommands = commands.slice(m.lastIndex);
     if (m.match && slicedCommands.length === 0) {
-        return new url_tree_1.UrlSegment(segment.pathsWithParams, {});
+        return new UrlSegment(segment.pathsWithParams, {});
     }
     else if (m.match && !segment.hasChildren()) {
         return createNewSegment(segment, startIndex, commands);
@@ -146,18 +144,18 @@ function updateSegment(segment, startIndex, commands) {
 }
 function updateSegmentChildren(segment, startIndex, commands) {
     if (commands.length === 0) {
-        return new url_tree_1.UrlSegment(segment.pathsWithParams, {});
+        return new UrlSegment(segment.pathsWithParams, {});
     }
     else {
         const outlet = getOutlet(commands);
         const children = {};
         children[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
-        collection_1.forEach(segment.children, (child, childOutlet) => {
+        forEach(segment.children, (child, childOutlet) => {
             if (childOutlet !== outlet) {
                 children[childOutlet] = child;
             }
         });
-        return new url_tree_1.UrlSegment(segment.pathsWithParams, children);
+        return new UrlSegment(segment.pathsWithParams, children);
     }
 }
 function prefixedWith(segment, startIndex, commands) {
@@ -191,29 +189,29 @@ function createNewSegment(segment, startIndex, commands) {
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && (typeof commands[0] === 'object')) {
             const p = segment.pathsWithParams[startIndex];
-            paths.push(new url_tree_1.UrlPathWithParams(p.path, commands[0]));
+            paths.push(new UrlPathWithParams(p.path, commands[0]));
             i++;
             continue;
         }
         const curr = getPath(commands[i]);
         const next = (i < commands.length - 1) ? commands[i + 1] : null;
         if (curr && next && (typeof next === 'object')) {
-            paths.push(new url_tree_1.UrlPathWithParams(curr, stringify(next)));
+            paths.push(new UrlPathWithParams(curr, stringify(next)));
             i += 2;
         }
         else {
-            paths.push(new url_tree_1.UrlPathWithParams(curr, {}));
+            paths.push(new UrlPathWithParams(curr, {}));
             i++;
         }
     }
-    return new url_tree_1.UrlSegment(paths, {});
+    return new UrlSegment(paths, {});
 }
 function stringify(params) {
     const res = {};
-    collection_1.forEach(params, (v, k) => res[k] = `${v}`);
+    forEach(params, (v, k) => res[k] = `${v}`);
     return res;
 }
 function compare(path, params, pathWithParams) {
-    return path == pathWithParams.path && collection_1.shallowEqual(params, pathWithParams.parameters);
+    return path == pathWithParams.path && shallowEqual(params, pathWithParams.parameters);
 }
 //# sourceMappingURL=create_url_tree.js.map

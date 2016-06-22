@@ -1,22 +1,20 @@
-"use strict";
-require('rxjs/add/operator/map');
-require('rxjs/add/operator/toPromise');
-const forkJoin_1 = require('rxjs/observable/forkJoin');
-const fromPromise_1 = require('rxjs/observable/fromPromise');
-function resolve(resolver, state) {
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+export function resolve(resolver, state) {
     return resolveNode(resolver, state._root).map(_ => state);
 }
-exports.resolve = resolve;
 function resolveNode(resolver, node) {
     if (node.children.length === 0) {
-        return fromPromise_1.fromPromise(resolveComponent(resolver, node.value).then(factory => {
+        return fromPromise(resolveComponent(resolver, node.value).then(factory => {
             node.value._resolvedComponentFactory = factory;
             return node.value;
         }));
     }
     else {
         const c = node.children.map(c => resolveNode(resolver, c).toPromise());
-        return forkJoin_1.forkJoin(c).map(_ => resolveComponent(resolver, node.value).then(factory => {
+        return forkJoin(c).map(_ => resolveComponent(resolver, node.value).then(factory => {
             node.value._resolvedComponentFactory = factory;
             return node.value;
         }));
