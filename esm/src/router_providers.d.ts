@@ -1,4 +1,4 @@
-import * as common from './common_router_providers';
+import { ExtraOptions } from './common_router_providers';
 import { RouterConfig } from './config';
 /**
  * A list of {@link Provider}s. To use the router, you must add this to your application.
@@ -18,4 +18,4 @@ import { RouterConfig } from './config';
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
  */
-export declare function provideRouter(config: RouterConfig, opts?: common.ExtraOptions): any[];
+export declare function provideRouter(config: RouterConfig, opts?: ExtraOptions): any[];

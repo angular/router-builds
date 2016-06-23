@@ -7,7 +7,7 @@
  */
 import { PlatformLocation } from '@angular/common';
 import { BrowserPlatformLocation } from '@angular/platform-browser';
-import * as common from './common_router_providers';
+import { provideRouter as provideRouter_ } from './common_router_providers';
 /**
  * A list of {@link Provider}s. To use the router, you must add this to your application.
  *
@@ -28,8 +28,7 @@ import * as common from './common_router_providers';
  */
 export function provideRouter(config, opts = {}) {
     return [
-        { provide: PlatformLocation, useClass: BrowserPlatformLocation },
-        ...common.provideRouter(config, opts)
+        { provide: PlatformLocation, useClass: BrowserPlatformLocation }, ...provideRouter_(config, opts)
     ];
 }
 //# sourceMappingURL=router_providers.js.map
