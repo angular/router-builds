@@ -15,10 +15,24 @@ var __extends = (this && this.__extends) || function (d, b) {
 }(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_Observable, rxjs_Subject, rxjs_observable_of, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, rxjs_observable_fromPromise, _angular_platformBrowser) {
     'use strict';
     /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * Name of the primary outlet.
      * @type {string}
      */
     var PRIMARY_OUTLET = 'PRIMARY_OUTLET';
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     function shallowEqual(a, b) {
         var k1 = Object.keys(a);
         var k2 = Object.keys(b);
@@ -611,6 +625,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             return new UrlPathWithParams(part, {});
         }
     }
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     function validateConfig(config) {
         config.forEach(validateNode);
     }
@@ -631,6 +652,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
         }
     }
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var Tree = (function () {
         function Tree(root) {
             this._root = root;
@@ -1277,6 +1305,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             return Promise.resolve(null);
         }
     }
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
             /** @internal */

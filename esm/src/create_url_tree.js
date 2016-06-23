@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { PRIMARY_OUTLET } from './shared';
 import { UrlPathWithParams, UrlSegment, UrlTree } from './url_tree';
 import { forEach, shallowEqual } from './utils/collection';
