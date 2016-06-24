@@ -6,6 +6,16 @@
  * found in the LICENSE file at https://angular.io/license
  */
 "use strict";
+function shallowEqualArrays(a, b) {
+    if (a.length !== b.length)
+        return false;
+    for (var i = 0; i < a.length; ++i) {
+        if (!shallowEqual(a[i], b[i]))
+            return false;
+    }
+    return true;
+}
+exports.shallowEqualArrays = shallowEqualArrays;
 function shallowEqual(a, b) {
     var k1 = Object.keys(a);
     var k2 = Object.keys(b);

@@ -449,7 +449,7 @@ var GuardChecks = (function () {
     };
     GuardChecks.prototype.runCanDeactivate = function (component, curr) {
         var _this = this;
-        var canDeactivate = curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+        var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of_1.of(true);
         return Observable_1.Observable.from(canDeactivate)

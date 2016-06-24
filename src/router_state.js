@@ -168,10 +168,14 @@ function serializeNode(node) {
  * And we detect that by checking if the snapshot field is set.
  */
 function advanceActivatedRoute(route) {
-    if (route.snapshot && !collection_1.shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+    if (route.snapshot) {
+        if (!collection_1.shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+            route.params.next(route._futureSnapshot.params);
+        }
+        if (!collection_1.shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+            route.url.next(route._futureSnapshot.url);
+        }
         route.snapshot = route._futureSnapshot;
-        route.url.next(route.snapshot.url);
-        route.params.next(route.snapshot.params);
     }
     else {
         route.snapshot = route._futureSnapshot;

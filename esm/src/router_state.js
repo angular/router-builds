@@ -8,7 +8,7 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlPathWithParams } from './url_tree';
-import { shallowEqual } from './utils/collection';
+import { shallowEqual, shallowEqualArrays } from './utils/collection';
 import { Tree, TreeNode } from './utils/tree';
 /**
  * The state of the router.
@@ -151,10 +151,14 @@ function serializeNode(node) {
  * And we detect that by checking if the snapshot field is set.
  */
 export function advanceActivatedRoute(route) {
-    if (route.snapshot && !shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+    if (route.snapshot) {
+        if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+            route.params.next(route._futureSnapshot.params);
+        }
+        if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+            route.url.next(route._futureSnapshot.url);
+        }
         route.snapshot = route._futureSnapshot;
-        route.url.next(route.snapshot.url);
-        route.params.next(route.snapshot.params);
     }
     else {
         route.snapshot = route._futureSnapshot;

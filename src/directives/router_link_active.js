@@ -20,7 +20,7 @@ var RouterLinkActive = (function () {
         this.element = element;
         this.renderer = renderer;
         this.classes = [];
-        this.routerLinkActiveOptions = { exact: true };
+        this.routerLinkActiveOptions = { exact: false };
         this.subscription = router.events.subscribe(function (s) {
             if (s instanceof router_1.NavigationEnd) {
                 _this.update();

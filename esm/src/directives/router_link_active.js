@@ -18,7 +18,7 @@ export class RouterLinkActive {
         this.element = element;
         this.renderer = renderer;
         this.classes = [];
-        this.routerLinkActiveOptions = { exact: true };
+        this.routerLinkActiveOptions = { exact: false };
         this.subscription = router.events.subscribe(s => {
             if (s instanceof NavigationEnd) {
                 this.update();

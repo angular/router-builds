@@ -33,6 +33,15 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    function shallowEqualArrays(a, b) {
+        if (a.length !== b.length)
+            return false;
+        for (var i = 0; i < a.length; ++i) {
+            if (!shallowEqual(a[i], b[i]))
+                return false;
+        }
+        return true;
+    }
     function shallowEqual(a, b) {
         var k1 = Object.keys(a);
         var k2 = Object.keys(b);
@@ -945,10 +954,14 @@ var __extends = (this && this.__extends) || function (d, b) {
      * And we detect that by checking if the snapshot field is set.
      */
     function advanceActivatedRoute(route) {
-        if (route.snapshot && !shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+        if (route.snapshot) {
+            if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+                route.params.next(route._futureSnapshot.params);
+            }
+            if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+                route.url.next(route._futureSnapshot.url);
+            }
             route.snapshot = route._futureSnapshot;
-            route.url.next(route.snapshot.url);
-            route.params.next(route.snapshot.params);
         }
         else {
             route.snapshot = route._futureSnapshot;
@@ -1875,7 +1888,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         GuardChecks.prototype.runCanDeactivate = function (component, curr) {
             var _this = this;
-            var canDeactivate = curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+            var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
             if (!canDeactivate || canDeactivate.length === 0)
                 return rxjs_observable_of.of(true);
             return rxjs_Observable.Observable.from(canDeactivate)
@@ -2079,7 +2092,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.element = element;
             this.renderer = renderer;
             this.classes = [];
-            this.routerLinkActiveOptions = { exact: true };
+            this.routerLinkActiveOptions = { exact: false };
             this.subscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
                     _this.update();
