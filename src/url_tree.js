@@ -308,6 +308,9 @@ var UrlParser = (function () {
     };
     UrlParser.prototype.parsePathWithParams = function () {
         var path = matchPathWithParams(this.remaining);
+        if (path === '' && this.peekStartsWith(';')) {
+            throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
+        }
         this.capture(path);
         var matrixParams = {};
         if (this.peekStartsWith(';')) {

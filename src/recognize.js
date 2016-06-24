@@ -44,7 +44,7 @@ function processSegment(config, segment, extraParams, outlet) {
         return processSegmentChildren(config, segment, extraParams);
     }
     else {
-        return [processPathsWithParams(config, segment, 0, segment.pathsWithParams, extraParams, outlet)];
+        return processPathsWithParams(config, segment, 0, segment.pathsWithParams, extraParams, outlet);
     }
 }
 function processSegmentChildren(config, segment, extraParams) {
@@ -75,30 +75,31 @@ function processPathsWithParams(config, segment, pathIndex, paths, extraParams, 
     }
     throw new NoMatch(segment);
 }
-function processPathsWithParamsAgainstRoute(route, segment, pathIndex, paths, parentExtraParams, outlet) {
+function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, parentExtraParams, outlet) {
     if (route.redirectTo)
         throw new NoMatch();
     if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
         throw new NoMatch();
     if (route.path === '**') {
         var params = paths.length > 0 ? collection_1.last(paths).parameters : {};
-        var snapshot_1 = new router_state_1.ActivatedRouteSnapshot(paths, collection_1.merge(parentExtraParams, params), outlet, route.component, route, segment, -1);
-        return new tree_1.TreeNode(snapshot_1, []);
+        var snapshot_1 = new router_state_1.ActivatedRouteSnapshot(paths, collection_1.merge(parentExtraParams, params), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1);
+        return [new tree_1.TreeNode(snapshot_1, [])];
     }
-    var _a = match(segment, route, paths, parentExtraParams), consumedPaths = _a.consumedPaths, parameters = _a.parameters, extraParams = _a.extraParams, lastChild = _a.lastChild;
-    var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, segment, pathIndex + lastChild - 1);
-    var slicedPath = paths.slice(lastChild);
+    var _a = match(rawSegment, route, paths, parentExtraParams), consumedPaths = _a.consumedPaths, parameters = _a.parameters, extraParams = _a.extraParams, lastChild = _a.lastChild;
+    var rawSlicedPath = paths.slice(lastChild);
     var childConfig = route.children ? route.children : [];
-    if (childConfig.length === 0 && slicedPath.length === 0) {
-        return new tree_1.TreeNode(snapshot, []);
-    }
-    else if (slicedPath.length === 0 && segment.hasChildren()) {
+    var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
+    var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1);
+    if (slicedPath.length === 0 && segment.hasChildren()) {
         var children = processSegmentChildren(childConfig, segment, extraParams);
-        return new tree_1.TreeNode(snapshot, children);
+        return [new tree_1.TreeNode(snapshot, children)];
+    }
+    else if (childConfig.length === 0 && slicedPath.length === 0) {
+        return [new tree_1.TreeNode(snapshot, [])];
     }
     else {
-        var child = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, shared_1.PRIMARY_OUTLET);
-        return new tree_1.TreeNode(snapshot, [child]);
+        var children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, shared_1.PRIMARY_OUTLET);
+        return [new tree_1.TreeNode(snapshot, children)];
     }
 }
 function match(segment, route, paths, parentExtraParams) {
@@ -147,5 +148,84 @@ function checkOutletNameUniqueness(nodes) {
         }
         names[n.value.outlet] = n.value;
     });
+}
+function getSourceSegment(segment) {
+    var s = segment;
+    while (s._sourceSegment) {
+        s = s._sourceSegment;
+    }
+    return s;
+}
+function getPathIndexShift(segment) {
+    var s = segment;
+    var res = 0;
+    while (s._sourceSegment) {
+        s = s._sourceSegment;
+        res += segment._pathIndexShift;
+    }
+    return res;
+}
+function split(segment, consumedPaths, slicedPath, config) {
+    if (slicedPath.length > 0 &&
+        containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, config)) {
+        var s = new url_tree_1.UrlSegment(consumedPaths, createChildrenForEmptyPaths(segment, consumedPaths, config, new url_tree_1.UrlSegment(slicedPath, segment.children)));
+        s._sourceSegment = segment;
+        s._pathIndexShift = 0;
+        return { segment: s, slicedPath: [] };
+    }
+    else if (slicedPath.length === 0 && containsEmptyPathMatches(segment, slicedPath, config)) {
+        var s = new url_tree_1.UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
+        s._sourceSegment = segment;
+        s._pathIndexShift = 0;
+        return { segment: s, slicedPath: slicedPath };
+    }
+    else {
+        return { segment: segment, slicedPath: slicedPath };
+    }
+}
+function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+    var res = {};
+    for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+        var r = routes_1[_i];
+        if (emptyPathMatch(segment, slicedPath, r) && !children[getOutlet(r)]) {
+            var s = new url_tree_1.UrlSegment([], {});
+            s._sourceSegment = segment;
+            s._pathIndexShift = segment.pathsWithParams.length;
+            res[getOutlet(r)] = s;
+        }
+    }
+    return collection_1.merge(children, res);
+}
+function createChildrenForEmptyPaths(segment, consumedPaths, routes, primarySegment) {
+    var res = {};
+    res[shared_1.PRIMARY_OUTLET] = primarySegment;
+    primarySegment._sourceSegment = segment;
+    primarySegment._pathIndexShift = consumedPaths.length;
+    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+        var r = routes_2[_i];
+        if (r.path === '') {
+            var s = new url_tree_1.UrlSegment([], {});
+            s._sourceSegment = segment;
+            s._pathIndexShift = consumedPaths.length;
+            res[getOutlet(r)] = s;
+        }
+    }
+    return res;
+}
+function containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, routes) {
+    return routes
+        .filter(function (r) { return emptyPathMatch(segment, slicedPath, r) && getOutlet(r) !== shared_1.PRIMARY_OUTLET; })
+        .length > 0;
+}
+function containsEmptyPathMatches(segment, slicedPath, routes) {
+    return routes.filter(function (r) { return emptyPathMatch(segment, slicedPath, r); }).length > 0;
+}
+function emptyPathMatch(segment, slicedPath, r) {
+    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+        return false;
+    return r.path === '' && r.redirectTo === undefined;
+}
+function getOutlet(route) {
+    return route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET;
 }
 //# sourceMappingURL=recognize.js.map

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlPathWithParams, UrlSegment, UrlTree, mapChildren } from './url_tree';
+import { merge } from './utils/collection';
 class NoMatch {
     constructor(segment = null) {
         this.segment = segment;
@@ -35,7 +36,10 @@ export function applyRedirects(urlTree, config) {
         }
     }
 }
-function createUrlTree(urlTree, root) {
+function createUrlTree(urlTree, rootCandidate) {
+    const root = rootCandidate.pathsWithParams.length > 0 ?
+        new UrlSegment([], { [PRIMARY_OUTLET]: rootCandidate }) :
+        rootCandidate;
     return of(new UrlTree(root, urlTree.queryParams, urlTree.fragment));
 }
 function expandSegment(routes, segment, outlet) {
@@ -62,11 +66,11 @@ function expandPathsWithParams(segment, routes, paths, outlet, allowRedirects) {
     throw new NoMatch(segment);
 }
 function expandPathsWithParamsAgainstRoute(segment, routes, route, paths, outlet, allowRedirects) {
-    if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
+    if (getOutlet(route) !== outlet)
         throw new NoMatch();
-    if (route.redirectTo && !allowRedirects)
+    if (route.redirectTo !== undefined && !allowRedirects)
         throw new NoMatch();
-    if (route.redirectTo) {
+    if (route.redirectTo !== undefined) {
         return expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet);
     }
     else {
@@ -100,20 +104,21 @@ function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, r
         return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
     }
 }
-function matchPathsWithParamsAgainstRoute(segment, route, paths) {
+function matchPathsWithParamsAgainstRoute(rawSegment, route, paths) {
     if (route.path === '**') {
         return new UrlSegment(paths, {});
     }
     else {
-        const { consumedPaths, lastChild } = match(segment, route, paths);
+        const { consumedPaths, lastChild } = match(rawSegment, route, paths);
         const childConfig = route.children ? route.children : [];
-        const slicedPath = paths.slice(lastChild);
-        if (childConfig.length === 0 && slicedPath.length === 0) {
-            return new UrlSegment(consumedPaths, {});
-        }
-        else if (slicedPath.length === 0 && segment.hasChildren()) {
+        const rawSlicedPath = paths.slice(lastChild);
+        const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
+        if (slicedPath.length === 0 && segment.hasChildren()) {
             const children = expandSegmentChildren(childConfig, segment);
             return new UrlSegment(consumedPaths, children);
+        }
+        else if (childConfig.length === 0 && slicedPath.length === 0) {
+            return new UrlSegment(consumedPaths, {});
         }
         else {
             const cs = expandPathsWithParams(segment, childConfig, slicedPath, PRIMARY_OUTLET, true);
@@ -155,13 +160,12 @@ function match(segment, route, paths) {
     return { consumedPaths, lastChild: currentIndex, positionalParamSegments };
 }
 function applyRedirectCommands(paths, redirectTo, posParams) {
-    if (redirectTo.startsWith('/')) {
-        const parts = redirectTo.substring(1).split('/');
-        return createPaths(redirectTo, parts, paths, posParams);
+    const r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+    if (r === '') {
+        return [];
     }
     else {
-        const parts = redirectTo.split('/');
-        return createPaths(redirectTo, parts, paths, posParams);
+        return createPaths(redirectTo, r.split('/'), paths, posParams);
     }
 }
 function createPaths(redirectTo, parts, segments, posParams) {
@@ -185,5 +189,54 @@ function findOrCreatePath(part, paths) {
     else {
         return new UrlPathWithParams(part, {});
     }
+}
+function split(segment, consumedPaths, slicedPath, config) {
+    if (slicedPath.length > 0 &&
+        containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, config)) {
+        const s = new UrlSegment(consumedPaths, createChildrenForEmptyPaths(config, new UrlSegment(slicedPath, segment.children)));
+        return { segment: s, slicedPath: [] };
+    }
+    else if (slicedPath.length === 0 && containsEmptyPathRedirects(segment, slicedPath, config)) {
+        const s = new UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
+        return { segment: s, slicedPath };
+    }
+    else {
+        return { segment, slicedPath };
+    }
+}
+function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+    const res = {};
+    for (let r of routes) {
+        if (emptyPathRedirect(segment, slicedPath, r) && !children[getOutlet(r)]) {
+            res[getOutlet(r)] = new UrlSegment([], {});
+        }
+    }
+    return merge(children, res);
+}
+function createChildrenForEmptyPaths(routes, primarySegment) {
+    const res = {};
+    res[PRIMARY_OUTLET] = primarySegment;
+    for (let r of routes) {
+        if (r.path === '') {
+            res[getOutlet(r)] = new UrlSegment([], {});
+        }
+    }
+    return res;
+}
+function containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, routes) {
+    return routes
+        .filter(r => emptyPathRedirect(segment, slicedPath, r) && getOutlet(r) !== PRIMARY_OUTLET)
+        .length > 0;
+}
+function containsEmptyPathRedirects(segment, slicedPath, routes) {
+    return routes.filter(r => emptyPathRedirect(segment, slicedPath, r)).length > 0;
+}
+function emptyPathRedirect(segment, slicedPath, r) {
+    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+        return false;
+    return r.path === '' && r.redirectTo !== undefined;
+}
+function getOutlet(route) {
+    return route.outlet ? route.outlet : PRIMARY_OUTLET;
 }
 //# sourceMappingURL=apply_redirects.js.map

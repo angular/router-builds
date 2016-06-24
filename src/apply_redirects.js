@@ -10,6 +10,7 @@ var Observable_1 = require('rxjs/Observable');
 var of_1 = require('rxjs/observable/of');
 var shared_1 = require('./shared');
 var url_tree_1 = require('./url_tree');
+var collection_1 = require('./utils/collection');
 var NoMatch = (function () {
     function NoMatch(segment) {
         if (segment === void 0) { segment = null; }
@@ -43,8 +44,12 @@ function applyRedirects(urlTree, config) {
     var _a;
 }
 exports.applyRedirects = applyRedirects;
-function createUrlTree(urlTree, root) {
+function createUrlTree(urlTree, rootCandidate) {
+    var root = rootCandidate.pathsWithParams.length > 0 ?
+        new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = rootCandidate, _a)) :
+        rootCandidate;
     return of_1.of(new url_tree_1.UrlTree(root, urlTree.queryParams, urlTree.fragment));
+    var _a;
 }
 function expandSegment(routes, segment, outlet) {
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
@@ -71,11 +76,11 @@ function expandPathsWithParams(segment, routes, paths, outlet, allowRedirects) {
     throw new NoMatch(segment);
 }
 function expandPathsWithParamsAgainstRoute(segment, routes, route, paths, outlet, allowRedirects) {
-    if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
+    if (getOutlet(route) !== outlet)
         throw new NoMatch();
-    if (route.redirectTo && !allowRedirects)
+    if (route.redirectTo !== undefined && !allowRedirects)
         throw new NoMatch();
-    if (route.redirectTo) {
+    if (route.redirectTo !== undefined) {
         return expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet);
     }
     else {
@@ -109,20 +114,21 @@ function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, r
         return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
     }
 }
-function matchPathsWithParamsAgainstRoute(segment, route, paths) {
+function matchPathsWithParamsAgainstRoute(rawSegment, route, paths) {
     if (route.path === '**') {
         return new url_tree_1.UrlSegment(paths, {});
     }
     else {
-        var _a = match(segment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild;
+        var _a = match(rawSegment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild;
         var childConfig = route.children ? route.children : [];
-        var slicedPath = paths.slice(lastChild);
-        if (childConfig.length === 0 && slicedPath.length === 0) {
-            return new url_tree_1.UrlSegment(consumedPaths, {});
-        }
-        else if (slicedPath.length === 0 && segment.hasChildren()) {
+        var rawSlicedPath = paths.slice(lastChild);
+        var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
+        if (slicedPath.length === 0 && segment.hasChildren()) {
             var children = expandSegmentChildren(childConfig, segment);
             return new url_tree_1.UrlSegment(consumedPaths, children);
+        }
+        else if (childConfig.length === 0 && slicedPath.length === 0) {
+            return new url_tree_1.UrlSegment(consumedPaths, {});
         }
         else {
             var cs = expandPathsWithParams(segment, childConfig, slicedPath, shared_1.PRIMARY_OUTLET, true);
@@ -164,13 +170,12 @@ function match(segment, route, paths) {
     return { consumedPaths: consumedPaths, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
 }
 function applyRedirectCommands(paths, redirectTo, posParams) {
-    if (redirectTo.startsWith('/')) {
-        var parts = redirectTo.substring(1).split('/');
-        return createPaths(redirectTo, parts, paths, posParams);
+    var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+    if (r === '') {
+        return [];
     }
     else {
-        var parts = redirectTo.split('/');
-        return createPaths(redirectTo, parts, paths, posParams);
+        return createPaths(redirectTo, r.split('/'), paths, posParams);
     }
 }
 function createPaths(redirectTo, parts, segments, posParams) {
@@ -194,5 +199,56 @@ function findOrCreatePath(part, paths) {
     else {
         return new url_tree_1.UrlPathWithParams(part, {});
     }
+}
+function split(segment, consumedPaths, slicedPath, config) {
+    if (slicedPath.length > 0 &&
+        containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, config)) {
+        var s = new url_tree_1.UrlSegment(consumedPaths, createChildrenForEmptyPaths(config, new url_tree_1.UrlSegment(slicedPath, segment.children)));
+        return { segment: s, slicedPath: [] };
+    }
+    else if (slicedPath.length === 0 && containsEmptyPathRedirects(segment, slicedPath, config)) {
+        var s = new url_tree_1.UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
+        return { segment: s, slicedPath: slicedPath };
+    }
+    else {
+        return { segment: segment, slicedPath: slicedPath };
+    }
+}
+function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+    var res = {};
+    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+        var r = routes_2[_i];
+        if (emptyPathRedirect(segment, slicedPath, r) && !children[getOutlet(r)]) {
+            res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
+        }
+    }
+    return collection_1.merge(children, res);
+}
+function createChildrenForEmptyPaths(routes, primarySegment) {
+    var res = {};
+    res[shared_1.PRIMARY_OUTLET] = primarySegment;
+    for (var _i = 0, routes_3 = routes; _i < routes_3.length; _i++) {
+        var r = routes_3[_i];
+        if (r.path === '') {
+            res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
+        }
+    }
+    return res;
+}
+function containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, routes) {
+    return routes
+        .filter(function (r) { return emptyPathRedirect(segment, slicedPath, r) && getOutlet(r) !== shared_1.PRIMARY_OUTLET; })
+        .length > 0;
+}
+function containsEmptyPathRedirects(segment, slicedPath, routes) {
+    return routes.filter(function (r) { return emptyPathRedirect(segment, slicedPath, r); }).length > 0;
+}
+function emptyPathRedirect(segment, slicedPath, r) {
+    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+        return false;
+    return r.path === '' && r.redirectTo !== undefined;
+}
+function getOutlet(route) {
+    return route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET;
 }
 //# sourceMappingURL=apply_redirects.js.map
