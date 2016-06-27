@@ -19,3 +19,6 @@ export interface CanActivate {
 export interface CanDeactivate<T> {
     canDeactivate(component: T, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean;
 }
+export interface Resolve<T> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any;
+}

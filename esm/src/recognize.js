@@ -7,7 +7,7 @@
  */
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
+import { ActivatedRouteSnapshot, InheritedResolve, RouterStateSnapshot } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlSegment, mapChildrenIntoArray } from './url_tree';
 import { last, merge } from './utils/collection';
@@ -17,10 +17,25 @@ class NoMatch {
         this.segment = segment;
     }
 }
+class InheritedFromParent {
+    constructor(parent, params, data, resolve) {
+        this.parent = parent;
+        this.params = params;
+        this.data = data;
+        this.resolve = resolve;
+    }
+    get allParams() {
+        return this.parent ? merge(this.parent.allParams, this.params) : this.params;
+    }
+    get allData() { return this.parent ? merge(this.parent.allData, this.data) : this.data; }
+    static get empty() {
+        return new InheritedFromParent(null, {}, {}, new InheritedResolve(null, {}));
+    }
+}
 export function recognize(rootComponentType, config, urlTree, url) {
     try {
-        const children = processSegment(config, urlTree.root, {}, PRIMARY_OUTLET);
-        const root = new ActivatedRouteSnapshot([], {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1);
+        const children = processSegment(config, urlTree.root, InheritedFromParent.empty, PRIMARY_OUTLET);
+        const root = new ActivatedRouteSnapshot([], {}, {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
         const rootNode = new TreeNode(root, children);
         return of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
     }
@@ -33,16 +48,16 @@ export function recognize(rootComponentType, config, urlTree, url) {
         }
     }
 }
-function processSegment(config, segment, extraParams, outlet) {
+function processSegment(config, segment, inherited, outlet) {
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-        return processSegmentChildren(config, segment, extraParams);
+        return processSegmentChildren(config, segment, inherited);
     }
     else {
-        return processPathsWithParams(config, segment, 0, segment.pathsWithParams, extraParams, outlet);
+        return processPathsWithParams(config, segment, 0, segment.pathsWithParams, inherited, outlet);
     }
 }
-function processSegmentChildren(config, segment, extraParams) {
-    const children = mapChildrenIntoArray(segment, (child, childOutlet) => processSegment(config, child, extraParams, childOutlet));
+function processSegmentChildren(config, segment, inherited) {
+    const children = mapChildrenIntoArray(segment, (child, childOutlet) => processSegment(config, child, inherited, childOutlet));
     checkOutletNameUniqueness(children);
     sortActivatedRouteSnapshots(children);
     return children;
@@ -56,10 +71,10 @@ function sortActivatedRouteSnapshots(nodes) {
         return a.value.outlet.localeCompare(b.value.outlet);
     });
 }
-function processPathsWithParams(config, segment, pathIndex, paths, extraParams, outlet) {
+function processPathsWithParams(config, segment, pathIndex, paths, inherited, outlet) {
     for (let r of config) {
         try {
-            return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, extraParams, outlet);
+            return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, inherited, outlet);
         }
         catch (e) {
             if (!(e instanceof NoMatch))
@@ -68,40 +83,44 @@ function processPathsWithParams(config, segment, pathIndex, paths, extraParams, 
     }
     throw new NoMatch(segment);
 }
-function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, parentExtraParams, outlet) {
+function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, inherited, outlet) {
     if (route.redirectTo)
         throw new NoMatch();
     if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
         throw new NoMatch();
+    const newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
     if (route.path === '**') {
         const params = paths.length > 0 ? last(paths).parameters : {};
-        const snapshot = new ActivatedRouteSnapshot(paths, merge(parentExtraParams, params), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1);
+        const snapshot = new ActivatedRouteSnapshot(paths, merge(inherited.allParams, params), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
         return [new TreeNode(snapshot, [])];
     }
-    const { consumedPaths, parameters, extraParams, lastChild } = match(rawSegment, route, paths, parentExtraParams);
+    const { consumedPaths, parameters, lastChild } = match(rawSegment, route, paths);
     const rawSlicedPath = paths.slice(lastChild);
     const childConfig = route.children ? route.children : [];
+    const newInherited = route.component ?
+        InheritedFromParent.empty :
+        new InheritedFromParent(inherited, parameters, getData(route), newInheritedResolve);
     const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
-    const snapshot = new ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1);
+    const snapshot = new ActivatedRouteSnapshot(consumedPaths, merge(inherited.allParams, parameters), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
     if (slicedPath.length === 0 && segment.hasChildren()) {
-        const children = processSegmentChildren(childConfig, segment, extraParams);
+        const children = processSegmentChildren(childConfig, segment, newInherited);
         return [new TreeNode(snapshot, children)];
     }
     else if (childConfig.length === 0 && slicedPath.length === 0) {
         return [new TreeNode(snapshot, [])];
     }
     else {
-        const children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, PRIMARY_OUTLET);
+        const children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, newInherited, PRIMARY_OUTLET);
         return [new TreeNode(snapshot, children)];
     }
 }
-function match(segment, route, paths, parentExtraParams) {
+function match(segment, route, paths) {
     if (route.path === '') {
         if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
             throw new NoMatch();
         }
         else {
-            return { consumedPaths: [], lastChild: 0, parameters: {}, extraParams: {} };
+            return { consumedPaths: [], lastChild: 0, parameters: {} };
         }
     }
     const path = route.path;
@@ -126,9 +145,8 @@ function match(segment, route, paths, parentExtraParams) {
     if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
         throw new NoMatch();
     }
-    const parameters = merge(parentExtraParams, merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters));
-    const extraParams = route.component ? {} : parameters;
-    return { consumedPaths, lastChild: currentIndex, parameters, extraParams };
+    const parameters = merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters);
+    return { consumedPaths, lastChild: currentIndex, parameters };
 }
 function checkOutletNameUniqueness(nodes) {
     const names = {};
@@ -218,5 +236,11 @@ function emptyPathMatch(segment, slicedPath, r) {
 }
 function getOutlet(route) {
     return route.outlet ? route.outlet : PRIMARY_OUTLET;
+}
+function getData(route) {
+    return route.data ? route.data : {};
+}
+function getResolve(route) {
+    return route.resolve ? route.resolve : {};
 }
 //# sourceMappingURL=recognize.js.map

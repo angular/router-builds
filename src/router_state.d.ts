@@ -7,6 +7,7 @@
  */
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Data, ResolveData } from './config';
 import { Params } from './shared';
 import { UrlPathWithParams, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
@@ -50,10 +51,17 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
 export declare class ActivatedRoute {
     url: Observable<UrlPathWithParams[]>;
     params: Observable<Params>;
+    data: Observable<Data>;
     outlet: string;
     component: Type | string;
     snapshot: ActivatedRouteSnapshot;
     toString(): string;
+}
+export declare class InheritedResolve {
+    parent: InheritedResolve;
+    current: ResolveData;
+    constructor(parent: InheritedResolve, current: ResolveData);
+    static empty: InheritedResolve;
 }
 /**
  * Contains the information about a component loaded in an outlet at a particular moment in time.
@@ -71,6 +79,7 @@ export declare class ActivatedRoute {
 export declare class ActivatedRouteSnapshot {
     url: UrlPathWithParams[];
     params: Params;
+    data: Data;
     outlet: string;
     component: Type | string;
     toString(): string;

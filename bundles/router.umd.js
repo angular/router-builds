@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/every'), require('rxjs/add/observable/from'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/observable/of'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('rxjs/observable/fromPromise'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/every', 'rxjs/add/observable/from', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/observable/of', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', 'rxjs/observable/fromPromise', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.rxjs_add_operator_map, global.rxjs_add_operator_mergeMap, global.rxjs_add_operator_mergeAll, global.rxjs_add_operator_every, global.rxjs_add_observable_from, global.Rx, global.Rx, global.rxjs_observable_of, global.Rx, global.rxjs_add_operator_toPromise, global.rxjs_observable_forkJoin, global.rxjs_observable_fromPromise, global.ng.platformBrowser));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_Observable, rxjs_Subject, rxjs_observable_of, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, rxjs_observable_fromPromise, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/add/observable/from'), require('rxjs/add/observable/forkJoin'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/observable/of'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('rxjs/observable/fromPromise'), require('@angular/platform-browser')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/add/observable/from', 'rxjs/add/observable/forkJoin', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/observable/of', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', 'rxjs/observable/fromPromise', '@angular/platform-browser'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.rxjs_add_operator_map, global.rxjs_add_operator_mergeMap, global.rxjs_add_operator_mergeAll, global.rxjs_add_operator_reduce, global.rxjs_add_operator_every, global.rxjs_add_observable_from, global.rxjs_add_observable_forkJoin, global.Rx, global.Rx, global.rxjs_observable_of, global.Rx, global.rxjs_add_operator_toPromise, global.rxjs_observable_forkJoin, global.rxjs_observable_fromPromise, global.ng.platformBrowser));
+}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_add_observable_forkJoin, rxjs_Observable, rxjs_Subject, rxjs_observable_of, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, rxjs_observable_fromPromise, _angular_platformBrowser) {
     'use strict';
     /**
      * @license
@@ -844,17 +844,19 @@ var __extends = (this && this.__extends) || function (d, b) {
         var snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
         var emptyUrl = new rxjs_BehaviorSubject.BehaviorSubject([new UrlPathWithParams('', {})]);
         var emptyParams = new rxjs_BehaviorSubject.BehaviorSubject({});
+        var emptyData = new rxjs_BehaviorSubject.BehaviorSubject({});
         var emptyQueryParams = new rxjs_BehaviorSubject.BehaviorSubject({});
         var fragment = new rxjs_BehaviorSubject.BehaviorSubject('');
-        var activated = new ActivatedRoute(emptyUrl, emptyParams, PRIMARY_OUTLET, rootComponent, snapshot.root);
+        var activated = new ActivatedRoute(emptyUrl, emptyParams, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
         activated.snapshot = snapshot.root;
         return new RouterState(new TreeNode(activated, []), emptyQueryParams, fragment, snapshot);
     }
     function createEmptyStateSnapshot(urlTree, rootComponent) {
         var emptyParams = {};
+        var emptyData = {};
         var emptyQueryParams = {};
         var fragment = '';
-        var activated = new ActivatedRouteSnapshot([], emptyParams, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1);
+        var activated = new ActivatedRouteSnapshot([], emptyParams, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
         return new RouterStateSnapshot('', new TreeNode(activated, []), emptyQueryParams, fragment);
     }
     /**
@@ -876,9 +878,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         /**
          * @internal
          */
-        function ActivatedRoute(url, params, outlet, component, futureSnapshot) {
+        function ActivatedRoute(url, params, data, outlet, component, futureSnapshot) {
             this.url = url;
             this.params = params;
+            this.data = data;
             this.outlet = outlet;
             this.component = component;
             this._futureSnapshot = futureSnapshot;
@@ -887,6 +890,33 @@ var __extends = (this && this.__extends) || function (d, b) {
             return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
         };
         return ActivatedRoute;
+    }());
+    var InheritedResolve = (function () {
+        function InheritedResolve(parent, current) {
+            this.parent = parent;
+            this.current = current;
+            /**
+             * @internal
+             */
+            this.resolvedData = {};
+        }
+        Object.defineProperty(InheritedResolve.prototype, "flattenedResolvedData", {
+            /**
+             * @internal
+             */
+            get: function () {
+                return this.parent ? merge(this.parent.flattenedResolvedData, this.resolvedData) :
+                    this.resolvedData;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(InheritedResolve, "empty", {
+            get: function () { return new InheritedResolve(null, {}); },
+            enumerable: true,
+            configurable: true
+        });
+        return InheritedResolve;
     }());
     /**
      * Contains the information about a component loaded in an outlet at a particular moment in time.
@@ -905,14 +935,16 @@ var __extends = (this && this.__extends) || function (d, b) {
         /**
          * @internal
          */
-        function ActivatedRouteSnapshot(url, params, outlet, component, routeConfig, urlSegment, lastPathIndex) {
+        function ActivatedRouteSnapshot(url, params, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
             this.url = url;
             this.params = params;
+            this.data = data;
             this.outlet = outlet;
             this.component = component;
             this._routeConfig = routeConfig;
             this._urlSegment = urlSegment;
             this._lastPathIndex = lastPathIndex;
+            this._resolve = resolve;
         }
         ActivatedRouteSnapshot.prototype.toString = function () {
             var url = this.url.map(function (s) { return s.toString(); }).join('/');
@@ -961,6 +993,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (route.snapshot) {
             if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
                 route.params.next(route._futureSnapshot.params);
+                route.data.next(route._futureSnapshot.data);
             }
             if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
                 route.url.next(route._futureSnapshot.url);
@@ -969,6 +1002,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         else {
             route.snapshot = route._futureSnapshot;
+            route.data.next(route._futureSnapshot.data);
         }
     }
     function createRouterState(curr, prevState) {
@@ -1002,7 +1036,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         });
     }
     function createActivatedRoute(c) {
-        return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), c.outlet, c.component, c);
+        return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
     }
     function equalRouteSnapshots(a, b) {
         return a._routeConfig === b._routeConfig;
@@ -1229,10 +1263,38 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return NoMatch$1;
     }());
+    var InheritedFromParent = (function () {
+        function InheritedFromParent(parent, params, data, resolve) {
+            this.parent = parent;
+            this.params = params;
+            this.data = data;
+            this.resolve = resolve;
+        }
+        Object.defineProperty(InheritedFromParent.prototype, "allParams", {
+            get: function () {
+                return this.parent ? merge(this.parent.allParams, this.params) : this.params;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(InheritedFromParent.prototype, "allData", {
+            get: function () { return this.parent ? merge(this.parent.allData, this.data) : this.data; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(InheritedFromParent, "empty", {
+            get: function () {
+                return new InheritedFromParent(null, {}, {}, new InheritedResolve(null, {}));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return InheritedFromParent;
+    }());
     function recognize(rootComponentType, config, urlTree, url) {
         try {
-            var children = processSegment(config, urlTree.root, {}, PRIMARY_OUTLET);
-            var root = new ActivatedRouteSnapshot([], {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1);
+            var children = processSegment(config, urlTree.root, InheritedFromParent.empty, PRIMARY_OUTLET);
+            var root = new ActivatedRouteSnapshot([], {}, {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
             var rootNode = new TreeNode(root, children);
             return rxjs_observable_of.of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
         }
@@ -1245,16 +1307,16 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
         }
     }
-    function processSegment(config, segment, extraParams, outlet) {
+    function processSegment(config, segment, inherited, outlet) {
         if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-            return processSegmentChildren(config, segment, extraParams);
+            return processSegmentChildren(config, segment, inherited);
         }
         else {
-            return processPathsWithParams(config, segment, 0, segment.pathsWithParams, extraParams, outlet);
+            return processPathsWithParams(config, segment, 0, segment.pathsWithParams, inherited, outlet);
         }
     }
-    function processSegmentChildren(config, segment, extraParams) {
-        var children = mapChildrenIntoArray(segment, function (child, childOutlet) { return processSegment(config, child, extraParams, childOutlet); });
+    function processSegmentChildren(config, segment, inherited) {
+        var children = mapChildrenIntoArray(segment, function (child, childOutlet) { return processSegment(config, child, inherited, childOutlet); });
         checkOutletNameUniqueness(children);
         sortActivatedRouteSnapshots(children);
         return children;
@@ -1268,11 +1330,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             return a.value.outlet.localeCompare(b.value.outlet);
         });
     }
-    function processPathsWithParams(config, segment, pathIndex, paths, extraParams, outlet) {
+    function processPathsWithParams(config, segment, pathIndex, paths, inherited, outlet) {
         for (var _i = 0, config_1 = config; _i < config_1.length; _i++) {
             var r = config_1[_i];
             try {
-                return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, extraParams, outlet);
+                return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, inherited, outlet);
             }
             catch (e) {
                 if (!(e instanceof NoMatch$1))
@@ -1281,40 +1343,44 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         throw new NoMatch$1(segment);
     }
-    function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, parentExtraParams, outlet) {
+    function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, inherited, outlet) {
         if (route.redirectTo)
             throw new NoMatch$1();
         if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
+        var newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
         if (route.path === '**') {
             var params = paths.length > 0 ? last(paths).parameters : {};
-            var snapshot_1 = new ActivatedRouteSnapshot(paths, merge(parentExtraParams, params), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1);
+            var snapshot_1 = new ActivatedRouteSnapshot(paths, merge(inherited.allParams, params), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
             return [new TreeNode(snapshot_1, [])];
         }
-        var _a = match$1(rawSegment, route, paths, parentExtraParams), consumedPaths = _a.consumedPaths, parameters = _a.parameters, extraParams = _a.extraParams, lastChild = _a.lastChild;
+        var _a = match$1(rawSegment, route, paths), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
         var rawSlicedPath = paths.slice(lastChild);
         var childConfig = route.children ? route.children : [];
+        var newInherited = route.component ?
+            InheritedFromParent.empty :
+            new InheritedFromParent(inherited, parameters, getData(route), newInheritedResolve);
         var _b = split$1(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
-        var snapshot = new ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1);
+        var snapshot = new ActivatedRouteSnapshot(consumedPaths, merge(inherited.allParams, parameters), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
         if (slicedPath.length === 0 && segment.hasChildren()) {
-            var children = processSegmentChildren(childConfig, segment, extraParams);
+            var children = processSegmentChildren(childConfig, segment, newInherited);
             return [new TreeNode(snapshot, children)];
         }
         else if (childConfig.length === 0 && slicedPath.length === 0) {
             return [new TreeNode(snapshot, [])];
         }
         else {
-            var children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, PRIMARY_OUTLET);
+            var children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, newInherited, PRIMARY_OUTLET);
             return [new TreeNode(snapshot, children)];
         }
     }
-    function match$1(segment, route, paths, parentExtraParams) {
+    function match$1(segment, route, paths) {
         if (route.path === '') {
             if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
                 throw new NoMatch$1();
             }
             else {
-                return { consumedPaths: [], lastChild: 0, parameters: {}, extraParams: {} };
+                return { consumedPaths: [], lastChild: 0, parameters: {} };
             }
         }
         var path = route.path;
@@ -1339,9 +1405,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
             throw new NoMatch$1();
         }
-        var parameters = merge(parentExtraParams, merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters));
-        var extraParams = route.component ? {} : parameters;
-        return { consumedPaths: consumedPaths, lastChild: currentIndex, parameters: parameters, extraParams: extraParams };
+        var parameters = merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters);
+        return { consumedPaths: consumedPaths, lastChild: currentIndex, parameters: parameters };
     }
     function checkOutletNameUniqueness(nodes) {
         var names = {};
@@ -1433,6 +1498,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function getOutlet$3(route) {
         return route.outlet ? route.outlet : PRIMARY_OUTLET;
+    }
+    function getData(route) {
+        return route.data ? route.data : {};
+    }
+    function getResolve(route) {
+        return route.resolve ? route.resolve : {};
     }
     function resolve(resolver, state) {
         return resolveNode(resolver, state._root).map(function (_) { return state; });
@@ -1722,6 +1793,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 var updatedUrl;
                 var state;
                 var navigationIsSuccessful;
+                var preActivation;
                 applyRedirects(url, _this.config)
                     .mergeMap(function (u) {
                     updatedUrl = u;
@@ -1736,10 +1808,20 @@ var __extends = (this && this.__extends) || function (d, b) {
                 })
                     .map(function (newState) {
                     state = newState;
+                    preActivation =
+                        new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
+                    preActivation.traverse(_this.outletMap);
                 })
                     .mergeMap(function (_) {
-                    return new GuardChecks(state.snapshot, _this.currentRouterState.snapshot, _this.injector)
-                        .check(_this.outletMap);
+                    return preActivation.checkGuards();
+                })
+                    .mergeMap(function (shouldActivate) {
+                    if (shouldActivate) {
+                        return preActivation.resolveData().map(function () { return shouldActivate; });
+                    }
+                    else {
+                        return rxjs_observable_of.of(shouldActivate);
+                    }
                 })
                     .forEach(function (shouldActivate) {
                     if (!shouldActivate || id !== _this.navigationId) {
@@ -1785,18 +1867,20 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return CanDeactivate;
     }());
-    var GuardChecks = (function () {
-        function GuardChecks(future, curr, injector) {
+    var PreActivation = (function () {
+        function PreActivation(future, curr, injector) {
             this.future = future;
             this.curr = curr;
             this.injector = injector;
             this.checks = [];
         }
-        GuardChecks.prototype.check = function (parentOutletMap) {
-            var _this = this;
+        PreActivation.prototype.traverse = function (parentOutletMap) {
             var futureRoot = this.future._root;
             var currRoot = this.curr ? this.curr._root : null;
             this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+        };
+        PreActivation.prototype.checkGuards = function () {
+            var _this = this;
             if (this.checks.length === 0)
                 return rxjs_observable_of.of(true);
             return rxjs_Observable.Observable.from(this.checks)
@@ -1814,7 +1898,22 @@ var __extends = (this && this.__extends) || function (d, b) {
                 .mergeAll()
                 .every(function (result) { return result === true; });
         };
-        GuardChecks.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap) {
+        PreActivation.prototype.resolveData = function () {
+            var _this = this;
+            if (this.checks.length === 0)
+                return rxjs_observable_of.of(null);
+            return rxjs_Observable.Observable.from(this.checks)
+                .mergeMap(function (s) {
+                if (s instanceof CanActivate) {
+                    return _this.runResolve(s.route);
+                }
+                else {
+                    return rxjs_observable_of.of(null);
+                }
+            })
+                .reduce(function (_, __) { return _; });
+        };
+        PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap) {
             var _this = this;
             var prevChildren = nodeChildrenAsMap(currNode);
             futureNode.children.forEach(function (c) {
@@ -1823,7 +1922,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             });
             forEach(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]); });
         };
-        GuardChecks.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap) {
+        PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap) {
             var future = futureNode.value;
             var curr = currNode ? currNode.value : null;
             var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
@@ -1860,13 +1959,13 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }
             }
         };
-        GuardChecks.prototype.deactivateOutletAndItChildren = function (route, outlet) {
+        PreActivation.prototype.deactivateOutletAndItChildren = function (route, outlet) {
             if (outlet && outlet.isActivated) {
                 this.deactivateOutletMap(outlet.outletMap);
                 this.checks.push(new CanDeactivate(outlet.component, route));
             }
         };
-        GuardChecks.prototype.deactivateOutletMap = function (outletMap) {
+        PreActivation.prototype.deactivateOutletMap = function (outletMap) {
             var _this = this;
             forEach(outletMap._outlets, function (v) {
                 if (v.isActivated) {
@@ -1874,7 +1973,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }
             });
         };
-        GuardChecks.prototype.runCanActivate = function (future) {
+        PreActivation.prototype.runCanActivate = function (future) {
             var _this = this;
             var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
             if (!canActivate || canActivate.length === 0)
@@ -1892,7 +1991,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 .mergeAll()
                 .every(function (result) { return result === true; });
         };
-        GuardChecks.prototype.runCanDeactivate = function (component, curr) {
+        PreActivation.prototype.runCanDeactivate = function (component, curr) {
             var _this = this;
             var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
             if (!canDeactivate || canDeactivate.length === 0)
@@ -1910,7 +2009,32 @@ var __extends = (this && this.__extends) || function (d, b) {
                 .mergeAll()
                 .every(function (result) { return result === true; });
         };
-        return GuardChecks;
+        PreActivation.prototype.runResolve = function (future) {
+            var resolve = future._resolve;
+            return this.resolveNode(resolve.current, future).map(function (resolvedData) {
+                resolve.resolvedData = resolvedData;
+                future.data = merge(future.data, resolve.flattenedResolvedData);
+                return null;
+            });
+        };
+        PreActivation.prototype.resolveNode = function (resolve, future) {
+            var _this = this;
+            var resolvingObs = [];
+            var resolvedData = {};
+            forEach(resolve, function (v, k) {
+                var resolver = _this.injector.get(v);
+                var obs = resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
+                    wrapIntoObservable(resolver(future, _this.future));
+                resolvingObs.push(obs.map(function (_) { resolvedData[k] = _; }));
+            });
+            if (resolvingObs.length > 0) {
+                return rxjs_Observable.Observable.forkJoin(resolvingObs).map(function (r) { return resolvedData; });
+            }
+            else {
+                return rxjs_observable_of.of(resolvedData);
+            }
+        };
+        return PreActivation;
     }());
     function wrapIntoObservable(value) {
         if (value instanceof rxjs_Observable.Observable) {

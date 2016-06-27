@@ -8,8 +8,10 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
 import { RouterConfig } from './config';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';

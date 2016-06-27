@@ -41,7 +41,7 @@ function createOrReuseChildren(curr, prevState) {
     });
 }
 function createActivatedRoute(c) {
-    return new router_state_1.ActivatedRoute(new BehaviorSubject_1.BehaviorSubject(c.url), new BehaviorSubject_1.BehaviorSubject(c.params), c.outlet, c.component, c);
+    return new router_state_1.ActivatedRoute(new BehaviorSubject_1.BehaviorSubject(c.url), new BehaviorSubject_1.BehaviorSubject(c.params), new BehaviorSubject_1.BehaviorSubject(c.data), c.outlet, c.component, c);
 }
 function equalRouteSnapshots(a, b) {
     return a._routeConfig === b._routeConfig;

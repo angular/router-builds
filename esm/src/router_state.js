@@ -8,7 +8,7 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlPathWithParams } from './url_tree';
-import { shallowEqual, shallowEqualArrays } from './utils/collection';
+import { merge, shallowEqual, shallowEqualArrays } from './utils/collection';
 import { Tree, TreeNode } from './utils/tree';
 /**
  * The state of the router.
@@ -41,17 +41,19 @@ export function createEmptyState(urlTree, rootComponent) {
     const snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
     const emptyUrl = new BehaviorSubject([new UrlPathWithParams('', {})]);
     const emptyParams = new BehaviorSubject({});
+    const emptyData = new BehaviorSubject({});
     const emptyQueryParams = new BehaviorSubject({});
     const fragment = new BehaviorSubject('');
-    const activated = new ActivatedRoute(emptyUrl, emptyParams, PRIMARY_OUTLET, rootComponent, snapshot.root);
+    const activated = new ActivatedRoute(emptyUrl, emptyParams, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
     activated.snapshot = snapshot.root;
     return new RouterState(new TreeNode(activated, []), emptyQueryParams, fragment, snapshot);
 }
 function createEmptyStateSnapshot(urlTree, rootComponent) {
     const emptyParams = {};
+    const emptyData = {};
     const emptyQueryParams = {};
     const fragment = '';
-    const activated = new ActivatedRouteSnapshot([], emptyParams, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1);
+    const activated = new ActivatedRouteSnapshot([], emptyParams, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
     return new RouterStateSnapshot('', new TreeNode(activated, []), emptyQueryParams, fragment);
 }
 /**
@@ -73,9 +75,10 @@ export class ActivatedRoute {
     /**
      * @internal
      */
-    constructor(url, params, outlet, component, futureSnapshot) {
+    constructor(url, params, data, outlet, component, futureSnapshot) {
         this.url = url;
         this.params = params;
+        this.data = data;
         this.outlet = outlet;
         this.component = component;
         this._futureSnapshot = futureSnapshot;
@@ -83,6 +86,24 @@ export class ActivatedRoute {
     toString() {
         return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
     }
+}
+export class InheritedResolve {
+    constructor(parent, current) {
+        this.parent = parent;
+        this.current = current;
+        /**
+         * @internal
+         */
+        this.resolvedData = {};
+    }
+    /**
+     * @internal
+     */
+    get flattenedResolvedData() {
+        return this.parent ? merge(this.parent.flattenedResolvedData, this.resolvedData) :
+            this.resolvedData;
+    }
+    static get empty() { return new InheritedResolve(null, {}); }
 }
 /**
  * Contains the information about a component loaded in an outlet at a particular moment in time.
@@ -101,14 +122,16 @@ export class ActivatedRouteSnapshot {
     /**
      * @internal
      */
-    constructor(url, params, outlet, component, routeConfig, urlSegment, lastPathIndex) {
+    constructor(url, params, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
         this.url = url;
         this.params = params;
+        this.data = data;
         this.outlet = outlet;
         this.component = component;
         this._routeConfig = routeConfig;
         this._urlSegment = urlSegment;
         this._lastPathIndex = lastPathIndex;
+        this._resolve = resolve;
     }
     toString() {
         const url = this.url.map(s => s.toString()).join('/');
@@ -154,6 +177,7 @@ export function advanceActivatedRoute(route) {
     if (route.snapshot) {
         if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
             route.params.next(route._futureSnapshot.params);
+            route.data.next(route._futureSnapshot.data);
         }
         if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
             route.url.next(route._futureSnapshot.url);
@@ -162,6 +186,7 @@ export function advanceActivatedRoute(route) {
     }
     else {
         route.snapshot = route._futureSnapshot;
+        route.data.next(route._futureSnapshot.data);
     }
 }
 //# sourceMappingURL=router_state.js.map

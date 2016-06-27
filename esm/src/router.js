@@ -8,8 +8,10 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/forkJoin';
 import { ReflectiveInjector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -24,7 +26,7 @@ import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlTree, createEmptyUrlTree } from './url_tree';
-import { forEach, shallowEqual } from './utils/collection';
+import { forEach, merge, shallowEqual } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  */
@@ -250,6 +252,7 @@ export class Router {
             let updatedUrl;
             let state;
             let navigationIsSuccessful;
+            let preActivation;
             applyRedirects(url, this.config)
                 .mergeMap(u => {
                 updatedUrl = u;
@@ -264,10 +267,20 @@ export class Router {
             })
                 .map((newState) => {
                 state = newState;
+                preActivation =
+                    new PreActivation(state.snapshot, this.currentRouterState.snapshot, this.injector);
+                preActivation.traverse(this.outletMap);
             })
                 .mergeMap(_ => {
-                return new GuardChecks(state.snapshot, this.currentRouterState.snapshot, this.injector)
-                    .check(this.outletMap);
+                return preActivation.checkGuards();
+            })
+                .mergeMap(shouldActivate => {
+                if (shouldActivate) {
+                    return preActivation.resolveData().map(() => shouldActivate);
+                }
+                else {
+                    return of(shouldActivate);
+                }
             })
                 .forEach((shouldActivate) => {
                 if (!shouldActivate || id !== this.navigationId) {
@@ -310,17 +323,19 @@ class CanDeactivate {
         this.route = route;
     }
 }
-class GuardChecks {
+class PreActivation {
     constructor(future, curr, injector) {
         this.future = future;
         this.curr = curr;
         this.injector = injector;
         this.checks = [];
     }
-    check(parentOutletMap) {
+    traverse(parentOutletMap) {
         const futureRoot = this.future._root;
         const currRoot = this.curr ? this.curr._root : null;
         this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+    }
+    checkGuards() {
         if (this.checks.length === 0)
             return of(true);
         return Observable.from(this.checks)
@@ -337,6 +352,20 @@ class GuardChecks {
         })
             .mergeAll()
             .every(result => result === true);
+    }
+    resolveData() {
+        if (this.checks.length === 0)
+            return of(null);
+        return Observable.from(this.checks)
+            .mergeMap(s => {
+            if (s instanceof CanActivate) {
+                return this.runResolve(s.route);
+            }
+            else {
+                return of(null);
+            }
+        })
+            .reduce((_, __) => _);
     }
     traverseChildRoutes(futureNode, currNode, outletMap) {
         const prevChildren = nodeChildrenAsMap(currNode);
@@ -429,6 +458,30 @@ class GuardChecks {
         })
             .mergeAll()
             .every(result => result === true);
+    }
+    runResolve(future) {
+        const resolve = future._resolve;
+        return this.resolveNode(resolve.current, future).map(resolvedData => {
+            resolve.resolvedData = resolvedData;
+            future.data = merge(future.data, resolve.flattenedResolvedData);
+            return null;
+        });
+    }
+    resolveNode(resolve, future) {
+        const resolvingObs = [];
+        const resolvedData = {};
+        forEach(resolve, (v, k) => {
+            const resolver = this.injector.get(v);
+            const obs = resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
+                wrapIntoObservable(resolver(future, this.future));
+            resolvingObs.push(obs.map((_) => { resolvedData[k] = _; }));
+        });
+        if (resolvingObs.length > 0) {
+            return Observable.forkJoin(resolvingObs).map(r => resolvedData);
+        }
+        else {
+            return of(resolvedData);
+        }
     }
 }
 function wrapIntoObservable(value) {

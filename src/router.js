@@ -9,8 +9,10 @@
 require('rxjs/add/operator/map');
 require('rxjs/add/operator/mergeMap');
 require('rxjs/add/operator/mergeAll');
+require('rxjs/add/operator/reduce');
 require('rxjs/add/operator/every');
 require('rxjs/add/observable/from');
+require('rxjs/add/observable/forkJoin');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
 var Subject_1 = require('rxjs/Subject');
@@ -278,6 +280,7 @@ var Router = (function () {
             var updatedUrl;
             var state;
             var navigationIsSuccessful;
+            var preActivation;
             apply_redirects_1.applyRedirects(url, _this.config)
                 .mergeMap(function (u) {
                 updatedUrl = u;
@@ -292,10 +295,20 @@ var Router = (function () {
             })
                 .map(function (newState) {
                 state = newState;
+                preActivation =
+                    new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
+                preActivation.traverse(_this.outletMap);
             })
                 .mergeMap(function (_) {
-                return new GuardChecks(state.snapshot, _this.currentRouterState.snapshot, _this.injector)
-                    .check(_this.outletMap);
+                return preActivation.checkGuards();
+            })
+                .mergeMap(function (shouldActivate) {
+                if (shouldActivate) {
+                    return preActivation.resolveData().map(function () { return shouldActivate; });
+                }
+                else {
+                    return of_1.of(shouldActivate);
+                }
             })
                 .forEach(function (shouldActivate) {
                 if (!shouldActivate || id !== _this.navigationId) {
@@ -342,18 +355,20 @@ var CanDeactivate = (function () {
     }
     return CanDeactivate;
 }());
-var GuardChecks = (function () {
-    function GuardChecks(future, curr, injector) {
+var PreActivation = (function () {
+    function PreActivation(future, curr, injector) {
         this.future = future;
         this.curr = curr;
         this.injector = injector;
         this.checks = [];
     }
-    GuardChecks.prototype.check = function (parentOutletMap) {
-        var _this = this;
+    PreActivation.prototype.traverse = function (parentOutletMap) {
         var futureRoot = this.future._root;
         var currRoot = this.curr ? this.curr._root : null;
         this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+    };
+    PreActivation.prototype.checkGuards = function () {
+        var _this = this;
         if (this.checks.length === 0)
             return of_1.of(true);
         return Observable_1.Observable.from(this.checks)
@@ -371,7 +386,22 @@ var GuardChecks = (function () {
             .mergeAll()
             .every(function (result) { return result === true; });
     };
-    GuardChecks.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap) {
+    PreActivation.prototype.resolveData = function () {
+        var _this = this;
+        if (this.checks.length === 0)
+            return of_1.of(null);
+        return Observable_1.Observable.from(this.checks)
+            .mergeMap(function (s) {
+            if (s instanceof CanActivate) {
+                return _this.runResolve(s.route);
+            }
+            else {
+                return of_1.of(null);
+            }
+        })
+            .reduce(function (_, __) { return _; });
+    };
+    PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap) {
         var _this = this;
         var prevChildren = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(function (c) {
@@ -380,7 +410,7 @@ var GuardChecks = (function () {
         });
         collection_1.forEach(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]); });
     };
-    GuardChecks.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap) {
+    PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap) {
         var future = futureNode.value;
         var curr = currNode ? currNode.value : null;
         var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
@@ -417,13 +447,13 @@ var GuardChecks = (function () {
             }
         }
     };
-    GuardChecks.prototype.deactivateOutletAndItChildren = function (route, outlet) {
+    PreActivation.prototype.deactivateOutletAndItChildren = function (route, outlet) {
         if (outlet && outlet.isActivated) {
             this.deactivateOutletMap(outlet.outletMap);
             this.checks.push(new CanDeactivate(outlet.component, route));
         }
     };
-    GuardChecks.prototype.deactivateOutletMap = function (outletMap) {
+    PreActivation.prototype.deactivateOutletMap = function (outletMap) {
         var _this = this;
         collection_1.forEach(outletMap._outlets, function (v) {
             if (v.isActivated) {
@@ -431,7 +461,7 @@ var GuardChecks = (function () {
             }
         });
     };
-    GuardChecks.prototype.runCanActivate = function (future) {
+    PreActivation.prototype.runCanActivate = function (future) {
         var _this = this;
         var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
@@ -449,7 +479,7 @@ var GuardChecks = (function () {
             .mergeAll()
             .every(function (result) { return result === true; });
     };
-    GuardChecks.prototype.runCanDeactivate = function (component, curr) {
+    PreActivation.prototype.runCanDeactivate = function (component, curr) {
         var _this = this;
         var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
@@ -467,7 +497,32 @@ var GuardChecks = (function () {
             .mergeAll()
             .every(function (result) { return result === true; });
     };
-    return GuardChecks;
+    PreActivation.prototype.runResolve = function (future) {
+        var resolve = future._resolve;
+        return this.resolveNode(resolve.current, future).map(function (resolvedData) {
+            resolve.resolvedData = resolvedData;
+            future.data = collection_1.merge(future.data, resolve.flattenedResolvedData);
+            return null;
+        });
+    };
+    PreActivation.prototype.resolveNode = function (resolve, future) {
+        var _this = this;
+        var resolvingObs = [];
+        var resolvedData = {};
+        collection_1.forEach(resolve, function (v, k) {
+            var resolver = _this.injector.get(v);
+            var obs = resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
+                wrapIntoObservable(resolver(future, _this.future));
+            resolvingObs.push(obs.map(function (_) { resolvedData[k] = _; }));
+        });
+        if (resolvingObs.length > 0) {
+            return Observable_1.Observable.forkJoin(resolvingObs).map(function (r) { return resolvedData; });
+        }
+        else {
+            return of_1.of(resolvedData);
+        }
+    };
+    return PreActivation;
 }());
 function wrapIntoObservable(value) {
     if (value instanceof Observable_1.Observable) {
