@@ -121,7 +121,7 @@ var Router = (function () {
      */
     Router.prototype.initialNavigation = function () {
         this.setUpLocationChangeListener();
-        this.navigateByUrl(this.location.path());
+        this.navigateByUrl(this.location.path(true));
     };
     Object.defineProperty(Router.prototype, "routerState", {
         /**
@@ -277,6 +277,7 @@ var Router = (function () {
         return new Promise(function (resolvePromise, rejectPromise) {
             var updatedUrl;
             var state;
+            var navigationIsSuccessful;
             apply_redirects_1.applyRedirects(url, _this.config)
                 .mergeMap(function (u) {
                 updatedUrl = u;
@@ -299,7 +300,8 @@ var Router = (function () {
                 .forEach(function (shouldActivate) {
                 if (!shouldActivate || id !== _this.navigationId) {
                     _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
-                    return Promise.resolve(false);
+                    navigationIsSuccessful = false;
+                    return;
                 }
                 new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
                 _this.currentUrlTree = updatedUrl;
@@ -313,11 +315,11 @@ var Router = (function () {
                         _this.location.go(path);
                     }
                 }
-                return Promise.resolve(true);
+                navigationIsSuccessful = true;
             })
                 .then(function () {
                 _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl)));
-                resolvePromise(true);
+                resolvePromise(navigationIsSuccessful);
             }, function (e) {
                 _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
                 rejectPromise(e);
@@ -484,6 +486,7 @@ var ActivateRoutes = (function () {
         var futureRoot = this.futureState._root;
         var currRoot = this.currState ? this.currState._root : null;
         pushQueryParamsAndFragment(this.futureState);
+        router_state_1.advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
     };
     ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {

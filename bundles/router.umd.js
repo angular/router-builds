@@ -324,7 +324,10 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.remaining = this.remaining.substring(str.length);
         };
         UrlParser.prototype.parseRootSegment = function () {
-            if (this.remaining === '' || this.remaining === '/') {
+            if (this.remaining.startsWith('/')) {
+                this.capture('/');
+            }
+            if (this.remaining === '' || this.remaining.startsWith('?')) {
                 return new UrlSegment([], {});
             }
             else {
@@ -1561,7 +1564,7 @@ var __extends = (this && this.__extends) || function (d, b) {
          */
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
-            this.navigateByUrl(this.location.path());
+            this.navigateByUrl(this.location.path(true));
         };
         Object.defineProperty(Router.prototype, "routerState", {
             /**
@@ -1717,6 +1720,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return new Promise(function (resolvePromise, rejectPromise) {
                 var updatedUrl;
                 var state;
+                var navigationIsSuccessful;
                 applyRedirects(url, _this.config)
                     .mergeMap(function (u) {
                     updatedUrl = u;
@@ -1739,7 +1743,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                     .forEach(function (shouldActivate) {
                     if (!shouldActivate || id !== _this.navigationId) {
                         _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
-                        return Promise.resolve(false);
+                        navigationIsSuccessful = false;
+                        return;
                     }
                     new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
                     _this.currentUrlTree = updatedUrl;
@@ -1753,11 +1758,11 @@ var __extends = (this && this.__extends) || function (d, b) {
                             _this.location.go(path);
                         }
                     }
-                    return Promise.resolve(true);
+                    navigationIsSuccessful = true;
                 })
                     .then(function () {
                     _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl)));
-                    resolvePromise(true);
+                    resolvePromise(navigationIsSuccessful);
                 }, function (e) {
                     _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
                     rejectPromise(e);
@@ -1923,6 +1928,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var futureRoot = this.futureState._root;
             var currRoot = this.currState ? this.currState._root : null;
             pushQueryParamsAndFragment(this.futureState);
+            advanceActivatedRoute(this.futureState.root);
             this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {

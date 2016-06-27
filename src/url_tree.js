@@ -275,7 +275,10 @@ var UrlParser = (function () {
         this.remaining = this.remaining.substring(str.length);
     };
     UrlParser.prototype.parseRootSegment = function () {
-        if (this.remaining === '' || this.remaining === '/') {
+        if (this.remaining.startsWith('/')) {
+            this.capture('/');
+        }
+        if (this.remaining === '' || this.remaining.startsWith('?')) {
             return new UrlSegment([], {});
         }
         else {

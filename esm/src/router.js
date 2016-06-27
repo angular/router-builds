@@ -110,7 +110,7 @@ export class Router {
      */
     initialNavigation() {
         this.setUpLocationChangeListener();
-        this.navigateByUrl(this.location.path());
+        this.navigateByUrl(this.location.path(true));
     }
     /**
      * Returns the current route state.
@@ -249,6 +249,7 @@ export class Router {
         return new Promise((resolvePromise, rejectPromise) => {
             let updatedUrl;
             let state;
+            let navigationIsSuccessful;
             applyRedirects(url, this.config)
                 .mergeMap(u => {
                 updatedUrl = u;
@@ -271,7 +272,8 @@ export class Router {
                 .forEach((shouldActivate) => {
                 if (!shouldActivate || id !== this.navigationId) {
                     this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
-                    return Promise.resolve(false);
+                    navigationIsSuccessful = false;
+                    return;
                 }
                 new ActivateRoutes(state, this.currentRouterState).activate(this.outletMap);
                 this.currentUrlTree = updatedUrl;
@@ -285,11 +287,11 @@ export class Router {
                         this.location.go(path);
                     }
                 }
-                return Promise.resolve(true);
+                navigationIsSuccessful = true;
             })
                 .then(() => {
                 this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(updatedUrl)));
-                resolvePromise(true);
+                resolvePromise(navigationIsSuccessful);
             }, e => {
                 this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
                 rejectPromise(e);
@@ -446,6 +448,7 @@ class ActivateRoutes {
         const futureRoot = this.futureState._root;
         const currRoot = this.currState ? this.currState._root : null;
         pushQueryParamsAndFragment(this.futureState);
+        advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
     }
     activateChildRoutes(futureNode, currNode, outletMap) {
