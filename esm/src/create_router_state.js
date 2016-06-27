@@ -29,13 +29,12 @@ function createNode(curr, prevState) {
 }
 function createOrReuseChildren(curr, prevState) {
     return curr.children.map(child => {
-        const index = prevState.children.findIndex(p => equalRouteSnapshots(p.value.snapshot, child.value));
-        if (index >= 0) {
-            return createNode(child, prevState.children[index]);
+        for (const p of prevState.children) {
+            if (equalRouteSnapshots(p.value.snapshot, child.value)) {
+                return createNode(child, p);
+            }
         }
-        else {
-            return createNode(child);
-        }
+        return createNode(child);
     });
 }
 function createActivatedRoute(c) {

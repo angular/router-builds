@@ -180,15 +180,15 @@ function findPosParam(part, posParams, redirectTo) {
     return pos;
 }
 function findOrCreatePath(part, paths) {
-    const matchingIndex = paths.findIndex(s => s.path === part);
-    if (matchingIndex > -1) {
-        const r = paths[matchingIndex];
-        paths.splice(matchingIndex);
-        return r;
+    let idx = 0;
+    for (const s of paths) {
+        if (s.path === part) {
+            paths.splice(idx);
+            return s;
+        }
+        idx++;
     }
-    else {
-        return new UrlPathWithParams(part, {});
-    }
+    return new UrlPathWithParams(part, {});
 }
 function split(segment, consumedPaths, slicedPath, config) {
     if (slicedPath.length > 0 &&

@@ -634,15 +634,16 @@ var __extends = (this && this.__extends) || function (d, b) {
         return pos;
     }
     function findOrCreatePath(part, paths) {
-        var matchingIndex = paths.findIndex(function (s) { return s.path === part; });
-        if (matchingIndex > -1) {
-            var r = paths[matchingIndex];
-            paths.splice(matchingIndex);
-            return r;
+        var idx = 0;
+        for (var _i = 0, paths_1 = paths; _i < paths_1.length; _i++) {
+            var s = paths_1[_i];
+            if (s.path === part) {
+                paths.splice(idx);
+                return s;
+            }
+            idx++;
         }
-        else {
-            return new UrlPathWithParams(part, {});
-        }
+        return new UrlPathWithParams(part, {});
     }
     function split(segment, consumedPaths, slicedPath, config) {
         if (slicedPath.length > 0 &&
@@ -991,13 +992,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function createOrReuseChildren(curr, prevState) {
         return curr.children.map(function (child) {
-            var index = prevState.children.findIndex(function (p) { return equalRouteSnapshots(p.value.snapshot, child.value); });
-            if (index >= 0) {
-                return createNode(child, prevState.children[index]);
+            for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
+                var p = _a[_i];
+                if (equalRouteSnapshots(p.value.snapshot, child.value)) {
+                    return createNode(child, p);
+                }
             }
-            else {
-                return createNode(child);
-            }
+            return createNode(child);
         });
     }
     function createActivatedRoute(c) {

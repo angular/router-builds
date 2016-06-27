@@ -190,15 +190,16 @@ function findPosParam(part, posParams, redirectTo) {
     return pos;
 }
 function findOrCreatePath(part, paths) {
-    var matchingIndex = paths.findIndex(function (s) { return s.path === part; });
-    if (matchingIndex > -1) {
-        var r = paths[matchingIndex];
-        paths.splice(matchingIndex);
-        return r;
+    var idx = 0;
+    for (var _i = 0, paths_1 = paths; _i < paths_1.length; _i++) {
+        var s = paths_1[_i];
+        if (s.path === part) {
+            paths.splice(idx);
+            return s;
+        }
+        idx++;
     }
-    else {
-        return new url_tree_1.UrlPathWithParams(part, {});
-    }
+    return new url_tree_1.UrlPathWithParams(part, {});
 }
 function split(segment, consumedPaths, slicedPath, config) {
     if (slicedPath.length > 0 &&
