@@ -24,8 +24,6 @@ import { Tree, TreeNode } from './utils/tree';
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export class RouterState extends Tree {
     /**
@@ -72,8 +70,6 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export class ActivatedRoute {
     /**
@@ -121,8 +117,6 @@ export class InheritedResolve {
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export class ActivatedRouteSnapshot {
     /**
@@ -157,8 +151,6 @@ export class ActivatedRouteSnapshot {
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export class RouterStateSnapshot extends Tree {
     /**

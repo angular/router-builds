@@ -64,8 +64,6 @@ function containsSegmentHelper(container, containee, containeePaths) {
 }
 /**
  * A URL in the tree form.
- *
- * @experimental
  */
 export class UrlTree {
     /**
@@ -88,9 +86,6 @@ export class UrlSegment {
     hasChildren() { return Object.keys(this.children).length > 0; }
     toString() { return serializePaths(this); }
 }
-/**
- * @experimental
- */
 export class UrlPathWithParams {
     constructor(path, parameters) {
         this.path = path;
@@ -148,15 +143,11 @@ export function mapChildrenIntoArray(segment, fn) {
 }
 /**
  * Defines a way to serialize/deserialize a url tree.
- *
- * @experimental
  */
 export class UrlSerializer {
 }
 /**
  * A default implementation of the serialization.
- *
- * @experimental
  */
 export class DefaultUrlSerializer {
     parse(url) {

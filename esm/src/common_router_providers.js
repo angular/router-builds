@@ -62,8 +62,6 @@ export function setupRouterInitializer(injector) {
  *
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
- *
- * @experimental
  */
 export function provideRouter(_config, _opts) {
     return [

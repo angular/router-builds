@@ -25,8 +25,6 @@ import { provideRouter as provideRouter_ } from './common_router_providers';
  *
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
- *
- * @experimental
  */
 export function provideRouter(config, opts = {}) {
     return [

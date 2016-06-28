@@ -30,8 +30,6 @@ var url_tree_1 = require('./url_tree');
 var collection_1 = require('./utils/collection');
 /**
  * An event triggered when a navigation starts
- *
- * @experimental
  */
 var NavigationStart = (function () {
     function NavigationStart(id, url) {
@@ -44,8 +42,6 @@ var NavigationStart = (function () {
 exports.NavigationStart = NavigationStart;
 /**
  * An event triggered when a navigation ends successfully
- *
- * @experimental
  */
 var NavigationEnd = (function () {
     function NavigationEnd(id, url, urlAfterRedirects) {
@@ -61,8 +57,6 @@ var NavigationEnd = (function () {
 exports.NavigationEnd = NavigationEnd;
 /**
  * An event triggered when a navigation is canceled
- *
- * @experimental
  */
 var NavigationCancel = (function () {
     function NavigationCancel(id, url) {
@@ -75,8 +69,6 @@ var NavigationCancel = (function () {
 exports.NavigationCancel = NavigationCancel;
 /**
  * An event triggered when a navigation fails due to unexpected error
- *
- * @experimental
  */
 var NavigationError = (function () {
     function NavigationError(id, url, error) {
@@ -92,8 +84,6 @@ var NavigationError = (function () {
 exports.NavigationError = NavigationError;
 /**
  * An event triggered when routes are recognized
- *
- * @experimental
  */
 var RoutesRecognized = (function () {
     function RoutesRecognized(id, url, urlAfterRedirects, state) {
@@ -110,8 +100,6 @@ var RoutesRecognized = (function () {
 exports.RoutesRecognized = RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
- *
- * @experimental
  */
 var Router = (function () {
     /**
@@ -354,18 +342,12 @@ var Router = (function () {
     return Router;
 }());
 exports.Router = Router;
-/**
- * @experimental
- */
 var CanActivate = (function () {
     function CanActivate(route) {
         this.route = route;
     }
     return CanActivate;
 }());
-/**
- * @experimental
- */
 var CanDeactivate = (function () {
     function CanDeactivate(component, route) {
         this.component = component;

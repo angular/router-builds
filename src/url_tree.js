@@ -67,8 +67,6 @@ function containsSegmentHelper(container, containee, containeePaths) {
 }
 /**
  * A URL in the tree form.
- *
- * @experimental
  */
 var UrlTree = (function () {
     /**
@@ -96,9 +94,6 @@ var UrlSegment = (function () {
     return UrlSegment;
 }());
 exports.UrlSegment = UrlSegment;
-/**
- * @experimental
- */
 var UrlPathWithParams = (function () {
     function UrlPathWithParams(path, parameters) {
         this.path = path;
@@ -162,8 +157,6 @@ function mapChildrenIntoArray(segment, fn) {
 exports.mapChildrenIntoArray = mapChildrenIntoArray;
 /**
  * Defines a way to serialize/deserialize a url tree.
- *
- * @experimental
  */
 var UrlSerializer = (function () {
     function UrlSerializer() {
@@ -173,8 +166,6 @@ var UrlSerializer = (function () {
 exports.UrlSerializer = UrlSerializer;
 /**
  * A default implementation of the serialization.
- *
- * @experimental
  */
 var DefaultUrlSerializer = (function () {
     function DefaultUrlSerializer() {

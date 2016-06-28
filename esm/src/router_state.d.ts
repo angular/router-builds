@@ -25,8 +25,6 @@ import { Tree } from './utils/tree';
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
     queryParams: Observable<Params>;
@@ -49,8 +47,6 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export declare class ActivatedRoute {
     url: Observable<UrlPathWithParams[]>;
@@ -79,8 +75,6 @@ export declare class InheritedResolve {
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export declare class ActivatedRouteSnapshot {
     url: UrlPathWithParams[];
@@ -102,8 +96,6 @@ export declare class ActivatedRouteSnapshot {
  *   }
  * }
  * ```
- *
- * @experimental
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     url: string;

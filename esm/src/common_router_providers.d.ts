@@ -13,9 +13,6 @@ import { RouterOutletMap } from './router_outlet_map';
 import { UrlSerializer } from './url_tree';
 export declare const ROUTER_CONFIG: OpaqueToken;
 export declare const ROUTER_OPTIONS: OpaqueToken;
-/**
- * @experimental
- */
 export interface ExtraOptions {
     enableTracing?: boolean;
 }
@@ -38,7 +35,5 @@ export declare function setupRouterInitializer(injector: Injector): () => any;
  *
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
- *
- * @experimental
  */
 export declare function provideRouter(_config: RouterConfig, _opts: ExtraOptions): any[];

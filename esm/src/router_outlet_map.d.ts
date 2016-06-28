@@ -6,9 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { RouterOutlet } from './directives/router_outlet';
-/**
- * @experimental
- */
 export declare class RouterOutletMap {
     registerOutlet(name: string, outlet: RouterOutlet): void;
 }

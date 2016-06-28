@@ -65,8 +65,6 @@ exports.setupRouterInitializer = setupRouterInitializer;
  *
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
- *
- * @experimental
  */
 function provideRouter(_config, _opts) {
     return [
