@@ -29,6 +29,8 @@ import { UrlTree, createEmptyUrlTree } from './url_tree';
 import { forEach, merge, shallowEqual } from './utils/collection';
 /**
  * An event triggered when a navigation starts
+ *
+ * @experimental
  */
 export class NavigationStart {
     constructor(id, url) {
@@ -39,6 +41,8 @@ export class NavigationStart {
 }
 /**
  * An event triggered when a navigation ends successfully
+ *
+ * @experimental
  */
 export class NavigationEnd {
     constructor(id, url, urlAfterRedirects) {
@@ -52,6 +56,8 @@ export class NavigationEnd {
 }
 /**
  * An event triggered when a navigation is canceled
+ *
+ * @experimental
  */
 export class NavigationCancel {
     constructor(id, url) {
@@ -62,6 +68,8 @@ export class NavigationCancel {
 }
 /**
  * An event triggered when a navigation fails due to unexpected error
+ *
+ * @experimental
  */
 export class NavigationError {
     constructor(id, url, error) {
@@ -75,6 +83,8 @@ export class NavigationError {
 }
 /**
  * An event triggered when routes are recognized
+ *
+ * @experimental
  */
 export class RoutesRecognized {
     constructor(id, url, urlAfterRedirects, state) {
@@ -89,6 +99,8 @@ export class RoutesRecognized {
 }
 /**
  * The `Router` is responsible for mapping URLs to components.
+ *
+ * @experimental
  */
 export class Router {
     /**
@@ -312,11 +324,17 @@ export class Router {
         });
     }
 }
+/**
+ * @experimental
+ */
 class CanActivate {
     constructor(route) {
         this.route = route;
     }
 }
+/**
+ * @experimental
+ */
 class CanDeactivate {
     constructor(component, route) {
         this.component = component;

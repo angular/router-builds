@@ -24,6 +24,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * Name of the primary outlet.
      * @type {string}
+     *
+     * @experimental
      */
     var PRIMARY_OUTLET = 'PRIMARY_OUTLET';
     /**
@@ -138,6 +140,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     /**
      * A URL in the tree form.
+     *
+     * @experimental
      */
     var UrlTree = (function () {
         /**
@@ -163,6 +167,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         UrlSegment.prototype.toString = function () { return serializePaths(this); };
         return UrlSegment;
     }());
+    /**
+     * @experimental
+     */
     var UrlPathWithParams = (function () {
         function UrlPathWithParams(path, parameters) {
             this.path = path;
@@ -210,6 +217,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     /**
      * Defines a way to serialize/deserialize a url tree.
+     *
+     * @experimental
      */
     var UrlSerializer = (function () {
         function UrlSerializer() {
@@ -218,6 +227,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * A default implementation of the serialization.
+     *
+     * @experimental
      */
     var DefaultUrlSerializer = (function () {
         function DefaultUrlSerializer() {
@@ -831,6 +842,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *   }
      * }
      * ```
+     *
+     * @experimental
      */
     var RouterState = (function (_super) {
         __extends(RouterState, _super);
@@ -879,6 +892,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *   }
      * }
      * ```
+     *
+     * @experimental
      */
     var ActivatedRoute = (function () {
         /**
@@ -936,6 +951,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *   }
      * }
      * ```
+     *
+     * @experimental
      */
     var ActivatedRouteSnapshot = (function () {
         /**
@@ -971,6 +988,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *   }
      * }
      * ```
+     *
+     * @experimental
      */
     var RouterStateSnapshot = (function (_super) {
         __extends(RouterStateSnapshot, _super);
@@ -1547,6 +1566,9 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * @experimental
+     */
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
             /** @internal */
@@ -1557,6 +1579,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * An event triggered when a navigation starts
+     *
+     * @experimental
      */
     var NavigationStart = (function () {
         function NavigationStart(id, url) {
@@ -1568,6 +1592,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * An event triggered when a navigation ends successfully
+     *
+     * @experimental
      */
     var NavigationEnd = (function () {
         function NavigationEnd(id, url, urlAfterRedirects) {
@@ -1582,6 +1608,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * An event triggered when a navigation is canceled
+     *
+     * @experimental
      */
     var NavigationCancel = (function () {
         function NavigationCancel(id, url) {
@@ -1593,6 +1621,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * An event triggered when a navigation fails due to unexpected error
+     *
+     * @experimental
      */
     var NavigationError = (function () {
         function NavigationError(id, url, error) {
@@ -1607,6 +1637,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * An event triggered when routes are recognized
+     *
+     * @experimental
      */
     var RoutesRecognized = (function () {
         function RoutesRecognized(id, url, urlAfterRedirects, state) {
@@ -1622,6 +1654,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /**
      * The `Router` is responsible for mapping URLs to components.
+     *
+     * @experimental
      */
     var Router = (function () {
         /**
@@ -1863,12 +1897,18 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return Router;
     }());
+    /**
+     * @experimental
+     */
     var CanActivate = (function () {
         function CanActivate(route) {
             this.route = route;
         }
         return CanActivate;
     }());
+    /**
+     * @experimental
+     */
     var CanDeactivate = (function () {
         function CanDeactivate(component, route) {
             this.component = component;
@@ -2407,6 +2447,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *
      * bootstrap(AppCmp, [provideRouter(router)]);
      * ```
+     *
+     * @experimental
      */
     function provideRouter$1(_config, _opts) {
         return [
@@ -2444,6 +2486,8 @@ var __extends = (this && this.__extends) || function (d, b) {
      *
      * bootstrap(AppCmp, [provideRouter(router)]);
      * ```
+     *
+     * @experimental
      */
     function provideRouter(config, opts) {
         if (opts === void 0) { opts = {}; }
@@ -2451,6 +2495,9 @@ var __extends = (this && this.__extends) || function (d, b) {
             { provide: _angular_common.PlatformLocation, useClass: _angular_platformBrowser.BrowserPlatformLocation }
         ].concat(provideRouter$1(config, opts));
     }
+    /**
+     * @experimental
+     */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive];
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.NavigationCancel = NavigationCancel;

@@ -30,6 +30,8 @@ var tree_1 = require('./utils/tree');
  *   }
  * }
  * ```
+ *
+ * @experimental
  */
 var RouterState = (function (_super) {
     __extends(RouterState, _super);
@@ -80,6 +82,8 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  *   }
  * }
  * ```
+ *
+ * @experimental
  */
 var ActivatedRoute = (function () {
     /**
@@ -139,6 +143,8 @@ exports.InheritedResolve = InheritedResolve;
  *   }
  * }
  * ```
+ *
+ * @experimental
  */
 var ActivatedRouteSnapshot = (function () {
     /**
@@ -175,6 +181,8 @@ exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
  *   }
  * }
  * ```
+ *
+ * @experimental
  */
 var RouterStateSnapshot = (function (_super) {
     __extends(RouterStateSnapshot, _super);
