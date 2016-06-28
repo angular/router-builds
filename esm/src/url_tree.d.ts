@@ -2,6 +2,8 @@ export declare function createEmptyUrlTree(): UrlTree;
 export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
 /**
  * A URL in the tree form.
+ *
+ * @experimental
  */
 export declare class UrlTree {
     root: UrlSegment;
@@ -23,6 +25,9 @@ export declare class UrlSegment {
     hasChildren(): boolean;
     toString(): string;
 }
+/**
+ * @experimental
+ */
 export declare class UrlPathWithParams {
     path: string;
     parameters: {
@@ -41,6 +46,8 @@ export declare function mapChildren(segment: UrlSegment, fn: (v: UrlSegment, k: 
 export declare function mapChildrenIntoArray<T>(segment: UrlSegment, fn: (v: UrlSegment, k: string) => T[]): T[];
 /**
  * Defines a way to serialize/deserialize a url tree.
+ *
+ * @experimental
  */
 export declare abstract class UrlSerializer {
     /**
@@ -54,6 +61,8 @@ export declare abstract class UrlSerializer {
 }
 /**
  * A default implementation of the serialization.
+ *
+ * @experimental
  */
 export declare class DefaultUrlSerializer implements UrlSerializer {
     parse(url: string): UrlTree;

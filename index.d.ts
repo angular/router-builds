@@ -17,4 +17,7 @@ export { provideRouter } from './src/router_providers';
 export { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './src/router_state';
 export { PRIMARY_OUTLET, Params } from './src/shared';
 export { DefaultUrlSerializer, UrlPathWithParams, UrlSerializer, UrlTree } from './src/url_tree';
+/**
+ * @experimental
+ */
 export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkActive)[];

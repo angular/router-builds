@@ -8,10 +8,14 @@
 /**
  * Name of the primary outlet.
  * @type {string}
+ *
+ * @experimental
  */
 export declare const PRIMARY_OUTLET: string;
 /**
  * A collection of parameters.
+ *
+ * @experimental
  */
 export declare type Params = {
     [key: string]: any;

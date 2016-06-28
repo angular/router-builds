@@ -24,6 +24,8 @@ export interface NavigationExtras {
 }
 /**
  * An event triggered when a navigation starts
+ *
+ * @experimental
  */
 export declare class NavigationStart {
     id: number;
@@ -33,6 +35,8 @@ export declare class NavigationStart {
 }
 /**
  * An event triggered when a navigation ends successfully
+ *
+ * @experimental
  */
 export declare class NavigationEnd {
     id: number;
@@ -43,6 +47,8 @@ export declare class NavigationEnd {
 }
 /**
  * An event triggered when a navigation is canceled
+ *
+ * @experimental
  */
 export declare class NavigationCancel {
     id: number;
@@ -52,6 +58,8 @@ export declare class NavigationCancel {
 }
 /**
  * An event triggered when a navigation fails due to unexpected error
+ *
+ * @experimental
  */
 export declare class NavigationError {
     id: number;
@@ -62,6 +70,8 @@ export declare class NavigationError {
 }
 /**
  * An event triggered when routes are recognized
+ *
+ * @experimental
  */
 export declare class RoutesRecognized {
     id: number;
@@ -71,9 +81,14 @@ export declare class RoutesRecognized {
     constructor(id: number, url: string, urlAfterRedirects: string, state: RouterStateSnapshot);
     toString(): string;
 }
+/**
+ * @experimental
+ */
 export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError;
 /**
  * The `Router` is responsible for mapping URLs to components.
+ *
+ * @experimental
  */
 export declare class Router {
     private rootComponentType;

@@ -6,13 +6,25 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Type } from '@angular/core';
+/**
+ * @experimental
+ */
 export declare type RouterConfig = Route[];
+/**
+ * @experimental
+ */
 export declare type Data = {
     [name: string]: any;
 };
+/**
+ * @experimental
+ */
 export declare type ResolveData = {
     [name: string]: any;
 };
+/**
+ * @experimental
+ */
 export interface Route {
     path?: string;
     /**

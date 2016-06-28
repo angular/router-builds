@@ -26,6 +26,8 @@ var common_router_providers_1 = require('./common_router_providers');
  *
  * bootstrap(AppCmp, [provideRouter(router)]);
  * ```
+ *
+ * @experimental
  */
 function provideRouter(config, opts) {
     if (opts === void 0) { opts = {}; }
