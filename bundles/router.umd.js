@@ -582,7 +582,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function match(segment, route, paths) {
         if (route.path === '') {
-            if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
+            if ((route.terminal || route.pathMatch === 'full') &&
+                (segment.hasChildren() || paths.length > 0)) {
                 throw new NoMatch();
             }
             else {
@@ -689,7 +690,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return routes.filter(function (r) { return emptyPathRedirect(segment, slicedPath, r); }).length > 0;
     }
     function emptyPathRedirect(segment, slicedPath, r) {
-        if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+        if ((segment.hasChildren() || slicedPath.length > 0) && (r.terminal || r.pathMatch === 'full'))
             return false;
         return r.path === '' && r.redirectTo !== undefined;
     }
@@ -721,6 +722,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         if (route.path.startsWith('/')) {
             throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
+        }
+        if (route.path === '' && route.redirectTo !== undefined &&
+            (route.terminal === undefined && route.pathMatch === undefined)) {
+            var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+            throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
         }
     }
     /**
@@ -1376,7 +1382,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function match$1(segment, route, paths) {
         if (route.path === '') {
-            if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
+            if ((route.terminal || route.pathMatch === 'full') &&
+                (segment.hasChildren() || paths.length > 0)) {
                 throw new NoMatch$1();
             }
             else {
@@ -1402,7 +1409,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             consumedPaths.push(current);
             currentIndex++;
         }
-        if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
+        if ((route.terminal || route.pathMatch === 'full') &&
+            (segment.hasChildren() || currentIndex < paths.length)) {
             throw new NoMatch$1();
         }
         var parameters = merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters);
@@ -1492,7 +1500,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return routes.filter(function (r) { return emptyPathMatch(segment, slicedPath, r); }).length > 0;
     }
     function emptyPathMatch(segment, slicedPath, r) {
-        if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+        if ((segment.hasChildren() || slicedPath.length > 0) && (r.terminal || r.pathMatch === 'full'))
             return false;
         return r.path === '' && r.redirectTo === undefined;
     }
@@ -1524,6 +1532,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
     }
     function resolveComponent(resolver, snapshot) {
+        // TODO: vsavkin change to typeof snapshot.component === 'string' in beta2
         if (snapshot.component && snapshot._routeConfig) {
             return resolver.resolveComponent(snapshot.component);
         }
@@ -2112,7 +2121,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 { provide: ActivatedRoute, useValue: future },
                 { provide: RouterOutletMap, useValue: outletMap }
             ]);
-            outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
+            outlet.activate(future, resolved, outletMap);
         };
         ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
             if (outlet && outlet.isActivated) {
@@ -2279,8 +2288,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         /**
          * @internal
          */
-        function RouterOutlet(parentOutletMap, location, name) {
+        function RouterOutlet(parentOutletMap, location, componentFactoryResolver, name) {
             this.location = location;
+            this.componentFactoryResolver = componentFactoryResolver;
             parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
         }
         Object.defineProperty(RouterOutlet.prototype, "isActivated", {
@@ -2312,9 +2322,24 @@ var __extends = (this && this.__extends) || function (d, b) {
                 this.activated = null;
             }
         };
-        RouterOutlet.prototype.activate = function (factory, activatedRoute, providers, outletMap) {
+        RouterOutlet.prototype.activate = function (activatedRoute, providers, outletMap) {
             this.outletMap = outletMap;
             this._activatedRoute = activatedRoute;
+            var snapshot = activatedRoute._futureSnapshot;
+            var component = snapshot._routeConfig.component;
+            var factory;
+            try {
+                factory = typeof component === 'string' ?
+                    snapshot._resolvedComponentFactory :
+                    this.componentFactoryResolver.resolveComponentFactory(component);
+            }
+            catch (e) {
+                if (!(e instanceof _angular_core.NoComponentFactoryError))
+                    throw e;
+                var componentName = component ? component.name : null;
+                console.warn("No component factory found for '" + componentName + "'. Add '" + componentName + "' to the 'precompile' list of your application component. This will be required in a future release of the router.");
+                factory = snapshot._resolvedComponentFactory;
+            }
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
             this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         };
@@ -2328,6 +2353,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     RouterOutlet.ctorParameters = [
         { type: RouterOutletMap, },
         { type: _angular_core.ViewContainerRef, },
+        { type: _angular_core.ComponentFactoryResolver, },
         { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
     ];
     var ROUTER_CONFIG = new _angular_core.OpaqueToken('ROUTER_CONFIG');

@@ -13,8 +13,9 @@ var RouterOutlet = (function () {
     /**
      * @internal
      */
-    function RouterOutlet(parentOutletMap, location, name) {
+    function RouterOutlet(parentOutletMap, location, componentFactoryResolver, name) {
         this.location = location;
+        this.componentFactoryResolver = componentFactoryResolver;
         parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
     }
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
@@ -46,9 +47,24 @@ var RouterOutlet = (function () {
             this.activated = null;
         }
     };
-    RouterOutlet.prototype.activate = function (factory, activatedRoute, providers, outletMap) {
+    RouterOutlet.prototype.activate = function (activatedRoute, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
+        var snapshot = activatedRoute._futureSnapshot;
+        var component = snapshot._routeConfig.component;
+        var factory;
+        try {
+            factory = typeof component === 'string' ?
+                snapshot._resolvedComponentFactory :
+                this.componentFactoryResolver.resolveComponentFactory(component);
+        }
+        catch (e) {
+            if (!(e instanceof core_1.NoComponentFactoryError))
+                throw e;
+            var componentName = component ? component.name : null;
+            console.warn("No component factory found for '" + componentName + "'. Add '" + componentName + "' to the 'precompile' list of your application component. This will be required in a future release of the router.");
+            factory = snapshot._resolvedComponentFactory;
+        }
         var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
     };
@@ -60,6 +76,7 @@ var RouterOutlet = (function () {
     RouterOutlet.ctorParameters = [
         { type: router_outlet_map_1.RouterOutletMap, },
         { type: core_1.ViewContainerRef, },
+        { type: core_1.ComponentFactoryResolver, },
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ['name',] },] },
     ];
     return RouterOutlet;

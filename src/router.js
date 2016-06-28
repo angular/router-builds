@@ -600,7 +600,7 @@ var ActivateRoutes = (function () {
             { provide: router_state_1.ActivatedRoute, useValue: future },
             { provide: router_outlet_map_1.RouterOutletMap, useValue: outletMap }
         ]);
-        outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
+        outlet.activate(future, resolved, outletMap);
     };
     ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
         if (outlet && outlet.isActivated) {

@@ -128,7 +128,8 @@ function matchPathsWithParamsAgainstRoute(rawSegment, route, paths) {
 }
 function match(segment, route, paths) {
     if (route.path === '') {
-        if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
+        if ((route.terminal || route.pathMatch === 'full') &&
+            (segment.hasChildren() || paths.length > 0)) {
             throw new NoMatch();
         }
         else {
@@ -232,7 +233,7 @@ function containsEmptyPathRedirects(segment, slicedPath, routes) {
     return routes.filter(r => emptyPathRedirect(segment, slicedPath, r)).length > 0;
 }
 function emptyPathRedirect(segment, slicedPath, r) {
-    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+    if ((segment.hasChildren() || slicedPath.length > 0) && (r.terminal || r.pathMatch === 'full'))
         return false;
     return r.path === '' && r.redirectTo !== undefined;
 }

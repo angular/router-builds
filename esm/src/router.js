@@ -559,7 +559,7 @@ class ActivateRoutes {
             { provide: ActivatedRoute, useValue: future },
             { provide: RouterOutletMap, useValue: outletMap }
         ]);
-        outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
+        outlet.activate(future, resolved, outletMap);
     }
     deactivateOutletAndItChildren(outlet) {
         if (outlet && outlet.isActivated) {

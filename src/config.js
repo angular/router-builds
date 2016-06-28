@@ -26,5 +26,10 @@ function validateNode(route) {
     if (route.path.startsWith('/')) {
         throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
     }
+    if (route.path === '' && route.redirectTo !== undefined &&
+        (route.terminal === undefined && route.pathMatch === undefined)) {
+        var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+        throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+    }
 }
 //# sourceMappingURL=config.js.map

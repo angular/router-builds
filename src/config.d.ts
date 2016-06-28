@@ -15,7 +15,11 @@ export declare type ResolveData = {
 };
 export interface Route {
     path?: string;
+    /**
+     * @deprecated - use `pathMatch` instead
+     */
     terminal?: boolean;
+    pathMatch?: 'full' | 'prefix';
     component?: Type | string;
     outlet?: string;
     canActivate?: any[];
