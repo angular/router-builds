@@ -7,7 +7,7 @@
  */
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Data, ResolveData } from './config';
+import { Data } from './config';
 import { Params } from './shared';
 import { UrlPathWithParams, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
@@ -26,7 +26,7 @@ import { Tree } from './utils/tree';
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
     queryParams: Observable<Params>;
@@ -37,8 +37,7 @@ export declare class RouterState extends Tree<ActivatedRoute> {
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
- * through
- * the params and urlSegments observables.
+ * through the params, urlSegments, and data observables.
  *
  * ### Usage
  *
@@ -46,11 +45,12 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: Observable<string> = route.params.map(p => p.id);
+ *     const data = route.data.map(d => d.user); //includes `data` and `resolve`
  *   }
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class ActivatedRoute {
     url: Observable<UrlPathWithParams[]>;
@@ -61,12 +61,6 @@ export declare class ActivatedRoute {
     snapshot: ActivatedRouteSnapshot;
     toString(): string;
 }
-export declare class InheritedResolve {
-    parent: InheritedResolve;
-    current: ResolveData;
-    constructor(parent: InheritedResolve, current: ResolveData);
-    static empty: InheritedResolve;
-}
 /**
  * Contains the information about a component loaded in an outlet at a particular moment in time.
  *
@@ -76,11 +70,12 @@ export declare class InheritedResolve {
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: string = route.snapshot.params.id;
+ *     const data = route.snapshot.data;
  *   }
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class ActivatedRouteSnapshot {
     url: UrlPathWithParams[];
@@ -103,7 +98,7 @@ export declare class ActivatedRouteSnapshot {
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     url: string;

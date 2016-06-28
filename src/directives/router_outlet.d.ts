@@ -8,6 +8,19 @@
 import { ResolvedReflectiveProvider } from '@angular/core';
 import { RouterOutletMap } from '../router_outlet_map';
 import { ActivatedRoute } from '../router_state';
+/**
+ * A router outlet is a placeholder that Angular dynamically fills based on the application's route.
+ *
+ * ## Use
+ *
+ * ```
+ * <router-outlet></router-outlet>
+ * <router-outlet name="left"></router-outlet>
+ * <router-outlet name="right"></router-outlet>
+ * ```
+ *
+ * @stable
+ */
 export declare class RouterOutlet {
     private location;
     private componentFactoryResolver;

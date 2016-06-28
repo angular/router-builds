@@ -141,7 +141,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * A URL in the tree form.
      *
-     * @experimental
+     * @stable
      */
     var UrlTree = (function () {
         /**
@@ -155,6 +155,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
         return UrlTree;
     }());
+    /**
+     * @stable
+     */
     var UrlSegment = (function () {
         function UrlSegment(pathsWithParams, children) {
             var _this = this;
@@ -168,7 +171,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return UrlSegment;
     }());
     /**
-     * @experimental
+     * @stable
      */
     var UrlPathWithParams = (function () {
         function UrlPathWithParams(path, parameters) {
@@ -843,7 +846,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      * ```
      *
-     * @experimental
+     * @stable
      */
     var RouterState = (function (_super) {
         __extends(RouterState, _super);
@@ -880,8 +883,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     /**
      * Contains the information about a component loaded in an outlet. The information is provided
-     * through
-     * the params and urlSegments observables.
+     * through the params, urlSegments, and data observables.
      *
      * ### Usage
      *
@@ -889,11 +891,12 @@ var __extends = (this && this.__extends) || function (d, b) {
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: Observable<string> = route.params.map(p => p.id);
+     *     const data = route.data.map(d => d.user); //includes `data` and `resolve`
      *   }
      * }
      * ```
      *
-     * @experimental
+     * @stable
      */
     var ActivatedRoute = (function () {
         /**
@@ -912,6 +915,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return ActivatedRoute;
     }());
+    /**
+     * @internal
+     */
     var InheritedResolve = (function () {
         function InheritedResolve(parent, current) {
             this.parent = parent;
@@ -948,11 +954,12 @@ var __extends = (this && this.__extends) || function (d, b) {
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: string = route.snapshot.params.id;
+     *     const data = route.snapshot.data;
      *   }
      * }
      * ```
      *
-     * @experimental
+     * @stable
      */
     var ActivatedRouteSnapshot = (function () {
         /**
@@ -989,7 +996,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      * ```
      *
-     * @experimental
+     * @stable
      */
     var RouterStateSnapshot = (function (_super) {
         __extends(RouterStateSnapshot, _super);
@@ -1567,7 +1574,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * found in the LICENSE file at https://angular.io/license
      */
     /**
-     * @experimental
+     * @stable
      */
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
@@ -1580,7 +1587,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * An event triggered when a navigation starts
      *
-     * @experimental
+     * @stable
      */
     var NavigationStart = (function () {
         function NavigationStart(id, url) {
@@ -1593,7 +1600,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * An event triggered when a navigation ends successfully
      *
-     * @experimental
+     * @stable
      */
     var NavigationEnd = (function () {
         function NavigationEnd(id, url, urlAfterRedirects) {
@@ -1609,7 +1616,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * An event triggered when a navigation is canceled
      *
-     * @experimental
+     * @stable
      */
     var NavigationCancel = (function () {
         function NavigationCancel(id, url) {
@@ -1622,7 +1629,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * An event triggered when a navigation fails due to unexpected error
      *
-     * @experimental
+     * @stable
      */
     var NavigationError = (function () {
         function NavigationError(id, url, error) {
@@ -1638,7 +1645,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * An event triggered when routes are recognized
      *
-     * @experimental
+     * @stable
      */
     var RoutesRecognized = (function () {
         function RoutesRecognized(id, url, urlAfterRedirects, state) {
@@ -1655,7 +1662,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * The `Router` is responsible for mapping URLs to components.
      *
-     * @experimental
+     * See {@link RouterConfig) for more details and examples.
+     *
+     * @stable
      */
     var Router = (function () {
         /**
@@ -2377,7 +2386,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 if (!(e instanceof _angular_core.NoComponentFactoryError))
                     throw e;
                 var componentName = component ? component.name : null;
-                console.warn("No component factory found for '" + componentName + "'. Add '" + componentName + "' to the 'precompile' list of your application component. This will be required in a future release of the router.");
+                console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred to by the RouterConfig are compiled, you must add '" + componentName + "' to the 'precompile' array of your application component. This will be required in a future release of the router.");
                 factory = snapshot._resolvedComponentFactory;
             }
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
@@ -2431,7 +2440,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return function () { return null; };
     }
     /**
-     * A list of {@link Provider}s. To use the router, you must add this to your application.
+     * An array of {@link Provider}s. To use the router, you must add this to your application.
      *
      * ### Example
      *
@@ -2441,14 +2450,14 @@ var __extends = (this && this.__extends) || function (d, b) {
      *   // ...
      * }
      *
-     * const router = [
-     *   {path: '/home', component: Home}
+     * const config = [
+     *   {path: 'home', component: Home}
      * ];
      *
-     * bootstrap(AppCmp, [provideRouter(router)]);
+     * bootstrap(AppCmp, [provideRouter(config)]);
      * ```
      *
-     * @experimental
+     * @stable
      */
     function provideRouter$1(_config, _opts) {
         return [
@@ -2481,10 +2490,10 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      *
      * const router = [
-     *   {path: '/home', component: Home}
+     *   {path: 'home', component: Home}
      * ];
      *
-     * bootstrap(AppCmp, [provideRouter(router)]);
+     * bootstrap(AppCmp, [provideRouter(router, {enableTracing: true})]);
      * ```
      *
      * @experimental

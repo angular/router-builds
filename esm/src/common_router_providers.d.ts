@@ -22,7 +22,7 @@ export interface ExtraOptions {
 export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, config: RouterConfig, opts: ExtraOptions): Router;
 export declare function setupRouterInitializer(injector: Injector): () => any;
 /**
- * A list of {@link Provider}s. To use the router, you must add this to your application.
+ * An array of {@link Provider}s. To use the router, you must add this to your application.
  *
  * ### Example
  *
@@ -32,13 +32,13 @@ export declare function setupRouterInitializer(injector: Injector): () => any;
  *   // ...
  * }
  *
- * const router = [
- *   {path: '/home', component: Home}
+ * const config = [
+ *   {path: 'home', component: Home}
  * ];
  *
- * bootstrap(AppCmp, [provideRouter(router)]);
+ * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare function provideRouter(_config: RouterConfig, _opts: ExtraOptions): any[];

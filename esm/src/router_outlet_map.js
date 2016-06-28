@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @experimental
+ * @stable
  */
 export class RouterOutletMap {
     constructor() {

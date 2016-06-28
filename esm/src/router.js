@@ -30,7 +30,7 @@ import { forEach, merge, shallowEqual } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  *
- * @experimental
+ * @stable
  */
 export class NavigationStart {
     constructor(id, url) {
@@ -42,7 +42,7 @@ export class NavigationStart {
 /**
  * An event triggered when a navigation ends successfully
  *
- * @experimental
+ * @stable
  */
 export class NavigationEnd {
     constructor(id, url, urlAfterRedirects) {
@@ -57,7 +57,7 @@ export class NavigationEnd {
 /**
  * An event triggered when a navigation is canceled
  *
- * @experimental
+ * @stable
  */
 export class NavigationCancel {
     constructor(id, url) {
@@ -69,7 +69,7 @@ export class NavigationCancel {
 /**
  * An event triggered when a navigation fails due to unexpected error
  *
- * @experimental
+ * @stable
  */
 export class NavigationError {
     constructor(id, url, error) {
@@ -84,7 +84,7 @@ export class NavigationError {
 /**
  * An event triggered when routes are recognized
  *
- * @experimental
+ * @stable
  */
 export class RoutesRecognized {
     constructor(id, url, urlAfterRedirects, state) {
@@ -100,7 +100,9 @@ export class RoutesRecognized {
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
- * @experimental
+ * See {@link RouterConfig) for more details and examples.
+ *
+ * @stable
  */
 export class Router {
     /**

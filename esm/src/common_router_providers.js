@@ -46,7 +46,7 @@ export function setupRouterInitializer(injector) {
     return () => null;
 }
 /**
- * A list of {@link Provider}s. To use the router, you must add this to your application.
+ * An array of {@link Provider}s. To use the router, you must add this to your application.
  *
  * ### Example
  *
@@ -56,14 +56,14 @@ export function setupRouterInitializer(injector) {
  *   // ...
  * }
  *
- * const router = [
- *   {path: '/home', component: Home}
+ * const config = [
+ *   {path: 'home', component: Home}
  * ];
  *
- * bootstrap(AppCmp, [provideRouter(router)]);
+ * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @experimental
+ * @stable
  */
 export function provideRouter(_config, _opts) {
     return [

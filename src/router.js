@@ -31,7 +31,7 @@ var collection_1 = require('./utils/collection');
 /**
  * An event triggered when a navigation starts
  *
- * @experimental
+ * @stable
  */
 var NavigationStart = (function () {
     function NavigationStart(id, url) {
@@ -45,7 +45,7 @@ exports.NavigationStart = NavigationStart;
 /**
  * An event triggered when a navigation ends successfully
  *
- * @experimental
+ * @stable
  */
 var NavigationEnd = (function () {
     function NavigationEnd(id, url, urlAfterRedirects) {
@@ -62,7 +62,7 @@ exports.NavigationEnd = NavigationEnd;
 /**
  * An event triggered when a navigation is canceled
  *
- * @experimental
+ * @stable
  */
 var NavigationCancel = (function () {
     function NavigationCancel(id, url) {
@@ -76,7 +76,7 @@ exports.NavigationCancel = NavigationCancel;
 /**
  * An event triggered when a navigation fails due to unexpected error
  *
- * @experimental
+ * @stable
  */
 var NavigationError = (function () {
     function NavigationError(id, url, error) {
@@ -93,7 +93,7 @@ exports.NavigationError = NavigationError;
 /**
  * An event triggered when routes are recognized
  *
- * @experimental
+ * @stable
  */
 var RoutesRecognized = (function () {
     function RoutesRecognized(id, url, urlAfterRedirects, state) {
@@ -111,7 +111,9 @@ exports.RoutesRecognized = RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
- * @experimental
+ * See {@link RouterConfig) for more details and examples.
+ *
+ * @stable
  */
 var Router = (function () {
     /**

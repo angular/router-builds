@@ -7,7 +7,7 @@
  */
 "use strict";
 /**
- * @experimental
+ * @stable
  */
 var RouterOutletMap = (function () {
     function RouterOutletMap() {

@@ -65,7 +65,7 @@ function containsSegmentHelper(container, containee, containeePaths) {
 /**
  * A URL in the tree form.
  *
- * @experimental
+ * @stable
  */
 export class UrlTree {
     /**
@@ -78,6 +78,9 @@ export class UrlTree {
     }
     toString() { return new DefaultUrlSerializer().serialize(this); }
 }
+/**
+ * @stable
+ */
 export class UrlSegment {
     constructor(pathsWithParams, children) {
         this.pathsWithParams = pathsWithParams;
@@ -89,7 +92,7 @@ export class UrlSegment {
     toString() { return serializePaths(this); }
 }
 /**
- * @experimental
+ * @stable
  */
 export class UrlPathWithParams {
     constructor(path, parameters) {

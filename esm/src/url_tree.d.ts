@@ -3,7 +3,7 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
 /**
  * A URL in the tree form.
  *
- * @experimental
+ * @stable
  */
 export declare class UrlTree {
     root: UrlSegment;
@@ -13,6 +13,9 @@ export declare class UrlTree {
     fragment: string;
     toString(): string;
 }
+/**
+ * @stable
+ */
 export declare class UrlSegment {
     pathsWithParams: UrlPathWithParams[];
     children: {
@@ -26,7 +29,7 @@ export declare class UrlSegment {
     toString(): string;
 }
 /**
- * @experimental
+ * @stable
  */
 export declare class UrlPathWithParams {
     path: string;

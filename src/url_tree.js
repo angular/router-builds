@@ -68,7 +68,7 @@ function containsSegmentHelper(container, containee, containeePaths) {
 /**
  * A URL in the tree form.
  *
- * @experimental
+ * @stable
  */
 var UrlTree = (function () {
     /**
@@ -83,6 +83,9 @@ var UrlTree = (function () {
     return UrlTree;
 }());
 exports.UrlTree = UrlTree;
+/**
+ * @stable
+ */
 var UrlSegment = (function () {
     function UrlSegment(pathsWithParams, children) {
         var _this = this;
@@ -97,7 +100,7 @@ var UrlSegment = (function () {
 }());
 exports.UrlSegment = UrlSegment;
 /**
- * @experimental
+ * @stable
  */
 var UrlPathWithParams = (function () {
     function UrlPathWithParams(path, parameters) {

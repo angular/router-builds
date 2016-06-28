@@ -31,7 +31,7 @@ var tree_1 = require('./utils/tree');
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 var RouterState = (function (_super) {
     __extends(RouterState, _super);
@@ -70,8 +70,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
 }
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
- * through
- * the params and urlSegments observables.
+ * through the params, urlSegments, and data observables.
  *
  * ### Usage
  *
@@ -79,11 +78,12 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: Observable<string> = route.params.map(p => p.id);
+ *     const data = route.data.map(d => d.user); //includes `data` and `resolve`
  *   }
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 var ActivatedRoute = (function () {
     /**
@@ -103,6 +103,9 @@ var ActivatedRoute = (function () {
     return ActivatedRoute;
 }());
 exports.ActivatedRoute = ActivatedRoute;
+/**
+ * @internal
+ */
 var InheritedResolve = (function () {
     function InheritedResolve(parent, current) {
         this.parent = parent;
@@ -140,11 +143,12 @@ exports.InheritedResolve = InheritedResolve;
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: string = route.snapshot.params.id;
+ *     const data = route.snapshot.data;
  *   }
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 var ActivatedRouteSnapshot = (function () {
     /**
@@ -182,7 +186,7 @@ exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
  * }
  * ```
  *
- * @experimental
+ * @stable
  */
 var RouterStateSnapshot = (function (_super) {
     __extends(RouterStateSnapshot, _super);

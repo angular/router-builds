@@ -7,7 +7,7 @@
  */
 import { RouterOutlet } from './directives/router_outlet';
 /**
- * @experimental
+ * @stable
  */
 export declare class RouterOutletMap {
     registerOutlet(name: string, outlet: RouterOutlet): void;

@@ -21,10 +21,10 @@ var common_router_providers_1 = require('./common_router_providers');
  * }
  *
  * const router = [
- *   {path: '/home', component: Home}
+ *   {path: 'home', component: Home}
  * ];
  *
- * bootstrap(AppCmp, [provideRouter(router)]);
+ * bootstrap(AppCmp, [provideRouter(router, {enableTracing: true})]);
  * ```
  *
  * @experimental
