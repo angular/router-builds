@@ -117,7 +117,7 @@ exports.RoutesRecognized = RoutesRecognized;
  */
 var Router = (function () {
     /**
-     * @internal
+     * Creates the router service.
      */
     function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
         this.rootComponentType = rootComponentType;

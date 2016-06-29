@@ -12,11 +12,14 @@ import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/forkJoin';
+import { Location } from '@angular/common';
+import { ComponentResolver, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { RouterConfig } from './config';
+import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
-import { UrlTree } from './url_tree';
+import { UrlSerializer, UrlTree } from './url_tree';
 export interface NavigationExtras {
     relativeTo?: ActivatedRoute;
     queryParams?: Params;
@@ -105,6 +108,10 @@ export declare class Router {
     private routerEvents;
     private navigationId;
     private config;
+    /**
+     * Creates the router service.
+     */
+    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, config: RouterConfig);
     /**
      * Returns the current route state.
      */

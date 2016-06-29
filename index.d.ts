@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { RouterLink } from './src/directives/router_link';
+import { RouterLink, RouterLinkWithHref } from './src/directives/router_link';
 import { RouterLinkActive } from './src/directives/router_link_active';
 import { RouterOutlet } from './src/directives/router_outlet';
 export { ExtraOptions } from './src/common_router_providers';
@@ -20,4 +20,4 @@ export { DefaultUrlSerializer, UrlPathWithParams, UrlSerializer, UrlTree } from 
 /**
  * @experimental
  */
-export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkActive)[];
+export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkWithHref | typeof RouterLinkActive)[];

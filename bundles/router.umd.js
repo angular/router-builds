@@ -1668,7 +1668,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      */
     var Router = (function () {
         /**
-         * @internal
+         * Creates the router service.
          */
         function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
             this.rootComponentType = rootComponentType;
@@ -2233,28 +2233,18 @@ var __extends = (this && this.__extends) || function (d, b) {
             enumerable: true,
             configurable: true
         });
-        RouterLink.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
         RouterLink.prototype.onClick = function (button, ctrlKey, metaKey) {
             if (button !== 0 || ctrlKey || metaKey) {
                 return true;
             }
-            if (typeof this.target === 'string' && this.target != '_self') {
-                return true;
-            }
-            this.router.navigateByUrl(this.urlTree);
+            this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
             return false;
-        };
-        RouterLink.prototype.updateTargetUrlAndHref = function () {
-            this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
-            if (this.urlTree) {
-                this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-            }
         };
         return RouterLink;
     }());
     /** @nocollapse */
     RouterLink.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: '[routerLink]' },] },
+        { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
     ];
     /** @nocollapse */
     RouterLink.ctorParameters = [
@@ -2264,6 +2254,64 @@ var __extends = (this && this.__extends) || function (d, b) {
     ];
     /** @nocollapse */
     RouterLink.propDecorators = {
+        'queryParams': [{ type: _angular_core.Input },],
+        'fragment': [{ type: _angular_core.Input },],
+        'routerLink': [{ type: _angular_core.Input },],
+        'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
+    var RouterLinkWithHref = (function () {
+        /**
+         * @internal
+         */
+        function RouterLinkWithHref(router, route, locationStrategy) {
+            this.router = router;
+            this.route = route;
+            this.locationStrategy = locationStrategy;
+            this.commands = [];
+        }
+        Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+            set: function (data) {
+                if (Array.isArray(data)) {
+                    this.commands = data;
+                }
+                else {
+                    this.commands = [data];
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
+            if (button !== 0 || ctrlKey || metaKey) {
+                return true;
+            }
+            if (typeof this.target === 'string' && this.target != '_self') {
+                return true;
+            }
+            this.router.navigateByUrl(this.urlTree);
+            return false;
+        };
+        RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
+            this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            if (this.urlTree) {
+                this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+            }
+        };
+        return RouterLinkWithHref;
+    }());
+    /** @nocollapse */
+    RouterLinkWithHref.decorators = [
+        { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = [
+        { type: Router, },
+        { type: ActivatedRoute, },
+        { type: _angular_common.LocationStrategy, },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.propDecorators = {
         'target': [{ type: _angular_core.Input },],
         'queryParams': [{ type: _angular_core.Input },],
         'fragment': [{ type: _angular_core.Input },],
@@ -2291,6 +2339,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterLinkActive.prototype.ngAfterContentInit = function () {
             var _this = this;
             this.links.changes.subscribe(function (s) { return _this.update(); });
+            this.linksWithHrefs.changes.subscribe(function (s) { return _this.update(); });
             this.update();
         };
         Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
@@ -2309,11 +2358,16 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
         RouterLinkActive.prototype.update = function () {
             var _this = this;
-            if (!this.links || this.links.length === 0)
+            if (!this.links || !this.linksWithHrefs)
                 return;
             var currentUrlTree = this.router.parseUrl(this.router.url);
-            var isActive = this.links.reduce(function (res, link) { return res || containsTree(currentUrlTree, link.urlTree, _this.routerLinkActiveOptions.exact); }, false);
-            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActive); });
+            var isActiveLinks = this.reduceList(currentUrlTree, this.links);
+            var isActiveLinksWithHrefs = this.reduceList(currentUrlTree, this.linksWithHrefs);
+            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
+        };
+        RouterLinkActive.prototype.reduceList = function (currentUrlTree, q) {
+            var _this = this;
+            return q.reduce(function (res, link) { return res || containsTree(currentUrlTree, link.urlTree, _this.routerLinkActiveOptions.exact); }, false);
         };
         return RouterLinkActive;
     }());
@@ -2330,6 +2384,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /** @nocollapse */
     RouterLinkActive.propDecorators = {
         'links': [{ type: _angular_core.ContentChildren, args: [RouterLink,] },],
+        'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref,] },],
         'routerLinkActiveOptions': [{ type: _angular_core.Input },],
         'routerLinkActive': [{ type: _angular_core.Input },],
     };
@@ -2507,7 +2562,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * @experimental
      */
-    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive];
+    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.NavigationCancel = NavigationCancel;
     exports.NavigationEnd = NavigationEnd;

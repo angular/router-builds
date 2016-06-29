@@ -106,7 +106,7 @@ export class RoutesRecognized {
  */
 export class Router {
     /**
-     * @internal
+     * Creates the router service.
      */
     constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
         this.rootComponentType = rootComponentType;

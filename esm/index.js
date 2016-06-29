@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { RouterLink } from './src/directives/router_link';
+import { RouterLink, RouterLinkWithHref } from './src/directives/router_link';
 import { RouterLinkActive } from './src/directives/router_link_active';
 import { RouterOutlet } from './src/directives/router_outlet';
 export { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RoutesRecognized } from './src/router';
@@ -17,5 +17,5 @@ export { DefaultUrlSerializer, UrlPathWithParams, UrlSerializer, UrlTree } from 
 /**
  * @experimental
  */
-export const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive];
+export const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 //# sourceMappingURL=index.js.map

@@ -30,6 +30,7 @@ var RouterLinkActive = (function () {
     RouterLinkActive.prototype.ngAfterContentInit = function () {
         var _this = this;
         this.links.changes.subscribe(function (s) { return _this.update(); });
+        this.linksWithHrefs.changes.subscribe(function (s) { return _this.update(); });
         this.update();
     };
     Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
@@ -48,13 +49,18 @@ var RouterLinkActive = (function () {
     RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     RouterLinkActive.prototype.update = function () {
         var _this = this;
-        if (!this.links || this.links.length === 0)
+        if (!this.links || !this.linksWithHrefs)
             return;
         var currentUrlTree = this.router.parseUrl(this.router.url);
-        var isActive = this.links.reduce(function (res, link) {
+        var isActiveLinks = this.reduceList(currentUrlTree, this.links);
+        var isActiveLinksWithHrefs = this.reduceList(currentUrlTree, this.linksWithHrefs);
+        this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
+    };
+    RouterLinkActive.prototype.reduceList = function (currentUrlTree, q) {
+        var _this = this;
+        return q.reduce(function (res, link) {
             return res || url_tree_1.containsTree(currentUrlTree, link.urlTree, _this.routerLinkActiveOptions.exact);
         }, false);
-        this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActive); });
     };
     /** @nocollapse */
     RouterLinkActive.decorators = [
@@ -69,6 +75,7 @@ var RouterLinkActive = (function () {
     /** @nocollapse */
     RouterLinkActive.propDecorators = {
         'links': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLink,] },],
+        'linksWithHrefs': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLinkWithHref,] },],
         'routerLinkActiveOptions': [{ type: core_1.Input },],
         'routerLinkActive': [{ type: core_1.Input },],
     };

@@ -32,26 +32,16 @@ var RouterLink = (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
     RouterLink.prototype.onClick = function (button, ctrlKey, metaKey) {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        if (typeof this.target === 'string' && this.target != '_self') {
-            return true;
-        }
-        this.router.navigateByUrl(this.urlTree);
+        this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         return false;
-    };
-    RouterLink.prototype.updateTargetUrlAndHref = function () {
-        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
-        if (this.urlTree) {
-            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-        }
     };
     /** @nocollapse */
     RouterLink.decorators = [
-        { type: core_1.Directive, args: [{ selector: '[routerLink]' },] },
+        { type: core_1.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
     ];
     /** @nocollapse */
     RouterLink.ctorParameters = [
@@ -61,6 +51,65 @@ var RouterLink = (function () {
     ];
     /** @nocollapse */
     RouterLink.propDecorators = {
+        'queryParams': [{ type: core_1.Input },],
+        'fragment': [{ type: core_1.Input },],
+        'routerLink': [{ type: core_1.Input },],
+        'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
+    return RouterLink;
+}());
+exports.RouterLink = RouterLink;
+var RouterLinkWithHref = (function () {
+    /**
+     * @internal
+     */
+    function RouterLinkWithHref(router, route, locationStrategy) {
+        this.router = router;
+        this.route = route;
+        this.locationStrategy = locationStrategy;
+        this.commands = [];
+    }
+    Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+        set: function (data) {
+            if (Array.isArray(data)) {
+                this.commands = data;
+            }
+            else {
+                this.commands = [data];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+    RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
+        if (button !== 0 || ctrlKey || metaKey) {
+            return true;
+        }
+        if (typeof this.target === 'string' && this.target != '_self') {
+            return true;
+        }
+        this.router.navigateByUrl(this.urlTree);
+        return false;
+    };
+    RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
+        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        if (this.urlTree) {
+            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+        }
+    };
+    /** @nocollapse */
+    RouterLinkWithHref.decorators = [
+        { type: core_1.Directive, args: [{ selector: 'a[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = [
+        { type: router_1.Router, },
+        { type: router_state_1.ActivatedRoute, },
+        { type: common_1.LocationStrategy, },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.propDecorators = {
         'target': [{ type: core_1.Input },],
         'queryParams': [{ type: core_1.Input },],
         'fragment': [{ type: core_1.Input },],
@@ -68,7 +117,7 @@ var RouterLink = (function () {
         'routerLink': [{ type: core_1.Input },],
         'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
-    return RouterLink;
+    return RouterLinkWithHref;
 }());
-exports.RouterLink = RouterLink;
+exports.RouterLinkWithHref = RouterLinkWithHref;
 //# sourceMappingURL=router_link.js.map

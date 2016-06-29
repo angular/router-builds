@@ -41,7 +41,24 @@ import { UrlTree } from '../url_tree';
  *
  * @stable
  */
-export declare class RouterLink implements OnChanges {
+export declare class RouterLink {
+    private router;
+    private route;
+    private locationStrategy;
+    private commands;
+    queryParams: {
+        [k: string]: any;
+    };
+    fragment: string;
+    urlTree: UrlTree;
+    routerLink: any[] | string;
+    onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
+}
+/**
+ * See {@link RouterLink} for more information.
+ * @stable
+ */
+export declare class RouterLinkWithHref implements OnChanges {
     private router;
     private route;
     private locationStrategy;

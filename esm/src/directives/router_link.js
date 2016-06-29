@@ -27,6 +27,49 @@ export class RouterLink {
             this.commands = [data];
         }
     }
+    onClick(button, ctrlKey, metaKey) {
+        if (button !== 0 || ctrlKey || metaKey) {
+            return true;
+        }
+        this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        return false;
+    }
+}
+/** @nocollapse */
+RouterLink.decorators = [
+    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+];
+/** @nocollapse */
+RouterLink.ctorParameters = [
+    { type: Router, },
+    { type: ActivatedRoute, },
+    { type: LocationStrategy, },
+];
+/** @nocollapse */
+RouterLink.propDecorators = {
+    'queryParams': [{ type: Input },],
+    'fragment': [{ type: Input },],
+    'routerLink': [{ type: Input },],
+    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+};
+export class RouterLinkWithHref {
+    /**
+     * @internal
+     */
+    constructor(router, route, locationStrategy) {
+        this.router = router;
+        this.route = route;
+        this.locationStrategy = locationStrategy;
+        this.commands = [];
+    }
+    set routerLink(data) {
+        if (Array.isArray(data)) {
+            this.commands = data;
+        }
+        else {
+            this.commands = [data];
+        }
+    }
     ngOnChanges(changes) { this.updateTargetUrlAndHref(); }
     onClick(button, ctrlKey, metaKey) {
         if (button !== 0 || ctrlKey || metaKey) {
@@ -46,17 +89,17 @@ export class RouterLink {
     }
 }
 /** @nocollapse */
-RouterLink.decorators = [
-    { type: Directive, args: [{ selector: '[routerLink]' },] },
+RouterLinkWithHref.decorators = [
+    { type: Directive, args: [{ selector: 'a[routerLink]' },] },
 ];
 /** @nocollapse */
-RouterLink.ctorParameters = [
+RouterLinkWithHref.ctorParameters = [
     { type: Router, },
     { type: ActivatedRoute, },
     { type: LocationStrategy, },
 ];
 /** @nocollapse */
-RouterLink.propDecorators = {
+RouterLinkWithHref.propDecorators = {
     'target': [{ type: Input },],
     'queryParams': [{ type: Input },],
     'fragment': [{ type: Input },],
