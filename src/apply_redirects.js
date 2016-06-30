@@ -206,14 +206,23 @@ function split(segment, consumedPaths, slicedPath, config) {
     if (slicedPath.length > 0 &&
         containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, config)) {
         var s = new url_tree_1.UrlSegment(consumedPaths, createChildrenForEmptyPaths(config, new url_tree_1.UrlSegment(slicedPath, segment.children)));
-        return { segment: s, slicedPath: [] };
+        return { segment: mergeTrivialChildren(s), slicedPath: [] };
     }
     else if (slicedPath.length === 0 && containsEmptyPathRedirects(segment, slicedPath, config)) {
         var s = new url_tree_1.UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
-        return { segment: s, slicedPath: slicedPath };
+        return { segment: mergeTrivialChildren(s), slicedPath: slicedPath };
     }
     else {
         return { segment: segment, slicedPath: slicedPath };
+    }
+}
+function mergeTrivialChildren(s) {
+    if (s.numberOfChildren === 1 && s.children[shared_1.PRIMARY_OUTLET]) {
+        var c = s.children[shared_1.PRIMARY_OUTLET];
+        return new url_tree_1.UrlSegment(s.pathsWithParams.concat(c.pathsWithParams), c.children);
+    }
+    else {
+        return s;
     }
 }
 function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {

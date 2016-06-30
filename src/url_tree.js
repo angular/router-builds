@@ -24,7 +24,7 @@ exports.containsTree = containsTree;
 function equalSegments(container, containee) {
     if (!equalPath(container.pathsWithParams, containee.pathsWithParams))
         return false;
-    if (Object.keys(container.children).length !== Object.keys(containee.children).length)
+    if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (var c in containee.children) {
         if (!container.children[c])
@@ -42,7 +42,7 @@ function containsSegmentHelper(container, containee, containeePaths) {
         var current = container.pathsWithParams.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
-        if (Object.keys(containee.children).length > 0)
+        if (containee.hasChildren())
             return false;
         return true;
     }
@@ -61,6 +61,8 @@ function containsSegmentHelper(container, containee, containeePaths) {
         var current = containeePaths.slice(0, container.pathsWithParams.length);
         var next = containeePaths.slice(container.pathsWithParams.length);
         if (!equalPath(container.pathsWithParams, current))
+            return false;
+        if (!container.children[shared_1.PRIMARY_OUTLET])
             return false;
         return containsSegmentHelper(container.children[shared_1.PRIMARY_OUTLET], containee, next);
     }
@@ -94,7 +96,18 @@ var UrlSegment = (function () {
         this.parent = null;
         collection_1.forEach(children, function (v, k) { return v.parent = _this; });
     }
-    UrlSegment.prototype.hasChildren = function () { return Object.keys(this.children).length > 0; };
+    /**
+     * Return true if the segment has child segments
+     */
+    UrlSegment.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+    Object.defineProperty(UrlSegment.prototype, "numberOfChildren", {
+        /**
+         * Returns the number of child sements.
+         */
+        get: function () { return Object.keys(this.children).length; },
+        enumerable: true,
+        configurable: true
+    });
     UrlSegment.prototype.toString = function () { return serializePaths(this); };
     return UrlSegment;
 }());

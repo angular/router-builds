@@ -25,7 +25,14 @@ export declare class UrlSegment {
     constructor(pathsWithParams: UrlPathWithParams[], children: {
         [key: string]: UrlSegment;
     });
+    /**
+     * Return true if the segment has child segments
+     */
     hasChildren(): boolean;
+    /**
+     * Returns the number of child sements.
+     */
+    numberOfChildren: number;
     toString(): string;
 }
 /**

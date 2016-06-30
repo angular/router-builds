@@ -97,7 +97,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function equalSegments(container, containee) {
         if (!equalPath(container.pathsWithParams, containee.pathsWithParams))
             return false;
-        if (Object.keys(container.children).length !== Object.keys(containee.children).length)
+        if (container.numberOfChildren !== containee.numberOfChildren)
             return false;
         for (var c in containee.children) {
             if (!container.children[c])
@@ -115,7 +115,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var current = container.pathsWithParams.slice(0, containeePaths.length);
             if (!equalPath(current, containeePaths))
                 return false;
-            if (Object.keys(containee.children).length > 0)
+            if (containee.hasChildren())
                 return false;
             return true;
         }
@@ -134,6 +134,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             var current = containeePaths.slice(0, container.pathsWithParams.length);
             var next = containeePaths.slice(container.pathsWithParams.length);
             if (!equalPath(container.pathsWithParams, current))
+                return false;
+            if (!container.children[PRIMARY_OUTLET])
                 return false;
             return containsSegmentHelper(container.children[PRIMARY_OUTLET], containee, next);
         }
@@ -166,7 +168,18 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.parent = null;
             forEach(children, function (v, k) { return v.parent = _this; });
         }
-        UrlSegment.prototype.hasChildren = function () { return Object.keys(this.children).length > 0; };
+        /**
+         * Return true if the segment has child segments
+         */
+        UrlSegment.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+        Object.defineProperty(UrlSegment.prototype, "numberOfChildren", {
+            /**
+             * Returns the number of child sements.
+             */
+            get: function () { return Object.keys(this.children).length; },
+            enumerable: true,
+            configurable: true
+        });
         UrlSegment.prototype.toString = function () { return serializePaths(this); };
         return UrlSegment;
     }());
@@ -664,14 +677,23 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (slicedPath.length > 0 &&
             containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, config)) {
             var s = new UrlSegment(consumedPaths, createChildrenForEmptyPaths(config, new UrlSegment(slicedPath, segment.children)));
-            return { segment: s, slicedPath: [] };
+            return { segment: mergeTrivialChildren(s), slicedPath: [] };
         }
         else if (slicedPath.length === 0 && containsEmptyPathRedirects(segment, slicedPath, config)) {
             var s = new UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
-            return { segment: s, slicedPath: slicedPath };
+            return { segment: mergeTrivialChildren(s), slicedPath: slicedPath };
         }
         else {
             return { segment: segment, slicedPath: slicedPath };
+        }
+    }
+    function mergeTrivialChildren(s) {
+        if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
+            var c = s.children[PRIMARY_OUTLET];
+            return new UrlSegment(s.pathsWithParams.concat(c.pathsWithParams), c.children);
+        }
+        else {
+            return s;
         }
     }
     function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
@@ -2560,10 +2582,14 @@ var __extends = (this && this.__extends) || function (d, b) {
         ].concat(provideRouter$1(config, opts));
     }
     /**
-     * @experimental
+     * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
+    exports.RouterLink = RouterLink;
+    exports.RouterLinkWithHref = RouterLinkWithHref;
+    exports.RouterLinkActive = RouterLinkActive;
+    exports.RouterOutlet = RouterOutlet;
     exports.NavigationCancel = NavigationCancel;
     exports.NavigationEnd = NavigationEnd;
     exports.NavigationError = NavigationError;

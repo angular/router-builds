@@ -21,7 +21,7 @@ export function containsTree(container, containee, exact) {
 function equalSegments(container, containee) {
     if (!equalPath(container.pathsWithParams, containee.pathsWithParams))
         return false;
-    if (Object.keys(container.children).length !== Object.keys(containee.children).length)
+    if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (let c in containee.children) {
         if (!container.children[c])
@@ -39,7 +39,7 @@ function containsSegmentHelper(container, containee, containeePaths) {
         const current = container.pathsWithParams.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
-        if (Object.keys(containee.children).length > 0)
+        if (containee.hasChildren())
             return false;
         return true;
     }
@@ -58,6 +58,8 @@ function containsSegmentHelper(container, containee, containeePaths) {
         const current = containeePaths.slice(0, container.pathsWithParams.length);
         const next = containeePaths.slice(container.pathsWithParams.length);
         if (!equalPath(container.pathsWithParams, current))
+            return false;
+        if (!container.children[PRIMARY_OUTLET])
             return false;
         return containsSegmentHelper(container.children[PRIMARY_OUTLET], containee, next);
     }
@@ -88,7 +90,14 @@ export class UrlSegment {
         this.parent = null;
         forEach(children, (v, k) => v.parent = this);
     }
-    hasChildren() { return Object.keys(this.children).length > 0; }
+    /**
+     * Return true if the segment has child segments
+     */
+    hasChildren() { return this.numberOfChildren > 0; }
+    /**
+     * Returns the number of child sements.
+     */
+    get numberOfChildren() { return Object.keys(this.children).length; }
     toString() { return serializePaths(this); }
 }
 /**
