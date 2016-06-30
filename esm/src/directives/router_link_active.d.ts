@@ -5,7 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AfterContentInit, OnChanges, OnDestroy } from '@angular/core';
+import { AfterContentInit, ElementRef, OnChanges, OnDestroy, QueryList, Renderer } from '@angular/core';
+import { Router } from '../router';
+import { RouterLink, RouterLinkWithHref } from './router_link';
 /**
  * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
  * becomes active.
@@ -52,11 +54,12 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private router;
     private element;
     private renderer;
-    private links;
-    private linksWithHrefs;
+    links: QueryList<RouterLink>;
+    linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
     private subscription;
     private routerLinkActiveOptions;
+    constructor(router: Router, element: ElementRef, renderer: Renderer);
     ngAfterContentInit(): void;
     routerLinkActive: string[] | string;
     ngOnChanges(changes: {}): any;

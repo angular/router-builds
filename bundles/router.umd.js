@@ -2236,9 +2236,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         return outlet;
     }
     var RouterLink = (function () {
-        /**
-         * @internal
-         */
         function RouterLink(router, route, locationStrategy) {
             this.router = router;
             this.route = route;
@@ -2344,9 +2341,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
     var RouterLinkActive = (function () {
-        /**
-         * @internal
-         */
         function RouterLinkActive(router, element, renderer) {
             var _this = this;
             this.router = router;

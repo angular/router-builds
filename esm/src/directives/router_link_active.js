@@ -10,9 +10,6 @@ import { NavigationEnd, Router } from '../router';
 import { containsTree } from '../url_tree';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 export class RouterLinkActive {
-    /**
-     * @internal
-     */
     constructor(router, element, renderer) {
         this.router = router;
         this.element = element;

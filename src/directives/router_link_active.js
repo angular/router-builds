@@ -11,9 +11,6 @@ var router_1 = require('../router');
 var url_tree_1 = require('../url_tree');
 var router_link_1 = require('./router_link');
 var RouterLinkActive = (function () {
-    /**
-     * @internal
-     */
     function RouterLinkActive(router, element, renderer) {
         var _this = this;
         this.router = router;

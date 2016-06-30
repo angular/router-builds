@@ -11,9 +11,6 @@ var core_1 = require('@angular/core');
 var router_1 = require('../router');
 var router_state_1 = require('../router_state');
 var RouterLink = (function () {
-    /**
-     * @internal
-     */
     function RouterLink(router, route, locationStrategy) {
         this.router = router;
         this.route = route;

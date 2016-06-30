@@ -10,9 +10,6 @@ import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 export class RouterLink {
-    /**
-     * @internal
-     */
     constructor(router, route, locationStrategy) {
         this.router = router;
         this.route = route;

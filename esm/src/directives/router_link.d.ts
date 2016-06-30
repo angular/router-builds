@@ -1,4 +1,14 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { LocationStrategy } from '@angular/common';
 import { OnChanges } from '@angular/core';
+import { Router } from '../router';
+import { ActivatedRoute } from '../router_state';
 import { UrlTree } from '../url_tree';
 /**
  * The RouterLink directive lets you link to specific parts of your app.
@@ -51,6 +61,7 @@ export declare class RouterLink {
     };
     fragment: string;
     urlTree: UrlTree;
+    constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
 }
