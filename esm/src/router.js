@@ -364,7 +364,9 @@ class PreActivation {
                 return this.runCanActivate(s.route);
             }
             else if (s instanceof CanDeactivate) {
-                return this.runCanDeactivate(s.component, s.route);
+                // workaround https://github.com/Microsoft/TypeScript/issues/7271
+                const s2 = s;
+                return this.runCanDeactivate(s2.component, s2.route);
             }
             else {
                 throw new Error('Cannot be reached');

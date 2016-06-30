@@ -1969,7 +1969,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                     return _this.runCanActivate(s.route);
                 }
                 else if (s instanceof CanDeactivate) {
-                    return _this.runCanDeactivate(s.component, s.route);
+                    // workaround https://github.com/Microsoft/TypeScript/issues/7271
+                    var s2 = s;
+                    return _this.runCanDeactivate(s2.component, s2.route);
                 }
                 else {
                     throw new Error('Cannot be reached');
