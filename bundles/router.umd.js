@@ -492,18 +492,18 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return NoMatch;
     }());
-    var GlobalRedirect = (function () {
-        function GlobalRedirect(paths) {
+    var AbsoluteRedirect = (function () {
+        function AbsoluteRedirect(paths) {
             this.paths = paths;
         }
-        return GlobalRedirect;
+        return AbsoluteRedirect;
     }());
     function applyRedirects(urlTree, config) {
         try {
             return createUrlTree(urlTree, expandSegment(config, urlTree.root, PRIMARY_OUTLET));
         }
         catch (e) {
-            if (e instanceof GlobalRedirect) {
+            if (e instanceof AbsoluteRedirect) {
                 return createUrlTree(urlTree, new UrlSegment([], (_a = {}, _a[PRIMARY_OUTLET] = new UrlSegment(e.paths, {}), _a)));
             }
             else if (e instanceof NoMatch) {
@@ -569,7 +569,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
         var newPaths = applyRedirectCommands([], route.redirectTo, {});
         if (route.redirectTo.startsWith('/')) {
-            throw new GlobalRedirect(newPaths);
+            throw new AbsoluteRedirect(newPaths);
         }
         else {
             return new UrlSegment(newPaths, {});
@@ -579,7 +579,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         var _a = match(segment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
         var newPaths = applyRedirectCommands(consumedPaths, route.redirectTo, positionalParamSegments);
         if (route.redirectTo.startsWith('/')) {
-            throw new GlobalRedirect(newPaths);
+            throw new AbsoluteRedirect(newPaths);
         }
         else {
             return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
@@ -1703,6 +1703,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.resetConfig(config);
             this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
+            this.futureUrlTree = this.currentUrlTree;
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
         /**
@@ -1795,6 +1796,17 @@ var __extends = (this && this.__extends) || function (d, b) {
             return createUrlTree$1(a, this.currentUrlTree, commands, queryParams, fragment);
         };
         /**
+         * Used by RouterLinkWithHref to update HREFs.
+         * We have to use the futureUrl because we run change detection ind the middle of activation when
+         * the current url has not been updated yet.
+         * @internal
+         */
+        Router.prototype.createUrlTreeUsingFutureUrl = function (commands, _a) {
+            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
+            var a = relativeTo ? relativeTo : this.routerState.root;
+            return createUrlTree$1(a, this.futureUrlTree, commands, queryParams, fragment);
+        };
+        /**
          * Navigate based on the provided url. This navigation is always absolute.
          *
          * Returns a promise that:
@@ -1864,17 +1876,16 @@ var __extends = (this && this.__extends) || function (d, b) {
                 return Promise.resolve(false);
             }
             return new Promise(function (resolvePromise, rejectPromise) {
-                var updatedUrl;
                 var state;
                 var navigationIsSuccessful;
                 var preActivation;
                 applyRedirects(url, _this.config)
                     .mergeMap(function (u) {
-                    updatedUrl = u;
-                    return recognize(_this.rootComponentType, _this.config, updatedUrl, _this.serializeUrl(updatedUrl));
+                    _this.futureUrlTree = u;
+                    return recognize(_this.rootComponentType, _this.config, _this.futureUrlTree, _this.serializeUrl(_this.futureUrlTree));
                 })
                     .mergeMap(function (newRouterStateSnapshot) {
-                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl), newRouterStateSnapshot));
+                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree), newRouterStateSnapshot));
                     return resolve(_this.resolver, newRouterStateSnapshot);
                 })
                     .map(function (routerStateSnapshot) {
@@ -1904,10 +1915,10 @@ var __extends = (this && this.__extends) || function (d, b) {
                         return;
                     }
                     new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
-                    _this.currentUrlTree = updatedUrl;
+                    _this.currentUrlTree = _this.futureUrlTree;
                     _this.currentRouterState = state;
                     if (!preventPushState) {
-                        var path = _this.urlSerializer.serialize(updatedUrl);
+                        var path = _this.urlSerializer.serialize(_this.futureUrlTree);
                         if (_this.location.isCurrentPathEqualTo(path)) {
                             _this.location.replaceState(path);
                         }
@@ -1918,7 +1929,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
-                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl)));
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree)));
                     resolvePromise(navigationIsSuccessful);
                 }, function (e) {
                     _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
@@ -2258,7 +2269,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (button !== 0 || ctrlKey || metaKey) {
                 return true;
             }
-            this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            this.router.navigateByUrl(this.urlTree);
             return false;
         };
         return RouterLink;
@@ -2285,10 +2297,16 @@ var __extends = (this && this.__extends) || function (d, b) {
          * @internal
          */
         function RouterLinkWithHref(router, route, locationStrategy) {
+            var _this = this;
             this.router = router;
             this.route = route;
             this.locationStrategy = locationStrategy;
             this.commands = [];
+            this.subscription = router.events.subscribe(function (s) {
+                if (s instanceof NavigationEnd) {
+                    _this.updateTargetUrlAndHref();
+                }
+            });
         }
         Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
             set: function (data) {
@@ -2303,6 +2321,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             configurable: true
         });
         RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+        RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
         RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
             if (button !== 0 || ctrlKey || metaKey) {
                 return true;
@@ -2314,7 +2333,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         };
         RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-            this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
             if (this.urlTree) {
                 this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
             }
@@ -2455,7 +2474,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             catch (e) {
                 if (!(e instanceof _angular_core.NoComponentFactoryError))
                     throw e;
-                // TODO: vsavkin uncomment this once CompoentResolver is deprecated
+                // TODO: vsavkin uncomment this once ComponentResolver is deprecated
                 // const componentName = component ? component.name : null;
                 // console.warn(
                 //     `'${componentName}' not found in precompile array.  To ensure all components referred
@@ -2466,6 +2485,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
             this.activated = this.location.createComponent(factory, this.location.length, inj, []);
+            this.activated.changeDetectorRef.detectChanges();
         };
         return RouterOutlet;
     }());

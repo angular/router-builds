@@ -7,7 +7,7 @@
  */
 import { LocationStrategy } from '@angular/common';
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
-import { Router } from '../router';
+import { NavigationEnd, Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 export class RouterLink {
     constructor(router, route, locationStrategy) {
@@ -28,7 +28,8 @@ export class RouterLink {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.router.navigateByUrl(this.urlTree);
         return false;
     }
 }
@@ -58,6 +59,11 @@ export class RouterLinkWithHref {
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
+        this.subscription = router.events.subscribe(s => {
+            if (s instanceof NavigationEnd) {
+                this.updateTargetUrlAndHref();
+            }
+        });
     }
     set routerLink(data) {
         if (Array.isArray(data)) {
@@ -68,6 +74,7 @@ export class RouterLinkWithHref {
         }
     }
     ngOnChanges(changes) { this.updateTargetUrlAndHref(); }
+    ngOnDestroy() { this.subscription.unsubscribe(); }
     onClick(button, ctrlKey, metaKey) {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
@@ -79,7 +86,7 @@ export class RouterLinkWithHref {
         return false;
     }
     updateTargetUrlAndHref() {
-        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         if (this.urlTree) {
             this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }

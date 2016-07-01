@@ -130,6 +130,7 @@ var Router = (function () {
         this.resetConfig(config);
         this.routerEvents = new Subject_1.Subject();
         this.currentUrlTree = url_tree_1.createEmptyUrlTree();
+        this.futureUrlTree = this.currentUrlTree;
         this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
@@ -222,6 +223,17 @@ var Router = (function () {
         return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     };
     /**
+     * Used by RouterLinkWithHref to update HREFs.
+     * We have to use the futureUrl because we run change detection ind the middle of activation when
+     * the current url has not been updated yet.
+     * @internal
+     */
+    Router.prototype.createUrlTreeUsingFutureUrl = function (commands, _a) {
+        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
+        var a = relativeTo ? relativeTo : this.routerState.root;
+        return create_url_tree_1.createUrlTree(a, this.futureUrlTree, commands, queryParams, fragment);
+    };
+    /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
      * Returns a promise that:
@@ -291,17 +303,16 @@ var Router = (function () {
             return Promise.resolve(false);
         }
         return new Promise(function (resolvePromise, rejectPromise) {
-            var updatedUrl;
             var state;
             var navigationIsSuccessful;
             var preActivation;
             apply_redirects_1.applyRedirects(url, _this.config)
                 .mergeMap(function (u) {
-                updatedUrl = u;
-                return recognize_1.recognize(_this.rootComponentType, _this.config, updatedUrl, _this.serializeUrl(updatedUrl));
+                _this.futureUrlTree = u;
+                return recognize_1.recognize(_this.rootComponentType, _this.config, _this.futureUrlTree, _this.serializeUrl(_this.futureUrlTree));
             })
                 .mergeMap(function (newRouterStateSnapshot) {
-                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl), newRouterStateSnapshot));
+                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree), newRouterStateSnapshot));
                 return resolve_1.resolve(_this.resolver, newRouterStateSnapshot);
             })
                 .map(function (routerStateSnapshot) {
@@ -331,10 +342,10 @@ var Router = (function () {
                     return;
                 }
                 new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
-                _this.currentUrlTree = updatedUrl;
+                _this.currentUrlTree = _this.futureUrlTree;
                 _this.currentRouterState = state;
                 if (!preventPushState) {
-                    var path = _this.urlSerializer.serialize(updatedUrl);
+                    var path = _this.urlSerializer.serialize(_this.futureUrlTree);
                     if (_this.location.isCurrentPathEqualTo(path)) {
                         _this.location.replaceState(path);
                     }
@@ -345,7 +356,7 @@ var Router = (function () {
                 navigationIsSuccessful = true;
             })
                 .then(function () {
-                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(updatedUrl)));
+                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree)));
                 resolvePromise(navigationIsSuccessful);
             }, function (e) {
                 _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));

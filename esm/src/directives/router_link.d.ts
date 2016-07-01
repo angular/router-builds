@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { OnChanges } from '@angular/core';
+import { OnChanges, OnDestroy } from '@angular/core';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 import { UrlTree } from '../url_tree';
@@ -69,7 +69,7 @@ export declare class RouterLink {
  * See {@link RouterLink} for more information.
  * @stable
  */
-export declare class RouterLinkWithHref implements OnChanges {
+export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private router;
     private route;
     private locationStrategy;
@@ -79,10 +79,12 @@ export declare class RouterLinkWithHref implements OnChanges {
         [k: string]: any;
     };
     fragment: string;
+    private subscription;
     href: string;
     urlTree: UrlTree;
     routerLink: any[] | string;
     ngOnChanges(changes: {}): any;
+    ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref();
 }

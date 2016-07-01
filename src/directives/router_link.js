@@ -33,7 +33,8 @@ var RouterLink = (function () {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        this.router.navigate(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.router.navigateByUrl(this.urlTree);
         return false;
     };
     /** @nocollapse */
@@ -61,10 +62,16 @@ var RouterLinkWithHref = (function () {
      * @internal
      */
     function RouterLinkWithHref(router, route, locationStrategy) {
+        var _this = this;
         this.router = router;
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
+        this.subscription = router.events.subscribe(function (s) {
+            if (s instanceof router_1.NavigationEnd) {
+                _this.updateTargetUrlAndHref();
+            }
+        });
     }
     Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
         set: function (data) {
@@ -79,6 +86,7 @@ var RouterLinkWithHref = (function () {
         configurable: true
     });
     RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+    RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
@@ -90,7 +98,7 @@ var RouterLinkWithHref = (function () {
         return false;
     };
     RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         if (this.urlTree) {
             this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }

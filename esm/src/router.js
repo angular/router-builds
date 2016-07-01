@@ -119,6 +119,7 @@ export class Router {
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
+        this.futureUrlTree = this.currentUrlTree;
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
@@ -198,6 +199,16 @@ export class Router {
         return createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     }
     /**
+     * Used by RouterLinkWithHref to update HREFs.
+     * We have to use the futureUrl because we run change detection ind the middle of activation when
+     * the current url has not been updated yet.
+     * @internal
+     */
+    createUrlTreeUsingFutureUrl(commands, { relativeTo, queryParams, fragment } = {}) {
+        const a = relativeTo ? relativeTo : this.routerState.root;
+        return createUrlTree(a, this.futureUrlTree, commands, queryParams, fragment);
+    }
+    /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
      * Returns a promise that:
@@ -263,17 +274,16 @@ export class Router {
             return Promise.resolve(false);
         }
         return new Promise((resolvePromise, rejectPromise) => {
-            let updatedUrl;
             let state;
             let navigationIsSuccessful;
             let preActivation;
             applyRedirects(url, this.config)
                 .mergeMap(u => {
-                updatedUrl = u;
-                return recognize(this.rootComponentType, this.config, updatedUrl, this.serializeUrl(updatedUrl));
+                this.futureUrlTree = u;
+                return recognize(this.rootComponentType, this.config, this.futureUrlTree, this.serializeUrl(this.futureUrlTree));
             })
                 .mergeMap((newRouterStateSnapshot) => {
-                this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(updatedUrl), newRouterStateSnapshot));
+                this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(this.futureUrlTree), newRouterStateSnapshot));
                 return resolve(this.resolver, newRouterStateSnapshot);
             })
                 .map((routerStateSnapshot) => {
@@ -303,10 +313,10 @@ export class Router {
                     return;
                 }
                 new ActivateRoutes(state, this.currentRouterState).activate(this.outletMap);
-                this.currentUrlTree = updatedUrl;
+                this.currentUrlTree = this.futureUrlTree;
                 this.currentRouterState = state;
                 if (!preventPushState) {
-                    let path = this.urlSerializer.serialize(updatedUrl);
+                    let path = this.urlSerializer.serialize(this.futureUrlTree);
                     if (this.location.isCurrentPathEqualTo(path)) {
                         this.location.replaceState(path);
                     }
@@ -317,7 +327,7 @@ export class Router {
                 navigationIsSuccessful = true;
             })
                 .then(() => {
-                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(updatedUrl)));
+                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(this.futureUrlTree)));
                 resolvePromise(navigationIsSuccessful);
             }, e => {
                 this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));

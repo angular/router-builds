@@ -18,18 +18,18 @@ var NoMatch = (function () {
     }
     return NoMatch;
 }());
-var GlobalRedirect = (function () {
-    function GlobalRedirect(paths) {
+var AbsoluteRedirect = (function () {
+    function AbsoluteRedirect(paths) {
         this.paths = paths;
     }
-    return GlobalRedirect;
+    return AbsoluteRedirect;
 }());
 function applyRedirects(urlTree, config) {
     try {
         return createUrlTree(urlTree, expandSegment(config, urlTree.root, shared_1.PRIMARY_OUTLET));
     }
     catch (e) {
-        if (e instanceof GlobalRedirect) {
+        if (e instanceof AbsoluteRedirect) {
             return createUrlTree(urlTree, new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = new url_tree_1.UrlSegment(e.paths, {}), _a)));
         }
         else if (e instanceof NoMatch) {
@@ -98,7 +98,7 @@ function expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, 
 function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
     var newPaths = applyRedirectCommands([], route.redirectTo, {});
     if (route.redirectTo.startsWith('/')) {
-        throw new GlobalRedirect(newPaths);
+        throw new AbsoluteRedirect(newPaths);
     }
     else {
         return new url_tree_1.UrlSegment(newPaths, {});
@@ -108,7 +108,7 @@ function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, r
     var _a = match(segment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
     var newPaths = applyRedirectCommands(consumedPaths, route.redirectTo, positionalParamSegments);
     if (route.redirectTo.startsWith('/')) {
-        throw new GlobalRedirect(newPaths);
+        throw new AbsoluteRedirect(newPaths);
     }
     else {
         return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);

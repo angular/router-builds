@@ -15,7 +15,7 @@ class NoMatch {
         this.segment = segment;
     }
 }
-class GlobalRedirect {
+class AbsoluteRedirect {
     constructor(paths) {
         this.paths = paths;
     }
@@ -25,7 +25,7 @@ export function applyRedirects(urlTree, config) {
         return createUrlTree(urlTree, expandSegment(config, urlTree.root, PRIMARY_OUTLET));
     }
     catch (e) {
-        if (e instanceof GlobalRedirect) {
+        if (e instanceof AbsoluteRedirect) {
             return createUrlTree(urlTree, new UrlSegment([], { [PRIMARY_OUTLET]: new UrlSegment(e.paths, {}) }));
         }
         else if (e instanceof NoMatch) {
@@ -88,7 +88,7 @@ function expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, 
 function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
     const newPaths = applyRedirectCommands([], route.redirectTo, {});
     if (route.redirectTo.startsWith('/')) {
-        throw new GlobalRedirect(newPaths);
+        throw new AbsoluteRedirect(newPaths);
     }
     else {
         return new UrlSegment(newPaths, {});
@@ -98,7 +98,7 @@ function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, r
     const { consumedPaths, lastChild, positionalParamSegments } = match(segment, route, paths);
     const newPaths = applyRedirectCommands(consumedPaths, route.redirectTo, positionalParamSegments);
     if (route.redirectTo.startsWith('/')) {
-        throw new GlobalRedirect(newPaths);
+        throw new AbsoluteRedirect(newPaths);
     }
     else {
         return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
