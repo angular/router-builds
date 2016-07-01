@@ -9,9 +9,6 @@ import { Attribute, ComponentFactoryResolver, Directive, NoComponentFactoryError
 import { RouterOutletMap } from '../router_outlet_map';
 import { PRIMARY_OUTLET } from '../shared';
 export class RouterOutlet {
-    /**
-     * @internal
-     */
     constructor(parentOutletMap, location, componentFactoryResolver, name) {
         this.location = location;
         this.componentFactoryResolver = componentFactoryResolver;

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ResolvedReflectiveProvider } from '@angular/core';
+import { ComponentFactoryResolver, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
 import { RouterOutletMap } from '../router_outlet_map';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -27,6 +27,7 @@ export declare class RouterOutlet {
     private activated;
     private _activatedRoute;
     outletMap: RouterOutletMap;
+    constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, componentFactoryResolver: ComponentFactoryResolver, name: string);
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;

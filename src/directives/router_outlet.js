@@ -10,9 +10,6 @@ var core_1 = require('@angular/core');
 var router_outlet_map_1 = require('../router_outlet_map');
 var shared_1 = require('../shared');
 var RouterOutlet = (function () {
-    /**
-     * @internal
-     */
     function RouterOutlet(parentOutletMap, location, componentFactoryResolver, name) {
         this.location = location;
         this.componentFactoryResolver = componentFactoryResolver;

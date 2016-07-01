@@ -2407,9 +2407,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         'routerLinkActive': [{ type: _angular_core.Input },],
     };
     var RouterOutlet = (function () {
-        /**
-         * @internal
-         */
         function RouterOutlet(parentOutletMap, location, componentFactoryResolver, name) {
             this.location = location;
             this.componentFactoryResolver = componentFactoryResolver;
