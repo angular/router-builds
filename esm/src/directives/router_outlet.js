@@ -9,9 +9,9 @@ import { Attribute, ComponentFactoryResolver, Directive, NoComponentFactoryError
 import { RouterOutletMap } from '../router_outlet_map';
 import { PRIMARY_OUTLET } from '../shared';
 export class RouterOutlet {
-    constructor(parentOutletMap, location, componentFactoryResolver, name) {
+    constructor(parentOutletMap, location, resolver, name) {
         this.location = location;
-        this.componentFactoryResolver = componentFactoryResolver;
+        this.resolver = resolver;
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
     }
     get isActivated() { return !!this.activated; }
@@ -31,16 +31,22 @@ export class RouterOutlet {
             this.activated = null;
         }
     }
-    activate(activatedRoute, providers, outletMap) {
+    activate(activatedRoute, loadedResolver, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
         const snapshot = activatedRoute._futureSnapshot;
         const component = snapshot._routeConfig.component;
         let factory;
         try {
-            factory = typeof component === 'string' ?
-                snapshot._resolvedComponentFactory :
-                this.componentFactoryResolver.resolveComponentFactory(component);
+            if (typeof component === 'string') {
+                factory = snapshot._resolvedComponentFactory;
+            }
+            else if (loadedResolver) {
+                factory = loadedResolver.resolveComponentFactory(component);
+            }
+            else {
+                factory = this.resolver.resolveComponentFactory(component);
+            }
         }
         catch (e) {
             if (!(e instanceof NoComponentFactoryError))

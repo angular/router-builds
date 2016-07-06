@@ -261,5 +261,6 @@ export interface Route {
     data?: Data;
     resolve?: ResolveData;
     children?: Route[];
+    mountChildren?: string;
 }
 export declare function validateConfig(config: RouterConfig): void;

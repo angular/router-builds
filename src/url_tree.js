@@ -146,21 +146,6 @@ function equalPath(a, b) {
     return true;
 }
 exports.equalPath = equalPath;
-function mapChildren(segment, fn) {
-    var newChildren = {};
-    collection_1.forEach(segment.children, function (child, childOutlet) {
-        if (childOutlet === shared_1.PRIMARY_OUTLET) {
-            newChildren[childOutlet] = fn(child, childOutlet);
-        }
-    });
-    collection_1.forEach(segment.children, function (child, childOutlet) {
-        if (childOutlet !== shared_1.PRIMARY_OUTLET) {
-            newChildren[childOutlet] = fn(child, childOutlet);
-        }
-    });
-    return newChildren;
-}
-exports.mapChildren = mapChildren;
 function mapChildrenIntoArray(segment, fn) {
     var res = [];
     collection_1.forEach(segment.children, function (child, childOutlet) {

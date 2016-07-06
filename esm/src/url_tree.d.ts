@@ -50,9 +50,6 @@ export declare class UrlPathWithParams {
 }
 export declare function equalPathsWithParams(a: UrlPathWithParams[], b: UrlPathWithParams[]): boolean;
 export declare function equalPath(a: UrlPathWithParams[], b: UrlPathWithParams[]): boolean;
-export declare function mapChildren(segment: UrlSegment, fn: (v: UrlSegment, k: string) => UrlSegment): {
-    [name: string]: UrlSegment;
-};
 export declare function mapChildrenIntoArray<T>(segment: UrlSegment, fn: (v: UrlSegment, k: string) => T[]): T[];
 /**
  * Defines a way to serialize/deserialize a url tree.

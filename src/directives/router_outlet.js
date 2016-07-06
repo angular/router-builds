@@ -10,9 +10,9 @@ var core_1 = require('@angular/core');
 var router_outlet_map_1 = require('../router_outlet_map');
 var shared_1 = require('../shared');
 var RouterOutlet = (function () {
-    function RouterOutlet(parentOutletMap, location, componentFactoryResolver, name) {
+    function RouterOutlet(parentOutletMap, location, resolver, name) {
         this.location = location;
-        this.componentFactoryResolver = componentFactoryResolver;
+        this.resolver = resolver;
         parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
     }
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
@@ -44,16 +44,22 @@ var RouterOutlet = (function () {
             this.activated = null;
         }
     };
-    RouterOutlet.prototype.activate = function (activatedRoute, providers, outletMap) {
+    RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
         var snapshot = activatedRoute._futureSnapshot;
         var component = snapshot._routeConfig.component;
         var factory;
         try {
-            factory = typeof component === 'string' ?
-                snapshot._resolvedComponentFactory :
-                this.componentFactoryResolver.resolveComponentFactory(component);
+            if (typeof component === 'string') {
+                factory = snapshot._resolvedComponentFactory;
+            }
+            else if (loadedResolver) {
+                factory = loadedResolver.resolveComponentFactory(component);
+            }
+            else {
+                factory = this.resolver.resolveComponentFactory(component);
+            }
         }
         catch (e) {
             if (!(e instanceof core_1.NoComponentFactoryError))

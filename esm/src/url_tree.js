@@ -130,20 +130,6 @@ export function equalPath(a, b) {
     }
     return true;
 }
-export function mapChildren(segment, fn) {
-    const newChildren = {};
-    forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet === PRIMARY_OUTLET) {
-            newChildren[childOutlet] = fn(child, childOutlet);
-        }
-    });
-    forEach(segment.children, (child, childOutlet) => {
-        if (childOutlet !== PRIMARY_OUTLET) {
-            newChildren[childOutlet] = fn(child, childOutlet);
-        }
-    });
-    return newChildren;
-}
 export function mapChildrenIntoArray(segment, fn) {
     let res = [];
     forEach(segment.children, (child, childOutlet) => {

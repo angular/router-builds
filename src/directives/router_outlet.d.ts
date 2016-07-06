@@ -23,14 +23,14 @@ import { ActivatedRoute } from '../router_state';
  */
 export declare class RouterOutlet {
     private location;
-    private componentFactoryResolver;
+    private resolver;
     private activated;
     private _activatedRoute;
     outletMap: RouterOutletMap;
-    constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, componentFactoryResolver: ComponentFactoryResolver, name: string);
+    constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
     isActivated: boolean;
     component: Object;
     activatedRoute: ActivatedRoute;
     deactivate(): void;
-    activate(activatedRoute: ActivatedRoute, providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void;
+    activate(activatedRoute: ActivatedRoute, loadedResolver: ComponentFactoryResolver, providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void;
 }

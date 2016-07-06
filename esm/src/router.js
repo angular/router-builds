@@ -12,7 +12,7 @@ import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/forkJoin';
-import { ReflectiveInjector } from '@angular/core';
+import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
@@ -22,11 +22,12 @@ import { createRouterState } from './create_router_state';
 import { createUrlTree } from './create_url_tree';
 import { recognize } from './recognize';
 import { resolve } from './resolve';
+import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlTree, createEmptyUrlTree } from './url_tree';
-import { forEach, merge, shallowEqual } from './utils/collection';
+import { forEach, merge, shallowEqual, waitForMap } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  *
@@ -108,7 +109,7 @@ export class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
+    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
         this.rootComponentType = rootComponentType;
         this.resolver = resolver;
         this.urlSerializer = urlSerializer;
@@ -120,6 +121,7 @@ export class Router {
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
         this.futureUrlTree = this.currentUrlTree;
+        this.configLoader = new RouterConfigLoader(loader);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
@@ -277,7 +279,7 @@ export class Router {
             let state;
             let navigationIsSuccessful;
             let preActivation;
-            applyRedirects(url, this.config)
+            applyRedirects(this.configLoader, url, this.config)
                 .mergeMap(u => {
                 this.futureUrlTree = u;
                 return recognize(this.rootComponentType, this.config, this.futureUrlTree, this.serializeUrl(this.futureUrlTree));
@@ -500,20 +502,11 @@ class PreActivation {
         });
     }
     resolveNode(resolve, future) {
-        const resolvingObs = [];
-        const resolvedData = {};
-        forEach(resolve, (v, k) => {
+        return waitForMap(resolve, (k, v) => {
             const resolver = this.injector.get(v);
-            const obs = resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
+            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
                 wrapIntoObservable(resolver(future, this.future));
-            resolvingObs.push(obs.map((_) => { resolvedData[k] = _; }));
         });
-        if (resolvingObs.length > 0) {
-            return Observable.forkJoin(resolvingObs).map(r => resolvedData);
-        }
-        else {
-            return of(resolvedData);
-        }
     }
 }
 function wrapIntoObservable(value) {
@@ -587,11 +580,20 @@ class ActivateRoutes {
         }
     }
     placeComponentIntoOutlet(outletMap, future, outlet) {
-        const resolved = ReflectiveInjector.resolve([
-            { provide: ActivatedRoute, useValue: future },
-            { provide: RouterOutletMap, useValue: outletMap }
-        ]);
-        outlet.activate(future, resolved, outletMap);
+        const resolved = [{ provide: ActivatedRoute, useValue: future }, {
+                provide: RouterOutletMap,
+                useValue: outletMap
+            }];
+        const parentFuture = this.futureState.parent(future); // find the closest parent?
+        const config = parentFuture ? parentFuture.snapshot._routeConfig : null;
+        let loadedFactoryResolver = null;
+        if (config && config._loadedConfig) {
+            const loadedResolver = config._loadedConfig.factoryResolver;
+            loadedFactoryResolver = loadedResolver;
+            resolved.push({ provide: ComponentFactoryResolver, useValue: loadedResolver });
+        }
+        ;
+        outlet.activate(future, loadedFactoryResolver, ReflectiveInjector.resolve(resolved), outletMap);
     }
     deactivateOutletAndItChildren(outlet) {
         if (outlet && outlet.isActivated) {

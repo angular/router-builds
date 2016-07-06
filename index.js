@@ -9,6 +9,8 @@
 var router_link_1 = require('./src/directives/router_link');
 var router_link_active_1 = require('./src/directives/router_link_active');
 var router_outlet_1 = require('./src/directives/router_outlet');
+var common_router_providers_1 = require('./src/common_router_providers');
+exports.provideRoutes = common_router_providers_1.provideRoutes;
 var router_link_2 = require('./src/directives/router_link');
 exports.RouterLink = router_link_2.RouterLink;
 exports.RouterLinkWithHref = router_link_2.RouterLinkWithHref;

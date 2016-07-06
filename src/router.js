@@ -23,6 +23,7 @@ var create_router_state_1 = require('./create_router_state');
 var create_url_tree_1 = require('./create_url_tree');
 var recognize_1 = require('./recognize');
 var resolve_1 = require('./resolve');
+var router_config_loader_1 = require('./router_config_loader');
 var router_outlet_map_1 = require('./router_outlet_map');
 var router_state_1 = require('./router_state');
 var shared_1 = require('./shared');
@@ -119,7 +120,7 @@ var Router = (function () {
     /**
      * Creates the router service.
      */
-    function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, config) {
+    function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
         this.rootComponentType = rootComponentType;
         this.resolver = resolver;
         this.urlSerializer = urlSerializer;
@@ -131,6 +132,7 @@ var Router = (function () {
         this.routerEvents = new Subject_1.Subject();
         this.currentUrlTree = url_tree_1.createEmptyUrlTree();
         this.futureUrlTree = this.currentUrlTree;
+        this.configLoader = new router_config_loader_1.RouterConfigLoader(loader);
         this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
@@ -306,7 +308,7 @@ var Router = (function () {
             var state;
             var navigationIsSuccessful;
             var preActivation;
-            apply_redirects_1.applyRedirects(url, _this.config)
+            apply_redirects_1.applyRedirects(_this.configLoader, url, _this.config)
                 .mergeMap(function (u) {
                 _this.futureUrlTree = u;
                 return recognize_1.recognize(_this.rootComponentType, _this.config, _this.futureUrlTree, _this.serializeUrl(_this.futureUrlTree));
@@ -540,20 +542,11 @@ var PreActivation = (function () {
     };
     PreActivation.prototype.resolveNode = function (resolve, future) {
         var _this = this;
-        var resolvingObs = [];
-        var resolvedData = {};
-        collection_1.forEach(resolve, function (v, k) {
+        return collection_1.waitForMap(resolve, function (k, v) {
             var resolver = _this.injector.get(v);
-            var obs = resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
+            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
                 wrapIntoObservable(resolver(future, _this.future));
-            resolvingObs.push(obs.map(function (_) { resolvedData[k] = _; }));
         });
-        if (resolvingObs.length > 0) {
-            return Observable_1.Observable.forkJoin(resolvingObs).map(function (r) { return resolvedData; });
-        }
-        else {
-            return of_1.of(resolvedData);
-        }
     };
     return PreActivation;
 }());
@@ -629,11 +622,20 @@ var ActivateRoutes = (function () {
         }
     };
     ActivateRoutes.prototype.placeComponentIntoOutlet = function (outletMap, future, outlet) {
-        var resolved = core_1.ReflectiveInjector.resolve([
-            { provide: router_state_1.ActivatedRoute, useValue: future },
-            { provide: router_outlet_map_1.RouterOutletMap, useValue: outletMap }
-        ]);
-        outlet.activate(future, resolved, outletMap);
+        var resolved = [{ provide: router_state_1.ActivatedRoute, useValue: future }, {
+                provide: router_outlet_map_1.RouterOutletMap,
+                useValue: outletMap
+            }];
+        var parentFuture = this.futureState.parent(future); // find the closest parent?
+        var config = parentFuture ? parentFuture.snapshot._routeConfig : null;
+        var loadedFactoryResolver = null;
+        if (config && config._loadedConfig) {
+            var loadedResolver = config._loadedConfig.factoryResolver;
+            loadedFactoryResolver = loadedResolver;
+            resolved.push({ provide: core_1.ComponentFactoryResolver, useValue: loadedResolver });
+        }
+        ;
+        outlet.activate(future, loadedFactoryResolver, core_1.ReflectiveInjector.resolve(resolved), outletMap);
     };
     ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
         if (outlet && outlet.isActivated) {

@@ -8,6 +8,7 @@
 import { RouterLink, RouterLinkWithHref } from './src/directives/router_link';
 import { RouterLinkActive } from './src/directives/router_link_active';
 import { RouterOutlet } from './src/directives/router_outlet';
+export { provideRoutes } from './src/common_router_providers';
 export { RouterLink, RouterLinkWithHref } from './src/directives/router_link';
 export { RouterLinkActive } from './src/directives/router_link_active';
 export { RouterOutlet } from './src/directives/router_outlet';

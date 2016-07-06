@@ -116,7 +116,7 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
     }
     var _a = match(rawSegment, route, paths), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
     var rawSlicedPath = paths.slice(lastChild);
-    var childConfig = route.children ? route.children : [];
+    var childConfig = getChildConfig(route);
     var newInherited = route.component ?
         InheritedFromParent.empty :
         new InheritedFromParent(inherited, parameters, getData(route), newInheritedResolve);
@@ -132,6 +132,17 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
     else {
         var children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, newInherited, shared_1.PRIMARY_OUTLET);
         return [new tree_1.TreeNode(snapshot, children)];
+    }
+}
+function getChildConfig(route) {
+    if (route.children) {
+        return route.children;
+    }
+    else if (route.mountChildren) {
+        return route._loadedConfig.routes;
+    }
+    else {
+        return [];
     }
 }
 function match(segment, route, paths) {

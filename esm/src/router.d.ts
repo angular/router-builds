@@ -13,7 +13,7 @@ import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/forkJoin';
 import { Location } from '@angular/common';
-import { ComponentResolver, Injector, Type } from '@angular/core';
+import { AppModuleFactoryLoader, ComponentResolver, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { RouterConfig } from './config';
 import { RouterOutletMap } from './router_outlet_map';
@@ -109,10 +109,11 @@ export declare class Router {
     private navigationId;
     private config;
     private futureUrlTree;
+    private configLoader;
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, config: RouterConfig);
+    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: RouterConfig);
     /**
      * Returns the current route state.
      */

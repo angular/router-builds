@@ -6,8 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 "use strict";
+require('rxjs/add/operator/first');
+require('rxjs/add/operator/catch');
+require('rxjs/add/operator/concatAll');
 var Observable_1 = require('rxjs/Observable');
 var of_1 = require('rxjs/observable/of');
+var EmptyError_1 = require('rxjs/util/EmptyError');
 var shared_1 = require('./shared');
 var url_tree_1 = require('./url_tree');
 var collection_1 = require('./utils/collection');
@@ -24,126 +28,158 @@ var AbsoluteRedirect = (function () {
     }
     return AbsoluteRedirect;
 }());
-function applyRedirects(urlTree, config) {
-    try {
-        return createUrlTree(urlTree, expandSegment(config, urlTree.root, shared_1.PRIMARY_OUTLET));
-    }
-    catch (e) {
+function noMatch(segment) {
+    return new Observable_1.Observable(function (obs) { return obs.error(new NoMatch(segment)); });
+}
+function absoluteRedirect(newPaths) {
+    return new Observable_1.Observable(function (obs) { return obs.error(new AbsoluteRedirect(newPaths)); });
+}
+function applyRedirects(configLoader, urlTree, config) {
+    return expandSegment(configLoader, config, urlTree.root, shared_1.PRIMARY_OUTLET)
+        .map(function (rootSegment) { return createUrlTree(urlTree, rootSegment); })
+        .catch(function (e) {
         if (e instanceof AbsoluteRedirect) {
-            return createUrlTree(urlTree, new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = new url_tree_1.UrlSegment(e.paths, {}), _a)));
+            return of_1.of(createUrlTree(urlTree, new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = new url_tree_1.UrlSegment(e.paths, {}), _a))));
         }
         else if (e instanceof NoMatch) {
-            return new Observable_1.Observable(function (obs) {
-                return obs.error(new Error("Cannot match any routes: '" + e.segment + "'"));
-            });
+            throw new Error("Cannot match any routes: '" + e.segment + "'");
         }
         else {
-            return new Observable_1.Observable(function (obs) { return obs.error(e); });
+            throw e;
         }
-    }
-    var _a;
+        var _a;
+    });
 }
 exports.applyRedirects = applyRedirects;
 function createUrlTree(urlTree, rootCandidate) {
     var root = rootCandidate.pathsWithParams.length > 0 ?
         new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = rootCandidate, _a)) :
         rootCandidate;
-    return of_1.of(new url_tree_1.UrlTree(root, urlTree.queryParams, urlTree.fragment));
+    return new url_tree_1.UrlTree(root, urlTree.queryParams, urlTree.fragment);
     var _a;
 }
-function expandSegment(routes, segment, outlet) {
+function expandSegment(configLoader, routes, segment, outlet) {
     if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-        return new url_tree_1.UrlSegment([], expandSegmentChildren(routes, segment));
+        return expandSegmentChildren(configLoader, routes, segment)
+            .map(function (children) { return new url_tree_1.UrlSegment([], children); });
     }
     else {
-        return expandPathsWithParams(segment, routes, segment.pathsWithParams, outlet, true);
+        return expandPathsWithParams(configLoader, segment, routes, segment.pathsWithParams, outlet, true);
     }
 }
-function expandSegmentChildren(routes, segment) {
-    return url_tree_1.mapChildren(segment, function (child, childOutlet) { return expandSegment(routes, child, childOutlet); });
+function expandSegmentChildren(configLoader, routes, segment) {
+    return collection_1.waitForMap(segment.children, function (childOutlet, child) { return expandSegment(configLoader, routes, child, childOutlet); });
 }
-function expandPathsWithParams(segment, routes, paths, outlet, allowRedirects) {
-    for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
-        var r = routes_1[_i];
-        try {
-            return expandPathsWithParamsAgainstRoute(segment, routes, r, paths, outlet, allowRedirects);
-        }
-        catch (e) {
-            if (!(e instanceof NoMatch))
+function expandPathsWithParams(configLoader, segment, routes, paths, outlet, allowRedirects) {
+    var processRoutes = of_1.of.apply(void 0, routes)
+        .map(function (r) {
+        return expandPathsWithParamsAgainstRoute(configLoader, segment, routes, r, paths, outlet, allowRedirects)
+            .catch(function (e) {
+            if (e instanceof NoMatch)
+                return of_1.of(null);
+            else
                 throw e;
+        });
+    })
+        .concatAll();
+    return processRoutes.first(function (s) { return !!s; }).catch(function (e, _) {
+        if (e instanceof EmptyError_1.EmptyError) {
+            throw new NoMatch(segment);
         }
-    }
-    throw new NoMatch(segment);
+        else {
+            throw e;
+        }
+    });
 }
-function expandPathsWithParamsAgainstRoute(segment, routes, route, paths, outlet, allowRedirects) {
+function expandPathsWithParamsAgainstRoute(configLoader, segment, routes, route, paths, outlet, allowRedirects) {
     if (getOutlet(route) !== outlet)
-        throw new NoMatch();
+        return noMatch(segment);
     if (route.redirectTo !== undefined && !allowRedirects)
-        throw new NoMatch();
+        return noMatch(segment);
     if (route.redirectTo !== undefined) {
-        return expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet);
+        return expandPathsWithParamsAgainstRouteUsingRedirect(configLoader, segment, routes, route, paths, outlet);
     }
     else {
-        return matchPathsWithParamsAgainstRoute(segment, route, paths);
+        return matchPathsWithParamsAgainstRoute(configLoader, segment, route, paths);
     }
 }
-function expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet) {
+function expandPathsWithParamsAgainstRouteUsingRedirect(configLoader, segment, routes, route, paths, outlet) {
     if (route.path === '**') {
         return expandWildCardWithParamsAgainstRouteUsingRedirect(route);
     }
     else {
-        return expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet);
+        return expandRegularPathWithParamsAgainstRouteUsingRedirect(configLoader, segment, routes, route, paths, outlet);
     }
 }
 function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
     var newPaths = applyRedirectCommands([], route.redirectTo, {});
     if (route.redirectTo.startsWith('/')) {
-        throw new AbsoluteRedirect(newPaths);
+        return absoluteRedirect(newPaths);
     }
     else {
-        return new url_tree_1.UrlSegment(newPaths, {});
+        return of_1.of(new url_tree_1.UrlSegment(newPaths, {}));
     }
 }
-function expandRegularPathWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet) {
-    var _a = match(segment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
+function expandRegularPathWithParamsAgainstRouteUsingRedirect(configLoader, segment, routes, route, paths, outlet) {
+    var _a = match(segment, route, paths), matched = _a.matched, consumedPaths = _a.consumedPaths, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
+    if (!matched)
+        return noMatch(segment);
     var newPaths = applyRedirectCommands(consumedPaths, route.redirectTo, positionalParamSegments);
     if (route.redirectTo.startsWith('/')) {
-        throw new AbsoluteRedirect(newPaths);
+        return absoluteRedirect(newPaths);
     }
     else {
-        return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
+        return expandPathsWithParams(configLoader, segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
     }
 }
-function matchPathsWithParamsAgainstRoute(rawSegment, route, paths) {
+function matchPathsWithParamsAgainstRoute(configLoader, rawSegment, route, paths) {
     if (route.path === '**') {
-        return new url_tree_1.UrlSegment(paths, {});
+        return of_1.of(new url_tree_1.UrlSegment(paths, {}));
     }
     else {
-        var _a = match(rawSegment, route, paths), consumedPaths = _a.consumedPaths, lastChild = _a.lastChild;
-        var childConfig = route.children ? route.children : [];
-        var rawSlicedPath = paths.slice(lastChild);
-        var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
-        if (slicedPath.length === 0 && segment.hasChildren()) {
-            var children = expandSegmentChildren(childConfig, segment);
-            return new url_tree_1.UrlSegment(consumedPaths, children);
-        }
-        else if (childConfig.length === 0 && slicedPath.length === 0) {
-            return new url_tree_1.UrlSegment(consumedPaths, {});
-        }
-        else {
-            var cs = expandPathsWithParams(segment, childConfig, slicedPath, shared_1.PRIMARY_OUTLET, true);
-            return new url_tree_1.UrlSegment(consumedPaths.concat(cs.pathsWithParams), cs.children);
-        }
+        var _a = match(rawSegment, route, paths), matched = _a.matched, consumedPaths_1 = _a.consumedPaths, lastChild = _a.lastChild;
+        if (!matched)
+            return noMatch(rawSegment);
+        var rawSlicedPath_1 = paths.slice(lastChild);
+        return getChildConfig(configLoader, route).mergeMap(function (childConfig) {
+            var _a = split(rawSegment, consumedPaths_1, rawSlicedPath_1, childConfig), segment = _a.segment, slicedPath = _a.slicedPath;
+            if (slicedPath.length === 0 && segment.hasChildren()) {
+                return expandSegmentChildren(configLoader, childConfig, segment)
+                    .map(function (children) { return new url_tree_1.UrlSegment(consumedPaths_1, children); });
+            }
+            else if (childConfig.length === 0 && slicedPath.length === 0) {
+                return of_1.of(new url_tree_1.UrlSegment(consumedPaths_1, {}));
+            }
+            else {
+                return expandPathsWithParams(configLoader, segment, childConfig, slicedPath, shared_1.PRIMARY_OUTLET, true)
+                    .map(function (cs) { return new url_tree_1.UrlSegment(consumedPaths_1.concat(cs.pathsWithParams), cs.children); });
+            }
+        });
+    }
+}
+function getChildConfig(configLoader, route) {
+    if (route.children) {
+        return of_1.of(route.children);
+    }
+    else if (route.mountChildren) {
+        return configLoader.load(route.mountChildren).map(function (r) {
+            route._loadedConfig = r;
+            return r.routes;
+        });
+    }
+    else {
+        return of_1.of([]);
     }
 }
 function match(segment, route, paths) {
+    var noMatch = { matched: false, consumedPaths: [], lastChild: 0, positionalParamSegments: {} };
     if (route.path === '') {
         if ((route.terminal || route.pathMatch === 'full') &&
             (segment.hasChildren() || paths.length > 0)) {
-            throw new NoMatch();
+            return { matched: false, consumedPaths: [], lastChild: 0, positionalParamSegments: {} };
         }
         else {
-            return { consumedPaths: [], lastChild: 0, positionalParamSegments: {} };
+            return { matched: true, consumedPaths: [], lastChild: 0, positionalParamSegments: {} };
         }
     }
     var path = route.path;
@@ -153,12 +189,12 @@ function match(segment, route, paths) {
     var currentIndex = 0;
     for (var i = 0; i < parts.length; ++i) {
         if (currentIndex >= paths.length)
-            throw new NoMatch();
+            return noMatch;
         var current = paths[currentIndex];
         var p = parts[i];
         var isPosParam = p.startsWith(':');
         if (!isPosParam && p !== current.path)
-            throw new NoMatch();
+            return noMatch;
         if (isPosParam) {
             positionalParamSegments[p.substring(1)] = current;
         }
@@ -166,9 +202,9 @@ function match(segment, route, paths) {
         currentIndex++;
     }
     if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
-        throw new NoMatch();
+        return { matched: false, consumedPaths: [], lastChild: 0, positionalParamSegments: {} };
     }
-    return { consumedPaths: consumedPaths, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
+    return { matched: true, consumedPaths: consumedPaths, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
 }
 function applyRedirectCommands(paths, redirectTo, posParams) {
     var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
@@ -227,8 +263,8 @@ function mergeTrivialChildren(s) {
 }
 function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
     var res = {};
-    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
-        var r = routes_2[_i];
+    for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+        var r = routes_1[_i];
         if (emptyPathRedirect(segment, slicedPath, r) && !children[getOutlet(r)]) {
             res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
         }
@@ -238,8 +274,8 @@ function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) 
 function createChildrenForEmptyPaths(routes, primarySegment) {
     var res = {};
     res[shared_1.PRIMARY_OUTLET] = primarySegment;
-    for (var _i = 0, routes_3 = routes; _i < routes_3.length; _i++) {
-        var r = routes_3[_i];
+    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+        var r = routes_2[_i];
         if (r.path === '') {
             res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
         }
