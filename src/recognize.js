@@ -138,7 +138,7 @@ function getChildConfig(route) {
     if (route.children) {
         return route.children;
     }
-    else if (route.mountChildren) {
+    else if (route.loadChildren) {
         return route._loadedConfig.routes;
     }
     else {

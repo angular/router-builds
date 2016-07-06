@@ -15,7 +15,7 @@ import 'rxjs/add/observable/forkJoin';
 import { Location } from '@angular/common';
 import { AppModuleFactoryLoader, ComponentResolver, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { RouterConfig } from './config';
+import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
@@ -91,7 +91,7 @@ export declare type Event = NavigationStart | NavigationEnd | NavigationCancel |
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
- * See {@link RouterConfig) for more details and examples.
+ * See {@link Routes) for more details and examples.
  *
  * @stable
  */
@@ -113,7 +113,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: RouterConfig);
+    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes);
     /**
      * Returns the current route state.
      */
@@ -140,7 +140,7 @@ export declare class Router {
      * ]);
      * ```
      */
-    resetConfig(config: RouterConfig): void;
+    resetConfig(config: Routes): void;
     /**
      * Applies an array of commands to the current url tree and creates
      * a new url tree.

@@ -8,11 +8,11 @@
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { APP_INITIALIZER, AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, OpaqueToken, SystemJsAppModuleLoader } from '@angular/core';
 import { Router } from './router';
-import { ROUTER_CONFIG } from './router_config_loader';
+import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
-export const ROUTER_OPTIONS = new OpaqueToken('ROUTER_OPTIONS');
+export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
 export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
@@ -63,19 +63,20 @@ export function setupRouterInitializer(injector) {
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @stable
+ * @deprecated use RouterAppModule instead
  */
-export function provideRouter(_config, _opts) {
+export function provideRouter(routes, config) {
     return [
-        { provide: ROUTER_CONFIG, useValue: _config }, { provide: ROUTER_OPTIONS, useValue: _opts },
-        Location, { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
+        { provide: ROUTER_CONFIGURATION, useValue: config }, Location,
+        { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: UrlSerializer, useClass: DefaultUrlSerializer },
         {
             provide: Router,
             useFactory: setupRouter,
             deps: [
                 ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-                AppModuleFactoryLoader, ROUTER_CONFIG, ROUTER_OPTIONS
+                AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap,
@@ -101,7 +102,26 @@ export function provideRouter(_config, _opts) {
  *
  * @experimental
  */
-export function provideRoutes(config) {
-    return { provide: ROUTER_CONFIG, useValue: config };
+export function provideRoutes(routes) {
+    return { provide: ROUTES, useValue: routes };
+}
+/**
+ * Router configuration.
+ *
+ * ### Example
+ *
+ * ```
+ * @AppModule({providers: [
+ *   provideRouterOptions({enableTracing: true})
+ * ]})
+ * class LazyLoadedModule {
+ *   // ...
+ * }
+ * ```
+ *
+ * @experimental
+ */
+export function provideRouterConfig(config) {
+    return { provide: ROUTER_CONFIGURATION, useValue: config };
 }
 //# sourceMappingURL=common_router_providers.js.map

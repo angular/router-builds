@@ -635,8 +635,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (route.children) {
             return rxjs_observable_of.of(route.children);
         }
-        else if (route.mountChildren) {
-            return configLoader.load(route.mountChildren).map(function (r) {
+        else if (route.loadChildren) {
+            return configLoader.load(route.loadChildren).map(function (r) {
                 route._loadedConfig = r;
                 return r.routes;
             });
@@ -786,18 +786,18 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (!!route.redirectTo && !!route.children) {
             throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
         }
-        if (!!route.redirectTo && !!route.mountChildren) {
-            throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and mountChildren cannot be used together");
+        if (!!route.redirectTo && !!route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and loadChildren cannot be used together");
         }
-        if (!!route.children && !!route.mountChildren) {
-            throw new Error("Invalid configuration of route '" + route.path + "': children and mountChildren cannot be used together");
+        if (!!route.children && !!route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + route.path + "': children and loadChildren cannot be used together");
         }
         if (!!route.redirectTo && !!route.component) {
             throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
         }
         if (route.redirectTo === undefined && !route.component && !route.children &&
-            !route.mountChildren) {
-            throw new Error("Invalid configuration of route '" + route.path + "': component, redirectTo, children, mountChildren must be provided");
+            !route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + route.path + "': component, redirectTo, children, loadChildren must be provided");
         }
         if (route.path === undefined) {
             throw new Error("Invalid route configuration: routes must have path specified");
@@ -1478,7 +1478,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (route.children) {
             return route.children;
         }
-        else if (route.mountChildren) {
+        else if (route.loadChildren) {
             return route._loadedConfig.routes;
         }
         else {
@@ -1645,7 +1645,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             return Promise.resolve(null);
         }
     }
+    /**
+     * @deprecated use Routes
+     */
     var ROUTER_CONFIG = new _angular_core.OpaqueToken('ROUTER_CONFIG');
+    var ROUTES = new _angular_core.OpaqueToken('ROUTES');
     var LoadedRouterConfig = (function () {
         function LoadedRouterConfig(routes, factoryResolver) {
             this.routes = routes;
@@ -1660,7 +1664,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterConfigLoader.prototype.load = function (path) {
             return rxjs_observable_fromPromise.fromPromise(this.loader.load(path).then(function (r) {
                 var ref = r.create();
-                return new LoadedRouterConfig(ref.injector.get(ROUTER_CONFIG), ref.componentFactoryResolver);
+                return new LoadedRouterConfig(ref.injector.get(ROUTES), ref.componentFactoryResolver);
             }));
         };
         return RouterConfigLoader;
@@ -1761,7 +1765,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * The `Router` is responsible for mapping URLs to components.
      *
-     * See {@link RouterConfig) for more details and examples.
+     * See {@link Routes) for more details and examples.
      *
      * @stable
      */
@@ -2324,6 +2328,118 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return outlet;
     }
+    var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+    function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+        if (ref.componentTypes.length == 0) {
+            throw new Error('Bootstrap at least one component before injecting Router.');
+        }
+        var componentType = ref.componentTypes[0];
+        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
+        ref.registerDisposeListener(function () { return r.dispose(); });
+        if (opts.enableTracing) {
+            r.events.subscribe(function (e) {
+                console.group("Router Event: " + e.constructor.name);
+                console.log(e.toString());
+                console.log(e);
+                console.groupEnd();
+            });
+        }
+        return r;
+    }
+    function setupRouterInitializer(injector) {
+        // https://github.com/angular/angular/issues/9101
+        // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
+        // APP_INITIALIZER -> Router)
+        setTimeout(function () {
+            var appRef = injector.get(_angular_core.ApplicationRef);
+            if (appRef.componentTypes.length == 0) {
+                appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
+            }
+            else {
+                injector.get(Router).initialNavigation();
+            }
+        }, 0);
+        return function () { return null; };
+    }
+    /**
+     * An array of {@link Provider}s. To use the router, you must add this to your application.
+     *
+     * ### Example
+     *
+     * ```
+     * @Component({directives: [ROUTER_DIRECTIVES]})
+     * class AppCmp {
+     *   // ...
+     * }
+     *
+     * const config = [
+     *   {path: 'home', component: Home}
+     * ];
+     *
+     * bootstrap(AppCmp, [provideRouter(config)]);
+     * ```
+     *
+     * @deprecated use RouterAppModule instead
+     */
+    function provideRouter_(routes, config) {
+        return [
+            { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
+            { provide: ROUTER_CONFIGURATION, useValue: config }, _angular_common.Location,
+            { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
+            { provide: UrlSerializer, useClass: DefaultUrlSerializer },
+            {
+                provide: Router,
+                useFactory: setupRouter,
+                deps: [
+                    _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
+                    _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                ]
+            },
+            RouterOutletMap,
+            { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
+            // Trigger initial navigation
+            { provide: _angular_core.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [_angular_core.Injector] },
+            { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader }
+        ];
+    }
+    /**
+     * Router configuration.
+     *
+     * ### Example
+     *
+     * ```
+     * @AppModule({providers: [
+     *   provideRoutes([{path: 'home', component: Home}])
+     * ]})
+     * class LazyLoadedModule {
+     *   // ...
+     * }
+     * ```
+     *
+     * @experimental
+     */
+    function provideRoutes(routes) {
+        return { provide: ROUTES, useValue: routes };
+    }
+    /**
+     * Router configuration.
+     *
+     * ### Example
+     *
+     * ```
+     * @AppModule({providers: [
+     *   provideRouterOptions({enableTracing: true})
+     * ]})
+     * class LazyLoadedModule {
+     *   // ...
+     * }
+     * ```
+     *
+     * @experimental
+     */
+    function provideRouterConfig(config) {
+        return { provide: ROUTER_CONFIGURATION, useValue: config };
+    }
     var RouterLink = (function () {
         function RouterLink(router, route, locationStrategy) {
             this.router = router;
@@ -2562,7 +2678,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 // const componentName = component ? component.name : null;
                 // console.warn(
                 //     `'${componentName}' not found in precompile array.  To ensure all components referred
-                //     to by the RouterConfig are compiled, you must add '${componentName}' to the
+                //     to by the Routes are compiled, you must add '${componentName}' to the
                 //     'precompile' array of your application component. This will be required in a future
                 //     release of the router.`);
                 factory = snapshot._resolvedComponentFactory;
@@ -2584,98 +2700,50 @@ var __extends = (this && this.__extends) || function (d, b) {
         { type: _angular_core.ComponentFactoryResolver, },
         { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
     ];
-    var ROUTER_OPTIONS = new _angular_core.OpaqueToken('ROUTER_OPTIONS');
-    function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
-        if (ref.componentTypes.length == 0) {
-            throw new Error('Bootstrap at least one component before injecting Router.');
-        }
-        var componentType = ref.componentTypes[0];
-        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
-        ref.registerDisposeListener(function () { return r.dispose(); });
-        if (opts.enableTracing) {
-            r.events.subscribe(function (e) {
-                console.group("Router Event: " + e.constructor.name);
-                console.log(e.toString());
-                console.log(e);
-                console.groupEnd();
-            });
-        }
-        return r;
-    }
-    function setupRouterInitializer(injector) {
-        // https://github.com/angular/angular/issues/9101
-        // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
-        // APP_INITIALIZER -> Router)
-        setTimeout(function () {
-            var appRef = injector.get(_angular_core.ApplicationRef);
-            if (appRef.componentTypes.length == 0) {
-                appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
-            }
-            else {
-                injector.get(Router).initialNavigation();
-            }
-        }, 0);
-        return function () { return null; };
-    }
     /**
-     * An array of {@link Provider}s. To use the router, you must add this to your application.
-     *
-     * ### Example
-     *
-     * ```
-     * @Component({directives: [ROUTER_DIRECTIVES]})
-     * class AppCmp {
-     *   // ...
-     * }
-     *
-     * const config = [
-     *   {path: 'home', component: Home}
-     * ];
-     *
-     * bootstrap(AppCmp, [provideRouter(config)]);
-     * ```
-     *
      * @stable
      */
-    function provideRouter_(_config, _opts) {
-        return [
-            { provide: ROUTER_CONFIG, useValue: _config }, { provide: ROUTER_OPTIONS, useValue: _opts },
-            _angular_common.Location, { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
-            { provide: UrlSerializer, useClass: DefaultUrlSerializer },
-            {
-                provide: Router,
-                useFactory: setupRouter,
-                deps: [
-                    _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                    _angular_core.AppModuleFactoryLoader, ROUTER_CONFIG, ROUTER_OPTIONS
-                ]
-            },
-            RouterOutletMap,
-            { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
-            // Trigger initial navigation
-            { provide: _angular_core.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [_angular_core.Injector] },
-            { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader }
-        ];
-    }
-    /**
-     * Router configuration.
-     *
-     * ### Example
-     *
-     * ```
-     * @AppModule({providers: [
-     *   provideRoutes([{path: 'home', component: Home}])
-     * ]})
-     * class LazyLoadedModule {
-     *   // ...
-     * }
-     * ```
-     *
-     * @experimental
-     */
-    function provideRoutes(config) {
-        return { provide: ROUTER_CONFIG, useValue: config };
-    }
+    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+    var RouterAppModule = (function () {
+        function RouterAppModule(injector) {
+            this.injector = injector;
+            setTimeout(function () {
+                var appRef = injector.get(_angular_core.ApplicationRef);
+                if (appRef.componentTypes.length == 0) {
+                    appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
+                }
+                else {
+                    injector.get(Router).initialNavigation();
+                }
+            }, 0);
+        }
+        return RouterAppModule;
+    }());
+    /** @nocollapse */
+    RouterAppModule.decorators = [
+        { type: _angular_core.AppModule, args: [{
+                    directives: ROUTER_DIRECTIVES,
+                    providers: [
+                        _angular_common.Location, { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
+                        { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
+                            provide: Router,
+                            useFactory: setupRouter,
+                            deps: [
+                                _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
+                                _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                            ]
+                        },
+                        RouterOutletMap,
+                        { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
+                        { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader },
+                        { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+                    ]
+                },] },
+    ];
+    /** @nocollapse */
+    RouterAppModule.ctorParameters = [
+        { type: _angular_core.Injector, },
+    ];
     /**
      * A list of {@link Provider}s. To use the router, you must add this to your application.
      *
@@ -2702,11 +2770,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             { provide: _angular_common.PlatformLocation, useClass: _angular_platformBrowser.BrowserPlatformLocation }
         ].concat(provideRouter_(config, opts));
     }
-    /**
-     * @stable
-     */
-    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
-    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
+    exports.provideRouterConfig = provideRouterConfig;
     exports.provideRoutes = provideRoutes;
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
@@ -2718,6 +2782,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.NavigationStart = NavigationStart;
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
+    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
+    exports.RouterAppModule = RouterAppModule;
     exports.RouterOutletMap = RouterOutletMap;
     exports.provideRouter = provideRouter;
     exports.ActivatedRoute = ActivatedRoute;

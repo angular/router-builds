@@ -7,18 +7,18 @@
  */
 import { Location } from '@angular/common';
 import { AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, OpaqueToken } from '@angular/core';
-import { RouterConfig } from './config';
+import { Routes } from './config';
 import { Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { UrlSerializer } from './url_tree';
-export declare const ROUTER_OPTIONS: OpaqueToken;
+export declare const ROUTER_CONFIGURATION: OpaqueToken;
 /**
  * @experimental
  */
 export interface ExtraOptions {
     enableTracing?: boolean;
 }
-export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: RouterConfig, opts: ExtraOptions): Router;
+export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes, opts: ExtraOptions): Router;
 export declare function setupRouterInitializer(injector: Injector): () => any;
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.
@@ -38,9 +38,9 @@ export declare function setupRouterInitializer(injector: Injector): () => any;
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @stable
+ * @deprecated use RouterAppModule instead
  */
-export declare function provideRouter(_config: RouterConfig, _opts: ExtraOptions): any[];
+export declare function provideRouter(routes: Routes, config: ExtraOptions): any[];
 /**
  * Router configuration.
  *
@@ -57,4 +57,21 @@ export declare function provideRouter(_config: RouterConfig, _opts: ExtraOptions
  *
  * @experimental
  */
-export declare function provideRoutes(config: RouterConfig): any;
+export declare function provideRoutes(routes: Routes): any;
+/**
+ * Router configuration.
+ *
+ * ### Example
+ *
+ * ```
+ * @AppModule({providers: [
+ *   provideRouterOptions({enableTracing: true})
+ * ]})
+ * class LazyLoadedModule {
+ *   // ...
+ * }
+ * ```
+ *
+ * @experimental
+ */
+export declare function provideRouterConfig(config: ExtraOptions): any;

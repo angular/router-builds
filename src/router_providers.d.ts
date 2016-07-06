@@ -1,5 +1,5 @@
 import { ExtraOptions } from './common_router_providers';
-import { RouterConfig } from './config';
+import { Routes } from './config';
 /**
  * A list of {@link Provider}s. To use the router, you must add this to your application.
  *
@@ -20,4 +20,4 @@ import { RouterConfig } from './config';
  *
  * @experimental
  */
-export declare function provideRouter(config: RouterConfig, opts?: ExtraOptions): any[];
+export declare function provideRouter(config: Routes, opts?: ExtraOptions): any[];

@@ -13,7 +13,7 @@ var router_config_loader_1 = require('./router_config_loader');
 var router_outlet_map_1 = require('./router_outlet_map');
 var router_state_1 = require('./router_state');
 var url_tree_1 = require('./url_tree');
-exports.ROUTER_OPTIONS = new core_1.OpaqueToken('ROUTER_OPTIONS');
+exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
 function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
@@ -66,19 +66,20 @@ exports.setupRouterInitializer = setupRouterInitializer;
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @stable
+ * @deprecated use RouterAppModule instead
  */
-function provideRouter(_config, _opts) {
+function provideRouter(routes, config) {
     return [
-        { provide: router_config_loader_1.ROUTER_CONFIG, useValue: _config }, { provide: exports.ROUTER_OPTIONS, useValue: _opts },
-        common_1.Location, { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
+        { provide: router_config_loader_1.ROUTES, useExisting: router_config_loader_1.ROUTER_CONFIG }, { provide: router_config_loader_1.ROUTER_CONFIG, useValue: routes },
+        { provide: exports.ROUTER_CONFIGURATION, useValue: config }, common_1.Location,
+        { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
         { provide: url_tree_1.UrlSerializer, useClass: url_tree_1.DefaultUrlSerializer },
         {
             provide: router_1.Router,
             useFactory: setupRouter,
             deps: [
                 core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector,
-                core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTER_CONFIG, exports.ROUTER_OPTIONS
+                core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
             ]
         },
         router_outlet_map_1.RouterOutletMap,
@@ -105,8 +106,28 @@ exports.provideRouter = provideRouter;
  *
  * @experimental
  */
-function provideRoutes(config) {
-    return { provide: router_config_loader_1.ROUTER_CONFIG, useValue: config };
+function provideRoutes(routes) {
+    return { provide: router_config_loader_1.ROUTES, useValue: routes };
 }
 exports.provideRoutes = provideRoutes;
+/**
+ * Router configuration.
+ *
+ * ### Example
+ *
+ * ```
+ * @AppModule({providers: [
+ *   provideRouterOptions({enableTracing: true})
+ * ]})
+ * class LazyLoadedModule {
+ *   // ...
+ * }
+ * ```
+ *
+ * @experimental
+ */
+function provideRouterConfig(config) {
+    return { provide: exports.ROUTER_CONFIGURATION, useValue: config };
+}
+exports.provideRouterConfig = provideRouterConfig;
 //# sourceMappingURL=common_router_providers.js.map

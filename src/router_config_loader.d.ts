@@ -8,7 +8,11 @@
 import { AppModuleFactoryLoader, ComponentFactoryResolver, OpaqueToken } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Route } from './config';
+/**
+ * @deprecated use Routes
+ */
 export declare const ROUTER_CONFIG: OpaqueToken;
+export declare const ROUTES: OpaqueToken;
 export declare class LoadedRouterConfig {
     routes: Route[];
     factoryResolver: ComponentFactoryResolver;

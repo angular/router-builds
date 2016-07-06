@@ -154,8 +154,8 @@ function getChildConfig(configLoader, route) {
     if (route.children) {
         return of(route.children);
     }
-    else if (route.mountChildren) {
-        return configLoader.load(route.mountChildren).map(r => {
+    else if (route.loadChildren) {
+        return configLoader.load(route.loadChildren).map(r => {
             route._loadedConfig = r;
             return r.routes;
         });
