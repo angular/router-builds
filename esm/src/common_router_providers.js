@@ -63,7 +63,7 @@ export function setupRouterInitializer(injector) {
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @deprecated use RouterAppModule instead
+ * @deprecated use RouterModule instead
  */
 export function provideRouter(routes, config) {
     return [

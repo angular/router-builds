@@ -6,18 +6,19 @@ import { RouterOutlet } from './directives/router_outlet';
  * @stable
  */
 export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkWithHref | typeof RouterLinkActive)[];
+export declare const ROUTER_PROVIDERS: any[];
 /**
  * Router module.
  *
  * ### Example
  *
  * ```
- * bootstrap(AppCmp, {modules: [RouterAppModule]});
+ * bootstrap(AppCmp, {modules: [RouterModule]});
  * ```
  *
  * @experimental
  */
-export declare class RouterAppModule {
+export declare class RouterModule {
     private injector;
     constructor(injector: Injector);
 }

@@ -66,7 +66,7 @@ exports.setupRouterInitializer = setupRouterInitializer;
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @deprecated use RouterAppModule instead
+ * @deprecated use RouterModule instead
  */
 function provideRouter(routes, config) {
     return [

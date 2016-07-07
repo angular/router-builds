@@ -2379,7 +2379,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * bootstrap(AppCmp, [provideRouter(config)]);
      * ```
      *
-     * @deprecated use RouterAppModule instead
+     * @deprecated use RouterModule instead
      */
     function provideRouter_(routes, config) {
         return [
@@ -2704,8 +2704,23 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
-    var RouterAppModule = (function () {
-        function RouterAppModule(injector) {
+    var ROUTER_PROVIDERS = [
+        _angular_common.Location, { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
+        { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
+            provide: Router,
+            useFactory: setupRouter,
+            deps: [
+                _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
+                _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+            ]
+        },
+        RouterOutletMap,
+        { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
+        { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader },
+        { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+    ];
+    var RouterModule = (function () {
+        function RouterModule(injector) {
             this.injector = injector;
             setTimeout(function () {
                 var appRef = injector.get(_angular_core.ApplicationRef);
@@ -2717,31 +2732,14 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }
             }, 0);
         }
-        return RouterAppModule;
+        return RouterModule;
     }());
     /** @nocollapse */
-    RouterAppModule.decorators = [
-        { type: _angular_core.AppModule, args: [{
-                    directives: ROUTER_DIRECTIVES,
-                    providers: [
-                        _angular_common.Location, { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
-                        { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
-                            provide: Router,
-                            useFactory: setupRouter,
-                            deps: [
-                                _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                                _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
-                            ]
-                        },
-                        RouterOutletMap,
-                        { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
-                        { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader },
-                        { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
-                    ]
-                },] },
+    RouterModule.decorators = [
+        { type: _angular_core.AppModule, args: [{ directives: ROUTER_DIRECTIVES, providers: ROUTER_PROVIDERS },] },
     ];
     /** @nocollapse */
-    RouterAppModule.ctorParameters = [
+    RouterModule.ctorParameters = [
         { type: _angular_core.Injector, },
     ];
     /**
@@ -2783,7 +2781,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
-    exports.RouterAppModule = RouterAppModule;
+    exports.RouterModule = RouterModule;
     exports.RouterOutletMap = RouterOutletMap;
     exports.provideRouter = provideRouter;
     exports.ActivatedRoute = ActivatedRoute;

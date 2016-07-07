@@ -38,7 +38,7 @@ export declare function setupRouterInitializer(injector: Injector): () => any;
  * bootstrap(AppCmp, [provideRouter(config)]);
  * ```
  *
- * @deprecated use RouterAppModule instead
+ * @deprecated use RouterModule instead
  */
 export declare function provideRouter(routes: Routes, config: ExtraOptions): any[];
 /**

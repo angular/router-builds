@@ -20,7 +20,22 @@ import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
  * @stable
  */
 export const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
-export class RouterAppModule {
+export const ROUTER_PROVIDERS = [
+    Location, { provide: LocationStrategy, useClass: PathLocationStrategy },
+    { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
+        provide: Router,
+        useFactory: setupRouter,
+        deps: [
+            ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
+            AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+        ]
+    },
+    RouterOutletMap,
+    { provide: ActivatedRoute, useFactory: (r) => r.routerState.root, deps: [Router] },
+    { provide: AppModuleFactoryLoader, useClass: SystemJsAppModuleLoader },
+    { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+];
+export class RouterModule {
     constructor(injector) {
         this.injector = injector;
         setTimeout(() => {
@@ -35,28 +50,11 @@ export class RouterAppModule {
     }
 }
 /** @nocollapse */
-RouterAppModule.decorators = [
-    { type: AppModule, args: [{
-                directives: ROUTER_DIRECTIVES,
-                providers: [
-                    Location, { provide: LocationStrategy, useClass: PathLocationStrategy },
-                    { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
-                        provide: Router,
-                        useFactory: setupRouter,
-                        deps: [
-                            ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-                            AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
-                        ]
-                    },
-                    RouterOutletMap,
-                    { provide: ActivatedRoute, useFactory: (r) => r.routerState.root, deps: [Router] },
-                    { provide: AppModuleFactoryLoader, useClass: SystemJsAppModuleLoader },
-                    { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
-                ]
-            },] },
+RouterModule.decorators = [
+    { type: AppModule, args: [{ directives: ROUTER_DIRECTIVES, providers: ROUTER_PROVIDERS },] },
 ];
 /** @nocollapse */
-RouterAppModule.ctorParameters = [
+RouterModule.ctorParameters = [
     { type: Injector, },
 ];
-//# sourceMappingURL=router_app_module.js.map
+//# sourceMappingURL=router_module.js.map
