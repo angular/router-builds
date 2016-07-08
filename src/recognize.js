@@ -21,8 +21,9 @@ var NoMatch = (function () {
     return NoMatch;
 }());
 var InheritedFromParent = (function () {
-    function InheritedFromParent(parent, params, data, resolve) {
+    function InheritedFromParent(parent, snapshot, params, data, resolve) {
         this.parent = parent;
+        this.snapshot = snapshot;
         this.params = params;
         this.data = data;
         this.resolve = resolve;
@@ -39,18 +40,14 @@ var InheritedFromParent = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(InheritedFromParent, "empty", {
-        get: function () {
-            return new InheritedFromParent(null, {}, {}, new router_state_1.InheritedResolve(null, {}));
-        },
-        enumerable: true,
-        configurable: true
-    });
+    InheritedFromParent.empty = function (snapshot) {
+        return new InheritedFromParent(null, snapshot, {}, {}, new router_state_1.InheritedResolve(null, {}));
+    };
     return InheritedFromParent;
 }());
 function recognize(rootComponentType, config, urlTree, url) {
     try {
-        var children = processSegment(config, urlTree.root, InheritedFromParent.empty, shared_1.PRIMARY_OUTLET);
+        var children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), shared_1.PRIMARY_OUTLET);
         var root = new router_state_1.ActivatedRouteSnapshot([], {}, {}, shared_1.PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, router_state_1.InheritedResolve.empty);
         var rootNode = new tree_1.TreeNode(root, children);
         return of_1.of(new router_state_1.RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
@@ -114,14 +111,14 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
         var snapshot_1 = new router_state_1.ActivatedRouteSnapshot(paths, collection_1.merge(inherited.allParams, params), collection_1.merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
         return [new tree_1.TreeNode(snapshot_1, [])];
     }
-    var _a = match(rawSegment, route, paths), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
+    var _a = match(rawSegment, route, paths, inherited.snapshot), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
     var rawSlicedPath = paths.slice(lastChild);
     var childConfig = getChildConfig(route);
-    var newInherited = route.component ?
-        InheritedFromParent.empty :
-        new InheritedFromParent(inherited, parameters, getData(route), newInheritedResolve);
     var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
     var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, collection_1.merge(inherited.allParams, parameters), collection_1.merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
+    var newInherited = route.component ?
+        InheritedFromParent.empty(snapshot) :
+        new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
     if (slicedPath.length === 0 && segment.hasChildren()) {
         var children = processSegmentChildren(childConfig, segment, newInherited);
         return [new tree_1.TreeNode(snapshot, children)];
@@ -145,14 +142,15 @@ function getChildConfig(route) {
         return [];
     }
 }
-function match(segment, route, paths) {
+function match(segment, route, paths, parent) {
     if (route.path === '') {
         if ((route.terminal || route.pathMatch === 'full') &&
             (segment.hasChildren() || paths.length > 0)) {
             throw new NoMatch();
         }
         else {
-            return { consumedPaths: [], lastChild: 0, parameters: {} };
+            var params = parent ? parent.params : {};
+            return { consumedPaths: [], lastChild: 0, parameters: params };
         }
     }
     var path = route.path;

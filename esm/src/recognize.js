@@ -18,8 +18,9 @@ class NoMatch {
     }
 }
 class InheritedFromParent {
-    constructor(parent, params, data, resolve) {
+    constructor(parent, snapshot, params, data, resolve) {
         this.parent = parent;
+        this.snapshot = snapshot;
         this.params = params;
         this.data = data;
         this.resolve = resolve;
@@ -28,13 +29,13 @@ class InheritedFromParent {
         return this.parent ? merge(this.parent.allParams, this.params) : this.params;
     }
     get allData() { return this.parent ? merge(this.parent.allData, this.data) : this.data; }
-    static get empty() {
-        return new InheritedFromParent(null, {}, {}, new InheritedResolve(null, {}));
+    static empty(snapshot) {
+        return new InheritedFromParent(null, snapshot, {}, {}, new InheritedResolve(null, {}));
     }
 }
 export function recognize(rootComponentType, config, urlTree, url) {
     try {
-        const children = processSegment(config, urlTree.root, InheritedFromParent.empty, PRIMARY_OUTLET);
+        const children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), PRIMARY_OUTLET);
         const root = new ActivatedRouteSnapshot([], {}, {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
         const rootNode = new TreeNode(root, children);
         return of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
@@ -94,14 +95,14 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
         const snapshot = new ActivatedRouteSnapshot(paths, merge(inherited.allParams, params), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
         return [new TreeNode(snapshot, [])];
     }
-    const { consumedPaths, parameters, lastChild } = match(rawSegment, route, paths);
+    const { consumedPaths, parameters, lastChild } = match(rawSegment, route, paths, inherited.snapshot);
     const rawSlicedPath = paths.slice(lastChild);
     const childConfig = getChildConfig(route);
-    const newInherited = route.component ?
-        InheritedFromParent.empty :
-        new InheritedFromParent(inherited, parameters, getData(route), newInheritedResolve);
     const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
     const snapshot = new ActivatedRouteSnapshot(consumedPaths, merge(inherited.allParams, parameters), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
+    const newInherited = route.component ?
+        InheritedFromParent.empty(snapshot) :
+        new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
     if (slicedPath.length === 0 && segment.hasChildren()) {
         const children = processSegmentChildren(childConfig, segment, newInherited);
         return [new TreeNode(snapshot, children)];
@@ -125,14 +126,15 @@ function getChildConfig(route) {
         return [];
     }
 }
-function match(segment, route, paths) {
+function match(segment, route, paths, parent) {
     if (route.path === '') {
         if ((route.terminal || route.pathMatch === 'full') &&
             (segment.hasChildren() || paths.length > 0)) {
             throw new NoMatch();
         }
         else {
-            return { consumedPaths: [], lastChild: 0, parameters: {} };
+            const params = parent ? parent.params : {};
+            return { consumedPaths: [], lastChild: 0, parameters: params };
         }
     }
     const path = route.path;
