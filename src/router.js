@@ -112,7 +112,7 @@ exports.RoutesRecognized = RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
- * See {@link Routes) for more details and examples.
+ * See {@link Routes} for more details and examples.
  *
  * @stable
  */

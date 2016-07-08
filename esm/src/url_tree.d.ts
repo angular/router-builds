@@ -58,11 +58,11 @@ export declare function mapChildrenIntoArray<T>(segment: UrlSegment, fn: (v: Url
  */
 export declare abstract class UrlSerializer {
     /**
-     * Parse a url into a {@Link UrlTree}
+     * Parse a url into a {@link UrlTree}
      */
     abstract parse(url: string): UrlTree;
     /**
-     * Converts a {@Link UrlTree} into a url
+     * Converts a {@link UrlTree} into a url
      */
     abstract serialize(tree: UrlTree): string;
 }
