@@ -33,10 +33,16 @@ var RouterLink = (function () {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         this.router.navigateByUrl(this.urlTree);
         return false;
     };
+    Object.defineProperty(RouterLink.prototype, "urlTree", {
+        get: function () {
+            return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        },
+        enumerable: true,
+        configurable: true
+    });
     /** @nocollapse */
     RouterLink.decorators = [
         { type: core_1.Directive, args: [{ selector: ':not(a)[routerLink]' },] },

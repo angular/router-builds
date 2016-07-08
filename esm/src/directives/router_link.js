@@ -28,9 +28,11 @@ export class RouterLink {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
-        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         this.router.navigateByUrl(this.urlTree);
         return false;
+    }
+    get urlTree() {
+        return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
     }
 }
 /** @nocollapse */

@@ -261,7 +261,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         DefaultUrlSerializer.prototype.serialize = function (tree) {
             var segment = "/" + serializeSegment(tree.root, true);
             var query = serializeQueryParams(tree.queryParams);
-            var fragment = tree.fragment !== null ? "#" + tree.fragment : '';
+            var fragment = tree.fragment !== null ? "#" + encodeURIComponent(tree.fragment) : '';
             return "" + segment + query + fragment;
         };
         return DefaultUrlSerializer;
@@ -301,13 +301,15 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
     }
     function serializePath(path) {
-        return "" + path.path + serializeParams(path.parameters);
+        return "" + encodeURIComponent(path.path) + serializeParams(path.parameters);
     }
     function serializeParams(params) {
-        return pairs(params).map(function (p) { return (";" + p.first + "=" + p.second); }).join('');
+        return pairs(params)
+            .map(function (p) { return (";" + encodeURIComponent(p.first) + "=" + encodeURIComponent(p.second)); })
+            .join('');
     }
     function serializeQueryParams(params) {
-        var strs = pairs(params).map(function (p) { return (p.first + "=" + p.second); });
+        var strs = pairs(params).map(function (p) { return (encodeURIComponent(p.first) + "=" + encodeURIComponent(p.second)); });
         return strs.length > 0 ? "?" + strs.join("&") : '';
     }
     var Pair = (function () {
@@ -400,7 +402,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (this.peekStartsWith(';')) {
                 matrixParams = this.parseMatrixParams();
             }
-            return new UrlPathWithParams(path, matrixParams);
+            return new UrlPathWithParams(decodeURIComponent(path), matrixParams);
         };
         UrlParser.prototype.parseQueryParams = function () {
             var params = {};
@@ -416,7 +418,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         UrlParser.prototype.parseFragment = function () {
             if (this.peekStartsWith('#')) {
-                return this.remaining.substring(1);
+                return decodeURIComponent(this.remaining.substring(1));
             }
             else {
                 return null;
@@ -445,7 +447,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     this.capture(value);
                 }
             }
-            params[key] = value;
+            params[decodeURIComponent(key)] = decodeURIComponent(value);
         };
         UrlParser.prototype.parseQueryParam = function (params) {
             var key = matchQueryParams(this.remaining);
@@ -462,7 +464,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     this.capture(value);
                 }
             }
-            params[key] = value;
+            params[decodeURIComponent(key)] = decodeURIComponent(value);
         };
         UrlParser.prototype.parseParens = function (allowPrimary) {
             var segments = {};
@@ -2463,10 +2465,16 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (button !== 0 || ctrlKey || metaKey) {
                 return true;
             }
-            this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
             this.router.navigateByUrl(this.urlTree);
             return false;
         };
+        Object.defineProperty(RouterLink.prototype, "urlTree", {
+            get: function () {
+                return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            },
+            enumerable: true,
+            configurable: true
+        });
         return RouterLink;
     }());
     /** @nocollapse */

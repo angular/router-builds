@@ -60,10 +60,10 @@ export declare class RouterLink {
         [k: string]: any;
     };
     fragment: string;
-    urlTree: UrlTree;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
+    urlTree: UrlTree;
 }
 /**
  * See {@link RouterLink} for more information.
