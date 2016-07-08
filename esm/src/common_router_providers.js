@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { APP_INITIALIZER, AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, OpaqueToken, SystemJsAppModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_PRECOMPILE, APP_INITIALIZER, AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, OpaqueToken, SystemJsAppModuleLoader } from '@angular/core';
 import { Router } from './router';
 import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -67,6 +67,7 @@ export function setupRouterInitializer(injector) {
  */
 export function provideRouter(routes, config) {
     return [
+        { provide: ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
         { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
         { provide: ROUTER_CONFIGURATION, useValue: config }, Location,
         { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -103,7 +104,10 @@ export function provideRouter(routes, config) {
  * @experimental
  */
 export function provideRoutes(routes) {
-    return { provide: ROUTES, useValue: routes };
+    return [
+        { provide: ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
+        { provide: ROUTES, useValue: routes }
+    ];
 }
 /**
  * Router configuration.
