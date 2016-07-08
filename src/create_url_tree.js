@@ -14,6 +14,7 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
         return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
     }
     var normalizedCommands = normalizeCommands(commands);
+    validateCommands(normalizedCommands);
     if (navigateToRoot(normalizedCommands)) {
         return tree(urlTree.root, new url_tree_1.UrlSegment([], {}), urlTree, queryParams, fragment);
     }
@@ -24,6 +25,11 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     return tree(startingPosition.segment, segment, urlTree, queryParams, fragment);
 }
 exports.createUrlTree = createUrlTree;
+function validateCommands(n) {
+    if (n.isAbsolute && n.commands.length > 0 && (typeof n.commands[0] === 'object')) {
+        throw new Error('Root segment cannot have matrix parameters');
+    }
+}
 function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
     var q = queryParams ? stringify(queryParams) : urlTree.queryParams;
     var f = fragment ? fragment : urlTree.fragment;
