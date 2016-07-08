@@ -5,13 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Attribute, ComponentFactoryResolver, Directive, NoComponentFactoryError, ReflectiveInjector, ViewContainerRef } from '@angular/core';
+import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, NoComponentFactoryError, Output, ReflectiveInjector, ViewContainerRef } from '@angular/core';
 import { RouterOutletMap } from '../router_outlet_map';
 import { PRIMARY_OUTLET } from '../shared';
 export class RouterOutlet {
     constructor(parentOutletMap, location, resolver, name) {
         this.location = location;
         this.resolver = resolver;
+        this.activateEvents = new EventEmitter();
+        this.deactivateEvents = new EventEmitter();
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
     }
     get isActivated() { return !!this.activated; }
@@ -27,8 +29,10 @@ export class RouterOutlet {
     }
     deactivate() {
         if (this.activated) {
+            const c = this.component;
             this.activated.destroy();
             this.activated = null;
+            this.deactivateEvents.emit(c);
         }
     }
     activate(activatedRoute, loadedResolver, providers, outletMap) {
@@ -61,6 +65,7 @@ export class RouterOutlet {
         const inj = ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         this.activated.changeDetectorRef.detectChanges();
+        this.activateEvents.emit(this.activated.instance);
     }
 }
 /** @nocollapse */
@@ -74,4 +79,9 @@ RouterOutlet.ctorParameters = [
     { type: ComponentFactoryResolver, },
     { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
 ];
+/** @nocollapse */
+RouterOutlet.propDecorators = {
+    'activateEvents': [{ type: Output, args: ['activate',] },],
+    'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
+};
 //# sourceMappingURL=router_outlet.js.map

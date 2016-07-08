@@ -2639,6 +2639,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         function RouterOutlet(parentOutletMap, location, resolver, name) {
             this.location = location;
             this.resolver = resolver;
+            this.activateEvents = new _angular_core.EventEmitter();
+            this.deactivateEvents = new _angular_core.EventEmitter();
             parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
         }
         Object.defineProperty(RouterOutlet.prototype, "isActivated", {
@@ -2666,8 +2668,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         });
         RouterOutlet.prototype.deactivate = function () {
             if (this.activated) {
+                var c = this.component;
                 this.activated.destroy();
                 this.activated = null;
+                this.deactivateEvents.emit(c);
             }
         };
         RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, providers, outletMap) {
@@ -2697,6 +2701,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
             this.activated = this.location.createComponent(factory, this.location.length, inj, []);
             this.activated.changeDetectorRef.detectChanges();
+            this.activateEvents.emit(this.activated.instance);
         };
         return RouterOutlet;
     }());
@@ -2711,6 +2716,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         { type: _angular_core.ComponentFactoryResolver, },
         { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
     ];
+    /** @nocollapse */
+    RouterOutlet.propDecorators = {
+        'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
+        'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
+    };
     /**
      * @stable
      */

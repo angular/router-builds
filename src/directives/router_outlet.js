@@ -13,6 +13,8 @@ var RouterOutlet = (function () {
     function RouterOutlet(parentOutletMap, location, resolver, name) {
         this.location = location;
         this.resolver = resolver;
+        this.activateEvents = new core_1.EventEmitter();
+        this.deactivateEvents = new core_1.EventEmitter();
         parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
     }
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
@@ -40,8 +42,10 @@ var RouterOutlet = (function () {
     });
     RouterOutlet.prototype.deactivate = function () {
         if (this.activated) {
+            var c = this.component;
             this.activated.destroy();
             this.activated = null;
+            this.deactivateEvents.emit(c);
         }
     };
     RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, providers, outletMap) {
@@ -71,6 +75,7 @@ var RouterOutlet = (function () {
         var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         this.activated.changeDetectorRef.detectChanges();
+        this.activateEvents.emit(this.activated.instance);
     };
     /** @nocollapse */
     RouterOutlet.decorators = [
@@ -83,6 +88,11 @@ var RouterOutlet = (function () {
         { type: core_1.ComponentFactoryResolver, },
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ['name',] },] },
     ];
+    /** @nocollapse */
+    RouterOutlet.propDecorators = {
+        'activateEvents': [{ type: core_1.Output, args: ['activate',] },],
+        'deactivateEvents': [{ type: core_1.Output, args: ['deactivate',] },],
+    };
     return RouterOutlet;
 }());
 exports.RouterOutlet = RouterOutlet;
