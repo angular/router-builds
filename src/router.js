@@ -13,10 +13,10 @@ require('rxjs/add/operator/reduce');
 require('rxjs/add/operator/every');
 require('rxjs/add/observable/from');
 require('rxjs/add/observable/forkJoin');
+require('rxjs/add/observable/of');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
 var Subject_1 = require('rxjs/Subject');
-var of_1 = require('rxjs/observable/of');
 var apply_redirects_1 = require('./apply_redirects');
 var config_1 = require('./config');
 var create_router_state_1 = require('./create_router_state');
@@ -334,7 +334,7 @@ var Router = (function () {
                     return preActivation.resolveData().map(function () { return shouldActivate; });
                 }
                 else {
-                    return of_1.of(shouldActivate);
+                    return Observable_1.Observable.of(shouldActivate);
                 }
             })
                 .forEach(function (shouldActivate) {
@@ -403,7 +403,7 @@ var PreActivation = (function () {
     PreActivation.prototype.checkGuards = function () {
         var _this = this;
         if (this.checks.length === 0)
-            return of_1.of(true);
+            return Observable_1.Observable.of(true);
         return Observable_1.Observable.from(this.checks)
             .map(function (s) {
             if (s instanceof CanActivate) {
@@ -424,14 +424,14 @@ var PreActivation = (function () {
     PreActivation.prototype.resolveData = function () {
         var _this = this;
         if (this.checks.length === 0)
-            return of_1.of(null);
+            return Observable_1.Observable.of(null);
         return Observable_1.Observable.from(this.checks)
             .mergeMap(function (s) {
             if (s instanceof CanActivate) {
                 return _this.runResolve(s.route);
             }
             else {
-                return of_1.of(null);
+                return Observable_1.Observable.of(null);
             }
         })
             .reduce(function (_, __) { return _; });
@@ -500,7 +500,7 @@ var PreActivation = (function () {
         var _this = this;
         var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
-            return of_1.of(true);
+            return Observable_1.Observable.of(true);
         return Observable_1.Observable.from(canActivate)
             .map(function (c) {
             var guard = _this.injector.get(c);
@@ -518,7 +518,7 @@ var PreActivation = (function () {
         var _this = this;
         var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
-            return of_1.of(true);
+            return Observable_1.Observable.of(true);
         return Observable_1.Observable.from(canDeactivate)
             .map(function (c) {
             var guard = _this.injector.get(c);
@@ -555,7 +555,7 @@ function wrapIntoObservable(value) {
         return value;
     }
     else {
-        return of_1.of(value);
+        return Observable_1.Observable.of(value);
     }
 }
 var ActivateRoutes = (function () {

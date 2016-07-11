@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/add/observable/from'), require('rxjs/add/observable/forkJoin'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/util/EmptyError'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('rxjs/observable/fromPromise'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/add/observable/from', 'rxjs/add/observable/forkJoin', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/util/EmptyError', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', 'rxjs/observable/fromPromise', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.rxjs_add_operator_map, global.rxjs_add_operator_mergeMap, global.rxjs_add_operator_mergeAll, global.rxjs_add_operator_reduce, global.rxjs_add_operator_every, global.rxjs_add_observable_from, global.rxjs_add_observable_forkJoin, global.Rx, global.Rx, global.rxjs_observable_of, global.rxjs_add_operator_first, global.rxjs_add_operator_catch, global.rxjs_add_operator_concatAll, global.rxjs_util_EmptyError, global.rxjs_add_operator_last, global.Rx, global.rxjs_add_operator_toPromise, global.rxjs_observable_forkJoin, global.rxjs_observable_fromPromise, global.ng.platformBrowser));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_add_observable_forkJoin, rxjs_Observable, rxjs_Subject, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_util_EmptyError, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, rxjs_observable_fromPromise, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/add/observable/from'), require('rxjs/add/observable/forkJoin'), require('rxjs/add/observable/of'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/observable/of'), require('rxjs/util/EmptyError'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('rxjs/observable/fromPromise'), require('@angular/platform-browser')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/add/observable/from', 'rxjs/add/observable/forkJoin', 'rxjs/add/observable/of', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/observable/of', 'rxjs/util/EmptyError', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', 'rxjs/observable/fromPromise', '@angular/platform-browser'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.rxjs_add_operator_map, global.rxjs_add_operator_mergeMap, global.rxjs_add_operator_mergeAll, global.rxjs_add_operator_reduce, global.rxjs_add_operator_every, global.rxjs_add_observable_from, global.rxjs_add_observable_forkJoin, global.rxjs_add_observable_of, global.Rx, global.Rx, global.rxjs_add_operator_first, global.rxjs_add_operator_catch, global.rxjs_add_operator_concatAll, global.rxjs_observable_of, global.rxjs_util_EmptyError, global.rxjs_add_operator_last, global.Rx, global.rxjs_add_operator_toPromise, global.rxjs_observable_forkJoin, global.rxjs_observable_fromPromise, global.ng.platformBrowser));
+}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_add_observable_forkJoin, rxjs_add_observable_of, rxjs_Observable, rxjs_Subject, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_observable_of, rxjs_util_EmptyError, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, rxjs_observable_fromPromise, _angular_platformBrowser) {
     'use strict';
     /**
      * @license
@@ -1993,7 +1993,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                         return preActivation.resolveData().map(function () { return shouldActivate; });
                     }
                     else {
-                        return rxjs_observable_of.of(shouldActivate);
+                        return rxjs_Observable.Observable.of(shouldActivate);
                     }
                 })
                     .forEach(function (shouldActivate) {
@@ -2061,7 +2061,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         PreActivation.prototype.checkGuards = function () {
             var _this = this;
             if (this.checks.length === 0)
-                return rxjs_observable_of.of(true);
+                return rxjs_Observable.Observable.of(true);
             return rxjs_Observable.Observable.from(this.checks)
                 .map(function (s) {
                 if (s instanceof CanActivate) {
@@ -2082,14 +2082,14 @@ var __extends = (this && this.__extends) || function (d, b) {
         PreActivation.prototype.resolveData = function () {
             var _this = this;
             if (this.checks.length === 0)
-                return rxjs_observable_of.of(null);
+                return rxjs_Observable.Observable.of(null);
             return rxjs_Observable.Observable.from(this.checks)
                 .mergeMap(function (s) {
                 if (s instanceof CanActivate) {
                     return _this.runResolve(s.route);
                 }
                 else {
-                    return rxjs_observable_of.of(null);
+                    return rxjs_Observable.Observable.of(null);
                 }
             })
                 .reduce(function (_, __) { return _; });
@@ -2158,7 +2158,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
             if (!canActivate || canActivate.length === 0)
-                return rxjs_observable_of.of(true);
+                return rxjs_Observable.Observable.of(true);
             return rxjs_Observable.Observable.from(canActivate)
                 .map(function (c) {
                 var guard = _this.injector.get(c);
@@ -2176,7 +2176,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
             if (!canDeactivate || canDeactivate.length === 0)
-                return rxjs_observable_of.of(true);
+                return rxjs_Observable.Observable.of(true);
             return rxjs_Observable.Observable.from(canDeactivate)
                 .map(function (c) {
                 var guard = _this.injector.get(c);
@@ -2213,7 +2213,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return value;
         }
         else {
-            return rxjs_observable_of.of(value);
+            return rxjs_Observable.Observable.of(value);
         }
     }
     var ActivateRoutes = (function () {
