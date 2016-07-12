@@ -1204,11 +1204,25 @@ var __extends = (this && this.__extends) || function (d, b) {
         var numberOfDoubleDots = 0;
         var isAbsolute = false;
         var res = [];
-        for (var i = 0; i < commands.length; ++i) {
+        var _loop_2 = function(i) {
             var c = commands[i];
+            if (typeof c === 'object' && c.outlets !== undefined) {
+                var r_1 = {};
+                forEach(c.outlets, function (commands, name) {
+                    var n = name === '' ? PRIMARY_OUTLET : name;
+                    if (typeof commands === 'string') {
+                        r_1[n] = commands.split('/');
+                    }
+                    else {
+                        r_1[n] = commands;
+                    }
+                });
+                res.push({ outlets: r_1 });
+                return "continue";
+            }
             if (!(typeof c === 'string')) {
                 res.push(c);
-                continue;
+                return "continue";
             }
             var parts = c.split('/');
             for (var j = 0; j < parts.length; ++j) {
@@ -1233,6 +1247,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                     }
                 }
             }
+        };
+        for (var i = 0; i < commands.length; ++i) {
+            _loop_2(i);
         }
         return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
     }
@@ -1259,16 +1276,15 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
     }
     function getPath(command) {
-        if (!(typeof command === 'string'))
-            return command.toString();
-        var parts = command.toString().split(':');
-        return parts.length > 1 ? parts[1] : command;
+        return "" + command;
     }
-    function getOutlet$2(commands) {
-        if (!(typeof commands[0] === 'string'))
-            return PRIMARY_OUTLET;
-        var parts = commands[0].toString().split(':');
-        return parts.length > 1 ? parts[0] : PRIMARY_OUTLET;
+    function getOutlets(commands) {
+        if (!(typeof commands[0] === 'object'))
+            return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
+        if (commands[0].outlets === undefined)
+            return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
+        return commands[0].outlets;
+        var _a, _b;
     }
     function updateSegment(segment, startIndex, commands) {
         if (!segment) {
@@ -1297,11 +1313,15 @@ var __extends = (this && this.__extends) || function (d, b) {
             return new UrlSegment(segment.pathsWithParams, {});
         }
         else {
-            var outlet_1 = getOutlet$2(commands);
+            var outlets_1 = getOutlets(commands);
             var children_2 = {};
-            children_2[outlet_1] = updateSegment(segment.children[outlet_1], startIndex, commands);
+            forEach(outlets_1, function (commands, outlet) {
+                if (commands !== null) {
+                    children_2[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
+                }
+            });
             forEach(segment.children, function (child, childOutlet) {
-                if (childOutlet !== outlet_1) {
+                if (outlets_1[childOutlet] === undefined) {
                     children_2[childOutlet] = child;
                 }
             });
@@ -1318,7 +1338,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var path = segment.pathsWithParams[currentPathIndex];
             var curr = getPath(commands[currentCommandIndex]);
             var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
-            if (curr && next && (typeof next === 'object')) {
+            if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
                 if (!compare(curr, next, path))
                     return noMatch;
                 currentCommandIndex += 2;
@@ -1577,11 +1597,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         var res = {};
         for (var _i = 0, routes_3 = routes; _i < routes_3.length; _i++) {
             var r = routes_3[_i];
-            if (emptyPathMatch(segment, slicedPath, r) && !children[getOutlet$3(r)]) {
+            if (emptyPathMatch(segment, slicedPath, r) && !children[getOutlet$2(r)]) {
                 var s = new UrlSegment([], {});
                 s._sourceSegment = segment;
                 s._pathIndexShift = segment.pathsWithParams.length;
-                res[getOutlet$3(r)] = s;
+                res[getOutlet$2(r)] = s;
             }
         }
         return merge(children, res);
@@ -1597,14 +1617,14 @@ var __extends = (this && this.__extends) || function (d, b) {
                 var s = new UrlSegment([], {});
                 s._sourceSegment = segment;
                 s._pathIndexShift = consumedPaths.length;
-                res[getOutlet$3(r)] = s;
+                res[getOutlet$2(r)] = s;
             }
         }
         return res;
     }
     function containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, routes) {
         return routes
-            .filter(function (r) { return emptyPathMatch(segment, slicedPath, r) && getOutlet$3(r) !== PRIMARY_OUTLET; })
+            .filter(function (r) { return emptyPathMatch(segment, slicedPath, r) && getOutlet$2(r) !== PRIMARY_OUTLET; })
             .length > 0;
     }
     function containsEmptyPathMatches(segment, slicedPath, routes) {
@@ -1615,7 +1635,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         return r.path === '' && r.redirectTo === undefined;
     }
-    function getOutlet$3(route) {
+    function getOutlet$2(route) {
         return route.outlet ? route.outlet : PRIMARY_OUTLET;
     }
     function getData(route) {
@@ -1865,6 +1885,9 @@ var __extends = (this && this.__extends) || function (d, b) {
          *
          * // you can collapse static fragments like this
          * router.createUrlTree(['/team/33/user', userId]);
+         *
+         * // create /team/33/(user/11//aux:chat)
+         * router.createUrlTree(['/team', 33, {outlets: {"": 'user/11', right: 'chat'}}]);
          *
          * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
          *

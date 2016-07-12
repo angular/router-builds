@@ -71,11 +71,25 @@ function normalizeCommands(commands) {
     var numberOfDoubleDots = 0;
     var isAbsolute = false;
     var res = [];
-    for (var i = 0; i < commands.length; ++i) {
+    var _loop_1 = function(i) {
         var c = commands[i];
+        if (typeof c === 'object' && c.outlets !== undefined) {
+            var r_1 = {};
+            collection_1.forEach(c.outlets, function (commands, name) {
+                var n = name === '' ? shared_1.PRIMARY_OUTLET : name;
+                if (typeof commands === 'string') {
+                    r_1[n] = commands.split('/');
+                }
+                else {
+                    r_1[n] = commands;
+                }
+            });
+            res.push({ outlets: r_1 });
+            return "continue";
+        }
         if (!(typeof c === 'string')) {
             res.push(c);
-            continue;
+            return "continue";
         }
         var parts = c.split('/');
         for (var j = 0; j < parts.length; ++j) {
@@ -100,6 +114,9 @@ function normalizeCommands(commands) {
                 }
             }
         }
+    };
+    for (var i = 0; i < commands.length; ++i) {
+        _loop_1(i);
     }
     return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
 }
@@ -126,16 +143,15 @@ function findStartingPosition(normalizedChange, urlTree, route) {
     }
 }
 function getPath(command) {
-    if (!(typeof command === 'string'))
-        return command.toString();
-    var parts = command.toString().split(':');
-    return parts.length > 1 ? parts[1] : command;
+    return "" + command;
 }
-function getOutlet(commands) {
-    if (!(typeof commands[0] === 'string'))
-        return shared_1.PRIMARY_OUTLET;
-    var parts = commands[0].toString().split(':');
-    return parts.length > 1 ? parts[0] : shared_1.PRIMARY_OUTLET;
+function getOutlets(commands) {
+    if (!(typeof commands[0] === 'object'))
+        return (_a = {}, _a[shared_1.PRIMARY_OUTLET] = commands, _a);
+    if (commands[0].outlets === undefined)
+        return (_b = {}, _b[shared_1.PRIMARY_OUTLET] = commands, _b);
+    return commands[0].outlets;
+    var _a, _b;
 }
 function updateSegment(segment, startIndex, commands) {
     if (!segment) {
@@ -164,11 +180,15 @@ function updateSegmentChildren(segment, startIndex, commands) {
         return new url_tree_1.UrlSegment(segment.pathsWithParams, {});
     }
     else {
-        var outlet_1 = getOutlet(commands);
+        var outlets_1 = getOutlets(commands);
         var children_1 = {};
-        children_1[outlet_1] = updateSegment(segment.children[outlet_1], startIndex, commands);
+        collection_1.forEach(outlets_1, function (commands, outlet) {
+            if (commands !== null) {
+                children_1[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
+            }
+        });
         collection_1.forEach(segment.children, function (child, childOutlet) {
-            if (childOutlet !== outlet_1) {
+            if (outlets_1[childOutlet] === undefined) {
                 children_1[childOutlet] = child;
             }
         });
@@ -185,7 +205,7 @@ function prefixedWith(segment, startIndex, commands) {
         var path = segment.pathsWithParams[currentPathIndex];
         var curr = getPath(commands[currentCommandIndex]);
         var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
-        if (curr && next && (typeof next === 'object')) {
+        if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
             if (!compare(curr, next, path))
                 return noMatch;
             currentCommandIndex += 2;

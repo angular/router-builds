@@ -70,6 +70,20 @@ function normalizeCommands(commands) {
     const res = [];
     for (let i = 0; i < commands.length; ++i) {
         const c = commands[i];
+        if (typeof c === 'object' && c.outlets !== undefined) {
+            const r = {};
+            forEach(c.outlets, (commands, name) => {
+                const n = name === '' ? PRIMARY_OUTLET : name;
+                if (typeof commands === 'string') {
+                    r[n] = commands.split('/');
+                }
+                else {
+                    r[n] = commands;
+                }
+            });
+            res.push({ outlets: r });
+            continue;
+        }
         if (!(typeof c === 'string')) {
             res.push(c);
             continue;
@@ -122,16 +136,14 @@ function findStartingPosition(normalizedChange, urlTree, route) {
     }
 }
 function getPath(command) {
-    if (!(typeof command === 'string'))
-        return command.toString();
-    const parts = command.toString().split(':');
-    return parts.length > 1 ? parts[1] : command;
+    return `${command}`;
 }
-function getOutlet(commands) {
-    if (!(typeof commands[0] === 'string'))
-        return PRIMARY_OUTLET;
-    const parts = commands[0].toString().split(':');
-    return parts.length > 1 ? parts[0] : PRIMARY_OUTLET;
+function getOutlets(commands) {
+    if (!(typeof commands[0] === 'object'))
+        return { [PRIMARY_OUTLET]: commands };
+    if (commands[0].outlets === undefined)
+        return { [PRIMARY_OUTLET]: commands };
+    return commands[0].outlets;
 }
 function updateSegment(segment, startIndex, commands) {
     if (!segment) {
@@ -160,11 +172,15 @@ function updateSegmentChildren(segment, startIndex, commands) {
         return new UrlSegment(segment.pathsWithParams, {});
     }
     else {
-        const outlet = getOutlet(commands);
+        const outlets = getOutlets(commands);
         const children = {};
-        children[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
+        forEach(outlets, (commands, outlet) => {
+            if (commands !== null) {
+                children[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
+            }
+        });
         forEach(segment.children, (child, childOutlet) => {
-            if (childOutlet !== outlet) {
+            if (outlets[childOutlet] === undefined) {
                 children[childOutlet] = child;
             }
         });
@@ -181,7 +197,7 @@ function prefixedWith(segment, startIndex, commands) {
         const path = segment.pathsWithParams[currentPathIndex];
         const curr = getPath(commands[currentCommandIndex]);
         const next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
-        if (curr && next && (typeof next === 'object')) {
+        if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
             if (!compare(curr, next, path))
                 return noMatch;
             currentCommandIndex += 2;
