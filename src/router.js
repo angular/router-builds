@@ -131,7 +131,6 @@ var Router = (function () {
         this.resetConfig(config);
         this.routerEvents = new Subject_1.Subject();
         this.currentUrlTree = url_tree_1.createEmptyUrlTree();
-        this.futureUrlTree = this.currentUrlTree;
         this.configLoader = new router_config_loader_1.RouterConfigLoader(loader);
         this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
@@ -228,17 +227,6 @@ var Router = (function () {
         return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     };
     /**
-     * Used by RouterLinkWithHref to update HREFs.
-     * We have to use the futureUrl because we run change detection ind the middle of activation when
-     * the current url has not been updated yet.
-     * @internal
-     */
-    Router.prototype.createUrlTreeUsingFutureUrl = function (commands, _a) {
-        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
-        var a = relativeTo ? relativeTo : this.routerState.root;
-        return create_url_tree_1.createUrlTree(a, this.futureUrlTree, commands, queryParams, fragment);
-    };
-    /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
      * Returns a promise that:
@@ -297,7 +285,12 @@ var Router = (function () {
     Router.prototype.setUpLocationChangeListener = function () {
         var _this = this;
         this.locationSubscription = this.location.subscribe(function (change) {
-            return _this.scheduleNavigation(_this.urlSerializer.parse(change['url']), change['pop']);
+            var tree = _this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return _this.currentUrlTree.toString() !== tree.toString() ?
+                _this.scheduleNavigation(tree, change['pop']) :
+                null;
         });
     };
     Router.prototype.runNavigate = function (url, preventPushState, id) {
@@ -311,13 +304,16 @@ var Router = (function () {
             var state;
             var navigationIsSuccessful;
             var preActivation;
+            var appliedUrl;
+            var storedState = _this.currentRouterState;
+            var storedUrl = _this.currentUrlTree;
             apply_redirects_1.applyRedirects(_this.configLoader, url, _this.config)
                 .mergeMap(function (u) {
-                _this.futureUrlTree = u;
-                return recognize_1.recognize(_this.rootComponentType, _this.config, _this.futureUrlTree, _this.serializeUrl(_this.futureUrlTree));
+                appliedUrl = u;
+                return recognize_1.recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
             })
                 .mergeMap(function (newRouterStateSnapshot) {
-                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree), newRouterStateSnapshot));
+                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
                 return resolve_1.resolve(_this.resolver, newRouterStateSnapshot);
             })
                 .map(function (routerStateSnapshot) {
@@ -346,11 +342,11 @@ var Router = (function () {
                     navigationIsSuccessful = false;
                     return;
                 }
-                new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
-                _this.currentUrlTree = _this.futureUrlTree;
+                _this.currentUrlTree = appliedUrl;
                 _this.currentRouterState = state;
+                new ActivateRoutes(state, storedState).activate(_this.outletMap);
                 if (!preventPushState) {
-                    var path = _this.urlSerializer.serialize(_this.futureUrlTree);
+                    var path = _this.urlSerializer.serialize(appliedUrl);
                     if (_this.location.isCurrentPathEqualTo(path)) {
                         _this.location.replaceState(path);
                     }
@@ -361,9 +357,11 @@ var Router = (function () {
                 navigationIsSuccessful = true;
             })
                 .then(function () {
-                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree)));
+                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
                 resolvePromise(navigationIsSuccessful);
             }, function (e) {
+                _this.currentRouterState = storedState;
+                _this.currentUrlTree = storedUrl;
                 _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
                 rejectPromise(e);
             });

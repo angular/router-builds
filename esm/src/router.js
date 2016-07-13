@@ -120,7 +120,6 @@ export class Router {
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
-        this.futureUrlTree = this.currentUrlTree;
         this.configLoader = new RouterConfigLoader(loader);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
@@ -204,16 +203,6 @@ export class Router {
         return createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     }
     /**
-     * Used by RouterLinkWithHref to update HREFs.
-     * We have to use the futureUrl because we run change detection ind the middle of activation when
-     * the current url has not been updated yet.
-     * @internal
-     */
-    createUrlTreeUsingFutureUrl(commands, { relativeTo, queryParams, fragment } = {}) {
-        const a = relativeTo ? relativeTo : this.routerState.root;
-        return createUrlTree(a, this.futureUrlTree, commands, queryParams, fragment);
-    }
-    /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
      * Returns a promise that:
@@ -269,7 +258,12 @@ export class Router {
     }
     setUpLocationChangeListener() {
         this.locationSubscription = this.location.subscribe((change) => {
-            return this.scheduleNavigation(this.urlSerializer.parse(change['url']), change['pop']);
+            const tree = this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return this.currentUrlTree.toString() !== tree.toString() ?
+                this.scheduleNavigation(tree, change['pop']) :
+                null;
         });
     }
     runNavigate(url, preventPushState, id) {
@@ -282,13 +276,16 @@ export class Router {
             let state;
             let navigationIsSuccessful;
             let preActivation;
+            let appliedUrl;
+            const storedState = this.currentRouterState;
+            const storedUrl = this.currentUrlTree;
             applyRedirects(this.configLoader, url, this.config)
                 .mergeMap(u => {
-                this.futureUrlTree = u;
-                return recognize(this.rootComponentType, this.config, this.futureUrlTree, this.serializeUrl(this.futureUrlTree));
+                appliedUrl = u;
+                return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl));
             })
                 .mergeMap((newRouterStateSnapshot) => {
-                this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(this.futureUrlTree), newRouterStateSnapshot));
+                this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), newRouterStateSnapshot));
                 return resolve(this.resolver, newRouterStateSnapshot);
             })
                 .map((routerStateSnapshot) => {
@@ -317,11 +314,11 @@ export class Router {
                     navigationIsSuccessful = false;
                     return;
                 }
-                new ActivateRoutes(state, this.currentRouterState).activate(this.outletMap);
-                this.currentUrlTree = this.futureUrlTree;
+                this.currentUrlTree = appliedUrl;
                 this.currentRouterState = state;
+                new ActivateRoutes(state, storedState).activate(this.outletMap);
                 if (!preventPushState) {
-                    let path = this.urlSerializer.serialize(this.futureUrlTree);
+                    let path = this.urlSerializer.serialize(appliedUrl);
                     if (this.location.isCurrentPathEqualTo(path)) {
                         this.location.replaceState(path);
                     }
@@ -332,9 +329,11 @@ export class Router {
                 navigationIsSuccessful = true;
             })
                 .then(() => {
-                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(this.futureUrlTree)));
+                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
                 resolvePromise(navigationIsSuccessful);
             }, e => {
+                this.currentRouterState = storedState;
+                this.currentUrlTree = storedUrl;
                 this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
                 rejectPromise(e);
             });
