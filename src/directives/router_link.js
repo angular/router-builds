@@ -38,7 +38,7 @@ var RouterLink = (function () {
     };
     Object.defineProperty(RouterLink.prototype, "urlTree", {
         get: function () {
-            return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            return this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         },
         enumerable: true,
         configurable: true
@@ -104,7 +104,7 @@ var RouterLinkWithHref = (function () {
         return false;
     };
     RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         if (this.urlTree) {
             this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }

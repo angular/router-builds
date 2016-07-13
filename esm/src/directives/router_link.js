@@ -32,7 +32,7 @@ export class RouterLink {
         return false;
     }
     get urlTree() {
-        return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        return this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
     }
 }
 /** @nocollapse */
@@ -88,7 +88,7 @@ export class RouterLinkWithHref {
         return false;
     }
     updateTargetUrlAndHref() {
-        this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
         if (this.urlTree) {
             this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }

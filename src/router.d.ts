@@ -109,7 +109,6 @@ export declare class Router {
     private routerEvents;
     private navigationId;
     private config;
-    private futureUrlTree;
     private configLoader;
     /**
      * Creates the router service.
