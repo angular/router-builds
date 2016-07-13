@@ -29,7 +29,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  *     component: Team,
  *     canActivate: [CanActivateTeam]
  *   }])
- * );
+ * ]);
  * ```
  *
  * You can also provide a function with the same signature instead of the class:
@@ -43,7 +43,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  *     component: Team,
  *     canActivate: ['canActivateTeam']
  *   }])
- * );
+ * ]);
  * ```
  *
  * @stable
@@ -73,7 +73,7 @@ export interface CanActivate {
  *     component: Team,
  *     canDeactivate: [CanDeactivateTeam]
  *   }])
- * );
+ * ]);
  * ```
  *
  * You can also provide a function with the same signature instead of the class:
@@ -87,7 +87,7 @@ export interface CanActivate {
  *     component: Team,
  *     canActivate: ['canDeactivateTeam']
  *   }])
- * );
+ * ]);
  * ```
  *
  * @stable
@@ -119,7 +119,7 @@ export interface CanDeactivate<T> {
  *       team: TeamResolver
  *     }
  *   }])
- * );
+ * ]);
  * ```
  *
  * You can also provide a function with the same signature instead of the class.
