@@ -1810,6 +1810,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.resetConfig(config);
             this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
+            this.futureUrlTree = this.currentUrlTree;
             this.configLoader = new RouterConfigLoader(loader);
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
@@ -1906,6 +1907,17 @@ var __extends = (this && this.__extends) || function (d, b) {
             return createUrlTree$1(a, this.currentUrlTree, commands, queryParams, fragment);
         };
         /**
+         * Used by RouterLinkWithHref to update HREFs.
+         * We have to use the futureUrl because we run change detection ind the middle of activation when
+         * the current url has not been updated yet.
+         * @internal
+         */
+        Router.prototype.createUrlTreeUsingFutureUrl = function (commands, _a) {
+            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
+            var a = relativeTo ? relativeTo : this.routerState.root;
+            return createUrlTree$1(a, this.futureUrlTree, commands, queryParams, fragment);
+        };
+        /**
          * Navigate based on the provided url. This navigation is always absolute.
          *
          * Returns a promise that:
@@ -1964,12 +1976,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         Router.prototype.setUpLocationChangeListener = function () {
             var _this = this;
             this.locationSubscription = this.location.subscribe(function (change) {
-                var tree = _this.urlSerializer.parse(change['url']);
-                // we fire multiple events for a single URL change
-                // we should navigate only once
-                return _this.currentUrlTree.toString() !== tree.toString() ?
-                    _this.scheduleNavigation(tree, change['pop']) :
-                    null;
+                return _this.scheduleNavigation(_this.urlSerializer.parse(change['url']), change['pop']);
             });
         };
         Router.prototype.runNavigate = function (url, preventPushState, id) {
@@ -1983,16 +1990,13 @@ var __extends = (this && this.__extends) || function (d, b) {
                 var state;
                 var navigationIsSuccessful;
                 var preActivation;
-                var appliedUrl;
-                var storedState = _this.currentRouterState;
-                var storedUrl = _this.currentUrlTree;
                 applyRedirects(_this.configLoader, url, _this.config)
                     .mergeMap(function (u) {
-                    appliedUrl = u;
-                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
+                    _this.futureUrlTree = u;
+                    return recognize(_this.rootComponentType, _this.config, _this.futureUrlTree, _this.serializeUrl(_this.futureUrlTree));
                 })
                     .mergeMap(function (newRouterStateSnapshot) {
-                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
+                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree), newRouterStateSnapshot));
                     return resolve(_this.resolver, newRouterStateSnapshot);
                 })
                     .map(function (routerStateSnapshot) {
@@ -2021,11 +2025,11 @@ var __extends = (this && this.__extends) || function (d, b) {
                         navigationIsSuccessful = false;
                         return;
                     }
-                    _this.currentUrlTree = appliedUrl;
+                    new ActivateRoutes(state, _this.currentRouterState).activate(_this.outletMap);
+                    _this.currentUrlTree = _this.futureUrlTree;
                     _this.currentRouterState = state;
-                    new ActivateRoutes(state, storedState).activate(_this.outletMap);
                     if (!preventPushState) {
-                        var path = _this.urlSerializer.serialize(appliedUrl);
+                        var path = _this.urlSerializer.serialize(_this.futureUrlTree);
                         if (_this.location.isCurrentPathEqualTo(path)) {
                             _this.location.replaceState(path);
                         }
@@ -2036,11 +2040,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
-                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.futureUrlTree)));
                     resolvePromise(navigationIsSuccessful);
                 }, function (e) {
-                    _this.currentRouterState = storedState;
-                    _this.currentUrlTree = storedUrl;
                     _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
                     rejectPromise(e);
                 });
@@ -2499,7 +2501,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         Object.defineProperty(RouterLink.prototype, "urlTree", {
             get: function () {
-                return this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+                return this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
             },
             enumerable: true,
             configurable: true
@@ -2564,7 +2566,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         };
         RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-            this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            this.urlTree = this.router.createUrlTreeUsingFutureUrl(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
             if (this.urlTree) {
                 this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
             }
