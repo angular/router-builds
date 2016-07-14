@@ -812,6 +812,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         config.forEach(validateNode);
     }
     function validateNode(route) {
+        if (Array.isArray(route)) {
+            throw new Error("Invalid route configuration: Array cannot be specified");
+        }
         if (!!route.redirectTo && !!route.children) {
             throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
         }
