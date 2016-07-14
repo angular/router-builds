@@ -11,6 +11,7 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
@@ -279,7 +280,7 @@ export class Router {
             let appliedUrl;
             const storedState = this.currentRouterState;
             const storedUrl = this.currentUrlTree;
-            applyRedirects(this.configLoader, url, this.config)
+            applyRedirects(this.injector, this.configLoader, url, this.config)
                 .mergeMap(u => {
                 appliedUrl = u;
                 return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl));
@@ -340,17 +341,12 @@ export class Router {
         });
     }
 }
-/**
- * @experimental
- */
 class CanActivate {
-    constructor(route) {
-        this.route = route;
+    constructor(path) {
+        this.path = path;
     }
+    get route() { return this.path[this.path.length - 1]; }
 }
-/**
- * @experimental
- */
 class CanDeactivate {
     constructor(component, route) {
         this.component = component;
@@ -367,7 +363,7 @@ class PreActivation {
     traverse(parentOutletMap) {
         const futureRoot = this.future._root;
         const currRoot = this.curr ? this.curr._root : null;
-        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
     }
     checkGuards() {
         if (this.checks.length === 0)
@@ -375,7 +371,7 @@ class PreActivation {
         return Observable.from(this.checks)
             .map(s => {
             if (s instanceof CanActivate) {
-                return this.runCanActivate(s.route);
+                return andObservables(Observable.from([this.runCanActivate(s.route), this.runCanActivateChild(s.path)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -403,29 +399,29 @@ class PreActivation {
         })
             .reduce((_, __) => _);
     }
-    traverseChildRoutes(futureNode, currNode, outletMap) {
+    traverseChildRoutes(futureNode, currNode, outletMap, futurePath) {
         const prevChildren = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(c => {
-            this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap);
+            this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
             delete prevChildren[c.value.outlet];
         });
         forEach(prevChildren, (v, k) => this.deactivateOutletAndItChildren(v, outletMap._outlets[k]));
     }
-    traverseRoutes(futureNode, currNode, parentOutletMap) {
+    traverseRoutes(futureNode, currNode, parentOutletMap, futurePath) {
         const future = futureNode.value;
         const curr = currNode ? currNode.value : null;
         const outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
             if (!shallowEqual(future.params, curr.params)) {
-                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(future));
+                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
-                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null);
+                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
             }
             else {
-                this.traverseChildRoutes(futureNode, currNode, parentOutletMap);
+                this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
             }
         }
         else {
@@ -438,13 +434,13 @@ class PreActivation {
                     this.deactivateOutletMap(parentOutletMap);
                 }
             }
-            this.checks.push(new CanActivate(future));
+            this.checks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
             if (future.component) {
-                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null);
+                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
             }
             else {
-                this.traverseChildRoutes(futureNode, null, parentOutletMap);
+                this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
             }
         }
     }
@@ -465,18 +461,41 @@ class PreActivation {
         const canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return Observable.of(true);
-        return Observable.from(canActivate)
-            .map(c => {
-            const guard = this.injector.get(c);
+        const obs = Observable.from(canActivate).map(c => {
+            const guard = this.getToken(c, future, this.future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, this.future));
             }
             else {
                 return wrapIntoObservable(guard(future, this.future));
             }
-        })
-            .mergeAll()
-            .every(result => result === true);
+        });
+        return andObservables(obs);
+    }
+    runCanActivateChild(path) {
+        const future = path[path.length - 1];
+        const canActivateChildGuards = path.slice(0, path.length - 1)
+            .reverse()
+            .map(p => this.extractCanActivateChild(p))
+            .filter(_ => _ !== null);
+        return andObservables(Observable.from(canActivateChildGuards).map(d => {
+            const obs = Observable.from(d.guards).map(c => {
+                const guard = this.getToken(c, c.node, this.future);
+                if (guard.canActivateChild) {
+                    return wrapIntoObservable(guard.canActivateChild(future, this.future));
+                }
+                else {
+                    return wrapIntoObservable(guard(future, this.future));
+                }
+            });
+            return andObservables(obs);
+        }));
+    }
+    extractCanActivateChild(p) {
+        const canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
+        if (!canActivateChild || canActivateChild.length === 0)
+            return null;
+        return { node: p, guards: canActivateChild };
     }
     runCanDeactivate(component, curr) {
         const canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
@@ -484,7 +503,7 @@ class PreActivation {
             return Observable.of(true);
         return Observable.from(canDeactivate)
             .map(c => {
-            const guard = this.injector.get(c);
+            const guard = this.getToken(c, curr, this.curr);
             if (guard.canDeactivate) {
                 return wrapIntoObservable(guard.canDeactivate(component, curr, this.curr));
             }
@@ -505,15 +524,23 @@ class PreActivation {
     }
     resolveNode(resolve, future) {
         return waitForMap(resolve, (k, v) => {
-            const resolver = this.injector.get(v);
+            const resolver = this.getToken(v, future, this.future);
             return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
                 wrapIntoObservable(resolver(future, this.future));
         });
+    }
+    getToken(token, snapshot, state) {
+        const config = closestLoadedConfig(state, snapshot);
+        const injector = config ? config.injector : this.injector;
+        return injector.get(token);
     }
 }
 function wrapIntoObservable(value) {
     if (value instanceof Observable) {
         return value;
+    }
+    else if (value instanceof Promise) {
+        return Observable.fromPromise(value);
     }
     else {
         return Observable.of(value);
@@ -586,11 +613,10 @@ class ActivateRoutes {
                 provide: RouterOutletMap,
                 useValue: outletMap
             }];
-        const parentFuture = this.futureState.parent(future); // find the closest parent?
-        const config = parentFuture ? parentFuture.snapshot._routeConfig : null;
+        const config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         let loadedFactoryResolver = null;
-        if (config && config._loadedConfig) {
-            const loadedResolver = config._loadedConfig.factoryResolver;
+        if (config) {
+            const loadedResolver = config.factoryResolver;
             loadedFactoryResolver = loadedResolver;
             resolved.push({ provide: ComponentFactoryResolver, useValue: loadedResolver });
         }
@@ -606,6 +632,16 @@ class ActivateRoutes {
     deactivateOutletMap(outletMap) {
         forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
     }
+}
+function closestLoadedConfig(state, snapshot) {
+    const b = state.pathFromRoot(snapshot).filter(s => {
+        const config = s._routeConfig;
+        return config && config._loadedConfig && s !== snapshot;
+    });
+    return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
+}
+function andObservables(observables) {
+    return observables.mergeAll().every(result => result === true);
 }
 function pushQueryParamsAndFragment(state) {
     if (!shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {

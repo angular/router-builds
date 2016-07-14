@@ -50,7 +50,65 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  * @stable
  */
 export interface CanActivate {
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean;
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
+}
+/**
+ * An interface a class can implement to be a guard deciding if a child route can be activated.
+ *
+ * ### Example
+ *
+ * ```
+ * @Injectable()
+ * class CanActivateTeam implements CanActivate {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>
+ * {
+ *     return this.permissions.canActivate(this.currentUser, this.route.params.id);
+ *   }
+ * }
+ *
+ * bootstrap(AppComponent, [
+ *   CanActivateTeam,
+ *
+ *   provideRouter([
+ *     {
+ *       path: 'root',
+ *       canActivateChild: [CanActivateTeam],
+ *       children: [
+ *        {
+ *          path: 'team/:id',
+ *          component: Team
+ *        }
+ *      ]
+ *    }
+ * ]);
+ * ```
+ *
+ * You can also provide a function with the same signature instead of the class:
+ *
+ * ```
+ * bootstrap(AppComponent, [
+ *   {provide: 'canActivateTeam', useValue: (route: ActivatedRouteSnapshot, state:
+ * RouterStateSnapshot) => true},
+ *   provideRouter([
+ *     {
+ *       path: 'root',
+ *       canActivateChild: [CanActivateTeam],
+ *       children: [
+ *        {
+ *          path: 'team/:id',
+ *          component: Team
+ *        }
+ *      ]
+ *    }
+ * ]);
+ * ```
+ *
+ * @stable
+ */
+export interface CanActivateChild {
+    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
  * An interface a class can implement to be a guard deciding if a route can be deactivated.
@@ -95,7 +153,7 @@ export interface CanActivate {
  * @stable
  */
 export interface CanDeactivate<T> {
-    canDeactivate(component: T, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean;
+    canDeactivate(component: T, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
  * An interface a class can implement to be a data provider.
@@ -130,5 +188,5 @@ export interface CanDeactivate<T> {
  * @experimental
  */
 export interface Resolve<T> {
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any;
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any;
 }

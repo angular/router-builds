@@ -12,6 +12,7 @@ require('rxjs/add/operator/mergeAll');
 require('rxjs/add/operator/reduce');
 require('rxjs/add/operator/every');
 require('rxjs/add/observable/from');
+require('rxjs/add/observable/fromPromise');
 require('rxjs/add/observable/forkJoin');
 require('rxjs/add/observable/of');
 var core_1 = require('@angular/core');
@@ -307,7 +308,7 @@ var Router = (function () {
             var appliedUrl;
             var storedState = _this.currentRouterState;
             var storedUrl = _this.currentUrlTree;
-            apply_redirects_1.applyRedirects(_this.configLoader, url, _this.config)
+            apply_redirects_1.applyRedirects(_this.injector, _this.configLoader, url, _this.config)
                 .mergeMap(function (u) {
                 appliedUrl = u;
                 return recognize_1.recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
@@ -370,18 +371,17 @@ var Router = (function () {
     return Router;
 }());
 exports.Router = Router;
-/**
- * @experimental
- */
 var CanActivate = (function () {
-    function CanActivate(route) {
-        this.route = route;
+    function CanActivate(path) {
+        this.path = path;
     }
+    Object.defineProperty(CanActivate.prototype, "route", {
+        get: function () { return this.path[this.path.length - 1]; },
+        enumerable: true,
+        configurable: true
+    });
     return CanActivate;
 }());
-/**
- * @experimental
- */
 var CanDeactivate = (function () {
     function CanDeactivate(component, route) {
         this.component = component;
@@ -399,7 +399,7 @@ var PreActivation = (function () {
     PreActivation.prototype.traverse = function (parentOutletMap) {
         var futureRoot = this.future._root;
         var currRoot = this.curr ? this.curr._root : null;
-        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap);
+        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
     };
     PreActivation.prototype.checkGuards = function () {
         var _this = this;
@@ -408,7 +408,7 @@ var PreActivation = (function () {
         return Observable_1.Observable.from(this.checks)
             .map(function (s) {
             if (s instanceof CanActivate) {
-                return _this.runCanActivate(s.route);
+                return andObservables(Observable_1.Observable.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -437,30 +437,30 @@ var PreActivation = (function () {
         })
             .reduce(function (_, __) { return _; });
     };
-    PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap) {
+    PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap, futurePath) {
         var _this = this;
         var prevChildren = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(function (c) {
-            _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap);
+            _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
             delete prevChildren[c.value.outlet];
         });
         collection_1.forEach(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]); });
     };
-    PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap) {
+    PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap, futurePath) {
         var future = futureNode.value;
         var curr = currNode ? currNode.value : null;
         var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
             if (!collection_1.shallowEqual(future.params, curr.params)) {
-                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(future));
+                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
-                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null);
+                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
             }
             else {
-                this.traverseChildRoutes(futureNode, currNode, parentOutletMap);
+                this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
             }
         }
         else {
@@ -473,13 +473,13 @@ var PreActivation = (function () {
                     this.deactivateOutletMap(parentOutletMap);
                 }
             }
-            this.checks.push(new CanActivate(future));
+            this.checks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
             if (future.component) {
-                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null);
+                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
             }
             else {
-                this.traverseChildRoutes(futureNode, null, parentOutletMap);
+                this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
             }
         }
     };
@@ -502,18 +502,42 @@ var PreActivation = (function () {
         var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return Observable_1.Observable.of(true);
-        return Observable_1.Observable.from(canActivate)
-            .map(function (c) {
-            var guard = _this.injector.get(c);
+        var obs = Observable_1.Observable.from(canActivate).map(function (c) {
+            var guard = _this.getToken(c, future, _this.future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, _this.future));
             }
             else {
                 return wrapIntoObservable(guard(future, _this.future));
             }
-        })
-            .mergeAll()
-            .every(function (result) { return result === true; });
+        });
+        return andObservables(obs);
+    };
+    PreActivation.prototype.runCanActivateChild = function (path) {
+        var _this = this;
+        var future = path[path.length - 1];
+        var canActivateChildGuards = path.slice(0, path.length - 1)
+            .reverse()
+            .map(function (p) { return _this.extractCanActivateChild(p); })
+            .filter(function (_) { return _ !== null; });
+        return andObservables(Observable_1.Observable.from(canActivateChildGuards).map(function (d) {
+            var obs = Observable_1.Observable.from(d.guards).map(function (c) {
+                var guard = _this.getToken(c, c.node, _this.future);
+                if (guard.canActivateChild) {
+                    return wrapIntoObservable(guard.canActivateChild(future, _this.future));
+                }
+                else {
+                    return wrapIntoObservable(guard(future, _this.future));
+                }
+            });
+            return andObservables(obs);
+        }));
+    };
+    PreActivation.prototype.extractCanActivateChild = function (p) {
+        var canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
+        if (!canActivateChild || canActivateChild.length === 0)
+            return null;
+        return { node: p, guards: canActivateChild };
     };
     PreActivation.prototype.runCanDeactivate = function (component, curr) {
         var _this = this;
@@ -522,7 +546,7 @@ var PreActivation = (function () {
             return Observable_1.Observable.of(true);
         return Observable_1.Observable.from(canDeactivate)
             .map(function (c) {
-            var guard = _this.injector.get(c);
+            var guard = _this.getToken(c, curr, _this.curr);
             if (guard.canDeactivate) {
                 return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
             }
@@ -544,16 +568,24 @@ var PreActivation = (function () {
     PreActivation.prototype.resolveNode = function (resolve, future) {
         var _this = this;
         return collection_1.waitForMap(resolve, function (k, v) {
-            var resolver = _this.injector.get(v);
+            var resolver = _this.getToken(v, future, _this.future);
             return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
                 wrapIntoObservable(resolver(future, _this.future));
         });
+    };
+    PreActivation.prototype.getToken = function (token, snapshot, state) {
+        var config = closestLoadedConfig(state, snapshot);
+        var injector = config ? config.injector : this.injector;
+        return injector.get(token);
     };
     return PreActivation;
 }());
 function wrapIntoObservable(value) {
     if (value instanceof Observable_1.Observable) {
         return value;
+    }
+    else if (value instanceof Promise) {
+        return Observable_1.Observable.fromPromise(value);
     }
     else {
         return Observable_1.Observable.of(value);
@@ -627,11 +659,10 @@ var ActivateRoutes = (function () {
                 provide: router_outlet_map_1.RouterOutletMap,
                 useValue: outletMap
             }];
-        var parentFuture = this.futureState.parent(future); // find the closest parent?
-        var config = parentFuture ? parentFuture.snapshot._routeConfig : null;
+        var config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         var loadedFactoryResolver = null;
-        if (config && config._loadedConfig) {
-            var loadedResolver = config._loadedConfig.factoryResolver;
+        if (config) {
+            var loadedResolver = config.factoryResolver;
             loadedFactoryResolver = loadedResolver;
             resolved.push({ provide: core_1.ComponentFactoryResolver, useValue: loadedResolver });
         }
@@ -650,6 +681,16 @@ var ActivateRoutes = (function () {
     };
     return ActivateRoutes;
 }());
+function closestLoadedConfig(state, snapshot) {
+    var b = state.pathFromRoot(snapshot).filter(function (s) {
+        var config = s._routeConfig;
+        return config && config._loadedConfig && s !== snapshot;
+    });
+    return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
+}
+function andObservables(observables) {
+    return observables.mergeAll().every(function (result) { return result === true; });
+}
 function pushQueryParamsAndFragment(state) {
     if (!collection_1.shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
         state.queryParams.next(state.snapshot.queryParams);

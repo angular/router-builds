@@ -11,6 +11,7 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 import { Location } from '@angular/common';

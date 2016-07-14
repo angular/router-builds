@@ -8,8 +8,9 @@
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/concatAll';
+import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
 import { RouterConfigLoader } from './router_config_loader';
 import { UrlTree } from './url_tree';
-export declare function applyRedirects(configLoader: RouterConfigLoader, urlTree: UrlTree, config: Routes): Observable<UrlTree>;
+export declare function applyRedirects(injector: Injector, configLoader: RouterConfigLoader, urlTree: UrlTree, config: Routes): Observable<UrlTree>;
