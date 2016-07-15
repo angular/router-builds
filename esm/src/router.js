@@ -258,14 +258,16 @@ export class Router {
         return Promise.resolve().then((_) => this.runNavigate(url, preventPushState, id));
     }
     setUpLocationChangeListener() {
-        this.locationSubscription = this.location.subscribe((change) => {
+        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+        // which does not work properly with zone.js in IE and Safari
+        this.locationSubscription = this.location.subscribe(Zone.current.wrap((change) => {
             const tree = this.urlSerializer.parse(change['url']);
             // we fire multiple events for a single URL change
             // we should navigate only once
             return this.currentUrlTree.toString() !== tree.toString() ?
                 this.scheduleNavigation(tree, change['pop']) :
                 null;
-        });
+        }));
     }
     runNavigate(url, preventPushState, id) {
         if (id !== this.navigationId) {
