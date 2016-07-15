@@ -36,9 +36,9 @@ class InheritedFromParent {
 export function recognize(rootComponentType, config, urlTree, url) {
     try {
         const children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), PRIMARY_OUTLET);
-        const root = new ActivatedRouteSnapshot([], {}, {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
+        const root = new ActivatedRouteSnapshot([], Object.freeze({}), {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
         const rootNode = new TreeNode(root, children);
-        return of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
+        return of(new RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
     }
     catch (e) {
         if (e instanceof NoMatch) {
@@ -92,14 +92,14 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
     const newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
     if (route.path === '**') {
         const params = paths.length > 0 ? last(paths).parameters : {};
-        const snapshot = new ActivatedRouteSnapshot(paths, merge(inherited.allParams, params), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
+        const snapshot = new ActivatedRouteSnapshot(paths, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
         return [new TreeNode(snapshot, [])];
     }
     const { consumedPaths, parameters, lastChild } = match(rawSegment, route, paths, inherited.snapshot);
     const rawSlicedPath = paths.slice(lastChild);
     const childConfig = getChildConfig(route);
     const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
-    const snapshot = new ActivatedRouteSnapshot(consumedPaths, merge(inherited.allParams, parameters), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
+    const snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
     const newInherited = route.component ?
         InheritedFromParent.empty(snapshot) :
         new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);

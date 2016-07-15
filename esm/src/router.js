@@ -125,7 +125,7 @@ export class Router {
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
-     * @internal
+     * Sets up the location change listener and performs the inital navigation
      */
     initialNavigation() {
         this.setUpLocationChangeListener();
@@ -162,7 +162,7 @@ export class Router {
         this.config = config;
     }
     /**
-     * @internal
+     * Disposes of the router.
      */
     dispose() { this.locationSubscription.unsubscribe(); }
     /**

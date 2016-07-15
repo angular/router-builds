@@ -136,7 +136,7 @@ var Router = (function () {
         this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
-     * @internal
+     * Sets up the location change listener and performs the inital navigation
      */
     Router.prototype.initialNavigation = function () {
         this.setUpLocationChangeListener();
@@ -185,7 +185,7 @@ var Router = (function () {
         this.config = config;
     };
     /**
-     * @internal
+     * Disposes of the router.
      */
     Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
     /**

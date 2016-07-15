@@ -116,6 +116,10 @@ export declare class Router {
      */
     constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes);
     /**
+     * Sets up the location change listener and performs the inital navigation
+     */
+    initialNavigation(): void;
+    /**
      * Returns the current route state.
      */
     routerState: RouterState;
@@ -142,6 +146,10 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
+    /**
+     * Disposes of the router.
+     */
+    dispose(): void;
     /**
      * Applies an array of commands to the current url tree and creates
      * a new url tree.

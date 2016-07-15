@@ -1449,9 +1449,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function recognize(rootComponentType, config, urlTree, url) {
         try {
             var children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), PRIMARY_OUTLET);
-            var root = new ActivatedRouteSnapshot([], {}, {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
+            var root = new ActivatedRouteSnapshot([], Object.freeze({}), {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
             var rootNode = new TreeNode(root, children);
-            return rxjs_observable_of.of(new RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
+            return rxjs_observable_of.of(new RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
         }
         catch (e) {
             if (e instanceof NoMatch$1) {
@@ -1506,14 +1506,14 @@ var __extends = (this && this.__extends) || function (d, b) {
         var newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
         if (route.path === '**') {
             var params = paths.length > 0 ? last(paths).parameters : {};
-            var snapshot_1 = new ActivatedRouteSnapshot(paths, merge(inherited.allParams, params), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
+            var snapshot_1 = new ActivatedRouteSnapshot(paths, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
             return [new TreeNode(snapshot_1, [])];
         }
         var _a = match$1(rawSegment, route, paths, inherited.snapshot), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
         var rawSlicedPath = paths.slice(lastChild);
         var childConfig = getChildConfig$1(route);
         var _b = split$1(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
-        var snapshot = new ActivatedRouteSnapshot(consumedPaths, merge(inherited.allParams, parameters), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
+        var snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
         var newInherited = route.component ?
             InheritedFromParent.empty(snapshot) :
             new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
@@ -1820,7 +1820,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
         /**
-         * @internal
+         * Sets up the location change listener and performs the inital navigation
          */
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
@@ -1869,7 +1869,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.config = config;
         };
         /**
-         * @internal
+         * Disposes of the router.
          */
         Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
         /**
