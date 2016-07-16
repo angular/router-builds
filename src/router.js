@@ -11,13 +11,12 @@ require('rxjs/add/operator/mergeMap');
 require('rxjs/add/operator/mergeAll');
 require('rxjs/add/operator/reduce');
 require('rxjs/add/operator/every');
-require('rxjs/add/observable/from');
-require('rxjs/add/observable/fromPromise');
-require('rxjs/add/observable/forkJoin');
-require('rxjs/add/observable/of');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
 var Subject_1 = require('rxjs/Subject');
+var from_1 = require('rxjs/observable/from');
+var fromPromise_1 = require('rxjs/observable/fromPromise');
+var of_1 = require('rxjs/observable/of');
 var apply_redirects_1 = require('./apply_redirects');
 var config_1 = require('./config');
 var create_router_state_1 = require('./create_router_state');
@@ -336,7 +335,7 @@ var Router = (function () {
                     return preActivation.resolveData().map(function () { return shouldActivate; });
                 }
                 else {
-                    return Observable_1.Observable.of(shouldActivate);
+                    return of_1.of(shouldActivate);
                 }
             })
                 .forEach(function (shouldActivate) {
@@ -406,11 +405,11 @@ var PreActivation = (function () {
     PreActivation.prototype.checkGuards = function () {
         var _this = this;
         if (this.checks.length === 0)
-            return Observable_1.Observable.of(true);
-        return Observable_1.Observable.from(this.checks)
+            return of_1.of(true);
+        return from_1.from(this.checks)
             .map(function (s) {
             if (s instanceof CanActivate) {
-                return andObservables(Observable_1.Observable.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
+                return andObservables(from_1.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -427,14 +426,14 @@ var PreActivation = (function () {
     PreActivation.prototype.resolveData = function () {
         var _this = this;
         if (this.checks.length === 0)
-            return Observable_1.Observable.of(null);
-        return Observable_1.Observable.from(this.checks)
+            return of_1.of(null);
+        return from_1.from(this.checks)
             .mergeMap(function (s) {
             if (s instanceof CanActivate) {
                 return _this.runResolve(s.route);
             }
             else {
-                return Observable_1.Observable.of(null);
+                return of_1.of(null);
             }
         })
             .reduce(function (_, __) { return _; });
@@ -503,8 +502,8 @@ var PreActivation = (function () {
         var _this = this;
         var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
-            return Observable_1.Observable.of(true);
-        var obs = Observable_1.Observable.from(canActivate).map(function (c) {
+            return of_1.of(true);
+        var obs = from_1.from(canActivate).map(function (c) {
             var guard = _this.getToken(c, future, _this.future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, _this.future));
@@ -522,8 +521,8 @@ var PreActivation = (function () {
             .reverse()
             .map(function (p) { return _this.extractCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(Observable_1.Observable.from(canActivateChildGuards).map(function (d) {
-            var obs = Observable_1.Observable.from(d.guards).map(function (c) {
+        return andObservables(from_1.from(canActivateChildGuards).map(function (d) {
+            var obs = from_1.from(d.guards).map(function (c) {
                 var guard = _this.getToken(c, c.node, _this.future);
                 if (guard.canActivateChild) {
                     return wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -545,8 +544,8 @@ var PreActivation = (function () {
         var _this = this;
         var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
-            return Observable_1.Observable.of(true);
-        return Observable_1.Observable.from(canDeactivate)
+            return of_1.of(true);
+        return from_1.from(canDeactivate)
             .map(function (c) {
             var guard = _this.getToken(c, curr, _this.curr);
             if (guard.canDeactivate) {
@@ -587,10 +586,10 @@ function wrapIntoObservable(value) {
         return value;
     }
     else if (value instanceof Promise) {
-        return Observable_1.Observable.fromPromise(value);
+        return fromPromise_1.fromPromise(value);
     }
     else {
-        return Observable_1.Observable.of(value);
+        return of_1.of(value);
     }
 }
 var ActivateRoutes = (function () {

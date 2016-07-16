@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/add/observable/from'), require('rxjs/add/observable/fromPromise'), require('rxjs/add/observable/forkJoin'), require('rxjs/add/observable/of'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/observable/of'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/add/observable/from', 'rxjs/add/observable/fromPromise', 'rxjs/add/observable/forkJoin', 'rxjs/add/observable/of', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/observable/of', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.rxjs_add_operator_map, global.rxjs_add_operator_mergeMap, global.rxjs_add_operator_mergeAll, global.rxjs_add_operator_reduce, global.rxjs_add_operator_every, global.rxjs_add_observable_from, global.rxjs_add_observable_fromPromise, global.rxjs_add_observable_forkJoin, global.rxjs_add_observable_of, global.Rx, global.Rx, global.rxjs_add_operator_first, global.rxjs_add_operator_catch, global.rxjs_add_operator_concatAll, global.rxjs_observable_of, global.rxjs_util_EmptyError, global.rxjs_observable_fromPromise, global.rxjs_add_operator_last, global.Rx, global.rxjs_add_operator_toPromise, global.rxjs_observable_forkJoin, global.ng.platformBrowser));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_add_observable_from, rxjs_add_observable_fromPromise, rxjs_add_observable_forkJoin, rxjs_add_observable_of, rxjs_Observable, rxjs_Subject, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_observable_of, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/fromPromise'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/util/EmptyError'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('@angular/platform-browser')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/fromPromise', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/util/EmptyError', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', '@angular/platform-browser'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.EmptyError, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable, global.ng.platformBrowser));
+}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Observable, rxjs_Subject, rxjs_observable_from, rxjs_observable_fromPromise, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_util_EmptyError, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
     'use strict';
     /**
      * @deprecated use Routes
@@ -2020,7 +2020,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                         return preActivation.resolveData().map(function () { return shouldActivate; });
                     }
                     else {
-                        return rxjs_Observable.Observable.of(shouldActivate);
+                        return rxjs_observable_of.of(shouldActivate);
                     }
                 })
                     .forEach(function (shouldActivate) {
@@ -2089,11 +2089,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         PreActivation.prototype.checkGuards = function () {
             var _this = this;
             if (this.checks.length === 0)
-                return rxjs_Observable.Observable.of(true);
-            return rxjs_Observable.Observable.from(this.checks)
+                return rxjs_observable_of.of(true);
+            return rxjs_observable_from.from(this.checks)
                 .map(function (s) {
                 if (s instanceof CanActivate) {
-                    return andObservables(rxjs_Observable.Observable.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
+                    return andObservables(rxjs_observable_from.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
                 }
                 else if (s instanceof CanDeactivate) {
                     // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -2110,14 +2110,14 @@ var __extends = (this && this.__extends) || function (d, b) {
         PreActivation.prototype.resolveData = function () {
             var _this = this;
             if (this.checks.length === 0)
-                return rxjs_Observable.Observable.of(null);
-            return rxjs_Observable.Observable.from(this.checks)
+                return rxjs_observable_of.of(null);
+            return rxjs_observable_from.from(this.checks)
                 .mergeMap(function (s) {
                 if (s instanceof CanActivate) {
                     return _this.runResolve(s.route);
                 }
                 else {
-                    return rxjs_Observable.Observable.of(null);
+                    return rxjs_observable_of.of(null);
                 }
             })
                 .reduce(function (_, __) { return _; });
@@ -2186,8 +2186,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
             if (!canActivate || canActivate.length === 0)
-                return rxjs_Observable.Observable.of(true);
-            var obs = rxjs_Observable.Observable.from(canActivate).map(function (c) {
+                return rxjs_observable_of.of(true);
+            var obs = rxjs_observable_from.from(canActivate).map(function (c) {
                 var guard = _this.getToken(c, future, _this.future);
                 if (guard.canActivate) {
                     return wrapIntoObservable(guard.canActivate(future, _this.future));
@@ -2205,8 +2205,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 .reverse()
                 .map(function (p) { return _this.extractCanActivateChild(p); })
                 .filter(function (_) { return _ !== null; });
-            return andObservables(rxjs_Observable.Observable.from(canActivateChildGuards).map(function (d) {
-                var obs = rxjs_Observable.Observable.from(d.guards).map(function (c) {
+            return andObservables(rxjs_observable_from.from(canActivateChildGuards).map(function (d) {
+                var obs = rxjs_observable_from.from(d.guards).map(function (c) {
                     var guard = _this.getToken(c, c.node, _this.future);
                     if (guard.canActivateChild) {
                         return wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -2228,8 +2228,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
             if (!canDeactivate || canDeactivate.length === 0)
-                return rxjs_Observable.Observable.of(true);
-            return rxjs_Observable.Observable.from(canDeactivate)
+                return rxjs_observable_of.of(true);
+            return rxjs_observable_from.from(canDeactivate)
                 .map(function (c) {
                 var guard = _this.getToken(c, curr, _this.curr);
                 if (guard.canDeactivate) {
@@ -2270,10 +2270,10 @@ var __extends = (this && this.__extends) || function (d, b) {
             return value;
         }
         else if (value instanceof Promise) {
-            return rxjs_Observable.Observable.fromPromise(value);
+            return rxjs_observable_fromPromise.fromPromise(value);
         }
         else {
-            return rxjs_Observable.Observable.of(value);
+            return rxjs_observable_of.of(value);
         }
     }
     var ActivateRoutes = (function () {
