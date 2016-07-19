@@ -662,13 +662,14 @@ var ActivateRoutes = (function () {
             }];
         var config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         var loadedFactoryResolver = null;
+        var loadedInjector = null;
         if (config) {
-            var loadedResolver = config.factoryResolver;
-            loadedFactoryResolver = loadedResolver;
-            resolved.push({ provide: core_1.ComponentFactoryResolver, useValue: loadedResolver });
+            loadedFactoryResolver = config.factoryResolver;
+            loadedInjector = config.injector;
+            resolved.push({ provide: core_1.ComponentFactoryResolver, useValue: loadedFactoryResolver });
         }
         ;
-        outlet.activate(future, loadedFactoryResolver, core_1.ReflectiveInjector.resolve(resolved), outletMap);
+        outlet.activate(future, loadedFactoryResolver, loadedInjector, core_1.ReflectiveInjector.resolve(resolved), outletMap);
     };
     ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
         if (outlet && outlet.isActivated) {

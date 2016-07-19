@@ -35,7 +35,7 @@ export class RouterOutlet {
             this.deactivateEvents.emit(c);
         }
     }
-    activate(activatedRoute, loadedResolver, providers, outletMap) {
+    activate(activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
         const snapshot = activatedRoute._futureSnapshot;
@@ -62,7 +62,8 @@ export class RouterOutlet {
           release of the router.`);
             factory = snapshot._resolvedComponentFactory;
         }
-        const inj = ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
+        const injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+        const inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);

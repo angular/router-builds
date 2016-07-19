@@ -18,6 +18,9 @@ import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlSerializer, UrlTree } from './url_tree';
+/**
+ * @experimental
+ */
 export interface NavigationExtras {
     relativeTo?: ActivatedRoute;
     queryParams?: Params;

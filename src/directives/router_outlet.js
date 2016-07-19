@@ -48,7 +48,7 @@ var RouterOutlet = (function () {
             this.deactivateEvents.emit(c);
         }
     };
-    RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, providers, outletMap) {
+    RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
         var snapshot = activatedRoute._futureSnapshot;
@@ -72,7 +72,8 @@ var RouterOutlet = (function () {
             console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'precompile' array of your application component. This will be required in a future\n          release of the router.");
             factory = snapshot._resolvedComponentFactory;
         }
-        var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
+        var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+        var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);

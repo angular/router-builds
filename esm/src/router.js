@@ -616,13 +616,14 @@ class ActivateRoutes {
             }];
         const config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         let loadedFactoryResolver = null;
+        let loadedInjector = null;
         if (config) {
-            const loadedResolver = config.factoryResolver;
-            loadedFactoryResolver = loadedResolver;
-            resolved.push({ provide: ComponentFactoryResolver, useValue: loadedResolver });
+            loadedFactoryResolver = config.factoryResolver;
+            loadedInjector = config.injector;
+            resolved.push({ provide: ComponentFactoryResolver, useValue: loadedFactoryResolver });
         }
         ;
-        outlet.activate(future, loadedFactoryResolver, ReflectiveInjector.resolve(resolved), outletMap);
+        outlet.activate(future, loadedFactoryResolver, loadedInjector, ReflectiveInjector.resolve(resolved), outletMap);
     }
     deactivateOutletAndItChildren(outlet) {
         if (outlet && outlet.isActivated) {

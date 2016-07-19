@@ -1506,14 +1506,14 @@ var __extends = (this && this.__extends) || function (d, b) {
         var newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
         if (route.path === '**') {
             var params = paths.length > 0 ? last(paths).parameters : {};
-            var snapshot_1 = new ActivatedRouteSnapshot(paths, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1, newInheritedResolve);
+            var snapshot_1 = new ActivatedRouteSnapshot(paths, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + paths.length, newInheritedResolve);
             return [new TreeNode(snapshot_1, [])];
         }
         var _a = match$1(rawSegment, route, paths, inherited.snapshot), consumedPaths = _a.consumedPaths, parameters = _a.parameters, lastChild = _a.lastChild;
         var rawSlicedPath = paths.slice(lastChild);
         var childConfig = getChildConfig$1(route);
         var _b = split$1(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
-        var snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1, newInheritedResolve);
+        var snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
         var newInherited = route.component ?
             InheritedFromParent.empty(snapshot) :
             new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
@@ -1598,29 +1598,32 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function getPathIndexShift(segment) {
         var s = segment;
-        var res = 0;
+        var res = (s._pathIndexShift ? s._pathIndexShift : 0);
         while (s._sourceSegment) {
             s = s._sourceSegment;
-            res += segment._pathIndexShift;
+            res += (s._pathIndexShift ? s._pathIndexShift : 0);
         }
-        return res;
+        return res - 1;
     }
     function split$1(segment, consumedPaths, slicedPath, config) {
         if (slicedPath.length > 0 &&
             containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, config)) {
             var s = new UrlSegment(consumedPaths, createChildrenForEmptyPaths$1(segment, consumedPaths, config, new UrlSegment(slicedPath, segment.children)));
             s._sourceSegment = segment;
-            s._pathIndexShift = 0;
+            s._pathIndexShift = consumedPaths.length;
             return { segment: s, slicedPath: [] };
         }
         else if (slicedPath.length === 0 && containsEmptyPathMatches(segment, slicedPath, config)) {
             var s = new UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded$1(segment, slicedPath, config, segment.children));
             s._sourceSegment = segment;
-            s._pathIndexShift = 0;
+            s._pathIndexShift = consumedPaths.length;
             return { segment: s, slicedPath: slicedPath };
         }
         else {
-            return { segment: segment, slicedPath: slicedPath };
+            var s = new UrlSegment(segment.pathsWithParams, segment.children);
+            s._sourceSegment = segment;
+            s._pathIndexShift = consumedPaths.length;
+            return { segment: s, slicedPath: slicedPath };
         }
     }
     function addEmptyPathsToChildrenIfNeeded$1(segment, slicedPath, routes, children) {
@@ -2346,13 +2349,14 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }];
             var config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
             var loadedFactoryResolver = null;
+            var loadedInjector = null;
             if (config) {
-                var loadedResolver = config.factoryResolver;
-                loadedFactoryResolver = loadedResolver;
-                resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: loadedResolver });
+                loadedFactoryResolver = config.factoryResolver;
+                loadedInjector = config.injector;
+                resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: loadedFactoryResolver });
             }
             ;
-            outlet.activate(future, loadedFactoryResolver, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
+            outlet.activate(future, loadedFactoryResolver, loadedInjector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
         };
         ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
             if (outlet && outlet.isActivated) {
@@ -2743,7 +2747,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 this.deactivateEvents.emit(c);
             }
         };
-        RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, providers, outletMap) {
+        RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
             this.outletMap = outletMap;
             this._activatedRoute = activatedRoute;
             var snapshot = activatedRoute._futureSnapshot;
@@ -2767,7 +2771,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'precompile' array of your application component. This will be required in a future\n          release of the router.");
                 factory = snapshot._resolvedComponentFactory;
             }
-            var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
+            var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+            var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
             this.activated = this.location.createComponent(factory, this.location.length, inj, []);
             this.activated.changeDetectorRef.detectChanges();
             this.activateEvents.emit(this.activated.instance);
