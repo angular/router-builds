@@ -286,7 +286,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         DefaultUrlSerializer.prototype.serialize = function (tree) {
             var segment = "/" + serializeSegment(tree.root, true);
             var query = serializeQueryParams(tree.queryParams);
-            var fragment = tree.fragment !== null ? "#" + encodeURIComponent(tree.fragment) : '';
+            var fragment = tree.fragment !== null && tree.fragment !== undefined ?
+                "#" + encodeURIComponent(tree.fragment) :
+                '';
             return "" + segment + query + fragment;
         };
         return DefaultUrlSerializer;
@@ -829,7 +831,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         if (route.redirectTo === undefined && !route.component && !route.children &&
             !route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + route.path + "': component, redirectTo, children, loadChildren must be provided");
+            throw new Error("Invalid configuration of route '" + route.path + "': one of the following must be provided (component or redirectTo or children or loadChildren)");
         }
         if (route.path === undefined) {
             throw new Error("Invalid route configuration: routes must have path specified");
@@ -1194,13 +1196,11 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
     }
     function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
-        var q = queryParams ? stringify(queryParams) : urlTree.queryParams;
-        var f = fragment ? fragment : urlTree.fragment;
         if (urlTree.root === oldSegment) {
-            return new UrlTree(newSegment, q, f);
+            return new UrlTree(newSegment, stringify(queryParams), fragment);
         }
         else {
-            return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), q, f);
+            return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), stringify(queryParams), fragment);
         }
     }
     function replaceSegment(current, oldSegment, newSegment) {
@@ -1816,6 +1816,12 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.location = location;
             this.injector = injector;
             this.navigationId = 0;
+            /**
+             * Indicates if at least one navigation happened.
+             *
+             * @experimental
+             */
+            this.navigated = false;
             this.resetConfig(config);
             this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
@@ -1910,9 +1916,11 @@ var __extends = (this && this.__extends) || function (d, b) {
          * ```
          */
         Router.prototype.createUrlTree = function (commands, _a) {
-            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
+            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, preserveFragment = _b.preserveFragment;
             var a = relativeTo ? relativeTo : this.routerState.root;
-            return createUrlTree$1(a, this.currentUrlTree, commands, queryParams, fragment);
+            var q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+            var f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+            return createUrlTree$1(a, this.currentUrlTree, commands, q, f);
         };
         /**
          * Navigate based on the provided url. This navigation is always absolute.
@@ -2047,6 +2055,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
+                    _this.navigated = true;
                     _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
                     resolvePromise(navigationIsSuccessful);
                 }, function (e) {
@@ -2551,7 +2560,13 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         Object.defineProperty(RouterLink.prototype, "urlTree", {
             get: function () {
-                return this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+                return this.router.createUrlTree(this.commands, {
+                    relativeTo: this.route,
+                    queryParams: this.queryParams,
+                    fragment: this.fragment,
+                    preserveQueryParams: toBool(this.preserveQueryParams),
+                    preserveFragment: toBool(this.preserveFragment)
+                });
             },
             enumerable: true,
             configurable: true
@@ -2572,6 +2587,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     RouterLink.propDecorators = {
         'queryParams': [{ type: _angular_core.Input },],
         'fragment': [{ type: _angular_core.Input },],
+        'preserveQueryParams': [{ type: _angular_core.Input },],
+        'preserveFragment': [{ type: _angular_core.Input },],
         'routerLink': [{ type: _angular_core.Input },],
         'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
@@ -2616,7 +2633,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         };
         RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-            this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            this.urlTree = this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: toBool(this.preserveQueryParams),
+                preserveFragment: toBool(this.preserveFragment)
+            });
             if (this.urlTree) {
                 this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
             }
@@ -2638,10 +2661,18 @@ var __extends = (this && this.__extends) || function (d, b) {
         'target': [{ type: _angular_core.Input },],
         'queryParams': [{ type: _angular_core.Input },],
         'fragment': [{ type: _angular_core.Input },],
+        'routerLinkOptions': [{ type: _angular_core.Input },],
+        'preserveQueryParams': [{ type: _angular_core.Input },],
+        'preserveFragment': [{ type: _angular_core.Input },],
         'href': [{ type: _angular_core.HostBinding },],
         'routerLink': [{ type: _angular_core.Input },],
         'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
+    function toBool(s) {
+        if (s === '')
+            return true;
+        return !!s;
+    }
     var RouterLinkActive = (function () {
         function RouterLinkActive(router, element, renderer) {
             var _this = this;
@@ -2678,7 +2709,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
         RouterLinkActive.prototype.update = function () {
             var _this = this;
-            if (!this.links || !this.linksWithHrefs)
+            if (!this.links || !this.linksWithHrefs || !this.router.navigated)
                 return;
             var currentUrlTree = this.router.parseUrl(this.router.url);
             var isActiveLinks = this.reduceList(currentUrlTree, this.links);

@@ -117,6 +117,12 @@ export class Router {
         this.location = location;
         this.injector = injector;
         this.navigationId = 0;
+        /**
+         * Indicates if at least one navigation happened.
+         *
+         * @experimental
+         */
+        this.navigated = false;
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
@@ -198,9 +204,11 @@ export class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands, { relativeTo, queryParams, fragment } = {}) {
+    createUrlTree(commands, { relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment } = {}) {
         const a = relativeTo ? relativeTo : this.routerState.root;
-        return createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
+        const q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+        const f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+        return createUrlTree(a, this.currentUrlTree, commands, q, f);
     }
     /**
      * Navigate based on the provided url. This navigation is always absolute.
@@ -331,6 +339,7 @@ export class Router {
                 navigationIsSuccessful = true;
             })
                 .then(() => {
+                this.navigated = true;
                 this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
                 resolvePromise(navigationIsSuccessful);
             }, e => {

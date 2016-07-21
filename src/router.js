@@ -128,6 +128,12 @@ var Router = (function () {
         this.location = location;
         this.injector = injector;
         this.navigationId = 0;
+        /**
+         * Indicates if at least one navigation happened.
+         *
+         * @experimental
+         */
+        this.navigated = false;
         this.resetConfig(config);
         this.routerEvents = new Subject_1.Subject();
         this.currentUrlTree = url_tree_1.createEmptyUrlTree();
@@ -222,9 +228,11 @@ var Router = (function () {
      * ```
      */
     Router.prototype.createUrlTree = function (commands, _a) {
-        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment;
+        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, preserveFragment = _b.preserveFragment;
         var a = relativeTo ? relativeTo : this.routerState.root;
-        return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
+        var q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+        var f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+        return create_url_tree_1.createUrlTree(a, this.currentUrlTree, commands, q, f);
     };
     /**
      * Navigate based on the provided url. This navigation is always absolute.
@@ -359,6 +367,7 @@ var Router = (function () {
                 navigationIsSuccessful = true;
             })
                 .then(function () {
+                _this.navigated = true;
                 _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
                 resolvePromise(navigationIsSuccessful);
             }, function (e) {

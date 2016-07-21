@@ -164,7 +164,9 @@ export class DefaultUrlSerializer {
     serialize(tree) {
         const segment = `/${serializeSegment(tree.root, true)}`;
         const query = serializeQueryParams(tree.queryParams);
-        const fragment = tree.fragment !== null ? `#${encodeURIComponent(tree.fragment)}` : '';
+        const fragment = tree.fragment !== null && tree.fragment !== undefined ?
+            `#${encodeURIComponent(tree.fragment)}` :
+            '';
         return `${segment}${query}${fragment}`;
     }
 }

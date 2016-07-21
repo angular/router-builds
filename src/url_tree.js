@@ -187,7 +187,9 @@ var DefaultUrlSerializer = (function () {
     DefaultUrlSerializer.prototype.serialize = function (tree) {
         var segment = "/" + serializeSegment(tree.root, true);
         var query = serializeQueryParams(tree.queryParams);
-        var fragment = tree.fragment !== null ? "#" + encodeURIComponent(tree.fragment) : '';
+        var fragment = tree.fragment !== null && tree.fragment !== undefined ?
+            "#" + encodeURIComponent(tree.fragment) :
+            '';
         return "" + segment + query + fragment;
     };
     return DefaultUrlSerializer;

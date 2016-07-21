@@ -31,13 +31,11 @@ function validateCommands(n) {
     }
 }
 function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
-    var q = queryParams ? stringify(queryParams) : urlTree.queryParams;
-    var f = fragment ? fragment : urlTree.fragment;
     if (urlTree.root === oldSegment) {
-        return new url_tree_1.UrlTree(newSegment, q, f);
+        return new url_tree_1.UrlTree(newSegment, stringify(queryParams), fragment);
     }
     else {
-        return new url_tree_1.UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), q, f);
+        return new url_tree_1.UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), stringify(queryParams), fragment);
     }
 }
 function replaceSegment(current, oldSegment, newSegment) {

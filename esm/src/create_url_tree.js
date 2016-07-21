@@ -29,13 +29,11 @@ function validateCommands(n) {
     }
 }
 function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
-    const q = queryParams ? stringify(queryParams) : urlTree.queryParams;
-    const f = fragment ? fragment : urlTree.fragment;
     if (urlTree.root === oldSegment) {
-        return new UrlTree(newSegment, q, f);
+        return new UrlTree(newSegment, stringify(queryParams), fragment);
     }
     else {
-        return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), q, f);
+        return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), stringify(queryParams), fragment);
     }
 }
 function replaceSegment(current, oldSegment, newSegment) {

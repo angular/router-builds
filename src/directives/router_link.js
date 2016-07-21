@@ -38,7 +38,13 @@ var RouterLink = (function () {
     };
     Object.defineProperty(RouterLink.prototype, "urlTree", {
         get: function () {
-            return this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: toBool(this.preserveQueryParams),
+                preserveFragment: toBool(this.preserveFragment)
+            });
         },
         enumerable: true,
         configurable: true
@@ -57,6 +63,8 @@ var RouterLink = (function () {
     RouterLink.propDecorators = {
         'queryParams': [{ type: core_1.Input },],
         'fragment': [{ type: core_1.Input },],
+        'preserveQueryParams': [{ type: core_1.Input },],
+        'preserveFragment': [{ type: core_1.Input },],
         'routerLink': [{ type: core_1.Input },],
         'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
@@ -104,7 +112,13 @@ var RouterLinkWithHref = (function () {
         return false;
     };
     RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-        this.urlTree = this.router.createUrlTree(this.commands, { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+        this.urlTree = this.router.createUrlTree(this.commands, {
+            relativeTo: this.route,
+            queryParams: this.queryParams,
+            fragment: this.fragment,
+            preserveQueryParams: toBool(this.preserveQueryParams),
+            preserveFragment: toBool(this.preserveFragment)
+        });
         if (this.urlTree) {
             this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         }
@@ -124,6 +138,9 @@ var RouterLinkWithHref = (function () {
         'target': [{ type: core_1.Input },],
         'queryParams': [{ type: core_1.Input },],
         'fragment': [{ type: core_1.Input },],
+        'routerLinkOptions': [{ type: core_1.Input },],
+        'preserveQueryParams': [{ type: core_1.Input },],
+        'preserveFragment': [{ type: core_1.Input },],
         'href': [{ type: core_1.HostBinding },],
         'routerLink': [{ type: core_1.Input },],
         'onClick': [{ type: core_1.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
@@ -131,4 +148,9 @@ var RouterLinkWithHref = (function () {
     return RouterLinkWithHref;
 }());
 exports.RouterLinkWithHref = RouterLinkWithHref;
+function toBool(s) {
+    if (s === '')
+        return true;
+    return !!s;
+}
 //# sourceMappingURL=router_link.js.map

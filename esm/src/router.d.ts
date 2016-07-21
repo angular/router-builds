@@ -25,6 +25,8 @@ export interface NavigationExtras {
     relativeTo?: ActivatedRoute;
     queryParams?: Params;
     fragment?: string;
+    preserveQueryParams?: boolean;
+    preserveFragment?: boolean;
 }
 /**
  * An event triggered when a navigation starts
@@ -111,6 +113,12 @@ export declare class Router {
     private config;
     private configLoader;
     /**
+     * Indicates if at least one navigation happened.
+     *
+     * @experimental
+     */
+    navigated: boolean;
+    /**
      * Creates the router service.
      */
     constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes);
@@ -183,7 +191,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], {relativeTo, queryParams, fragment}?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment}?: NavigationExtras): UrlTree;
     /**
      * Navigate based on the provided url. This navigation is always absolute.
      *

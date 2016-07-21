@@ -46,7 +46,7 @@ var RouterLinkActive = (function () {
     RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     RouterLinkActive.prototype.update = function () {
         var _this = this;
-        if (!this.links || !this.linksWithHrefs)
+        if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
         var currentUrlTree = this.router.parseUrl(this.router.url);
         var isActiveLinks = this.reduceList(currentUrlTree, this.links);

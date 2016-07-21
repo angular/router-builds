@@ -46,8 +46,14 @@ import { UrlTree } from '../url_tree';
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">link to user
  component</a>
  * ```
- *
  * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+ *
+ * You can also tell the directive to preserve the current query params and fragment:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>link to user
+ component</a>
+ * ```
  *
  * @stable
  */
@@ -60,6 +66,8 @@ export declare class RouterLink {
         [k: string]: any;
     };
     fragment: string;
+    preserveQueryParams: boolean;
+    preserveFragment: boolean;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
@@ -79,6 +87,12 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
         [k: string]: any;
     };
     fragment: string;
+    routerLinkOptions: {
+        preserveQueryParams: boolean;
+        preserveFragment: boolean;
+    };
+    preserveQueryParams: boolean;
+    preserveFragment: boolean;
     private subscription;
     href: string;
     urlTree: UrlTree;

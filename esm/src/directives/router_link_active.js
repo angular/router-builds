@@ -38,7 +38,7 @@ export class RouterLinkActive {
     ngOnChanges(changes) { this.update(); }
     ngOnDestroy() { this.subscription.unsubscribe(); }
     update() {
-        if (!this.links || !this.linksWithHrefs)
+        if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
         const currentUrlTree = this.router.parseUrl(this.router.url);
         const isActiveLinks = this.reduceList(currentUrlTree, this.links);
