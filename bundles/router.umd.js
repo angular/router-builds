@@ -297,8 +297,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         return segment.pathsWithParams.map(function (p) { return serializePath(p); }).join('/');
     }
     function serializeSegment(segment, root) {
-        if (segment.children[PRIMARY_OUTLET] && root) {
-            var primary = serializeSegment(segment.children[PRIMARY_OUTLET], false);
+        if (segment.hasChildren() && root) {
+            var primary = segment.children[PRIMARY_OUTLET] ?
+                serializeSegment(segment.children[PRIMARY_OUTLET], false) :
+                '';
             var children_1 = [];
             forEach(segment.children, function (v, k) {
                 if (k !== PRIMARY_OUTLET) {
@@ -374,8 +376,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         return match ? match[0] : '';
     }
     var UrlParser = (function () {
-        function UrlParser(remaining) {
-            this.remaining = remaining;
+        function UrlParser(url) {
+            this.url = url;
+            this.remaining = url;
         }
         UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
         UrlParser.prototype.capture = function (str) {
@@ -402,7 +405,10 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (this.peekStartsWith('/')) {
                 this.capture('/');
             }
-            var paths = [this.parsePathWithParams()];
+            var paths = [];
+            if (!this.peekStartsWith('(')) {
+                paths.push(this.parsePathWithParams());
+            }
             while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
                 this.capture('/');
                 paths.push(this.parsePathWithParams());
@@ -416,7 +422,9 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (this.peekStartsWith('(')) {
                 res = this.parseParens(false);
             }
-            res[PRIMARY_OUTLET] = new UrlSegment(paths, children);
+            if (paths.length > 0 || Object.keys(children).length > 0) {
+                res[PRIMARY_OUTLET] = new UrlSegment(paths, children);
+            }
             return res;
         };
         UrlParser.prototype.parsePathWithParams = function () {
@@ -498,6 +506,12 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.capture('(');
             while (!this.peekStartsWith(')') && this.remaining.length > 0) {
                 var path = matchPathWithParams(this.remaining);
+                var next = this.remaining[path.length];
+                // if is is not one of these characters, then the segment was unescaped
+                // or the group was not closed
+                if (next !== '/' && next !== ')' && next !== ';') {
+                    throw new Error("Cannot parse url '" + this.url + "'");
+                }
                 var outletName = void 0;
                 if (path.indexOf(':') > -1) {
                     outletName = path.substr(0, path.indexOf(':'));
@@ -1448,7 +1462,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     function recognize(rootComponentType, config, urlTree, url) {
         try {
-            var children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), PRIMARY_OUTLET);
+            var rootSegment = split$1(urlTree.root, [], [], config).segment;
+            var children = processSegment(config, rootSegment, InheritedFromParent.empty(null), PRIMARY_OUTLET);
             var root = new ActivatedRouteSnapshot([], Object.freeze({}), {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
             var rootNode = new TreeNode(root, children);
             return rxjs_observable_of.of(new RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
@@ -1513,6 +1528,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         var rawSlicedPath = paths.slice(lastChild);
         var childConfig = getChildConfig$1(route);
         var _b = split$1(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
+        // console.log("raw", rawSegment)
+        // console.log(segment.toString(), childConfig)
         var snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
         var newInherited = route.component ?
             InheritedFromParent.empty(snapshot) :

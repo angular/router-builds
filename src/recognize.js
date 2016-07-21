@@ -47,7 +47,8 @@ var InheritedFromParent = (function () {
 }());
 function recognize(rootComponentType, config, urlTree, url) {
     try {
-        var children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), shared_1.PRIMARY_OUTLET);
+        var rootSegment = split(urlTree.root, [], [], config).segment;
+        var children = processSegment(config, rootSegment, InheritedFromParent.empty(null), shared_1.PRIMARY_OUTLET);
         var root = new router_state_1.ActivatedRouteSnapshot([], Object.freeze({}), {}, shared_1.PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, router_state_1.InheritedResolve.empty);
         var rootNode = new tree_1.TreeNode(root, children);
         return of_1.of(new router_state_1.RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
@@ -115,6 +116,8 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
     var rawSlicedPath = paths.slice(lastChild);
     var childConfig = getChildConfig(route);
     var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
+    // console.log("raw", rawSegment)
+    // console.log(segment.toString(), childConfig)
     var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, Object.freeze(collection_1.merge(inherited.allParams, parameters)), collection_1.merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
     var newInherited = route.component ?
         InheritedFromParent.empty(snapshot) :

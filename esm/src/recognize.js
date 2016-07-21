@@ -35,7 +35,8 @@ class InheritedFromParent {
 }
 export function recognize(rootComponentType, config, urlTree, url) {
     try {
-        const children = processSegment(config, urlTree.root, InheritedFromParent.empty(null), PRIMARY_OUTLET);
+        const rootSegment = split(urlTree.root, [], [], config).segment;
+        const children = processSegment(config, rootSegment, InheritedFromParent.empty(null), PRIMARY_OUTLET);
         const root = new ActivatedRouteSnapshot([], Object.freeze({}), {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
         const rootNode = new TreeNode(root, children);
         return of(new RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
@@ -99,6 +100,8 @@ function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths,
     const rawSlicedPath = paths.slice(lastChild);
     const childConfig = getChildConfig(route);
     const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
+    // console.log("raw", rawSegment)
+    // console.log(segment.toString(), childConfig)
     const snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
     const newInherited = route.component ?
         InheritedFromParent.empty(snapshot) :

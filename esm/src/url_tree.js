@@ -174,8 +174,10 @@ export function serializePaths(segment) {
     return segment.pathsWithParams.map(p => serializePath(p)).join('/');
 }
 function serializeSegment(segment, root) {
-    if (segment.children[PRIMARY_OUTLET] && root) {
-        const primary = serializeSegment(segment.children[PRIMARY_OUTLET], false);
+    if (segment.hasChildren() && root) {
+        const primary = segment.children[PRIMARY_OUTLET] ?
+            serializeSegment(segment.children[PRIMARY_OUTLET], false) :
+            '';
         const children = [];
         forEach(segment.children, (v, k) => {
             if (k !== PRIMARY_OUTLET) {
@@ -250,8 +252,9 @@ function matchUrlQueryParamValue(str) {
     return match ? match[0] : '';
 }
 class UrlParser {
-    constructor(remaining) {
-        this.remaining = remaining;
+    constructor(url) {
+        this.url = url;
+        this.remaining = url;
     }
     peekStartsWith(str) { return this.remaining.startsWith(str); }
     capture(str) {
@@ -278,7 +281,10 @@ class UrlParser {
         if (this.peekStartsWith('/')) {
             this.capture('/');
         }
-        const paths = [this.parsePathWithParams()];
+        let paths = [];
+        if (!this.peekStartsWith('(')) {
+            paths.push(this.parsePathWithParams());
+        }
         while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
             this.capture('/');
             paths.push(this.parsePathWithParams());
@@ -292,7 +298,9 @@ class UrlParser {
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
-        res[PRIMARY_OUTLET] = new UrlSegment(paths, children);
+        if (paths.length > 0 || Object.keys(children).length > 0) {
+            res[PRIMARY_OUTLET] = new UrlSegment(paths, children);
+        }
         return res;
     }
     parsePathWithParams() {
@@ -373,7 +381,13 @@ class UrlParser {
         const segments = {};
         this.capture('(');
         while (!this.peekStartsWith(')') && this.remaining.length > 0) {
-            let path = matchPathWithParams(this.remaining);
+            const path = matchPathWithParams(this.remaining);
+            const next = this.remaining[path.length];
+            // if is is not one of these characters, then the segment was unescaped
+            // or the group was not closed
+            if (next !== '/' && next !== ')' && next !== ';') {
+                throw new Error(`Cannot parse url '${this.url}'`);
+            }
             let outletName;
             if (path.indexOf(':') > -1) {
                 outletName = path.substr(0, path.indexOf(':'));

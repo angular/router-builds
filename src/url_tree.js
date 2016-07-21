@@ -200,8 +200,10 @@ function serializePaths(segment) {
 }
 exports.serializePaths = serializePaths;
 function serializeSegment(segment, root) {
-    if (segment.children[shared_1.PRIMARY_OUTLET] && root) {
-        var primary = serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false);
+    if (segment.hasChildren() && root) {
+        var primary = segment.children[shared_1.PRIMARY_OUTLET] ?
+            serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false) :
+            '';
         var children_1 = [];
         collection_1.forEach(segment.children, function (v, k) {
             if (k !== shared_1.PRIMARY_OUTLET) {
@@ -278,8 +280,9 @@ function matchUrlQueryParamValue(str) {
     return match ? match[0] : '';
 }
 var UrlParser = (function () {
-    function UrlParser(remaining) {
-        this.remaining = remaining;
+    function UrlParser(url) {
+        this.url = url;
+        this.remaining = url;
     }
     UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
     UrlParser.prototype.capture = function (str) {
@@ -306,7 +309,10 @@ var UrlParser = (function () {
         if (this.peekStartsWith('/')) {
             this.capture('/');
         }
-        var paths = [this.parsePathWithParams()];
+        var paths = [];
+        if (!this.peekStartsWith('(')) {
+            paths.push(this.parsePathWithParams());
+        }
         while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
             this.capture('/');
             paths.push(this.parsePathWithParams());
@@ -320,7 +326,9 @@ var UrlParser = (function () {
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
-        res[shared_1.PRIMARY_OUTLET] = new UrlSegment(paths, children);
+        if (paths.length > 0 || Object.keys(children).length > 0) {
+            res[shared_1.PRIMARY_OUTLET] = new UrlSegment(paths, children);
+        }
         return res;
     };
     UrlParser.prototype.parsePathWithParams = function () {
@@ -402,6 +410,12 @@ var UrlParser = (function () {
         this.capture('(');
         while (!this.peekStartsWith(')') && this.remaining.length > 0) {
             var path = matchPathWithParams(this.remaining);
+            var next = this.remaining[path.length];
+            // if is is not one of these characters, then the segment was unescaped
+            // or the group was not closed
+            if (next !== '/' && next !== ')' && next !== ';') {
+                throw new Error("Cannot parse url '" + this.url + "'");
+            }
             var outletName = void 0;
             if (path.indexOf(':') > -1) {
                 outletName = path.substr(0, path.indexOf(':'));
