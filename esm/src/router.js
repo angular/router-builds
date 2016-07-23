@@ -190,7 +190,10 @@ export class Router {
      * router.createUrlTree(['/team/33/user', userId]);
      *
      * // create /team/33/(user/11//aux:chat)
-     * router.createUrlTree(['/team', 33, {outlets: {"": 'user/11', right: 'chat'}}]);
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
+     *
+     * // remove the right secondary node
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
      *
      * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
      *
@@ -223,6 +226,9 @@ export class Router {
      * ```
      * router.navigateByUrl("/team/33/user/11");
      * ```
+     *
+     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
+     * and does not apply any delta to the current one.
      */
     navigateByUrl(url) {
         if (url instanceof UrlTree) {
@@ -247,6 +253,9 @@ export class Router {
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
      * ```
+     *
+     * In opposite to `navigateByUrl`, `navigate` always takes a delta
+     * that is applied to the current URL.
      */
     navigate(commands, extras = {}) {
         return this.scheduleNavigation(this.createUrlTree(commands, extras), false);
@@ -564,9 +573,9 @@ class ActivateRoutes {
     activate(parentOutletMap) {
         const futureRoot = this.futureState._root;
         const currRoot = this.currState ? this.currState._root : null;
-        pushQueryParamsAndFragment(this.futureState);
         advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+        pushQueryParamsAndFragment(this.futureState);
     }
     activateChildRoutes(futureNode, currNode, outletMap) {
         const prevChildren = nodeChildrenAsMap(currNode);

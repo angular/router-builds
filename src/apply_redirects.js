@@ -279,7 +279,7 @@ function createChildrenForEmptyPaths(routes, primarySegment) {
     res[shared_1.PRIMARY_OUTLET] = primarySegment;
     for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
         var r = routes_2[_i];
-        if (r.path === '') {
+        if (r.path === '' && getOutlet(r) !== shared_1.PRIMARY_OUTLET) {
             res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
         }
     }

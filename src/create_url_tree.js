@@ -74,12 +74,11 @@ function normalizeCommands(commands) {
         if (typeof c === 'object' && c.outlets !== undefined) {
             var r_1 = {};
             collection_1.forEach(c.outlets, function (commands, name) {
-                var n = name === '' ? shared_1.PRIMARY_OUTLET : name;
                 if (typeof commands === 'string') {
-                    r_1[n] = commands.split('/');
+                    r_1[name] = commands.split('/');
                 }
                 else {
-                    r_1[n] = commands;
+                    r_1[name] = commands;
                 }
             });
             res.push({ outlets: r_1 });

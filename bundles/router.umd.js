@@ -52,7 +52,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      *
      * @experimental
      */
-    var PRIMARY_OUTLET = 'PRIMARY_OUTLET';
+    var PRIMARY_OUTLET = 'primary';
     function shallowEqualArrays(a, b) {
         if (a.length !== b.length)
             return false;
@@ -391,7 +391,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (this.remaining.startsWith('/')) {
                 this.capture('/');
             }
-            if (this.remaining === '' || this.remaining.startsWith('?')) {
+            if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
                 return new UrlSegment([], {});
             }
             else {
@@ -795,7 +795,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         res[PRIMARY_OUTLET] = primarySegment;
         for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
             var r = routes_2[_i];
-            if (r.path === '') {
+            if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
                 res[getOutlet$1(r)] = new UrlSegment([], {});
             }
         }
@@ -1253,12 +1253,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (typeof c === 'object' && c.outlets !== undefined) {
                 var r_1 = {};
                 forEach(c.outlets, function (commands, name) {
-                    var n = name === '' ? PRIMARY_OUTLET : name;
                     if (typeof commands === 'string') {
-                        r_1[n] = commands.split('/');
+                        r_1[name] = commands.split('/');
                     }
                     else {
-                        r_1[n] = commands;
+                        r_1[name] = commands;
                     }
                 });
                 res.push({ outlets: r_1 });
@@ -1528,8 +1527,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         var rawSlicedPath = paths.slice(lastChild);
         var childConfig = getChildConfig$1(route);
         var _b = split$1(rawSegment, consumedPaths, rawSlicedPath, childConfig), segment = _b.segment, slicedPath = _b.slicedPath;
-        // console.log("raw", rawSegment)
-        // console.log(segment.toString(), childConfig)
         var snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
         var newInherited = route.component ?
             InheritedFromParent.empty(snapshot) :
@@ -1663,7 +1660,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         primarySegment._pathIndexShift = consumedPaths.length;
         for (var _i = 0, routes_4 = routes; _i < routes_4.length; _i++) {
             var r = routes_4[_i];
-            if (r.path === '') {
+            if (r.path === '' && getOutlet$2(r) !== PRIMARY_OUTLET) {
                 var s = new UrlSegment([], {});
                 s._sourceSegment = segment;
                 s._pathIndexShift = consumedPaths.length;
@@ -1918,7 +1915,10 @@ var __extends = (this && this.__extends) || function (d, b) {
          * router.createUrlTree(['/team/33/user', userId]);
          *
          * // create /team/33/(user/11//aux:chat)
-         * router.createUrlTree(['/team', 33, {outlets: {"": 'user/11', right: 'chat'}}]);
+         * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
+         *
+         * // remove the right secondary node
+         * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
          *
          * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
          *
@@ -1952,6 +1952,9 @@ var __extends = (this && this.__extends) || function (d, b) {
          * ```
          * router.navigateByUrl("/team/33/user/11");
          * ```
+         *
+         * In opposite to `navigate`, `navigateByUrl` takes a whole URL
+         * and does not apply any delta to the current one.
          */
         Router.prototype.navigateByUrl = function (url) {
             if (url instanceof UrlTree) {
@@ -1976,6 +1979,9 @@ var __extends = (this && this.__extends) || function (d, b) {
          * ```
          * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
          * ```
+         *
+         * In opposite to `navigateByUrl`, `navigate` always takes a delta
+         * that is applied to the current URL.
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = {}; }
@@ -2313,9 +2319,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         ActivateRoutes.prototype.activate = function (parentOutletMap) {
             var futureRoot = this.futureState._root;
             var currRoot = this.currState ? this.currState._root : null;
-            pushQueryParamsAndFragment(this.futureState);
             advanceActivatedRoute(this.futureState.root);
             this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+            pushQueryParamsAndFragment(this.futureState);
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {
             var _this = this;
@@ -2751,8 +2757,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     ];
     /** @nocollapse */
     RouterLinkActive.propDecorators = {
-        'links': [{ type: _angular_core.ContentChildren, args: [RouterLink,] },],
-        'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref,] },],
+        'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
+        'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
         'routerLinkActiveOptions': [{ type: _angular_core.Input },],
         'routerLinkActive': [{ type: _angular_core.Input },],
     };

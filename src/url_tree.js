@@ -295,7 +295,7 @@ var UrlParser = (function () {
         if (this.remaining.startsWith('/')) {
             this.capture('/');
         }
-        if (this.remaining === '' || this.remaining.startsWith('?')) {
+        if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
             return new UrlSegment([], {});
         }
         else {

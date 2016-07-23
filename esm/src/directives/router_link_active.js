@@ -61,8 +61,8 @@ RouterLinkActive.ctorParameters = [
 ];
 /** @nocollapse */
 RouterLinkActive.propDecorators = {
-    'links': [{ type: ContentChildren, args: [RouterLink,] },],
-    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref,] },],
+    'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
+    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
     'routerLinkActiveOptions': [{ type: Input },],
     'routerLinkActive': [{ type: Input },],
 };

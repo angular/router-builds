@@ -71,8 +71,8 @@ var RouterLinkActive = (function () {
     ];
     /** @nocollapse */
     RouterLinkActive.propDecorators = {
-        'links': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLink,] },],
-        'linksWithHrefs': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLinkWithHref,] },],
+        'links': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLink, { descendants: true },] },],
+        'linksWithHrefs': [{ type: core_1.ContentChildren, args: [router_link_1.RouterLinkWithHref, { descendants: true },] },],
         'routerLinkActiveOptions': [{ type: core_1.Input },],
         'routerLinkActive': [{ type: core_1.Input },],
     };

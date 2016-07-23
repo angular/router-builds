@@ -269,7 +269,7 @@ function createChildrenForEmptyPaths(routes, primarySegment) {
     const res = {};
     res[PRIMARY_OUTLET] = primarySegment;
     for (let r of routes) {
-        if (r.path === '') {
+        if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
             res[getOutlet(r)] = new UrlSegment([], {});
         }
     }
