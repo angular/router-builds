@@ -9,7 +9,7 @@ import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Data } from './config';
 import { Params } from './shared';
-import { UrlPathWithParams, UrlTree } from './url_tree';
+import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
  * The state of the router.
@@ -53,7 +53,7 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
  * @stable
  */
 export declare class ActivatedRoute {
-    url: Observable<UrlPathWithParams[]>;
+    url: Observable<UrlSegment[]>;
     params: Observable<Params>;
     data: Observable<Data>;
     outlet: string;
@@ -78,7 +78,7 @@ export declare class ActivatedRoute {
  * @stable
  */
 export declare class ActivatedRouteSnapshot {
-    url: UrlPathWithParams[];
+    url: UrlSegment[];
     params: Params;
     data: Data;
     outlet: string;

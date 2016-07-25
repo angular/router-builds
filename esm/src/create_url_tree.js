@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { PRIMARY_OUTLET } from './shared';
-import { UrlPathWithParams, UrlSegment, UrlTree } from './url_tree';
+import { UrlSegment, UrlSegmentGroup, UrlTree } from './url_tree';
 import { forEach, shallowEqual } from './utils/collection';
 export function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     if (commands.length === 0) {
@@ -15,25 +15,25 @@ export function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     const normalizedCommands = normalizeCommands(commands);
     validateCommands(normalizedCommands);
     if (navigateToRoot(normalizedCommands)) {
-        return tree(urlTree.root, new UrlSegment([], {}), urlTree, queryParams, fragment);
+        return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
     }
     const startingPosition = findStartingPosition(normalizedCommands, urlTree, route);
-    const segment = startingPosition.processChildren ?
-        updateSegmentChildren(startingPosition.segment, startingPosition.index, normalizedCommands.commands) :
-        updateSegment(startingPosition.segment, startingPosition.index, normalizedCommands.commands);
-    return tree(startingPosition.segment, segment, urlTree, queryParams, fragment);
+    const segmentGroup = startingPosition.processChildren ?
+        updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands) :
+        updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands);
+    return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
 }
 function validateCommands(n) {
     if (n.isAbsolute && n.commands.length > 0 && (typeof n.commands[0] === 'object')) {
         throw new Error('Root segment cannot have matrix parameters');
     }
 }
-function tree(oldSegment, newSegment, urlTree, queryParams, fragment) {
-    if (urlTree.root === oldSegment) {
-        return new UrlTree(newSegment, stringify(queryParams), fragment);
+function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
+    if (urlTree.root === oldSegmentGroup) {
+        return new UrlTree(newSegmentGroup, stringify(queryParams), fragment);
     }
     else {
-        return new UrlTree(replaceSegment(urlTree.root, oldSegment, newSegment), stringify(queryParams), fragment);
+        return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
     }
 }
 function replaceSegment(current, oldSegment, newSegment) {
@@ -46,7 +46,7 @@ function replaceSegment(current, oldSegment, newSegment) {
             children[outletName] = replaceSegment(c, oldSegment, newSegment);
         }
     });
-    return new UrlSegment(current.pathsWithParams, children);
+    return new UrlSegmentGroup(current.segments, children);
 }
 function navigateToRoot(normalizedChange) {
     return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
@@ -112,8 +112,8 @@ function normalizeCommands(commands) {
     return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
 }
 class Position {
-    constructor(segment, processChildren, index) {
-        this.segment = segment;
+    constructor(segmentGroup, processChildren, index) {
+        this.segmentGroup = segmentGroup;
         this.processChildren = processChildren;
         this.index = index;
     }
@@ -142,56 +142,56 @@ function getOutlets(commands) {
         return { [PRIMARY_OUTLET]: commands };
     return commands[0].outlets;
 }
-function updateSegment(segment, startIndex, commands) {
-    if (!segment) {
-        segment = new UrlSegment([], {});
+function updateSegmentGroup(segmentGroup, startIndex, commands) {
+    if (!segmentGroup) {
+        segmentGroup = new UrlSegmentGroup([], {});
     }
-    if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-        return updateSegmentChildren(segment, startIndex, commands);
+    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+        return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
     }
-    const m = prefixedWith(segment, startIndex, commands);
+    const m = prefixedWith(segmentGroup, startIndex, commands);
     const slicedCommands = commands.slice(m.lastIndex);
     if (m.match && slicedCommands.length === 0) {
-        return new UrlSegment(segment.pathsWithParams, {});
+        return new UrlSegmentGroup(segmentGroup.segments, {});
     }
-    else if (m.match && !segment.hasChildren()) {
-        return createNewSegment(segment, startIndex, commands);
+    else if (m.match && !segmentGroup.hasChildren()) {
+        return createNewSegmentGroup(segmentGroup, startIndex, commands);
     }
     else if (m.match) {
-        return updateSegmentChildren(segment, 0, slicedCommands);
+        return updateSegmentGroupChildren(segmentGroup, 0, slicedCommands);
     }
     else {
-        return createNewSegment(segment, startIndex, commands);
+        return createNewSegmentGroup(segmentGroup, startIndex, commands);
     }
 }
-function updateSegmentChildren(segment, startIndex, commands) {
+function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
     if (commands.length === 0) {
-        return new UrlSegment(segment.pathsWithParams, {});
+        return new UrlSegmentGroup(segmentGroup.segments, {});
     }
     else {
         const outlets = getOutlets(commands);
         const children = {};
         forEach(outlets, (commands, outlet) => {
             if (commands !== null) {
-                children[outlet] = updateSegment(segment.children[outlet], startIndex, commands);
+                children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
             }
         });
-        forEach(segment.children, (child, childOutlet) => {
+        forEach(segmentGroup.children, (child, childOutlet) => {
             if (outlets[childOutlet] === undefined) {
                 children[childOutlet] = child;
             }
         });
-        return new UrlSegment(segment.pathsWithParams, children);
+        return new UrlSegmentGroup(segmentGroup.segments, children);
     }
 }
-function prefixedWith(segment, startIndex, commands) {
+function prefixedWith(segmentGroup, startIndex, commands) {
     let currentCommandIndex = 0;
     let currentPathIndex = startIndex;
     const noMatch = { match: false, lastIndex: 0 };
-    while (currentPathIndex < segment.pathsWithParams.length) {
+    while (currentPathIndex < segmentGroup.segments.length) {
         if (currentCommandIndex >= commands.length)
             return noMatch;
-        const path = segment.pathsWithParams[currentPathIndex];
+        const path = segmentGroup.segments[currentPathIndex];
         const curr = getPath(commands[currentCommandIndex]);
         const next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
         if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
@@ -208,36 +208,36 @@ function prefixedWith(segment, startIndex, commands) {
     }
     return { match: true, lastIndex: currentCommandIndex };
 }
-function createNewSegment(segment, startIndex, commands) {
-    const paths = segment.pathsWithParams.slice(0, startIndex);
+function createNewSegmentGroup(segmentGroup, startIndex, commands) {
+    const paths = segmentGroup.segments.slice(0, startIndex);
     let i = 0;
     while (i < commands.length) {
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && (typeof commands[0] === 'object')) {
-            const p = segment.pathsWithParams[startIndex];
-            paths.push(new UrlPathWithParams(p.path, commands[0]));
+            const p = segmentGroup.segments[startIndex];
+            paths.push(new UrlSegment(p.path, commands[0]));
             i++;
             continue;
         }
         const curr = getPath(commands[i]);
         const next = (i < commands.length - 1) ? commands[i + 1] : null;
         if (curr && next && (typeof next === 'object')) {
-            paths.push(new UrlPathWithParams(curr, stringify(next)));
+            paths.push(new UrlSegment(curr, stringify(next)));
             i += 2;
         }
         else {
-            paths.push(new UrlPathWithParams(curr, {}));
+            paths.push(new UrlSegment(curr, {}));
             i++;
         }
     }
-    return new UrlSegment(paths, {});
+    return new UrlSegmentGroup(paths, {});
 }
 function stringify(params) {
     const res = {};
     forEach(params, (v, k) => res[k] = `${v}`);
     return res;
 }
-function compare(path, params, pathWithParams) {
-    return path == pathWithParams.path && shallowEqual(params, pathWithParams.parameters);
+function compare(path, params, segment) {
+    return path == segment.path && shallowEqual(params, segment.parameters);
 }
 //# sourceMappingURL=create_url_tree.js.map

@@ -50,7 +50,7 @@ var RouterState = (function (_super) {
 exports.RouterState = RouterState;
 function createEmptyState(urlTree, rootComponent) {
     var snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    var emptyUrl = new BehaviorSubject_1.BehaviorSubject([new url_tree_1.UrlPathWithParams('', {})]);
+    var emptyUrl = new BehaviorSubject_1.BehaviorSubject([new url_tree_1.UrlSegment('', {})]);
     var emptyParams = new BehaviorSubject_1.BehaviorSubject({});
     var emptyData = new BehaviorSubject_1.BehaviorSubject({});
     var emptyQueryParams = new BehaviorSubject_1.BehaviorSubject({});

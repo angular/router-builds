@@ -7,7 +7,7 @@
  */
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PRIMARY_OUTLET } from './shared';
-import { UrlPathWithParams } from './url_tree';
+import { UrlSegment } from './url_tree';
 import { merge, shallowEqual, shallowEqualArrays } from './utils/collection';
 import { Tree, TreeNode } from './utils/tree';
 /**
@@ -41,7 +41,7 @@ export class RouterState extends Tree {
 }
 export function createEmptyState(urlTree, rootComponent) {
     const snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    const emptyUrl = new BehaviorSubject([new UrlPathWithParams('', {})]);
+    const emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
     const emptyParams = new BehaviorSubject({});
     const emptyData = new BehaviorSubject({});
     const emptyQueryParams = new BehaviorSubject({});

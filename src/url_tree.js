@@ -9,62 +9,62 @@
 var shared_1 = require('./shared');
 var collection_1 = require('./utils/collection');
 function createEmptyUrlTree() {
-    return new UrlTree(new UrlSegment([], {}), {}, null);
+    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
 exports.createEmptyUrlTree = createEmptyUrlTree;
 function containsTree(container, containee, exact) {
     if (exact) {
-        return equalSegments(container.root, containee.root);
+        return equalSegmentGroups(container.root, containee.root);
     }
     else {
-        return containsSegment(container.root, containee.root);
+        return containsSegmentGroup(container.root, containee.root);
     }
 }
 exports.containsTree = containsTree;
-function equalSegments(container, containee) {
-    if (!equalPath(container.pathsWithParams, containee.pathsWithParams))
+function equalSegmentGroups(container, containee) {
+    if (!equalPath(container.segments, containee.segments))
         return false;
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (var c in containee.children) {
         if (!container.children[c])
             return false;
-        if (!equalSegments(container.children[c], containee.children[c]))
+        if (!equalSegmentGroups(container.children[c], containee.children[c]))
             return false;
     }
     return true;
 }
-function containsSegment(container, containee) {
-    return containsSegmentHelper(container, containee, containee.pathsWithParams);
+function containsSegmentGroup(container, containee) {
+    return containsSegmentGroupHelper(container, containee, containee.segments);
 }
-function containsSegmentHelper(container, containee, containeePaths) {
-    if (container.pathsWithParams.length > containeePaths.length) {
-        var current = container.pathsWithParams.slice(0, containeePaths.length);
+function containsSegmentGroupHelper(container, containee, containeePaths) {
+    if (container.segments.length > containeePaths.length) {
+        var current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
             return false;
         return true;
     }
-    else if (container.pathsWithParams.length === containeePaths.length) {
-        if (!equalPath(container.pathsWithParams, containeePaths))
+    else if (container.segments.length === containeePaths.length) {
+        if (!equalPath(container.segments, containeePaths))
             return false;
         for (var c in containee.children) {
             if (!container.children[c])
                 return false;
-            if (!containsSegment(container.children[c], containee.children[c]))
+            if (!containsSegmentGroup(container.children[c], containee.children[c]))
                 return false;
         }
         return true;
     }
     else {
-        var current = containeePaths.slice(0, container.pathsWithParams.length);
-        var next = containeePaths.slice(container.pathsWithParams.length);
-        if (!equalPath(container.pathsWithParams, current))
+        var current = containeePaths.slice(0, container.segments.length);
+        var next = containeePaths.slice(container.segments.length);
+        if (!equalPath(container.segments, current))
             return false;
         if (!container.children[shared_1.PRIMARY_OUTLET])
             return false;
-        return containsSegmentHelper(container.children[shared_1.PRIMARY_OUTLET], containee, next);
+        return containsSegmentGroupHelper(container.children[shared_1.PRIMARY_OUTLET], containee, next);
     }
 }
 /**
@@ -88,10 +88,10 @@ exports.UrlTree = UrlTree;
 /**
  * @stable
  */
-var UrlSegment = (function () {
-    function UrlSegment(pathsWithParams, children) {
+var UrlSegmentGroup = (function () {
+    function UrlSegmentGroup(segments, children) {
         var _this = this;
-        this.pathsWithParams = pathsWithParams;
+        this.segments = segments;
         this.children = children;
         this.parent = null;
         collection_1.forEach(children, function (v, k) { return v.parent = _this; });
@@ -99,8 +99,8 @@ var UrlSegment = (function () {
     /**
      * Return true if the segment has child segments
      */
-    UrlSegment.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
-    Object.defineProperty(UrlSegment.prototype, "numberOfChildren", {
+    UrlSegmentGroup.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+    Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
         /**
          * Returns the number of child sements.
          */
@@ -108,23 +108,23 @@ var UrlSegment = (function () {
         enumerable: true,
         configurable: true
     });
-    UrlSegment.prototype.toString = function () { return serializePaths(this); };
-    return UrlSegment;
+    UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
+    return UrlSegmentGroup;
 }());
-exports.UrlSegment = UrlSegment;
+exports.UrlSegmentGroup = UrlSegmentGroup;
 /**
  * @stable
  */
-var UrlPathWithParams = (function () {
-    function UrlPathWithParams(path, parameters) {
+var UrlSegment = (function () {
+    function UrlSegment(path, parameters) {
         this.path = path;
         this.parameters = parameters;
     }
-    UrlPathWithParams.prototype.toString = function () { return serializePath(this); };
-    return UrlPathWithParams;
+    UrlSegment.prototype.toString = function () { return serializePath(this); };
+    return UrlSegment;
 }());
-exports.UrlPathWithParams = UrlPathWithParams;
-function equalPathsWithParams(a, b) {
+exports.UrlSegment = UrlSegment;
+function equalSegments(a, b) {
     if (a.length !== b.length)
         return false;
     for (var i = 0; i < a.length; ++i) {
@@ -135,7 +135,7 @@ function equalPathsWithParams(a, b) {
     }
     return true;
 }
-exports.equalPathsWithParams = equalPathsWithParams;
+exports.equalSegments = equalSegments;
 function equalPath(a, b) {
     if (a.length !== b.length)
         return false;
@@ -196,7 +196,7 @@ var DefaultUrlSerializer = (function () {
 }());
 exports.DefaultUrlSerializer = DefaultUrlSerializer;
 function serializePaths(segment) {
-    return segment.pathsWithParams.map(function (p) { return serializePath(p); }).join('/');
+    return segment.segments.map(function (p) { return serializePath(p); }).join('/');
 }
 exports.serializePaths = serializePaths;
 function serializeSegment(segment, root) {
@@ -262,7 +262,7 @@ function pairs(obj) {
     return res;
 }
 var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
-function matchPathWithParams(str) {
+function matchSegments(str) {
     SEGMENT_RE.lastIndex = 0;
     var match = SEGMENT_RE.exec(str);
     return match ? match[0] : '';
@@ -296,13 +296,13 @@ var UrlParser = (function () {
             this.capture('/');
         }
         if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
-            return new UrlSegment([], {});
+            return new UrlSegmentGroup([], {});
         }
         else {
-            return new UrlSegment([], this.parseSegmentChildren());
+            return new UrlSegmentGroup([], this.parseChildren());
         }
     };
-    UrlParser.prototype.parseSegmentChildren = function () {
+    UrlParser.prototype.parseChildren = function () {
         if (this.remaining.length == 0) {
             return {};
         }
@@ -311,11 +311,11 @@ var UrlParser = (function () {
         }
         var paths = [];
         if (!this.peekStartsWith('(')) {
-            paths.push(this.parsePathWithParams());
+            paths.push(this.parseSegments());
         }
         while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
             this.capture('/');
-            paths.push(this.parsePathWithParams());
+            paths.push(this.parseSegments());
         }
         var children = {};
         if (this.peekStartsWith('/(')) {
@@ -327,12 +327,12 @@ var UrlParser = (function () {
             res = this.parseParens(false);
         }
         if (paths.length > 0 || Object.keys(children).length > 0) {
-            res[shared_1.PRIMARY_OUTLET] = new UrlSegment(paths, children);
+            res[shared_1.PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
         }
         return res;
     };
-    UrlParser.prototype.parsePathWithParams = function () {
-        var path = matchPathWithParams(this.remaining);
+    UrlParser.prototype.parseSegments = function () {
+        var path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
             throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
         }
@@ -341,7 +341,7 @@ var UrlParser = (function () {
         if (this.peekStartsWith(';')) {
             matrixParams = this.parseMatrixParams();
         }
-        return new UrlPathWithParams(decodeURIComponent(path), matrixParams);
+        return new UrlSegment(decodeURIComponent(path), matrixParams);
     };
     UrlParser.prototype.parseQueryParams = function () {
         var params = {};
@@ -372,7 +372,7 @@ var UrlParser = (function () {
         return params;
     };
     UrlParser.prototype.parseParam = function (params) {
-        var key = matchPathWithParams(this.remaining);
+        var key = matchSegments(this.remaining);
         if (!key) {
             return;
         }
@@ -380,7 +380,7 @@ var UrlParser = (function () {
         var value = 'true';
         if (this.peekStartsWith('=')) {
             this.capture('=');
-            var valueMatch = matchPathWithParams(this.remaining);
+            var valueMatch = matchSegments(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
                 this.capture(value);
@@ -409,7 +409,7 @@ var UrlParser = (function () {
         var segments = {};
         this.capture('(');
         while (!this.peekStartsWith(')') && this.remaining.length > 0) {
-            var path = matchPathWithParams(this.remaining);
+            var path = matchSegments(this.remaining);
             var next = this.remaining[path.length];
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
@@ -425,9 +425,9 @@ var UrlParser = (function () {
             else if (allowPrimary) {
                 outletName = shared_1.PRIMARY_OUTLET;
             }
-            var children = this.parseSegmentChildren();
+            var children = this.parseChildren();
             segments[outletName] = Object.keys(children).length === 1 ? children[shared_1.PRIMARY_OUTLET] :
-                new UrlSegment([], children);
+                new UrlSegmentGroup([], children);
             if (this.peekStartsWith('//')) {
                 this.capture('//');
             }

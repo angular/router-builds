@@ -15,5 +15,5 @@ export { RouterOutletMap } from './src/router_outlet_map';
 export { provideRouter } from './src/router_providers';
 export { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './src/router_state';
 export { PRIMARY_OUTLET } from './src/shared';
-export { DefaultUrlSerializer, UrlPathWithParams, UrlSerializer, UrlTree } from './src/url_tree';
+export { DefaultUrlSerializer, UrlSegment, UrlSerializer, UrlTree } from './src/url_tree';
 //# sourceMappingURL=index.js.map

@@ -9,12 +9,12 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { ActivatedRouteSnapshot, InheritedResolve, RouterStateSnapshot } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
-import { UrlSegment, mapChildrenIntoArray } from './url_tree';
+import { UrlSegmentGroup, mapChildrenIntoArray } from './url_tree';
 import { last, merge } from './utils/collection';
 import { TreeNode } from './utils/tree';
 class NoMatch {
-    constructor(segment = null) {
-        this.segment = segment;
+    constructor(segmentGroup = null) {
+        this.segmentGroup = segmentGroup;
     }
 }
 class InheritedFromParent {
@@ -35,31 +35,31 @@ class InheritedFromParent {
 }
 export function recognize(rootComponentType, config, urlTree, url) {
     try {
-        const rootSegment = split(urlTree.root, [], [], config).segment;
-        const children = processSegment(config, rootSegment, InheritedFromParent.empty(null), PRIMARY_OUTLET);
+        const rootSegmentGroup = split(urlTree.root, [], [], config).segmentGroup;
+        const children = processSegmentGroup(config, rootSegmentGroup, InheritedFromParent.empty(null), PRIMARY_OUTLET);
         const root = new ActivatedRouteSnapshot([], Object.freeze({}), {}, PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1, InheritedResolve.empty);
         const rootNode = new TreeNode(root, children);
         return of(new RouterStateSnapshot(url, rootNode, Object.freeze(urlTree.queryParams), urlTree.fragment));
     }
     catch (e) {
         if (e instanceof NoMatch) {
-            return new Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segment}'`)));
+            return new Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segmentGroup}'`)));
         }
         else {
             return new Observable((obs) => obs.error(e));
         }
     }
 }
-function processSegment(config, segment, inherited, outlet) {
-    if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
-        return processSegmentChildren(config, segment, inherited);
+function processSegmentGroup(config, segmentGroup, inherited, outlet) {
+    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+        return processChildren(config, segmentGroup, inherited);
     }
     else {
-        return processPathsWithParams(config, segment, 0, segment.pathsWithParams, inherited, outlet);
+        return processSegment(config, segmentGroup, 0, segmentGroup.segments, inherited, outlet);
     }
 }
-function processSegmentChildren(config, segment, inherited) {
-    const children = mapChildrenIntoArray(segment, (child, childOutlet) => processSegment(config, child, inherited, childOutlet));
+function processChildren(config, segmentGroup, inherited) {
+    const children = mapChildrenIntoArray(segmentGroup, (child, childOutlet) => processSegmentGroup(config, child, inherited, childOutlet));
     checkOutletNameUniqueness(children);
     sortActivatedRouteSnapshots(children);
     return children;
@@ -73,46 +73,46 @@ function sortActivatedRouteSnapshots(nodes) {
         return a.value.outlet.localeCompare(b.value.outlet);
     });
 }
-function processPathsWithParams(config, segment, pathIndex, paths, inherited, outlet) {
+function processSegment(config, segmentGroup, pathIndex, segments, inherited, outlet) {
     for (let r of config) {
         try {
-            return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, inherited, outlet);
+            return processSegmentAgainstRoute(r, segmentGroup, pathIndex, segments, inherited, outlet);
         }
         catch (e) {
             if (!(e instanceof NoMatch))
                 throw e;
         }
     }
-    throw new NoMatch(segment);
+    throw new NoMatch(segmentGroup);
 }
-function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, inherited, outlet) {
+function processSegmentAgainstRoute(route, rawSegment, pathIndex, segments, inherited, outlet) {
     if (route.redirectTo)
         throw new NoMatch();
     if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
         throw new NoMatch();
     const newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
     if (route.path === '**') {
-        const params = paths.length > 0 ? last(paths).parameters : {};
-        const snapshot = new ActivatedRouteSnapshot(paths, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + paths.length, newInheritedResolve);
+        const params = segments.length > 0 ? last(segments).parameters : {};
+        const snapshot = new ActivatedRouteSnapshot(segments, Object.freeze(merge(inherited.allParams, params)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, newInheritedResolve);
         return [new TreeNode(snapshot, [])];
     }
-    const { consumedPaths, parameters, lastChild } = match(rawSegment, route, paths, inherited.snapshot);
-    const rawSlicedPath = paths.slice(lastChild);
+    const { consumedSegments, parameters, lastChild } = match(rawSegment, route, segments, inherited.snapshot);
+    const rawSlicedSegments = segments.slice(lastChild);
     const childConfig = getChildConfig(route);
-    const { segment, slicedPath } = split(rawSegment, consumedPaths, rawSlicedPath, childConfig);
-    const snapshot = new ActivatedRouteSnapshot(consumedPaths, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + consumedPaths.length, newInheritedResolve);
+    const { segmentGroup, slicedSegments } = split(rawSegment, consumedSegments, rawSlicedSegments, childConfig);
+    const snapshot = new ActivatedRouteSnapshot(consumedSegments, Object.freeze(merge(inherited.allParams, parameters)), merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, newInheritedResolve);
     const newInherited = route.component ?
         InheritedFromParent.empty(snapshot) :
         new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
-    if (slicedPath.length === 0 && segment.hasChildren()) {
-        const children = processSegmentChildren(childConfig, segment, newInherited);
+    if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+        const children = processChildren(childConfig, segmentGroup, newInherited);
         return [new TreeNode(snapshot, children)];
     }
-    else if (childConfig.length === 0 && slicedPath.length === 0) {
+    else if (childConfig.length === 0 && slicedSegments.length === 0) {
         return [new TreeNode(snapshot, [])];
     }
     else {
-        const children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, newInherited, PRIMARY_OUTLET);
+        const children = processSegment(childConfig, segmentGroup, pathIndex + lastChild, slicedSegments, newInherited, PRIMARY_OUTLET);
         return [new TreeNode(snapshot, children)];
     }
 }
@@ -127,26 +127,26 @@ function getChildConfig(route) {
         return [];
     }
 }
-function match(segment, route, paths, parent) {
+function match(segmentGroup, route, segments, parent) {
     if (route.path === '') {
         if ((route.terminal || route.pathMatch === 'full') &&
-            (segment.hasChildren() || paths.length > 0)) {
+            (segmentGroup.hasChildren() || segments.length > 0)) {
             throw new NoMatch();
         }
         else {
             const params = parent ? parent.params : {};
-            return { consumedPaths: [], lastChild: 0, parameters: params };
+            return { consumedSegments: [], lastChild: 0, parameters: params };
         }
     }
     const path = route.path;
     const parts = path.split('/');
     const posParameters = {};
-    const consumedPaths = [];
+    const consumedSegments = [];
     let currentIndex = 0;
     for (let i = 0; i < parts.length; ++i) {
-        if (currentIndex >= paths.length)
+        if (currentIndex >= segments.length)
             throw new NoMatch();
-        const current = paths[currentIndex];
+        const current = segments[currentIndex];
         const p = parts[i];
         const isPosParam = p.startsWith(':');
         if (!isPosParam && p !== current.path)
@@ -154,15 +154,15 @@ function match(segment, route, paths, parent) {
         if (isPosParam) {
             posParameters[p.substring(1)] = current.path;
         }
-        consumedPaths.push(current);
+        consumedSegments.push(current);
         currentIndex++;
     }
     if ((route.terminal || route.pathMatch === 'full') &&
-        (segment.hasChildren() || currentIndex < paths.length)) {
+        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
         throw new NoMatch();
     }
-    const parameters = merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters);
-    return { consumedPaths, lastChild: currentIndex, parameters };
+    const parameters = merge(posParameters, consumedSegments[consumedSegments.length - 1].parameters);
+    return { consumedSegments, lastChild: currentIndex, parameters };
 }
 function checkOutletNameUniqueness(nodes) {
     const names = {};
@@ -176,80 +176,83 @@ function checkOutletNameUniqueness(nodes) {
         names[n.value.outlet] = n.value;
     });
 }
-function getSourceSegment(segment) {
-    let s = segment;
+function getSourceSegmentGroup(segmentGroup) {
+    let s = segmentGroup;
     while (s._sourceSegment) {
         s = s._sourceSegment;
     }
     return s;
 }
-function getPathIndexShift(segment) {
-    let s = segment;
-    let res = (s._pathIndexShift ? s._pathIndexShift : 0);
+function getPathIndexShift(segmentGroup) {
+    let s = segmentGroup;
+    let res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
     while (s._sourceSegment) {
         s = s._sourceSegment;
-        res += (s._pathIndexShift ? s._pathIndexShift : 0);
+        res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
     }
     return res - 1;
 }
-function split(segment, consumedPaths, slicedPath, config) {
-    if (slicedPath.length > 0 &&
-        containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, config)) {
-        const s = new UrlSegment(consumedPaths, createChildrenForEmptyPaths(segment, consumedPaths, config, new UrlSegment(slicedPath, segment.children)));
-        s._sourceSegment = segment;
-        s._pathIndexShift = consumedPaths.length;
-        return { segment: s, slicedPath: [] };
+function split(segmentGroup, consumedSegments, slicedSegments, config) {
+    if (slicedSegments.length > 0 &&
+        containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments: [] };
     }
-    else if (slicedPath.length === 0 && containsEmptyPathMatches(segment, slicedPath, config)) {
-        const s = new UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
-        s._sourceSegment = segment;
-        s._pathIndexShift = consumedPaths.length;
-        return { segment: s, slicedPath };
+    else if (slicedSegments.length === 0 &&
+        containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments };
     }
     else {
-        const s = new UrlSegment(segment.pathsWithParams, segment.children);
-        s._sourceSegment = segment;
-        s._pathIndexShift = consumedPaths.length;
-        return { segment: s, slicedPath };
+        const s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments };
     }
 }
-function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
     const res = {};
     for (let r of routes) {
-        if (emptyPathMatch(segment, slicedPath, r) && !children[getOutlet(r)]) {
-            const s = new UrlSegment([], {});
-            s._sourceSegment = segment;
-            s._pathIndexShift = segment.pathsWithParams.length;
+        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
+            const s = new UrlSegmentGroup([], {});
+            s._sourceSegment = segmentGroup;
+            s._segmentIndexShift = segmentGroup.segments.length;
             res[getOutlet(r)] = s;
         }
     }
     return merge(children, res);
 }
-function createChildrenForEmptyPaths(segment, consumedPaths, routes, primarySegment) {
+function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
     const res = {};
     res[PRIMARY_OUTLET] = primarySegment;
-    primarySegment._sourceSegment = segment;
-    primarySegment._pathIndexShift = consumedPaths.length;
+    primarySegment._sourceSegment = segmentGroup;
+    primarySegment._segmentIndexShift = consumedSegments.length;
     for (let r of routes) {
         if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
-            const s = new UrlSegment([], {});
-            s._sourceSegment = segment;
-            s._pathIndexShift = consumedPaths.length;
+            const s = new UrlSegmentGroup([], {});
+            s._sourceSegment = segmentGroup;
+            s._segmentIndexShift = consumedSegments.length;
             res[getOutlet(r)] = s;
         }
     }
     return res;
 }
-function containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, routes) {
+function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
     return routes
-        .filter(r => emptyPathMatch(segment, slicedPath, r) && getOutlet(r) !== PRIMARY_OUTLET)
+        .filter(r => emptyPathMatch(segmentGroup, slicedSegments, r) &&
+        getOutlet(r) !== PRIMARY_OUTLET)
         .length > 0;
 }
-function containsEmptyPathMatches(segment, slicedPath, routes) {
-    return routes.filter(r => emptyPathMatch(segment, slicedPath, r)).length > 0;
+function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
+    return routes.filter(r => emptyPathMatch(segmentGroup, slicedSegments, r)).length > 0;
 }
-function emptyPathMatch(segment, slicedPath, r) {
-    if ((segment.hasChildren() || slicedPath.length > 0) && (r.terminal || r.pathMatch === 'full'))
+function emptyPathMatch(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) &&
+        (r.terminal || r.pathMatch === 'full'))
         return false;
     return r.path === '' && r.redirectTo === undefined;
 }

@@ -1,1 +1,1 @@
-{"__symbolic":"module","version":1,"metadata":{"applyRedirects":{"__symbolic":"function","parameters":["injector","configLoader","urlTree","config"],"value":{"__symbolic":"error","message":"Function call not supported","line":45,"character":13}}}}
+{"__symbolic":"module","version":1,"metadata":{"applyRedirects":{"__symbolic":"function","parameters":["injector","configLoader","urlTree","config"],"value":{"__symbolic":"error","message":"Function call not supported","line":48,"character":13}}}}
