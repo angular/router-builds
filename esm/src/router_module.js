@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { AppModule, AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, SystemJsAppModuleLoader } from '@angular/core';
+import { ApplicationRef, ComponentResolver, Injector, NgModule, NgModuleFactoryLoader, SystemJsNgModuleLoader } from '@angular/core';
 import { ROUTER_CONFIGURATION, rootRoute, setupRouter } from './common_router_providers';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
@@ -27,12 +27,18 @@ export const ROUTER_PROVIDERS = [
         useFactory: setupRouter,
         deps: [
             ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-            AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+            NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
         ]
     },
     RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-    { provide: AppModuleFactoryLoader, useClass: SystemJsAppModuleLoader },
+    { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader },
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+];
+export class RouterModuleWithoutProviders {
+}
+/** @nocollapse */
+RouterModuleWithoutProviders.decorators = [
+    { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
 ];
 export class RouterModule {
     constructor(injector) {
@@ -50,7 +56,7 @@ export class RouterModule {
 }
 /** @nocollapse */
 RouterModule.decorators = [
-    { type: AppModule, args: [{ directives: ROUTER_DIRECTIVES, providers: ROUTER_PROVIDERS },] },
+    { type: NgModule, args: [{ exports: [RouterModuleWithoutProviders], providers: ROUTER_PROVIDERS },] },
 ];
 /** @nocollapse */
 RouterModule.ctorParameters = [

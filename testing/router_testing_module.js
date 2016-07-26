@@ -12,30 +12,30 @@ var core_1 = require('@angular/core');
 var index_1 = require('../index');
 var router_config_loader_1 = require('../src/router_config_loader');
 var router_module_1 = require('../src/router_module');
-var SpyAppModuleFactoryLoader = (function () {
-    function SpyAppModuleFactoryLoader(compiler) {
+var SpyNgModuleFactoryLoader = (function () {
+    function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         this.stubbedModules = {};
     }
-    SpyAppModuleFactoryLoader.prototype.load = function (path) {
+    SpyNgModuleFactoryLoader.prototype.load = function (path) {
         if (this.stubbedModules[path]) {
-            return this.compiler.compileAppModuleAsync(this.stubbedModules[path]);
+            return this.compiler.compileModuleAsync(this.stubbedModules[path]);
         }
         else {
             return Promise.reject(new Error("Cannot find module " + path));
         }
     };
     /** @nocollapse */
-    SpyAppModuleFactoryLoader.decorators = [
+    SpyNgModuleFactoryLoader.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */
-    SpyAppModuleFactoryLoader.ctorParameters = [
+    SpyNgModuleFactoryLoader.ctorParameters = [
         { type: core_1.Compiler, },
     ];
-    return SpyAppModuleFactoryLoader;
+    return SpyNgModuleFactoryLoader;
 }());
-exports.SpyAppModuleFactoryLoader = SpyAppModuleFactoryLoader;
+exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
 function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
     return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
 }
@@ -44,18 +44,17 @@ var RouterTestingModule = (function () {
     }
     /** @nocollapse */
     RouterTestingModule.decorators = [
-        { type: core_1.AppModule, args: [{
-                    directives: router_module_1.ROUTER_DIRECTIVES,
+        { type: core_1.NgModule, args: [{
+                    exports: [router_module_1.RouterModule],
                     providers: [
-                        router_module_1.ROUTER_PROVIDERS,
                         { provide: common_1.Location, useClass: testing_1.SpyLocation },
                         { provide: common_1.LocationStrategy, useClass: testing_1.MockLocationStrategy },
-                        { provide: core_1.AppModuleFactoryLoader, useClass: SpyAppModuleFactoryLoader },
+                        { provide: core_1.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader },
                         {
                             provide: index_1.Router,
                             useFactory: setupTestingRouter,
                             deps: [
-                                core_1.ComponentResolver, index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.AppModuleFactoryLoader,
+                                core_1.ComponentResolver, index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.NgModuleFactoryLoader,
                                 core_1.Injector, router_config_loader_1.ROUTES
                             ]
                         },

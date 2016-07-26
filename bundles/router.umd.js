@@ -1716,8 +1716,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
     }
     function resolveComponent(resolver, snapshot) {
-        // TODO: vsavkin change to typeof snapshot.component === 'string' in beta2
-        if (snapshot.component && snapshot._routeConfig) {
+        if (snapshot.component && snapshot._routeConfig && typeof snapshot.component === 'string') {
             return resolver.resolveComponent(snapshot.component);
         }
         else {
@@ -2513,13 +2512,13 @@ var __extends = (this && this.__extends) || function (d, b) {
                 useFactory: setupRouter,
                 deps: [
                     _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                    _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                    _angular_core.NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
                 ]
             },
             RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
             // Trigger initial navigation
             { provide: _angular_core.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [_angular_core.Injector] },
-            { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader }
+            { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader }
         ];
     }
     /**
@@ -2528,7 +2527,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * ### Example
      *
      * ```
-     * @AppModule({providers: [
+     * @NgModule({providers: [
      *   provideRoutes([{path: 'home', component: Home}])
      * ]})
      * class LazyLoadedModule {
@@ -2550,7 +2549,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * ### Example
      *
      * ```
-     * @AppModule({providers: [
+     * @NgModule({providers: [
      *   provideRouterOptions({enableTracing: true})
      * ]})
      * class LazyLoadedModule {
@@ -2868,12 +2867,21 @@ var __extends = (this && this.__extends) || function (d, b) {
             useFactory: setupRouter,
             deps: [
                 _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                _angular_core.NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-        { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader },
+        { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader },
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+    ];
+    var RouterModuleWithoutProviders = (function () {
+        function RouterModuleWithoutProviders() {
+        }
+        return RouterModuleWithoutProviders;
+    }());
+    /** @nocollapse */
+    RouterModuleWithoutProviders.decorators = [
+        { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
     var RouterModule = (function () {
         function RouterModule(injector) {
@@ -2892,7 +2900,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }());
     /** @nocollapse */
     RouterModule.decorators = [
-        { type: _angular_core.AppModule, args: [{ directives: ROUTER_DIRECTIVES, providers: ROUTER_PROVIDERS },] },
+        { type: _angular_core.NgModule, args: [{ exports: [RouterModuleWithoutProviders], providers: ROUTER_PROVIDERS },] },
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = [
@@ -2938,6 +2946,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.RoutesRecognized = RoutesRecognized;
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.RouterModule = RouterModule;
+    exports.RouterModuleWithoutProviders = RouterModuleWithoutProviders;
     exports.RouterOutletMap = RouterOutletMap;
     exports.provideRouter = provideRouter;
     exports.ActivatedRoute = ActivatedRoute;

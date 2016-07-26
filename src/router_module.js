@@ -28,13 +28,23 @@ exports.ROUTER_PROVIDERS = [
         useFactory: common_router_providers_1.setupRouter,
         deps: [
             core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector,
-            core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTES, common_router_providers_1.ROUTER_CONFIGURATION
+            core_1.NgModuleFactoryLoader, router_config_loader_1.ROUTES, common_router_providers_1.ROUTER_CONFIGURATION
         ]
     },
     router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: common_router_providers_1.rootRoute, deps: [router_1.Router] },
-    { provide: core_1.AppModuleFactoryLoader, useClass: core_1.SystemJsAppModuleLoader },
+    { provide: core_1.NgModuleFactoryLoader, useClass: core_1.SystemJsNgModuleLoader },
     { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
+var RouterModuleWithoutProviders = (function () {
+    function RouterModuleWithoutProviders() {
+    }
+    /** @nocollapse */
+    RouterModuleWithoutProviders.decorators = [
+        { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
+    ];
+    return RouterModuleWithoutProviders;
+}());
+exports.RouterModuleWithoutProviders = RouterModuleWithoutProviders;
 var RouterModule = (function () {
     function RouterModule(injector) {
         this.injector = injector;
@@ -50,7 +60,7 @@ var RouterModule = (function () {
     }
     /** @nocollapse */
     RouterModule.decorators = [
-        { type: core_1.AppModule, args: [{ directives: exports.ROUTER_DIRECTIVES, providers: exports.ROUTER_PROVIDERS },] },
+        { type: core_1.NgModule, args: [{ exports: [RouterModuleWithoutProviders], providers: exports.ROUTER_PROVIDERS },] },
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = [

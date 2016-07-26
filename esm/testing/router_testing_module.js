@@ -7,18 +7,18 @@
  */
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
-import { AppModule, AppModuleFactoryLoader, Compiler, ComponentResolver, Injectable, Injector } from '@angular/core';
+import { Compiler, ComponentResolver, Injectable, Injector, NgModule, NgModuleFactoryLoader } from '@angular/core';
 import { Router, RouterOutletMap, UrlSerializer } from '../index';
 import { ROUTES } from '../src/router_config_loader';
-import { ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '../src/router_module';
-export class SpyAppModuleFactoryLoader {
+import { RouterModule } from '../src/router_module';
+export class SpyNgModuleFactoryLoader {
     constructor(compiler) {
         this.compiler = compiler;
         this.stubbedModules = {};
     }
     load(path) {
         if (this.stubbedModules[path]) {
-            return this.compiler.compileAppModuleAsync(this.stubbedModules[path]);
+            return this.compiler.compileModuleAsync(this.stubbedModules[path]);
         }
         else {
             return Promise.reject(new Error(`Cannot find module ${path}`));
@@ -26,11 +26,11 @@ export class SpyAppModuleFactoryLoader {
     }
 }
 /** @nocollapse */
-SpyAppModuleFactoryLoader.decorators = [
+SpyNgModuleFactoryLoader.decorators = [
     { type: Injectable },
 ];
 /** @nocollapse */
-SpyAppModuleFactoryLoader.ctorParameters = [
+SpyNgModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
 function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
@@ -40,18 +40,17 @@ export class RouterTestingModule {
 }
 /** @nocollapse */
 RouterTestingModule.decorators = [
-    { type: AppModule, args: [{
-                directives: ROUTER_DIRECTIVES,
+    { type: NgModule, args: [{
+                exports: [RouterModule],
                 providers: [
-                    ROUTER_PROVIDERS,
                     { provide: Location, useClass: SpyLocation },
                     { provide: LocationStrategy, useClass: MockLocationStrategy },
-                    { provide: AppModuleFactoryLoader, useClass: SpyAppModuleFactoryLoader },
+                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader },
                     {
                         provide: Router,
                         useFactory: setupTestingRouter,
                         deps: [
-                            ComponentResolver, UrlSerializer, RouterOutletMap, Location, AppModuleFactoryLoader,
+                            ComponentResolver, UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader,
                             Injector, ROUTES
                         ]
                     },

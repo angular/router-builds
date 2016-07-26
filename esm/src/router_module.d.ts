@@ -8,6 +8,24 @@ import { RouterOutlet } from './directives/router_outlet';
 export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkWithHref | typeof RouterLinkActive)[];
 export declare const ROUTER_PROVIDERS: any[];
 /**
+ * Router module to be used for lazy loaded parts.
+ *
+ * ### Example
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModuleWithoutProviders]
+ * })
+ * class TeamsModule {}
+ * ```
+ *
+ * @experimental We will soon have a way for the `RouterModule` to be imported with and without a
+ * provider,
+ * and then this module will be removed.
+ */
+export declare class RouterModuleWithoutProviders {
+}
+/**
  * Router module.
  *
  * ### Example

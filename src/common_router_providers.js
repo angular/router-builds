@@ -84,13 +84,13 @@ function provideRouter(routes, config) {
             useFactory: setupRouter,
             deps: [
                 core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector,
-                core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
+                core_1.NgModuleFactoryLoader, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
             ]
         },
         router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: rootRoute, deps: [router_1.Router] },
         // Trigger initial navigation
         { provide: core_1.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [core_1.Injector] },
-        { provide: core_1.AppModuleFactoryLoader, useClass: core_1.SystemJsAppModuleLoader }
+        { provide: core_1.NgModuleFactoryLoader, useClass: core_1.SystemJsNgModuleLoader }
     ];
 }
 exports.provideRouter = provideRouter;
@@ -100,7 +100,7 @@ exports.provideRouter = provideRouter;
  * ### Example
  *
  * ```
- * @AppModule({providers: [
+ * @NgModule({providers: [
  *   provideRoutes([{path: 'home', component: Home}])
  * ]})
  * class LazyLoadedModule {
@@ -123,7 +123,7 @@ exports.provideRoutes = provideRoutes;
  * ### Example
  *
  * ```
- * @AppModule({providers: [
+ * @NgModule({providers: [
  *   provideRouterOptions({enableTracing: true})
  * ]})
  * class LazyLoadedModule {

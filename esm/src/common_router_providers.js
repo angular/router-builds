@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ANALYZE_FOR_PRECOMPILE, APP_INITIALIZER, AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, OpaqueToken, SystemJsAppModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_PRECOMPILE, APP_INITIALIZER, ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
 import { Router } from './router';
 import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -80,13 +80,13 @@ export function provideRouter(routes, config) {
             useFactory: setupRouter,
             deps: [
                 ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-                AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
         // Trigger initial navigation
         { provide: APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [Injector] },
-        { provide: AppModuleFactoryLoader, useClass: SystemJsAppModuleLoader }
+        { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader }
     ];
 }
 /**
@@ -95,7 +95,7 @@ export function provideRouter(routes, config) {
  * ### Example
  *
  * ```
- * @AppModule({providers: [
+ * @NgModule({providers: [
  *   provideRoutes([{path: 'home', component: Home}])
  * ]})
  * class LazyLoadedModule {
@@ -117,7 +117,7 @@ export function provideRoutes(routes) {
  * ### Example
  *
  * ```
- * @AppModule({providers: [
+ * @NgModule({providers: [
  *   provideRouterOptions({enableTracing: true})
  * ]})
  * class LazyLoadedModule {
