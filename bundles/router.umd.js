@@ -2502,7 +2502,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      */
     function provideRouter_(routes, config) {
         return [
-            { provide: _angular_core.ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
+            { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
             { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
             { provide: ROUTER_CONFIGURATION, useValue: config }, _angular_common.Location,
             { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
@@ -2539,7 +2539,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      */
     function provideRoutes(routes) {
         return [
-            { provide: _angular_core.ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
+            { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
             { provide: ROUTES, useValue: routes }
         ];
     }
@@ -2829,7 +2829,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 if (!(e instanceof _angular_core.NoComponentFactoryError))
                     throw e;
                 var componentName = component ? component.name : null;
-                console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'precompile' array of your application component. This will be required in a future\n          release of the router.");
+                console.warn("'" + componentName + "' not found in entryComponents array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'entryComponents' array of your application component. This will be required in a future\n          release of the router.");
                 factory = snapshot._resolvedComponentFactory;
             }
             var injector = loadedInjector ? loadedInjector : this.location.parentInjector;

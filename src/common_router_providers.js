@@ -74,7 +74,7 @@ exports.setupRouterInitializer = setupRouterInitializer;
  */
 function provideRouter(routes, config) {
     return [
-        { provide: core_1.ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
+        { provide: core_1.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
         { provide: router_config_loader_1.ROUTES, useExisting: router_config_loader_1.ROUTER_CONFIG }, { provide: router_config_loader_1.ROUTER_CONFIG, useValue: routes },
         { provide: exports.ROUTER_CONFIGURATION, useValue: config }, common_1.Location,
         { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
@@ -112,7 +112,7 @@ exports.provideRouter = provideRouter;
  */
 function provideRoutes(routes) {
     return [
-        { provide: core_1.ANALYZE_FOR_PRECOMPILE, multi: true, useValue: routes },
+        { provide: core_1.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
         { provide: router_config_loader_1.ROUTES, useValue: routes }
     ];
 }

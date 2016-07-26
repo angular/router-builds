@@ -69,7 +69,7 @@ var RouterOutlet = (function () {
             if (!(e instanceof core_1.NoComponentFactoryError))
                 throw e;
             var componentName = component ? component.name : null;
-            console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'precompile' array of your application component. This will be required in a future\n          release of the router.");
+            console.warn("'" + componentName + "' not found in entryComponents array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'entryComponents' array of your application component. This will be required in a future\n          release of the router.");
             factory = snapshot._resolvedComponentFactory;
         }
         var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
