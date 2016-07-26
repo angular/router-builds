@@ -2463,6 +2463,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return r;
     }
+    function rootRoute(router) {
+        return router.routerState.root;
+    }
     function setupRouterInitializer(injector) {
         // https://github.com/angular/angular/issues/9101
         // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
@@ -2513,8 +2516,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
                 ]
             },
-            RouterOutletMap,
-            { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
+            RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
             // Trigger initial navigation
             { provide: _angular_core.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [_angular_core.Injector] },
             { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader }
@@ -2869,8 +2871,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 _angular_core.AppModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
             ]
         },
-        RouterOutletMap,
-        { provide: ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [Router] },
+        RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
         { provide: _angular_core.AppModuleFactoryLoader, useClass: _angular_core.SystemJsAppModuleLoader },
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];

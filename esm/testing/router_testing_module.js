@@ -33,6 +33,9 @@ SpyAppModuleFactoryLoader.decorators = [
 SpyAppModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
+function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
+    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
+}
 export class RouterTestingModule {
 }
 /** @nocollapse */
@@ -46,9 +49,7 @@ RouterTestingModule.decorators = [
                     { provide: AppModuleFactoryLoader, useClass: SpyAppModuleFactoryLoader },
                     {
                         provide: Router,
-                        useFactory: (resolver, urlSerializer, outletMap, location, loader, injector, routes) => {
-                            return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
-                        },
+                        useFactory: setupTestingRouter,
                         deps: [
                             ComponentResolver, UrlSerializer, RouterOutletMap, Location, AppModuleFactoryLoader,
                             Injector, ROUTES

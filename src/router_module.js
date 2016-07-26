@@ -31,8 +31,7 @@ exports.ROUTER_PROVIDERS = [
             core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTES, common_router_providers_1.ROUTER_CONFIGURATION
         ]
     },
-    router_outlet_map_1.RouterOutletMap,
-    { provide: router_state_1.ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [router_1.Router] },
+    router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: common_router_providers_1.rootRoute, deps: [router_1.Router] },
     { provide: core_1.AppModuleFactoryLoader, useClass: core_1.SystemJsAppModuleLoader },
     { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];

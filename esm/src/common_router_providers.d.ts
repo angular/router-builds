@@ -10,6 +10,7 @@ import { AppModuleFactoryLoader, ApplicationRef, ComponentResolver, Injector, Op
 import { Routes } from './config';
 import { Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
+import { ActivatedRoute } from './router_state';
 import { UrlSerializer } from './url_tree';
 export declare const ROUTER_CONFIGURATION: OpaqueToken;
 /**
@@ -19,6 +20,7 @@ export interface ExtraOptions {
     enableTracing?: boolean;
 }
 export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes, opts: ExtraOptions): Router;
+export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function setupRouterInitializer(injector: Injector): () => any;
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.

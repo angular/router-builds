@@ -36,6 +36,9 @@ var SpyAppModuleFactoryLoader = (function () {
     return SpyAppModuleFactoryLoader;
 }());
 exports.SpyAppModuleFactoryLoader = SpyAppModuleFactoryLoader;
+function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
+    return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
+}
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
     }
@@ -50,9 +53,7 @@ var RouterTestingModule = (function () {
                         { provide: core_1.AppModuleFactoryLoader, useClass: SpyAppModuleFactoryLoader },
                         {
                             provide: index_1.Router,
-                            useFactory: function (resolver, urlSerializer, outletMap, location, loader, injector, routes) {
-                                return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
-                            },
+                            useFactory: setupTestingRouter,
                             deps: [
                                 core_1.ComponentResolver, index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.AppModuleFactoryLoader,
                                 core_1.Injector, router_config_loader_1.ROUTES

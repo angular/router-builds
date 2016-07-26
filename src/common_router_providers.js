@@ -32,6 +32,10 @@ function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector
     return r;
 }
 exports.setupRouter = setupRouter;
+function rootRoute(router) {
+    return router.routerState.root;
+}
+exports.rootRoute = rootRoute;
 function setupRouterInitializer(injector) {
     // https://github.com/angular/angular/issues/9101
     // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
@@ -83,8 +87,7 @@ function provideRouter(routes, config) {
                 core_1.AppModuleFactoryLoader, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
             ]
         },
-        router_outlet_map_1.RouterOutletMap,
-        { provide: router_state_1.ActivatedRoute, useFactory: function (r) { return r.routerState.root; }, deps: [router_1.Router] },
+        router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: rootRoute, deps: [router_1.Router] },
         // Trigger initial navigation
         { provide: core_1.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [core_1.Injector] },
         { provide: core_1.AppModuleFactoryLoader, useClass: core_1.SystemJsAppModuleLoader }
