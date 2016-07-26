@@ -7,6 +7,8 @@
  */
 import 'rxjs/add/operator/concatAll';
 import 'rxjs/add/operator/last';
+import { Observable } from 'rxjs/Observable';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { PRIMARY_OUTLET } from '../shared';
 export function shallowEqualArrays(a, b) {
@@ -96,6 +98,20 @@ export function waitForMap(obj, fn) {
     }
     else {
         return of(res);
+    }
+}
+export function andObservables(observables) {
+    return observables.mergeAll().every(result => result === true);
+}
+export function wrapIntoObservable(value) {
+    if (value instanceof Observable) {
+        return value;
+    }
+    else if (value instanceof Promise) {
+        return fromPromise(value);
+    }
+    else {
+        return of(value);
     }
 }
 //# sourceMappingURL=collection.js.map

@@ -11,10 +11,8 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { applyRedirects } from './apply_redirects';
 import { validateConfig } from './config';
@@ -27,7 +25,7 @@ import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlTree, createEmptyUrlTree } from './url_tree';
-import { forEach, merge, shallowEqual, waitForMap } from './utils/collection';
+import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  *
@@ -554,17 +552,6 @@ class PreActivation {
         return injector.get(token);
     }
 }
-function wrapIntoObservable(value) {
-    if (value instanceof Observable) {
-        return value;
-    }
-    else if (value instanceof Promise) {
-        return fromPromise(value);
-    }
-    else {
-        return of(value);
-    }
-}
 class ActivateRoutes {
     constructor(futureState, currState) {
         this.futureState = futureState;
@@ -659,9 +646,6 @@ function closestLoadedConfig(state, snapshot) {
         return config && config._loadedConfig && s !== snapshot;
     });
     return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
-}
-function andObservables(observables) {
-    return observables.mergeAll().every(result => result === true);
 }
 function pushQueryParamsAndFragment(state) {
     if (!shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {

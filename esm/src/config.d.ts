@@ -484,6 +484,7 @@ export interface Route {
     canActivate?: any[];
     canActivateChild?: any[];
     canDeactivate?: any[];
+    canLoad?: any[];
     data?: Data;
     resolve?: ResolveData;
     children?: Route[];

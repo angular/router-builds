@@ -12,10 +12,8 @@ require('rxjs/add/operator/mergeAll');
 require('rxjs/add/operator/reduce');
 require('rxjs/add/operator/every');
 var core_1 = require('@angular/core');
-var Observable_1 = require('rxjs/Observable');
 var Subject_1 = require('rxjs/Subject');
 var from_1 = require('rxjs/observable/from');
-var fromPromise_1 = require('rxjs/observable/fromPromise');
 var of_1 = require('rxjs/observable/of');
 var apply_redirects_1 = require('./apply_redirects');
 var config_1 = require('./config');
@@ -427,7 +425,7 @@ var PreActivation = (function () {
         return from_1.from(this.checks)
             .map(function (s) {
             if (s instanceof CanActivate) {
-                return andObservables(from_1.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
+                return collection_1.andObservables(from_1.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -524,13 +522,13 @@ var PreActivation = (function () {
         var obs = from_1.from(canActivate).map(function (c) {
             var guard = _this.getToken(c, future, _this.future);
             if (guard.canActivate) {
-                return wrapIntoObservable(guard.canActivate(future, _this.future));
+                return collection_1.wrapIntoObservable(guard.canActivate(future, _this.future));
             }
             else {
-                return wrapIntoObservable(guard(future, _this.future));
+                return collection_1.wrapIntoObservable(guard(future, _this.future));
             }
         });
-        return andObservables(obs);
+        return collection_1.andObservables(obs);
     };
     PreActivation.prototype.runCanActivateChild = function (path) {
         var _this = this;
@@ -539,17 +537,17 @@ var PreActivation = (function () {
             .reverse()
             .map(function (p) { return _this.extractCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(from_1.from(canActivateChildGuards).map(function (d) {
+        return collection_1.andObservables(from_1.from(canActivateChildGuards).map(function (d) {
             var obs = from_1.from(d.guards).map(function (c) {
                 var guard = _this.getToken(c, c.node, _this.future);
                 if (guard.canActivateChild) {
-                    return wrapIntoObservable(guard.canActivateChild(future, _this.future));
+                    return collection_1.wrapIntoObservable(guard.canActivateChild(future, _this.future));
                 }
                 else {
-                    return wrapIntoObservable(guard(future, _this.future));
+                    return collection_1.wrapIntoObservable(guard(future, _this.future));
                 }
             });
-            return andObservables(obs);
+            return collection_1.andObservables(obs);
         }));
     };
     PreActivation.prototype.extractCanActivateChild = function (p) {
@@ -567,10 +565,10 @@ var PreActivation = (function () {
             .map(function (c) {
             var guard = _this.getToken(c, curr, _this.curr);
             if (guard.canDeactivate) {
-                return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+                return collection_1.wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
             }
             else {
-                return wrapIntoObservable(guard(component, curr, _this.curr));
+                return collection_1.wrapIntoObservable(guard(component, curr, _this.curr));
             }
         })
             .mergeAll()
@@ -588,8 +586,8 @@ var PreActivation = (function () {
         var _this = this;
         return collection_1.waitForMap(resolve, function (k, v) {
             var resolver = _this.getToken(v, future, _this.future);
-            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
-                wrapIntoObservable(resolver(future, _this.future));
+            return resolver.resolve ? collection_1.wrapIntoObservable(resolver.resolve(future, _this.future)) :
+                collection_1.wrapIntoObservable(resolver(future, _this.future));
         });
     };
     PreActivation.prototype.getToken = function (token, snapshot, state) {
@@ -599,17 +597,6 @@ var PreActivation = (function () {
     };
     return PreActivation;
 }());
-function wrapIntoObservable(value) {
-    if (value instanceof Observable_1.Observable) {
-        return value;
-    }
-    else if (value instanceof Promise) {
-        return fromPromise_1.fromPromise(value);
-    }
-    else {
-        return of_1.of(value);
-    }
-}
 var ActivateRoutes = (function () {
     function ActivateRoutes(futureState, currState) {
         this.futureState = futureState;
@@ -707,9 +694,6 @@ function closestLoadedConfig(state, snapshot) {
         return config && config._loadedConfig && s !== snapshot;
     });
     return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
-}
-function andObservables(observables) {
-    return observables.mergeAll().every(function (result) { return result === true; });
 }
 function pushQueryParamsAndFragment(state) {
     if (!collection_1.shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {

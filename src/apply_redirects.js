@@ -10,6 +10,7 @@ require('rxjs/add/operator/first');
 require('rxjs/add/operator/catch');
 require('rxjs/add/operator/concatAll');
 var Observable_1 = require('rxjs/Observable');
+var from_1 = require('rxjs/observable/from');
 var of_1 = require('rxjs/observable/of');
 var EmptyError_1 = require('rxjs/util/EmptyError');
 var router_config_loader_1 = require('./router_config_loader');
@@ -34,6 +35,9 @@ function noMatch(segmentGroup) {
 }
 function absoluteRedirect(segments) {
     return new Observable_1.Observable(function (obs) { return obs.error(new AbsoluteRedirect(segments)); });
+}
+function canLoadFails(route) {
+    return new Observable_1.Observable(function (obs) { return obs.error(new Error("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
 }
 function applyRedirects(injector, configLoader, urlTree, config) {
     return expandSegmentGroup(injector, configLoader, config, urlTree.root, shared_1.PRIMARY_OUTLET)
@@ -165,14 +169,36 @@ function getChildConfig(injector, configLoader, route) {
         return of_1.of(new router_config_loader_1.LoadedRouterConfig(route.children, injector, null));
     }
     else if (route.loadChildren) {
-        return configLoader.load(injector, route.loadChildren).map(function (r) {
-            route._loadedConfig = r;
-            return r;
+        return runGuards(injector, route).mergeMap(function (shouldLoad) {
+            if (shouldLoad) {
+                return configLoader.load(injector, route.loadChildren).map(function (r) {
+                    route._loadedConfig = r;
+                    return r;
+                });
+            }
+            else {
+                return canLoadFails(route);
+            }
         });
     }
     else {
         return of_1.of(new router_config_loader_1.LoadedRouterConfig([], injector, null));
     }
+}
+function runGuards(injector, route) {
+    var canLoad = route.canLoad;
+    if (!canLoad || canLoad.length === 0)
+        return of_1.of(true);
+    var obs = from_1.from(canLoad).map(function (c) {
+        var guard = injector.get(c);
+        if (guard.canLoad) {
+            return collection_1.wrapIntoObservable(guard.canLoad(route));
+        }
+        else {
+            return collection_1.wrapIntoObservable(guard(route));
+        }
+    });
+    return collection_1.andObservables(obs);
 }
 function match(segmentGroup, route, segments) {
     var noMatch = { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };

@@ -8,6 +8,8 @@
 "use strict";
 require('rxjs/add/operator/concatAll');
 require('rxjs/add/operator/last');
+var Observable_1 = require('rxjs/Observable');
+var fromPromise_1 = require('rxjs/observable/fromPromise');
 var of_1 = require('rxjs/observable/of');
 var shared_1 = require('../shared');
 function shallowEqualArrays(a, b) {
@@ -108,4 +110,20 @@ function waitForMap(obj, fn) {
     }
 }
 exports.waitForMap = waitForMap;
+function andObservables(observables) {
+    return observables.mergeAll().every(function (result) { return result === true; });
+}
+exports.andObservables = andObservables;
+function wrapIntoObservable(value) {
+    if (value instanceof Observable_1.Observable) {
+        return value;
+    }
+    else if (value instanceof Promise) {
+        return fromPromise_1.fromPromise(value);
+    }
+    else {
+        return of_1.of(value);
+    }
+}
+exports.wrapIntoObservable = wrapIntoObservable;
 //# sourceMappingURL=collection.js.map

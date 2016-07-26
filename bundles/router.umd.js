@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Observable'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/fromPromise'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/util/EmptyError'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Observable', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/fromPromise', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/util/EmptyError', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.EmptyError, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable, global.ng.platformBrowser));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Observable, rxjs_Subject, rxjs_observable_from, rxjs_observable_fromPromise, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_util_EmptyError, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/Observable'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('@angular/platform-browser')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', '@angular/platform-browser'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.EmptyError, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable, global.ng.platformBrowser));
+}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_Observable, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
     'use strict';
     /**
      * @deprecated use Routes
@@ -125,6 +125,20 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         else {
             return rxjs_observable_of.of(res);
+        }
+    }
+    function andObservables(observables) {
+        return observables.mergeAll().every(function (result) { return result === true; });
+    }
+    function wrapIntoObservable(value) {
+        if (value instanceof rxjs_Observable.Observable) {
+            return value;
+        }
+        else if (value instanceof Promise) {
+            return rxjs_observable_fromPromise.fromPromise(value);
+        }
+        else {
+            return rxjs_observable_of.of(value);
         }
     }
     function createEmptyUrlTree() {
@@ -552,6 +566,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function absoluteRedirect(segments) {
         return new rxjs_Observable.Observable(function (obs) { return obs.error(new AbsoluteRedirect(segments)); });
     }
+    function canLoadFails(route) {
+        return new rxjs_Observable.Observable(function (obs) { return obs.error(new Error("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+    }
     function applyRedirects(injector, configLoader, urlTree, config) {
         return expandSegmentGroup(injector, configLoader, config, urlTree.root, PRIMARY_OUTLET)
             .map(function (rootSegmentGroup) { return createUrlTree(urlTree, rootSegmentGroup); })
@@ -681,14 +698,36 @@ var __extends = (this && this.__extends) || function (d, b) {
             return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null));
         }
         else if (route.loadChildren) {
-            return configLoader.load(injector, route.loadChildren).map(function (r) {
-                route._loadedConfig = r;
-                return r;
+            return runGuards(injector, route).mergeMap(function (shouldLoad) {
+                if (shouldLoad) {
+                    return configLoader.load(injector, route.loadChildren).map(function (r) {
+                        route._loadedConfig = r;
+                        return r;
+                    });
+                }
+                else {
+                    return canLoadFails(route);
+                }
             });
         }
         else {
             return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null));
         }
+    }
+    function runGuards(injector, route) {
+        var canLoad = route.canLoad;
+        if (!canLoad || canLoad.length === 0)
+            return rxjs_observable_of.of(true);
+        var obs = rxjs_observable_from.from(canLoad).map(function (c) {
+            var guard = injector.get(c);
+            if (guard.canLoad) {
+                return wrapIntoObservable(guard.canLoad(route));
+            }
+            else {
+                return wrapIntoObservable(guard(route));
+            }
+        });
+        return andObservables(obs);
     }
     function match(segmentGroup, route, segments) {
         var noMatch = { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
@@ -2305,17 +2344,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return PreActivation;
     }());
-    function wrapIntoObservable(value) {
-        if (value instanceof rxjs_Observable.Observable) {
-            return value;
-        }
-        else if (value instanceof Promise) {
-            return rxjs_observable_fromPromise.fromPromise(value);
-        }
-        else {
-            return rxjs_observable_of.of(value);
-        }
-    }
     var ActivateRoutes = (function () {
         function ActivateRoutes(futureState, currState) {
             this.futureState = futureState;
@@ -2413,9 +2441,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             return config && config._loadedConfig && s !== snapshot;
         });
         return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
-    }
-    function andObservables(observables) {
-        return observables.mergeAll().every(function (result) { return result === true; });
     }
     function pushQueryParamsAndFragment(state) {
         if (!shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
