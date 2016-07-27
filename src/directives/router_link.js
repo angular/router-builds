@@ -72,9 +72,6 @@ var RouterLink = (function () {
 }());
 exports.RouterLink = RouterLink;
 var RouterLinkWithHref = (function () {
-    /**
-     * @internal
-     */
     function RouterLinkWithHref(router, route, locationStrategy) {
         var _this = this;
         this.router = router;

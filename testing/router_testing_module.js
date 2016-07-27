@@ -47,6 +47,7 @@ var RouterTestingModule = (function () {
         { type: core_1.NgModule, args: [{
                     exports: [router_module_1.RouterModule],
                     providers: [
+                        router_module_1.ROUTER_PROVIDERS,
                         { provide: common_1.Location, useClass: testing_1.SpyLocation },
                         { provide: common_1.LocationStrategy, useClass: testing_1.MockLocationStrategy },
                         { provide: core_1.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader },

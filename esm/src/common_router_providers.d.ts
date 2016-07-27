@@ -18,6 +18,7 @@ export declare const ROUTER_CONFIGURATION: OpaqueToken;
  */
 export interface ExtraOptions {
     enableTracing?: boolean;
+    useHash?: boolean;
 }
 export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Routes, opts: ExtraOptions): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
@@ -57,7 +58,7 @@ export declare function provideRouter(routes: Routes, config: ExtraOptions): any
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
@@ -74,6 +75,6 @@ export declare function provideRoutes(routes: Routes): any;
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 export declare function provideRouterConfig(config: ExtraOptions): any;

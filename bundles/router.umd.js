@@ -2560,7 +2560,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      * ```
      *
-     * @experimental
+     * @deprecated
      */
     function provideRoutes(routes) {
         return [
@@ -2582,7 +2582,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * }
      * ```
      *
-     * @experimental
+     * @deprecated
      */
     function provideRouterConfig(config) {
         return { provide: ROUTER_CONFIGURATION, useValue: config };
@@ -2648,9 +2648,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
     };
     var RouterLinkWithHref = (function () {
-        /**
-         * @internal
-         */
         function RouterLinkWithHref(router, route, locationStrategy) {
             var _this = this;
             this.router = router;
@@ -2885,9 +2882,16 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+    var pathLocationStrategy = {
+        provide: _angular_common.LocationStrategy,
+        useClass: _angular_common.PathLocationStrategy
+    };
+    var hashLocationStrategy = {
+        provide: _angular_common.LocationStrategy,
+        useClass: _angular_common.HashLocationStrategy
+    };
     var ROUTER_PROVIDERS = [
-        _angular_common.Location, { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
-        { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
+        _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
             provide: Router,
             useFactory: setupRouter,
             deps: [
@@ -2899,18 +2903,12 @@ var __extends = (this && this.__extends) || function (d, b) {
         { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader },
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
-    var RouterModuleWithoutProviders = (function () {
-        function RouterModuleWithoutProviders() {
-        }
-        return RouterModuleWithoutProviders;
-    }());
-    /** @nocollapse */
-    RouterModuleWithoutProviders.decorators = [
-        { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-    ];
     var RouterModule = (function () {
         function RouterModule(injector) {
             this.injector = injector;
+            // do the initialization only once
+            if (injector.parent.get(RouterModule, null))
+                return;
             setTimeout(function () {
                 var appRef = injector.get(_angular_core.ApplicationRef);
                 if (appRef.componentTypes.length == 0) {
@@ -2921,11 +2919,23 @@ var __extends = (this && this.__extends) || function (d, b) {
                 }
             }, 0);
         }
+        RouterModule.forRoot = function (routes, config) {
+            return {
+                ngModule: RouterModule,
+                providers: [
+                    ROUTER_PROVIDERS, provideRoutes(routes), config ? provideRouterConfig(config) : [],
+                    config.useHash ? hashLocationStrategy : pathLocationStrategy
+                ]
+            };
+        };
+        RouterModule.forChild = function (routes) {
+            return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
+        };
         return RouterModule;
     }());
     /** @nocollapse */
     RouterModule.decorators = [
-        { type: _angular_core.NgModule, args: [{ exports: [RouterModuleWithoutProviders], providers: ROUTER_PROVIDERS },] },
+        { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = [
@@ -2971,7 +2981,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.RoutesRecognized = RoutesRecognized;
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.RouterModule = RouterModule;
-    exports.RouterModuleWithoutProviders = RouterModuleWithoutProviders;
     exports.RouterOutletMap = RouterOutletMap;
     exports.provideRouter = provideRouter;
     exports.ActivatedRoute = ActivatedRoute;

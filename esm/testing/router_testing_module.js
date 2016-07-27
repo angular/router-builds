@@ -10,7 +10,7 @@ import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Compiler, ComponentResolver, Injectable, Injector, NgModule, NgModuleFactoryLoader } from '@angular/core';
 import { Router, RouterOutletMap, UrlSerializer } from '../index';
 import { ROUTES } from '../src/router_config_loader';
-import { RouterModule } from '../src/router_module';
+import { ROUTER_PROVIDERS, RouterModule } from '../src/router_module';
 export class SpyNgModuleFactoryLoader {
     constructor(compiler) {
         this.compiler = compiler;
@@ -43,6 +43,7 @@ RouterTestingModule.decorators = [
     { type: NgModule, args: [{
                 exports: [RouterModule],
                 providers: [
+                    ROUTER_PROVIDERS,
                     { provide: Location, useClass: SpyLocation },
                     { provide: LocationStrategy, useClass: MockLocationStrategy },
                     { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader },

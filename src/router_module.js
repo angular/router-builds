@@ -21,9 +21,16 @@ var url_tree_1 = require('./url_tree');
  * @stable
  */
 exports.ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterLink, router_link_1.RouterLinkWithHref, router_link_active_1.RouterLinkActive];
+var pathLocationStrategy = {
+    provide: common_1.LocationStrategy,
+    useClass: common_1.PathLocationStrategy
+};
+var hashLocationStrategy = {
+    provide: common_1.LocationStrategy,
+    useClass: common_1.HashLocationStrategy
+};
 exports.ROUTER_PROVIDERS = [
-    common_1.Location, { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
-    { provide: url_tree_1.UrlSerializer, useClass: url_tree_1.DefaultUrlSerializer }, {
+    common_1.Location, { provide: url_tree_1.UrlSerializer, useClass: url_tree_1.DefaultUrlSerializer }, {
         provide: router_1.Router,
         useFactory: common_router_providers_1.setupRouter,
         deps: [
@@ -35,19 +42,12 @@ exports.ROUTER_PROVIDERS = [
     { provide: core_1.NgModuleFactoryLoader, useClass: core_1.SystemJsNgModuleLoader },
     { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
-var RouterModuleWithoutProviders = (function () {
-    function RouterModuleWithoutProviders() {
-    }
-    /** @nocollapse */
-    RouterModuleWithoutProviders.decorators = [
-        { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
-    ];
-    return RouterModuleWithoutProviders;
-}());
-exports.RouterModuleWithoutProviders = RouterModuleWithoutProviders;
 var RouterModule = (function () {
     function RouterModule(injector) {
         this.injector = injector;
+        // do the initialization only once
+        if (injector.parent.get(RouterModule, null))
+            return;
         setTimeout(function () {
             var appRef = injector.get(core_1.ApplicationRef);
             if (appRef.componentTypes.length == 0) {
@@ -58,9 +58,21 @@ var RouterModule = (function () {
             }
         }, 0);
     }
+    RouterModule.forRoot = function (routes, config) {
+        return {
+            ngModule: RouterModule,
+            providers: [
+                exports.ROUTER_PROVIDERS, common_router_providers_1.provideRoutes(routes), config ? common_router_providers_1.provideRouterConfig(config) : [],
+                config.useHash ? hashLocationStrategy : pathLocationStrategy
+            ]
+        };
+    };
+    RouterModule.forChild = function (routes) {
+        return { ngModule: RouterModule, providers: [common_router_providers_1.provideRoutes(routes)] };
+    };
     /** @nocollapse */
     RouterModule.decorators = [
-        { type: core_1.NgModule, args: [{ exports: [RouterModuleWithoutProviders], providers: exports.ROUTER_PROVIDERS },] },
+        { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = [

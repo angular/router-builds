@@ -1,4 +1,6 @@
-import { Injector } from '@angular/core';
+import { Injector, ModuleWithProviders } from '@angular/core';
+import { ExtraOptions } from './common_router_providers';
+import { Routes } from './config';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -8,30 +10,25 @@ import { RouterOutlet } from './directives/router_outlet';
 export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkWithHref | typeof RouterLinkActive)[];
 export declare const ROUTER_PROVIDERS: any[];
 /**
- * Router module to be used for lazy loaded parts.
+ * Router module.
+ *
+ * When registered at the root, it should be used as follows:
+ *
+ * ### Example
+ *
+ * ```
+ * bootstrap(AppCmp, {imports: [RouterModule.forRoot(ROUTES)]});
+ * ```
+ *
+ * For lazy loaded modules it should be used as follows:
  *
  * ### Example
  *
  * ```
  * @NgModule({
- *   imports: [RouterModuleWithoutProviders]
+ *   imports: [RouterModule.forChild(CHILD_ROUTES)]
  * })
- * class TeamsModule {}
- * ```
- *
- * @experimental We will soon have a way for the `RouterModule` to be imported with and without a
- * provider,
- * and then this module will be removed.
- */
-export declare class RouterModuleWithoutProviders {
-}
-/**
- * Router module.
- *
- * ### Example
- *
- * ```
- * bootstrap(AppCmp, {modules: [RouterModule]});
+ * class Lazy {}
  * ```
  *
  * @experimental
@@ -39,4 +36,6 @@ export declare class RouterModuleWithoutProviders {
 export declare class RouterModule {
     private injector;
     constructor(injector: Injector);
+    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
+    static forChild(routes: Routes): ModuleWithProviders;
 }

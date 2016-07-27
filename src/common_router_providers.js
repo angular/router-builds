@@ -108,7 +108,7 @@ exports.provideRouter = provideRouter;
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 function provideRoutes(routes) {
     return [
@@ -131,7 +131,7 @@ exports.provideRoutes = provideRoutes;
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 function provideRouterConfig(config) {
     return { provide: exports.ROUTER_CONFIGURATION, useValue: config };

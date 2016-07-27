@@ -61,9 +61,6 @@ RouterLink.propDecorators = {
     'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
 };
 export class RouterLinkWithHref {
-    /**
-     * @internal
-     */
     constructor(router, route, locationStrategy) {
         this.router = router;
         this.route = route;

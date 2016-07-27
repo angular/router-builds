@@ -103,7 +103,7 @@ export function provideRouter(routes, config) {
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 export function provideRoutes(routes) {
     return [
@@ -125,7 +125,7 @@ export function provideRoutes(routes) {
  * }
  * ```
  *
- * @experimental
+ * @deprecated
  */
 export function provideRouterConfig(config) {
     return { provide: ROUTER_CONFIGURATION, useValue: config };
