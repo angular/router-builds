@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ApplicationRef, ComponentResolver, Injector, NgModule, NgModuleFactoryLoader, SystemJsNgModuleLoader } from '@angular/core';
-import { ROUTER_CONFIGURATION, provideRouterConfig, provideRoutes, rootRoute, setupRouter } from './common_router_providers';
+import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { ApplicationRef, ComponentResolver, Inject, Injector, NgModule, NgModuleFactoryLoader, Optional, SystemJsNgModuleLoader } from '@angular/core';
+import { ROUTER_CONFIGURATION, provideRoutes, rootRoute, setupRouter } from './common_router_providers';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -61,8 +61,14 @@ export class RouterModule {
         return {
             ngModule: RouterModule,
             providers: [
-                ROUTER_PROVIDERS, provideRoutes(routes), config ? provideRouterConfig(config) : [],
-                config.useHash ? hashLocationStrategy : pathLocationStrategy
+                ROUTER_PROVIDERS, provideRoutes(routes), { provide: ROUTER_CONFIGURATION, useValue: config },
+                {
+                    provide: LocationStrategy,
+                    useFactory: provideLocationStrategy,
+                    deps: [
+                        PlatformLocation, [new Inject(APP_BASE_HREF), new Optional()], ROUTER_CONFIGURATION
+                    ]
+                }
             ]
         };
     }
@@ -78,4 +84,8 @@ RouterModule.decorators = [
 RouterModule.ctorParameters = [
     { type: Injector, },
 ];
+function provideLocationStrategy(platformLocationStrategy, baseHref, options = {}) {
+    return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :
+        new PathLocationStrategy(platformLocationStrategy, baseHref);
+}
 //# sourceMappingURL=router_module.js.map

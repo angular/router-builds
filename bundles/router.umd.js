@@ -2471,6 +2471,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
     function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+        if (opts === void 0) { opts = {}; }
         if (ref.componentTypes.length == 0) {
             throw new Error('Bootstrap at least one component before injecting Router.');
         }
@@ -2526,6 +2527,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @deprecated use RouterModule instead
      */
     function provideRouter_(routes, config) {
+        if (config === void 0) { config = {}; }
         return [
             { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
             { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
@@ -2882,14 +2884,6 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
-    var pathLocationStrategy = {
-        provide: _angular_common.LocationStrategy,
-        useClass: _angular_common.PathLocationStrategy
-    };
-    var hashLocationStrategy = {
-        provide: _angular_common.LocationStrategy,
-        useClass: _angular_common.HashLocationStrategy
-    };
     var ROUTER_PROVIDERS = [
         _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
             provide: Router,
@@ -2923,8 +2917,14 @@ var __extends = (this && this.__extends) || function (d, b) {
             return {
                 ngModule: RouterModule,
                 providers: [
-                    ROUTER_PROVIDERS, provideRoutes(routes), config ? provideRouterConfig(config) : [],
-                    config.useHash ? hashLocationStrategy : pathLocationStrategy
+                    ROUTER_PROVIDERS, provideRoutes(routes), { provide: ROUTER_CONFIGURATION, useValue: config },
+                    {
+                        provide: _angular_common.LocationStrategy,
+                        useFactory: provideLocationStrategy,
+                        deps: [
+                            _angular_common.PlatformLocation, [new _angular_core.Inject(_angular_common.APP_BASE_HREF), new _angular_core.Optional()], ROUTER_CONFIGURATION
+                        ]
+                    }
                 ]
             };
         };
@@ -2941,6 +2941,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     RouterModule.ctorParameters = [
         { type: _angular_core.Injector, },
     ];
+    function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+        if (options === void 0) { options = {}; }
+        return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) :
+            new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
+    }
     /**
      * A list of {@link Provider}s. To use the router, you must add this to your application.
      *

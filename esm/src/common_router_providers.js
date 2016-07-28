@@ -13,7 +13,7 @@ import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
-export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts = {}) {
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
@@ -68,7 +68,7 @@ export function setupRouterInitializer(injector) {
  *
  * @deprecated use RouterModule instead
  */
-export function provideRouter(routes, config) {
+export function provideRouter(routes, config = {}) {
     return [
         { provide: ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
         { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },

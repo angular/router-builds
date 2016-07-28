@@ -62,8 +62,14 @@ var RouterModule = (function () {
         return {
             ngModule: RouterModule,
             providers: [
-                exports.ROUTER_PROVIDERS, common_router_providers_1.provideRoutes(routes), config ? common_router_providers_1.provideRouterConfig(config) : [],
-                config.useHash ? hashLocationStrategy : pathLocationStrategy
+                exports.ROUTER_PROVIDERS, common_router_providers_1.provideRoutes(routes), { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: config },
+                {
+                    provide: common_1.LocationStrategy,
+                    useFactory: provideLocationStrategy,
+                    deps: [
+                        common_1.PlatformLocation, [new core_1.Inject(common_1.APP_BASE_HREF), new core_1.Optional()], common_router_providers_1.ROUTER_CONFIGURATION
+                    ]
+                }
             ]
         };
     };
@@ -81,4 +87,9 @@ var RouterModule = (function () {
     return RouterModule;
 }());
 exports.RouterModule = RouterModule;
+function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+    if (options === void 0) { options = {}; }
+    return options.useHash ? new common_1.HashLocationStrategy(platformLocationStrategy, baseHref) :
+        new common_1.PathLocationStrategy(platformLocationStrategy, baseHref);
+}
 //# sourceMappingURL=router_module.js.map

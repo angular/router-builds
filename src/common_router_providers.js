@@ -15,6 +15,7 @@ var router_state_1 = require('./router_state');
 var url_tree_1 = require('./url_tree');
 exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
 function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+    if (opts === void 0) { opts = {}; }
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
@@ -73,6 +74,7 @@ exports.setupRouterInitializer = setupRouterInitializer;
  * @deprecated use RouterModule instead
  */
 function provideRouter(routes, config) {
+    if (config === void 0) { config = {}; }
     return [
         { provide: core_1.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
         { provide: router_config_loader_1.ROUTES, useExisting: router_config_loader_1.ROUTER_CONFIG }, { provide: router_config_loader_1.ROUTER_CONFIG, useValue: routes },
