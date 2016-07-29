@@ -900,6 +900,9 @@ var __extends = (this && this.__extends) || function (d, b) {
             var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
             throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
         }
+        if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+            throw new Error("Invalid configuration of route '" + route.path + "': pathMatch can only be set to 'prefix' or 'full'");
+        }
     }
     /**
      * @license
@@ -1068,6 +1071,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.component = component;
             this._futureSnapshot = futureSnapshot;
         }
+        Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+            get: function () { return this._futureSnapshot.routeConfig; },
+            enumerable: true,
+            configurable: true
+        });
         ActivatedRoute.prototype.toString = function () {
             return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
         };
@@ -1134,6 +1142,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             this._lastPathIndex = lastPathIndex;
             this._resolve = resolve;
         }
+        Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+            get: function () { return this._routeConfig; },
+            enumerable: true,
+            configurable: true
+        });
         ActivatedRouteSnapshot.prototype.toString = function () {
             var url = this.url.map(function (s) { return s.toString(); }).join('/');
             var matched = this._routeConfig ? this._routeConfig.path : '';
@@ -2039,6 +2052,18 @@ var __extends = (this && this.__extends) || function (d, b) {
          * Parse a string into a {@link UrlTree}.
          */
         Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
+        /**
+         * Returns if the url is activated or not.
+         */
+        Router.prototype.isActive = function (url, exact) {
+            if (url instanceof UrlTree) {
+                return containsTree(this.currentUrlTree, url, exact);
+            }
+            else {
+                var urlTree = this.urlSerializer.parse(url);
+                return containsTree(this.currentUrlTree, urlTree, exact);
+            }
+        };
         Router.prototype.scheduleNavigation = function (url, preventPushState) {
             var _this = this;
             var id = ++this.navigationId;
@@ -2765,14 +2790,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             if (!this.links || !this.linksWithHrefs || !this.router.navigated)
                 return;
-            var currentUrlTree = this.router.parseUrl(this.router.url);
-            var isActiveLinks = this.reduceList(currentUrlTree, this.links);
-            var isActiveLinksWithHrefs = this.reduceList(currentUrlTree, this.linksWithHrefs);
+            var isActiveLinks = this.reduceList(this.links);
+            var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
             this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
         };
-        RouterLinkActive.prototype.reduceList = function (currentUrlTree, q) {
+        RouterLinkActive.prototype.reduceList = function (q) {
             var _this = this;
-            return q.reduce(function (res, link) { return res || containsTree(currentUrlTree, link.urlTree, _this.routerLinkActiveOptions.exact); }, false);
+            return q.reduce(function (res, link) { return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact); }, false);
         };
         return RouterLinkActive;
     }());

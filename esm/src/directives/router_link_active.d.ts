@@ -65,5 +65,5 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
     private update();
-    private reduceList(currentUrlTree, q);
+    private reduceList(q);
 }

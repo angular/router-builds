@@ -97,6 +97,11 @@ var ActivatedRoute = (function () {
         this.component = component;
         this._futureSnapshot = futureSnapshot;
     }
+    Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+        get: function () { return this._futureSnapshot.routeConfig; },
+        enumerable: true,
+        configurable: true
+    });
     ActivatedRoute.prototype.toString = function () {
         return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
     };
@@ -165,6 +170,11 @@ var ActivatedRouteSnapshot = (function () {
         this._lastPathIndex = lastPathIndex;
         this._resolve = resolve;
     }
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+        get: function () { return this._routeConfig; },
+        enumerable: true,
+        configurable: true
+    });
     ActivatedRouteSnapshot.prototype.toString = function () {
         var url = this.url.map(function (s) { return s.toString(); }).join('/');
         var matched = this._routeConfig ? this._routeConfig.path : '';

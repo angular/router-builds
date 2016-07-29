@@ -39,5 +39,8 @@ function validateNode(route) {
         const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
         throw new Error(`Invalid route configuration of route '{path: "${route.path}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
     }
+    if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error(`Invalid configuration of route '${route.path}': pathMatch can only be set to 'prefix' or 'full'`);
+    }
 }
 //# sourceMappingURL=config.js.map

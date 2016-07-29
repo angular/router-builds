@@ -87,6 +87,7 @@ export class ActivatedRoute {
         this.component = component;
         this._futureSnapshot = futureSnapshot;
     }
+    get routeConfig() { return this._futureSnapshot.routeConfig; }
     toString() {
         return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
     }
@@ -143,6 +144,7 @@ export class ActivatedRouteSnapshot {
         this._lastPathIndex = lastPathIndex;
         this._resolve = resolve;
     }
+    get routeConfig() { return this._routeConfig; }
     toString() {
         const url = this.url.map(s => s.toString()).join('/');
         const matched = this._routeConfig ? this._routeConfig.path : '';

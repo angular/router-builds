@@ -24,7 +24,7 @@ import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
-import { UrlTree, createEmptyUrlTree } from './url_tree';
+import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
  * An event triggered when a navigation starts
@@ -266,6 +266,18 @@ export class Router {
      * Parse a string into a {@link UrlTree}.
      */
     parseUrl(url) { return this.urlSerializer.parse(url); }
+    /**
+     * Returns if the url is activated or not.
+     */
+    isActive(url, exact) {
+        if (url instanceof UrlTree) {
+            return containsTree(this.currentUrlTree, url, exact);
+        }
+        else {
+            const urlTree = this.urlSerializer.parse(url);
+            return containsTree(this.currentUrlTree, urlTree, exact);
+        }
+    }
     scheduleNavigation(url, preventPushState) {
         const id = ++this.navigationId;
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));

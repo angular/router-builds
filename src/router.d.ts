@@ -240,6 +240,10 @@ export declare class Router {
      * Parse a string into a {@link UrlTree}.
      */
     parseUrl(url: string): UrlTree;
+    /**
+     * Returns if the url is activated or not.
+     */
+    isActive(url: string | UrlTree, exact: boolean): boolean;
     private scheduleNavigation(url, preventPushState);
     private setUpLocationChangeListener();
     private runNavigate(url, preventPushState, id);

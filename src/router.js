@@ -291,6 +291,18 @@ var Router = (function () {
      * Parse a string into a {@link UrlTree}.
      */
     Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
+    /**
+     * Returns if the url is activated or not.
+     */
+    Router.prototype.isActive = function (url, exact) {
+        if (url instanceof url_tree_1.UrlTree) {
+            return url_tree_1.containsTree(this.currentUrlTree, url, exact);
+        }
+        else {
+            var urlTree = this.urlSerializer.parse(url);
+            return url_tree_1.containsTree(this.currentUrlTree, urlTree, exact);
+        }
+    };
     Router.prototype.scheduleNavigation = function (url, preventPushState) {
         var _this = this;
         var id = ++this.navigationId;

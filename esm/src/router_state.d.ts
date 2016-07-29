@@ -7,7 +7,7 @@
  */
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Data } from './config';
+import { Data, Route } from './config';
 import { Params } from './shared';
 import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
@@ -59,6 +59,7 @@ export declare class ActivatedRoute {
     outlet: string;
     component: Type | string;
     snapshot: ActivatedRouteSnapshot;
+    readonly routeConfig: Route;
     toString(): string;
 }
 /**
@@ -83,6 +84,7 @@ export declare class ActivatedRouteSnapshot {
     data: Data;
     outlet: string;
     component: Type | string;
+    readonly routeConfig: Route;
     toString(): string;
 }
 /**
