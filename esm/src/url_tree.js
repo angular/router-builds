@@ -366,7 +366,7 @@ class UrlParser {
             return;
         }
         this.capture(key);
-        let value = 'true';
+        let value = '';
         if (this.peekStartsWith('=')) {
             this.capture('=');
             var valueMatch = matchUrlQueryParamValue(this.remaining);

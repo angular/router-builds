@@ -504,7 +504,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 return;
             }
             this.capture(key);
-            var value = 'true';
+            var value = '';
             if (this.peekStartsWith('=')) {
                 this.capture('=');
                 var valueMatch = matchUrlQueryParamValue(this.remaining);
