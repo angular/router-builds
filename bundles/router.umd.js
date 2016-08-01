@@ -2925,8 +2925,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             return {
                 ngModule: RouterModule,
                 providers: [
-                    ROUTER_PROVIDERS, provideRoutes(routes), { provide: ROUTER_CONFIGURATION, useValue: config },
-                    {
+                    ROUTER_PROVIDERS, provideRoutes(routes),
+                    { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
                         provide: _angular_common.LocationStrategy,
                         useFactory: provideLocationStrategy,
                         deps: [

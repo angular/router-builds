@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { HashLocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ApplicationRef, Injector, ModuleWithProviders } from '@angular/core';
 import { ExtraOptions } from './common_router_providers';
 import { Routes } from './config';
@@ -39,3 +47,4 @@ export declare class RouterModule {
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     static forChild(routes: Routes): ModuleWithProviders;
 }
+export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
