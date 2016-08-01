@@ -37,9 +37,11 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 exports.rootRoute = rootRoute;
-function setupRouterInitializer(injector, appRef) {
+function setupRouterInitializer(injector) {
     return function () {
-        appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
+        injector.get(core_1.ApplicationRef).registerBootstrapListener(function () {
+            injector.get(router_1.Router).initialNavigation();
+        });
     };
 }
 exports.setupRouterInitializer = setupRouterInitializer;

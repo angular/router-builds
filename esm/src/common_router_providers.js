@@ -33,9 +33,11 @@ export function setupRouter(ref, resolver, urlSerializer, outletMap, location, i
 export function rootRoute(router) {
     return router.routerState.root;
 }
-export function setupRouterInitializer(injector, appRef) {
+export function setupRouterInitializer(injector) {
     return () => {
-        appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
+        injector.get(ApplicationRef).registerBootstrapListener(() => {
+            injector.get(Router).initialNavigation();
+        });
     };
 }
 /**

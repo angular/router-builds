@@ -2516,9 +2516,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function rootRoute(router) {
         return router.routerState.root;
     }
-    function setupRouterInitializer(injector, appRef) {
+    function setupRouterInitializer(injector) {
         return function () {
-            appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
+            injector.get(_angular_core.ApplicationRef).registerBootstrapListener(function () {
+                injector.get(Router).initialNavigation();
+            });
         };
     }
     /**
