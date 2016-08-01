@@ -1,4 +1,4 @@
-import { Injector, ModuleWithProviders } from '@angular/core';
+import { ApplicationRef, Injector, ModuleWithProviders } from '@angular/core';
 import { ExtraOptions } from './common_router_providers';
 import { Routes } from './config';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
@@ -35,7 +35,7 @@ export declare const ROUTER_PROVIDERS: any[];
  */
 export declare class RouterModule {
     private injector;
-    constructor(injector: Injector);
+    constructor(injector: Injector, appRef: ApplicationRef);
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     static forChild(routes: Routes): ModuleWithProviders;
 }

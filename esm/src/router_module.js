@@ -42,20 +42,12 @@ export const ROUTER_PROVIDERS = [
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 export class RouterModule {
-    constructor(injector) {
+    constructor(injector, appRef) {
         this.injector = injector;
         // do the initialization only once
         if (injector.parent.get(RouterModule, null))
             return;
-        setTimeout(() => {
-            const appRef = injector.get(ApplicationRef);
-            if (appRef.componentTypes.length == 0) {
-                appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
-            }
-            else {
-                injector.get(Router).initialNavigation();
-            }
-        }, 0);
+        appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
     }
     static forRoot(routes, config) {
         return {
@@ -83,6 +75,7 @@ RouterModule.decorators = [
 /** @nocollapse */
 RouterModule.ctorParameters = [
     { type: Injector, },
+    { type: ApplicationRef, },
 ];
 function provideLocationStrategy(platformLocationStrategy, baseHref, options = {}) {
     return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :

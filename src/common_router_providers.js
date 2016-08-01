@@ -37,20 +37,10 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 exports.rootRoute = rootRoute;
-function setupRouterInitializer(injector) {
-    // https://github.com/angular/angular/issues/9101
-    // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
-    // APP_INITIALIZER -> Router)
-    setTimeout(function () {
-        var appRef = injector.get(core_1.ApplicationRef);
-        if (appRef.componentTypes.length == 0) {
-            appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
-        }
-        else {
-            injector.get(router_1.Router).initialNavigation();
-        }
-    }, 0);
-    return function () { return null; };
+function setupRouterInitializer(injector, appRef) {
+    return function () {
+        appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
+    };
 }
 exports.setupRouterInitializer = setupRouterInitializer;
 /**

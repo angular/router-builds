@@ -2516,20 +2516,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     function rootRoute(router) {
         return router.routerState.root;
     }
-    function setupRouterInitializer(injector) {
-        // https://github.com/angular/angular/issues/9101
-        // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
-        // APP_INITIALIZER -> Router)
-        setTimeout(function () {
-            var appRef = injector.get(_angular_core.ApplicationRef);
-            if (appRef.componentTypes.length == 0) {
-                appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
-            }
-            else {
-                injector.get(Router).initialNavigation();
-            }
-        }, 0);
-        return function () { return null; };
+    function setupRouterInitializer(injector, appRef) {
+        return function () {
+            appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
+        };
     }
     /**
      * An array of {@link Provider}s. To use the router, you must add this to your application.
@@ -2922,20 +2912,12 @@ var __extends = (this && this.__extends) || function (d, b) {
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
     var RouterModule = (function () {
-        function RouterModule(injector) {
+        function RouterModule(injector, appRef) {
             this.injector = injector;
             // do the initialization only once
             if (injector.parent.get(RouterModule, null))
                 return;
-            setTimeout(function () {
-                var appRef = injector.get(_angular_core.ApplicationRef);
-                if (appRef.componentTypes.length == 0) {
-                    appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
-                }
-                else {
-                    injector.get(Router).initialNavigation();
-                }
-            }, 0);
+            appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
         }
         RouterModule.forRoot = function (routes, config) {
             return {
@@ -2964,6 +2946,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /** @nocollapse */
     RouterModule.ctorParameters = [
         { type: _angular_core.Injector, },
+        { type: _angular_core.ApplicationRef, },
     ];
     function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         if (options === void 0) { options = {}; }

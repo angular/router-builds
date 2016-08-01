@@ -33,20 +33,10 @@ export function setupRouter(ref, resolver, urlSerializer, outletMap, location, i
 export function rootRoute(router) {
     return router.routerState.root;
 }
-export function setupRouterInitializer(injector) {
-    // https://github.com/angular/angular/issues/9101
-    // Delay the router instantiation to avoid circular dependency (ApplicationRef ->
-    // APP_INITIALIZER -> Router)
-    setTimeout(() => {
-        const appRef = injector.get(ApplicationRef);
-        if (appRef.componentTypes.length == 0) {
-            appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
-        }
-        else {
-            injector.get(Router).initialNavigation();
-        }
-    }, 0);
-    return () => null;
+export function setupRouterInitializer(injector, appRef) {
+    return () => {
+        appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
+    };
 }
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.

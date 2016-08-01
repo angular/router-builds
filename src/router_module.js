@@ -43,20 +43,12 @@ exports.ROUTER_PROVIDERS = [
     { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 var RouterModule = (function () {
-    function RouterModule(injector) {
+    function RouterModule(injector, appRef) {
         this.injector = injector;
         // do the initialization only once
         if (injector.parent.get(RouterModule, null))
             return;
-        setTimeout(function () {
-            var appRef = injector.get(core_1.ApplicationRef);
-            if (appRef.componentTypes.length == 0) {
-                appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
-            }
-            else {
-                injector.get(router_1.Router).initialNavigation();
-            }
-        }, 0);
+        appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
     }
     RouterModule.forRoot = function (routes, config) {
         return {
@@ -83,6 +75,7 @@ var RouterModule = (function () {
     /** @nocollapse */
     RouterModule.ctorParameters = [
         { type: core_1.Injector, },
+        { type: core_1.ApplicationRef, },
     ];
     return RouterModule;
 }());
