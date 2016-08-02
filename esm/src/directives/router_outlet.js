@@ -10,12 +10,15 @@ import { RouterOutletMap } from '../router_outlet_map';
 import { PRIMARY_OUTLET } from '../shared';
 export class RouterOutlet {
     constructor(parentOutletMap, location, resolver, name) {
+        this.parentOutletMap = parentOutletMap;
         this.location = location;
         this.resolver = resolver;
+        this.name = name;
         this.activateEvents = new EventEmitter();
         this.deactivateEvents = new EventEmitter();
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
     }
+    ngOnDestroy() { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); }
     get isActivated() { return !!this.activated; }
     get component() {
         if (!this.activated)

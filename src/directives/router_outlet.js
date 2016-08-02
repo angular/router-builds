@@ -11,12 +11,15 @@ var router_outlet_map_1 = require('../router_outlet_map');
 var shared_1 = require('../shared');
 var RouterOutlet = (function () {
     function RouterOutlet(parentOutletMap, location, resolver, name) {
+        this.parentOutletMap = parentOutletMap;
         this.location = location;
         this.resolver = resolver;
+        this.name = name;
         this.activateEvents = new core_1.EventEmitter();
         this.deactivateEvents = new core_1.EventEmitter();
         parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
     }
+    RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : shared_1.PRIMARY_OUTLET); };
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
         get: function () { return !!this.activated; },
         enumerable: true,

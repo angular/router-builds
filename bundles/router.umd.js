@@ -1791,6 +1791,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this._outlets = {};
         }
         RouterOutletMap.prototype.registerOutlet = function (name, outlet) { this._outlets[name] = outlet; };
+        RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
         return RouterOutletMap;
     }());
     /**
@@ -2811,12 +2812,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     };
     var RouterOutlet = (function () {
         function RouterOutlet(parentOutletMap, location, resolver, name) {
+            this.parentOutletMap = parentOutletMap;
             this.location = location;
             this.resolver = resolver;
+            this.name = name;
             this.activateEvents = new _angular_core.EventEmitter();
             this.deactivateEvents = new _angular_core.EventEmitter();
             parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
         }
+        RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); };
         Object.defineProperty(RouterOutlet.prototype, "isActivated", {
             get: function () { return !!this.activated; },
             enumerable: true,
