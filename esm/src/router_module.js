@@ -7,7 +7,7 @@
  */
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ApplicationRef, ComponentResolver, Inject, Injector, NgModule, NgModuleFactoryLoader, Optional, SystemJsNgModuleLoader } from '@angular/core';
-import { ROUTER_CONFIGURATION, provideRoutes, rootRoute, setupRouter } from './common_router_providers';
+import { ROUTER_CONFIGURATION, provideRouterInitializer, provideRoutes, rootRoute, setupRouter } from './common_router_providers';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -42,13 +42,6 @@ export const ROUTER_PROVIDERS = [
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 export class RouterModule {
-    constructor(injector, appRef) {
-        this.injector = injector;
-        // do the initialization only once
-        if (injector.parent.get(RouterModule, null))
-            return;
-        appRef.registerBootstrapListener(() => { injector.get(Router).initialNavigation(); });
-    }
     static forRoot(routes, config) {
         return {
             ngModule: RouterModule,
@@ -60,7 +53,8 @@ export class RouterModule {
                     deps: [
                         PlatformLocation, [new Inject(APP_BASE_HREF), new Optional()], ROUTER_CONFIGURATION
                     ]
-                }
+                },
+                provideRouterInitializer()
             ]
         };
     }
@@ -71,11 +65,6 @@ export class RouterModule {
 /** @nocollapse */
 RouterModule.decorators = [
     { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-];
-/** @nocollapse */
-RouterModule.ctorParameters = [
-    { type: Injector, },
-    { type: ApplicationRef, },
 ];
 export function provideLocationStrategy(platformLocationStrategy, baseHref, options = {}) {
     return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :

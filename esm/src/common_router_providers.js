@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
 import { Router } from './router';
 import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -19,7 +19,6 @@ export function setupRouter(ref, resolver, urlSerializer, outletMap, location, i
     }
     const componentType = ref.componentTypes[0];
     const r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
-    ref.registerDisposeListener(() => r.dispose());
     if (opts.enableTracing) {
         r.events.subscribe(e => {
             console.group(`Router Event: ${e.constructor.name}`);
@@ -33,12 +32,8 @@ export function setupRouter(ref, resolver, urlSerializer, outletMap, location, i
 export function rootRoute(router) {
     return router.routerState.root;
 }
-export function setupRouterInitializer(injector) {
-    return () => {
-        injector.get(ApplicationRef).registerBootstrapListener(() => {
-            injector.get(Router).initialNavigation();
-        });
-    };
+export function initialRouterNavigation(router) {
+    return () => { router.initialNavigation(); };
 }
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.
@@ -77,9 +72,16 @@ export function provideRouter(routes, config = {}) {
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
         // Trigger initial navigation
-        { provide: APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [Injector] },
-        { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader }
+        provideRouterInitializer(), { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader }
     ];
+}
+export function provideRouterInitializer() {
+    return {
+        provide: APP_BOOTSTRAP_LISTENER,
+        multi: true,
+        useFactory: initialRouterNavigation,
+        deps: [Router]
+    };
 }
 /**
  * Router configuration.

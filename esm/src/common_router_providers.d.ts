@@ -22,7 +22,7 @@ export interface ExtraOptions {
 }
 export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Routes, opts?: ExtraOptions): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function setupRouterInitializer(injector: Injector): () => void;
+export declare function initialRouterNavigation(router: Router): () => void;
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.
  *
@@ -44,6 +44,12 @@ export declare function setupRouterInitializer(injector: Injector): () => void;
  * @deprecated use RouterModule instead
  */
 export declare function provideRouter(routes: Routes, config?: ExtraOptions): any[];
+export declare function provideRouterInitializer(): {
+    provide: OpaqueToken;
+    multi: boolean;
+    useFactory: (router: Router) => () => void;
+    deps: typeof Router[];
+};
 /**
  * Router configuration.
  *

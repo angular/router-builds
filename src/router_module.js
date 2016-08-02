@@ -43,12 +43,7 @@ exports.ROUTER_PROVIDERS = [
     { provide: common_router_providers_1.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 var RouterModule = (function () {
-    function RouterModule(injector, appRef) {
-        this.injector = injector;
-        // do the initialization only once
-        if (injector.parent.get(RouterModule, null))
-            return;
-        appRef.registerBootstrapListener(function () { injector.get(router_1.Router).initialNavigation(); });
+    function RouterModule() {
     }
     RouterModule.forRoot = function (routes, config) {
         return {
@@ -61,7 +56,8 @@ var RouterModule = (function () {
                     deps: [
                         common_1.PlatformLocation, [new core_1.Inject(common_1.APP_BASE_HREF), new core_1.Optional()], common_router_providers_1.ROUTER_CONFIGURATION
                     ]
-                }
+                },
+                common_router_providers_1.provideRouterInitializer()
             ]
         };
     };
@@ -71,11 +67,6 @@ var RouterModule = (function () {
     /** @nocollapse */
     RouterModule.decorators = [
         { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
-    ];
-    /** @nocollapse */
-    RouterModule.ctorParameters = [
-        { type: core_1.Injector, },
-        { type: core_1.ApplicationRef, },
     ];
     return RouterModule;
 }());

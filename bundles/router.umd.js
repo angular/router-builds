@@ -1949,6 +1949,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             validateConfig(config);
             this.config = config;
         };
+        Router.prototype.ngOnDestroy = function () { this.dispose(); };
         /**
          * Disposes of the router.
          */
@@ -2503,7 +2504,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         var componentType = ref.componentTypes[0];
         var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
-        ref.registerDisposeListener(function () { return r.dispose(); });
         if (opts.enableTracing) {
             r.events.subscribe(function (e) {
                 console.group("Router Event: " + e.constructor.name);
@@ -2517,12 +2517,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function rootRoute(router) {
         return router.routerState.root;
     }
-    function setupRouterInitializer(injector) {
-        return function () {
-            injector.get(_angular_core.ApplicationRef).registerBootstrapListener(function () {
-                injector.get(Router).initialNavigation();
-            });
-        };
+    function initialRouterNavigation(router) {
+        return function () { router.initialNavigation(); };
     }
     /**
      * An array of {@link Provider}s. To use the router, you must add this to your application.
@@ -2562,9 +2558,16 @@ var __extends = (this && this.__extends) || function (d, b) {
             },
             RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
             // Trigger initial navigation
-            { provide: _angular_core.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [_angular_core.Injector] },
-            { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader }
+            provideRouterInitializer(), { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader }
         ];
+    }
+    function provideRouterInitializer() {
+        return {
+            provide: _angular_core.APP_BOOTSTRAP_LISTENER,
+            multi: true,
+            useFactory: initialRouterNavigation,
+            deps: [Router]
+        };
     }
     /**
      * Router configuration.
@@ -2918,12 +2921,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
     var RouterModule = (function () {
-        function RouterModule(injector, appRef) {
-            this.injector = injector;
-            // do the initialization only once
-            if (injector.parent.get(RouterModule, null))
-                return;
-            appRef.registerBootstrapListener(function () { injector.get(Router).initialNavigation(); });
+        function RouterModule() {
         }
         RouterModule.forRoot = function (routes, config) {
             return {
@@ -2936,7 +2934,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                         deps: [
                             _angular_common.PlatformLocation, [new _angular_core.Inject(_angular_common.APP_BASE_HREF), new _angular_core.Optional()], ROUTER_CONFIGURATION
                         ]
-                    }
+                    },
+                    provideRouterInitializer()
                 ]
             };
         };
@@ -2948,11 +2947,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     /** @nocollapse */
     RouterModule.decorators = [
         { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-    ];
-    /** @nocollapse */
-    RouterModule.ctorParameters = [
-        { type: _angular_core.Injector, },
-        { type: _angular_core.ApplicationRef, },
     ];
     function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         if (options === void 0) { options = {}; }

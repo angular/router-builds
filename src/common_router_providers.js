@@ -21,7 +21,6 @@ function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector
     }
     var componentType = ref.componentTypes[0];
     var r = new router_1.Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
-    ref.registerDisposeListener(function () { return r.dispose(); });
     if (opts.enableTracing) {
         r.events.subscribe(function (e) {
             console.group("Router Event: " + e.constructor.name);
@@ -37,14 +36,10 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 exports.rootRoute = rootRoute;
-function setupRouterInitializer(injector) {
-    return function () {
-        injector.get(core_1.ApplicationRef).registerBootstrapListener(function () {
-            injector.get(router_1.Router).initialNavigation();
-        });
-    };
+function initialRouterNavigation(router) {
+    return function () { router.initialNavigation(); };
 }
-exports.setupRouterInitializer = setupRouterInitializer;
+exports.initialRouterNavigation = initialRouterNavigation;
 /**
  * An array of {@link Provider}s. To use the router, you must add this to your application.
  *
@@ -83,11 +78,19 @@ function provideRouter(routes, config) {
         },
         router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: rootRoute, deps: [router_1.Router] },
         // Trigger initial navigation
-        { provide: core_1.APP_INITIALIZER, multi: true, useFactory: setupRouterInitializer, deps: [core_1.Injector] },
-        { provide: core_1.NgModuleFactoryLoader, useClass: core_1.SystemJsNgModuleLoader }
+        provideRouterInitializer(), { provide: core_1.NgModuleFactoryLoader, useClass: core_1.SystemJsNgModuleLoader }
     ];
 }
 exports.provideRouter = provideRouter;
+function provideRouterInitializer() {
+    return {
+        provide: core_1.APP_BOOTSTRAP_LISTENER,
+        multi: true,
+        useFactory: initialRouterNavigation,
+        deps: [router_1.Router]
+    };
+}
+exports.provideRouterInitializer = provideRouterInitializer;
 /**
  * Router configuration.
  *

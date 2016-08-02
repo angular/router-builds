@@ -187,6 +187,7 @@ var Router = (function () {
         config_1.validateConfig(config);
         this.config = config;
     };
+    Router.prototype.ngOnDestroy = function () { this.dispose(); };
     /**
      * Disposes of the router.
      */

@@ -153,6 +153,7 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
+    ngOnDestroy(): void;
     /**
      * Disposes of the router.
      */

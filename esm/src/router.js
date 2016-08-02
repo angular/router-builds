@@ -164,6 +164,7 @@ export class Router {
         validateConfig(config);
         this.config = config;
     }
+    ngOnDestroy() { this.dispose(); }
     /**
      * Disposes of the router.
      */
