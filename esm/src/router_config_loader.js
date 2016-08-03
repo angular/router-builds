@@ -7,6 +7,7 @@
  */
 import { OpaqueToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { flatten } from './utils/collection';
 /**
  * @deprecated use Routes
  */
@@ -26,7 +27,7 @@ export class RouterConfigLoader {
     load(parentInjector, path) {
         return fromPromise(this.loader.load(path).then(r => {
             const ref = r.create(parentInjector);
-            return new LoadedRouterConfig(ref.injector.get(ROUTES), ref.injector, ref.componentFactoryResolver);
+            return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
         }));
     }
 }

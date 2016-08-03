@@ -12,13 +12,14 @@ import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
+import { flatten } from './utils/collection';
 export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
 export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts = {}) {
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
     const componentType = ref.componentTypes[0];
-    const r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
+    const r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, flatten(config));
     if (opts.enableTracing) {
         r.events.subscribe(e => {
             console.group(`Router Event: ${e.constructor.name}`);
@@ -102,7 +103,7 @@ export function provideRouterInitializer() {
 export function provideRoutes(routes) {
     return [
         { provide: ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-        { provide: ROUTES, useValue: routes }
+        { provide: ROUTES, multi: true, useValue: routes }
     ];
 }
 /**

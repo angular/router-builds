@@ -7,7 +7,7 @@
  */
 import { Location } from '@angular/common';
 import { ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken } from '@angular/core';
-import { Routes } from './config';
+import { Route, Routes } from './config';
 import { Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
@@ -20,7 +20,7 @@ export interface ExtraOptions {
     enableTracing?: boolean;
     useHash?: boolean;
 }
-export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Routes, opts?: ExtraOptions): Router;
+export declare function setupRouter(ref: ApplicationRef, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Route[][], opts?: ExtraOptions): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function initialRouterNavigation(router: Router): () => void;
 /**

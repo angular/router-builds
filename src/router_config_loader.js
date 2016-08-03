@@ -8,6 +8,7 @@
 "use strict";
 var core_1 = require('@angular/core');
 var fromPromise_1 = require('rxjs/observable/fromPromise');
+var collection_1 = require('./utils/collection');
 /**
  * @deprecated use Routes
  */
@@ -29,7 +30,7 @@ var RouterConfigLoader = (function () {
     RouterConfigLoader.prototype.load = function (parentInjector, path) {
         return fromPromise_1.fromPromise(this.loader.load(path).then(function (r) {
             var ref = r.create(parentInjector);
-            return new LoadedRouterConfig(ref.injector.get(exports.ROUTES), ref.injector, ref.componentFactoryResolver);
+            return new LoadedRouterConfig(collection_1.flatten(ref.injector.get(exports.ROUTES)), ref.injector, ref.componentFactoryResolver);
         }));
     };
     return RouterConfigLoader;

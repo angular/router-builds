@@ -13,6 +13,7 @@ var router_config_loader_1 = require('./router_config_loader');
 var router_outlet_map_1 = require('./router_outlet_map');
 var router_state_1 = require('./router_state');
 var url_tree_1 = require('./url_tree');
+var collection_1 = require('./utils/collection');
 exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
 function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
     if (opts === void 0) { opts = {}; }
@@ -20,7 +21,7 @@ function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
     var componentType = ref.componentTypes[0];
-    var r = new router_1.Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
+    var r = new router_1.Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, collection_1.flatten(config));
     if (opts.enableTracing) {
         r.events.subscribe(function (e) {
             console.group("Router Event: " + e.constructor.name);
@@ -110,7 +111,7 @@ exports.provideRouterInitializer = provideRouterInitializer;
 function provideRoutes(routes) {
     return [
         { provide: core_1.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-        { provide: router_config_loader_1.ROUTES, useValue: routes }
+        { provide: router_config_loader_1.ROUTES, multi: true, useValue: routes }
     ];
 }
 exports.provideRoutes = provideRoutes;

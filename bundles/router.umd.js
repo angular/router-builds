@@ -15,31 +15,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 }(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_Observable, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
     'use strict';
     /**
-     * @deprecated use Routes
-     */
-    var ROUTER_CONFIG = new _angular_core.OpaqueToken('ROUTER_CONFIG');
-    var ROUTES = new _angular_core.OpaqueToken('ROUTES');
-    var LoadedRouterConfig = (function () {
-        function LoadedRouterConfig(routes, injector, factoryResolver) {
-            this.routes = routes;
-            this.injector = injector;
-            this.factoryResolver = factoryResolver;
-        }
-        return LoadedRouterConfig;
-    }());
-    var RouterConfigLoader = (function () {
-        function RouterConfigLoader(loader) {
-            this.loader = loader;
-        }
-        RouterConfigLoader.prototype.load = function (parentInjector, path) {
-            return rxjs_observable_fromPromise.fromPromise(this.loader.load(path).then(function (r) {
-                var ref = r.create(parentInjector);
-                return new LoadedRouterConfig(ref.injector.get(ROUTES), ref.injector, ref.componentFactoryResolver);
-            }));
-        };
-        return RouterConfigLoader;
-    }());
-    /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
      *
@@ -76,6 +51,15 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
         }
         return true;
+    }
+    function flatten(a) {
+        var target = [];
+        for (var i = 0; i < a.length; ++i) {
+            for (var j = 0; j < a[i].length; ++j) {
+                target.push(a[i][j]);
+            }
+        }
+        return target;
     }
     function last(a) {
         return a.length > 0 ? a[a.length - 1] : null;
@@ -141,6 +125,31 @@ var __extends = (this && this.__extends) || function (d, b) {
             return rxjs_observable_of.of(value);
         }
     }
+    /**
+     * @deprecated use Routes
+     */
+    var ROUTER_CONFIG = new _angular_core.OpaqueToken('ROUTER_CONFIG');
+    var ROUTES = new _angular_core.OpaqueToken('ROUTES');
+    var LoadedRouterConfig = (function () {
+        function LoadedRouterConfig(routes, injector, factoryResolver) {
+            this.routes = routes;
+            this.injector = injector;
+            this.factoryResolver = factoryResolver;
+        }
+        return LoadedRouterConfig;
+    }());
+    var RouterConfigLoader = (function () {
+        function RouterConfigLoader(loader) {
+            this.loader = loader;
+        }
+        RouterConfigLoader.prototype.load = function (parentInjector, path) {
+            return rxjs_observable_fromPromise.fromPromise(this.loader.load(path).then(function (r) {
+                var ref = r.create(parentInjector);
+                return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
+            }));
+        };
+        return RouterConfigLoader;
+    }());
     function createEmptyUrlTree() {
         return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
     }
@@ -2503,7 +2512,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             throw new Error('Bootstrap at least one component before injecting Router.');
         }
         var componentType = ref.componentTypes[0];
-        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, config);
+        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, flatten(config));
         if (opts.enableTracing) {
             r.events.subscribe(function (e) {
                 console.group("Router Event: " + e.constructor.name);
@@ -2588,7 +2597,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function provideRoutes(routes) {
         return [
             { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-            { provide: ROUTES, useValue: routes }
+            { provide: ROUTES, multi: true, useValue: routes }
         ];
     }
     /**

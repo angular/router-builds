@@ -11,6 +11,7 @@ import { Compiler, ComponentResolver, Injectable, Injector, NgModule, NgModuleFa
 import { Router, RouterOutletMap, UrlSerializer } from '../index';
 import { ROUTES } from '../src/router_config_loader';
 import { ROUTER_PROVIDERS, RouterModule } from '../src/router_module';
+import { flatten } from '../src/utils/collection';
 export class SpyNgModuleFactoryLoader {
     constructor(compiler) {
         this.compiler = compiler;
@@ -34,7 +35,7 @@ SpyNgModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
 function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
-    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
+    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, flatten(routes));
 }
 export class RouterTestingModule {
 }

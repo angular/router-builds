@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var index_1 = require('../index');
 var router_config_loader_1 = require('../src/router_config_loader');
 var router_module_1 = require('../src/router_module');
+var collection_1 = require('../src/utils/collection');
 var SpyNgModuleFactoryLoader = (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
@@ -37,7 +38,7 @@ var SpyNgModuleFactoryLoader = (function () {
 }());
 exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
 function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
-    return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, routes);
+    return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, collection_1.flatten(routes));
 }
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
