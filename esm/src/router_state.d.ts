@@ -29,9 +29,15 @@ import { Tree } from './utils/tree';
  * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
-    queryParams: Observable<Params>;
-    fragment: Observable<string>;
     snapshot: RouterStateSnapshot;
+    /**
+      * @deprecated (Use root.queryParams)
+      */
+    readonly queryParams: Observable<Params>;
+    /**
+     * @deprecated (Use root.fragment)
+     */
+    readonly fragment: Observable<string>;
     toString(): string;
 }
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
@@ -55,11 +61,17 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
 export declare class ActivatedRoute {
     url: Observable<UrlSegment[]>;
     params: Observable<Params>;
+    queryParams: Observable<Params>;
+    fragment: Observable<string>;
     data: Observable<Data>;
     outlet: string;
     component: Type | string;
     snapshot: ActivatedRouteSnapshot;
     readonly routeConfig: Route;
+    readonly parent: ActivatedRoute;
+    readonly firstChild: ActivatedRoute;
+    readonly children: ActivatedRoute[];
+    readonly pathFromRoot: ActivatedRoute[];
     toString(): string;
 }
 /**
@@ -81,10 +93,16 @@ export declare class ActivatedRoute {
 export declare class ActivatedRouteSnapshot {
     url: UrlSegment[];
     params: Params;
+    queryParams: Params;
+    fragment: string;
     data: Data;
     outlet: string;
     component: Type | string;
     readonly routeConfig: Route;
+    readonly parent: ActivatedRouteSnapshot;
+    readonly firstChild: ActivatedRouteSnapshot;
+    readonly children: ActivatedRouteSnapshot[];
+    readonly pathFromRoot: ActivatedRouteSnapshot[];
     toString(): string;
 }
 /**
@@ -104,8 +122,14 @@ export declare class ActivatedRouteSnapshot {
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     url: string;
-    queryParams: Params;
-    fragment: string;
+    /**
+     * @deprecated (Use root.queryParams)
+     */
+    readonly queryParams: Params;
+    /**
+     * @deprecated (Use root.fragment)
+     */
+    readonly fragment: string;
     toString(): string;
 }
 /**

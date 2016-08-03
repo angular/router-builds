@@ -620,7 +620,6 @@ var ActivateRoutes = (function () {
         var currRoot = this.currState ? this.currState._root : null;
         router_state_1.advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
-        pushQueryParamsAndFragment(this.futureState);
     };
     ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {
         var _this = this;
@@ -707,14 +706,6 @@ function closestLoadedConfig(state, snapshot) {
         return config && config._loadedConfig && s !== snapshot;
     });
     return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
-}
-function pushQueryParamsAndFragment(state) {
-    if (!collection_1.shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
-        state.queryParams.next(state.snapshot.queryParams);
-    }
-    if (state.snapshot.fragment !== state.fragment.value) {
-        state.fragment.next(state.snapshot.fragment);
-    }
 }
 function nodeChildrenAsMap(node) {
     return node ? node.children.reduce(function (m, c) {

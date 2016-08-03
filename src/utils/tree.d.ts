@@ -8,12 +8,26 @@
 export declare class Tree<T> {
     constructor(root: TreeNode<T>);
     root: T;
+    /**
+     * @deprecated (use ActivatedRoute.parent instead)
+     */
     parent(t: T): T;
+    /**
+     * @deprecated (use ActivatedRoute.children instead)
+     */
     children(t: T): T[];
+    /**
+     * @deprecated (use ActivatedRoute.firstChild instead)
+     */
     firstChild(t: T): T;
+    /**
+     * @deprecated
+     */
     siblings(t: T): T[];
+    /**
+     * @deprecated (use ActivatedRoute.pathFromRoot instead)
+     */
     pathFromRoot(t: T): T[];
-    contains(tree: Tree<T>): boolean;
 }
 export declare class TreeNode<T> {
     value: T;

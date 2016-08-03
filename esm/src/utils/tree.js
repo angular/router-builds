@@ -10,18 +10,30 @@ export class Tree {
         this._root = root;
     }
     get root() { return this._root.value; }
+    /**
+     * @deprecated (use ActivatedRoute.parent instead)
+     */
     parent(t) {
         const p = this.pathFromRoot(t);
         return p.length > 1 ? p[p.length - 2] : null;
     }
+    /**
+     * @deprecated (use ActivatedRoute.children instead)
+     */
     children(t) {
         const n = findNode(t, this._root);
         return n ? n.children.map(t => t.value) : [];
     }
+    /**
+     * @deprecated (use ActivatedRoute.firstChild instead)
+     */
     firstChild(t) {
         const n = findNode(t, this._root);
         return n && n.children.length > 0 ? n.children[0].value : null;
     }
+    /**
+     * @deprecated
+     */
     siblings(t) {
         const p = findPath(t, this._root, []);
         if (p.length < 2)
@@ -29,8 +41,10 @@ export class Tree {
         const c = p[p.length - 2].children.map(c => c.value);
         return c.filter(cc => cc !== t);
     }
+    /**
+     * @deprecated (use ActivatedRoute.pathFromRoot instead)
+     */
     pathFromRoot(t) { return findPath(t, this._root, []).map(s => s.value); }
-    contains(tree) { return contains(this._root, tree._root); }
 }
 function findNode(expected, c) {
     if (expected === c.value)
@@ -53,18 +67,6 @@ function findPath(expected, c, collected) {
             return r;
     }
     return [];
-}
-function contains(tree, subtree) {
-    if (tree.value !== subtree.value)
-        return false;
-    for (let subtreeNode of subtree.children) {
-        const s = tree.children.filter(child => child.value === subtreeNode.value);
-        if (s.length === 0)
-            return false;
-        if (!contains(s[0], subtreeNode))
-            return false;
-    }
-    return true;
 }
 export class TreeNode {
     constructor(value, children) {

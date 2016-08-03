@@ -29,9 +29,15 @@ import { Tree } from './utils/tree';
  * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
-    queryParams: Observable<Params>;
-    fragment: Observable<string>;
     snapshot: RouterStateSnapshot;
+    /**
+      * @deprecated (Use root.queryParams)
+      */
+    queryParams: Observable<Params>;
+    /**
+     * @deprecated (Use root.fragment)
+     */
+    fragment: Observable<string>;
     toString(): string;
 }
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
@@ -55,11 +61,17 @@ export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type):
 export declare class ActivatedRoute {
     url: Observable<UrlSegment[]>;
     params: Observable<Params>;
+    queryParams: Observable<Params>;
+    fragment: Observable<string>;
     data: Observable<Data>;
     outlet: string;
     component: Type | string;
     snapshot: ActivatedRouteSnapshot;
     routeConfig: Route;
+    parent: ActivatedRoute;
+    firstChild: ActivatedRoute;
+    children: ActivatedRoute[];
+    pathFromRoot: ActivatedRoute[];
     toString(): string;
 }
 /**
@@ -81,10 +93,16 @@ export declare class ActivatedRoute {
 export declare class ActivatedRouteSnapshot {
     url: UrlSegment[];
     params: Params;
+    queryParams: Params;
+    fragment: string;
     data: Data;
     outlet: string;
     component: Type | string;
     routeConfig: Route;
+    parent: ActivatedRouteSnapshot;
+    firstChild: ActivatedRouteSnapshot;
+    children: ActivatedRouteSnapshot[];
+    pathFromRoot: ActivatedRouteSnapshot[];
     toString(): string;
 }
 /**
@@ -104,7 +122,13 @@ export declare class ActivatedRouteSnapshot {
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     url: string;
+    /**
+     * @deprecated (Use root.queryParams)
+     */
     queryParams: Params;
+    /**
+     * @deprecated (Use root.fragment)
+     */
     fragment: string;
     toString(): string;
 }
