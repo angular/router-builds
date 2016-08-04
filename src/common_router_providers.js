@@ -64,8 +64,7 @@ exports.initialRouterNavigation = initialRouterNavigation;
 function provideRouter(routes, config) {
     if (config === void 0) { config = {}; }
     return [
-        { provide: core_1.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-        { provide: router_config_loader_1.ROUTES, useExisting: router_config_loader_1.ROUTER_CONFIG }, { provide: router_config_loader_1.ROUTER_CONFIG, useValue: routes },
+        provideRoutes(routes),
         { provide: exports.ROUTER_CONFIGURATION, useValue: config }, common_1.Location,
         { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
         { provide: url_tree_1.UrlSerializer, useClass: url_tree_1.DefaultUrlSerializer },

@@ -8,7 +8,7 @@
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
 import { Router } from './router';
-import { ROUTER_CONFIG, ROUTES } from './router_config_loader';
+import { ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
@@ -58,8 +58,7 @@ export function initialRouterNavigation(router) {
  */
 export function provideRouter(routes, config = {}) {
     return [
-        { provide: ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-        { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
+        provideRoutes(routes),
         { provide: ROUTER_CONFIGURATION, useValue: config }, Location,
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: UrlSerializer, useClass: DefaultUrlSerializer },

@@ -2636,8 +2636,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function provideRouter_(routes, config) {
         if (config === void 0) { config = {}; }
         return [
-            { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-            { provide: ROUTES, useExisting: ROUTER_CONFIG }, { provide: ROUTER_CONFIG, useValue: routes },
+            provideRoutes(routes),
             { provide: ROUTER_CONFIGURATION, useValue: config }, _angular_common.Location,
             { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
             { provide: UrlSerializer, useClass: DefaultUrlSerializer },
