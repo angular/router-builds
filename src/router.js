@@ -248,18 +248,22 @@ var Router = (function () {
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
+     *
+     * // Navigate without updating the URL
+     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
      * In opposite to `navigate`, `navigateByUrl` takes a whole URL
      * and does not apply any delta to the current one.
      */
-    Router.prototype.navigateByUrl = function (url) {
+    Router.prototype.navigateByUrl = function (url, extras) {
+        if (extras === void 0) { extras = { skipLocationChange: false }; }
         if (url instanceof url_tree_1.UrlTree) {
-            return this.scheduleNavigation(url, false);
+            return this.scheduleNavigation(url, extras);
         }
         else {
             var urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(urlTree, false);
+            return this.scheduleNavigation(urlTree, extras);
         }
     };
     /**
@@ -275,14 +279,17 @@ var Router = (function () {
      *
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
+     *
+     * // Navigate without updating the URL
+     * router.navigate(['team', 33, 'team', '11], {relativeTo: route, skipLocationChange: true });
      * ```
      *
      * In opposite to `navigateByUrl`, `navigate` always takes a delta
      * that is applied to the current URL.
      */
     Router.prototype.navigate = function (commands, extras) {
-        if (extras === void 0) { extras = {}; }
-        return this.scheduleNavigation(this.createUrlTree(commands, extras), false);
+        if (extras === void 0) { extras = { skipLocationChange: false }; }
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
     };
     /**
      * Serializes a {@link UrlTree} into a string.
@@ -304,11 +311,11 @@ var Router = (function () {
             return url_tree_1.containsTree(this.currentUrlTree, urlTree, exact);
         }
     };
-    Router.prototype.scheduleNavigation = function (url, preventPushState) {
+    Router.prototype.scheduleNavigation = function (url, extras) {
         var _this = this;
         var id = ++this.navigationId;
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-        return Promise.resolve().then(function (_) { return _this.runNavigate(url, preventPushState, id); });
+        return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, id); });
     };
     Router.prototype.setUpLocationChangeListener = function () {
         var _this = this;

@@ -224,18 +224,21 @@ export class Router {
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
+     *
+     * // Navigate without updating the URL
+     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
      * In opposite to `navigate`, `navigateByUrl` takes a whole URL
      * and does not apply any delta to the current one.
      */
-    navigateByUrl(url) {
+    navigateByUrl(url, extras = { skipLocationChange: false }) {
         if (url instanceof UrlTree) {
-            return this.scheduleNavigation(url, false);
+            return this.scheduleNavigation(url, extras);
         }
         else {
             const urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(urlTree, false);
+            return this.scheduleNavigation(urlTree, extras);
         }
     }
     /**
@@ -251,13 +254,16 @@ export class Router {
      *
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
+     *
+     * // Navigate without updating the URL
+     * router.navigate(['team', 33, 'team', '11], {relativeTo: route, skipLocationChange: true });
      * ```
      *
      * In opposite to `navigateByUrl`, `navigate` always takes a delta
      * that is applied to the current URL.
      */
-    navigate(commands, extras = {}) {
-        return this.scheduleNavigation(this.createUrlTree(commands, extras), false);
+    navigate(commands, extras = { skipLocationChange: false }) {
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
     }
     /**
      * Serializes a {@link UrlTree} into a string.
@@ -279,10 +285,10 @@ export class Router {
             return containsTree(this.currentUrlTree, urlTree, exact);
         }
     }
-    scheduleNavigation(url, preventPushState) {
+    scheduleNavigation(url, extras) {
         const id = ++this.navigationId;
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-        return Promise.resolve().then((_) => this.runNavigate(url, preventPushState, id));
+        return Promise.resolve().then((_) => this.runNavigate(url, extras.skipLocationChange, id));
     }
     setUpLocationChangeListener() {
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,

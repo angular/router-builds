@@ -27,6 +27,7 @@ export interface NavigationExtras {
     fragment?: string;
     preserveQueryParams?: boolean;
     preserveFragment?: boolean;
+    skipLocationChange?: boolean;
 }
 /**
  * An event triggered when a navigation starts
@@ -208,12 +209,15 @@ export declare class Router {
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
+     *
+     * // Navigate without updating the URL
+     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
      * In opposite to `navigate`, `navigateByUrl` takes a whole URL
      * and does not apply any delta to the current one.
      */
-    navigateByUrl(url: string | UrlTree): Promise<boolean>;
+    navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
     /**
      * Navigate based on the provided array of commands and a starting point.
      * If no starting route is provided, the navigation is absolute.
@@ -227,6 +231,9 @@ export declare class Router {
      *
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
+     *
+     * // Navigate without updating the URL
+     * router.navigate(['team', 33, 'team', '11], {relativeTo: route, skipLocationChange: true });
      * ```
      *
      * In opposite to `navigateByUrl`, `navigate` always takes a delta
@@ -245,7 +252,7 @@ export declare class Router {
      * Returns if the url is activated or not.
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private scheduleNavigation(url, preventPushState);
+    private scheduleNavigation(url, extras);
     private setUpLocationChangeListener();
     private runNavigate(url, preventPushState, id);
 }
