@@ -206,20 +206,16 @@ function serializeSegment(segment, root) {
         return serializePaths(segment);
     }
 }
-export function encode(s) {
-    return encodeURIComponent(s);
-}
-export function decode(s) {
-    return decodeURIComponent(s);
-}
 export function serializePath(path) {
-    return `${encode(path.path)}${serializeParams(path.parameters)}`;
+    return `${encodeURIComponent(path.path)}${serializeParams(path.parameters)}`;
 }
 function serializeParams(params) {
-    return pairs(params).map(p => `;${encode(p.first)}=${encode(p.second)}`).join('');
+    return pairs(params)
+        .map(p => `;${encodeURIComponent(p.first)}=${encodeURIComponent(p.second)}`)
+        .join('');
 }
 function serializeQueryParams(params) {
-    const strs = pairs(params).map(p => `${encode(p.first)}=${encode(p.second)}`);
+    const strs = pairs(params).map(p => `${encodeURIComponent(p.first)}=${encodeURIComponent(p.second)}`);
     return strs.length > 0 ? `?${strs.join("&")}` : '';
 }
 class Pair {
@@ -317,7 +313,7 @@ class UrlParser {
         if (this.peekStartsWith(';')) {
             matrixParams = this.parseMatrixParams();
         }
-        return new UrlSegment(decode(path), matrixParams);
+        return new UrlSegment(decodeURIComponent(path), matrixParams);
     }
     parseQueryParams() {
         const params = {};
@@ -333,7 +329,7 @@ class UrlParser {
     }
     parseFragment() {
         if (this.peekStartsWith('#')) {
-            return decode(this.remaining.substring(1));
+            return decodeURIComponent(this.remaining.substring(1));
         }
         else {
             return null;
@@ -362,7 +358,7 @@ class UrlParser {
                 this.capture(value);
             }
         }
-        params[decode(key)] = decode(value);
+        params[decodeURIComponent(key)] = decodeURIComponent(value);
     }
     parseQueryParam(params) {
         const key = matchQueryParams(this.remaining);
@@ -379,7 +375,7 @@ class UrlParser {
                 this.capture(value);
             }
         }
-        params[decode(key)] = decode(value);
+        params[decodeURIComponent(key)] = decodeURIComponent(value);
     }
     parseParens(allowPrimary) {
         const segments = {};

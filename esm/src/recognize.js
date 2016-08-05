@@ -13,6 +13,9 @@ import { UrlSegmentGroup, mapChildrenIntoArray } from './url_tree';
 import { last, merge } from './utils/collection';
 import { TreeNode } from './utils/tree';
 class NoMatch {
+    constructor(segmentGroup = null) {
+        this.segmentGroup = segmentGroup;
+    }
 }
 class InheritedFromParent {
     constructor(parent, snapshot, params, data, resolve) {
@@ -49,7 +52,12 @@ class Recognizer {
             return of(new RouterStateSnapshot(this.url, rootNode));
         }
         catch (e) {
-            return new Observable((obs) => obs.error(e));
+            if (e instanceof NoMatch) {
+                return new Observable((obs) => obs.error(new Error(`Cannot match any routes: '${e.segmentGroup}'`)));
+            }
+            else {
+                return new Observable((obs) => obs.error(e));
+            }
         }
     }
     processSegmentGroup(config, segmentGroup, inherited, outlet) {
@@ -76,7 +84,7 @@ class Recognizer {
                     throw e;
             }
         }
-        throw new NoMatch();
+        throw new NoMatch(segmentGroup);
     }
     processSegmentAgainstRoute(route, rawSegment, pathIndex, segments, inherited, outlet) {
         if (route.redirectTo)
