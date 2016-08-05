@@ -36,146 +36,179 @@ function canLoadFails(route) {
     return new Observable((obs) => obs.error(new Error(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
 }
 export function applyRedirects(injector, configLoader, urlTree, config) {
-    return expandSegmentGroup(injector, configLoader, config, urlTree.root, PRIMARY_OUTLET)
-        .map(rootSegmentGroup => createUrlTree(urlTree, rootSegmentGroup))
-        .catch(e => {
-        if (e instanceof AbsoluteRedirect) {
-            return of(createUrlTree(urlTree, new UrlSegmentGroup([], { [PRIMARY_OUTLET]: new UrlSegmentGroup(e.segments, {}) })));
-        }
-        else if (e instanceof NoMatch) {
-            throw new Error(`Cannot match any routes: '${e.segmentGroup}'`);
-        }
-        else {
-            throw e;
-        }
-    });
+    return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
 }
-function createUrlTree(urlTree, rootCandidate) {
-    const root = rootCandidate.segments.length > 0 ?
-        new UrlSegmentGroup([], { [PRIMARY_OUTLET]: rootCandidate }) :
-        rootCandidate;
-    return new UrlTree(root, urlTree.queryParams, urlTree.fragment);
-}
-function expandSegmentGroup(injector, configLoader, routes, segmentGroup, outlet) {
-    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-        return expandChildren(injector, configLoader, routes, segmentGroup)
-            .map(children => new UrlSegmentGroup([], children));
+class ApplyRedirects {
+    constructor(injector, configLoader, urlTree, config) {
+        this.injector = injector;
+        this.configLoader = configLoader;
+        this.urlTree = urlTree;
+        this.config = config;
+        this.allowRedirects = true;
     }
-    else {
-        return expandSegment(injector, configLoader, segmentGroup, routes, segmentGroup.segments, outlet, true);
-    }
-}
-function expandChildren(injector, configLoader, routes, segmentGroup) {
-    return waitForMap(segmentGroup.children, (childOutlet, child) => expandSegmentGroup(injector, configLoader, routes, child, childOutlet));
-}
-function expandSegment(injector, configLoader, segmentGroup, routes, segments, outlet, allowRedirects) {
-    const processRoutes = of(...routes)
-        .map(r => {
-        return expandSegmentAgainstRoute(injector, configLoader, segmentGroup, routes, r, segments, outlet, allowRedirects)
-            .catch((e) => {
-            if (e instanceof NoMatch)
-                return of(null);
-            else
+    apply() {
+        return this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET)
+            .map(rootSegmentGroup => this.createUrlTree(rootSegmentGroup))
+            .catch(e => {
+            if (e instanceof AbsoluteRedirect) {
+                // after an absolute redirect we do not apply any more redirects!
+                this.allowRedirects = false;
+                const group = new UrlSegmentGroup([], { [PRIMARY_OUTLET]: new UrlSegmentGroup(e.segments, {}) });
+                // we need to run matching, so we can fetch all lazy-loaded modules
+                return this.match(group);
+            }
+            else if (e instanceof NoMatch) {
+                throw this.noMatchError(e);
+            }
+            else {
                 throw e;
+            }
         });
-    })
-        .concatAll();
-    return processRoutes.first(s => !!s).catch((e, _) => {
-        if (e instanceof EmptyError) {
-            throw new NoMatch(segmentGroup);
+    }
+    match(segmentGroup) {
+        return this.expandSegmentGroup(this.injector, this.config, segmentGroup, PRIMARY_OUTLET)
+            .map(rootSegmentGroup => this.createUrlTree(rootSegmentGroup))
+            .catch((e) => {
+            if (e instanceof NoMatch) {
+                throw this.noMatchError(e);
+            }
+            else {
+                throw e;
+            }
+        });
+    }
+    noMatchError(e) {
+        return new Error(`Cannot match any routes: '${e.segmentGroup}'`);
+    }
+    createUrlTree(rootCandidate) {
+        const root = rootCandidate.segments.length > 0 ?
+            new UrlSegmentGroup([], { [PRIMARY_OUTLET]: rootCandidate }) :
+            rootCandidate;
+        return new UrlTree(root, this.urlTree.queryParams, this.urlTree.fragment);
+    }
+    expandSegmentGroup(injector, routes, segmentGroup, outlet) {
+        if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+            return this.expandChildren(injector, routes, segmentGroup)
+                .map(children => new UrlSegmentGroup([], children));
         }
         else {
-            throw e;
+            return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
         }
-    });
-}
-function expandSegmentAgainstRoute(injector, configLoader, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-    if (getOutlet(route) !== outlet)
-        return noMatch(segmentGroup);
-    if (route.redirectTo !== undefined && !allowRedirects)
-        return noMatch(segmentGroup);
-    if (route.redirectTo !== undefined) {
-        return expandSegmentAgainstRouteUsingRedirect(injector, configLoader, segmentGroup, routes, route, paths, outlet);
     }
-    else {
-        return matchSegmentAgainstRoute(injector, configLoader, segmentGroup, route, paths);
+    expandChildren(injector, routes, segmentGroup) {
+        return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(injector, routes, child, childOutlet));
     }
-}
-function expandSegmentAgainstRouteUsingRedirect(injector, configLoader, segmentGroup, routes, route, segments, outlet) {
-    if (route.path === '**') {
-        return expandWildCardWithParamsAgainstRouteUsingRedirect(route);
+    expandSegment(injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+        const processRoutes = of(...routes)
+            .map(r => {
+            return this
+                .expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects)
+                .catch((e) => {
+                if (e instanceof NoMatch)
+                    return of(null);
+                else
+                    throw e;
+            });
+        })
+            .concatAll();
+        return processRoutes.first(s => !!s).catch((e, _) => {
+            if (e instanceof EmptyError) {
+                throw new NoMatch(segmentGroup);
+            }
+            else {
+                throw e;
+            }
+        });
     }
-    else {
-        return expandRegularSegmentAgainstRouteUsingRedirect(injector, configLoader, segmentGroup, routes, route, segments, outlet);
+    expandSegmentAgainstRoute(injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+        if (getOutlet(route) !== outlet)
+            return noMatch(segmentGroup);
+        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+            return noMatch(segmentGroup);
+        if (route.redirectTo === undefined) {
+            return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+        }
+        else {
+            return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+        }
     }
-}
-function expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
-    const newSegments = applyRedirectCommands([], route.redirectTo, {});
-    if (route.redirectTo.startsWith('/')) {
-        return absoluteRedirect(newSegments);
+    expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet) {
+        if (route.path === '**') {
+            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
+        }
+        else {
+            return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+        }
     }
-    else {
-        return of(new UrlSegmentGroup(newSegments, {}));
+    expandWildCardWithParamsAgainstRouteUsingRedirect(route) {
+        const newSegments = applyRedirectCommands([], route.redirectTo, {});
+        if (route.redirectTo.startsWith('/')) {
+            return absoluteRedirect(newSegments);
+        }
+        else {
+            return of(new UrlSegmentGroup(newSegments, {}));
+        }
     }
-}
-function expandRegularSegmentAgainstRouteUsingRedirect(injector, configLoader, segmentGroup, routes, route, segments, outlet) {
-    const { matched, consumedSegments, lastChild, positionalParamSegments } = match(segmentGroup, route, segments);
-    if (!matched)
-        return noMatch(segmentGroup);
-    const newSegments = applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
-    if (route.redirectTo.startsWith('/')) {
-        return absoluteRedirect(newSegments);
-    }
-    else {
-        return expandSegment(injector, configLoader, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-    }
-}
-function matchSegmentAgainstRoute(injector, configLoader, rawSegmentGroup, route, segments) {
-    if (route.path === '**') {
-        return of(new UrlSegmentGroup(segments, {}));
-    }
-    else {
-        const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
+    expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet) {
+        const { matched, consumedSegments, lastChild, positionalParamSegments } = match(segmentGroup, route, segments);
         if (!matched)
-            return noMatch(rawSegmentGroup);
-        const rawSlicedSegments = segments.slice(lastChild);
-        return getChildConfig(injector, configLoader, route).mergeMap(routerConfig => {
-            const childInjector = routerConfig.injector;
-            const childConfig = routerConfig.routes;
-            const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
-            if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                return expandChildren(childInjector, configLoader, childConfig, segmentGroup)
-                    .map(children => new UrlSegmentGroup(consumedSegments, children));
-            }
-            else if (childConfig.length === 0 && slicedSegments.length === 0) {
-                return of(new UrlSegmentGroup(consumedSegments, {}));
-            }
-            else {
-                return expandSegment(childInjector, configLoader, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true)
-                    .map(cs => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
-            }
-        });
+            return noMatch(segmentGroup);
+        const newSegments = applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
+        if (route.redirectTo.startsWith('/')) {
+            return absoluteRedirect(newSegments);
+        }
+        else {
+            return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+        }
     }
-}
-function getChildConfig(injector, configLoader, route) {
-    if (route.children) {
-        return of(new LoadedRouterConfig(route.children, injector, null));
+    matchSegmentAgainstRoute(injector, rawSegmentGroup, route, segments) {
+        if (route.path === '**') {
+            return of(new UrlSegmentGroup(segments, {}));
+        }
+        else {
+            const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
+            if (!matched)
+                return noMatch(rawSegmentGroup);
+            const rawSlicedSegments = segments.slice(lastChild);
+            return this.getChildConfig(injector, route).mergeMap(routerConfig => {
+                const childInjector = routerConfig.injector;
+                const childConfig = routerConfig.routes;
+                const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
+                if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+                    return this.expandChildren(childInjector, childConfig, segmentGroup)
+                        .map(children => new UrlSegmentGroup(consumedSegments, children));
+                }
+                else if (childConfig.length === 0 && slicedSegments.length === 0) {
+                    return of(new UrlSegmentGroup(consumedSegments, {}));
+                }
+                else {
+                    return this
+                        .expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true)
+                        .map(cs => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
+                }
+            });
+        }
     }
-    else if (route.loadChildren) {
-        return runGuards(injector, route).mergeMap(shouldLoad => {
-            if (shouldLoad) {
-                return configLoader.load(injector, route.loadChildren).map(r => {
-                    route._loadedConfig = r;
-                    return r;
-                });
-            }
-            else {
-                return canLoadFails(route);
-            }
-        });
-    }
-    else {
-        return of(new LoadedRouterConfig([], injector, null));
+    getChildConfig(injector, route) {
+        if (route.children) {
+            return of(new LoadedRouterConfig(route.children, injector, null));
+        }
+        else if (route.loadChildren) {
+            return runGuards(injector, route).mergeMap(shouldLoad => {
+                if (shouldLoad) {
+                    return this.configLoader.load(injector, route.loadChildren).map(r => {
+                        route._loadedConfig = r;
+                        return r;
+                    });
+                }
+                else {
+                    return canLoadFails(route);
+                }
+            });
+        }
+        else {
+            return of(new LoadedRouterConfig([], injector, null));
+        }
     }
 }
 function runGuards(injector, route) {

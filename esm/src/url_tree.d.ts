@@ -76,4 +76,6 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
     serialize(tree: UrlTree): string;
 }
 export declare function serializePaths(segment: UrlSegmentGroup): string;
+export declare function encode(s: string): string;
+export declare function decode(s: string): string;
 export declare function serializePath(path: UrlSegment): string;

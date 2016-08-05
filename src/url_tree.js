@@ -232,17 +232,23 @@ function serializeSegment(segment, root) {
         return serializePaths(segment);
     }
 }
+function encode(s) {
+    return encodeURIComponent(s);
+}
+exports.encode = encode;
+function decode(s) {
+    return decodeURIComponent(s);
+}
+exports.decode = decode;
 function serializePath(path) {
-    return "" + encodeURIComponent(path.path) + serializeParams(path.parameters);
+    return "" + encode(path.path) + serializeParams(path.parameters);
 }
 exports.serializePath = serializePath;
 function serializeParams(params) {
-    return pairs(params)
-        .map(function (p) { return (";" + encodeURIComponent(p.first) + "=" + encodeURIComponent(p.second)); })
-        .join('');
+    return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
 }
 function serializeQueryParams(params) {
-    var strs = pairs(params).map(function (p) { return (encodeURIComponent(p.first) + "=" + encodeURIComponent(p.second)); });
+    var strs = pairs(params).map(function (p) { return (encode(p.first) + "=" + encode(p.second)); });
     return strs.length > 0 ? "?" + strs.join("&") : '';
 }
 var Pair = (function () {
@@ -341,7 +347,7 @@ var UrlParser = (function () {
         if (this.peekStartsWith(';')) {
             matrixParams = this.parseMatrixParams();
         }
-        return new UrlSegment(decodeURIComponent(path), matrixParams);
+        return new UrlSegment(decode(path), matrixParams);
     };
     UrlParser.prototype.parseQueryParams = function () {
         var params = {};
@@ -357,7 +363,7 @@ var UrlParser = (function () {
     };
     UrlParser.prototype.parseFragment = function () {
         if (this.peekStartsWith('#')) {
-            return decodeURIComponent(this.remaining.substring(1));
+            return decode(this.remaining.substring(1));
         }
         else {
             return null;
@@ -386,7 +392,7 @@ var UrlParser = (function () {
                 this.capture(value);
             }
         }
-        params[decodeURIComponent(key)] = decodeURIComponent(value);
+        params[decode(key)] = decode(value);
     };
     UrlParser.prototype.parseQueryParam = function (params) {
         var key = matchQueryParams(this.remaining);
@@ -403,7 +409,7 @@ var UrlParser = (function () {
                 this.capture(value);
             }
         }
-        params[decodeURIComponent(key)] = decodeURIComponent(value);
+        params[decode(key)] = decode(value);
     };
     UrlParser.prototype.parseParens = function (allowPrimary) {
         var segments = {};
