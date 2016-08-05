@@ -383,19 +383,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
     function matchSegments(str) {
         SEGMENT_RE.lastIndex = 0;
-        var match = SEGMENT_RE.exec(str);
+        var match = str.match(SEGMENT_RE);
         return match ? match[0] : '';
     }
     var QUERY_PARAM_RE = /^[^=\?&#]+/;
     function matchQueryParams(str) {
         QUERY_PARAM_RE.lastIndex = 0;
-        var match = SEGMENT_RE.exec(str);
+        var match = str.match(SEGMENT_RE);
         return match ? match[0] : '';
     }
     var QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
     function matchUrlQueryParamValue(str) {
         QUERY_PARAM_VALUE_RE.lastIndex = 0;
-        var match = QUERY_PARAM_VALUE_RE.exec(str);
+        var match = str.match(QUERY_PARAM_VALUE_RE);
         return match ? match[0] : '';
     }
     var UrlParser = (function () {
