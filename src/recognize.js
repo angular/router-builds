@@ -14,9 +14,7 @@ var url_tree_1 = require('./url_tree');
 var collection_1 = require('./utils/collection');
 var tree_1 = require('./utils/tree');
 var NoMatch = (function () {
-    function NoMatch(segmentGroup) {
-        if (segmentGroup === void 0) { segmentGroup = null; }
-        this.segmentGroup = segmentGroup;
+    function NoMatch() {
     }
     return NoMatch;
 }());
@@ -65,14 +63,7 @@ var Recognizer = (function () {
             return of_1.of(new router_state_1.RouterStateSnapshot(this.url, rootNode));
         }
         catch (e) {
-            if (e instanceof NoMatch) {
-                return new Observable_1.Observable(function (obs) {
-                    return obs.error(new Error("Cannot match any routes: '" + e.segmentGroup + "'"));
-                });
-            }
-            else {
-                return new Observable_1.Observable(function (obs) { return obs.error(e); });
-            }
+            return new Observable_1.Observable(function (obs) { return obs.error(e); });
         }
     };
     Recognizer.prototype.processSegmentGroup = function (config, segmentGroup, inherited, outlet) {
@@ -101,7 +92,7 @@ var Recognizer = (function () {
                     throw e;
             }
         }
-        throw new NoMatch(segmentGroup);
+        throw new NoMatch();
     };
     Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, pathIndex, segments, inherited, outlet) {
         if (route.redirectTo)

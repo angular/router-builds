@@ -91,7 +91,7 @@ export declare class RoutesRecognized {
 /**
  * @stable
  */
-export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError;
+export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized;
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
@@ -175,8 +175,13 @@ export declare class Router {
      * // create /team/33;expand=true/user/11
      * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
      *
-     * // you can collapse static fragments like this
+     * // you can collapse static segments like this (this works only with the first passed-in value):
      * router.createUrlTree(['/team/33/user', userId]);
+     *
+     * If the first segment can contain slashes, and you do not want the router to split it, you
+     * can do the following:
+     *
+     * router.createUrlTree([{segmentPath: '/one/two'}]);
      *
      * // create /team/33/(user/11//aux:chat)
      * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);

@@ -84,15 +84,18 @@ function normalizeCommands(commands) {
             res.push({ outlets: r_1 });
             return "continue";
         }
+        if (typeof c === 'object' && c.segmentPath !== undefined) {
+            res.push(c.segmentPath);
+            return "continue";
+        }
         if (!(typeof c === 'string')) {
             res.push(c);
             return "continue";
         }
-        var parts = c.split('/');
-        for (var j = 0; j < parts.length; ++j) {
-            var cc = parts[j];
-            // first exp is treated in a special way
-            if (i == 0) {
+        if (i === 0) {
+            var parts = c.split('/');
+            for (var j = 0; j < parts.length; ++j) {
+                var cc = parts[j];
                 if (j == 0 && cc == '.') {
                 }
                 else if (j == 0 && cc == '') {
@@ -105,11 +108,9 @@ function normalizeCommands(commands) {
                     res.push(cc);
                 }
             }
-            else {
-                if (cc != '') {
-                    res.push(cc);
-                }
-            }
+        }
+        else {
+            res.push(c);
         }
     };
     for (var i = 0; i < commands.length; ++i) {
