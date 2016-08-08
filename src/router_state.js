@@ -119,11 +119,6 @@ var ActivatedRoute = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(ActivatedRoute.prototype, "root", {
-        get: function () { return this._routerState.root; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(ActivatedRoute.prototype, "parent", {
         get: function () { return this._routerState.parent(this); },
         enumerable: true,
@@ -216,11 +211,6 @@ var ActivatedRouteSnapshot = (function () {
     }
     Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
         get: function () { return this._routeConfig; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
-        get: function () { return this._routerState.root; },
         enumerable: true,
         configurable: true
     });
