@@ -68,6 +68,7 @@ export declare class ActivatedRoute {
     component: Type | string;
     snapshot: ActivatedRouteSnapshot;
     routeConfig: Route;
+    root: ActivatedRoute;
     parent: ActivatedRoute;
     firstChild: ActivatedRoute;
     children: ActivatedRoute[];
@@ -99,6 +100,7 @@ export declare class ActivatedRouteSnapshot {
     outlet: string;
     component: Type | string;
     routeConfig: Route;
+    root: ActivatedRouteSnapshot;
     parent: ActivatedRouteSnapshot;
     firstChild: ActivatedRouteSnapshot;
     children: ActivatedRouteSnapshot[];
