@@ -72,7 +72,7 @@ function findPath(expected, c, collected) {
         var cc = _a[_i];
         var cloned = collected.slice(0);
         var r = findPath(expected, cc, cloned);
-        if (r.length > 0)
+        if (r)
             return r;
     }
     return [];

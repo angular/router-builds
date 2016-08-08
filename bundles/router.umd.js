@@ -1029,7 +1029,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var cc = _a[_i];
             var cloned = collected.slice(0);
             var r = findPath(expected, cc, cloned);
-            if (r.length > 0)
+            if (r)
                 return r;
         }
         return [];
@@ -1143,11 +1143,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(ActivatedRoute.prototype, "root", {
-            get: function () { return this._routerState.root; },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(ActivatedRoute.prototype, "parent", {
             get: function () { return this._routerState.parent(this); },
             enumerable: true,
@@ -1238,11 +1233,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
             get: function () { return this._routeConfig; },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
-            get: function () { return this._routerState.root; },
             enumerable: true,
             configurable: true
         });
@@ -1403,17 +1393,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
     }
     function validateCommands(n) {
-        if (n.isAbsolute && n.commands.length > 0 && isMatrixParams(n.commands[0])) {
+        if (n.isAbsolute && n.commands.length > 0 && (typeof n.commands[0] === 'object')) {
             throw new Error('Root segment cannot have matrix parameters');
         }
-        var c = n.commands.filter(function (c) { return typeof c === 'object' && c.outlets !== undefined; });
-        if (c.length > 0 && c[0] !== n.commands[n.commands.length - 1]) {
-            throw new Error('{outlets:{}} has to be the last command');
-        }
-    }
-    function isMatrixParams(command) {
-        return typeof command === 'object' && command.outlets === undefined &&
-            command.segmentPath === undefined;
     }
     function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
         if (urlTree.root === oldSegmentGroup) {
@@ -1606,10 +1588,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         var paths = segmentGroup.segments.slice(0, startIndex);
         var i = 0;
         while (i < commands.length) {
-            if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
-                var children = createNewSegmentChldren(commands[i].outlets);
-                return new UrlSegmentGroup(paths, children);
-            }
             // if we start with an object literal, we need to reuse the path part from the segment
             if (i === 0 && (typeof commands[0] === 'object')) {
                 var p = segmentGroup.segments[startIndex];
@@ -1629,15 +1607,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
         }
         return new UrlSegmentGroup(paths, {});
-    }
-    function createNewSegmentChldren(outlets) {
-        var children = {};
-        forEach(outlets, function (commands, outlet) {
-            if (commands !== null) {
-                children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
-            }
-        });
-        return children;
     }
     function stringify(params) {
         var res = {};

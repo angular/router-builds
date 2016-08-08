@@ -63,7 +63,7 @@ function findPath(expected, c, collected) {
     for (let cc of c.children) {
         const cloned = collected.slice(0);
         const r = findPath(expected, cc, cloned);
-        if (r.length > 0)
+        if (r)
             return r;
     }
     return [];

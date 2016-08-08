@@ -24,17 +24,9 @@ export function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
 }
 function validateCommands(n) {
-    if (n.isAbsolute && n.commands.length > 0 && isMatrixParams(n.commands[0])) {
+    if (n.isAbsolute && n.commands.length > 0 && (typeof n.commands[0] === 'object')) {
         throw new Error('Root segment cannot have matrix parameters');
     }
-    const c = n.commands.filter(c => typeof c === 'object' && c.outlets !== undefined);
-    if (c.length > 0 && c[0] !== n.commands[n.commands.length - 1]) {
-        throw new Error('{outlets:{}} has to be the last command');
-    }
-}
-function isMatrixParams(command) {
-    return typeof command === 'object' && command.outlets === undefined &&
-        command.segmentPath === undefined;
 }
 function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
     if (urlTree.root === oldSegmentGroup) {
@@ -221,10 +213,6 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
     const paths = segmentGroup.segments.slice(0, startIndex);
     let i = 0;
     while (i < commands.length) {
-        if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
-            const children = createNewSegmentChldren(commands[i].outlets);
-            return new UrlSegmentGroup(paths, children);
-        }
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && (typeof commands[0] === 'object')) {
             const p = segmentGroup.segments[startIndex];
@@ -244,15 +232,6 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
         }
     }
     return new UrlSegmentGroup(paths, {});
-}
-function createNewSegmentChldren(outlets) {
-    const children = {};
-    forEach(outlets, (commands, outlet) => {
-        if (commands !== null) {
-            children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
-        }
-    });
-    return children;
 }
 function stringify(params) {
     const res = {};

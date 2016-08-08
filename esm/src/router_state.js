@@ -97,7 +97,6 @@ export class ActivatedRoute {
         this._futureSnapshot = futureSnapshot;
     }
     get routeConfig() { return this._futureSnapshot.routeConfig; }
-    get root() { return this._routerState.root; }
     get parent() { return this._routerState.parent(this); }
     get firstChild() { return this._routerState.firstChild(this); }
     get children() { return this._routerState.children(this); }
@@ -161,7 +160,6 @@ export class ActivatedRouteSnapshot {
         this._resolve = resolve;
     }
     get routeConfig() { return this._routeConfig; }
-    get root() { return this._routerState.root; }
     get parent() { return this._routerState.parent(this); }
     get firstChild() { return this._routerState.firstChild(this); }
     get children() { return this._routerState.children(this); }
