@@ -134,12 +134,25 @@ function findStartingPosition(normalizedChange, urlTree, route) {
     else if (route.snapshot._lastPathIndex === -1) {
         return new Position(route.snapshot._urlSegment, true, 0);
     }
-    else if (route.snapshot._lastPathIndex + 1 - normalizedChange.numberOfDoubleDots >= 0) {
-        return new Position(route.snapshot._urlSegment, false, route.snapshot._lastPathIndex + 1 - normalizedChange.numberOfDoubleDots);
-    }
     else {
-        throw new Error('Invalid number of \'../\'');
+        const modifier = isMatrixParams(normalizedChange.commands[0]) ? 0 : 1;
+        const index = route.snapshot._lastPathIndex + modifier;
+        return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, normalizedChange.numberOfDoubleDots);
     }
+}
+function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
+    let g = group;
+    let ci = index;
+    let dd = numberOfDoubleDots;
+    while (dd > ci) {
+        dd -= ci;
+        g = g.parent;
+        if (!g) {
+            throw new Error('Invalid number of \'../\'');
+        }
+        ci = g.segments.length;
+    }
+    return new Position(g, false, ci - dd);
 }
 function getPath(command) {
     return `${command}`;
@@ -226,7 +239,7 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
             return new UrlSegmentGroup(paths, children);
         }
         // if we start with an object literal, we need to reuse the path part from the segment
-        if (i === 0 && (typeof commands[0] === 'object')) {
+        if (i === 0 && isMatrixParams(commands[0])) {
             const p = segmentGroup.segments[startIndex];
             paths.push(new UrlSegment(p.path, commands[0]));
             i++;
@@ -234,7 +247,7 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
         }
         const curr = getPath(commands[i]);
         const next = (i < commands.length - 1) ? commands[i + 1] : null;
-        if (curr && next && (typeof next === 'object')) {
+        if (curr && next && isMatrixParams(next)) {
             paths.push(new UrlSegment(curr, stringify(next)));
             i += 2;
         }
