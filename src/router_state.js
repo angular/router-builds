@@ -83,7 +83,6 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
     var activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, shared_1.PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
     return new RouterStateSnapshot('', new tree_1.TreeNode(activated, []));
 }
-exports.createEmptyStateSnapshot = createEmptyStateSnapshot;
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
  * through the params, urlSegments, and data observables.

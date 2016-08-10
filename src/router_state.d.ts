@@ -41,7 +41,6 @@ export declare class RouterState extends Tree<ActivatedRoute> {
     toString(): string;
 }
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
-export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type): RouterStateSnapshot;
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
  * through the params, urlSegments, and data observables.
