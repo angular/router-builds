@@ -2071,6 +2071,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.outletMap = outletMap;
             this.location = location;
             this.injector = injector;
+            this.config = config;
             this.navigationId = 0;
             /**
              * Indicates if at least one navigation happened.
