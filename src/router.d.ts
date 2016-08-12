@@ -107,12 +107,12 @@ export declare class Router {
     private outletMap;
     private location;
     private injector;
-    config: Routes;
     private currentUrlTree;
     private currentRouterState;
     private locationSubscription;
     private routerEvents;
     private navigationId;
+    private config;
     private configLoader;
     /**
      * Indicates if at least one navigation happened.

@@ -114,7 +114,6 @@ export class Router {
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
-        this.config = config;
         this.navigationId = 0;
         /**
          * Indicates if at least one navigation happened.
