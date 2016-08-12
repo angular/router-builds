@@ -751,10 +751,15 @@ var __extends = (this && this.__extends) || function (d, b) {
             else if (route.loadChildren) {
                 return runGuards(injector, route).mergeMap(function (shouldLoad) {
                     if (shouldLoad) {
-                        return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
-                            route._loadedConfig = r;
-                            return r;
-                        });
+                        if (route._loadedConfig) {
+                            return rxjs_observable_of.of(route._loadedConfig);
+                        }
+                        else {
+                            return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
+                                route._loadedConfig = r;
+                                return r;
+                            });
+                        }
                     }
                     else {
                         return canLoadFails(route);
@@ -2071,6 +2076,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.outletMap = outletMap;
             this.location = location;
             this.injector = injector;
+            this.config = config;
             this.navigationId = 0;
             /**
              * Indicates if at least one navigation happened.
@@ -2326,7 +2332,6 @@ var __extends = (this && this.__extends) || function (d, b) {
                 })
                     .forEach(function (shouldActivate) {
                     if (!shouldActivate || id !== _this.navigationId) {
-                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
                         navigationIsSuccessful = false;
                         return;
                     }
@@ -2346,8 +2351,14 @@ var __extends = (this && this.__extends) || function (d, b) {
                 })
                     .then(function () {
                     _this.navigated = true;
-                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
-                    resolvePromise(navigationIsSuccessful);
+                    if (navigationIsSuccessful) {
+                        _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                        resolvePromise(true);
+                    }
+                    else {
+                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
+                        resolvePromise(false);
+                    }
                 }, function (e) {
                     _this.currentRouterState = storedState;
                     _this.currentUrlTree = storedUrl;

@@ -114,6 +114,7 @@ export class Router {
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
+        this.config = config;
         this.navigationId = 0;
         /**
          * Indicates if at least one navigation happened.
@@ -351,7 +352,6 @@ export class Router {
             })
                 .forEach((shouldActivate) => {
                 if (!shouldActivate || id !== this.navigationId) {
-                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
                     navigationIsSuccessful = false;
                     return;
                 }
@@ -371,8 +371,14 @@ export class Router {
             })
                 .then(() => {
                 this.navigated = true;
-                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
-                resolvePromise(navigationIsSuccessful);
+                if (navigationIsSuccessful) {
+                    this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
+                    resolvePromise(true);
+                }
+                else {
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+                    resolvePromise(false);
+                }
             }, e => {
                 this.currentRouterState = storedState;
                 this.currentUrlTree = storedUrl;

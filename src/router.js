@@ -125,6 +125,7 @@ var Router = (function () {
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
+        this.config = config;
         this.navigationId = 0;
         /**
          * Indicates if at least one navigation happened.
@@ -380,7 +381,6 @@ var Router = (function () {
             })
                 .forEach(function (shouldActivate) {
                 if (!shouldActivate || id !== _this.navigationId) {
-                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
                     navigationIsSuccessful = false;
                     return;
                 }
@@ -400,8 +400,14 @@ var Router = (function () {
             })
                 .then(function () {
                 _this.navigated = true;
-                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
-                resolvePromise(navigationIsSuccessful);
+                if (navigationIsSuccessful) {
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                    resolvePromise(true);
+                }
+                else {
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
+                    resolvePromise(false);
+                }
             }, function (e) {
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
