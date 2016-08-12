@@ -114,6 +114,7 @@ export class Router {
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
+        this.config = config;
         this.navigationId = 0;
         /**
          * Indicates if at least one navigation happened.
@@ -132,7 +133,7 @@ export class Router {
      */
     initialNavigation() {
         this.setUpLocationChangeListener();
-        this.navigateByUrl(this.location.path(true));
+        this.navigateByUrl(this.location.path(true), { replaceUrl: true });
     }
     /**
      * Returns the current route state.
@@ -293,7 +294,7 @@ export class Router {
     scheduleNavigation(url, extras) {
         const id = ++this.navigationId;
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-        return Promise.resolve().then((_) => this.runNavigate(url, extras.skipLocationChange, id));
+        return Promise.resolve().then((_) => this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id));
     }
     setUpLocationChangeListener() {
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,
@@ -303,11 +304,11 @@ export class Router {
             // we fire multiple events for a single URL change
             // we should navigate only once
             return this.currentUrlTree.toString() !== tree.toString() ?
-                this.scheduleNavigation(tree, change['pop']) :
+                this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
                 null;
         }));
     }
-    runNavigate(url, preventPushState, id) {
+    runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id) {
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
             this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
@@ -351,16 +352,15 @@ export class Router {
             })
                 .forEach((shouldActivate) => {
                 if (!shouldActivate || id !== this.navigationId) {
-                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
                     navigationIsSuccessful = false;
                     return;
                 }
                 this.currentUrlTree = appliedUrl;
                 this.currentRouterState = state;
                 new ActivateRoutes(state, storedState).activate(this.outletMap);
-                if (!preventPushState) {
+                if (!shouldPreventPushState) {
                     let path = this.urlSerializer.serialize(appliedUrl);
-                    if (this.location.isCurrentPathEqualTo(path)) {
+                    if (this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
                         this.location.replaceState(path);
                     }
                     else {
@@ -371,8 +371,14 @@ export class Router {
             })
                 .then(() => {
                 this.navigated = true;
-                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
-                resolvePromise(navigationIsSuccessful);
+                if (navigationIsSuccessful) {
+                    this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
+                    resolvePromise(true);
+                }
+                else {
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+                    resolvePromise(false);
+                }
             }, e => {
                 this.currentRouterState = storedState;
                 this.currentUrlTree = storedUrl;
@@ -394,7 +400,7 @@ class CanDeactivate {
         this.route = route;
     }
 }
-class PreActivation {
+export class PreActivation {
     constructor(future, curr, injector) {
         this.future = future;
         this.curr = curr;
@@ -457,6 +463,10 @@ class PreActivation {
             if (!shallowEqual(future.params, curr.params)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
+            else {
+                // we need to set the data
+                future.data = curr.data;
+            }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
@@ -503,7 +513,7 @@ class PreActivation {
         if (!canActivate || canActivate.length === 0)
             return of(true);
         const obs = from(canActivate).map(c => {
-            const guard = this.getToken(c, future, this.future);
+            const guard = this.getToken(c, future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, this.future));
             }
@@ -521,7 +531,7 @@ class PreActivation {
             .filter(_ => _ !== null);
         return andObservables(from(canActivateChildGuards).map(d => {
             const obs = from(d.guards).map(c => {
-                const guard = this.getToken(c, c.node, this.future);
+                const guard = this.getToken(c, c.node);
                 if (guard.canActivateChild) {
                     return wrapIntoObservable(guard.canActivateChild(future, this.future));
                 }
@@ -544,7 +554,7 @@ class PreActivation {
             return of(true);
         return from(canDeactivate)
             .map(c => {
-            const guard = this.getToken(c, curr, this.curr);
+            const guard = this.getToken(c, curr);
             if (guard.canDeactivate) {
                 return wrapIntoObservable(guard.canDeactivate(component, curr, this.curr));
             }
@@ -565,13 +575,13 @@ class PreActivation {
     }
     resolveNode(resolve, future) {
         return waitForMap(resolve, (k, v) => {
-            const resolver = this.getToken(v, future, this.future);
+            const resolver = this.getToken(v, future);
             return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
                 wrapIntoObservable(resolver(future, this.future));
         });
     }
-    getToken(token, snapshot, state) {
-        const config = closestLoadedConfig(state, snapshot);
+    getToken(token, snapshot) {
+        const config = closestLoadedConfig(snapshot);
         const injector = config ? config.injector : this.injector;
         return injector.get(token);
     }
@@ -642,7 +652,7 @@ class ActivateRoutes {
                 provide: RouterOutletMap,
                 useValue: outletMap
             }];
-        const config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
+        const config = parentLoadedConfig(future.snapshot);
         let loadedFactoryResolver = null;
         let loadedInjector = null;
         if (config) {
@@ -650,7 +660,6 @@ class ActivateRoutes {
             loadedInjector = config.injector;
             resolved.push({ provide: ComponentFactoryResolver, useValue: loadedFactoryResolver });
         }
-        ;
         outlet.activate(future, loadedFactoryResolver, loadedInjector, ReflectiveInjector.resolve(resolved), outletMap);
     }
     deactivateOutletAndItChildren(outlet) {
@@ -663,12 +672,29 @@ class ActivateRoutes {
         forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
     }
 }
-function closestLoadedConfig(state, snapshot) {
-    const b = state.pathFromRoot(snapshot).filter(s => {
-        const config = s._routeConfig;
-        return config && config._loadedConfig && s !== snapshot;
-    });
-    return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
+function parentLoadedConfig(snapshot) {
+    let s = snapshot.parent;
+    while (s) {
+        const c = s._routeConfig;
+        if (c && c._loadedConfig)
+            return c._loadedConfig;
+        if (c && c.component)
+            return null;
+        s = s.parent;
+    }
+    return null;
+}
+function closestLoadedConfig(snapshot) {
+    if (!snapshot)
+        return null;
+    let s = snapshot.parent;
+    while (s) {
+        const c = s._routeConfig;
+        if (c && c._loadedConfig)
+            return c._loadedConfig;
+        s = s.parent;
+    }
+    return null;
 }
 function nodeChildrenAsMap(node) {
     return node ? node.children.reduce((m, c) => {

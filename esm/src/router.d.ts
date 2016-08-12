@@ -15,9 +15,10 @@ import { ComponentResolver, Injector, NgModuleFactoryLoader, Type } from '@angul
 import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
-import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlSerializer, UrlTree } from './url_tree';
+import { TreeNode } from './utils/tree';
 /**
  * @experimental
  */
@@ -28,6 +29,7 @@ export interface NavigationExtras {
     preserveQueryParams?: boolean;
     preserveFragment?: boolean;
     skipLocationChange?: boolean;
+    replaceUrl?: boolean;
 }
 /**
  * An event triggered when a navigation starts
@@ -106,12 +108,12 @@ export declare class Router {
     private outletMap;
     private location;
     private injector;
+    config: Routes;
     private currentUrlTree;
     private currentRouterState;
     private locationSubscription;
     private routerEvents;
     private navigationId;
-    private config;
     private configLoader;
     /**
      * Indicates if at least one navigation happened.
@@ -122,7 +124,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Routes);
+    constructor(rootComponentType: Type<any>, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, config: Routes);
     /**
      * Sets up the location change listener and performs the inital navigation
      */
@@ -259,5 +261,26 @@ export declare class Router {
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private scheduleNavigation(url, extras);
     private setUpLocationChangeListener();
-    private runNavigate(url, preventPushState, id);
+    private runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id);
+}
+export declare class PreActivation {
+    private future;
+    private curr;
+    private injector;
+    private checks;
+    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, injector: Injector);
+    traverse(parentOutletMap: RouterOutletMap): void;
+    checkGuards(): Observable<boolean>;
+    resolveData(): Observable<any>;
+    private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
+    traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
+    private deactivateOutletAndItChildren(route, outlet);
+    private deactivateOutletMap(outletMap);
+    private runCanActivate(future);
+    private runCanActivateChild(path);
+    private extractCanActivateChild(p);
+    private runCanDeactivate(component, curr);
+    private runResolve(future);
+    private resolveNode(resolve, future);
+    private getToken(token, snapshot);
 }

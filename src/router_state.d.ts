@@ -40,7 +40,8 @@ export declare class RouterState extends Tree<ActivatedRoute> {
     fragment: Observable<string>;
     toString(): string;
 }
-export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
+export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any>): RouterState;
+export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any>): RouterStateSnapshot;
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
  * through the params, urlSegments, and data observables.
@@ -65,7 +66,7 @@ export declare class ActivatedRoute {
     fragment: Observable<string>;
     data: Observable<Data>;
     outlet: string;
-    component: Type | string;
+    component: Type<any> | string;
     snapshot: ActivatedRouteSnapshot;
     routeConfig: Route;
     root: ActivatedRoute;
@@ -98,7 +99,7 @@ export declare class ActivatedRouteSnapshot {
     fragment: string;
     data: Data;
     outlet: string;
-    component: Type | string;
+    component: Type<any> | string;
     routeConfig: Route;
     root: ActivatedRouteSnapshot;
     parent: ActivatedRouteSnapshot;
