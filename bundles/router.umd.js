@@ -751,15 +751,10 @@ var __extends = (this && this.__extends) || function (d, b) {
             else if (route.loadChildren) {
                 return runGuards(injector, route).mergeMap(function (shouldLoad) {
                     if (shouldLoad) {
-                        if (route._loadedConfig) {
-                            return rxjs_observable_of.of(route._loadedConfig);
-                        }
-                        else {
-                            return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
-                                route._loadedConfig = r;
-                                return r;
-                            });
-                        }
+                        return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
+                            route._loadedConfig = r;
+                            return r;
+                        });
                     }
                     else {
                         return canLoadFails(route);
@@ -2076,7 +2071,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.outletMap = outletMap;
             this.location = location;
             this.injector = injector;
-            this.config = config;
             this.navigationId = 0;
             /**
              * Indicates if at least one navigation happened.
@@ -2332,6 +2326,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 })
                     .forEach(function (shouldActivate) {
                     if (!shouldActivate || id !== _this.navigationId) {
+                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
                         navigationIsSuccessful = false;
                         return;
                     }
@@ -2351,14 +2346,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                 })
                     .then(function () {
                     _this.navigated = true;
-                    if (navigationIsSuccessful) {
-                        _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
-                        resolvePromise(true);
-                    }
-                    else {
-                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
-                        resolvePromise(false);
-                    }
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                    resolvePromise(navigationIsSuccessful);
                 }, function (e) {
                     _this.currentRouterState = storedState;
                     _this.currentUrlTree = storedUrl;
@@ -2453,10 +2442,6 @@ var __extends = (this && this.__extends) || function (d, b) {
                 if (!shallowEqual(future.params, curr.params)) {
                     this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
                 }
-                else {
-                    // we need to set the data
-                    future.data = curr.data;
-                }
                 // If we have a component, we need to go through an outlet.
                 if (future.component) {
                     this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
@@ -2505,7 +2490,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             if (!canActivate || canActivate.length === 0)
                 return rxjs_observable_of.of(true);
             var obs = rxjs_observable_from.from(canActivate).map(function (c) {
-                var guard = _this.getToken(c, future);
+                var guard = _this.getToken(c, future, _this.future);
                 if (guard.canActivate) {
                     return wrapIntoObservable(guard.canActivate(future, _this.future));
                 }
@@ -2524,7 +2509,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 .filter(function (_) { return _ !== null; });
             return andObservables(rxjs_observable_from.from(canActivateChildGuards).map(function (d) {
                 var obs = rxjs_observable_from.from(d.guards).map(function (c) {
-                    var guard = _this.getToken(c, c.node);
+                    var guard = _this.getToken(c, c.node, _this.future);
                     if (guard.canActivateChild) {
                         return wrapIntoObservable(guard.canActivateChild(future, _this.future));
                     }
@@ -2548,7 +2533,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 return rxjs_observable_of.of(true);
             return rxjs_observable_from.from(canDeactivate)
                 .map(function (c) {
-                var guard = _this.getToken(c, curr);
+                var guard = _this.getToken(c, curr, _this.curr);
                 if (guard.canDeactivate) {
                     return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
                 }
@@ -2570,13 +2555,13 @@ var __extends = (this && this.__extends) || function (d, b) {
         PreActivation.prototype.resolveNode = function (resolve, future) {
             var _this = this;
             return waitForMap(resolve, function (k, v) {
-                var resolver = _this.getToken(v, future);
+                var resolver = _this.getToken(v, future, _this.future);
                 return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
                     wrapIntoObservable(resolver(future, _this.future));
             });
         };
-        PreActivation.prototype.getToken = function (token, snapshot) {
-            var config = closestLoadedConfig(snapshot);
+        PreActivation.prototype.getToken = function (token, snapshot, state) {
+            var config = closestLoadedConfig(state, snapshot);
             var injector = config ? config.injector : this.injector;
             return injector.get(token);
         };
@@ -2649,7 +2634,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                     provide: RouterOutletMap,
                     useValue: outletMap
                 }];
-            var config = parentLoadedConfig(future.snapshot);
+            var config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
             var loadedFactoryResolver = null;
             var loadedInjector = null;
             if (config) {
@@ -2657,6 +2642,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 loadedInjector = config.injector;
                 resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: loadedFactoryResolver });
             }
+            ;
             outlet.activate(future, loadedFactoryResolver, loadedInjector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
         };
         ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
@@ -2671,29 +2657,12 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return ActivateRoutes;
     }());
-    function parentLoadedConfig(snapshot) {
-        var s = snapshot.parent;
-        while (s) {
-            var c = s._routeConfig;
-            if (c && c._loadedConfig)
-                return c._loadedConfig;
-            if (c && c.component)
-                return null;
-            s = s.parent;
-        }
-        return null;
-    }
-    function closestLoadedConfig(snapshot) {
-        if (!snapshot)
-            return null;
-        var s = snapshot.parent;
-        while (s) {
-            var c = s._routeConfig;
-            if (c && c._loadedConfig)
-                return c._loadedConfig;
-            s = s.parent;
-        }
-        return null;
+    function closestLoadedConfig(state, snapshot) {
+        var b = state.pathFromRoot(snapshot).filter(function (s) {
+            var config = s._routeConfig;
+            return config && config._loadedConfig && s !== snapshot;
+        });
+        return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
     }
     function nodeChildrenAsMap(node) {
         return node ? node.children.reduce(function (m, c) {

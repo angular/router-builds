@@ -125,7 +125,6 @@ var Router = (function () {
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
-        this.config = config;
         this.navigationId = 0;
         /**
          * Indicates if at least one navigation happened.
@@ -381,6 +380,7 @@ var Router = (function () {
             })
                 .forEach(function (shouldActivate) {
                 if (!shouldActivate || id !== _this.navigationId) {
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
                     navigationIsSuccessful = false;
                     return;
                 }
@@ -400,14 +400,8 @@ var Router = (function () {
             })
                 .then(function () {
                 _this.navigated = true;
-                if (navigationIsSuccessful) {
-                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
-                    resolvePromise(true);
-                }
-                else {
-                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
-                    resolvePromise(false);
-                }
+                _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                resolvePromise(navigationIsSuccessful);
             }, function (e) {
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
@@ -503,10 +497,6 @@ var PreActivation = (function () {
             if (!collection_1.shallowEqual(future.params, curr.params)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
-            else {
-                // we need to set the data
-                future.data = curr.data;
-            }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
@@ -555,7 +545,7 @@ var PreActivation = (function () {
         if (!canActivate || canActivate.length === 0)
             return of_1.of(true);
         var obs = from_1.from(canActivate).map(function (c) {
-            var guard = _this.getToken(c, future);
+            var guard = _this.getToken(c, future, _this.future);
             if (guard.canActivate) {
                 return collection_1.wrapIntoObservable(guard.canActivate(future, _this.future));
             }
@@ -574,7 +564,7 @@ var PreActivation = (function () {
             .filter(function (_) { return _ !== null; });
         return collection_1.andObservables(from_1.from(canActivateChildGuards).map(function (d) {
             var obs = from_1.from(d.guards).map(function (c) {
-                var guard = _this.getToken(c, c.node);
+                var guard = _this.getToken(c, c.node, _this.future);
                 if (guard.canActivateChild) {
                     return collection_1.wrapIntoObservable(guard.canActivateChild(future, _this.future));
                 }
@@ -598,7 +588,7 @@ var PreActivation = (function () {
             return of_1.of(true);
         return from_1.from(canDeactivate)
             .map(function (c) {
-            var guard = _this.getToken(c, curr);
+            var guard = _this.getToken(c, curr, _this.curr);
             if (guard.canDeactivate) {
                 return collection_1.wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
             }
@@ -620,19 +610,18 @@ var PreActivation = (function () {
     PreActivation.prototype.resolveNode = function (resolve, future) {
         var _this = this;
         return collection_1.waitForMap(resolve, function (k, v) {
-            var resolver = _this.getToken(v, future);
+            var resolver = _this.getToken(v, future, _this.future);
             return resolver.resolve ? collection_1.wrapIntoObservable(resolver.resolve(future, _this.future)) :
                 collection_1.wrapIntoObservable(resolver(future, _this.future));
         });
     };
-    PreActivation.prototype.getToken = function (token, snapshot) {
-        var config = closestLoadedConfig(snapshot);
+    PreActivation.prototype.getToken = function (token, snapshot, state) {
+        var config = closestLoadedConfig(state, snapshot);
         var injector = config ? config.injector : this.injector;
         return injector.get(token);
     };
     return PreActivation;
 }());
-exports.PreActivation = PreActivation;
 var ActivateRoutes = (function () {
     function ActivateRoutes(futureState, currState) {
         this.futureState = futureState;
@@ -700,7 +689,7 @@ var ActivateRoutes = (function () {
                 provide: router_outlet_map_1.RouterOutletMap,
                 useValue: outletMap
             }];
-        var config = parentLoadedConfig(future.snapshot);
+        var config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         var loadedFactoryResolver = null;
         var loadedInjector = null;
         if (config) {
@@ -708,6 +697,7 @@ var ActivateRoutes = (function () {
             loadedInjector = config.injector;
             resolved.push({ provide: core_1.ComponentFactoryResolver, useValue: loadedFactoryResolver });
         }
+        ;
         outlet.activate(future, loadedFactoryResolver, loadedInjector, core_1.ReflectiveInjector.resolve(resolved), outletMap);
     };
     ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
@@ -722,29 +712,12 @@ var ActivateRoutes = (function () {
     };
     return ActivateRoutes;
 }());
-function parentLoadedConfig(snapshot) {
-    var s = snapshot.parent;
-    while (s) {
-        var c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        if (c && c.component)
-            return null;
-        s = s.parent;
-    }
-    return null;
-}
-function closestLoadedConfig(snapshot) {
-    if (!snapshot)
-        return null;
-    var s = snapshot.parent;
-    while (s) {
-        var c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        s = s.parent;
-    }
-    return null;
+function closestLoadedConfig(state, snapshot) {
+    var b = state.pathFromRoot(snapshot).filter(function (s) {
+        var config = s._routeConfig;
+        return config && config._loadedConfig && s !== snapshot;
+    });
+    return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
 }
 function nodeChildrenAsMap(node) {
     return node ? node.children.reduce(function (m, c) {

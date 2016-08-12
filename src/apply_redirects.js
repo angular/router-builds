@@ -209,15 +209,10 @@ var ApplyRedirects = (function () {
         else if (route.loadChildren) {
             return runGuards(injector, route).mergeMap(function (shouldLoad) {
                 if (shouldLoad) {
-                    if (route._loadedConfig) {
-                        return of_1.of(route._loadedConfig);
-                    }
-                    else {
-                        return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
-                            route._loadedConfig = r;
-                            return r;
-                        });
-                    }
+                    return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
+                        route._loadedConfig = r;
+                        return r;
+                    });
                 }
                 else {
                     return canLoadFails(route);

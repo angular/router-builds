@@ -478,7 +478,7 @@ export interface Route {
      */
     terminal?: boolean;
     pathMatch?: string;
-    component?: Type<any> | string;
+    component?: Type | string;
     redirectTo?: string;
     outlet?: string;
     canActivate?: any[];
