@@ -7,9 +7,9 @@
  */
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Data, Route } from './config';
+import { Data } from './config';
 import { Params } from './shared';
-import { UrlSegment, UrlTree } from './url_tree';
+import { UrlPathWithParams, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
  * The state of the router.
@@ -29,11 +29,12 @@ import { Tree } from './utils/tree';
  * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
+    queryParams: Observable<Params>;
+    fragment: Observable<string>;
     snapshot: RouterStateSnapshot;
     toString(): string;
 }
-export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any>): RouterState;
-export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any>): RouterStateSnapshot;
+export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type): RouterState;
 /**
  * Contains the information about a component loaded in an outlet. The information is provided
  * through the params, urlSegments, and data observables.
@@ -52,20 +53,12 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * @stable
  */
 export declare class ActivatedRoute {
-    url: Observable<UrlSegment[]>;
+    url: Observable<UrlPathWithParams[]>;
     params: Observable<Params>;
-    queryParams: Observable<Params>;
-    fragment: Observable<string>;
     data: Observable<Data>;
     outlet: string;
-    component: Type<any> | string;
+    component: Type | string;
     snapshot: ActivatedRouteSnapshot;
-    routeConfig: Route;
-    root: ActivatedRoute;
-    parent: ActivatedRoute;
-    firstChild: ActivatedRoute;
-    children: ActivatedRoute[];
-    pathFromRoot: ActivatedRoute[];
     toString(): string;
 }
 /**
@@ -85,19 +78,11 @@ export declare class ActivatedRoute {
  * @stable
  */
 export declare class ActivatedRouteSnapshot {
-    url: UrlSegment[];
+    url: UrlPathWithParams[];
     params: Params;
-    queryParams: Params;
-    fragment: string;
     data: Data;
     outlet: string;
-    component: Type<any> | string;
-    routeConfig: Route;
-    root: ActivatedRouteSnapshot;
-    parent: ActivatedRouteSnapshot;
-    firstChild: ActivatedRouteSnapshot;
-    children: ActivatedRouteSnapshot[];
-    pathFromRoot: ActivatedRouteSnapshot[];
+    component: Type | string;
     toString(): string;
 }
 /**
@@ -117,6 +102,8 @@ export declare class ActivatedRouteSnapshot {
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     url: string;
+    queryParams: Params;
+    fragment: string;
     toString(): string;
 }
 /**

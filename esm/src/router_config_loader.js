@@ -5,10 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Compiler, OpaqueToken } from '@angular/core';
+import { OpaqueToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { of } from 'rxjs/observable/of';
-import { flatten, wrapIntoObservable } from './utils/collection';
+/**
+ * @deprecated use Routes
+ */
+export const ROUTER_CONFIG = new OpaqueToken('ROUTER_CONFIG');
 export const ROUTES = new OpaqueToken('ROUTES');
 export class LoadedRouterConfig {
     constructor(routes, injector, factoryResolver) {
@@ -18,25 +20,14 @@ export class LoadedRouterConfig {
     }
 }
 export class RouterConfigLoader {
-    constructor(loader, compiler) {
+    constructor(loader) {
         this.loader = loader;
-        this.compiler = compiler;
     }
-    load(parentInjector, loadChildren) {
-        return this.loadModuleFactory(loadChildren).map(r => {
+    load(parentInjector, path) {
+        return fromPromise(this.loader.load(path).then(r => {
             const ref = r.create(parentInjector);
-            return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
-        });
-    }
-    loadModuleFactory(loadChildren) {
-        if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
-        }
-        else {
-            const offlineMode = this.compiler instanceof Compiler;
-            return wrapIntoObservable(loadChildren())
-                .mergeMap(t => offlineMode ? of(t) : fromPromise(this.compiler.compileModuleAsync(t)));
-        }
+            return new LoadedRouterConfig(ref.injector.get(ROUTES), ref.injector, ref.componentFactoryResolver);
+        }));
     }
 }
 //# sourceMappingURL=router_config_loader.js.map

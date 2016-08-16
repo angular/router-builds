@@ -7,6 +7,7 @@
  */
 import { ContentChildren, Directive, ElementRef, Input, Renderer } from '@angular/core';
 import { NavigationEnd, Router } from '../router';
+import { containsTree } from '../url_tree';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 export class RouterLinkActive {
     constructor(router, element, renderer) {
@@ -37,14 +38,15 @@ export class RouterLinkActive {
     ngOnChanges(changes) { this.update(); }
     ngOnDestroy() { this.subscription.unsubscribe(); }
     update() {
-        if (!this.links || !this.linksWithHrefs || !this.router.navigated)
+        if (!this.links || !this.linksWithHrefs)
             return;
-        const isActiveLinks = this.reduceList(this.links);
-        const isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
+        const currentUrlTree = this.router.parseUrl(this.router.url);
+        const isActiveLinks = this.reduceList(currentUrlTree, this.links);
+        const isActiveLinksWithHrefs = this.reduceList(currentUrlTree, this.linksWithHrefs);
         this.classes.forEach(c => this.renderer.setElementClass(this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs));
     }
-    reduceList(q) {
-        return q.reduce((res, link) => res || this.router.isActive(link.urlTree, this.routerLinkActiveOptions.exact), false);
+    reduceList(currentUrlTree, q) {
+        return q.reduce((res, link) => res || containsTree(currentUrlTree, link.urlTree, this.routerLinkActiveOptions.exact), false);
     }
 }
 /** @nocollapse */
@@ -59,8 +61,8 @@ RouterLinkActive.ctorParameters = [
 ];
 /** @nocollapse */
 RouterLinkActive.propDecorators = {
-    'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
-    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+    'links': [{ type: ContentChildren, args: [RouterLink,] },],
+    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref,] },],
     'routerLinkActiveOptions': [{ type: Input },],
     'routerLinkActive': [{ type: Input },],
 };

@@ -11,15 +11,12 @@ var router_outlet_map_1 = require('../router_outlet_map');
 var shared_1 = require('../shared');
 var RouterOutlet = (function () {
     function RouterOutlet(parentOutletMap, location, resolver, name) {
-        this.parentOutletMap = parentOutletMap;
         this.location = location;
         this.resolver = resolver;
-        this.name = name;
         this.activateEvents = new core_1.EventEmitter();
         this.deactivateEvents = new core_1.EventEmitter();
         parentOutletMap.registerOutlet(name ? name : shared_1.PRIMARY_OUTLET, this);
     }
-    RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : shared_1.PRIMARY_OUTLET); };
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
         get: function () { return !!this.activated; },
         enumerable: true,
@@ -57,11 +54,23 @@ var RouterOutlet = (function () {
         var snapshot = activatedRoute._futureSnapshot;
         var component = snapshot._routeConfig.component;
         var factory;
-        if (loadedResolver) {
-            factory = loadedResolver.resolveComponentFactory(component);
+        try {
+            if (typeof component === 'string') {
+                factory = snapshot._resolvedComponentFactory;
+            }
+            else if (loadedResolver) {
+                factory = loadedResolver.resolveComponentFactory(component);
+            }
+            else {
+                factory = this.resolver.resolveComponentFactory(component);
+            }
         }
-        else {
-            factory = this.resolver.resolveComponentFactory(component);
+        catch (e) {
+            if (!(e instanceof core_1.NoComponentFactoryError))
+                throw e;
+            var componentName = component ? component.name : null;
+            console.warn("'" + componentName + "' not found in precompile array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'precompile' array of your application component. This will be required in a future\n          release of the router.");
+            factory = snapshot._resolvedComponentFactory;
         }
         var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
         var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, injector);

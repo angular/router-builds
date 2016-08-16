@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, EventEmitter, Injector, OnDestroy, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, EventEmitter, Injector, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
 import { RouterOutletMap } from '../router_outlet_map';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -31,18 +31,15 @@ import { ActivatedRoute } from '../router_state';
  *
  * @stable
  */
-export declare class RouterOutlet implements OnDestroy {
-    private parentOutletMap;
+export declare class RouterOutlet {
     private location;
     private resolver;
-    private name;
     private activated;
     private _activatedRoute;
     outletMap: RouterOutletMap;
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
     constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
-    ngOnDestroy(): void;
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;

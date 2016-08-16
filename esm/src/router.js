@@ -11,20 +11,23 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { applyRedirects } from './apply_redirects';
 import { validateConfig } from './config';
 import { createRouterState } from './create_router_state';
 import { createUrlTree } from './create_url_tree';
 import { recognize } from './recognize';
+import { resolve } from './resolve';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { PRIMARY_OUTLET } from './shared';
-import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
-import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
+import { UrlTree, createEmptyUrlTree } from './url_tree';
+import { forEach, merge, shallowEqual, waitForMap } from './utils/collection';
 /**
  * An event triggered when a navigation starts
  *
@@ -106,24 +109,18 @@ export class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
         this.rootComponentType = rootComponentType;
+        this.resolver = resolver;
         this.urlSerializer = urlSerializer;
         this.outletMap = outletMap;
         this.location = location;
         this.injector = injector;
-        this.config = config;
         this.navigationId = 0;
-        /**
-         * Indicates if at least one navigation happened.
-         *
-         * @experimental
-         */
-        this.navigated = false;
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
-        this.configLoader = new RouterConfigLoader(loader, compiler);
+        this.configLoader = new RouterConfigLoader(loader);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
@@ -131,7 +128,7 @@ export class Router {
      */
     initialNavigation() {
         this.setUpLocationChangeListener();
-        this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+        this.navigateByUrl(this.location.path(true));
     }
     /**
      * Returns the current route state.
@@ -163,7 +160,6 @@ export class Router {
         validateConfig(config);
         this.config = config;
     }
-    ngOnDestroy() { this.dispose(); }
     /**
      * Disposes of the router.
      */
@@ -184,19 +180,11 @@ export class Router {
      * // create /team/33;expand=true/user/11
      * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
      *
-     * // you can collapse static segments like this (this works only with the first passed-in value):
+     * // you can collapse static fragments like this
      * router.createUrlTree(['/team/33/user', userId]);
      *
-     * If the first segment can contain slashes, and you do not want the router to split it, you
-     * can do the following:
-     *
-     * router.createUrlTree([{segmentPath: '/one/two'}]);
-     *
      * // create /team/33/(user/11//aux:chat)
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
-     *
-     * // remove the right secondary node
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+     * router.createUrlTree(['/team', 33, {outlets: {"": 'user/11', right: 'chat'}}]);
      *
      * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
      *
@@ -210,11 +198,9 @@ export class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands, { relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment } = {}) {
+    createUrlTree(commands, { relativeTo, queryParams, fragment } = {}) {
         const a = relativeTo ? relativeTo : this.routerState.root;
-        const q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
-        const f = preserveFragment ? this.currentUrlTree.fragment : fragment;
-        return createUrlTree(a, this.currentUrlTree, commands, q, f);
+        return createUrlTree(a, this.currentUrlTree, commands, queryParams, fragment);
     }
     /**
      * Navigate based on the provided url. This navigation is always absolute.
@@ -228,21 +214,15 @@ export class Router {
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
-     *
-     * // Navigate without updating the URL
-     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
-     *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
      */
-    navigateByUrl(url, extras = { skipLocationChange: false }) {
+    navigateByUrl(url) {
         if (url instanceof UrlTree) {
-            return this.scheduleNavigation(url, extras);
+            return this.scheduleNavigation(url, false);
         }
         else {
             const urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(urlTree, extras);
+            return this.scheduleNavigation(urlTree, false);
         }
     }
     /**
@@ -258,16 +238,10 @@ export class Router {
      *
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
-     *
-     * // Navigate without updating the URL
-     * router.navigate(['team', 33, 'team', '11], {relativeTo: route, skipLocationChange: true });
      * ```
-     *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta
-     * that is applied to the current URL.
      */
-    navigate(commands, extras = { skipLocationChange: false }) {
-        return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
+    navigate(commands, extras = {}) {
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), false);
     }
     /**
      * Serializes a {@link UrlTree} into a string.
@@ -277,22 +251,10 @@ export class Router {
      * Parse a string into a {@link UrlTree}.
      */
     parseUrl(url) { return this.urlSerializer.parse(url); }
-    /**
-     * Returns if the url is activated or not.
-     */
-    isActive(url, exact) {
-        if (url instanceof UrlTree) {
-            return containsTree(this.currentUrlTree, url, exact);
-        }
-        else {
-            const urlTree = this.urlSerializer.parse(url);
-            return containsTree(this.currentUrlTree, urlTree, exact);
-        }
-    }
-    scheduleNavigation(url, extras) {
+    scheduleNavigation(url, preventPushState) {
         const id = ++this.navigationId;
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-        return Promise.resolve().then((_) => this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id));
+        return Promise.resolve().then((_) => this.runNavigate(url, preventPushState, id));
     }
     setUpLocationChangeListener() {
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,
@@ -302,11 +264,11 @@ export class Router {
             // we fire multiple events for a single URL change
             // we should navigate only once
             return this.currentUrlTree.toString() !== tree.toString() ?
-                this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                this.scheduleNavigation(tree, change['pop']) :
                 null;
         }));
     }
-    runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id) {
+    runNavigate(url, preventPushState, id) {
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
             this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
@@ -324,9 +286,9 @@ export class Router {
                 appliedUrl = u;
                 return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl));
             })
-                .map((newRouterStateSnapshot) => {
+                .mergeMap((newRouterStateSnapshot) => {
                 this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                return newRouterStateSnapshot;
+                return resolve(this.resolver, newRouterStateSnapshot);
             })
                 .map((routerStateSnapshot) => {
                 return createRouterState(routerStateSnapshot, this.currentRouterState);
@@ -350,15 +312,16 @@ export class Router {
             })
                 .forEach((shouldActivate) => {
                 if (!shouldActivate || id !== this.navigationId) {
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
                     navigationIsSuccessful = false;
                     return;
                 }
                 this.currentUrlTree = appliedUrl;
                 this.currentRouterState = state;
                 new ActivateRoutes(state, storedState).activate(this.outletMap);
-                if (!shouldPreventPushState) {
+                if (!preventPushState) {
                     let path = this.urlSerializer.serialize(appliedUrl);
-                    if (this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+                    if (this.location.isCurrentPathEqualTo(path)) {
                         this.location.replaceState(path);
                     }
                     else {
@@ -368,15 +331,8 @@ export class Router {
                 navigationIsSuccessful = true;
             })
                 .then(() => {
-                this.navigated = true;
-                if (navigationIsSuccessful) {
-                    this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
-                    resolvePromise(true);
-                }
-                else {
-                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
-                    resolvePromise(false);
-                }
+                this.routerEvents.next(new NavigationEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl)));
+                resolvePromise(navigationIsSuccessful);
             }, e => {
                 this.currentRouterState = storedState;
                 this.currentUrlTree = storedUrl;
@@ -398,7 +354,7 @@ class CanDeactivate {
         this.route = route;
     }
 }
-export class PreActivation {
+class PreActivation {
     constructor(future, curr, injector) {
         this.future = future;
         this.curr = curr;
@@ -461,10 +417,6 @@ export class PreActivation {
             if (!shallowEqual(future.params, curr.params)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
-            else {
-                // we need to set the data
-                future.data = curr.data;
-            }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
@@ -511,7 +463,7 @@ export class PreActivation {
         if (!canActivate || canActivate.length === 0)
             return of(true);
         const obs = from(canActivate).map(c => {
-            const guard = this.getToken(c, future);
+            const guard = this.getToken(c, future, this.future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, this.future));
             }
@@ -529,7 +481,7 @@ export class PreActivation {
             .filter(_ => _ !== null);
         return andObservables(from(canActivateChildGuards).map(d => {
             const obs = from(d.guards).map(c => {
-                const guard = this.getToken(c, c.node);
+                const guard = this.getToken(c, c.node, this.future);
                 if (guard.canActivateChild) {
                     return wrapIntoObservable(guard.canActivateChild(future, this.future));
                 }
@@ -552,7 +504,7 @@ export class PreActivation {
             return of(true);
         return from(canDeactivate)
             .map(c => {
-            const guard = this.getToken(c, curr);
+            const guard = this.getToken(c, curr, this.curr);
             if (guard.canDeactivate) {
                 return wrapIntoObservable(guard.canDeactivate(component, curr, this.curr));
             }
@@ -573,15 +525,26 @@ export class PreActivation {
     }
     resolveNode(resolve, future) {
         return waitForMap(resolve, (k, v) => {
-            const resolver = this.getToken(v, future);
+            const resolver = this.getToken(v, future, this.future);
             return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
                 wrapIntoObservable(resolver(future, this.future));
         });
     }
-    getToken(token, snapshot) {
-        const config = closestLoadedConfig(snapshot);
+    getToken(token, snapshot, state) {
+        const config = closestLoadedConfig(state, snapshot);
         const injector = config ? config.injector : this.injector;
         return injector.get(token);
+    }
+}
+function wrapIntoObservable(value) {
+    if (value instanceof Observable) {
+        return value;
+    }
+    else if (value instanceof Promise) {
+        return fromPromise(value);
+    }
+    else {
+        return of(value);
     }
 }
 class ActivateRoutes {
@@ -592,6 +555,7 @@ class ActivateRoutes {
     activate(parentOutletMap) {
         const futureRoot = this.futureState._root;
         const currRoot = this.currState ? this.currState._root : null;
+        pushQueryParamsAndFragment(this.futureState);
         advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
     }
@@ -650,7 +614,7 @@ class ActivateRoutes {
                 provide: RouterOutletMap,
                 useValue: outletMap
             }];
-        const config = parentLoadedConfig(future.snapshot);
+        const config = closestLoadedConfig(this.futureState.snapshot, future.snapshot);
         let loadedFactoryResolver = null;
         let loadedInjector = null;
         if (config) {
@@ -658,6 +622,7 @@ class ActivateRoutes {
             loadedInjector = config.injector;
             resolved.push({ provide: ComponentFactoryResolver, useValue: loadedFactoryResolver });
         }
+        ;
         outlet.activate(future, loadedFactoryResolver, loadedInjector, ReflectiveInjector.resolve(resolved), outletMap);
     }
     deactivateOutletAndItChildren(outlet) {
@@ -670,29 +635,23 @@ class ActivateRoutes {
         forEach(outletMap._outlets, (v) => this.deactivateOutletAndItChildren(v));
     }
 }
-function parentLoadedConfig(snapshot) {
-    let s = snapshot.parent;
-    while (s) {
-        const c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        if (c && c.component)
-            return null;
-        s = s.parent;
-    }
-    return null;
+function closestLoadedConfig(state, snapshot) {
+    const b = state.pathFromRoot(snapshot).filter(s => {
+        const config = s._routeConfig;
+        return config && config._loadedConfig && s !== snapshot;
+    });
+    return b.length > 0 ? b[b.length - 1]._routeConfig._loadedConfig : null;
 }
-function closestLoadedConfig(snapshot) {
-    if (!snapshot)
-        return null;
-    let s = snapshot.parent;
-    while (s) {
-        const c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        s = s.parent;
+function andObservables(observables) {
+    return observables.mergeAll().every(result => result === true);
+}
+function pushQueryParamsAndFragment(state) {
+    if (!shallowEqual(state.snapshot.queryParams, state.queryParams.value)) {
+        state.queryParams.next(state.snapshot.queryParams);
     }
-    return null;
+    if (state.snapshot.fragment !== state.fragment.value) {
+        state.fragment.next(state.snapshot.fragment);
+    }
 }
 function nodeChildrenAsMap(node) {
     return node ? node.children.reduce((m, c) => {

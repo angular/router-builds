@@ -11,14 +11,13 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import { Location } from '@angular/common';
-import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
+import { AppModuleFactoryLoader, ComponentResolver, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
-import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
+import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlSerializer, UrlTree } from './url_tree';
-import { TreeNode } from './utils/tree';
 /**
  * @experimental
  */
@@ -26,10 +25,6 @@ export interface NavigationExtras {
     relativeTo?: ActivatedRoute;
     queryParams?: Params;
     fragment?: string;
-    preserveQueryParams?: boolean;
-    preserveFragment?: boolean;
-    skipLocationChange?: boolean;
-    replaceUrl?: boolean;
 }
 /**
  * An event triggered when a navigation starts
@@ -93,7 +88,7 @@ export declare class RoutesRecognized {
 /**
  * @stable
  */
-export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized;
+export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError;
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
@@ -103,27 +98,22 @@ export declare type Event = NavigationStart | NavigationEnd | NavigationCancel |
  */
 export declare class Router {
     private rootComponentType;
+    private resolver;
     private urlSerializer;
     private outletMap;
     private location;
     private injector;
-    config: Routes;
     private currentUrlTree;
     private currentRouterState;
     private locationSubscription;
     private routerEvents;
     private navigationId;
+    private config;
     private configLoader;
-    /**
-     * Indicates if at least one navigation happened.
-     *
-     * @experimental
-     */
-    navigated: boolean;
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any>, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: AppModuleFactoryLoader, config: Routes);
     /**
      * Sets up the location change listener and performs the inital navigation
      */
@@ -155,7 +145,6 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
-    ngOnDestroy(): void;
     /**
      * Disposes of the router.
      */
@@ -176,19 +165,11 @@ export declare class Router {
      * // create /team/33;expand=true/user/11
      * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
      *
-     * // you can collapse static segments like this (this works only with the first passed-in value):
+     * // you can collapse static fragments like this
      * router.createUrlTree(['/team/33/user', userId]);
      *
-     * If the first segment can contain slashes, and you do not want the router to split it, you
-     * can do the following:
-     *
-     * router.createUrlTree([{segmentPath: '/one/two'}]);
-     *
      * // create /team/33/(user/11//aux:chat)
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
-     *
-     * // remove the right secondary node
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+     * router.createUrlTree(['/team', 33, {outlets: {"": 'user/11', right: 'chat'}}]);
      *
      * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
      *
@@ -202,7 +183,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment}?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], {relativeTo, queryParams, fragment}?: NavigationExtras): UrlTree;
     /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
@@ -215,15 +196,9 @@ export declare class Router {
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
-     *
-     * // Navigate without updating the URL
-     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
-     *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
      */
-    navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
+    navigateByUrl(url: string | UrlTree): Promise<boolean>;
     /**
      * Navigate based on the provided array of commands and a starting point.
      * If no starting route is provided, the navigation is absolute.
@@ -237,13 +212,7 @@ export declare class Router {
      *
      * ```
      * router.navigate(['team', 33, 'team', '11], {relativeTo: route});
-     *
-     * // Navigate without updating the URL
-     * router.navigate(['team', 33, 'team', '11], {relativeTo: route, skipLocationChange: true });
      * ```
-     *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta
-     * that is applied to the current URL.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
     /**
@@ -254,32 +223,7 @@ export declare class Router {
      * Parse a string into a {@link UrlTree}.
      */
     parseUrl(url: string): UrlTree;
-    /**
-     * Returns if the url is activated or not.
-     */
-    isActive(url: string | UrlTree, exact: boolean): boolean;
-    private scheduleNavigation(url, extras);
+    private scheduleNavigation(url, preventPushState);
     private setUpLocationChangeListener();
-    private runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id);
-}
-export declare class PreActivation {
-    private future;
-    private curr;
-    private injector;
-    private checks;
-    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, injector: Injector);
-    traverse(parentOutletMap: RouterOutletMap): void;
-    checkGuards(): Observable<boolean>;
-    resolveData(): Observable<any>;
-    private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
-    traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
-    private deactivateOutletAndItChildren(route, outlet);
-    private deactivateOutletMap(outletMap);
-    private runCanActivate(future);
-    private runCanActivateChild(path);
-    private extractCanActivateChild(p);
-    private runCanDeactivate(component, curr);
-    private runResolve(future);
-    private resolveNode(resolve, future);
-    private getToken(token, snapshot);
+    private runNavigate(url, preventPushState, id);
 }

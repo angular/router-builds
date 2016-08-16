@@ -26,7 +26,7 @@ function validateNode(route) {
     }
     if (route.redirectTo === undefined && !route.component && !route.children &&
         !route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${route.path}': one of the following must be provided (component or redirectTo or children or loadChildren)`);
+        throw new Error(`Invalid configuration of route '${route.path}': component, redirectTo, children, loadChildren must be provided`);
     }
     if (route.path === undefined) {
         throw new Error(`Invalid route configuration: routes must have path specified`);
@@ -34,12 +34,10 @@ function validateNode(route) {
     if (route.path.startsWith('/')) {
         throw new Error(`Invalid route configuration of route '${route.path}': path cannot start with a slash`);
     }
-    if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
+    if (route.path === '' && route.redirectTo !== undefined &&
+        (route.terminal === undefined && route.pathMatch === undefined)) {
         const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
         throw new Error(`Invalid route configuration of route '{path: "${route.path}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
-    }
-    if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error(`Invalid configuration of route '${route.path}': pathMatch can only be set to 'prefix' or 'full'`);
     }
 }
 //# sourceMappingURL=config.js.map
