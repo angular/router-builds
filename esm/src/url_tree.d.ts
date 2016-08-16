@@ -6,7 +6,7 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
  * @stable
  */
 export declare class UrlTree {
-    root: UrlSegment;
+    root: UrlSegmentGroup;
     queryParams: {
         [key: string]: string;
     };
@@ -16,14 +16,14 @@ export declare class UrlTree {
 /**
  * @stable
  */
-export declare class UrlSegment {
-    pathsWithParams: UrlPathWithParams[];
+export declare class UrlSegmentGroup {
+    segments: UrlSegment[];
     children: {
-        [key: string]: UrlSegment;
+        [key: string]: UrlSegmentGroup;
     };
-    parent: UrlSegment;
-    constructor(pathsWithParams: UrlPathWithParams[], children: {
-        [key: string]: UrlSegment;
+    parent: UrlSegmentGroup;
+    constructor(segments: UrlSegment[], children: {
+        [key: string]: UrlSegmentGroup;
     });
     /**
      * Return true if the segment has child segments
@@ -38,7 +38,7 @@ export declare class UrlSegment {
 /**
  * @stable
  */
-export declare class UrlPathWithParams {
+export declare class UrlSegment {
     path: string;
     parameters: {
         [key: string]: string;
@@ -48,9 +48,9 @@ export declare class UrlPathWithParams {
     });
     toString(): string;
 }
-export declare function equalPathsWithParams(a: UrlPathWithParams[], b: UrlPathWithParams[]): boolean;
-export declare function equalPath(a: UrlPathWithParams[], b: UrlPathWithParams[]): boolean;
-export declare function mapChildrenIntoArray<T>(segment: UrlSegment, fn: (v: UrlSegment, k: string) => T[]): T[];
+export declare function equalSegments(a: UrlSegment[], b: UrlSegment[]): boolean;
+export declare function equalPath(a: UrlSegment[], b: UrlSegment[]): boolean;
+export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v: UrlSegmentGroup, k: string) => T[]): T[];
 /**
  * Defines a way to serialize/deserialize a url tree.
  *
@@ -75,5 +75,7 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
     parse(url: string): UrlTree;
     serialize(tree: UrlTree): string;
 }
-export declare function serializePaths(segment: UrlSegment): string;
-export declare function serializePath(path: UrlPathWithParams): string;
+export declare function serializePaths(segment: UrlSegmentGroup): string;
+export declare function encode(s: string): string;
+export declare function decode(s: string): string;
+export declare function serializePath(path: UrlSegment): string;

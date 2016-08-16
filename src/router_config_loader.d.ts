@@ -5,13 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AppModuleFactoryLoader, ComponentFactoryResolver, Injector, OpaqueToken } from '@angular/core';
+import { Compiler, ComponentFactoryResolver, Injector, NgModuleFactoryLoader, OpaqueToken } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Route } from './config';
-/**
- * @deprecated use Routes
- */
-export declare const ROUTER_CONFIG: OpaqueToken;
+import { LoadChildren, Route } from './config';
 export declare const ROUTES: OpaqueToken;
 export declare class LoadedRouterConfig {
     routes: Route[];
@@ -21,6 +17,8 @@ export declare class LoadedRouterConfig {
 }
 export declare class RouterConfigLoader {
     private loader;
-    constructor(loader: AppModuleFactoryLoader);
-    load(parentInjector: Injector, path: string): Observable<LoadedRouterConfig>;
+    private compiler;
+    constructor(loader: NgModuleFactoryLoader, compiler: Compiler);
+    load(parentInjector: Injector, loadChildren: LoadChildren): Observable<LoadedRouterConfig>;
+    private loadModuleFactory(loadChildren);
 }
