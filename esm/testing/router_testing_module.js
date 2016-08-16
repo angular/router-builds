@@ -34,8 +34,8 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
-function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
-    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, flatten(routes));
+function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, compiler, injector, routes) {
+    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
 }
 export class RouterTestingModule {
 }
@@ -53,7 +53,7 @@ RouterTestingModule.decorators = [
                         useFactory: setupTestingRouter,
                         deps: [
                             ComponentResolver, UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader,
-                            Injector, ROUTES
+                            Compiler, Injector, ROUTES
                         ]
                     },
                 ]

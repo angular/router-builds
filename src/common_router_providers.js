@@ -15,13 +15,13 @@ var router_state_1 = require('./router_state');
 var url_tree_1 = require('./url_tree');
 var collection_1 = require('./utils/collection');
 exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
-function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
     if (opts === void 0) { opts = {}; }
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
     var componentType = ref.componentTypes[0];
-    var r = new router_1.Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, collection_1.flatten(config));
+    var r = new router_1.Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, collection_1.flatten(config));
     if (opts.enableTracing) {
         r.events.subscribe(function (e) {
             console.group("Router Event: " + e.constructor.name);
@@ -73,7 +73,7 @@ function provideRouter(routes, config) {
             useFactory: setupRouter,
             deps: [
                 core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector,
-                core_1.NgModuleFactoryLoader, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
+                core_1.NgModuleFactoryLoader, core_1.Compiler, router_config_loader_1.ROUTES, exports.ROUTER_CONFIGURATION
             ]
         },
         router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: rootRoute, deps: [router_1.Router] },

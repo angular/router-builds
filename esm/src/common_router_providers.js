@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, ComponentResolver, Injector, NgModuleFactoryLoader, OpaqueToken, SystemJsNgModuleLoader } from '@angular/core';
 import { Router } from './router';
 import { ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -14,12 +14,12 @@ import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 import { flatten } from './utils/collection';
 export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
-export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts = {}) {
+export function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config, opts = {}) {
     if (ref.componentTypes.length == 0) {
         throw new Error('Bootstrap at least one component before injecting Router.');
     }
     const componentType = ref.componentTypes[0];
-    const r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, flatten(config));
+    const r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
     if (opts.enableTracing) {
         r.events.subscribe(e => {
             console.group(`Router Event: ${e.constructor.name}`);
@@ -67,7 +67,7 @@ export function provideRouter(routes, config = {}) {
             useFactory: setupRouter,
             deps: [
                 ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-                NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                NgModuleFactoryLoader, Compiler, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },

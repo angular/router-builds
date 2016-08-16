@@ -139,14 +139,26 @@ var __extends = (this && this.__extends) || function (d, b) {
         return LoadedRouterConfig;
     }());
     var RouterConfigLoader = (function () {
-        function RouterConfigLoader(loader) {
+        function RouterConfigLoader(loader, compiler) {
             this.loader = loader;
+            this.compiler = compiler;
         }
-        RouterConfigLoader.prototype.load = function (parentInjector, path) {
-            return rxjs_observable_fromPromise.fromPromise(this.loader.load(path).then(function (r) {
+        RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
+            return this.loadModuleFactory(loadChildren).map(function (r) {
                 var ref = r.create(parentInjector);
                 return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
-            }));
+            });
+        };
+        RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
+            var _this = this;
+            if (typeof loadChildren === 'string') {
+                return rxjs_observable_fromPromise.fromPromise(this.loader.load(loadChildren));
+            }
+            else {
+                var offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
+                return wrapIntoObservable(loadChildren())
+                    .mergeMap(function (t) { return offlineMode_1 ? rxjs_observable_of.of(t) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t)); });
+            }
         };
         return RouterConfigLoader;
     }());
@@ -2069,7 +2081,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         /**
          * Creates the router service.
          */
-        function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
+        function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
             this.rootComponentType = rootComponentType;
             this.resolver = resolver;
             this.urlSerializer = urlSerializer;
@@ -2087,7 +2099,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.resetConfig(config);
             this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
-            this.configLoader = new RouterConfigLoader(loader);
+            this.configLoader = new RouterConfigLoader(loader, compiler);
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
         /**
@@ -2715,13 +2727,13 @@ var __extends = (this && this.__extends) || function (d, b) {
         return outlet;
     }
     var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
-    function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
+    function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
         if (opts === void 0) { opts = {}; }
         if (ref.componentTypes.length == 0) {
             throw new Error('Bootstrap at least one component before injecting Router.');
         }
         var componentType = ref.componentTypes[0];
-        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, flatten(config));
+        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
         if (opts.enableTracing) {
             r.events.subscribe(function (e) {
                 console.group("Router Event: " + e.constructor.name);
@@ -2770,7 +2782,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                 useFactory: setupRouter,
                 deps: [
                     _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                    _angular_core.NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                    _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
                 ]
             },
             RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
@@ -3130,7 +3142,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             useFactory: setupRouter,
             deps: [
                 _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                _angular_core.NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+                _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },

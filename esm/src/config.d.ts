@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Type } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 /**
  * `Routes` is an array of route configurations. Each one has the following properties:
  *
@@ -468,6 +469,14 @@ export declare type ResolveData = {
     [name: string]: any;
 };
 /**
+ * @experimental
+ */
+export declare type LoadChildrenCallback = () => Type<any> | Promise<Type<any>> | Observable<Type<any>>;
+/**
+ * @experimental
+ */
+export declare type LoadChildren = string | LoadChildrenCallback;
+/**
  * See {@link Routes} for more details.
  * @stable
  */
@@ -488,6 +497,6 @@ export interface Route {
     data?: Data;
     resolve?: ResolveData;
     children?: Route[];
-    loadChildren?: string;
+    loadChildren?: LoadChildren;
 }
 export declare function validateConfig(config: Routes): void;

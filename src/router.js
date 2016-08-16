@@ -118,7 +118,7 @@ var Router = (function () {
     /**
      * Creates the router service.
      */
-    function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
+    function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
         this.rootComponentType = rootComponentType;
         this.resolver = resolver;
         this.urlSerializer = urlSerializer;
@@ -136,7 +136,7 @@ var Router = (function () {
         this.resetConfig(config);
         this.routerEvents = new Subject_1.Subject();
         this.currentUrlTree = url_tree_1.createEmptyUrlTree();
-        this.configLoader = new router_config_loader_1.RouterConfigLoader(loader);
+        this.configLoader = new router_config_loader_1.RouterConfigLoader(loader, compiler);
         this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**

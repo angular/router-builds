@@ -35,7 +35,7 @@ exports.ROUTER_PROVIDERS = [
         useFactory: common_router_providers_1.setupRouter,
         deps: [
             core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector,
-            core_1.NgModuleFactoryLoader, router_config_loader_1.ROUTES, common_router_providers_1.ROUTER_CONFIGURATION
+            core_1.NgModuleFactoryLoader, core_1.Compiler, router_config_loader_1.ROUTES, common_router_providers_1.ROUTER_CONFIGURATION
         ]
     },
     router_outlet_map_1.RouterOutletMap, { provide: router_state_1.ActivatedRoute, useFactory: common_router_providers_1.rootRoute, deps: [router_1.Router] },

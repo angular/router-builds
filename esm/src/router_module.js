@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, ComponentResolver, Inject, Injector, NgModule, NgModuleFactoryLoader, Optional, SystemJsNgModuleLoader } from '@angular/core';
+import { ApplicationRef, Compiler, ComponentResolver, Inject, Injector, NgModule, NgModuleFactoryLoader, Optional, SystemJsNgModuleLoader } from '@angular/core';
 import { ROUTER_CONFIGURATION, provideRouterInitializer, provideRoutes, rootRoute, setupRouter } from './common_router_providers';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
@@ -34,7 +34,7 @@ export const ROUTER_PROVIDERS = [
         useFactory: setupRouter,
         deps: [
             ApplicationRef, ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector,
-            NgModuleFactoryLoader, ROUTES, ROUTER_CONFIGURATION
+            NgModuleFactoryLoader, Compiler, ROUTES, ROUTER_CONFIGURATION
         ]
     },
     RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },

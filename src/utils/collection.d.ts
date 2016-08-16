@@ -34,4 +34,4 @@ export declare function waitForMap<A, B>(obj: {
     [k: string]: B;
 }>;
 export declare function andObservables(observables: Observable<Observable<any>>): Observable<boolean>;
-export declare function wrapIntoObservable<T>(value: T | Observable<T>): Observable<T>;
+export declare function wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>): Observable<T>;

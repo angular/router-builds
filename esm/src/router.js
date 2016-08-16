@@ -107,7 +107,7 @@ export class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, config) {
+    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
         this.rootComponentType = rootComponentType;
         this.resolver = resolver;
         this.urlSerializer = urlSerializer;
@@ -125,7 +125,7 @@ export class Router {
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
-        this.configLoader = new RouterConfigLoader(loader);
+        this.configLoader = new RouterConfigLoader(loader, compiler);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**

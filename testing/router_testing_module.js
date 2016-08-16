@@ -37,8 +37,8 @@ var SpyNgModuleFactoryLoader = (function () {
     return SpyNgModuleFactoryLoader;
 }());
 exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
-function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, injector, routes) {
-    return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, collection_1.flatten(routes));
+function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, compiler, injector, routes) {
+    return new index_1.Router(null, resolver, urlSerializer, outletMap, location, injector, loader, compiler, collection_1.flatten(routes));
 }
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
@@ -57,7 +57,7 @@ var RouterTestingModule = (function () {
                             useFactory: setupTestingRouter,
                             deps: [
                                 core_1.ComponentResolver, index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.NgModuleFactoryLoader,
-                                core_1.Injector, router_config_loader_1.ROUTES
+                                core_1.Compiler, core_1.Injector, router_config_loader_1.ROUTES
                             ]
                         },
                     ]
