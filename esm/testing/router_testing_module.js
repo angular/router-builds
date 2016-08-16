@@ -7,7 +7,7 @@
  */
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
-import { Compiler, ComponentResolver, Injectable, Injector, NgModule, NgModuleFactoryLoader } from '@angular/core';
+import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader } from '@angular/core';
 import { Router, RouterOutletMap, UrlSerializer } from '../index';
 import { ROUTES } from '../src/router_config_loader';
 import { ROUTER_PROVIDERS, RouterModule } from '../src/router_module';
@@ -34,8 +34,8 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
-function setupTestingRouter(resolver, urlSerializer, outletMap, location, loader, compiler, injector, routes) {
-    return new Router(null, resolver, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
+function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
+    return new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
 }
 export class RouterTestingModule {
 }
@@ -50,8 +50,7 @@ RouterTestingModule.decorators = [
                         provide: Router,
                         useFactory: setupTestingRouter,
                         deps: [
-                            ComponentResolver, UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader,
-                            Compiler, Injector, ROUTES
+                            UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader, Compiler, Injector, ROUTES
                         ]
                     }
                 ]

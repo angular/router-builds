@@ -11,28 +11,28 @@ export class Tree {
     }
     get root() { return this._root.value; }
     /**
-     * @deprecated (use ActivatedRoute.parent instead)
+     * @internal
      */
     parent(t) {
         const p = this.pathFromRoot(t);
         return p.length > 1 ? p[p.length - 2] : null;
     }
     /**
-     * @deprecated (use ActivatedRoute.children instead)
+     * @internal
      */
     children(t) {
         const n = findNode(t, this._root);
         return n ? n.children.map(t => t.value) : [];
     }
     /**
-     * @deprecated (use ActivatedRoute.firstChild instead)
+     * @internal
      */
     firstChild(t) {
         const n = findNode(t, this._root);
         return n && n.children.length > 0 ? n.children[0].value : null;
     }
     /**
-     * @deprecated
+     * @internal
      */
     siblings(t) {
         const p = findPath(t, this._root, []);
@@ -42,7 +42,7 @@ export class Tree {
         return c.filter(cc => cc !== t);
     }
     /**
-     * @deprecated (use ActivatedRoute.pathFromRoot instead)
+     * @internal
      */
     pathFromRoot(t) { return findPath(t, this._root, []).map(s => s.value); }
 }

@@ -20,7 +20,6 @@ var config_1 = require('./config');
 var create_router_state_1 = require('./create_router_state');
 var create_url_tree_1 = require('./create_url_tree');
 var recognize_1 = require('./recognize');
-var resolve_1 = require('./resolve');
 var router_config_loader_1 = require('./router_config_loader');
 var router_outlet_map_1 = require('./router_outlet_map');
 var router_state_1 = require('./router_state');
@@ -118,9 +117,8 @@ var Router = (function () {
     /**
      * Creates the router service.
      */
-    function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+    function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
         this.rootComponentType = rootComponentType;
-        this.resolver = resolver;
         this.urlSerializer = urlSerializer;
         this.outletMap = outletMap;
         this.location = location;
@@ -355,9 +353,9 @@ var Router = (function () {
                 appliedUrl = u;
                 return recognize_1.recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
             })
-                .mergeMap(function (newRouterStateSnapshot) {
+                .map(function (newRouterStateSnapshot) {
                 _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                return resolve_1.resolve(_this.resolver, newRouterStateSnapshot);
+                return newRouterStateSnapshot;
             })
                 .map(function (routerStateSnapshot) {
                 return create_router_state_1.createRouterState(routerStateSnapshot, _this.currentRouterState);

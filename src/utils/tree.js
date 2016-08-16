@@ -16,28 +16,28 @@ var Tree = (function () {
         configurable: true
     });
     /**
-     * @deprecated (use ActivatedRoute.parent instead)
+     * @internal
      */
     Tree.prototype.parent = function (t) {
         var p = this.pathFromRoot(t);
         return p.length > 1 ? p[p.length - 2] : null;
     };
     /**
-     * @deprecated (use ActivatedRoute.children instead)
+     * @internal
      */
     Tree.prototype.children = function (t) {
         var n = findNode(t, this._root);
         return n ? n.children.map(function (t) { return t.value; }) : [];
     };
     /**
-     * @deprecated (use ActivatedRoute.firstChild instead)
+     * @internal
      */
     Tree.prototype.firstChild = function (t) {
         var n = findNode(t, this._root);
         return n && n.children.length > 0 ? n.children[0].value : null;
     };
     /**
-     * @deprecated
+     * @internal
      */
     Tree.prototype.siblings = function (t) {
         var p = findPath(t, this._root, []);
@@ -47,7 +47,7 @@ var Tree = (function () {
         return c.filter(function (cc) { return cc !== t; });
     };
     /**
-     * @deprecated (use ActivatedRoute.pathFromRoot instead)
+     * @internal
      */
     Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
     return Tree;

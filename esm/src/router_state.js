@@ -36,14 +36,6 @@ export class RouterState extends Tree {
         this.snapshot = snapshot;
         setRouterStateSnapshot(this, root);
     }
-    /**
-      * @deprecated (Use root.queryParams)
-      */
-    get queryParams() { return this.root.queryParams; }
-    /**
-     * @deprecated (Use root.fragment)
-     */
-    get fragment() { return this.root.fragment; }
     toString() { return this.snapshot.toString(); }
 }
 export function createEmptyState(urlTree, rootComponent) {
@@ -196,14 +188,6 @@ export class RouterStateSnapshot extends Tree {
         this.url = url;
         setRouterStateSnapshot(this, root);
     }
-    /**
-     * @deprecated (Use root.queryParams)
-     */
-    get queryParams() { return this.root.queryParams; }
-    /**
-     * @deprecated (Use root.fragment)
-     */
-    get fragment() { return this.root.fragment; }
     toString() { return serializeNode(this._root); }
 }
 function setRouterStateSnapshot(state, node) {

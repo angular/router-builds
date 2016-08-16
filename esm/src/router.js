@@ -19,7 +19,6 @@ import { validateConfig } from './config';
 import { createRouterState } from './create_router_state';
 import { createUrlTree } from './create_url_tree';
 import { recognize } from './recognize';
-import { resolve } from './resolve';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
@@ -107,9 +106,8 @@ export class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+    constructor(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
         this.rootComponentType = rootComponentType;
-        this.resolver = resolver;
         this.urlSerializer = urlSerializer;
         this.outletMap = outletMap;
         this.location = location;
@@ -326,9 +324,9 @@ export class Router {
                 appliedUrl = u;
                 return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl));
             })
-                .mergeMap((newRouterStateSnapshot) => {
+                .map((newRouterStateSnapshot) => {
                 this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                return resolve(this.resolver, newRouterStateSnapshot);
+                return newRouterStateSnapshot;
             })
                 .map((routerStateSnapshot) => {
                 return createRouterState(routerStateSnapshot, this.currentRouterState);

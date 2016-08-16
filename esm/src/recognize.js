@@ -132,8 +132,7 @@ function getChildConfig(route) {
 }
 function match(segmentGroup, route, segments, parent) {
     if (route.path === '') {
-        if ((route.terminal || route.pathMatch === 'full') &&
-            (segmentGroup.hasChildren() || segments.length > 0)) {
+        if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
             throw new NoMatch();
         }
         else {
@@ -160,7 +159,7 @@ function match(segmentGroup, route, segments, parent) {
         consumedSegments.push(current);
         currentIndex++;
     }
-    if ((route.terminal || route.pathMatch === 'full') &&
+    if (route.pathMatch === 'full' &&
         (segmentGroup.hasChildren() || currentIndex < segments.length)) {
         throw new NoMatch();
     }
@@ -254,8 +253,7 @@ function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
     return routes.filter(r => emptyPathMatch(segmentGroup, slicedSegments, r)).length > 0;
 }
 function emptyPathMatch(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) &&
-        (r.terminal || r.pathMatch === 'full'))
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
         return false;
     return r.path === '' && r.redirectTo === undefined;
 }

@@ -9,10 +9,6 @@ import { Compiler, OpaqueToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { flatten, wrapIntoObservable } from './utils/collection';
-/**
- * @deprecated use Routes
- */
-export const ROUTER_CONFIG = new OpaqueToken('ROUTER_CONFIG');
 export const ROUTES = new OpaqueToken('ROUTES');
 export class LoadedRouterConfig {
     constructor(routes, injector, factoryResolver) {

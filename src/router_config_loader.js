@@ -10,10 +10,6 @@ var core_1 = require('@angular/core');
 var fromPromise_1 = require('rxjs/observable/fromPromise');
 var of_1 = require('rxjs/observable/of');
 var collection_1 = require('./utils/collection');
-/**
- * @deprecated use Routes
- */
-exports.ROUTER_CONFIG = new core_1.OpaqueToken('ROUTER_CONFIG');
 exports.ROUTES = new core_1.OpaqueToken('ROUTES');
 var LoadedRouterConfig = (function () {
     function LoadedRouterConfig(routes, injector, factoryResolver) {

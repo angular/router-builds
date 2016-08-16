@@ -234,8 +234,7 @@ function runGuards(injector, route) {
 function match(segmentGroup, route, segments) {
     const noMatch = { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
     if (route.path === '') {
-        if ((route.terminal || route.pathMatch === 'full') &&
-            (segmentGroup.hasChildren() || segments.length > 0)) {
+        if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
             return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
         }
         else {
@@ -261,7 +260,8 @@ function match(segmentGroup, route, segments) {
         consumedSegments.push(current);
         currentIndex++;
     }
-    if (route.terminal && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
         return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
     }
     return { matched: true, consumedSegments, lastChild: currentIndex, positionalParamSegments };
@@ -350,8 +350,7 @@ function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
     return routes.filter(r => emptyPathRedirect(segmentGroup, slicedSegments, r)).length > 0;
 }
 function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) &&
-        (r.terminal || r.pathMatch === 'full'))
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
         return false;
     return r.path === '' && r.redirectTo !== undefined;
 }

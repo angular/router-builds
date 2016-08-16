@@ -43,22 +43,6 @@ var RouterState = (function (_super) {
         this.snapshot = snapshot;
         setRouterStateSnapshot(this, root);
     }
-    Object.defineProperty(RouterState.prototype, "queryParams", {
-        /**
-          * @deprecated (Use root.queryParams)
-          */
-        get: function () { return this.root.queryParams; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterState.prototype, "fragment", {
-        /**
-         * @deprecated (Use root.fragment)
-         */
-        get: function () { return this.root.fragment; },
-        enumerable: true,
-        configurable: true
-    });
     RouterState.prototype.toString = function () { return this.snapshot.toString(); };
     return RouterState;
 }(tree_1.Tree));
@@ -278,22 +262,6 @@ var RouterStateSnapshot = (function (_super) {
         this.url = url;
         setRouterStateSnapshot(this, root);
     }
-    Object.defineProperty(RouterStateSnapshot.prototype, "queryParams", {
-        /**
-         * @deprecated (Use root.queryParams)
-         */
-        get: function () { return this.root.queryParams; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterStateSnapshot.prototype, "fragment", {
-        /**
-         * @deprecated (Use root.fragment)
-         */
-        get: function () { return this.root.fragment; },
-        enumerable: true,
-        configurable: true
-    });
     RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
     return RouterStateSnapshot;
 }(tree_1.Tree));

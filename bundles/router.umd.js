@@ -9,10 +9,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/Observable'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/add/operator/toPromise'), require('rxjs/observable/forkJoin'), require('@angular/platform-browser')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject', 'rxjs/add/operator/toPromise', 'rxjs/observable/forkJoin', '@angular/platform-browser'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.EmptyError, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable, global.ng.platformBrowser));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_Observable, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject, rxjs_add_operator_toPromise, rxjs_observable_forkJoin, _angular_platformBrowser) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/Observable'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.EmptyError, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx));
+}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_Observable, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject) {
     'use strict';
     /**
      * @license
@@ -125,10 +125,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             return rxjs_observable_of.of(value);
         }
     }
-    /**
-     * @deprecated use Routes
-     */
-    var ROUTER_CONFIG = new _angular_core.OpaqueToken('ROUTER_CONFIG');
     var ROUTES = new _angular_core.OpaqueToken('ROUTES');
     var LoadedRouterConfig = (function () {
         function LoadedRouterConfig(routes, injector, factoryResolver) {
@@ -802,8 +798,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function match(segmentGroup, route, segments) {
         var noMatch = { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
         if (route.path === '') {
-            if ((route.terminal || route.pathMatch === 'full') &&
-                (segmentGroup.hasChildren() || segments.length > 0)) {
+            if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
                 return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
             }
             else {
@@ -829,7 +824,8 @@ var __extends = (this && this.__extends) || function (d, b) {
             consumedSegments.push(current);
             currentIndex++;
         }
-        if (route.terminal && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+        if (route.pathMatch === 'full' &&
+            (segmentGroup.hasChildren() || currentIndex < segments.length)) {
             return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
         }
         return { matched: true, consumedSegments: consumedSegments, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
@@ -921,8 +917,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return routes.filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r); }).length > 0;
     }
     function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) &&
-            (r.terminal || r.pathMatch === 'full'))
+        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
             return false;
         return r.path === '' && r.redirectTo !== undefined;
     }
@@ -965,8 +960,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         if (route.path.startsWith('/')) {
             throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
         }
-        if (route.path === '' && route.redirectTo !== undefined &&
-            (route.terminal === undefined && route.pathMatch === undefined)) {
+        if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
             var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
             throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
         }
@@ -991,28 +985,28 @@ var __extends = (this && this.__extends) || function (d, b) {
             configurable: true
         });
         /**
-         * @deprecated (use ActivatedRoute.parent instead)
+         * @internal
          */
         Tree.prototype.parent = function (t) {
             var p = this.pathFromRoot(t);
             return p.length > 1 ? p[p.length - 2] : null;
         };
         /**
-         * @deprecated (use ActivatedRoute.children instead)
+         * @internal
          */
         Tree.prototype.children = function (t) {
             var n = findNode(t, this._root);
             return n ? n.children.map(function (t) { return t.value; }) : [];
         };
         /**
-         * @deprecated (use ActivatedRoute.firstChild instead)
+         * @internal
          */
         Tree.prototype.firstChild = function (t) {
             var n = findNode(t, this._root);
             return n && n.children.length > 0 ? n.children[0].value : null;
         };
         /**
-         * @deprecated
+         * @internal
          */
         Tree.prototype.siblings = function (t) {
             var p = findPath(t, this._root, []);
@@ -1022,7 +1016,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return c.filter(function (cc) { return cc !== t; });
         };
         /**
-         * @deprecated (use ActivatedRoute.pathFromRoot instead)
+         * @internal
          */
         Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
         return Tree;
@@ -1086,22 +1080,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.snapshot = snapshot;
             setRouterStateSnapshot(this, root);
         }
-        Object.defineProperty(RouterState.prototype, "queryParams", {
-            /**
-              * @deprecated (Use root.queryParams)
-              */
-            get: function () { return this.root.queryParams; },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(RouterState.prototype, "fragment", {
-            /**
-             * @deprecated (Use root.fragment)
-             */
-            get: function () { return this.root.fragment; },
-            enumerable: true,
-            configurable: true
-        });
         RouterState.prototype.toString = function () { return this.snapshot.toString(); };
         return RouterState;
     }(Tree));
@@ -1315,22 +1293,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.url = url;
             setRouterStateSnapshot(this, root);
         }
-        Object.defineProperty(RouterStateSnapshot.prototype, "queryParams", {
-            /**
-             * @deprecated (Use root.queryParams)
-             */
-            get: function () { return this.root.queryParams; },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(RouterStateSnapshot.prototype, "fragment", {
-            /**
-             * @deprecated (Use root.fragment)
-             */
-            get: function () { return this.root.fragment; },
-            enumerable: true,
-            configurable: true
-        });
         RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
         return RouterStateSnapshot;
     }(Tree));
@@ -1812,8 +1774,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function match$1(segmentGroup, route, segments, parent) {
         if (route.path === '') {
-            if ((route.terminal || route.pathMatch === 'full') &&
-                (segmentGroup.hasChildren() || segments.length > 0)) {
+            if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
                 throw new NoMatch$1();
             }
             else {
@@ -1840,7 +1801,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             consumedSegments.push(current);
             currentIndex++;
         }
-        if ((route.terminal || route.pathMatch === 'full') &&
+        if (route.pathMatch === 'full' &&
             (segmentGroup.hasChildren() || currentIndex < segments.length)) {
             throw new NoMatch$1();
         }
@@ -1936,8 +1897,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return routes.filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); }).length > 0;
     }
     function emptyPathMatch(segmentGroup, slicedSegments, r) {
-        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) &&
-            (r.terminal || r.pathMatch === 'full'))
+        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
             return false;
         return r.path === '' && r.redirectTo === undefined;
     }
@@ -1949,32 +1909,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function getResolve(route) {
         return route.resolve ? route.resolve : {};
-    }
-    function resolve(resolver, state) {
-        return resolveNode(resolver, state._root).map(function (_) { return state; });
-    }
-    function resolveNode(resolver, node) {
-        if (node.children.length === 0) {
-            return rxjs_observable_fromPromise.fromPromise(resolveComponent(resolver, node.value).then(function (factory) {
-                node.value._resolvedComponentFactory = factory;
-                return node.value;
-            }));
-        }
-        else {
-            var c = node.children.map(function (c) { return resolveNode(resolver, c).toPromise(); });
-            return rxjs_observable_forkJoin.forkJoin(c).map(function (_) { return resolveComponent(resolver, node.value).then(function (factory) {
-                node.value._resolvedComponentFactory = factory;
-                return node.value;
-            }); });
-        }
-    }
-    function resolveComponent(resolver, snapshot) {
-        if (snapshot.component && snapshot._routeConfig && typeof snapshot.component === 'string') {
-            return resolver.resolveComponent(snapshot.component);
-        }
-        else {
-            return Promise.resolve(null);
-        }
     }
     /**
      * @license
@@ -2081,9 +2015,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         /**
          * Creates the router service.
          */
-        function Router(rootComponentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+        function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
             this.rootComponentType = rootComponentType;
-            this.resolver = resolver;
             this.urlSerializer = urlSerializer;
             this.outletMap = outletMap;
             this.location = location;
@@ -2318,9 +2251,9 @@ var __extends = (this && this.__extends) || function (d, b) {
                     appliedUrl = u;
                     return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
                 })
-                    .mergeMap(function (newRouterStateSnapshot) {
+                    .map(function (newRouterStateSnapshot) {
                     _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                    return resolve(_this.resolver, newRouterStateSnapshot);
+                    return newRouterStateSnapshot;
                 })
                     .map(function (routerStateSnapshot) {
                     return createRouterState(routerStateSnapshot, _this.currentRouterState);
@@ -2726,119 +2659,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return outlet;
     }
-    var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
-    function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
-        if (opts === void 0) { opts = {}; }
-        if (ref.componentTypes.length == 0) {
-            throw new Error('Bootstrap at least one component before injecting Router.');
-        }
-        var componentType = ref.componentTypes[0];
-        var r = new Router(componentType, resolver, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
-        if (opts.enableTracing) {
-            r.events.subscribe(function (e) {
-                console.group("Router Event: " + e.constructor.name);
-                console.log(e.toString());
-                console.log(e);
-                console.groupEnd();
-            });
-        }
-        return r;
-    }
-    function rootRoute(router) {
-        return router.routerState.root;
-    }
-    function initialRouterNavigation(router) {
-        return function () { router.initialNavigation(); };
-    }
-    /**
-     * An array of {@link Provider}s. To use the router, you must add this to your application.
-     *
-     * ### Example
-     *
-     * ```
-     * @Component({directives: [ROUTER_DIRECTIVES]})
-     * class AppCmp {
-     *   // ...
-     * }
-     *
-     * const config = [
-     *   {path: 'home', component: Home}
-     * ];
-     *
-     * bootstrap(AppCmp, [provideRouter(config)]);
-     * ```
-     *
-     * @deprecated use RouterModule instead
-     */
-    function provideRouter_(routes, config) {
-        if (config === void 0) { config = {}; }
-        return [
-            provideRoutes(routes),
-            { provide: ROUTER_CONFIGURATION, useValue: config }, _angular_common.Location,
-            { provide: _angular_common.LocationStrategy, useClass: _angular_common.PathLocationStrategy },
-            { provide: UrlSerializer, useClass: DefaultUrlSerializer },
-            {
-                provide: Router,
-                useFactory: setupRouter,
-                deps: [
-                    _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                    _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
-                ]
-            },
-            RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-            // Trigger initial navigation
-            provideRouterInitializer(), { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader }
-        ];
-    }
-    function provideRouterInitializer() {
-        return {
-            provide: _angular_core.APP_BOOTSTRAP_LISTENER,
-            multi: true,
-            useFactory: initialRouterNavigation,
-            deps: [Router]
-        };
-    }
-    /**
-     * Router configuration.
-     *
-     * ### Example
-     *
-     * ```
-     * @NgModule({providers: [
-     *   provideRoutes([{path: 'home', component: Home}])
-     * ]})
-     * class LazyLoadedModule {
-     *   // ...
-     * }
-     * ```
-     *
-     * @deprecated
-     */
-    function provideRoutes(routes) {
-        return [
-            { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-            { provide: ROUTES, multi: true, useValue: routes }
-        ];
-    }
-    /**
-     * Router configuration.
-     *
-     * ### Example
-     *
-     * ```
-     * @NgModule({providers: [
-     *   provideRouterOptions({enableTracing: true})
-     * ]})
-     * class LazyLoadedModule {
-     *   // ...
-     * }
-     * ```
-     *
-     * @deprecated
-     */
-    function provideRouterConfig(config) {
-        return { provide: ROUTER_CONFIGURATION, useValue: config };
-    }
     var RouterLink = (function () {
         function RouterLink(router, route, locationStrategy) {
             this.router = router;
@@ -3090,23 +2910,11 @@ var __extends = (this && this.__extends) || function (d, b) {
             var snapshot = activatedRoute._futureSnapshot;
             var component = snapshot._routeConfig.component;
             var factory;
-            try {
-                if (typeof component === 'string') {
-                    factory = snapshot._resolvedComponentFactory;
-                }
-                else if (loadedResolver) {
-                    factory = loadedResolver.resolveComponentFactory(component);
-                }
-                else {
-                    factory = this.resolver.resolveComponentFactory(component);
-                }
+            if (loadedResolver) {
+                factory = loadedResolver.resolveComponentFactory(component);
             }
-            catch (e) {
-                if (!(e instanceof _angular_core.NoComponentFactoryError))
-                    throw e;
-                var componentName = component ? component.name : null;
-                console.warn("'" + componentName + "' not found in entryComponents array.  To ensure all components referred\n          to by the Routes are compiled, you must add '" + componentName + "' to the\n          'entryComponents' array of your application component. This will be required in a future\n          release of the router.");
-                factory = snapshot._resolvedComponentFactory;
+            else {
+                factory = this.resolver.resolveComponentFactory(component);
             }
             var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
@@ -3136,13 +2944,17 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+    /**
+     * @stable
+     */
+    var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
     var ROUTER_PROVIDERS = [
         _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
             provide: Router,
             useFactory: setupRouter,
             deps: [
-                _angular_core.ApplicationRef, _angular_core.ComponentResolver, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector,
-                _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
+                _angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader,
+                _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
@@ -3183,33 +2995,45 @@ var __extends = (this && this.__extends) || function (d, b) {
             new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
     }
     /**
-     * A list of {@link Provider}s. To use the router, you must add this to your application.
-     *
-     * ### Example
-     *
-     * ```
-     * @Component({directives: [ROUTER_DIRECTIVES]})
-     * class AppCmp {
-     *   // ...
-     * }
-     *
-     * const router = [
-     *   {path: 'home', component: Home}
-     * ];
-     *
-     * bootstrap(AppCmp, [provideRouter(router, {enableTracing: true})]);
-     * ```
-     *
-     * @experimental
+     * @stable
      */
-    function provideRouter(config, opts) {
-        if (opts === void 0) { opts = {}; }
+    function provideRoutes(routes) {
         return [
-            { provide: _angular_common.PlatformLocation, useClass: _angular_platformBrowser.BrowserPlatformLocation }
-        ].concat(provideRouter_(config, opts));
+            { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
+            { provide: ROUTES, multi: true, useValue: routes }
+        ];
     }
-    exports.provideRouterConfig = provideRouterConfig;
-    exports.provideRoutes = provideRoutes;
+    function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
+        if (opts === void 0) { opts = {}; }
+        if (ref.componentTypes.length == 0) {
+            throw new Error('Bootstrap at least one component before injecting Router.');
+        }
+        var componentType = ref.componentTypes[0];
+        var r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+        if (opts.enableTracing) {
+            r.events.subscribe(function (e) {
+                console.group("Router Event: " + e.constructor.name);
+                console.log(e.toString());
+                console.log(e);
+                console.groupEnd();
+            });
+        }
+        return r;
+    }
+    function rootRoute(router) {
+        return router.routerState.root;
+    }
+    function initialRouterNavigation(router) {
+        return function () { router.initialNavigation(); };
+    }
+    function provideRouterInitializer() {
+        return {
+            provide: _angular_core.APP_BOOTSTRAP_LISTENER,
+            multi: true,
+            useFactory: initialRouterNavigation,
+            deps: [Router]
+        };
+    }
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
     exports.RouterLinkActive = RouterLinkActive;
@@ -3222,8 +3046,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.RoutesRecognized = RoutesRecognized;
     exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.RouterModule = RouterModule;
+    exports.provideRoutes = provideRoutes;
     exports.RouterOutletMap = RouterOutletMap;
-    exports.provideRouter = provideRouter;
     exports.ActivatedRoute = ActivatedRoute;
     exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
     exports.RouterState = RouterState;

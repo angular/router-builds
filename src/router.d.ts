@@ -11,7 +11,7 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/every';
 import { Location } from '@angular/common';
-import { Compiler, ComponentResolver, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
+import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
@@ -103,7 +103,6 @@ export declare type Event = NavigationStart | NavigationEnd | NavigationCancel |
  */
 export declare class Router {
     private rootComponentType;
-    private resolver;
     private urlSerializer;
     private outletMap;
     private location;
@@ -124,7 +123,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any>, resolver: ComponentResolver, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type<any>, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
     /**
      * Sets up the location change listener and performs the inital navigation
      */
