@@ -186,7 +186,7 @@ export interface CanDeactivate<T> {
  *
  * You can also provide a function with the same signature instead of the class.
  *
- * @experimental
+ * @stable
  */
 export interface Resolve<T> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any;

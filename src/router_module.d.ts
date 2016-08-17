@@ -46,7 +46,7 @@ export declare const ROUTER_PROVIDERS: any[];
  * class Lazy {}
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class RouterModule {
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;

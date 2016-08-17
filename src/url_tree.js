@@ -164,7 +164,7 @@ exports.mapChildrenIntoArray = mapChildrenIntoArray;
 /**
  * Defines a way to serialize/deserialize a url tree.
  *
- * @experimental
+ * @stable
  */
 var UrlSerializer = (function () {
     function UrlSerializer() {
@@ -175,7 +175,7 @@ exports.UrlSerializer = UrlSerializer;
 /**
  * A default implementation of the serialization.
  *
- * @experimental
+ * @stable
  */
 var DefaultUrlSerializer = (function () {
     function DefaultUrlSerializer() {

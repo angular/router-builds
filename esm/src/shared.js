@@ -9,7 +9,7 @@
  * Name of the primary outlet.
  * @type {string}
  *
- * @experimental
+ * @stable
  */
 export const PRIMARY_OUTLET = 'primary';
 //# sourceMappingURL=shared.js.map

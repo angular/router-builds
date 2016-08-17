@@ -247,11 +247,11 @@ export declare type ResolveData = {
     [name: string]: any;
 };
 /**
- * @experimental
+ * @stable
  */
 export declare type LoadChildrenCallback = () => Type<any> | Promise<Type<any>> | Observable<Type<any>>;
 /**
- * @experimental
+ * @stable
  */
 export declare type LoadChildren = string | LoadChildrenCallback;
 /**

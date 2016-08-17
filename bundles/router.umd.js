@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Name of the primary outlet.
      * @type {string}
      *
-     * @experimental
+     * @stable
      */
     var PRIMARY_OUTLET = 'primary';
     function shallowEqualArrays(a, b) {
@@ -295,7 +295,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * Defines a way to serialize/deserialize a url tree.
      *
-     * @experimental
+     * @stable
      */
     var UrlSerializer = (function () {
         function UrlSerializer() {
@@ -305,7 +305,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     /**
      * A default implementation of the serialization.
      *
-     * @experimental
+     * @stable
      */
     var DefaultUrlSerializer = (function () {
         function DefaultUrlSerializer() {

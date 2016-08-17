@@ -54,7 +54,7 @@ export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v
 /**
  * Defines a way to serialize/deserialize a url tree.
  *
- * @experimental
+ * @stable
  */
 export declare abstract class UrlSerializer {
     /**
@@ -69,7 +69,7 @@ export declare abstract class UrlSerializer {
 /**
  * A default implementation of the serialization.
  *
- * @experimental
+ * @stable
  */
 export declare class DefaultUrlSerializer implements UrlSerializer {
     parse(url: string): UrlTree;

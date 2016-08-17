@@ -147,14 +147,14 @@ export function mapChildrenIntoArray(segment, fn) {
 /**
  * Defines a way to serialize/deserialize a url tree.
  *
- * @experimental
+ * @stable
  */
 export class UrlSerializer {
 }
 /**
  * A default implementation of the serialization.
  *
- * @experimental
+ * @stable
  */
 export class DefaultUrlSerializer {
     parse(url) {

@@ -3,7 +3,7 @@ import { Compiler, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core'
  * A spy for {@link NgModuleFactoryLoader} that allows tests to simulate the loading of ng module
  * factories.
  *
- * @experimental
+ * @stable
  */
 export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     private compiler;
@@ -29,7 +29,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
  * });
  * ```
  *
- * @experimental
+ * @stable
  */
 export declare class RouterTestingModule {
 }
