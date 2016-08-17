@@ -2113,7 +2113,7 @@ var __extends = (this && this.__extends) || function (d, b) {
          *
          * router.createUrlTree([{segmentPath: '/one/two'}]);
          *
-         * // create /team/33/(user/11//aux:chat)
+         * // create /team/33/(user/11//right:chat)
          * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
          *
          * // remove the right secondary node
