@@ -1,5 +1,4 @@
-import { Compiler, ModuleWithProviders, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
-import { Routes } from '../src/config';
+import { Compiler, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
 /**
  * A spy for {@link NgModuleFactoryLoader} that allows tests to simulate the loading of ng module
  * factories.
@@ -22,12 +21,10 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
  *
  * ```
  * beforeEach(() => {
- *   TestBed.configureTestModule({
- *     modules: [
- *       RouterTestingModule.withRoutes(
+ *   configureModule({
+ *     modules: [RouterTestingModule],
+ *     providers: [provideRoutes(
  *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
- *       )
- *     ]
  *   });
  * });
  * ```
@@ -35,5 +32,4 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
  * @stable
  */
 export declare class RouterTestingModule {
-    static withRoutes(routes: Routes): ModuleWithProviders;
 }
