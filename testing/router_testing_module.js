@@ -43,6 +43,9 @@ function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
     }
+    RouterTestingModule.withRoutes = function (routes) {
+        return { ngModule: RouterTestingModule, providers: [router_module_1.provideRoutes(routes)] };
+    };
     /** @nocollapse */
     RouterTestingModule.decorators = [
         { type: core_1.NgModule, args: [{
@@ -56,7 +59,8 @@ var RouterTestingModule = (function () {
                             deps: [
                                 index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.NgModuleFactoryLoader, core_1.Compiler, core_1.Injector, router_config_loader_1.ROUTES
                             ]
-                        }
+                        },
+                        router_module_1.provideRoutes([])
                     ]
                 },] },
     ];
