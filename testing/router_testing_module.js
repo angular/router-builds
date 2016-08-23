@@ -37,9 +37,15 @@ var SpyNgModuleFactoryLoader = (function () {
     return SpyNgModuleFactoryLoader;
 }());
 exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
+/**
+ * Router setup factory function used for testing.
+ *
+ * @experimental
+ */
 function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
     return new index_1.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, collection_1.flatten(routes));
 }
+exports.setupTestingRouter = setupTestingRouter;
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
     }

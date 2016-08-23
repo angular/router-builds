@@ -34,7 +34,12 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = [
     { type: Compiler, },
 ];
-function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
+/**
+ * Router setup factory function used for testing.
+ *
+ * @experimental
+ */
+export function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
     return new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
 }
 export class RouterTestingModule {
