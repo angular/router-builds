@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, BaseException, Compiler, Inject, Injector, NgModule, NgModuleFactoryLoader, OpaqueToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, Injector, NgModule, NgModuleFactoryLoader, OpaqueToken, Optional, SystemJsNgModuleLoader } from '@angular/core';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -24,7 +24,6 @@ export const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, 
  * @stable
  */
 export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
-export const ROUTER_FORROOT_GUARD = new OpaqueToken('ROUTER_FORROOT_GUARD');
 const pathLocationStrategy = {
     provide: LocationStrategy,
     useClass: PathLocationStrategy
@@ -47,17 +46,11 @@ export const ROUTER_PROVIDERS = [
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 export class RouterModule {
-    constructor(guard) {
-    }
     static forRoot(routes, config) {
         return {
             ngModule: RouterModule,
             providers: [
-                ROUTER_PROVIDERS, provideRoutes(routes), {
-                    provide: ROUTER_FORROOT_GUARD,
-                    useFactory: provideForRootGuard,
-                    deps: [[Router, new Optional(), new SkipSelf()]]
-                },
+                ROUTER_PROVIDERS, provideRoutes(routes),
                 { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
                     provide: LocationStrategy,
                     useFactory: provideLocationStrategy,
@@ -77,19 +70,9 @@ export class RouterModule {
 RouterModule.decorators = [
     { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
 ];
-/** @nocollapse */
-RouterModule.ctorParameters = [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-];
 export function provideLocationStrategy(platformLocationStrategy, baseHref, options = {}) {
     return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :
         new PathLocationStrategy(platformLocationStrategy, baseHref);
-}
-export function provideForRootGuard(router) {
-    if (router) {
-        throw new BaseException(`RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.`);
-    }
-    return 'guarded';
 }
 /**
  * @stable

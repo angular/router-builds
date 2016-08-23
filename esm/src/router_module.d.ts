@@ -23,7 +23,6 @@ export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink
  * @stable
  */
 export declare const ROUTER_CONFIGURATION: OpaqueToken;
-export declare const ROUTER_FORROOT_GUARD: OpaqueToken;
 export declare const ROUTER_PROVIDERS: any[];
 /**
  * Router module.
@@ -50,12 +49,10 @@ export declare const ROUTER_PROVIDERS: any[];
  * @stable
  */
 export declare class RouterModule {
-    constructor(guard: any);
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     static forChild(routes: Routes): ModuleWithProviders;
 }
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
-export declare function provideForRootGuard(router: Router): any;
 /**
  * @stable
  */
