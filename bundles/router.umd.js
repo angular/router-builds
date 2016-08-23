@@ -2948,6 +2948,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+    var ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
     var ROUTER_PROVIDERS = [
         _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
             provide: Router,
@@ -2962,13 +2963,17 @@ var __extends = (this && this.__extends) || function (d, b) {
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
     var RouterModule = (function () {
-        function RouterModule() {
+        function RouterModule(guard) {
         }
         RouterModule.forRoot = function (routes, config) {
             return {
                 ngModule: RouterModule,
                 providers: [
-                    ROUTER_PROVIDERS, provideRoutes(routes),
+                    ROUTER_PROVIDERS, provideRoutes(routes), {
+                        provide: ROUTER_FORROOT_GUARD,
+                        useFactory: provideForRootGuard,
+                        deps: [[Router, new _angular_core.Optional(), new _angular_core.SkipSelf()]]
+                    },
                     { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
                         provide: _angular_common.LocationStrategy,
                         useFactory: provideLocationStrategy,
@@ -2989,10 +2994,20 @@ var __extends = (this && this.__extends) || function (d, b) {
     RouterModule.decorators = [
         { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = [
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+    ];
     function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         if (options === void 0) { options = {}; }
         return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) :
             new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
+    }
+    function provideForRootGuard(router) {
+        if (router) {
+            throw new _angular_core.BaseException("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+        }
+        return 'guarded';
     }
     /**
      * @stable
