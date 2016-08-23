@@ -25,6 +25,7 @@ exports.ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterL
  * @stable
  */
 exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
+exports.ROUTER_FORROOT_GUARD = new core_1.OpaqueToken('ROUTER_FORROOT_GUARD');
 var pathLocationStrategy = {
     provide: common_1.LocationStrategy,
     useClass: common_1.PathLocationStrategy
@@ -47,13 +48,17 @@ exports.ROUTER_PROVIDERS = [
     { provide: exports.ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 var RouterModule = (function () {
-    function RouterModule() {
+    function RouterModule(guard) {
     }
     RouterModule.forRoot = function (routes, config) {
         return {
             ngModule: RouterModule,
             providers: [
-                exports.ROUTER_PROVIDERS, provideRoutes(routes),
+                exports.ROUTER_PROVIDERS, provideRoutes(routes), {
+                    provide: exports.ROUTER_FORROOT_GUARD,
+                    useFactory: provideForRootGuard,
+                    deps: [[router_1.Router, new core_1.Optional(), new core_1.SkipSelf()]]
+                },
                 { provide: exports.ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
                     provide: common_1.LocationStrategy,
                     useFactory: provideLocationStrategy,
@@ -72,6 +77,10 @@ var RouterModule = (function () {
     RouterModule.decorators = [
         { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
     ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = [
+        { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Inject, args: [exports.ROUTER_FORROOT_GUARD,] },] },
+    ];
     return RouterModule;
 }());
 exports.RouterModule = RouterModule;
@@ -81,6 +90,13 @@ function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         new common_1.PathLocationStrategy(platformLocationStrategy, baseHref);
 }
 exports.provideLocationStrategy = provideLocationStrategy;
+function provideForRootGuard(router) {
+    if (router) {
+        throw new core_1.BaseException("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+    }
+    return 'guarded';
+}
+exports.provideForRootGuard = provideForRootGuard;
 /**
  * @stable
  */
