@@ -28,6 +28,16 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var PRIMARY_OUTLET = 'primary';
+    var NavigationCancelingError = (function (_super) {
+        __extends(NavigationCancelingError, _super);
+        function NavigationCancelingError(message) {
+            _super.call(this, message);
+            this.message = message;
+            this.stack = (new Error(message)).stack;
+        }
+        NavigationCancelingError.prototype.toString = function () { return this.message; };
+        return NavigationCancelingError;
+    }(Error));
     function shallowEqualArrays(a, b) {
         if (a.length !== b.length)
             return false;
@@ -588,7 +598,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         return new rxjs_Observable.Observable(function (obs) { return obs.error(new AbsoluteRedirect(segments)); });
     }
     function canLoadFails(route) {
-        return new rxjs_Observable.Observable(function (obs) { return obs.error(new Error("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+        return new rxjs_Observable.Observable(function (obs) { return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
     }
     function applyRedirects(injector, configLoader, urlTree, config) {
         return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
@@ -1964,9 +1974,10 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var NavigationCancel = (function () {
-        function NavigationCancel(id, url) {
+        function NavigationCancel(id, url, reason) {
             this.id = id;
             this.url = url;
+            this.reason = reason;
         }
         NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
         return NavigationCancel;
@@ -2236,7 +2247,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             var _this = this;
             if (id !== this.navigationId) {
                 this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
-                this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+                this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
                 return Promise.resolve(false);
             }
             return new Promise(function (resolvePromise, rejectPromise) {
@@ -2301,14 +2312,21 @@ var __extends = (this && this.__extends) || function (d, b) {
                         resolvePromise(true);
                     }
                     else {
-                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
+                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
                         resolvePromise(false);
                     }
                 }, function (e) {
+                    if (e instanceof NavigationCancelingError) {
+                        _this.navigated = true;
+                        _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
+                        resolvePromise(false);
+                    }
+                    else {
+                        _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+                        rejectPromise(e);
+                    }
                     _this.currentRouterState = storedState;
                     _this.currentUrlTree = storedUrl;
-                    _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
-                    rejectPromise(e);
                 });
             });
         };

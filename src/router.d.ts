@@ -145,7 +145,8 @@ export declare class NavigationEnd {
 export declare class NavigationCancel {
     id: number;
     url: string;
-    constructor(id: number, url: string);
+    reason: string;
+    constructor(id: number, url: string, reason: string);
     toString(): string;
 }
 /**

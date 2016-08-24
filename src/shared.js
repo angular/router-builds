@@ -6,6 +6,11 @@
  * found in the LICENSE file at https://angular.io/license
  */
 "use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 /**
  * Name of the primary outlet.
  * @type {string}
@@ -13,4 +18,15 @@
  * @stable
  */
 exports.PRIMARY_OUTLET = 'primary';
+var NavigationCancelingError = (function (_super) {
+    __extends(NavigationCancelingError, _super);
+    function NavigationCancelingError(message) {
+        _super.call(this, message);
+        this.message = message;
+        this.stack = (new Error(message)).stack;
+    }
+    NavigationCancelingError.prototype.toString = function () { return this.message; };
+    return NavigationCancelingError;
+}(Error));
+exports.NavigationCancelingError = NavigationCancelingError;
 //# sourceMappingURL=shared.js.map

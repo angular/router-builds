@@ -22,7 +22,7 @@ import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
-import { PRIMARY_OUTLET } from './shared';
+import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
@@ -58,9 +58,10 @@ export class NavigationEnd {
  * @stable
  */
 export class NavigationCancel {
-    constructor(id, url) {
+    constructor(id, url, reason) {
         this.id = id;
         this.url = url;
+        this.reason = reason;
     }
     toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
 }
@@ -309,7 +310,7 @@ export class Router {
     runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id) {
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
-            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), `Navigation ID ${id} is not equal to the current navigation id ${this.navigationId}`));
             return Promise.resolve(false);
         }
         return new Promise((resolvePromise, rejectPromise) => {
@@ -374,14 +375,21 @@ export class Router {
                     resolvePromise(true);
                 }
                 else {
-                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), ''));
                     resolvePromise(false);
                 }
             }, e => {
+                if (e instanceof NavigationCancelingError) {
+                    this.navigated = true;
+                    this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), e.message));
+                    resolvePromise(false);
+                }
+                else {
+                    this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
+                    rejectPromise(e);
+                }
                 this.currentRouterState = storedState;
                 this.currentUrlTree = storedUrl;
-                this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
-                rejectPromise(e);
             });
         });
     }

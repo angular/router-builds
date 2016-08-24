@@ -12,4 +12,12 @@
  * @stable
  */
 export const PRIMARY_OUTLET = 'primary';
+export class NavigationCancelingError extends Error {
+    constructor(message) {
+        super(message);
+        this.message = message;
+        this.stack = (new Error(message)).stack;
+    }
+    toString() { return this.message; }
+}
 //# sourceMappingURL=shared.js.map

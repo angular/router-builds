@@ -37,7 +37,7 @@ function absoluteRedirect(segments) {
     return new Observable_1.Observable(function (obs) { return obs.error(new AbsoluteRedirect(segments)); });
 }
 function canLoadFails(route) {
-    return new Observable_1.Observable(function (obs) { return obs.error(new Error("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+    return new Observable_1.Observable(function (obs) { return obs.error(new shared_1.NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
 }
 function applyRedirects(injector, configLoader, urlTree, config) {
     return new ApplyRedirects(injector, configLoader, urlTree, config).apply();

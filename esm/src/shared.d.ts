@@ -20,3 +20,9 @@ export declare const PRIMARY_OUTLET: string;
 export declare type Params = {
     [key: string]: any;
 };
+export declare class NavigationCancelingError extends Error {
+    message: string;
+    stack: any;
+    constructor(message: string);
+    toString(): string;
+}

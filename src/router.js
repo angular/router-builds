@@ -63,9 +63,10 @@ exports.NavigationEnd = NavigationEnd;
  * @stable
  */
 var NavigationCancel = (function () {
-    function NavigationCancel(id, url) {
+    function NavigationCancel(id, url, reason) {
         this.id = id;
         this.url = url;
+        this.reason = reason;
     }
     NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
     return NavigationCancel;
@@ -338,7 +339,7 @@ var Router = (function () {
         var _this = this;
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
-            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url)));
+            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
             return Promise.resolve(false);
         }
         return new Promise(function (resolvePromise, rejectPromise) {
@@ -403,14 +404,21 @@ var Router = (function () {
                     resolvePromise(true);
                 }
                 else {
-                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url)));
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
                     resolvePromise(false);
                 }
             }, function (e) {
+                if (e instanceof shared_1.NavigationCancelingError) {
+                    _this.navigated = true;
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
+                    resolvePromise(false);
+                }
+                else {
+                    _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+                    rejectPromise(e);
+                }
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
-                _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
-                rejectPromise(e);
             });
         });
     };

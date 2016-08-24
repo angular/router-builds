@@ -13,7 +13,7 @@ import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { LoadedRouterConfig } from './router_config_loader';
-import { PRIMARY_OUTLET } from './shared';
+import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
 import { UrlSegment, UrlSegmentGroup, UrlTree } from './url_tree';
 import { andObservables, merge, waitForMap, wrapIntoObservable } from './utils/collection';
 class NoMatch {
@@ -33,7 +33,7 @@ function absoluteRedirect(segments) {
     return new Observable((obs) => obs.error(new AbsoluteRedirect(segments)));
 }
 function canLoadFails(route) {
-    return new Observable((obs) => obs.error(new Error(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
+    return new Observable((obs) => obs.error(new NavigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
 }
 export function applyRedirects(injector, configLoader, urlTree, config) {
     return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
