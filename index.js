@@ -21,7 +21,6 @@ exports.NavigationStart = router_1.NavigationStart;
 exports.Router = router_1.Router;
 exports.RoutesRecognized = router_1.RoutesRecognized;
 var router_module_1 = require('./src/router_module');
-exports.ROUTER_DIRECTIVES = router_module_1.ROUTER_DIRECTIVES;
 exports.RouterModule = router_module_1.RouterModule;
 exports.provideRoutes = router_module_1.provideRoutes;
 var router_outlet_map_1 = require('./src/router_outlet_map');

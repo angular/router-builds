@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, Compiler, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken } from '@angular/core';
+import { ApplicationRef, Compiler, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
@@ -24,7 +24,7 @@ export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink
  */
 export declare const ROUTER_CONFIGURATION: OpaqueToken;
 export declare const ROUTER_FORROOT_GUARD: OpaqueToken;
-export declare const ROUTER_PROVIDERS: any[];
+export declare const ROUTER_PROVIDERS: Provider[];
 /**
  * Router module.
  *

@@ -3077,7 +3077,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.NavigationStart = NavigationStart;
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
-    exports.ROUTER_DIRECTIVES = ROUTER_DIRECTIVES;
     exports.RouterModule = RouterModule;
     exports.provideRoutes = provideRoutes;
     exports.RouterOutletMap = RouterOutletMap;
