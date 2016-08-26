@@ -92,7 +92,7 @@ function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
 exports.provideLocationStrategy = provideLocationStrategy;
 function provideForRootGuard(router) {
     if (router) {
-        throw new core_1.BaseException("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+        throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
     }
     return 'guarded';
 }
