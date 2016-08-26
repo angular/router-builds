@@ -164,9 +164,7 @@ export class DefaultUrlSerializer {
     serialize(tree) {
         const segment = `/${serializeSegment(tree.root, true)}`;
         const query = serializeQueryParams(tree.queryParams);
-        const fragment = tree.fragment !== null && tree.fragment !== undefined ?
-            `#${encodeURIComponent(tree.fragment)}` :
-            '';
+        const fragment = tree.fragment !== null && tree.fragment !== undefined ? `#${encodeURI(tree.fragment)}` : '';
         return `${segment}${query}${fragment}`;
     }
 }
@@ -333,7 +331,7 @@ class UrlParser {
     }
     parseFragment() {
         if (this.peekStartsWith('#')) {
-            return decode(this.remaining.substring(1));
+            return decodeURI(this.remaining.substring(1));
         }
         else {
             return null;

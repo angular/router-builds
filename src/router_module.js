@@ -20,7 +20,7 @@ var collection_1 = require('./utils/collection');
 /**
  * @stable
  */
-exports.ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterLink, router_link_1.RouterLinkWithHref, router_link_active_1.RouterLinkActive];
+var ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterLink, router_link_1.RouterLinkWithHref, router_link_active_1.RouterLinkActive];
 /**
  * @stable
  */
@@ -75,7 +75,7 @@ var RouterModule = (function () {
     };
     /** @nocollapse */
     RouterModule.decorators = [
-        { type: core_1.NgModule, args: [{ declarations: exports.ROUTER_DIRECTIVES, exports: exports.ROUTER_DIRECTIVES },] },
+        { type: core_1.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = [
@@ -114,6 +114,9 @@ function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, 
     }
     var componentType = ref.componentTypes[0];
     var r = new router_1.Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, collection_1.flatten(config));
+    if (opts.errorHandler) {
+        r.errorHandler = opts.errorHandler;
+    }
     if (opts.enableTracing) {
         r.events.subscribe(function (e) {
             console.group("Router Event: " + e.constructor.name);
@@ -129,8 +132,15 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 exports.rootRoute = rootRoute;
-function initialRouterNavigation(router) {
-    return function () { router.initialNavigation(); };
+function initialRouterNavigation(router, opts) {
+    return function () {
+        if (opts.initialNavigation === false) {
+            router.setUpLocationChangeListener();
+        }
+        else {
+            router.initialNavigation();
+        }
+    };
 }
 exports.initialRouterNavigation = initialRouterNavigation;
 function provideRouterInitializer() {
@@ -138,7 +148,7 @@ function provideRouterInitializer() {
         provide: core_1.APP_BOOTSTRAP_LISTENER,
         multi: true,
         useFactory: initialRouterNavigation,
-        deps: [router_1.Router]
+        deps: [router_1.Router, exports.ROUTER_CONFIGURATION]
     };
 }
 exports.provideRouterInitializer = provideRouterInitializer;

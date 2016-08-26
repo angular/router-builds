@@ -109,17 +109,21 @@ var RouterLinkWithHref = (function () {
         return false;
     };
     RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-        this.urlTree = this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
-            queryParams: this.queryParams,
-            fragment: this.fragment,
-            preserveQueryParams: toBool(this.preserveQueryParams),
-            preserveFragment: toBool(this.preserveFragment)
-        });
-        if (this.urlTree) {
-            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-        }
+        this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
     };
+    Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+        get: function () {
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: toBool(this.preserveQueryParams),
+                preserveFragment: toBool(this.preserveFragment)
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
     /** @nocollapse */
     RouterLinkWithHref.decorators = [
         { type: core_1.Directive, args: [{ selector: 'a[routerLink]' },] },

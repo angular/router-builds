@@ -8,17 +8,10 @@
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ApplicationRef, Compiler, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
-import { RouterLink, RouterLinkWithHref } from './directives/router_link';
-import { RouterLinkActive } from './directives/router_link_active';
-import { RouterOutlet } from './directives/router_outlet';
-import { Router } from './router';
+import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute } from './router_state';
 import { UrlSerializer } from './url_tree';
-/**
- * @stable
- */
-export declare const ROUTER_DIRECTIVES: (typeof RouterOutlet | typeof RouterLink | typeof RouterLinkWithHref | typeof RouterLinkActive)[];
 /**
  * @stable
  */
@@ -61,18 +54,26 @@ export declare function provideForRootGuard(router: Router): any;
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
+ * Extra options used to configure the router.
+ *
+ * Set `enableTracing` to log router events to the console.
+ * Set 'useHash' to true to enable HashLocationStrategy.
+ * Set `errorHandler` to enable a custom ErrorHandler.
+ *
  * @stable
  */
 export interface ExtraOptions {
     enableTracing?: boolean;
     useHash?: boolean;
+    initialNavigation?: boolean;
+    errorHandler?: ErrorHandler;
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function initialRouterNavigation(router: Router): () => void;
+export declare function initialRouterNavigation(router: Router, opts: ExtraOptions): () => void;
 export declare function provideRouterInitializer(): {
     provide: OpaqueToken;
     multi: boolean;
-    useFactory: (router: Router) => () => void;
-    deps: typeof Router[];
+    useFactory: (router: Router, opts: ExtraOptions) => () => void;
+    deps: (typeof Router | OpaqueToken)[];
 };

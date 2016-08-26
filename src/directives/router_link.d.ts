@@ -102,11 +102,11 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     preserveFragment: boolean;
     private subscription;
     href: string;
-    urlTree: UrlTree;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref();
+    urlTree: UrlTree;
 }

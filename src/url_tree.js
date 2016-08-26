@@ -187,9 +187,7 @@ var DefaultUrlSerializer = (function () {
     DefaultUrlSerializer.prototype.serialize = function (tree) {
         var segment = "/" + serializeSegment(tree.root, true);
         var query = serializeQueryParams(tree.queryParams);
-        var fragment = tree.fragment !== null && tree.fragment !== undefined ?
-            "#" + encodeURIComponent(tree.fragment) :
-            '';
+        var fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
         return "" + segment + query + fragment;
     };
     return DefaultUrlSerializer;
@@ -363,7 +361,7 @@ var UrlParser = (function () {
     };
     UrlParser.prototype.parseFragment = function () {
         if (this.peekStartsWith('#')) {
-            return decode(this.remaining.substring(1));
+            return decodeURI(this.remaining.substring(1));
         }
         else {
             return null;

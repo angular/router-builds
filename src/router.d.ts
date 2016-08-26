@@ -179,6 +179,16 @@ export declare class RoutesRecognized {
  */
 export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized;
 /**
+ * Error handler that is invoked when a navigation errors.
+ *
+ * If the handler retuns a value, the navigation promise will be resolved with this value.
+ * If the handler throws an exception, the navigation promise will be rejected with
+ * the exception.
+ *
+ * @stable
+ */
+export declare type ErrorHandler = (error: any) => any;
+/**
  * The `Router` is responsible for mapping URLs to components.
  *
  * See {@link Routes} for more details and examples.
@@ -198,6 +208,7 @@ export declare class Router {
     private routerEvents;
     private navigationId;
     private configLoader;
+    errorHandler: ErrorHandler;
     /**
      * Indicates if at least one navigation happened.
      *
@@ -212,6 +223,10 @@ export declare class Router {
      * Sets up the location change listener and performs the inital navigation
      */
     initialNavigation(): void;
+    /**
+     * Sets up the location change listener
+     */
+    setUpLocationChangeListener(): void;
     /**
      * Returns the current route state.
      */
@@ -343,7 +358,6 @@ export declare class Router {
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private scheduleNavigation(url, extras);
-    private setUpLocationChangeListener();
     private runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id);
 }
 export declare class PreActivation {

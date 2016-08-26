@@ -96,6 +96,9 @@ export class RoutesRecognized {
         return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
 }
+function defaultErrorHandler(error) {
+    throw error;
+}
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
@@ -115,6 +118,7 @@ export class Router {
         this.injector = injector;
         this.config = config;
         this.navigationId = 0;
+        this.errorHandler = defaultErrorHandler;
         /**
          * Indicates if at least one navigation happened.
          *
@@ -133,6 +137,21 @@ export class Router {
     initialNavigation() {
         this.setUpLocationChangeListener();
         this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+    }
+    /**
+     * Sets up the location change listener
+     */
+    setUpLocationChangeListener() {
+        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+        // which does not work properly with zone.js in IE and Safari
+        this.locationSubscription = this.location.subscribe(Zone.current.wrap((change) => {
+            const tree = this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return this.currentUrlTree.toString() !== tree.toString() ?
+                this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                null;
+        }));
     }
     /**
      * Returns the current route state.
@@ -295,18 +314,6 @@ export class Router {
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
         return Promise.resolve().then((_) => this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id));
     }
-    setUpLocationChangeListener() {
-        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
-        // which does not work properly with zone.js in IE and Safari
-        this.locationSubscription = this.location.subscribe(Zone.current.wrap((change) => {
-            const tree = this.urlSerializer.parse(change['url']);
-            // we fire multiple events for a single URL change
-            // we should navigate only once
-            return this.currentUrlTree.toString() !== tree.toString() ?
-                this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
-                null;
-        }));
-    }
     runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id) {
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
@@ -356,7 +363,6 @@ export class Router {
                 }
                 this.currentUrlTree = appliedUrl;
                 this.currentRouterState = state;
-                new ActivateRoutes(state, storedState).activate(this.outletMap);
                 if (!shouldPreventPushState) {
                     let path = this.urlSerializer.serialize(appliedUrl);
                     if (this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
@@ -366,6 +372,7 @@ export class Router {
                         this.location.go(path);
                     }
                 }
+                new ActivateRoutes(state, storedState).activate(this.outletMap);
                 navigationIsSuccessful = true;
             })
                 .then(() => {
@@ -386,10 +393,16 @@ export class Router {
                 }
                 else {
                     this.routerEvents.next(new NavigationError(id, this.serializeUrl(url), e));
-                    rejectPromise(e);
+                    try {
+                        resolvePromise(this.errorHandler(e));
+                    }
+                    catch (ee) {
+                        rejectPromise(ee);
+                    }
                 }
                 this.currentRouterState = storedState;
                 this.currentUrlTree = storedUrl;
+                this.location.replaceState(this.serializeUrl(storedUrl));
             });
         });
     }
@@ -424,7 +437,7 @@ export class PreActivation {
         return from(this.checks)
             .map(s => {
             if (s instanceof CanActivate) {
-                return andObservables(from([this.runCanActivate(s.route), this.runCanActivateChild(s.path)]));
+                return andObservables(from([this.runCanActivateChild(s.path), this.runCanActivate(s.route)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271

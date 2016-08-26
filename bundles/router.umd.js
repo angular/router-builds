@@ -327,9 +327,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         DefaultUrlSerializer.prototype.serialize = function (tree) {
             var segment = "/" + serializeSegment(tree.root, true);
             var query = serializeQueryParams(tree.queryParams);
-            var fragment = tree.fragment !== null && tree.fragment !== undefined ?
-                "#" + encodeURIComponent(tree.fragment) :
-                '';
+            var fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
             return "" + segment + query + fragment;
         };
         return DefaultUrlSerializer;
@@ -498,7 +496,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         UrlParser.prototype.parseFragment = function () {
             if (this.peekStartsWith('#')) {
-                return decode(this.remaining.substring(1));
+                return decodeURI(this.remaining.substring(1));
             }
             else {
                 return null;
@@ -2015,6 +2013,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return RoutesRecognized;
     }());
+    function defaultErrorHandler(error) {
+        throw error;
+    }
     /**
      * The `Router` is responsible for mapping URLs to components.
      *
@@ -2034,6 +2035,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.injector = injector;
             this.config = config;
             this.navigationId = 0;
+            this.errorHandler = defaultErrorHandler;
             /**
              * Indicates if at least one navigation happened.
              *
@@ -2052,6 +2054,22 @@ var __extends = (this && this.__extends) || function (d, b) {
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
             this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+        };
+        /**
+         * Sets up the location change listener
+         */
+        Router.prototype.setUpLocationChangeListener = function () {
+            var _this = this;
+            // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+            // which does not work properly with zone.js in IE and Safari
+            this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
+                var tree = _this.urlSerializer.parse(change['url']);
+                // we fire multiple events for a single URL change
+                // we should navigate only once
+                return _this.currentUrlTree.toString() !== tree.toString() ?
+                    _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                    null;
+            }));
         };
         Object.defineProperty(Router.prototype, "routerState", {
             /**
@@ -2230,19 +2248,6 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
             return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id); });
         };
-        Router.prototype.setUpLocationChangeListener = function () {
-            var _this = this;
-            // Zone.current.wrap is needed because of the issue with RxJS scheduler,
-            // which does not work properly with zone.js in IE and Safari
-            this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
-                var tree = _this.urlSerializer.parse(change['url']);
-                // we fire multiple events for a single URL change
-                // we should navigate only once
-                return _this.currentUrlTree.toString() !== tree.toString() ?
-                    _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
-                    null;
-            }));
-        };
         Router.prototype.runNavigate = function (url, shouldPreventPushState, shouldReplaceUrl, id) {
             var _this = this;
             if (id !== this.navigationId) {
@@ -2293,7 +2298,6 @@ var __extends = (this && this.__extends) || function (d, b) {
                     }
                     _this.currentUrlTree = appliedUrl;
                     _this.currentRouterState = state;
-                    new ActivateRoutes(state, storedState).activate(_this.outletMap);
                     if (!shouldPreventPushState) {
                         var path = _this.urlSerializer.serialize(appliedUrl);
                         if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
@@ -2303,6 +2307,7 @@ var __extends = (this && this.__extends) || function (d, b) {
                             _this.location.go(path);
                         }
                     }
+                    new ActivateRoutes(state, storedState).activate(_this.outletMap);
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
@@ -2323,10 +2328,16 @@ var __extends = (this && this.__extends) || function (d, b) {
                     }
                     else {
                         _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
-                        rejectPromise(e);
+                        try {
+                            resolvePromise(_this.errorHandler(e));
+                        }
+                        catch (ee) {
+                            rejectPromise(ee);
+                        }
                     }
                     _this.currentRouterState = storedState;
                     _this.currentUrlTree = storedUrl;
+                    _this.location.replaceState(_this.serializeUrl(storedUrl));
                 });
             });
         };
@@ -2369,7 +2380,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             return rxjs_observable_from.from(this.checks)
                 .map(function (s) {
                 if (s instanceof CanActivate) {
-                    return andObservables(rxjs_observable_from.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
+                    return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
                 }
                 else if (s instanceof CanDeactivate) {
                     // workaround https://github.com/Microsoft/TypeScript/issues/7271
@@ -2775,17 +2786,21 @@ var __extends = (this && this.__extends) || function (d, b) {
             return false;
         };
         RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-            this.urlTree = this.router.createUrlTree(this.commands, {
-                relativeTo: this.route,
-                queryParams: this.queryParams,
-                fragment: this.fragment,
-                preserveQueryParams: toBool(this.preserveQueryParams),
-                preserveFragment: toBool(this.preserveFragment)
-            });
-            if (this.urlTree) {
-                this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-            }
+            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
         };
+        Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+            get: function () {
+                return this.router.createUrlTree(this.commands, {
+                    relativeTo: this.route,
+                    queryParams: this.queryParams,
+                    fragment: this.fragment,
+                    preserveQueryParams: toBool(this.preserveQueryParams),
+                    preserveFragment: toBool(this.preserveFragment)
+                });
+            },
+            enumerable: true,
+            configurable: true
+        });
         return RouterLinkWithHref;
     }());
     /** @nocollapse */
@@ -3043,6 +3058,9 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         var componentType = ref.componentTypes[0];
         var r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+        if (opts.errorHandler) {
+            r.errorHandler = opts.errorHandler;
+        }
         if (opts.enableTracing) {
             r.events.subscribe(function (e) {
                 console.group("Router Event: " + e.constructor.name);
@@ -3056,15 +3074,22 @@ var __extends = (this && this.__extends) || function (d, b) {
     function rootRoute(router) {
         return router.routerState.root;
     }
-    function initialRouterNavigation(router) {
-        return function () { router.initialNavigation(); };
+    function initialRouterNavigation(router, opts) {
+        return function () {
+            if (opts.initialNavigation === false) {
+                router.setUpLocationChangeListener();
+            }
+            else {
+                router.initialNavigation();
+            }
+        };
     }
     function provideRouterInitializer() {
         return {
             provide: _angular_core.APP_BOOTSTRAP_LISTENER,
             multi: true,
             useFactory: initialRouterNavigation,
-            deps: [Router]
+            deps: [Router, ROUTER_CONFIGURATION]
         };
     }
     exports.RouterLink = RouterLink;

@@ -19,7 +19,7 @@ import { flatten } from './utils/collection';
 /**
  * @stable
  */
-export const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
  * @stable
  */
@@ -106,6 +106,9 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
     }
     const componentType = ref.componentTypes[0];
     const r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+    if (opts.errorHandler) {
+        r.errorHandler = opts.errorHandler;
+    }
     if (opts.enableTracing) {
         r.events.subscribe(e => {
             console.group(`Router Event: ${e.constructor.name}`);
@@ -119,15 +122,22 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
 export function rootRoute(router) {
     return router.routerState.root;
 }
-export function initialRouterNavigation(router) {
-    return () => { router.initialNavigation(); };
+export function initialRouterNavigation(router, opts) {
+    return () => {
+        if (opts.initialNavigation === false) {
+            router.setUpLocationChangeListener();
+        }
+        else {
+            router.initialNavigation();
+        }
+    };
 }
 export function provideRouterInitializer() {
     return {
         provide: APP_BOOTSTRAP_LISTENER,
         multi: true,
         useFactory: initialRouterNavigation,
-        deps: [Router]
+        deps: [Router, ROUTER_CONFIGURATION]
     };
 }
 //# sourceMappingURL=router_module.js.map

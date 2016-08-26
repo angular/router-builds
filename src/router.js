@@ -107,6 +107,9 @@ var RoutesRecognized = (function () {
     return RoutesRecognized;
 }());
 exports.RoutesRecognized = RoutesRecognized;
+function defaultErrorHandler(error) {
+    throw error;
+}
 /**
  * The `Router` is responsible for mapping URLs to components.
  *
@@ -126,6 +129,7 @@ var Router = (function () {
         this.injector = injector;
         this.config = config;
         this.navigationId = 0;
+        this.errorHandler = defaultErrorHandler;
         /**
          * Indicates if at least one navigation happened.
          *
@@ -144,6 +148,22 @@ var Router = (function () {
     Router.prototype.initialNavigation = function () {
         this.setUpLocationChangeListener();
         this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+    };
+    /**
+     * Sets up the location change listener
+     */
+    Router.prototype.setUpLocationChangeListener = function () {
+        var _this = this;
+        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+        // which does not work properly with zone.js in IE and Safari
+        this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
+            var tree = _this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return _this.currentUrlTree.toString() !== tree.toString() ?
+                _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                null;
+        }));
     };
     Object.defineProperty(Router.prototype, "routerState", {
         /**
@@ -322,19 +342,6 @@ var Router = (function () {
         this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
         return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id); });
     };
-    Router.prototype.setUpLocationChangeListener = function () {
-        var _this = this;
-        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
-        // which does not work properly with zone.js in IE and Safari
-        this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
-            var tree = _this.urlSerializer.parse(change['url']);
-            // we fire multiple events for a single URL change
-            // we should navigate only once
-            return _this.currentUrlTree.toString() !== tree.toString() ?
-                _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
-                null;
-        }));
-    };
     Router.prototype.runNavigate = function (url, shouldPreventPushState, shouldReplaceUrl, id) {
         var _this = this;
         if (id !== this.navigationId) {
@@ -385,7 +392,6 @@ var Router = (function () {
                 }
                 _this.currentUrlTree = appliedUrl;
                 _this.currentRouterState = state;
-                new ActivateRoutes(state, storedState).activate(_this.outletMap);
                 if (!shouldPreventPushState) {
                     var path = _this.urlSerializer.serialize(appliedUrl);
                     if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
@@ -395,6 +401,7 @@ var Router = (function () {
                         _this.location.go(path);
                     }
                 }
+                new ActivateRoutes(state, storedState).activate(_this.outletMap);
                 navigationIsSuccessful = true;
             })
                 .then(function () {
@@ -415,10 +422,16 @@ var Router = (function () {
                 }
                 else {
                     _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
-                    rejectPromise(e);
+                    try {
+                        resolvePromise(_this.errorHandler(e));
+                    }
+                    catch (ee) {
+                        rejectPromise(ee);
+                    }
                 }
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
+                _this.location.replaceState(_this.serializeUrl(storedUrl));
             });
         });
     };
@@ -462,7 +475,7 @@ var PreActivation = (function () {
         return from_1.from(this.checks)
             .map(function (s) {
             if (s instanceof CanActivate) {
-                return collection_1.andObservables(from_1.from([_this.runCanActivate(s.route), _this.runCanActivateChild(s.path)]));
+                return collection_1.andObservables(from_1.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
             }
             else if (s instanceof CanDeactivate) {
                 // workaround https://github.com/Microsoft/TypeScript/issues/7271
