@@ -351,7 +351,7 @@ class UrlParser {
             return;
         }
         this.capture(key);
-        let value = 'true';
+        let value = '';
         if (this.peekStartsWith('=')) {
             this.capture('=');
             const valueMatch = matchSegments(this.remaining);

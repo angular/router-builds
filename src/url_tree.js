@@ -381,7 +381,7 @@ var UrlParser = (function () {
             return;
         }
         this.capture(key);
-        var value = 'true';
+        var value = '';
         if (this.peekStartsWith('=')) {
             this.capture('=');
             var valueMatch = matchSegments(this.remaining);
