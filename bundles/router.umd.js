@@ -2335,9 +2335,11 @@ var __extends = (this && this.__extends) || function (d, b) {
                             rejectPromise(ee);
                         }
                     }
-                    _this.currentRouterState = storedState;
-                    _this.currentUrlTree = storedUrl;
-                    _this.location.replaceState(_this.serializeUrl(storedUrl));
+                    if (id === _this.navigationId) {
+                        _this.currentRouterState = storedState;
+                        _this.currentUrlTree = storedUrl;
+                        _this.location.replaceState(_this.serializeUrl(storedUrl));
+                    }
                 });
             });
         };
