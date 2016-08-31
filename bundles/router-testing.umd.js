@@ -44,7 +44,7 @@
     /**
      * Router setup factory function used for testing.
      *
-     * @experimental
+     * @stable
      */
     function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
         return new _angular_router.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));

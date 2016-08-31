@@ -5,11 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/every';
 import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +15,7 @@ import { Params } from './shared';
 import { UrlSerializer, UrlTree } from './url_tree';
 import { TreeNode } from './utils/tree';
 /**
- * @experimental
+ * @stable
  */
 export interface NavigationExtras {
     /**
@@ -212,7 +207,7 @@ export declare class Router {
     /**
      * Indicates if at least one navigation happened.
      *
-     * @experimental
+     * @stable
      */
     navigated: boolean;
     /**

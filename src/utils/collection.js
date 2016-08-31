@@ -5,11 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import 'rxjs/add/operator/concatAll';
-import 'rxjs/add/operator/last';
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
+import { concatAll } from 'rxjs/operator/concatAll';
+import { every } from 'rxjs/operator/every';
+import * as l from 'rxjs/operator/last';
+import { map } from 'rxjs/operator/map';
+import { mergeAll } from 'rxjs/operator/mergeAll';
 import { PRIMARY_OUTLET } from '../shared';
 export function shallowEqualArrays(a, b) {
     if (a.length !== b.length)
@@ -79,7 +82,7 @@ export function waitForMap(obj, fn) {
     var res = {};
     forEach(obj, function (a, k) {
         if (k === PRIMARY_OUTLET) {
-            waitFor.push(fn(k, a).map(function (_) {
+            waitFor.push(map.call(fn(k, a), function (_) {
                 res[k] = _;
                 return _;
             }));
@@ -87,21 +90,24 @@ export function waitForMap(obj, fn) {
     });
     forEach(obj, function (a, k) {
         if (k !== PRIMARY_OUTLET) {
-            waitFor.push(fn(k, a).map(function (_) {
+            waitFor.push(map.call(fn(k, a), function (_) {
                 res[k] = _;
                 return _;
             }));
         }
     });
     if (waitFor.length > 0) {
-        return of.apply(void 0, waitFor).concatAll().last().map(function (last) { return res; });
+        var concatted$ = concatAll.call(of.apply(void 0, waitFor));
+        var last$ = l.last.call(concatted$);
+        return map.call(last$, function () { return res; });
     }
     else {
         return of(res);
     }
 }
 export function andObservables(observables) {
-    return observables.mergeAll().every(function (result) { return result === true; });
+    var merged$ = mergeAll.call(observables);
+    return every.call(merged$, function (result) { return result === true; });
 }
 export function wrapIntoObservable(value) {
     if (value instanceof Observable) {

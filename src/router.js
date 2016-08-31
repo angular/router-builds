@@ -5,15 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/every';
 import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
+import { every } from 'rxjs/operator/every';
+import { map } from 'rxjs/operator/map';
+import { mergeAll } from 'rxjs/operator/mergeAll';
+import { mergeMap } from 'rxjs/operator/mergeMap';
+import { reduce } from 'rxjs/operator/reduce';
 import { applyRedirects } from './apply_redirects';
 import { validateConfig } from './config';
 import { createRouterState } from './create_router_state';
@@ -127,7 +127,7 @@ export var Router = (function () {
         /**
          * Indicates if at least one navigation happened.
          *
-         * @experimental
+         * @stable
          */
         this.navigated = false;
         this.resetConfig(config);
@@ -350,35 +350,34 @@ export var Router = (function () {
             var appliedUrl;
             var storedState = _this.currentRouterState;
             var storedUrl = _this.currentUrlTree;
-            applyRedirects(_this.injector, _this.configLoader, url, _this.config)
-                .mergeMap(function (u) {
+            var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+            var snapshot$ = mergeMap.call(redirectsApplied$, function (u) {
                 appliedUrl = u;
                 return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-            })
-                .map(function (newRouterStateSnapshot) {
+            });
+            var emitRecognzied$ = map.call(snapshot$, function (newRouterStateSnapshot) {
                 _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
                 return newRouterStateSnapshot;
-            })
-                .map(function (routerStateSnapshot) {
+            });
+            var routerState$ = map.call(emitRecognzied$, function (routerStateSnapshot) {
                 return createRouterState(routerStateSnapshot, _this.currentRouterState);
-            })
-                .map(function (newState) {
+            });
+            var preactivation$ = map.call(routerState$, function (newState) {
                 state = newState;
                 preActivation =
                     new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
                 preActivation.traverse(_this.outletMap);
-            })
-                .mergeMap(function (_) {
-                return preActivation.checkGuards();
-            })
-                .mergeMap(function (shouldActivate) {
+            });
+            var preactivation2$ = mergeMap.call(preactivation$, function () { return preActivation.checkGuards(); });
+            var resolveData$ = mergeMap.call(preactivation2$, function (shouldActivate) {
                 if (shouldActivate) {
-                    return preActivation.resolveData().map(function () { return shouldActivate; });
+                    return map.call(preActivation.resolveData(), function () { return shouldActivate; });
                 }
                 else {
                     return of(shouldActivate);
                 }
-            })
+            });
+            resolveData$
                 .forEach(function (shouldActivate) {
                 if (!shouldActivate || id !== _this.navigationId) {
                     navigationIsSuccessful = false;
@@ -467,8 +466,8 @@ export var PreActivation = (function () {
         var _this = this;
         if (this.checks.length === 0)
             return of(true);
-        return from(this.checks)
-            .map(function (s) {
+        var checks$ = from(this.checks);
+        var runningChecks$ = map.call(checks$, function (s) {
             if (s instanceof CanActivate) {
                 return andObservables(from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
             }
@@ -480,24 +479,24 @@ export var PreActivation = (function () {
             else {
                 throw new Error('Cannot be reached');
             }
-        })
-            .mergeAll()
-            .every(function (result) { return result === true; });
+        });
+        var mergedChecks$ = mergeAll.call(runningChecks$);
+        return every.call(mergedChecks$, function (result) { return result === true; });
     };
     PreActivation.prototype.resolveData = function () {
         var _this = this;
         if (this.checks.length === 0)
             return of(null);
-        return from(this.checks)
-            .mergeMap(function (s) {
+        var checks$ = from(this.checks);
+        var runningChecks$ = mergeMap.call(checks$, function (s) {
             if (s instanceof CanActivate) {
                 return _this.runResolve(s.route);
             }
             else {
                 return of(null);
             }
-        })
-            .reduce(function (_, __) { return _; });
+        });
+        return reduce.call(runningChecks$, function (_, __) { return _; });
     };
     PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap, futurePath) {
         var _this = this;
@@ -568,7 +567,7 @@ export var PreActivation = (function () {
         var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return of(true);
-        var obs = from(canActivate).map(function (c) {
+        var obs = map.call(from(canActivate), function (c) {
             var guard = _this.getToken(c, future);
             if (guard.canActivate) {
                 return wrapIntoObservable(guard.canActivate(future, _this.future));
@@ -586,8 +585,8 @@ export var PreActivation = (function () {
             .reverse()
             .map(function (p) { return _this.extractCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(from(canActivateChildGuards).map(function (d) {
-            var obs = from(d.guards).map(function (c) {
+        return andObservables(map.call(from(canActivateChildGuards), function (d) {
+            var obs = map.call(from(d.guards), function (c) {
                 var guard = _this.getToken(c, c.node);
                 if (guard.canActivateChild) {
                     return wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -610,8 +609,7 @@ export var PreActivation = (function () {
         var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        return from(canDeactivate)
-            .map(function (c) {
+        var canDeactivate$ = map.call(from(canDeactivate), function (c) {
             var guard = _this.getToken(c, curr);
             if (guard.canDeactivate) {
                 return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
@@ -619,13 +617,13 @@ export var PreActivation = (function () {
             else {
                 return wrapIntoObservable(guard(component, curr, _this.curr));
             }
-        })
-            .mergeAll()
-            .every(function (result) { return result === true; });
+        });
+        var merged$ = mergeAll.call(canDeactivate$);
+        return every.call(merged$, function (result) { return result === true; });
     };
     PreActivation.prototype.runResolve = function (future) {
         var resolve = future._resolve;
-        return this.resolveNode(resolve.current, future).map(function (resolvedData) {
+        return map.call(this.resolveNode(resolve.current, future), function (resolvedData) {
             resolve.resolvedData = resolvedData;
             future.data = merge(future.data, resolve.flattenedResolvedData);
             return null;

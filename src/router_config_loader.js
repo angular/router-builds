@@ -8,6 +8,8 @@
 import { Compiler, OpaqueToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operator/map';
+import { mergeMap } from 'rxjs/operator/mergeMap';
 import { flatten, wrapIntoObservable } from './utils/collection';
 /**
  * @experimental
@@ -27,7 +29,7 @@ export var RouterConfigLoader = (function () {
         this.compiler = compiler;
     }
     RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
-        return this.loadModuleFactory(loadChildren).map(function (r) {
+        return map.call(this.loadModuleFactory(loadChildren), function (r) {
             var ref = r.create(parentInjector);
             return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
         });
@@ -39,8 +41,7 @@ export var RouterConfigLoader = (function () {
         }
         else {
             var offlineMode_1 = this.compiler instanceof Compiler;
-            return wrapIntoObservable(loadChildren())
-                .mergeMap(function (t) { return offlineMode_1 ? of(t) : fromPromise(_this.compiler.compileModuleAsync(t)); });
+            return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) { return offlineMode_1 ? of(t) : fromPromise(_this.compiler.compileModuleAsync(t)); });
         }
     };
     return RouterConfigLoader;

@@ -17,11 +17,12 @@ import { Tree } from './utils/tree';
  * ### Usage
  *
  * ```
+ * @Component({template:''})
  * class MyComponent {
  *   constructor(router: Router) {
  *     const state = router.routerState;
- *     const id: Observable<string> = state.firstChild(state.root).params.map(p => p.id);
- *     const isDebug: Observable<string> = state.queryParams.map(q => q.debug);
+ *     const id: Observable<string> = state.root.firstChild.params.map(p => p.id);
+ *     const isDebug: Observable<string> = state.root.queryParams.map(q => q.debug);
  *   }
  * }
  * ```
@@ -41,6 +42,7 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * ### Usage
  *
  * ```
+ * @Component({template:''})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: Observable<string> = route.params.map(p => p.id);
@@ -74,6 +76,7 @@ export declare class ActivatedRoute {
  * ### Usage
  *
  * ```
+ * @Component({template:''})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: string = route.snapshot.params.id;
@@ -106,6 +109,7 @@ export declare class ActivatedRouteSnapshot {
  * ### Usage
  *
  * ```
+ * @Component({template:''})
  * class MyComponent {
  *   constructor(router: Router) {
  *     const snapshot = router.routerState.snapshot;

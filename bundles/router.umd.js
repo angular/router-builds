@@ -4,10 +4,10 @@
  * License: MIT
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/Observable'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.EmptyError,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx));
-}(this, function (exports,_angular_common,_angular_core,rxjs_add_operator_map,rxjs_add_operator_mergeMap,rxjs_add_operator_mergeAll,rxjs_add_operator_reduce,rxjs_add_operator_every,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_add_operator_first,rxjs_add_operator_catch,rxjs_add_operator_concatAll,rxjs_Observable,rxjs_util_EmptyError,rxjs_observable_fromPromise,rxjs_add_operator_last,rxjs_BehaviorSubject) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/every'), require('rxjs/operator/map'), require('rxjs/operator/mergeAll'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/operator/first'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/BehaviorSubject')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/every', 'rxjs/operator/map', 'rxjs/operator/mergeAll', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/operator/first', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/BehaviorSubject'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx));
+}(this, function (exports,_angular_common,_angular_core,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_every,rxjs_operator_map,rxjs_operator_mergeAll,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_operator_first,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_BehaviorSubject) { 'use strict';
 
     /**
      * @license
@@ -101,7 +101,7 @@
         var res = {};
         forEach(obj, function (a, k) {
             if (k === PRIMARY_OUTLET) {
-                waitFor.push(fn(k, a).map(function (_) {
+                waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
                     res[k] = _;
                     return _;
                 }));
@@ -109,21 +109,24 @@
         });
         forEach(obj, function (a, k) {
             if (k !== PRIMARY_OUTLET) {
-                waitFor.push(fn(k, a).map(function (_) {
+                waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
                     res[k] = _;
                     return _;
                 }));
             }
         });
         if (waitFor.length > 0) {
-            return rxjs_observable_of.of.apply(void 0, waitFor).concatAll().last().map(function (last) { return res; });
+            var concatted$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitFor));
+            var last$ = l.last.call(concatted$);
+            return rxjs_operator_map.map.call(last$, function () { return res; });
         }
         else {
             return rxjs_observable_of.of(res);
         }
     }
     function andObservables(observables) {
-        return observables.mergeAll().every(function (result) { return result === true; });
+        var merged$ = rxjs_operator_mergeAll.mergeAll.call(observables);
+        return rxjs_operator_every.every.call(merged$, function (result) { return result === true; });
     }
     function wrapIntoObservable(value) {
         if (value instanceof rxjs_Observable.Observable) {
@@ -155,7 +158,7 @@
             this.compiler = compiler;
         }
         RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
-            return this.loadModuleFactory(loadChildren).map(function (r) {
+            return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function (r) {
                 var ref = r.create(parentInjector);
                 return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
             });
@@ -167,8 +170,7 @@
             }
             else {
                 var offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
-                return wrapIntoObservable(loadChildren())
-                    .mergeMap(function (t) { return offlineMode_1 ? rxjs_observable_of.of(t) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t)); });
+                return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function (t) { return offlineMode_1 ? rxjs_observable_of.of(t) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t)); });
             }
         };
         return RouterConfigLoader;
@@ -618,9 +620,9 @@
         }
         ApplyRedirects.prototype.apply = function () {
             var _this = this;
-            return this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET)
-                .map(function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); })
-                .catch(function (e) {
+            var expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
+            var urlTrees$ = rxjs_operator_map.map.call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); });
+            return rxjs_operator_catch._catch.call(urlTrees$, function (e) {
                 if (e instanceof AbsoluteRedirect) {
                     // after an absolute redirect we do not apply any more redirects!
                     _this.allowRedirects = false;
@@ -639,9 +641,9 @@
         };
         ApplyRedirects.prototype.match = function (segmentGroup) {
             var _this = this;
-            return this.expandSegmentGroup(this.injector, this.config, segmentGroup, PRIMARY_OUTLET)
-                .map(function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); })
-                .catch(function (e) {
+            var expanded$ = this.expandSegmentGroup(this.injector, this.config, segmentGroup, PRIMARY_OUTLET);
+            var mapped$ = rxjs_operator_map.map.call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); });
+            return rxjs_operator_catch._catch.call(mapped$, function (e) {
                 if (e instanceof NoMatch) {
                     throw _this.noMatchError(e);
                 }
@@ -662,8 +664,7 @@
         };
         ApplyRedirects.prototype.expandSegmentGroup = function (injector, routes, segmentGroup, outlet) {
             if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-                return this.expandChildren(injector, routes, segmentGroup)
-                    .map(function (children) { return new UrlSegmentGroup([], children); });
+                return rxjs_operator_map.map.call(this.expandChildren(injector, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
             }
             else {
                 return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
@@ -675,19 +676,19 @@
         };
         ApplyRedirects.prototype.expandSegment = function (injector, segmentGroup, routes, segments, outlet, allowRedirects) {
             var _this = this;
-            var processRoutes = rxjs_observable_of.of.apply(void 0, routes)
-                .map(function (r) {
-                return _this
-                    .expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects)
-                    .catch(function (e) {
+            var routes$ = rxjs_observable_of.of.apply(void 0, routes);
+            var processedRoutes$ = rxjs_operator_map.map.call(routes$, function (r) {
+                var expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+                return rxjs_operator_catch._catch.call(expanded$, function (e) {
                     if (e instanceof NoMatch)
                         return rxjs_observable_of.of(null);
                     else
                         throw e;
                 });
-            })
-                .concatAll();
-            return processRoutes.first(function (s) { return !!s; }).catch(function (e, _) {
+            });
+            var concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
+            var first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function (s) { return !!s; });
+            return rxjs_operator_catch._catch.call(first$, function (e, _) {
                 if (e instanceof rxjs_util_EmptyError.EmptyError) {
                     throw new NoMatch(segmentGroup);
                 }
@@ -747,21 +748,21 @@
                 if (!matched)
                     return noMatch(rawSegmentGroup);
                 var rawSlicedSegments_1 = segments.slice(lastChild);
-                return this.getChildConfig(injector, route).mergeMap(function (routerConfig) {
+                var childConfig$ = this.getChildConfig(injector, route);
+                return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function (routerConfig) {
                     var childInjector = routerConfig.injector;
                     var childConfig = routerConfig.routes;
                     var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
                     if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                        return _this.expandChildren(childInjector, childConfig, segmentGroup)
-                            .map(function (children) { return new UrlSegmentGroup(consumedSegments_1, children); });
+                        var expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
+                        return rxjs_operator_map.map.call(expanded$, function (children) { return new UrlSegmentGroup(consumedSegments_1, children); });
                     }
                     else if (childConfig.length === 0 && slicedSegments.length === 0) {
                         return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments_1, {}));
                     }
                     else {
-                        return _this
-                            .expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true)
-                            .map(function (cs) { return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children); });
+                        var expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+                        return rxjs_operator_map.map.call(expanded$, function (cs) { return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children); });
                     }
                 });
             }
@@ -772,13 +773,13 @@
                 return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null));
             }
             else if (route.loadChildren) {
-                return runGuards(injector, route).mergeMap(function (shouldLoad) {
+                return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function (shouldLoad) {
                     if (shouldLoad) {
                         if (route._loadedConfig) {
                             return rxjs_observable_of.of(route._loadedConfig);
                         }
                         else {
-                            return _this.configLoader.load(injector, route.loadChildren).map(function (r) {
+                            return rxjs_operator_map.map.call(_this.configLoader.load(injector, route.loadChildren), function (r) {
                                 route._loadedConfig = r;
                                 return r;
                             });
@@ -799,7 +800,7 @@
         var canLoad = route.canLoad;
         if (!canLoad || canLoad.length === 0)
             return rxjs_observable_of.of(true);
-        var obs = rxjs_observable_from.from(canLoad).map(function (c) {
+        var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function (c) {
             var guard = injector.get(c);
             if (guard.canLoad) {
                 return wrapIntoObservable(guard.canLoad(route));
@@ -1089,11 +1090,12 @@
      * ### Usage
      *
      * ```
+     * @Component({template:''})
      * class MyComponent {
      *   constructor(router: Router) {
      *     const state = router.routerState;
-     *     const id: Observable<string> = state.firstChild(state.root).params.map(p => p.id);
-     *     const isDebug: Observable<string> = state.queryParams.map(q => q.debug);
+     *     const id: Observable<string> = state.root.firstChild.params.map(p => p.id);
+     *     const isDebug: Observable<string> = state.root.queryParams.map(q => q.debug);
      *   }
      * }
      * ```
@@ -1139,6 +1141,7 @@
      * ### Usage
      *
      * ```
+     * @Component({template:''})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: Observable<string> = route.params.map(p => p.id);
@@ -1234,6 +1237,7 @@
      * ### Usage
      *
      * ```
+     * @Component({template:''})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: string = route.snapshot.params.id;
@@ -1304,6 +1308,7 @@
      * ### Usage
      *
      * ```
+     * @Component({template:''})
      * class MyComponent {
      *   constructor(router: Router) {
      *     const snapshot = router.routerState.snapshot;
@@ -2066,7 +2071,7 @@
             /**
              * Indicates if at least one navigation happened.
              *
-             * @experimental
+             * @stable
              */
             this.navigated = false;
             this.resetConfig(config);
@@ -2289,35 +2294,34 @@
                 var appliedUrl;
                 var storedState = _this.currentRouterState;
                 var storedUrl = _this.currentUrlTree;
-                applyRedirects(_this.injector, _this.configLoader, url, _this.config)
-                    .mergeMap(function (u) {
+                var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+                var snapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function (u) {
                     appliedUrl = u;
                     return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-                })
-                    .map(function (newRouterStateSnapshot) {
+                });
+                var emitRecognzied$ = rxjs_operator_map.map.call(snapshot$, function (newRouterStateSnapshot) {
                     _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
                     return newRouterStateSnapshot;
-                })
-                    .map(function (routerStateSnapshot) {
+                });
+                var routerState$ = rxjs_operator_map.map.call(emitRecognzied$, function (routerStateSnapshot) {
                     return createRouterState(routerStateSnapshot, _this.currentRouterState);
-                })
-                    .map(function (newState) {
+                });
+                var preactivation$ = rxjs_operator_map.map.call(routerState$, function (newState) {
                     state = newState;
                     preActivation =
                         new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
                     preActivation.traverse(_this.outletMap);
-                })
-                    .mergeMap(function (_) {
-                    return preActivation.checkGuards();
-                })
-                    .mergeMap(function (shouldActivate) {
+                });
+                var preactivation2$ = rxjs_operator_mergeMap.mergeMap.call(preactivation$, function () { return preActivation.checkGuards(); });
+                var resolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivation2$, function (shouldActivate) {
                     if (shouldActivate) {
-                        return preActivation.resolveData().map(function () { return shouldActivate; });
+                        return rxjs_operator_map.map.call(preActivation.resolveData(), function () { return shouldActivate; });
                     }
                     else {
                         return rxjs_observable_of.of(shouldActivate);
                     }
-                })
+                });
+                resolveData$
                     .forEach(function (shouldActivate) {
                     if (!shouldActivate || id !== _this.navigationId) {
                         navigationIsSuccessful = false;
@@ -2406,8 +2410,8 @@
             var _this = this;
             if (this.checks.length === 0)
                 return rxjs_observable_of.of(true);
-            return rxjs_observable_from.from(this.checks)
-                .map(function (s) {
+            var checks$ = rxjs_observable_from.from(this.checks);
+            var runningChecks$ = rxjs_operator_map.map.call(checks$, function (s) {
                 if (s instanceof CanActivate) {
                     return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
                 }
@@ -2419,24 +2423,24 @@
                 else {
                     throw new Error('Cannot be reached');
                 }
-            })
-                .mergeAll()
-                .every(function (result) { return result === true; });
+            });
+            var mergedChecks$ = rxjs_operator_mergeAll.mergeAll.call(runningChecks$);
+            return rxjs_operator_every.every.call(mergedChecks$, function (result) { return result === true; });
         };
         PreActivation.prototype.resolveData = function () {
             var _this = this;
             if (this.checks.length === 0)
                 return rxjs_observable_of.of(null);
-            return rxjs_observable_from.from(this.checks)
-                .mergeMap(function (s) {
+            var checks$ = rxjs_observable_from.from(this.checks);
+            var runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (s) {
                 if (s instanceof CanActivate) {
                     return _this.runResolve(s.route);
                 }
                 else {
                     return rxjs_observable_of.of(null);
                 }
-            })
-                .reduce(function (_, __) { return _; });
+            });
+            return rxjs_operator_reduce.reduce.call(runningChecks$, function (_, __) { return _; });
         };
         PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap, futurePath) {
             var _this = this;
@@ -2507,7 +2511,7 @@
             var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
             if (!canActivate || canActivate.length === 0)
                 return rxjs_observable_of.of(true);
-            var obs = rxjs_observable_from.from(canActivate).map(function (c) {
+            var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canActivate), function (c) {
                 var guard = _this.getToken(c, future);
                 if (guard.canActivate) {
                     return wrapIntoObservable(guard.canActivate(future, _this.future));
@@ -2525,8 +2529,8 @@
                 .reverse()
                 .map(function (p) { return _this.extractCanActivateChild(p); })
                 .filter(function (_) { return _ !== null; });
-            return andObservables(rxjs_observable_from.from(canActivateChildGuards).map(function (d) {
-                var obs = rxjs_observable_from.from(d.guards).map(function (c) {
+            return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function (d) {
+                var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function (c) {
                     var guard = _this.getToken(c, c.node);
                     if (guard.canActivateChild) {
                         return wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -2549,8 +2553,7 @@
             var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
             if (!canDeactivate || canDeactivate.length === 0)
                 return rxjs_observable_of.of(true);
-            return rxjs_observable_from.from(canDeactivate)
-                .map(function (c) {
+            var canDeactivate$ = rxjs_operator_map.map.call(rxjs_observable_from.from(canDeactivate), function (c) {
                 var guard = _this.getToken(c, curr);
                 if (guard.canDeactivate) {
                     return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
@@ -2558,13 +2561,13 @@
                 else {
                     return wrapIntoObservable(guard(component, curr, _this.curr));
                 }
-            })
-                .mergeAll()
-                .every(function (result) { return result === true; });
+            });
+            var merged$ = rxjs_operator_mergeAll.mergeAll.call(canDeactivate$);
+            return rxjs_operator_every.every.call(merged$, function (result) { return result === true; });
         };
         PreActivation.prototype.runResolve = function (future) {
             var resolve = future._resolve;
-            return this.resolveNode(resolve.current, future).map(function (resolvedData) {
+            return rxjs_operator_map.map.call(this.resolveNode(resolve.current, future), function (resolvedData) {
                 resolve.resolvedData = resolvedData;
                 future.data = merge(future.data, resolve.flattenedResolvedData);
                 return null;
