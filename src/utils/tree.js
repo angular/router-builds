@@ -5,8 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-"use strict";
-var Tree = (function () {
+export var Tree = (function () {
     function Tree(root) {
         this._root = root;
     }
@@ -52,7 +51,6 @@ var Tree = (function () {
     Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
     return Tree;
 }());
-exports.Tree = Tree;
 function findNode(expected, c) {
     if (expected === c.value)
         return c;
@@ -77,7 +75,7 @@ function findPath(expected, c, collected) {
     }
     return [];
 }
-var TreeNode = (function () {
+export var TreeNode = (function () {
     function TreeNode(value, children) {
         this.value = value;
         this.children = children;
@@ -85,5 +83,4 @@ var TreeNode = (function () {
     TreeNode.prototype.toString = function () { return "TreeNode(" + this.value + ")"; };
     return TreeNode;
 }());
-exports.TreeNode = TreeNode;
 //# sourceMappingURL=tree.js.map

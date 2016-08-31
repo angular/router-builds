@@ -5,11 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-"use strict";
-function validateConfig(config) {
+export function validateConfig(config) {
     config.forEach(validateNode);
 }
-exports.validateConfig = validateConfig;
 function validateNode(route) {
     if (Array.isArray(route)) {
         throw new Error("Invalid route configuration: Array cannot be specified");

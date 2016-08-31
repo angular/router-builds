@@ -8,7 +8,7 @@
 /**
  * @module
  * @description
- * Entry point for all public APIs of the router package.
+ * Entry point for all public APIs of the router/testing package.
  */
-export * from './src/index';
+export * from './router_testing_module';
 //# sourceMappingURL=index.js.map

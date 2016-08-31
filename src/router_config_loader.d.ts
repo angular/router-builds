@@ -8,6 +8,9 @@
 import { Compiler, ComponentFactoryResolver, Injector, NgModuleFactoryLoader, OpaqueToken } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { LoadChildren, Route } from './config';
+/**
+ * @experimental
+ */
 export declare const ROUTES: OpaqueToken;
 export declare class LoadedRouterConfig {
     routes: Route[];

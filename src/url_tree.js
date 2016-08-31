@@ -5,14 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-"use strict";
-var shared_1 = require('./shared');
-var collection_1 = require('./utils/collection');
-function createEmptyUrlTree() {
+import { PRIMARY_OUTLET } from './shared';
+import { forEach, shallowEqual } from './utils/collection';
+export function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
-exports.createEmptyUrlTree = createEmptyUrlTree;
-function containsTree(container, containee, exact) {
+export function containsTree(container, containee, exact) {
     if (exact) {
         return equalSegmentGroups(container.root, containee.root);
     }
@@ -20,7 +18,6 @@ function containsTree(container, containee, exact) {
         return containsSegmentGroup(container.root, containee.root);
     }
 }
-exports.containsTree = containsTree;
 function equalSegmentGroups(container, containee) {
     if (!equalPath(container.segments, containee.segments))
         return false;
@@ -62,9 +59,9 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         var next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
-        if (!container.children[shared_1.PRIMARY_OUTLET])
+        if (!container.children[PRIMARY_OUTLET])
             return false;
-        return containsSegmentGroupHelper(container.children[shared_1.PRIMARY_OUTLET], containee, next);
+        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
     }
 }
 /**
@@ -72,7 +69,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *
  * @stable
  */
-var UrlTree = (function () {
+export var UrlTree = (function () {
     /**
      * @internal
      */
@@ -84,17 +81,16 @@ var UrlTree = (function () {
     UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
     return UrlTree;
 }());
-exports.UrlTree = UrlTree;
 /**
  * @stable
  */
-var UrlSegmentGroup = (function () {
+export var UrlSegmentGroup = (function () {
     function UrlSegmentGroup(segments, children) {
         var _this = this;
         this.segments = segments;
         this.children = children;
         this.parent = null;
-        collection_1.forEach(children, function (v, k) { return v.parent = _this; });
+        forEach(children, function (v, k) { return v.parent = _this; });
     }
     /**
      * Return true if the segment has child segments
@@ -111,11 +107,10 @@ var UrlSegmentGroup = (function () {
     UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
     return UrlSegmentGroup;
 }());
-exports.UrlSegmentGroup = UrlSegmentGroup;
 /**
  * @stable
  */
-var UrlSegment = (function () {
+export var UrlSegment = (function () {
     function UrlSegment(path, parameters) {
         this.path = path;
         this.parameters = parameters;
@@ -123,20 +118,18 @@ var UrlSegment = (function () {
     UrlSegment.prototype.toString = function () { return serializePath(this); };
     return UrlSegment;
 }());
-exports.UrlSegment = UrlSegment;
-function equalSegments(a, b) {
+export function equalSegments(a, b) {
     if (a.length !== b.length)
         return false;
     for (var i = 0; i < a.length; ++i) {
         if (a[i].path !== b[i].path)
             return false;
-        if (!collection_1.shallowEqual(a[i].parameters, b[i].parameters))
+        if (!shallowEqual(a[i].parameters, b[i].parameters))
             return false;
     }
     return true;
 }
-exports.equalSegments = equalSegments;
-function equalPath(a, b) {
+export function equalPath(a, b) {
     if (a.length !== b.length)
         return false;
     for (var i = 0; i < a.length; ++i) {
@@ -145,39 +138,36 @@ function equalPath(a, b) {
     }
     return true;
 }
-exports.equalPath = equalPath;
-function mapChildrenIntoArray(segment, fn) {
+export function mapChildrenIntoArray(segment, fn) {
     var res = [];
-    collection_1.forEach(segment.children, function (child, childOutlet) {
-        if (childOutlet === shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, function (child, childOutlet) {
+        if (childOutlet === PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
     });
-    collection_1.forEach(segment.children, function (child, childOutlet) {
-        if (childOutlet !== shared_1.PRIMARY_OUTLET) {
+    forEach(segment.children, function (child, childOutlet) {
+        if (childOutlet !== PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
     });
     return res;
 }
-exports.mapChildrenIntoArray = mapChildrenIntoArray;
 /**
  * Defines a way to serialize/deserialize a url tree.
  *
  * @stable
  */
-var UrlSerializer = (function () {
+export var UrlSerializer = (function () {
     function UrlSerializer() {
     }
     return UrlSerializer;
 }());
-exports.UrlSerializer = UrlSerializer;
 /**
  * A default implementation of the serialization.
  *
  * @stable
  */
-var DefaultUrlSerializer = (function () {
+export var DefaultUrlSerializer = (function () {
     function DefaultUrlSerializer() {
     }
     DefaultUrlSerializer.prototype.parse = function (url) {
@@ -192,19 +182,17 @@ var DefaultUrlSerializer = (function () {
     };
     return DefaultUrlSerializer;
 }());
-exports.DefaultUrlSerializer = DefaultUrlSerializer;
-function serializePaths(segment) {
+export function serializePaths(segment) {
     return segment.segments.map(function (p) { return serializePath(p); }).join('/');
 }
-exports.serializePaths = serializePaths;
 function serializeSegment(segment, root) {
     if (segment.hasChildren() && root) {
-        var primary = segment.children[shared_1.PRIMARY_OUTLET] ?
-            serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false) :
+        var primary = segment.children[PRIMARY_OUTLET] ?
+            serializeSegment(segment.children[PRIMARY_OUTLET], false) :
             '';
         var children_1 = [];
-        collection_1.forEach(segment.children, function (v, k) {
-            if (k !== shared_1.PRIMARY_OUTLET) {
+        forEach(segment.children, function (v, k) {
+            if (k !== PRIMARY_OUTLET) {
                 children_1.push(k + ":" + serializeSegment(v, false));
             }
         });
@@ -217,8 +205,8 @@ function serializeSegment(segment, root) {
     }
     else if (segment.hasChildren() && !root) {
         var children = mapChildrenIntoArray(segment, function (v, k) {
-            if (k === shared_1.PRIMARY_OUTLET) {
-                return [serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false)];
+            if (k === PRIMARY_OUTLET) {
+                return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
             else {
                 return [(k + ":" + serializeSegment(v, false))];
@@ -230,18 +218,15 @@ function serializeSegment(segment, root) {
         return serializePaths(segment);
     }
 }
-function encode(s) {
+export function encode(s) {
     return encodeURIComponent(s);
 }
-exports.encode = encode;
-function decode(s) {
+export function decode(s) {
     return decodeURIComponent(s);
 }
-exports.decode = decode;
-function serializePath(path) {
+export function serializePath(path) {
     return "" + encode(path.path) + serializeParams(path.parameters);
 }
-exports.serializePath = serializePath;
 function serializeParams(params) {
     return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
 }
@@ -331,7 +316,7 @@ var UrlParser = (function () {
             res = this.parseParens(false);
         }
         if (paths.length > 0 || Object.keys(children).length > 0) {
-            res[shared_1.PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
+            res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
         }
         return res;
     };
@@ -427,10 +412,10 @@ var UrlParser = (function () {
                 this.capture(':');
             }
             else if (allowPrimary) {
-                outletName = shared_1.PRIMARY_OUTLET;
+                outletName = PRIMARY_OUTLET;
             }
             var children = this.parseChildren();
-            segments[outletName] = Object.keys(children).length === 1 ? children[shared_1.PRIMARY_OUTLET] :
+            segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegmentGroup([], children);
             if (this.peekStartsWith('//')) {
                 this.capture('//');

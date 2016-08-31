@@ -3,17 +3,12 @@
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/add/operator/map'), require('rxjs/add/operator/mergeMap'), require('rxjs/add/operator/mergeAll'), require('rxjs/add/operator/reduce'), require('rxjs/add/operator/every'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/add/operator/first'), require('rxjs/add/operator/catch'), require('rxjs/add/operator/concatAll'), require('rxjs/Observable'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/add/operator/last'), require('rxjs/BehaviorSubject')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.EmptyError, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx));
-}(this, function (exports, _angular_common, _angular_core, rxjs_add_operator_map, rxjs_add_operator_mergeMap, rxjs_add_operator_mergeAll, rxjs_add_operator_reduce, rxjs_add_operator_every, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_add_operator_first, rxjs_add_operator_catch, rxjs_add_operator_concatAll, rxjs_Observable, rxjs_util_EmptyError, rxjs_observable_fromPromise, rxjs_add_operator_last, rxjs_BehaviorSubject) {
-    'use strict';
+    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/add/operator/map', 'rxjs/add/operator/mergeMap', 'rxjs/add/operator/mergeAll', 'rxjs/add/operator/reduce', 'rxjs/add/operator/every', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/add/operator/first', 'rxjs/add/operator/catch', 'rxjs/add/operator/concatAll', 'rxjs/Observable', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/add/operator/last', 'rxjs/BehaviorSubject'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.EmptyError,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx));
+}(this, function (exports,_angular_common,_angular_core,rxjs_add_operator_map,rxjs_add_operator_mergeMap,rxjs_add_operator_mergeAll,rxjs_add_operator_reduce,rxjs_add_operator_every,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_add_operator_first,rxjs_add_operator_catch,rxjs_add_operator_concatAll,rxjs_Observable,rxjs_util_EmptyError,rxjs_observable_fromPromise,rxjs_add_operator_last,rxjs_BehaviorSubject) { 'use strict';
+
     /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
@@ -21,6 +16,11 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var __extends = (this && this.__extends) || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
     /**
      * Name of the primary outlet.
      * @type {string}
@@ -38,6 +38,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         NavigationCancelingError.prototype.toString = function () { return this.message; };
         return NavigationCancelingError;
     }(Error));
+
     function shallowEqualArrays(a, b) {
         if (a.length !== b.length)
             return false;
@@ -115,7 +116,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             }
         });
         if (waitFor.length > 0) {
-            return rxjs_observable_of.of.apply(rxjs_observable_of, waitFor).concatAll().last().map(function (last) { return res; });
+            return rxjs_observable_of.of.apply(void 0, waitFor).concatAll().last().map(function (last) { return res; });
         }
         else {
             return rxjs_observable_of.of(res);
@@ -135,6 +136,10 @@ var __extends = (this && this.__extends) || function (d, b) {
             return rxjs_observable_of.of(value);
         }
     }
+
+    /**
+     * @experimental
+     */
     var ROUTES = new _angular_core.OpaqueToken('ROUTES');
     var LoadedRouterConfig = (function () {
         function LoadedRouterConfig(routes, injector, factoryResolver) {
@@ -168,6 +173,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return RouterConfigLoader;
     }());
+
     function createEmptyUrlTree() {
         return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
     }
@@ -576,6 +582,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return UrlParser;
     }());
+
     var NoMatch = (function () {
         function NoMatch(segmentGroup) {
             if (segmentGroup === void 0) { segmentGroup = null; }
@@ -668,7 +675,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         ApplyRedirects.prototype.expandSegment = function (injector, segmentGroup, routes, segments, outlet, allowRedirects) {
             var _this = this;
-            var processRoutes = rxjs_observable_of.of.apply(rxjs_observable_of, routes)
+            var processRoutes = rxjs_observable_of.of.apply(void 0, routes)
                 .map(function (r) {
                 return _this
                     .expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects)
@@ -932,6 +939,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function getOutlet$1(route) {
         return route.outlet ? route.outlet : PRIMARY_OUTLET;
     }
+
     /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
@@ -976,6 +984,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             throw new Error("Invalid configuration of route '" + route.path + "': pathMatch can only be set to 'prefix' or 'full'");
         }
     }
+
     /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
@@ -1061,6 +1070,19 @@ var __extends = (this && this.__extends) || function (d, b) {
         TreeNode.prototype.toString = function () { return "TreeNode(" + this.value + ")"; };
         return TreeNode;
     }());
+
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    var __extends$1 = (this && this.__extends) || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
     /**
      * The state of the router.
      *
@@ -1079,7 +1101,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var RouterState = (function (_super) {
-        __extends(RouterState, _super);
+        __extends$1(RouterState, _super);
         /**
          * @internal
          */
@@ -1292,7 +1314,7 @@ var __extends = (this && this.__extends) || function (d, b) {
      * @stable
      */
     var RouterStateSnapshot = (function (_super) {
-        __extends(RouterStateSnapshot, _super);
+        __extends$1(RouterStateSnapshot, _super);
         /**
          * @internal
          */
@@ -1340,6 +1362,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             route.data.next(route._futureSnapshot.data);
         }
     }
+
     function createRouterState(curr, prevState) {
         var root = createNode(curr._root, prevState ? prevState._root : undefined);
         return new RouterState(root, curr);
@@ -1374,6 +1397,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function equalRouteSnapshots(a, b) {
         return a._routeConfig === b._routeConfig;
     }
+
     function createUrlTree(route, urlTree, commands, queryParams, fragment) {
         if (commands.length === 0) {
             return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
@@ -1564,18 +1588,18 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         else {
             var outlets_1 = getOutlets(commands);
-            var children_2 = {};
+            var children_1 = {};
             forEach(outlets_1, function (commands, outlet) {
                 if (commands !== null) {
-                    children_2[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
+                    children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
                 }
             });
             forEach(segmentGroup.children, function (child, childOutlet) {
                 if (outlets_1[childOutlet] === undefined) {
-                    children_2[childOutlet] = child;
+                    children_1[childOutlet] = child;
                 }
             });
-            return new UrlSegmentGroup(segmentGroup.segments, children_2);
+            return new UrlSegmentGroup(segmentGroup.segments, children_1);
         }
     }
     function prefixedWith(segmentGroup, startIndex, commands) {
@@ -1647,10 +1671,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function compare(path, params, segment) {
         return path == segment.path && shallowEqual(params, segment.parameters);
     }
+
     var NoMatch$1 = (function () {
-        function NoMatch$1() {
+        function NoMatch() {
         }
-        return NoMatch$1;
+        return NoMatch;
     }());
     var InheritedFromParent = (function () {
         function InheritedFromParent(parent, snapshot, params, data, resolve) {
@@ -1868,8 +1893,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     }
     function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
         var res = {};
-        for (var _i = 0, routes_3 = routes; _i < routes_3.length; _i++) {
-            var r = routes_3[_i];
+        for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+            var r = routes_1[_i];
             if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$2(r)]) {
                 var s = new UrlSegmentGroup([], {});
                 s._sourceSegment = segmentGroup;
@@ -1884,8 +1909,8 @@ var __extends = (this && this.__extends) || function (d, b) {
         res[PRIMARY_OUTLET] = primarySegment;
         primarySegment._sourceSegment = segmentGroup;
         primarySegment._segmentIndexShift = consumedSegments.length;
-        for (var _i = 0, routes_4 = routes; _i < routes_4.length; _i++) {
-            var r = routes_4[_i];
+        for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+            var r = routes_2[_i];
             if (r.path === '' && getOutlet$2(r) !== PRIMARY_OUTLET) {
                 var s = new UrlSegmentGroup([], {});
                 s._sourceSegment = segmentGroup;
@@ -1918,6 +1943,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function getResolve(route) {
         return route.resolve ? route.resolve : {};
     }
+
     /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
@@ -1937,6 +1963,7 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
         return RouterOutletMap;
     }());
+
     /**
      * An event triggered when a navigation starts
      *
@@ -2690,6 +2717,61 @@ var __extends = (this && this.__extends) || function (d, b) {
         }
         return outlet;
     }
+
+    /**
+     * The RouterLink directive lets you link to specific parts of your app.
+     *
+     * Consider the following route configuration:
+
+     * ```
+     * [{ path: 'user/:name', component: UserCmp }]
+     * ```
+     *
+     * When linking to this `User` route, you can write:
+     *
+     * ```
+     * <a [routerLink]="/user/bob">link to user component</a>
+     * ```
+     *
+     * If you use dynamic values to generate the link, you can pass an array of path
+     * segments, followed by the params for each segment.
+     *
+     * For instance `['/team', teamId, 'user', userName, {details: true}]`
+     * means that we want to generate a link to `/team/11/user/bob;details=true`.
+     * Multiple static segments can be merged into one (e.g., `['/team/11/user', userName, {details:
+     true}]`).
+     *
+     * The first segment name can be prepended with `/`, `./`, or `../`:
+     * * If the first segment begins with `/`, the router will look up the route from the root of the
+     app.
+     * * If the first segment begins with `./`, or doesn't begin with a slash, the router will
+     * instead look in the children of the current activated route.
+     * * And if the first segment begins with `../`, the router will go up one level.
+     *
+     * You can set query params and fragment as follows:
+     *
+     * ```
+     * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">link to user
+     component</a>
+     * ```
+     * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+     *
+     * You can also tell the directive to preserve the current query params and fragment:
+     *
+     * ```
+     * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>link to user
+     component</a>
+     * ```
+     *
+     * The router link directive always treats the provided input as a delta to the current url.
+     *
+     * For instance, if the current url is `/user/(box//aux:team)`.
+     *
+     * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
+     * `/user/(jim//aux:team)`. See {@link Router.createUrlTree} for more information.
+     *
+     * @stable
+     */
     var RouterLink = (function () {
         function RouterLink(router, route, locationStrategy) {
             this.router = router;
@@ -2729,27 +2811,29 @@ var __extends = (this && this.__extends) || function (d, b) {
             enumerable: true,
             configurable: true
         });
+        RouterLink.decorators = [
+            { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+        ];
+        /** @nocollapse */
+        RouterLink.ctorParameters = [
+            { type: Router, },
+            { type: ActivatedRoute, },
+            { type: _angular_common.LocationStrategy, },
+        ];
+        RouterLink.propDecorators = {
+            'queryParams': [{ type: _angular_core.Input },],
+            'fragment': [{ type: _angular_core.Input },],
+            'preserveQueryParams': [{ type: _angular_core.Input },],
+            'preserveFragment': [{ type: _angular_core.Input },],
+            'routerLink': [{ type: _angular_core.Input },],
+            'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+        };
         return RouterLink;
     }());
-    /** @nocollapse */
-    RouterLink.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
-    ];
-    /** @nocollapse */
-    RouterLink.ctorParameters = [
-        { type: Router, },
-        { type: ActivatedRoute, },
-        { type: _angular_common.LocationStrategy, },
-    ];
-    /** @nocollapse */
-    RouterLink.propDecorators = {
-        'queryParams': [{ type: _angular_core.Input },],
-        'fragment': [{ type: _angular_core.Input },],
-        'preserveQueryParams': [{ type: _angular_core.Input },],
-        'preserveFragment': [{ type: _angular_core.Input },],
-        'routerLink': [{ type: _angular_core.Input },],
-        'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
-    };
+    /**
+     * See {@link RouterLink} for more information.
+     * @stable
+     */
     var RouterLinkWithHref = (function () {
         function RouterLinkWithHref(router, route, locationStrategy) {
             var _this = this;
@@ -2803,35 +2887,76 @@ var __extends = (this && this.__extends) || function (d, b) {
             enumerable: true,
             configurable: true
         });
+        RouterLinkWithHref.decorators = [
+            { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
+        ];
+        /** @nocollapse */
+        RouterLinkWithHref.ctorParameters = [
+            { type: Router, },
+            { type: ActivatedRoute, },
+            { type: _angular_common.LocationStrategy, },
+        ];
+        RouterLinkWithHref.propDecorators = {
+            'target': [{ type: _angular_core.Input },],
+            'queryParams': [{ type: _angular_core.Input },],
+            'fragment': [{ type: _angular_core.Input },],
+            'routerLinkOptions': [{ type: _angular_core.Input },],
+            'preserveQueryParams': [{ type: _angular_core.Input },],
+            'preserveFragment': [{ type: _angular_core.Input },],
+            'href': [{ type: _angular_core.HostBinding },],
+            'routerLink': [{ type: _angular_core.Input },],
+            'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+        };
         return RouterLinkWithHref;
     }());
-    /** @nocollapse */
-    RouterLinkWithHref.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
-    ];
-    /** @nocollapse */
-    RouterLinkWithHref.ctorParameters = [
-        { type: Router, },
-        { type: ActivatedRoute, },
-        { type: _angular_common.LocationStrategy, },
-    ];
-    /** @nocollapse */
-    RouterLinkWithHref.propDecorators = {
-        'target': [{ type: _angular_core.Input },],
-        'queryParams': [{ type: _angular_core.Input },],
-        'fragment': [{ type: _angular_core.Input },],
-        'routerLinkOptions': [{ type: _angular_core.Input },],
-        'preserveQueryParams': [{ type: _angular_core.Input },],
-        'preserveFragment': [{ type: _angular_core.Input },],
-        'href': [{ type: _angular_core.HostBinding },],
-        'routerLink': [{ type: _angular_core.Input },],
-        'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
-    };
     function toBool(s) {
         if (s === '')
             return true;
         return !!s;
     }
+
+    /**
+     * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
+     * becomes active.
+     *
+     * Consider the following example:
+     *
+     * ```
+     * <a [routerLink]="/user/bob" routerLinkActive="active-link">Bob</a>
+     * ```
+     *
+     * When the url is either '/user' or '/user/bob', the active-link class will
+     * be added to the `a` tag. If the url changes, the class will be removed.
+     *
+     * You can set more than one class, as follows:
+     *
+     * ```
+     * <a [routerLink]="/user/bob" routerLinkActive="class1 class2">Bob</a>
+     * <a [routerLink]="/user/bob" routerLinkActive="['class1', 'class2']">Bob</a>
+     * ```
+     *
+     * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
+     * only when the url matches the link exactly.
+     *
+     * ```
+     * <a [routerLink]="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+     * true}">Bob</a>
+     * ```
+     *
+     * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
+     *
+     * ```
+     * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+     *   <a [routerLink]="/user/jim">Jim</a>
+     *   <a [routerLink]="/user/bob">Bob</a>
+     * </div>
+     * ```
+     *
+     * This will set the active-link class on the div tag if the url is either '/user/jim' or
+     * '/user/bob'.
+     *
+     * @stable
+     */
     var RouterLinkActive = (function () {
         function RouterLinkActive(router, element, renderer) {
             var _this = this;
@@ -2876,27 +3001,51 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         RouterLinkActive.prototype.reduceList = function (q) {
             var _this = this;
-            return q.reduce(function (res, link) { return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact); }, false);
+            return q.reduce(function (res, link) {
+                return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+            }, false);
+        };
+        RouterLinkActive.decorators = [
+            { type: _angular_core.Directive, args: [{ selector: '[routerLinkActive]' },] },
+        ];
+        /** @nocollapse */
+        RouterLinkActive.ctorParameters = [
+            { type: Router, },
+            { type: _angular_core.ElementRef, },
+            { type: _angular_core.Renderer, },
+        ];
+        RouterLinkActive.propDecorators = {
+            'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
+            'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+            'routerLinkActiveOptions': [{ type: _angular_core.Input },],
+            'routerLinkActive': [{ type: _angular_core.Input },],
         };
         return RouterLinkActive;
     }());
-    /** @nocollapse */
-    RouterLinkActive.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: '[routerLinkActive]' },] },
-    ];
-    /** @nocollapse */
-    RouterLinkActive.ctorParameters = [
-        { type: Router, },
-        { type: _angular_core.ElementRef, },
-        { type: _angular_core.Renderer, },
-    ];
-    /** @nocollapse */
-    RouterLinkActive.propDecorators = {
-        'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
-        'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-        'routerLinkActiveOptions': [{ type: _angular_core.Input },],
-        'routerLinkActive': [{ type: _angular_core.Input },],
-    };
+
+    /**
+     * A router outlet is a placeholder that Angular dynamically fills based on the application's route.
+     *
+     * ## Example
+     *
+     * ```
+     * <router-outlet></router-outlet>
+     * <router-outlet name="left"></router-outlet>
+     * <router-outlet name="right"></router-outlet>
+     * ```
+     *
+     * A router outlet will emit an activate event any time a new component is being instantiated,
+     * and a deactivate event when it is being destroyed.
+     *
+     * ## Example
+     *
+     * ```
+     * <router-outlet (activate)="onActivate($event)"
+     * (deactivate)="onDeactivate($event)"></router-outlet>
+     * ```
+     *
+     * @stable
+     */
     var RouterOutlet = (function () {
         function RouterOutlet(parentOutletMap, location, resolver, name) {
             this.parentOutletMap = parentOutletMap;
@@ -2957,24 +3106,23 @@ var __extends = (this && this.__extends) || function (d, b) {
             this.activated.changeDetectorRef.detectChanges();
             this.activateEvents.emit(this.activated.instance);
         };
+        RouterOutlet.decorators = [
+            { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+        ];
+        /** @nocollapse */
+        RouterOutlet.ctorParameters = [
+            { type: RouterOutletMap, },
+            { type: _angular_core.ViewContainerRef, },
+            { type: _angular_core.ComponentFactoryResolver, },
+            { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
+        ];
+        RouterOutlet.propDecorators = {
+            'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
+            'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
+        };
         return RouterOutlet;
     }());
-    /** @nocollapse */
-    RouterOutlet.decorators = [
-        { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
-    ];
-    /** @nocollapse */
-    RouterOutlet.ctorParameters = [
-        { type: RouterOutletMap, },
-        { type: _angular_core.ViewContainerRef, },
-        { type: _angular_core.ComponentFactoryResolver, },
-        { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
-    ];
-    /** @nocollapse */
-    RouterOutlet.propDecorators = {
-        'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
-        'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
-    };
+
     /**
      * @stable
      */
@@ -2997,6 +3145,30 @@ var __extends = (this && this.__extends) || function (d, b) {
         { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader },
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
+    /**
+     * Router module.
+     *
+     * When registered at the root, it should be used as follows:
+     *
+     * ### Example
+     *
+     * ```
+     * bootstrap(AppCmp, {imports: [RouterModule.forRoot(ROUTES)]});
+     * ```
+     *
+     * For submodules and lazy loaded submodules it should be used as follows:
+     *
+     * ### Example
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forChild(CHILD_ROUTES)]
+     * })
+     * class Lazy {}
+     * ```
+     *
+     * @stable
+     */
     var RouterModule = (function () {
         function RouterModule(guard) {
         }
@@ -3023,16 +3195,15 @@ var __extends = (this && this.__extends) || function (d, b) {
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
+        RouterModule.decorators = [
+            { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+        ];
+        /** @nocollapse */
+        RouterModule.ctorParameters = [
+            { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+        ];
         return RouterModule;
     }());
-    /** @nocollapse */
-    RouterModule.decorators = [
-        { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-    ];
-    /** @nocollapse */
-    RouterModule.ctorParameters = [
-        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-    ];
     function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         if (options === void 0) { options = {}; }
         return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) :
@@ -3094,6 +3265,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             deps: [Router, ROUTER_CONFIGURATION]
         };
     }
+
+    var __router_private__ = {
+        ROUTER_PROVIDERS: ROUTER_PROVIDERS,
+        ROUTES: ROUTES,
+        flatten: flatten
+    };
+
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
     exports.RouterLinkActive = RouterLinkActive;
@@ -3116,4 +3294,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     exports.UrlSegment = UrlSegment;
     exports.UrlSerializer = UrlSerializer;
     exports.UrlTree = UrlTree;
+    exports.__router_private__ = __router_private__;
+
 }));

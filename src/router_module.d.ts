@@ -75,5 +75,5 @@ export declare function provideRouterInitializer(): {
     provide: OpaqueToken;
     multi: boolean;
     useFactory: (router: Router, opts: ExtraOptions) => () => void;
-    deps: (typeof Router | OpaqueToken)[];
+    deps: (OpaqueToken | typeof Router)[];
 };

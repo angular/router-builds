@@ -7,8 +7,7 @@
  */
 import { Location } from '@angular/common';
 import { Compiler, Injector, ModuleWithProviders, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
-import { Route, Router, RouterOutletMap, UrlSerializer } from '../index';
-import { Routes } from '../src/config';
+import { Route, Router, RouterOutletMap, Routes, UrlSerializer } from '@angular/router';
 /**
  * A spy for {@link NgModuleFactoryLoader} that allows tests to simulate the loading of ng module
  * factories.

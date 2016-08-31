@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -17,8 +16,8 @@ var __extends = (this && this.__extends) || function (d, b) {
  *
  * @stable
  */
-exports.PRIMARY_OUTLET = 'primary';
-var NavigationCancelingError = (function (_super) {
+export var PRIMARY_OUTLET = 'primary';
+export var NavigationCancelingError = (function (_super) {
     __extends(NavigationCancelingError, _super);
     function NavigationCancelingError(message) {
         _super.call(this, message);
@@ -28,5 +27,4 @@ var NavigationCancelingError = (function (_super) {
     NavigationCancelingError.prototype.toString = function () { return this.message; };
     return NavigationCancelingError;
 }(Error));
-exports.NavigationCancelingError = NavigationCancelingError;
 //# sourceMappingURL=shared.js.map

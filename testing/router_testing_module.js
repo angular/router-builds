@@ -5,15 +5,18 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-"use strict";
-var common_1 = require('@angular/common');
-var testing_1 = require('@angular/common/testing');
-var core_1 = require('@angular/core');
-var index_1 = require('../index');
-var router_config_loader_1 = require('../src/router_config_loader');
-var router_module_1 = require('../src/router_module');
-var collection_1 = require('../src/utils/collection');
-var SpyNgModuleFactoryLoader = (function () {
+import { Location, LocationStrategy } from '@angular/common';
+import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
+import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader } from '@angular/core';
+import { Router, RouterModule, RouterOutletMap, UrlSerializer, provideRoutes } from '@angular/router';
+import { ROUTER_PROVIDERS, ROUTES, flatten } from './private_import_router';
+/**
+ * A spy for {@link NgModuleFactoryLoader} that allows tests to simulate the loading of ng module
+ * factories.
+ *
+ * @stable
+ */
+export var SpyNgModuleFactoryLoader = (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         this.stubbedModules = {};
@@ -26,51 +29,68 @@ var SpyNgModuleFactoryLoader = (function () {
             return Promise.reject(new Error("Cannot find module " + path));
         }
     };
-    /** @nocollapse */
     SpyNgModuleFactoryLoader.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     /** @nocollapse */
     SpyNgModuleFactoryLoader.ctorParameters = [
-        { type: core_1.Compiler, },
+        { type: Compiler, },
     ];
     return SpyNgModuleFactoryLoader;
 }());
-exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
 /**
  * Router setup factory function used for testing.
  *
  * @experimental
  */
-function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
-    return new index_1.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, collection_1.flatten(routes));
+export function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
+    return new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
 }
-exports.setupTestingRouter = setupTestingRouter;
-var RouterTestingModule = (function () {
+/**
+ * A module setting up the router that should be used for testing.
+ * It provides spy implementations of Location, LocationStrategy, and NgModuleFactoryLoader.
+ *
+ * # Example:
+ *
+ * ```
+ * beforeEach(() => {
+ *   TestBed.configureTestModule({
+ *     modules: [
+ *       RouterTestingModule.withRoutes(
+ *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
+ *       )
+ *     ]
+ *   });
+ * });
+ * ```
+ *
+ * @stable
+ */
+export var RouterTestingModule = (function () {
     function RouterTestingModule() {
     }
     RouterTestingModule.withRoutes = function (routes) {
-        return { ngModule: RouterTestingModule, providers: [router_module_1.provideRoutes(routes)] };
+        return { ngModule: RouterTestingModule, providers: [provideRoutes(routes)] };
     };
-    /** @nocollapse */
     RouterTestingModule.decorators = [
-        { type: core_1.NgModule, args: [{
-                    exports: [router_module_1.RouterModule],
+        { type: NgModule, args: [{
+                    exports: [RouterModule],
                     providers: [
-                        router_module_1.ROUTER_PROVIDERS, { provide: common_1.Location, useClass: testing_1.SpyLocation },
-                        { provide: common_1.LocationStrategy, useClass: testing_1.MockLocationStrategy },
-                        { provide: core_1.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                            provide: index_1.Router,
+                        ROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                        { provide: LocationStrategy, useClass: MockLocationStrategy },
+                        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: Router,
                             useFactory: setupTestingRouter,
                             deps: [
-                                index_1.UrlSerializer, index_1.RouterOutletMap, common_1.Location, core_1.NgModuleFactoryLoader, core_1.Compiler, core_1.Injector, router_config_loader_1.ROUTES
+                                UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader, Compiler, Injector, ROUTES
                             ]
                         },
-                        router_module_1.provideRoutes([])
+                        provideRoutes([])
                     ]
                 },] },
     ];
+    /** @nocollapse */
+    RouterTestingModule.ctorParameters = [];
     return RouterTestingModule;
 }());
-exports.RouterTestingModule = RouterTestingModule;
 //# sourceMappingURL=router_testing_module.js.map
