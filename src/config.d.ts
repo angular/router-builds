@@ -8,9 +8,12 @@
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 /**
+ * @whatItDoes Represents router configuration.
+ *
+ * @description
  * `Routes` is an array of route configurations. Each one has the following properties:
  *
- * - *`path`* is a string that uses the route matcher DSL.
+ * - `path` is a string that uses the route matcher DSL.
  * - `pathMatch` is a string that specifies the matching strategy.
  * - `component` is a component type.
  * - `redirectTo` is the url fragment which will replace the current matched segment.
@@ -101,7 +104,7 @@ import { Observable } from 'rxjs/Observable';
  *
  * ### Empty Path
  *
- * Empty-path route configurations can be used to instantiate components that do not "consume"
+ * Empty-path route configurations can be used to instantiate components that do not 'consume'
  * any url segments. Let's look at the following configuration:
  *
  * ```
@@ -229,10 +232,31 @@ import { Observable } from 'rxjs/Observable';
  * With this configuration in place, navigating to '/parent/10' will create the main child and aux
  * components.
  *
+ * ### Lazy Loading
+ *
+ * Lazy loading speeds up our application load time by splitting it into multiple bundles, and
+ * loading them on demand. The router is designed to make lazy loading simple and easy. Instead of
+ * providing the children property, you can provide
+ * the loadChildren property, as follows:
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team,
+ *   loadChildren: 'team'
+ * }]
+ * ```
+ *
+ * The router will use registered NgModuleFactoryLoader to fetch an NgModule associated with 'team'.
+ * Then it will
+ * extract the set of routes defined in that NgModule, and will transparently add those routes to
+ * the main configuration.
+ *
  * @stable use Routes
  */
 export declare type Routes = Route[];
 /**
+ * @whatItDoes Represents the static data associated with a particular route.
  * See {@link Routes} for more details.
  * @stable
  */
@@ -240,6 +264,7 @@ export declare type Data = {
     [name: string]: any;
 };
 /**
+ *  @whatItDoes Represents the resolved data associated with a particular route.
  * See {@link Routes} for more details.
  * @stable
  */
@@ -247,10 +272,15 @@ export declare type ResolveData = {
     [name: string]: any;
 };
 /**
+ * @whatItDoes The type of `loadChildren`.
+ * See {@link Routes} for more details.
  * @stable
  */
 export declare type LoadChildrenCallback = () => Type<any> | Promise<Type<any>> | Observable<Type<any>>;
 /**
+ * @whatItDoes The type of `loadChildren`.
+ *
+ * See {@link Routes} for more details.
  * @stable
  */
 export declare type LoadChildren = string | LoadChildrenCallback;

@@ -22,8 +22,7 @@
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
     /**
-     * Name of the primary outlet.
-     * @type {string}
+     * @whatItDoes Name of the primary outlet.
      *
      * @stable
      */
@@ -234,7 +233,31 @@
         }
     }
     /**
-     * A URL in the tree form.
+     * @whatItDoes Represents the parsed URL.
+     *
+     * @howToUse
+     *
+     * ```
+     * @Component({templateUrl:'template.html'})
+     * class MyComponent {
+     *   constructor(router: Router) {
+     *     const tree: UrlTree =
+     * router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
+     *     const f = tree.fragment; // return 'fragment'
+     *     const q = tree.queryParams; // returns {debug: 'true'}
+     *     const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+     *     const s: UrlSegment[] = g.segments; // returns 2 segments 'team' and '33'
+     *     g.children[PRIMARY_OUTLET].segments; // returns 2 segments 'user' and 'victor'
+     *     g.children['support'].segments; // return 1 segment 'help'
+     *   }
+     * }
+     * ```
+     *
+     * @description
+     *
+     * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+     * serialized tree.
+     * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
      *
      * @stable
      */
@@ -242,22 +265,52 @@
         /**
          * @internal
          */
-        function UrlTree(root, queryParams, fragment) {
+        function UrlTree(
+            /**
+            * The root segment group of the URL tree.
+             */
+            root, 
+            /**
+             * The query params of the URL.
+             */
+            queryParams, 
+            /**
+             * The fragment of the URL.
+             */
+            fragment) {
             this.root = root;
             this.queryParams = queryParams;
             this.fragment = fragment;
         }
+        /**
+         * @docsNotRequired
+         */
         UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
         return UrlTree;
     }());
     /**
+     * @whatItDoes Represents the parsed URL segment.
+     *
+     * See {@link UrlTree} for more information.
+     *
      * @stable
      */
     var UrlSegmentGroup = (function () {
-        function UrlSegmentGroup(segments, children) {
+        function UrlSegmentGroup(
+            /**
+             * The URL segments of this group. See {@link UrlSegment} for more information.
+             */
+            segments, 
+            /**
+             * The list of children of this group.
+             */
+            children) {
             var _this = this;
             this.segments = segments;
             this.children = children;
+            /**
+             * The parent node in the url tree.
+             */
             this.parent = null;
             forEach(children, function (v, k) { return v.parent = _this; });
         }
@@ -273,17 +326,53 @@
             enumerable: true,
             configurable: true
         });
+        /**
+         * @docsNotRequired
+         */
         UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
         return UrlSegmentGroup;
     }());
     /**
+     * @whatItDoes Represents a single URL segment.
+     *
+     * @howToUse
+     *
+     * ```
+     * @Component({templateUrl:'template.html'})
+     * class MyComponent {
+     *   constructor(router: Router) {
+     *     const tree: UrlTree = router.parseUrl('/team;id=33');
+     *     const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+     *     const s: UrlSegment[] = g.segments;
+     *     s[0].path; // returns 'team'
+     *     s[0].parameters; // returns {id: 33}
+     *   }
+     * }
+     * ```
+     *
+     * @description
+     *
+     * A UrlSegment is a part of a URL between the two slashes. It contains a path and
+     * the matrix parameters associated with the segment.
+     *
      * @stable
      */
     var UrlSegment = (function () {
-        function UrlSegment(path, parameters) {
+        function UrlSegment(
+            /**
+             * The part part of a URL segment.
+             */
+            path, 
+            /**
+             * The matrix parameters associated with a segment.
+             */
+            parameters) {
             this.path = path;
             this.parameters = parameters;
         }
+        /**
+         * @docsNotRequired
+         */
         UrlSegment.prototype.toString = function () { return serializePath(this); };
         return UrlSegment;
     }());
@@ -311,7 +400,12 @@
         return res;
     }
     /**
-     * Defines a way to serialize/deserialize a url tree.
+     * @whatItDoes Serializes and deserializes a URL string into a URL tree.
+     *
+     * @description The url serialization strategy is customizable. You can
+     * make all URLs case insensitive by providing a custom UrlSerializer.
+     *
+     * See {@link DefaultUrlSerializer} for an example of a URL serializer.
      *
      * @stable
      */
@@ -321,17 +415,36 @@
         return UrlSerializer;
     }());
     /**
-     * A default implementation of the serialization.
+     * @whatItDoes A default implementation of the {@link UrlSerializer}.
+     *
+     * @description
+     *
+     * Example URLs:
+     *
+     * ```
+     * /inbox/33(popup:compose)
+     * /inbox/33;open=true/messages/44
+     * ```
+     *
+     * DefaultUrlSerializer uses parentheses to serialize secondary segments (e.g., popup:compose), the
+     * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
+     * specify route specific parameters.
      *
      * @stable
      */
     var DefaultUrlSerializer = (function () {
         function DefaultUrlSerializer() {
         }
+        /**
+         * Parse a url into a {@link UrlTree}.
+         */
         DefaultUrlSerializer.prototype.parse = function (url) {
             var p = new UrlParser(url);
             return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
         };
+        /**
+         * Converts a {@link UrlTree} into a url.
+         */
         DefaultUrlSerializer.prototype.serialize = function (tree) {
             var segment = "/" + serializeSegment(tree.root, true);
             var query = serializeQueryParams(tree.queryParams);
@@ -1085,20 +1198,29 @@
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
     /**
-     * The state of the router.
+     * @whatItDoes Represents the state of the router.
      *
-     * ### Usage
+     * @howToUse
      *
      * ```
-     * @Component({template:''})
+     * @Component({templateUrl:'template.html'})
      * class MyComponent {
      *   constructor(router: Router) {
-     *     const state = router.routerState;
-     *     const id: Observable<string> = state.root.firstChild.params.map(p => p.id);
-     *     const isDebug: Observable<string> = state.root.queryParams.map(q => q.debug);
+     *     const state: RouterState = router.routerState;
+     *     const root: ActivatedRoute = state.root;
+     *     const child = root.firstChild;
+     *     const id: Observable<string> = child.params.map(p => p.id);
+     *     //...
      *   }
      * }
      * ```
+     *
+     * @description
+     * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+     * segments,
+     * the extracted parameters, and the resolved data.
+     *
+     * See {@link ActivatedRoute} for more information.
      *
      * @stable
      */
@@ -1107,7 +1229,11 @@
         /**
          * @internal
          */
-        function RouterState(root, snapshot) {
+        function RouterState(root, 
+            /**
+             * The current snapshot of the router state.
+             */
+            snapshot) {
             _super.call(this, root);
             this.snapshot = snapshot;
             setRouterStateSnapshot(this, root);
@@ -1135,17 +1261,19 @@
         return new RouterStateSnapshot('', new TreeNode(activated, []));
     }
     /**
-     * Contains the information about a component loaded in an outlet. The information is provided
-     * through the params, urlSegments, and data observables.
+     * @whatItDoes Contains the information about a route associated with a component loaded in an
+     * outlet.
+     * ActivatedRoute can also be used to traverse the router state tree.
      *
-     * ### Usage
+     * @howToUse
      *
      * ```
-     * @Component({template:''})
+     * @Component({templateUrl:'./my-component.html'})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: Observable<string> = route.params.map(p => p.id);
-     *     const data = route.data.map(d => d.user); //includes `data` and `resolve`
+     *     const url: Observable<string> = route.url.map(s => s.join(''));
+     *     const user = route.data.map(d => d.user); //includes `data` and `resolve`
      *   }
      * }
      * ```
@@ -1156,7 +1284,41 @@
         /**
          * @internal
          */
-        function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
+        function ActivatedRoute(
+            /**
+             *  The URL segments matched by this route. The observable will emit a new value when
+             *  the array of segments changes.
+             */
+            url, 
+            /**
+             * The matrix parameters scoped to this route. The observable will emit a new value when
+             * the set of the parameters changes.
+             */
+            params, 
+            /**
+             * The query parameters shared by all the routes. The observable will emit a new value when
+             * the set of the parameters changes.
+             */
+            queryParams, 
+            /**
+             * The URL fragment shared by all the routes. The observable will emit a new value when
+             * the URL fragment changes.
+             */
+            fragment, 
+            /**
+             * The static and resolved data of this route. The observable will emit a new value when
+             * any of the resolvers returns a new object.
+             */
+            data, 
+            /**
+             * The outlet name of the route. It's a constant.
+             */
+            outlet, 
+            /**
+             * The component of the route. It's a constant.
+             */
+            component, // TODO: vsavkin: remove |string
+            futureSnapshot) {
             this.url = url;
             this.params = params;
             this.queryParams = queryParams;
@@ -1167,35 +1329,56 @@
             this._futureSnapshot = futureSnapshot;
         }
         Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+            /**
+             * The configuration used to match this route.
+             */
             get: function () { return this._futureSnapshot.routeConfig; },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "root", {
+            /**
+             * The root of the router state.
+             */
             get: function () { return this._routerState.root; },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "parent", {
+            /**
+             * The parent of this route in the router state tree.
+             */
             get: function () { return this._routerState.parent(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
+            /**
+             * The first child of this route in the router state tree.
+             */
             get: function () { return this._routerState.firstChild(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "children", {
+            /**
+             * The children of this route in the router state tree.
+             */
             get: function () { return this._routerState.children(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
+            /**
+             * The path from the root of the router state tree to this route.
+             */
             get: function () { return this._routerState.pathFromRoot(this); },
             enumerable: true,
             configurable: true
         });
+        /**
+         * @docsNotRequired
+         */
         ActivatedRoute.prototype.toString = function () {
             return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
         };
@@ -1232,16 +1415,20 @@
         return InheritedResolve;
     }());
     /**
-     * Contains the information about a component loaded in an outlet at a particular moment in time.
+     * @whatItDoes Contains the information about a route associated with a component loaded in an
+     * outlet
+     * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
+     * state tree.
      *
-     * ### Usage
+     * @howToUse
      *
      * ```
-     * @Component({template:''})
+     * @Component({templateUrl:'./my-component.html'})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
      *     const id: string = route.snapshot.params.id;
-     *     const data = route.snapshot.data;
+     *     const url: string = route.snapshot.url.join('');
+     *     const user = route.snapshot.data.user;
      *   }
      * }
      * ```
@@ -1252,7 +1439,35 @@
         /**
          * @internal
          */
-        function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
+        function ActivatedRouteSnapshot(
+            /**
+             *  The URL segments matched by this route.
+             */
+            url, 
+            /**
+             * The matrix parameters scoped to this route.
+             */
+            params, 
+            /**
+             * The query parameters shared by all the routes.
+             */
+            queryParams, 
+            /**
+             * The URL fragment shared by all the routes.
+             */
+            fragment, 
+            /**
+             * The static and resolved data of this route.
+             */
+            data, 
+            /**
+             * The outlet name of the route.
+             */
+            outlet, 
+            /**
+             * The component of the route.
+             */
+            component, routeConfig, urlSegment, lastPathIndex, resolve) {
             this.url = url;
             this.params = params;
             this.queryParams = queryParams;
@@ -1266,35 +1481,56 @@
             this._resolve = resolve;
         }
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+            /**
+             * The configuration used to match this route.
+             */
             get: function () { return this._routeConfig; },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
+            /**
+             * The root of the router state.
+             */
             get: function () { return this._routerState.root; },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
+            /**
+             * The parent of this route in the router state tree.
+             */
             get: function () { return this._routerState.parent(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
+            /**
+             * The first child of this route in the router state tree.
+             */
             get: function () { return this._routerState.firstChild(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
+            /**
+             * The children of this route in the router state tree.
+             */
             get: function () { return this._routerState.children(this); },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
+            /**
+             * The path from the root of the router state tree to this route.
+             */
             get: function () { return this._routerState.pathFromRoot(this); },
             enumerable: true,
             configurable: true
         });
+        /**
+         * @docsNotRequired
+         */
         ActivatedRouteSnapshot.prototype.toString = function () {
             var url = this.url.map(function (s) { return s.toString(); }).join('/');
             var matched = this._routeConfig ? this._routeConfig.path : '';
@@ -1303,18 +1539,27 @@
         return ActivatedRouteSnapshot;
     }());
     /**
-     * The state of the router at a particular moment in time.
+     * @whatItDoes Represents the state of the router at a moment in time.
      *
-     * ### Usage
+     * @howToUse
      *
      * ```
-     * @Component({template:''})
+     * @Component({templateUrl:'template.html'})
      * class MyComponent {
      *   constructor(router: Router) {
-     *     const snapshot = router.routerState.snapshot;
+     *     const state: RouterState = router.routerState;
+     *     const snapshot: RouterStateSnapshot = state.snapshot;
+     *     const root: ActivatedRouteSnapshot = snapshot.root;
+     *     const child = root.firstChild;
+     *     const id: Observable<string> = child.params.map(p => p.id);
+     *     //...
      *   }
      * }
      * ```
+     *
+     * @description
+     * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
+     * the "consumed" URL segments, the extracted parameters, and the resolved data.
      *
      * @stable
      */
@@ -1323,7 +1568,9 @@
         /**
          * @internal
          */
-        function RouterStateSnapshot(url, root) {
+        function RouterStateSnapshot(
+            /** The url from which this snapshot was created */
+            url, root) {
             _super.call(this, root);
             this.url = url;
             setRouterStateSnapshot(this, root);
@@ -1957,6 +2204,8 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
+     * @whatItDoes Contains all the router outlets created in a component.
+     *
      * @stable
      */
     var RouterOutletMap = (function () {
@@ -1964,82 +2213,128 @@
             /** @internal */
             this._outlets = {};
         }
+        /**
+         * Adds an outlet to this map.
+         */
         RouterOutletMap.prototype.registerOutlet = function (name, outlet) { this._outlets[name] = outlet; };
+        /**
+         * Removes an outlet from this map.
+         */
         RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
         return RouterOutletMap;
     }());
 
     /**
-     * An event triggered when a navigation starts
+     * @whatItDoes Represents an event triggered when a navigation starts.
      *
      * @stable
      */
     var NavigationStart = (function () {
-        function NavigationStart(id, url) {
+        // TODO: vsavkin: make internal
+        function NavigationStart(
+            /** @docsNotRequired */
+            id, 
+            /** @docsNotRequired */
+            url) {
             this.id = id;
             this.url = url;
         }
+        /** @docsNotRequired */
         NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
         return NavigationStart;
     }());
     /**
-     * An event triggered when a navigation ends successfully
+     * @whatItDoes Represents an event triggered when a navigation ends successfully.
      *
      * @stable
      */
     var NavigationEnd = (function () {
-        function NavigationEnd(id, url, urlAfterRedirects) {
+        // TODO: vsavkin: make internal
+        function NavigationEnd(
+            /** @docsNotRequired */
+            id, 
+            /** @docsNotRequired */
+            url, 
+            /** @docsNotRequired */
+            urlAfterRedirects) {
             this.id = id;
             this.url = url;
             this.urlAfterRedirects = urlAfterRedirects;
         }
+        /** @docsNotRequired */
         NavigationEnd.prototype.toString = function () {
             return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
         };
         return NavigationEnd;
     }());
     /**
-     * An event triggered when a navigation is canceled
+     * @whatItDoes Represents an event triggered when a navigation is canceled.
      *
      * @stable
      */
     var NavigationCancel = (function () {
-        function NavigationCancel(id, url, reason) {
+        // TODO: vsavkin: make internal
+        function NavigationCancel(
+            /** @docsNotRequired */
+            id, 
+            /** @docsNotRequired */
+            url, 
+            /** @docsNotRequired */
+            reason) {
             this.id = id;
             this.url = url;
             this.reason = reason;
         }
+        /** @docsNotRequired */
         NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
         return NavigationCancel;
     }());
     /**
-     * An event triggered when a navigation fails due to unexpected error
+     * @whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
      *
      * @stable
      */
     var NavigationError = (function () {
-        function NavigationError(id, url, error) {
+        // TODO: vsavkin: make internal
+        function NavigationError(
+            /** @docsNotRequired */
+            id, 
+            /** @docsNotRequired */
+            url, 
+            /** @docsNotRequired */
+            error) {
             this.id = id;
             this.url = url;
             this.error = error;
         }
+        /** @docsNotRequired */
         NavigationError.prototype.toString = function () {
             return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
         };
         return NavigationError;
     }());
     /**
-     * An event triggered when routes are recognized
+     * @whatItDoes Represents an event triggered when routes are recognized.
      *
      * @stable
      */
     var RoutesRecognized = (function () {
-        function RoutesRecognized(id, url, urlAfterRedirects, state) {
+        // TODO: vsavkin: make internal
+        function RoutesRecognized(
+            /** @docsNotRequired */
+            id, 
+            /** @docsNotRequired */
+            url, 
+            /** @docsNotRequired */
+            urlAfterRedirects, 
+            /** @docsNotRequired */
+            state) {
             this.id = id;
             this.url = url;
             this.urlAfterRedirects = urlAfterRedirects;
             this.state = state;
         }
+        /** @docsNotRequired */
         RoutesRecognized.prototype.toString = function () {
             return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
         };
@@ -2049,9 +2344,11 @@
         throw error;
     }
     /**
-     * The `Router` is responsible for mapping URLs to components.
+     * @whatItDoes Provides the navigation and url manipulation capabilities.
      *
      * See {@link Routes} for more details and examples.
+     *
+     * @ngModule RouterModule
      *
      * @stable
      */
@@ -2059,6 +2356,7 @@
         /**
          * Creates the router service.
          */
+        // TODO: vsavkin make internal after the final is out.
         function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
             this.rootComponentType = rootComponentType;
             this.urlSerializer = urlSerializer;
@@ -2067,11 +2365,14 @@
             this.injector = injector;
             this.config = config;
             this.navigationId = 0;
+            /**
+             * Error handler that is invoked when a navigation errors.
+             *
+             * See {@link ErrorHandler} for more information.
+             */
             this.errorHandler = defaultErrorHandler;
             /**
              * Indicates if at least one navigation happened.
-             *
-             * @stable
              */
             this.navigated = false;
             this.resetConfig(config);
@@ -2081,14 +2382,14 @@
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
         /**
-         * Sets up the location change listener and performs the inital navigation
+         * Sets up the location change listener and performs the initial navigation.
          */
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
             this.navigateByUrl(this.location.path(true), { replaceUrl: true });
         };
         /**
-         * Sets up the location change listener
+         * Sets up the location change listener.
          */
         Router.prototype.setUpLocationChangeListener = function () {
             var _this = this;
@@ -2145,14 +2446,16 @@
             validateConfig(config);
             this.config = config;
         };
+        /**
+         * @docsNotRequired
+         */
         Router.prototype.ngOnDestroy = function () { this.dispose(); };
         /**
          * Disposes of the router.
          */
         Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
         /**
-         * Applies an array of commands to the current url tree and creates
-         * a new url tree.
+         * Applies an array of commands to the current url tree and creates a new url tree.
          *
          * When given an activate route, applies the given commands starting from the route.
          * When not given a route, applies the given command starting from the root.
@@ -2259,7 +2562,7 @@
          */
         Router.prototype.serializeUrl = function (url) { return this.urlSerializer.serialize(url); };
         /**
-         * Parse a string into a {@link UrlTree}.
+         * Parses a string into a {@link UrlTree}.
          */
         Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
         /**
@@ -2722,7 +3025,9 @@
     }
 
     /**
-     * The RouterLink directive lets you link to specific parts of your app.
+     * @whatItDoes Lets you link to specific parts of your app.
+     *
+     * @howToUse
      *
      * Consider the following route configuration:
 
@@ -2730,10 +3035,20 @@
      * [{ path: 'user/:name', component: UserCmp }]
      * ```
      *
-     * When linking to this `User` route, you can write:
+     * When linking to this `user/:name` route, you can write:
      *
      * ```
-     * <a [routerLink]="/user/bob">link to user component</a>
+     * <a routerLink='/user/bob'>link to user component</a>
+     * ```
+     *
+     * @description
+     *
+     * The RouterLink directives let you link to specific parts of your app.
+     *
+     * Whe the link is static, you can use the directive as follows:
+     *
+     * ```
+     * <a routerLink="/user/bob">link to user component</a>
      * ```
      *
      * If you use dynamic values to generate the link, you can pass an array of path
@@ -2741,6 +3056,7 @@
      *
      * For instance `['/team', teamId, 'user', userName, {details: true}]`
      * means that we want to generate a link to `/team/11/user/bob;details=true`.
+     *
      * Multiple static segments can be merged into one (e.g., `['/team/11/user', userName, {details:
      true}]`).
      *
@@ -2771,7 +3087,12 @@
      * For instance, if the current url is `/user/(box//aux:team)`.
      *
      * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
-     * `/user/(jim//aux:team)`. See {@link Router.createUrlTree} for more information.
+     * `/user/(jim//aux:team)`.
+     *
+     * @selector ':not(a)[routerLink]'
+     * @ngModule RouterModule
+     *
+     * See {@link Router.createUrlTree} for more information.
      *
      * @stable
      */
@@ -2834,7 +3155,13 @@
         return RouterLink;
     }());
     /**
+     * @whatItDoes Lets you link to specific parts of your app.
+     *
      * See {@link RouterLink} for more information.
+     *
+     * @selector 'a[routerLink]'
+     * @ngModule RouterModule
+     *
      * @stable
      */
     var RouterLinkWithHref = (function () {
@@ -2919,6 +3246,16 @@
     }
 
     /**
+     * @whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
+     *
+     * @howToUse
+     *
+     * ```
+     * <a [routerLink]='/user/bob' routerLinkActive='active-link'>Bob</a>
+     * ```
+     *
+     * @description
+     *
      * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
      * becomes active.
      *
@@ -2935,7 +3272,7 @@
      *
      * ```
      * <a [routerLink]="/user/bob" routerLinkActive="class1 class2">Bob</a>
-     * <a [routerLink]="/user/bob" routerLinkActive="['class1', 'class2']">Bob</a>
+     * <a [routerLink]="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
      * ```
      *
      * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
@@ -2957,6 +3294,9 @@
      *
      * This will set the active-link class on the div tag if the url is either '/user/jim' or
      * '/user/bob'.
+     *
+     * @selector ':not(a)[routerLink]'
+     * @ngModule RouterModule
      *
      * @stable
      */
@@ -3027,25 +3367,27 @@
     }());
 
     /**
-     * A router outlet is a placeholder that Angular dynamically fills based on the application's route.
+     * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
+     * state.
      *
-     * ## Example
+     * @howToUse
      *
      * ```
      * <router-outlet></router-outlet>
-     * <router-outlet name="left"></router-outlet>
-     * <router-outlet name="right"></router-outlet>
+     * <router-outlet name='left'></router-outlet>
+     * <router-outlet name='right'></router-outlet>
      * ```
      *
      * A router outlet will emit an activate event any time a new component is being instantiated,
      * and a deactivate event when it is being destroyed.
      *
-     * ## Example
-     *
      * ```
-     * <router-outlet (activate)="onActivate($event)"
-     * (deactivate)="onDeactivate($event)"></router-outlet>
+     * <router-outlet
+     *   (activate)='onActivate($event)'
+     *   (deactivate)='onDeactivate($event)'></router-outlet>
      * ```
+     * @selector 'a[routerLink]'
+     * @ngModule RouterModule
      *
      * @stable
      */
@@ -3127,13 +3469,18 @@
     }());
 
     /**
+     * @whatItDoes Contains a list of directives
      * @stable
      */
     var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
     /**
+     * @whatItDoes Is used in DI to configure the router.
      * @stable
      */
     var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+    /**
+     * @docsNotRequired
+     */
     var ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
     var ROUTER_PROVIDERS = [
         _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
@@ -3149,32 +3496,71 @@
         { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
     ];
     /**
-     * Router module.
+     * @whatItDoes Adds router directives and providers.
      *
-     * When registered at the root, it should be used as follows:
+     * @howToUse
      *
-     * ### Example
+     * RouterModule can be imported multiple times: once per lazily-loaded bundle.
+     * Since the router deals with a global shared resource--location, we cannot have
+     * more than one router service active.
      *
-     * ```
-     * bootstrap(AppCmp, {imports: [RouterModule.forRoot(ROUTES)]});
-     * ```
+     * That is why there are two ways to create the module: `RouterModule.forRoot` and
+     * `RouterModule.forChild`.
      *
-     * For submodules and lazy loaded submodules it should be used as follows:
+     * * `forRoot` creates a module that contains all the directives, the given routes, and the router
+     * service itself.
+     * * `forChild` creates a module that contains all the directives and the given routes, but does not
+     * include
+     * the router service.
      *
-     * ### Example
+     * When registered at the root, the module should be used as follows
      *
      * ```
      * @NgModule({
-     *   imports: [RouterModule.forChild(CHILD_ROUTES)]
+     *   imports: [RouterModule.forRoot(ROUTES)]
      * })
-     * class Lazy {}
+     * class MyNgModule {}
      * ```
+     *
+     * For submodules and lazy loaded submodules the module should be used as follows:
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forChild(ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
+     * @description
+     *
+     * Managing state transitions is one of the hardest parts of building applications. This is
+     * especially true on the web, where you also need to ensure that the state is reflected in the URL.
+     * In addition, we often want to split applications into multiple bundles and load them on demand.
+     * Doing this transparently is not trivial.
+     *
+     * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+     * application states, manage state transitions while taking care of the URL, and load bundles on
+     * demand.
+     *
+     * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
+     * overview of how the router should be used.
      *
      * @stable
      */
     var RouterModule = (function () {
         function RouterModule(guard) {
         }
+        /**
+         * Creates a module with all the router providers and directives. It also optionally sets up an
+         * application listener to perform an initial navigation.
+         *
+         * Options:
+         * * `enableTracing` makes the router log all its internal events to the console.
+         * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+         * API.
+         * * `initialNavigation` disables the initial navigation.
+         * * `errorHandler` provides a custom error handler.
+         */
         RouterModule.forRoot = function (routes, config) {
             return {
                 ngModule: RouterModule,
@@ -3195,6 +3581,9 @@
                 ]
             };
         };
+        /**
+         * Creates a module with all the router directives and a provider registering routes.
+         */
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
@@ -3219,6 +3608,18 @@
         return 'guarded';
     }
     /**
+     * @whatItDoes Registers routes.
+     *
+     * @howToUse
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forChild(ROUTES)],
+     *   providers: [provideRoutes(EXTRA_ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
      * @stable
      */
     function provideRoutes(routes) {

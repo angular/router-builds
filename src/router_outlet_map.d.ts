@@ -7,9 +7,17 @@
  */
 import { RouterOutlet } from './directives/router_outlet';
 /**
+ * @whatItDoes Contains all the router outlets created in a component.
+ *
  * @stable
  */
 export declare class RouterOutletMap {
+    /**
+     * Adds an outlet to this map.
+     */
     registerOutlet(name: string, outlet: RouterOutlet): void;
+    /**
+     * Removes an outlet from this map.
+     */
     removeOutlet(name: string): void;
 }

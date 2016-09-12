@@ -17,13 +17,18 @@ import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 import { flatten } from './utils/collection';
 /**
+ * @whatItDoes Contains a list of directives
  * @stable
  */
 var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
+ * @whatItDoes Is used in DI to configure the router.
  * @stable
  */
 export var ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
+/**
+ * @docsNotRequired
+ */
 export var ROUTER_FORROOT_GUARD = new OpaqueToken('ROUTER_FORROOT_GUARD');
 var pathLocationStrategy = {
     provide: LocationStrategy,
@@ -47,32 +52,71 @@ export var ROUTER_PROVIDERS = [
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 /**
- * Router module.
+ * @whatItDoes Adds router directives and providers.
  *
- * When registered at the root, it should be used as follows:
+ * @howToUse
  *
- * ### Example
+ * RouterModule can be imported multiple times: once per lazily-loaded bundle.
+ * Since the router deals with a global shared resource--location, we cannot have
+ * more than one router service active.
  *
- * ```
- * bootstrap(AppCmp, {imports: [RouterModule.forRoot(ROUTES)]});
- * ```
+ * That is why there are two ways to create the module: `RouterModule.forRoot` and
+ * `RouterModule.forChild`.
  *
- * For submodules and lazy loaded submodules it should be used as follows:
+ * * `forRoot` creates a module that contains all the directives, the given routes, and the router
+ * service itself.
+ * * `forChild` creates a module that contains all the directives and the given routes, but does not
+ * include
+ * the router service.
  *
- * ### Example
+ * When registered at the root, the module should be used as follows
  *
  * ```
  * @NgModule({
- *   imports: [RouterModule.forChild(CHILD_ROUTES)]
+ *   imports: [RouterModule.forRoot(ROUTES)]
  * })
- * class Lazy {}
+ * class MyNgModule {}
  * ```
+ *
+ * For submodules and lazy loaded submodules the module should be used as follows:
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModule.forChild(ROUTES)]
+ * })
+ * class MyNgModule {}
+ * ```
+ *
+ * @description
+ *
+ * Managing state transitions is one of the hardest parts of building applications. This is
+ * especially true on the web, where you also need to ensure that the state is reflected in the URL.
+ * In addition, we often want to split applications into multiple bundles and load them on demand.
+ * Doing this transparently is not trivial.
+ *
+ * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+ * application states, manage state transitions while taking care of the URL, and load bundles on
+ * demand.
+ *
+ * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
+ * overview of how the router should be used.
  *
  * @stable
  */
 export var RouterModule = (function () {
     function RouterModule(guard) {
     }
+    /**
+     * Creates a module with all the router providers and directives. It also optionally sets up an
+     * application listener to perform an initial navigation.
+     *
+     * Options:
+     * * `enableTracing` makes the router log all its internal events to the console.
+     * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+     * API.
+     * * `initialNavigation` disables the initial navigation.
+     * * `errorHandler` provides a custom error handler.
+     */
     RouterModule.forRoot = function (routes, config) {
         return {
             ngModule: RouterModule,
@@ -93,6 +137,9 @@ export var RouterModule = (function () {
             ]
         };
     };
+    /**
+     * Creates a module with all the router directives and a provider registering routes.
+     */
     RouterModule.forChild = function (routes) {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     };
@@ -117,6 +164,18 @@ export function provideForRootGuard(router) {
     return 'guarded';
 }
 /**
+ * @whatItDoes Registers routes.
+ *
+ * @howToUse
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModule.forChild(ROUTES)],
+ *   providers: [provideRoutes(EXTRA_ROUTES)]
+ * })
+ * class MyNgModule {}
+ * ```
+ *
  * @stable
  */
 export function provideRoutes(routes) {

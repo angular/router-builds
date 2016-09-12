@@ -7,8 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Name of the primary outlet.
- * @type {string}
+ * @whatItDoes Name of the primary outlet.
  *
  * @stable
  */
