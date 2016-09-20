@@ -183,6 +183,14 @@ export var Router = (function () {
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
     /**
+     * @internal
+     * TODO: this should be removed once the constructor of the router made internal
+     */
+    Router.prototype.resetRootComponentType = function (rootComponentType) {
+        this.rootComponentType = rootComponentType;
+        this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+    };
+    /**
      * Sets up the location change listener and performs the initial navigation.
      */
     Router.prototype.initialNavigation = function () {
