@@ -2387,7 +2387,9 @@
          */
         Router.prototype.resetRootComponentType = function (rootComponentType) {
             this.rootComponentType = rootComponentType;
-            this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+            // TODO: vsavkin router 4.0 should make the root component set to null
+            // this will simplify the lifecycle of the router.
+            this.currentRouterState.root.component = this.rootComponentType;
         };
         /**
          * Sets up the location change listener and performs the initial navigation.
