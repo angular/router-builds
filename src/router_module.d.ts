@@ -10,7 +10,6 @@ import { ApplicationRef, Compiler, Injector, ModuleWithProviders, NgModuleFactor
 import { Route, Routes } from './config';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
-import { RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
 import { UrlSerializer } from './url_tree';
 /**
@@ -134,17 +133,13 @@ export interface ExtraOptions {
      * A custom error handler.
      */
     errorHandler?: ErrorHandler;
-    /**
-     * Configures a preloading strategy. See {@link PreloadAllModules}.
-     */
-    preloadingStrategy?: any;
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): () => void;
+export declare function initialRouterNavigation(router: Router, opts: ExtraOptions): () => void;
 export declare function provideRouterInitializer(): {
     provide: OpaqueToken;
     multi: boolean;
-    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => () => void;
-    deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
+    useFactory: (router: Router, opts: ExtraOptions) => () => void;
+    deps: (OpaqueToken | typeof Router)[];
 };
