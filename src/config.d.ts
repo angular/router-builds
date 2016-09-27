@@ -58,7 +58,7 @@ import { Observable } from 'rxjs/Observable';
  * {
  *   path: 'chat/:user',
  *   component: Chat
- *   outlet: aux
+ *   outlet: 'aux'
  * }]
  * ```
  *
