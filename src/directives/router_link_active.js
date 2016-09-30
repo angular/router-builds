@@ -101,15 +101,18 @@ export var RouterLinkActive = (function () {
         var _this = this;
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        var isActiveLinks = this.reduceList(this.links);
-        var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
-        this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
+        var isActive = this.hasActiveLink();
+        this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActive); });
     };
-    RouterLinkActive.prototype.reduceList = function (q) {
+    RouterLinkActive.prototype.isLinkActive = function (router) {
         var _this = this;
-        return q.reduce(function (res, link) {
-            return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
-        }, false);
+        return function (link) {
+            return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+        };
+    };
+    RouterLinkActive.prototype.hasActiveLink = function () {
+        return this.links.some(this.isLinkActive(this.router)) ||
+            this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
     RouterLinkActive.decorators = [
         { type: Directive, args: [{ selector: '[routerLinkActive]' },] },
