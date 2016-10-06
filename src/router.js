@@ -9,6 +9,7 @@ import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
+import { concatMap } from 'rxjs/operator/concatMap';
 import { every } from 'rxjs/operator/every';
 import { map } from 'rxjs/operator/map';
 import { mergeAll } from 'rxjs/operator/mergeAll';
@@ -546,7 +547,7 @@ export var PreActivation = (function () {
         if (this.checks.length === 0)
             return of(null);
         var checks$ = from(this.checks);
-        var runningChecks$ = mergeMap.call(checks$, function (s) {
+        var runningChecks$ = concatMap.call(checks$, function (s) {
             if (s instanceof CanActivate) {
                 return _this.runResolve(s.route);
             }
