@@ -83,7 +83,7 @@
      * ```
      * beforeEach(() => {
      *   TestBed.configureTestModule({
-     *     modules: [
+     *     imports: [
      *       RouterTestingModule.withRoutes(
      *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
      *       )

@@ -80,7 +80,7 @@ export function setupTestingRouter(urlSerializer, outletMap, location, loader, c
  * ```
  * beforeEach(() => {
  *   TestBed.configureTestModule({
- *     modules: [
+ *     imports: [
  *       RouterTestingModule.withRoutes(
  *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
  *       )
