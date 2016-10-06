@@ -13,7 +13,6 @@ import { RouterOutlet } from './directives/router_outlet';
 import { Router } from './router';
 import { ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
-import { NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 import { flatten } from './utils/collection';
@@ -49,8 +48,8 @@ export var ROUTER_PROVIDERS = [
         ]
     },
     RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-    { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader }, RouterPreloader, NoPreloading,
-    PreloadAllModules, { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+    { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader },
+    { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
 ];
 /**
  * @whatItDoes Adds router directives and providers.
@@ -134,11 +133,6 @@ export var RouterModule = (function () {
                         PlatformLocation, [new Inject(APP_BASE_HREF), new Optional()], ROUTER_CONFIGURATION
                     ]
                 },
-                {
-                    provide: PreloadingStrategy,
-                    useExisting: config && config.preloadingStrategy ? config.preloadingStrategy :
-                        NoPreloading
-                },
                 provideRouterInitializer()
             ]
         };
@@ -192,7 +186,11 @@ export function provideRoutes(routes) {
 }
 export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
     if (opts === void 0) { opts = {}; }
-    var r = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+    if (ref.componentTypes.length == 0) {
+        throw new Error('Bootstrap at least one component before injecting Router.');
+    }
+    var componentType = ref.componentTypes[0];
+    var r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
     if (opts.errorHandler) {
         r.errorHandler = opts.errorHandler;
     }
@@ -209,10 +207,8 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
 export function rootRoute(router) {
     return router.routerState.root;
 }
-export function initialRouterNavigation(router, ref, preloader, opts) {
+export function initialRouterNavigation(router, opts) {
     return function () {
-        router.resetRootComponentType(ref.componentTypes[0]);
-        preloader.setUpPreloading();
         if (opts.initialNavigation === false) {
             router.setUpLocationChangeListener();
         }
@@ -226,7 +222,7 @@ export function provideRouterInitializer() {
         provide: APP_BOOTSTRAP_LISTENER,
         multi: true,
         useFactory: initialRouterNavigation,
-        deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+        deps: [Router, ROUTER_CONFIGURATION]
     };
 }
 //# sourceMappingURL=router_module.js.map
