@@ -3269,7 +3269,7 @@
      * @howToUse
      *
      * ```
-     * <a [routerLink]='/user/bob' routerLinkActive='active-link'>Bob</a>
+     * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
      * ```
      *
      * @description
@@ -3280,7 +3280,7 @@
      * Consider the following example:
      *
      * ```
-     * <a [routerLink]="/user/bob" routerLinkActive="active-link">Bob</a>
+     * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
      * ```
      *
      * When the url is either '/user' or '/user/bob', the active-link class will
@@ -3289,15 +3289,15 @@
      * You can set more than one class, as follows:
      *
      * ```
-     * <a [routerLink]="/user/bob" routerLinkActive="class1 class2">Bob</a>
-     * <a [routerLink]="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
+     * <a routerLink="/user/bob" routerLinkActive="class1 class2">Bob</a>
+     * <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
      * ```
      *
      * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
      * only when the url matches the link exactly.
      *
      * ```
-     * <a [routerLink]="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+     * <a routerLink="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
      * true}">Bob</a>
      * ```
      *
@@ -3305,8 +3305,8 @@
      *
      * ```
      * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
-     *   <a [routerLink]="/user/jim">Jim</a>
-     *   <a [routerLink]="/user/bob">Bob</a>
+     *   <a routerLink="/user/jim">Jim</a>
+     *   <a routerLink="/user/bob">Bob</a>
      * </div>
      * ```
      *
