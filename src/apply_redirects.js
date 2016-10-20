@@ -144,20 +144,19 @@ var ApplyRedirects = (function () {
     };
     ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
         if (route.path === '**') {
-            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
+            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
         }
         else {
             return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
         }
     };
-    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (injector, routes, route, outlet) {
+    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (route) {
         var newSegments = applyRedirectCommands([], route.redirectTo, {});
         if (route.redirectTo.startsWith('/')) {
             return absoluteRedirect(newSegments);
         }
         else {
-            var group = new UrlSegmentGroup(newSegments, {});
-            return this.expandSegment(injector, group, routes, newSegments, outlet, false);
+            return of(new UrlSegmentGroup(newSegments, {}));
         }
     };
     ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
