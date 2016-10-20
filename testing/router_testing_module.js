@@ -45,30 +45,11 @@ export var SpyNgModuleFactoryLoader = (function () {
         /**
          * @docsNotRequired
          */
-        this._stubbedModules = {};
+        this.stubbedModules = {};
     }
-    Object.defineProperty(SpyNgModuleFactoryLoader.prototype, "stubbedModules", {
-        /**
-         * @docsNotRequired
-         */
-        get: function () { return this._stubbedModules; },
-        /**
-         * @docsNotRequired
-         */
-        set: function (modules) {
-            var res = {};
-            for (var _i = 0, _a = Object.keys(modules); _i < _a.length; _i++) {
-                var t = _a[_i];
-                res[t] = this.compiler.compileModuleAsync(modules[t]);
-            }
-            this._stubbedModules = res;
-        },
-        enumerable: true,
-        configurable: true
-    });
     SpyNgModuleFactoryLoader.prototype.load = function (path) {
-        if (this._stubbedModules[path]) {
-            return this._stubbedModules[path];
+        if (this.stubbedModules[path]) {
+            return this.compiler.compileModuleAsync(this.stubbedModules[path]);
         }
         else {
             return Promise.reject(new Error("Cannot find module " + path));
