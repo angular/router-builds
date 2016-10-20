@@ -16,5 +16,6 @@ export { RouterOutletMap } from './router_outlet_map';
 export { NoPreloading, PreloadAllModules, PreloadingStrategy } from './router_preloader';
 export { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 export { PRIMARY_OUTLET, Params } from './shared';
-export { DefaultUrlSerializer, UrlSegment, UrlSerializer, UrlTree } from './url_tree';
+export { UrlHandlingStrategy } from './url_handling_strategy';
+export { DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree } from './url_tree';
 export * from './private_export';

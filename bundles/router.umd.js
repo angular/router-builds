@@ -2244,6 +2244,35 @@
     }());
 
     /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
+     * @whatItDoes Provides a way to migrate Angular 1 applications to Angular 2.
+     *
+     * @experimental
+     */
+    var UrlHandlingStrategy = (function () {
+        function UrlHandlingStrategy() {
+        }
+        return UrlHandlingStrategy;
+    }());
+    /**
+     * @experimental
+     */
+    var DefaultUrlHandlingStrategy = (function () {
+        function DefaultUrlHandlingStrategy() {
+        }
+        DefaultUrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { return true; };
+        DefaultUrlHandlingStrategy.prototype.extract = function (url) { return url; };
+        DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
+        return DefaultUrlHandlingStrategy;
+    }());
+
+    /**
      * @whatItDoes Represents an event triggered when a navigation starts.
      *
      * @stable
@@ -2394,9 +2423,14 @@
              * Indicates if at least one navigation happened.
              */
             this.navigated = false;
+            /**
+             * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+             */
+            this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
             this.resetConfig(config);
             this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
+            this.rawUrlTree = this.currentUrlTree;
             this.configLoader = new RouterConfigLoader(loader, compiler);
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
@@ -2425,12 +2459,18 @@
             // Zone.current.wrap is needed because of the issue with RxJS scheduler,
             // which does not work properly with zone.js in IE and Safari
             this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
-                var tree = _this.urlSerializer.parse(change['url']);
-                // we fire multiple events for a single URL change
-                // we should navigate only once
-                return _this.currentUrlTree.toString() !== tree.toString() ?
-                    _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
-                    null;
+                var rawUrlTree = _this.urlSerializer.parse(change['url']);
+                var tree = _this.urlHandlingStrategy.extract(rawUrlTree);
+                setTimeout(function () {
+                    // we fire multiple events for a single URL change
+                    // we should navigate only once
+                    if (!_this.lastNavigation || _this.lastNavigation.toString() !== tree.toString()) {
+                        _this.scheduleNavigation(rawUrlTree, tree, { skipLocationChange: change['pop'], replaceUrl: true });
+                    }
+                    else {
+                        _this.rawUrlTree = rawUrlTree;
+                    }
+                }, 0);
             }));
         };
         Object.defineProperty(Router.prototype, "routerState", {
@@ -2554,11 +2594,11 @@
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
             if (url instanceof UrlTree) {
-                return this.scheduleNavigation(url, extras);
+                return this.scheduleNavigation(this.rawUrlTree, url, extras);
             }
             else {
                 var urlTree = this.urlSerializer.parse(url);
-                return this.scheduleNavigation(urlTree, extras);
+                return this.scheduleNavigation(this.rawUrlTree, urlTree, extras);
             }
         };
         /**
@@ -2584,7 +2624,7 @@
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
-            return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
+            return this.scheduleNavigation(this.rawUrlTree, this.createUrlTree(commands, extras), extras);
         };
         /**
          * Serializes a {@link UrlTree} into a string.
@@ -2606,13 +2646,24 @@
                 return containsTree(this.currentUrlTree, urlTree, exact);
             }
         };
-        Router.prototype.scheduleNavigation = function (url, extras) {
+        Router.prototype.scheduleNavigation = function (rawUrl, url, extras) {
             var _this = this;
-            var id = ++this.navigationId;
-            this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-            return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id); });
+            if (this.urlHandlingStrategy.shouldProcessUrl(url)) {
+                var id_1 = ++this.navigationId;
+                this.routerEvents.next(new NavigationStart(id_1, this.serializeUrl(url)));
+                return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, extras.skipLocationChange, extras.replaceUrl, id_1, null); });
+            }
+            else if (this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
+                var id_2 = ++this.navigationId;
+                this.routerEvents.next(new NavigationStart(id_2, this.serializeUrl(url)));
+                return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, false, false, id_2, createEmptyState(url, _this.rootComponentType)); });
+            }
+            else {
+                this.rawUrlTree = rawUrl;
+                return Promise.resolve(null);
+            }
         };
-        Router.prototype.runNavigate = function (url, shouldPreventPushState, shouldReplaceUrl, id) {
+        Router.prototype.runNavigate = function (rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
             var _this = this;
             if (id !== this.navigationId) {
                 this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
@@ -2626,18 +2677,25 @@
                 var appliedUrl;
                 var storedState = _this.currentRouterState;
                 var storedUrl = _this.currentUrlTree;
-                var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
-                var snapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function (u) {
-                    appliedUrl = u;
-                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-                });
-                var emitRecognzied$ = rxjs_operator_map.map.call(snapshot$, function (newRouterStateSnapshot) {
-                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                    return newRouterStateSnapshot;
-                });
-                var routerState$ = rxjs_operator_map.map.call(emitRecognzied$, function (routerStateSnapshot) {
-                    return createRouterState(routerStateSnapshot, _this.currentRouterState);
-                });
+                var routerState$;
+                if (!precreatedState) {
+                    var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+                    var snapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function (u) {
+                        appliedUrl = u;
+                        return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
+                    });
+                    var emitRecognzied$ = rxjs_operator_map.map.call(snapshot$, function (newRouterStateSnapshot) {
+                        _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
+                        return newRouterStateSnapshot;
+                    });
+                    routerState$ = rxjs_operator_map.map.call(emitRecognzied$, function (routerStateSnapshot) {
+                        return createRouterState(routerStateSnapshot, _this.currentRouterState);
+                    });
+                }
+                else {
+                    appliedUrl = url;
+                    routerState$ = rxjs_observable_of.of(precreatedState);
+                }
                 var preactivation$ = rxjs_operator_map.map.call(routerState$, function (newState) {
                     state = newState;
                     preActivation =
@@ -2659,10 +2717,12 @@
                         navigationIsSuccessful = false;
                         return;
                     }
+                    _this.lastNavigation = appliedUrl;
                     _this.currentUrlTree = appliedUrl;
+                    _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                     _this.currentRouterState = state;
                     if (!shouldPreventPushState) {
-                        var path = _this.urlSerializer.serialize(appliedUrl);
+                        var path = _this.urlSerializer.serialize(_this.rawUrlTree);
                         if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
                             _this.location.replaceState(path);
                         }
@@ -2701,7 +2761,8 @@
                     if (id === _this.navigationId) {
                         _this.currentRouterState = storedState;
                         _this.currentUrlTree = storedUrl;
-                        _this.location.replaceState(_this.serializeUrl(storedUrl));
+                        _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+                        _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
                     }
                 });
             });
@@ -3632,7 +3693,7 @@
             useFactory: setupRouter,
             deps: [
                 _angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader,
-                _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION
+                _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new _angular_core.Optional()]
             ]
         },
         RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
@@ -3777,21 +3838,24 @@
             { provide: ROUTES, multi: true, useValue: routes }
         ];
     }
-    function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
+    function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy) {
         if (opts === void 0) { opts = {}; }
-        var r = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+        var router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+        if (urlHandlingStrategy) {
+            router.urlHandlingStrategy = urlHandlingStrategy;
+        }
         if (opts.errorHandler) {
-            r.errorHandler = opts.errorHandler;
+            router.errorHandler = opts.errorHandler;
         }
         if (opts.enableTracing) {
-            r.events.subscribe(function (e) {
+            router.events.subscribe(function (e) {
                 console.group("Router Event: " + e.constructor.name);
                 console.log(e.toString());
                 console.log(e);
                 console.groupEnd();
             });
         }
-        return r;
+        return router;
     }
     function rootRoute(router) {
         return router.routerState.root;
@@ -3844,8 +3908,10 @@
     exports.RouterState = RouterState;
     exports.RouterStateSnapshot = RouterStateSnapshot;
     exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
+    exports.UrlHandlingStrategy = UrlHandlingStrategy;
     exports.DefaultUrlSerializer = DefaultUrlSerializer;
     exports.UrlSegment = UrlSegment;
+    exports.UrlSegmentGroup = UrlSegmentGroup;
     exports.UrlSerializer = UrlSerializer;
     exports.UrlTree = UrlTree;
     exports.__router_private__ = __router_private__;

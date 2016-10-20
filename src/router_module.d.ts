@@ -12,6 +12,7 @@ import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
+import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
 /**
  * @whatItDoes Is used in DI to configure the router.
@@ -139,7 +140,7 @@ export interface ExtraOptions {
      */
     preloadingStrategy?: any;
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): () => void;
 export declare function provideRouterInitializer(): {
