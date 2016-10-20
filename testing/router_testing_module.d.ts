@@ -42,6 +42,13 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     /**
      * @docsNotRequired
      */
+    private _stubbedModules;
+    /**
+     * @docsNotRequired
+     */
+    /**
+     * @docsNotRequired
+     */
     stubbedModules: {
         [path: string]: any;
     };

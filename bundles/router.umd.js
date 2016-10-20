@@ -824,19 +824,20 @@
         };
         ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
             if (route.path === '**') {
-                return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
+                return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
             }
             else {
                 return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
             }
         };
-        ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (route) {
+        ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (injector, routes, route, outlet) {
             var newSegments = applyRedirectCommands([], route.redirectTo, {});
             if (route.redirectTo.startsWith('/')) {
                 return absoluteRedirect(newSegments);
             }
             else {
-                return rxjs_observable_of.of(new UrlSegmentGroup(newSegments, {}));
+                var group = new UrlSegmentGroup(newSegments, {});
+                return this.expandSegment(injector, group, routes, newSegments, outlet, false);
             }
         };
         ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
