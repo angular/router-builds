@@ -46,6 +46,14 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  * true}">Bob</a>
  * ```
  *
+ * You can assign the RouterLinkActive instance to a template variable and directly check
+ * the `isActive` status.
+ * ```
+ * <a routerLink="/user/bob" routerLinkActive #rla="routerLinkActive">
+ *   Bob {{ rla.isActive ? '(already open)' : ''}}
+ * </a>
+ * ```
+ *
  * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
  *
  * ```
@@ -75,6 +83,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
         exact: boolean;
     };
     constructor(router: Router, element: ElementRef, renderer: Renderer);
+    isActive: boolean;
     ngAfterContentInit(): void;
     routerLinkActive: string[] | string;
     ngOnChanges(changes: {}): any;
