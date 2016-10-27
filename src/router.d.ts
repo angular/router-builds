@@ -12,7 +12,6 @@ import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
-import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
 import { TreeNode } from './utils/tree';
 /**
@@ -260,8 +259,6 @@ export declare class Router {
     private injector;
     config: Routes;
     private currentUrlTree;
-    private rawUrlTree;
-    private lastNavigation;
     private currentRouterState;
     private locationSubscription;
     private routerEvents;
@@ -277,10 +274,6 @@ export declare class Router {
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
-    /**
-     * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
-     */
-    urlHandlingStrategy: UrlHandlingStrategy;
     /**
      * Creates the router service.
      */
@@ -425,8 +418,8 @@ export declare class Router {
      * Returns if the url is activated or not.
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private scheduleNavigation(rawUrl, url, extras);
-    private runNavigate(rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private scheduleNavigation(url, extras);
+    private runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id);
 }
 export declare class PreActivation {
     private future;
@@ -439,7 +432,8 @@ export declare class PreActivation {
     resolveData(): Observable<any>;
     private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
     traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
-    private deactiveRouteAndItsChildren(route, outlet);
+    private deactivateOutletAndItChildren(route, outlet);
+    private deactivateOutletMap(outletMap);
     private runCanActivate(future);
     private runCanActivateChild(path);
     private extractCanActivateChild(p);

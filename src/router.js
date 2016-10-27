@@ -22,9 +22,8 @@ import { createUrlTree } from './create_url_tree';
 import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
-import { ActivatedRoute, advanceActivatedRoute, createEmptyState, inheritedParamsDataResolve } from './router_state';
+import { ActivatedRoute, advanceActivatedRoute, createEmptyState } from './router_state';
 import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
-import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
@@ -178,14 +177,9 @@ export var Router = (function () {
          * Indicates if at least one navigation happened.
          */
         this.navigated = false;
-        /**
-         * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
-         */
-        this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.resetConfig(config);
         this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
-        this.rawUrlTree = this.currentUrlTree;
         this.configLoader = new RouterConfigLoader(loader, compiler);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
     }
@@ -214,18 +208,12 @@ export var Router = (function () {
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,
         // which does not work properly with zone.js in IE and Safari
         this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
-            var rawUrlTree = _this.urlSerializer.parse(change['url']);
-            var tree = _this.urlHandlingStrategy.extract(rawUrlTree);
-            setTimeout(function () {
-                // we fire multiple events for a single URL change
-                // we should navigate only once
-                if (!_this.lastNavigation || _this.lastNavigation.toString() !== tree.toString()) {
-                    _this.scheduleNavigation(rawUrlTree, tree, { skipLocationChange: change['pop'], replaceUrl: true });
-                }
-                else {
-                    _this.rawUrlTree = rawUrlTree;
-                }
-            }, 0);
+            var tree = _this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return _this.currentUrlTree.toString() !== tree.toString() ?
+                _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                null;
         }));
     };
     Object.defineProperty(Router.prototype, "routerState", {
@@ -349,11 +337,11 @@ export var Router = (function () {
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
         if (url instanceof UrlTree) {
-            return this.scheduleNavigation(this.rawUrlTree, url, extras);
+            return this.scheduleNavigation(url, extras);
         }
         else {
             var urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(this.rawUrlTree, urlTree, extras);
+            return this.scheduleNavigation(urlTree, extras);
         }
     };
     /**
@@ -379,7 +367,7 @@ export var Router = (function () {
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
-        return this.scheduleNavigation(this.rawUrlTree, this.createUrlTree(commands, extras), extras);
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
     };
     /**
      * Serializes a {@link UrlTree} into a string.
@@ -401,24 +389,13 @@ export var Router = (function () {
             return containsTree(this.currentUrlTree, urlTree, exact);
         }
     };
-    Router.prototype.scheduleNavigation = function (rawUrl, url, extras) {
+    Router.prototype.scheduleNavigation = function (url, extras) {
         var _this = this;
-        if (this.urlHandlingStrategy.shouldProcessUrl(url)) {
-            var id_1 = ++this.navigationId;
-            this.routerEvents.next(new NavigationStart(id_1, this.serializeUrl(url)));
-            return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, extras.skipLocationChange, extras.replaceUrl, id_1, null); });
-        }
-        else if (this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
-            var id_2 = ++this.navigationId;
-            this.routerEvents.next(new NavigationStart(id_2, this.serializeUrl(url)));
-            return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, false, false, id_2, createEmptyState(url, _this.rootComponentType)); });
-        }
-        else {
-            this.rawUrlTree = rawUrl;
-            return Promise.resolve(null);
-        }
+        var id = ++this.navigationId;
+        this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+        return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id); });
     };
-    Router.prototype.runNavigate = function (rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+    Router.prototype.runNavigate = function (url, shouldPreventPushState, shouldReplaceUrl, id) {
         var _this = this;
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
@@ -432,25 +409,18 @@ export var Router = (function () {
             var appliedUrl;
             var storedState = _this.currentRouterState;
             var storedUrl = _this.currentUrlTree;
-            var routerState$;
-            if (!precreatedState) {
-                var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
-                var snapshot$ = mergeMap.call(redirectsApplied$, function (u) {
-                    appliedUrl = u;
-                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-                });
-                var emitRecognzied$ = map.call(snapshot$, function (newRouterStateSnapshot) {
-                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                    return newRouterStateSnapshot;
-                });
-                routerState$ = map.call(emitRecognzied$, function (routerStateSnapshot) {
-                    return createRouterState(routerStateSnapshot, _this.currentRouterState);
-                });
-            }
-            else {
-                appliedUrl = url;
-                routerState$ = of(precreatedState);
-            }
+            var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+            var snapshot$ = mergeMap.call(redirectsApplied$, function (u) {
+                appliedUrl = u;
+                return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
+            });
+            var emitRecognzied$ = map.call(snapshot$, function (newRouterStateSnapshot) {
+                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
+                return newRouterStateSnapshot;
+            });
+            var routerState$ = map.call(emitRecognzied$, function (routerStateSnapshot) {
+                return createRouterState(routerStateSnapshot, _this.currentRouterState);
+            });
             var preactivation$ = map.call(routerState$, function (newState) {
                 state = newState;
                 preActivation =
@@ -472,12 +442,10 @@ export var Router = (function () {
                     navigationIsSuccessful = false;
                     return;
                 }
-                _this.lastNavigation = appliedUrl;
                 _this.currentUrlTree = appliedUrl;
-                _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                 _this.currentRouterState = state;
                 if (!shouldPreventPushState) {
-                    var path = _this.urlSerializer.serialize(_this.rawUrlTree);
+                    var path = _this.urlSerializer.serialize(appliedUrl);
                     if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
                         _this.location.replaceState(path);
                     }
@@ -516,8 +484,7 @@ export var Router = (function () {
                 if (id === _this.navigationId) {
                     _this.currentRouterState = storedState;
                     _this.currentUrlTree = storedUrl;
-                    _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                    _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+                    _this.location.replaceState(_this.serializeUrl(storedUrl));
                 }
             });
         });
@@ -597,7 +564,7 @@ export var PreActivation = (function () {
             _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
             delete prevChildren[c.value.outlet];
         });
-        forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap._outlets[k]); });
+        forEach(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]); });
     };
     PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap, futurePath) {
         var future = futureNode.value;
@@ -611,7 +578,6 @@ export var PreActivation = (function () {
             else {
                 // we need to set the data
                 future.data = curr.data;
-                future._resolvedData = curr._resolvedData;
             }
             // If we have a component, we need to go through an outlet.
             if (future.component) {
@@ -623,7 +589,13 @@ export var PreActivation = (function () {
         }
         else {
             if (curr) {
-                this.deactiveRouteAndItsChildren(currNode, outlet);
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    this.deactivateOutletAndItChildren(curr, outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
             }
             this.checks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
@@ -635,15 +607,19 @@ export var PreActivation = (function () {
             }
         }
     };
-    PreActivation.prototype.deactiveRouteAndItsChildren = function (route, outlet) {
+    PreActivation.prototype.deactivateOutletAndItChildren = function (route, outlet) {
+        if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
+            this.checks.push(new CanDeactivate(outlet.component, route));
+        }
+    };
+    PreActivation.prototype.deactivateOutletMap = function (outletMap) {
         var _this = this;
-        var prevChildren = nodeChildrenAsMap(route);
-        forEach(prevChildren, function (v, k) {
-            var childOutlet = outlet ? outlet.outletMap._outlets[k] : null;
-            _this.deactiveRouteAndItsChildren(v, childOutlet);
+        forEach(outletMap._outlets, function (v) {
+            if (v.isActivated) {
+                _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
+            }
         });
-        var component = outlet && outlet.isActivated ? outlet.component : null;
-        this.checks.push(new CanDeactivate(component, route.value));
     };
     PreActivation.prototype.runCanActivate = function (future) {
         var _this = this;
@@ -706,9 +682,9 @@ export var PreActivation = (function () {
     };
     PreActivation.prototype.runResolve = function (future) {
         var resolve = future._resolve;
-        return map.call(this.resolveNode(resolve, future), function (resolvedData) {
-            future._resolvedData = resolvedData;
-            future.data = merge(future.data, inheritedParamsDataResolve(future).resolve);
+        return map.call(this.resolveNode(resolve.current, future), function (resolvedData) {
+            resolve.resolvedData = resolvedData;
+            future.data = merge(future.data, resolve.flattenedResolvedData);
             return null;
         });
     };
@@ -745,7 +721,7 @@ var ActivateRoutes = (function () {
             _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
             delete prevChildren[c.value.outlet];
         });
-        forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap); });
+        forEach(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(outletMap._outlets[k]); });
     };
     ActivateRoutes.prototype.activateRoutes = function (futureNode, currNode, parentOutletMap) {
         var future = futureNode.value;
@@ -756,7 +732,7 @@ var ActivateRoutes = (function () {
             advanceActivatedRoute(future);
             // If we have a normal route, we need to go through an outlet.
             if (future.component) {
-                var outlet = getOutlet(parentOutletMap, future);
+                var outlet = getOutlet(parentOutletMap, futureNode.value);
                 this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
             }
             else {
@@ -765,7 +741,14 @@ var ActivateRoutes = (function () {
         }
         else {
             if (curr) {
-                this.deactiveRouteAndItsChildren(currNode, parentOutletMap);
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    var outlet = getOutlet(parentOutletMap, futureNode.value);
+                    this.deactivateOutletAndItChildren(outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
             }
             // if we have a normal route, we need to advance the route
             // and place the component into the outlet. After that recurse.
@@ -797,30 +780,15 @@ var ActivateRoutes = (function () {
         }
         outlet.activate(future, loadedFactoryResolver, loadedInjector, ReflectiveInjector.resolve(resolved), outletMap);
     };
-    ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
-        var _this = this;
-        var prevChildren = nodeChildrenAsMap(route);
-        var outlet = null;
-        // getOutlet throws when cannot find the right outlet,
-        // which can happen if an outlet was in an NgIf and was removed
-        try {
-            outlet = getOutlet(parentOutletMap, route.value);
-        }
-        catch (e) {
-            return;
-        }
-        var childOutletMap = outlet.outletMap;
-        forEach(prevChildren, function (v, k) {
-            if (route.value.component) {
-                _this.deactiveRouteAndItsChildren(v, childOutletMap);
-            }
-            else {
-                _this.deactiveRouteAndItsChildren(v, parentOutletMap);
-            }
-        });
+    ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
         if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
             outlet.deactivate();
         }
+    };
+    ActivateRoutes.prototype.deactivateOutletMap = function (outletMap) {
+        var _this = this;
+        forEach(outletMap._outlets, function (v) { return _this.deactivateOutletAndItChildren(v); });
     };
     return ActivateRoutes;
 }());

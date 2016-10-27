@@ -15,7 +15,6 @@ import { ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
-import { UrlHandlingStrategy } from './url_handling_strategy';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 import { flatten } from './utils/collection';
 /**
@@ -46,7 +45,7 @@ export var ROUTER_PROVIDERS = [
         useFactory: setupRouter,
         deps: [
             ApplicationRef, UrlSerializer, RouterOutletMap, Location, Injector, NgModuleFactoryLoader,
-            Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+            Compiler, ROUTES, ROUTER_CONFIGURATION
         ]
     },
     RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
@@ -191,24 +190,21 @@ export function provideRoutes(routes) {
         { provide: ROUTES, multi: true, useValue: routes }
     ];
 }
-export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy) {
+export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
     if (opts === void 0) { opts = {}; }
-    var router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
-    if (urlHandlingStrategy) {
-        router.urlHandlingStrategy = urlHandlingStrategy;
-    }
+    var r = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
     if (opts.errorHandler) {
-        router.errorHandler = opts.errorHandler;
+        r.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
-        router.events.subscribe(function (e) {
+        r.events.subscribe(function (e) {
             console.group("Router Event: " + e.constructor.name);
             console.log(e.toString());
             console.log(e);
             console.groupEnd();
         });
     }
-    return router;
+    return r;
 }
 export function rootRoute(router) {
     return router.routerState.root;
