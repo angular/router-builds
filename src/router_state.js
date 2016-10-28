@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PRIMARY_OUTLET } from './shared';
-import { UrlSegment } from './url_tree';
+import { UrlSegment, equalSegments } from './url_tree';
 import { merge, shallowEqual, shallowEqualArrays } from './utils/collection';
 import { Tree, TreeNode } from './utils/tree';
 /**
@@ -428,5 +428,8 @@ export function advanceActivatedRoute(route) {
         // this is for resolved data
         route.data.next(route._futureSnapshot.data);
     }
+}
+export function equalParamsAndUrlSegments(a, b) {
+    return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
 }
 //# sourceMappingURL=router_state.js.map

@@ -4,10 +4,10 @@
  * License: MIT
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/concatMap'), require('rxjs/operator/every'), require('rxjs/operator/map'), require('rxjs/operator/mergeAll'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/operator/first'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/BehaviorSubject'), require('rxjs/operator/filter')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/concatMap', 'rxjs/operator/every', 'rxjs/operator/map', 'rxjs/operator/mergeAll', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/operator/first', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/BehaviorSubject', 'rxjs/operator/filter'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.rxjs_operator_concatMap,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype));
-}(this, function (exports,_angular_common,_angular_core,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_map,rxjs_operator_mergeAll,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_operator_first,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_BehaviorSubject,rxjs_operator_filter) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/concatMap'), require('rxjs/operator/every'), require('rxjs/operator/map'), require('rxjs/operator/mergeAll'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/operator/first'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/operator/filter')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/BehaviorSubject', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/concatMap', 'rxjs/operator/every', 'rxjs/operator/map', 'rxjs/operator/mergeAll', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/operator/first', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/operator/filter'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.rxjs_operator_concatMap,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype));
+}(this, function (exports,_angular_common,_angular_core,rxjs_BehaviorSubject,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_map,rxjs_operator_mergeAll,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_operator_first,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_operator_filter) { 'use strict';
 
     /**
      * @license
@@ -376,6 +376,17 @@
         UrlSegment.prototype.toString = function () { return serializePath(this); };
         return UrlSegment;
     }());
+    function equalSegments(a, b) {
+        if (a.length !== b.length)
+            return false;
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i].path !== b[i].path)
+                return false;
+            if (!shallowEqual(a[i].parameters, b[i].parameters))
+                return false;
+        }
+        return true;
+    }
     function equalPath(a, b) {
         if (a.length !== b.length)
             return false;
@@ -1616,6 +1627,9 @@
             route.data.next(route._futureSnapshot.data);
         }
     }
+    function equalParamsAndUrlSegments(a, b) {
+        return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+    }
 
     function createRouterState(curr, prevState) {
         var root = createNode(curr._root, prevState ? prevState._root : undefined);
@@ -2385,6 +2399,8 @@
             this.location = location;
             this.injector = injector;
             this.config = config;
+            this.navigations = new rxjs_BehaviorSubject.BehaviorSubject(null);
+            this.routerEvents = new rxjs_Subject.Subject();
             this.navigationId = 0;
             /**
              * Error handler that is invoked when a navigation errors.
@@ -2401,11 +2417,11 @@
              */
             this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
             this.resetConfig(config);
-            this.routerEvents = new rxjs_Subject.Subject();
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
             this.configLoader = new RouterConfigLoader(loader, compiler);
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+            this.processNavigations();
         }
         /**
          * @internal
@@ -2433,16 +2449,8 @@
             // which does not work properly with zone.js in IE and Safari
             this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
                 var rawUrlTree = _this.urlSerializer.parse(change['url']);
-                var tree = _this.urlHandlingStrategy.extract(rawUrlTree);
                 setTimeout(function () {
-                    // we fire multiple events for a single URL change
-                    // we should navigate only once
-                    if (!_this.lastNavigation || _this.lastNavigation.toString() !== tree.toString()) {
-                        _this.scheduleNavigation(rawUrlTree, tree, { skipLocationChange: change['pop'], replaceUrl: true });
-                    }
-                    else {
-                        _this.rawUrlTree = rawUrlTree;
-                    }
+                    _this.scheduleNavigation(rawUrlTree, { skipLocationChange: change['pop'], replaceUrl: true });
                 }, 0);
             }));
         };
@@ -2567,11 +2575,11 @@
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
             if (url instanceof UrlTree) {
-                return this.scheduleNavigation(this.rawUrlTree, url, extras);
+                return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), extras);
             }
             else {
                 var urlTree = this.urlSerializer.parse(url);
-                return this.scheduleNavigation(this.rawUrlTree, urlTree, extras);
+                return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), extras);
             }
         };
         /**
@@ -2597,7 +2605,7 @@
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
-            return this.scheduleNavigation(this.rawUrlTree, this.createUrlTree(commands, extras), extras);
+            return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
         };
         /**
          * Serializes a {@link UrlTree} into a string.
@@ -2619,24 +2627,61 @@
                 return containsTree(this.currentUrlTree, urlTree, exact);
             }
         };
-        Router.prototype.scheduleNavigation = function (rawUrl, url, extras) {
+        Router.prototype.processNavigations = function () {
             var _this = this;
-            if (this.urlHandlingStrategy.shouldProcessUrl(url)) {
-                var id_1 = ++this.navigationId;
-                this.routerEvents.next(new NavigationStart(id_1, this.serializeUrl(url)));
-                return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, extras.skipLocationChange, extras.replaceUrl, id_1, null); });
+            rxjs_operator_concatMap.concatMap
+                .call(this.navigations, function (nav) {
+                if (nav) {
+                    _this.executeScheduledNavigation(nav);
+                    // a failed navigation should not stop the router from processing
+                    // further navigations => the catch
+                    return nav.promise.catch(function () { });
+                }
+                else {
+                    return rxjs_observable_of.of(null);
+                }
+            })
+                .subscribe(function () { });
+        };
+        Router.prototype.scheduleNavigation = function (rawUrl, extras) {
+            var prevRawUrl = this.navigations.value ? this.navigations.value.rawUrl : null;
+            if (prevRawUrl && prevRawUrl.toString() === rawUrl.toString()) {
+                return this.navigations.value.promise;
             }
-            else if (this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
-                var id_2 = ++this.navigationId;
-                this.routerEvents.next(new NavigationStart(id_2, this.serializeUrl(url)));
-                return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, false, false, id_2, createEmptyState(url, _this.rootComponentType)); });
+            var resolve = null;
+            var reject = null;
+            var promise = new Promise(function (res, rej) {
+                resolve = res;
+                reject = rej;
+            });
+            var id = ++this.navigationId;
+            this.navigations.next({ id: id, rawUrl: rawUrl, prevRawUrl: prevRawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
+            return promise;
+        };
+        Router.prototype.executeScheduledNavigation = function (_a) {
+            var _this = this;
+            var id = _a.id, rawUrl = _a.rawUrl, prevRawUrl = _a.prevRawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
+            var url = this.urlHandlingStrategy.extract(rawUrl);
+            var prevUrl = prevRawUrl ? this.urlHandlingStrategy.extract(prevRawUrl) : null;
+            var urlTransition = !prevUrl || url.toString() !== prevUrl.toString();
+            if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+                this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+                Promise.resolve()
+                    .then(function (_) { return _this.runNavigate(url, rawUrl, extras.skipLocationChange, extras.replaceUrl, id, null); })
+                    .then(resolve, reject);
+            }
+            else if (urlTransition && prevRawUrl && this.urlHandlingStrategy.shouldProcessUrl(prevRawUrl)) {
+                this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+                Promise.resolve()
+                    .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType)); })
+                    .then(resolve, reject);
             }
             else {
                 this.rawUrlTree = rawUrl;
-                return Promise.resolve(null);
+                resolve(null);
             }
         };
-        Router.prototype.runNavigate = function (rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+        Router.prototype.runNavigate = function (url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
             var _this = this;
             if (id !== this.navigationId) {
                 this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
@@ -2675,8 +2720,14 @@
                         new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
                     preActivation.traverse(_this.outletMap);
                 });
-                var preactivation2$ = rxjs_operator_mergeMap.mergeMap.call(preactivation$, function () { return preActivation.checkGuards(); });
+                var preactivation2$ = rxjs_operator_mergeMap.mergeMap.call(preactivation$, function () {
+                    if (_this.navigationId !== id)
+                        return rxjs_observable_of.of(false);
+                    return preActivation.checkGuards();
+                });
                 var resolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivation2$, function (shouldActivate) {
+                    if (_this.navigationId !== id)
+                        return rxjs_observable_of.of(false);
                     if (shouldActivate) {
                         return rxjs_operator_map.map.call(preActivation.resolveData(), function () { return shouldActivate; });
                     }
@@ -2690,7 +2741,6 @@
                         navigationIsSuccessful = false;
                         return;
                     }
-                    _this.lastNavigation = appliedUrl;
                     _this.currentUrlTree = appliedUrl;
                     _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                     _this.currentRouterState = state;
@@ -2823,7 +2873,7 @@
             var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
             // reusing the node
             if (curr && future._routeConfig === curr._routeConfig) {
-                if (!shallowEqual(future.params, curr.params)) {
+                if (!equalParamsAndUrlSegments(future, curr)) {
                     this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
                 }
                 else {

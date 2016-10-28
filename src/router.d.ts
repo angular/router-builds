@@ -261,10 +261,10 @@ export declare class Router {
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
-    private lastNavigation;
+    private navigations;
+    private routerEvents;
     private currentRouterState;
     private locationSubscription;
-    private routerEvents;
     private navigationId;
     private configLoader;
     /**
@@ -425,8 +425,10 @@ export declare class Router {
      * Returns if the url is activated or not.
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private scheduleNavigation(rawUrl, url, extras);
-    private runNavigate(rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private processNavigations();
+    private scheduleNavigation(rawUrl, extras);
+    private executeScheduledNavigation({id, rawUrl, prevRawUrl, extras, resolve, reject});
+    private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
 }
 export declare class PreActivation {
     private future;

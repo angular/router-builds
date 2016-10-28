@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
@@ -22,11 +23,11 @@ import { createUrlTree } from './create_url_tree';
 import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
-import { ActivatedRoute, advanceActivatedRoute, createEmptyState, inheritedParamsDataResolve } from './router_state';
+import { ActivatedRoute, advanceActivatedRoute, createEmptyState, equalParamsAndUrlSegments, inheritedParamsDataResolve } from './router_state';
 import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
-import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
+import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
  * @whatItDoes Represents an event triggered when a navigation starts.
  *
@@ -167,6 +168,8 @@ export var Router = (function () {
         this.location = location;
         this.injector = injector;
         this.config = config;
+        this.navigations = new BehaviorSubject(null);
+        this.routerEvents = new Subject();
         this.navigationId = 0;
         /**
          * Error handler that is invoked when a navigation errors.
@@ -183,11 +186,11 @@ export var Router = (function () {
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.resetConfig(config);
-        this.routerEvents = new Subject();
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
         this.configLoader = new RouterConfigLoader(loader, compiler);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+        this.processNavigations();
     }
     /**
      * @internal
@@ -215,16 +218,8 @@ export var Router = (function () {
         // which does not work properly with zone.js in IE and Safari
         this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
             var rawUrlTree = _this.urlSerializer.parse(change['url']);
-            var tree = _this.urlHandlingStrategy.extract(rawUrlTree);
             setTimeout(function () {
-                // we fire multiple events for a single URL change
-                // we should navigate only once
-                if (!_this.lastNavigation || _this.lastNavigation.toString() !== tree.toString()) {
-                    _this.scheduleNavigation(rawUrlTree, tree, { skipLocationChange: change['pop'], replaceUrl: true });
-                }
-                else {
-                    _this.rawUrlTree = rawUrlTree;
-                }
+                _this.scheduleNavigation(rawUrlTree, { skipLocationChange: change['pop'], replaceUrl: true });
             }, 0);
         }));
     };
@@ -349,11 +344,11 @@ export var Router = (function () {
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
         if (url instanceof UrlTree) {
-            return this.scheduleNavigation(this.rawUrlTree, url, extras);
+            return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), extras);
         }
         else {
             var urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(this.rawUrlTree, urlTree, extras);
+            return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), extras);
         }
     };
     /**
@@ -379,7 +374,7 @@ export var Router = (function () {
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
-        return this.scheduleNavigation(this.rawUrlTree, this.createUrlTree(commands, extras), extras);
+        return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
     };
     /**
      * Serializes a {@link UrlTree} into a string.
@@ -401,24 +396,61 @@ export var Router = (function () {
             return containsTree(this.currentUrlTree, urlTree, exact);
         }
     };
-    Router.prototype.scheduleNavigation = function (rawUrl, url, extras) {
+    Router.prototype.processNavigations = function () {
         var _this = this;
-        if (this.urlHandlingStrategy.shouldProcessUrl(url)) {
-            var id_1 = ++this.navigationId;
-            this.routerEvents.next(new NavigationStart(id_1, this.serializeUrl(url)));
-            return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, extras.skipLocationChange, extras.replaceUrl, id_1, null); });
+        concatMap
+            .call(this.navigations, function (nav) {
+            if (nav) {
+                _this.executeScheduledNavigation(nav);
+                // a failed navigation should not stop the router from processing
+                // further navigations => the catch
+                return nav.promise.catch(function () { });
+            }
+            else {
+                return of(null);
+            }
+        })
+            .subscribe(function () { });
+    };
+    Router.prototype.scheduleNavigation = function (rawUrl, extras) {
+        var prevRawUrl = this.navigations.value ? this.navigations.value.rawUrl : null;
+        if (prevRawUrl && prevRawUrl.toString() === rawUrl.toString()) {
+            return this.navigations.value.promise;
         }
-        else if (this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
-            var id_2 = ++this.navigationId;
-            this.routerEvents.next(new NavigationStart(id_2, this.serializeUrl(url)));
-            return Promise.resolve().then(function (_) { return _this.runNavigate(rawUrl, url, false, false, id_2, createEmptyState(url, _this.rootComponentType)); });
+        var resolve = null;
+        var reject = null;
+        var promise = new Promise(function (res, rej) {
+            resolve = res;
+            reject = rej;
+        });
+        var id = ++this.navigationId;
+        this.navigations.next({ id: id, rawUrl: rawUrl, prevRawUrl: prevRawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
+        return promise;
+    };
+    Router.prototype.executeScheduledNavigation = function (_a) {
+        var _this = this;
+        var id = _a.id, rawUrl = _a.rawUrl, prevRawUrl = _a.prevRawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
+        var url = this.urlHandlingStrategy.extract(rawUrl);
+        var prevUrl = prevRawUrl ? this.urlHandlingStrategy.extract(prevRawUrl) : null;
+        var urlTransition = !prevUrl || url.toString() !== prevUrl.toString();
+        if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+            this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+            Promise.resolve()
+                .then(function (_) { return _this.runNavigate(url, rawUrl, extras.skipLocationChange, extras.replaceUrl, id, null); })
+                .then(resolve, reject);
+        }
+        else if (urlTransition && prevRawUrl && this.urlHandlingStrategy.shouldProcessUrl(prevRawUrl)) {
+            this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+            Promise.resolve()
+                .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType)); })
+                .then(resolve, reject);
         }
         else {
             this.rawUrlTree = rawUrl;
-            return Promise.resolve(null);
+            resolve(null);
         }
     };
-    Router.prototype.runNavigate = function (rawUrl, url, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+    Router.prototype.runNavigate = function (url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
         var _this = this;
         if (id !== this.navigationId) {
             this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
@@ -457,8 +489,14 @@ export var Router = (function () {
                     new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
                 preActivation.traverse(_this.outletMap);
             });
-            var preactivation2$ = mergeMap.call(preactivation$, function () { return preActivation.checkGuards(); });
+            var preactivation2$ = mergeMap.call(preactivation$, function () {
+                if (_this.navigationId !== id)
+                    return of(false);
+                return preActivation.checkGuards();
+            });
             var resolveData$ = mergeMap.call(preactivation2$, function (shouldActivate) {
+                if (_this.navigationId !== id)
+                    return of(false);
                 if (shouldActivate) {
                     return map.call(preActivation.resolveData(), function () { return shouldActivate; });
                 }
@@ -472,7 +510,6 @@ export var Router = (function () {
                     navigationIsSuccessful = false;
                     return;
                 }
-                _this.lastNavigation = appliedUrl;
                 _this.currentUrlTree = appliedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                 _this.currentRouterState = state;
@@ -605,7 +642,7 @@ export var PreActivation = (function () {
         var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (!shallowEqual(future.params, curr.params)) {
+            if (!equalParamsAndUrlSegments(future, curr)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             else {

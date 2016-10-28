@@ -249,3 +249,4 @@ export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * And we detect that by checking if the snapshot field is set.
  */
 export declare function advanceActivatedRoute(route: ActivatedRoute): void;
+export declare function equalParamsAndUrlSegments(a: ActivatedRouteSnapshot, b: ActivatedRouteSnapshot): boolean;
