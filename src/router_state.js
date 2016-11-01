@@ -416,10 +416,12 @@ export function advanceActivatedRoute(route) {
         }
         if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
             route.params.next(route._futureSnapshot.params);
-            route.data.next(route._futureSnapshot.data);
         }
         if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
             route.url.next(route._futureSnapshot.url);
+        }
+        if (!equalParamsAndUrlSegments(route.snapshot, route._futureSnapshot)) {
+            route.data.next(route._futureSnapshot.data);
         }
         route.snapshot = route._futureSnapshot;
     }
