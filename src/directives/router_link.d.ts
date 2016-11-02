@@ -95,7 +95,7 @@ export declare class RouterLink {
     preserveFragment: boolean;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
-    onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
+    onClick(): boolean;
     urlTree: UrlTree;
 }
 /**

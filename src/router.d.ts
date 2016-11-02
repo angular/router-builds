@@ -429,6 +429,7 @@ export declare class Router {
     private scheduleNavigation(rawUrl, extras);
     private executeScheduledNavigation({id, rawUrl, prevRawUrl, extras, resolve, reject});
     private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private resetUrlToCurrentUrlTree();
 }
 export declare class PreActivation {
     private future;

@@ -532,11 +532,13 @@ export var Router = (function () {
                     resolvePromise(true);
                 }
                 else {
+                    _this.resetUrlToCurrentUrlTree();
                     _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
                     resolvePromise(false);
                 }
             }, function (e) {
                 if (e instanceof NavigationCancelingError) {
+                    _this.resetUrlToCurrentUrlTree();
                     _this.navigated = true;
                     _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
                     resolvePromise(false);
@@ -550,14 +552,16 @@ export var Router = (function () {
                         rejectPromise(ee);
                     }
                 }
-                if (id === _this.navigationId) {
-                    _this.currentRouterState = storedState;
-                    _this.currentUrlTree = storedUrl;
-                    _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                    _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
-                }
+                _this.currentRouterState = storedState;
+                _this.currentUrlTree = storedUrl;
+                _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+                _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
             });
         });
+    };
+    Router.prototype.resetUrlToCurrentUrlTree = function () {
+        var path = this.urlSerializer.serialize(this.rawUrlTree);
+        this.location.replaceState(path);
     };
     return Router;
 }());
@@ -675,12 +679,27 @@ export var PreActivation = (function () {
     PreActivation.prototype.deactiveRouteAndItsChildren = function (route, outlet) {
         var _this = this;
         var prevChildren = nodeChildrenAsMap(route);
+        var r = route.value;
         forEach(prevChildren, function (v, k) {
-            var childOutlet = outlet ? outlet.outletMap._outlets[k] : null;
-            _this.deactiveRouteAndItsChildren(v, childOutlet);
+            if (!r.component) {
+                _this.deactiveRouteAndItsChildren(v, outlet);
+            }
+            else if (!!outlet) {
+                _this.deactiveRouteAndItsChildren(v, outlet.outletMap._outlets[k]);
+            }
+            else {
+                _this.deactiveRouteAndItsChildren(v, null);
+            }
         });
-        var component = outlet && outlet.isActivated ? outlet.component : null;
-        this.checks.push(new CanDeactivate(component, route.value));
+        if (!r.component) {
+            this.checks.push(new CanDeactivate(null, r));
+        }
+        else if (outlet && outlet.isActivated) {
+            this.checks.push(new CanDeactivate(outlet.component, r));
+        }
+        else {
+            this.checks.push(new CanDeactivate(null, r));
+        }
     };
     PreActivation.prototype.runCanActivate = function (future) {
         var _this = this;
