@@ -12,8 +12,8 @@ import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
 import { concatMap } from 'rxjs/operator/concatMap';
 import { every } from 'rxjs/operator/every';
-import { first } from 'rxjs/operator/first';
 import { map } from 'rxjs/operator/map';
+import { mergeAll } from 'rxjs/operator/mergeAll';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { reduce } from 'rxjs/operator/reduce';
 import { applyRedirects } from './apply_redirects';
@@ -600,7 +600,7 @@ export var PreActivation = (function () {
         if (this.checks.length === 0)
             return of(true);
         var checks$ = from(this.checks);
-        var runningChecks$ = mergeMap.call(checks$, function (s) {
+        var runningChecks$ = map.call(checks$, function (s) {
             if (s instanceof CanActivate) {
                 return andObservables(from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
             }
@@ -613,7 +613,8 @@ export var PreActivation = (function () {
                 throw new Error('Cannot be reached');
             }
         });
-        return every.call(runningChecks$, function (result) { return result === true; });
+        var mergedChecks$ = mergeAll.call(runningChecks$);
+        return every.call(mergedChecks$, function (result) { return result === true; });
     };
     PreActivation.prototype.resolveData = function () {
         var _this = this;
@@ -707,14 +708,12 @@ export var PreActivation = (function () {
             return of(true);
         var obs = map.call(from(canActivate), function (c) {
             var guard = _this.getToken(c, future);
-            var observable;
             if (guard.canActivate) {
-                observable = wrapIntoObservable(guard.canActivate(future, _this.future));
+                return wrapIntoObservable(guard.canActivate(future, _this.future));
             }
             else {
-                observable = wrapIntoObservable(guard(future, _this.future));
+                return wrapIntoObservable(guard(future, _this.future));
             }
-            return first.call(observable);
         });
         return andObservables(obs);
     };
@@ -728,14 +727,12 @@ export var PreActivation = (function () {
         return andObservables(map.call(from(canActivateChildGuards), function (d) {
             var obs = map.call(from(d.guards), function (c) {
                 var guard = _this.getToken(c, c.node);
-                var observable;
                 if (guard.canActivateChild) {
-                    observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
+                    return wrapIntoObservable(guard.canActivateChild(future, _this.future));
                 }
                 else {
-                    observable = wrapIntoObservable(guard(future, _this.future));
+                    return wrapIntoObservable(guard(future, _this.future));
                 }
-                return first.call(observable);
             });
             return andObservables(obs);
         }));
@@ -751,18 +748,17 @@ export var PreActivation = (function () {
         var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        var canDeactivate$ = mergeMap.call(from(canDeactivate), function (c) {
+        var canDeactivate$ = map.call(from(canDeactivate), function (c) {
             var guard = _this.getToken(c, curr);
-            var observable;
             if (guard.canDeactivate) {
-                observable = wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+                return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
             }
             else {
-                observable = wrapIntoObservable(guard(component, curr, _this.curr));
+                return wrapIntoObservable(guard(component, curr, _this.curr));
             }
-            return first.call(observable);
         });
-        return every.call(canDeactivate$, function (result) { return result === true; });
+        var merged$ = mergeAll.call(canDeactivate$);
+        return every.call(merged$, function (result) { return result === true; });
     };
     PreActivation.prototype.runResolve = function (future) {
         var resolve = future._resolve;
