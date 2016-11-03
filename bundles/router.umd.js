@@ -3028,17 +3028,43 @@
         ActivateRoutes.prototype.activate = function (parentOutletMap) {
             var futureRoot = this.futureState._root;
             var currRoot = this.currState ? this.currState._root : null;
+            this.deactivateChildRoutes(futureRoot, currRoot, parentOutletMap);
             advanceActivatedRoute(this.futureState.root);
             this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+        };
+        ActivateRoutes.prototype.deactivateChildRoutes = function (futureNode, currNode, outletMap) {
+            var _this = this;
+            var prevChildren = nodeChildrenAsMap(currNode);
+            futureNode.children.forEach(function (c) {
+                _this.deactivateRoutes(c, prevChildren[c.value.outlet], outletMap);
+                delete prevChildren[c.value.outlet];
+            });
+            forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap); });
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {
             var _this = this;
             var prevChildren = nodeChildrenAsMap(currNode);
-            futureNode.children.forEach(function (c) {
-                _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
-                delete prevChildren[c.value.outlet];
-            });
-            forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap); });
+            futureNode.children.forEach(function (c) { _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap); });
+        };
+        ActivateRoutes.prototype.deactivateRoutes = function (futureNode, currNode, parentOutletMap) {
+            var future = futureNode.value;
+            var curr = currNode ? currNode.value : null;
+            // reusing the node
+            if (future === curr) {
+                // If we have a normal route, we need to go through an outlet.
+                if (future.component) {
+                    var outlet = getOutlet(parentOutletMap, future);
+                    this.deactivateChildRoutes(futureNode, currNode, outlet.outletMap);
+                }
+                else {
+                    this.deactivateChildRoutes(futureNode, currNode, parentOutletMap);
+                }
+            }
+            else {
+                if (curr) {
+                    this.deactiveRouteAndItsChildren(currNode, parentOutletMap);
+                }
+            }
         };
         ActivateRoutes.prototype.activateRoutes = function (futureNode, currNode, parentOutletMap) {
             var future = futureNode.value;
@@ -3057,9 +3083,6 @@
                 }
             }
             else {
-                if (curr) {
-                    this.deactiveRouteAndItsChildren(currNode, parentOutletMap);
-                }
                 // if we have a normal route, we need to advance the route
                 // and place the component into the outlet. After that recurse.
                 if (future.component) {
