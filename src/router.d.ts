@@ -12,6 +12,7 @@ import { Routes } from './config';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
+import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
 import { TreeNode } from './utils/tree';
 /**
@@ -259,9 +260,11 @@ export declare class Router {
     private injector;
     config: Routes;
     private currentUrlTree;
+    private rawUrlTree;
+    private navigations;
+    private routerEvents;
     private currentRouterState;
     private locationSubscription;
-    private routerEvents;
     private navigationId;
     private configLoader;
     /**
@@ -274,6 +277,10 @@ export declare class Router {
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
+    /**
+     * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+     */
+    urlHandlingStrategy: UrlHandlingStrategy;
     /**
      * Creates the router service.
      */
@@ -418,8 +425,11 @@ export declare class Router {
      * Returns if the url is activated or not.
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private scheduleNavigation(url, extras);
-    private runNavigate(url, shouldPreventPushState, shouldReplaceUrl, id);
+    private processNavigations();
+    private scheduleNavigation(rawUrl, extras);
+    private executeScheduledNavigation({id, rawUrl, prevRawUrl, extras, resolve, reject});
+    private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private resetUrlToCurrentUrlTree();
 }
 export declare class PreActivation {
     private future;

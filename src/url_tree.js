@@ -192,7 +192,7 @@ export var UrlSegmentGroup = (function () {
 export var UrlSegment = (function () {
     function UrlSegment(
         /**
-         * The part part of a URL segment.
+         * The path part of a URL segment.
          */
         path, 
         /**

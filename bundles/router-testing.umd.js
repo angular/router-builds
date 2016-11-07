@@ -91,8 +91,12 @@
      *
      * @stable
      */
-    function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes) {
-        return new _angular_router.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
+    function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes, urlHandlingStrategy) {
+        var router = new _angular_router.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
+        if (urlHandlingStrategy) {
+            router.urlHandlingStrategy = urlHandlingStrategy;
+        }
+        return router;
     }
     /**
      * @whatItDoes Sets up the router to be used for testing.
@@ -135,7 +139,8 @@
                                 provide: _angular_router.Router,
                                 useFactory: setupTestingRouter,
                                 deps: [
-                                    _angular_router.UrlSerializer, _angular_router.RouterOutletMap, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector, ROUTES
+                                    _angular_router.UrlSerializer, _angular_router.RouterOutletMap, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector, ROUTES,
+                                    [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
                                 ]
                             },
                             { provide: _angular_router.PreloadingStrategy, useExisting: _angular_router.NoPreloading }, _angular_router.provideRoutes([])
