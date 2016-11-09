@@ -143,9 +143,18 @@ export interface ExtraOptions {
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): () => void;
-export declare function provideRouterInitializer(): {
+/**
+ * A token for the router initializer that will be called after the app is bootstrapped.
+ *
+ * @experimental
+ */
+export declare const ROUTER_INITIALIZER: OpaqueToken;
+export declare function provideRouterInitializer(): ({
     provide: OpaqueToken;
-    multi: boolean;
     useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => () => void;
     deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
-};
+} | {
+    provide: OpaqueToken;
+    multi: boolean;
+    useExisting: OpaqueToken;
+})[];

@@ -225,12 +225,20 @@ export function initialRouterNavigation(router, ref, preloader, opts) {
         }
     };
 }
+/**
+ * A token for the router initializer that will be called after the app is bootstrapped.
+ *
+ * @experimental
+ */
+export var ROUTER_INITIALIZER = new OpaqueToken('Router Initializer');
 export function provideRouterInitializer() {
-    return {
-        provide: APP_BOOTSTRAP_LISTENER,
-        multi: true,
-        useFactory: initialRouterNavigation,
-        deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
-    };
+    return [
+        {
+            provide: ROUTER_INITIALIZER,
+            useFactory: initialRouterNavigation,
+            deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+        },
+        { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }
+    ];
 }
 //# sourceMappingURL=router_module.js.map

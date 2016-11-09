@@ -3704,6 +3704,8 @@
      * will check if any configurations can be loaded lazily.
      *
      * If a route is protected by `canLoad` guards, the preloaded will not load it.
+     *
+     * @stable
      */
     var RouterPreloader = (function () {
         function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
@@ -3962,13 +3964,21 @@
             }
         };
     }
+    /**
+     * A token for the router initializer that will be called after the app is bootstrapped.
+     *
+     * @experimental
+     */
+    var ROUTER_INITIALIZER = new _angular_core.OpaqueToken('Router Initializer');
     function provideRouterInitializer() {
-        return {
-            provide: _angular_core.APP_BOOTSTRAP_LISTENER,
-            multi: true,
-            useFactory: initialRouterNavigation,
-            deps: [Router, _angular_core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
-        };
+        return [
+            {
+                provide: ROUTER_INITIALIZER,
+                useFactory: initialRouterNavigation,
+                deps: [Router, _angular_core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+            },
+            { provide: _angular_core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }
+        ];
     }
 
     var __router_private__ = {
@@ -3987,12 +3997,15 @@
     exports.NavigationStart = NavigationStart;
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
+    exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
+    exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
     exports.RouterModule = RouterModule;
     exports.provideRoutes = provideRoutes;
     exports.RouterOutletMap = RouterOutletMap;
     exports.NoPreloading = NoPreloading;
     exports.PreloadAllModules = PreloadAllModules;
     exports.PreloadingStrategy = PreloadingStrategy;
+    exports.RouterPreloader = RouterPreloader;
     exports.ActivatedRoute = ActivatedRoute;
     exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
     exports.RouterState = RouterState;
