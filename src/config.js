@@ -28,6 +28,9 @@ function validateNode(route) {
     if (!!route.redirectTo && !!route.component) {
         throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
     }
+    if (!!route.path && !!route.matcher) {
+        throw new Error("Invalid configuration of route '" + route.path + "': path and matcher cannot be used together");
+    }
     if (route.redirectTo === undefined && !route.component && !route.children &&
         !route.loadChildren) {
         throw new Error("Invalid configuration of route '" + route.path + "': one of the following must be provided (component or redirectTo or children or loadChildren)");
