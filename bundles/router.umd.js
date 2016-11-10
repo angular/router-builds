@@ -37,34 +37,6 @@
         NavigationCancelingError.prototype.toString = function () { return this.message; };
         return NavigationCancelingError;
     }(Error));
-    function defaultUrlMatcher(segments, segmentGroup, route) {
-        var path = route.path;
-        var parts = path.split('/');
-        var posParams = {};
-        var consumed = [];
-        var currentIndex = 0;
-        for (var i = 0; i < parts.length; ++i) {
-            if (currentIndex >= segments.length)
-                return null;
-            var current = segments[currentIndex];
-            var p = parts[i];
-            var isPosParam = p.startsWith(':');
-            if (!isPosParam && p !== current.path)
-                return null;
-            if (isPosParam) {
-                posParams[p.substring(1)] = current;
-            }
-            consumed.push(current);
-            currentIndex++;
-        }
-        if (route.pathMatch === 'full' &&
-            (segmentGroup.hasChildren() || currentIndex < segments.length)) {
-            return null;
-        }
-        else {
-            return { consumed: consumed, posParams: posParams };
-        }
-    }
 
     function shallowEqualArrays(a, b) {
         if (a.length !== b.length)
@@ -842,20 +814,12 @@
             var first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function (s) { return !!s; });
             return rxjs_operator_catch._catch.call(first$, function (e, _) {
                 if (e instanceof rxjs_util_EmptyError.EmptyError) {
-                    if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
-                        return rxjs_observable_of.of(new UrlSegmentGroup([], {}));
-                    }
-                    else {
-                        throw new NoMatch(segmentGroup);
-                    }
+                    throw new NoMatch(segmentGroup);
                 }
                 else {
                     throw e;
                 }
             });
-        };
-        ApplyRedirects.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
-            return segments.length === 0 && !segmentGroup.children[outlet];
         };
         ApplyRedirects.prototype.expandSegmentAgainstRoute = function (injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
             if (getOutlet$1(route) !== outlet)
@@ -990,16 +954,30 @@
                 return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
             }
         }
-        var matcher = route.matcher || defaultUrlMatcher;
-        var res = matcher(segments, segmentGroup, route);
-        if (!res)
-            return noMatch;
-        return {
-            matched: true,
-            consumedSegments: res.consumed,
-            lastChild: res.consumed.length,
-            positionalParamSegments: res.posParams
-        };
+        var path = route.path;
+        var parts = path.split('/');
+        var positionalParamSegments = {};
+        var consumedSegments = [];
+        var currentIndex = 0;
+        for (var i = 0; i < parts.length; ++i) {
+            if (currentIndex >= segments.length)
+                return noMatch;
+            var current = segments[currentIndex];
+            var p = parts[i];
+            var isPosParam = p.startsWith(':');
+            if (!isPosParam && p !== current.path)
+                return noMatch;
+            if (isPosParam) {
+                positionalParamSegments[p.substring(1)] = current;
+            }
+            consumedSegments.push(current);
+            currentIndex++;
+        }
+        if (route.pathMatch === 'full' &&
+            (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+            return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+        }
+        return { matched: true, consumedSegments: consumedSegments, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
     }
     function applyRedirectCommands(segments, redirectTo, posParams) {
         var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
@@ -1117,9 +1095,6 @@
         }
         if (!!route.redirectTo && !!route.component) {
             throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
-        }
-        if (!!route.path && !!route.matcher) {
-            throw new Error("Invalid configuration of route '" + route.path + "': path and matcher cannot be used together");
         }
         if (route.redirectTo === undefined && !route.component && !route.children &&
             !route.loadChildren) {
@@ -2040,15 +2015,7 @@
                         throw e;
                 }
             }
-            if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
-                return [];
-            }
-            else {
-                throw new NoMatch$1();
-            }
-        };
-        Recognizer.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
-            return segments.length === 0 && !segmentGroup.children[outlet];
+            throw new NoMatch$1();
         };
         Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, pathIndex, segments, outlet) {
             if (route.redirectTo)
@@ -2108,14 +2075,31 @@
                 return { consumedSegments: [], lastChild: 0, parameters: {} };
             }
         }
-        var matcher = route.matcher || defaultUrlMatcher;
-        var res = matcher(segments, segmentGroup, route);
-        if (!res)
+        var path = route.path;
+        var parts = path.split('/');
+        var posParameters = {};
+        var consumedSegments = [];
+        var currentIndex = 0;
+        for (var i = 0; i < parts.length; ++i) {
+            if (currentIndex >= segments.length)
+                throw new NoMatch$1();
+            var current = segments[currentIndex];
+            var p = parts[i];
+            var isPosParam = p.startsWith(':');
+            if (!isPosParam && p !== current.path)
+                throw new NoMatch$1();
+            if (isPosParam) {
+                posParameters[p.substring(1)] = current.path;
+            }
+            consumedSegments.push(current);
+            currentIndex++;
+        }
+        if (route.pathMatch === 'full' &&
+            (segmentGroup.hasChildren() || currentIndex < segments.length)) {
             throw new NoMatch$1();
-        var posParams = {};
-        forEach(res.posParams, function (v, k) { posParams[k] = v.path; });
-        var parameters = merge(posParams, res.consumed[res.consumed.length - 1].parameters);
-        return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
+        }
+        var parameters = merge(posParameters, consumedSegments[consumedSegments.length - 1].parameters);
+        return { consumedSegments: consumedSegments, lastChild: currentIndex, parameters: parameters };
     }
     function checkOutletNameUniqueness(nodes) {
         var names = {};

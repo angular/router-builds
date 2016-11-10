@@ -6,8 +6,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Route, UrlMatchResult } from './config';
-import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
  * @whatItDoes Name of the primary outlet.
  *
@@ -28,4 +26,3 @@ export declare class NavigationCancelingError extends Error {
     constructor(message: string);
     toString(): string;
 }
-export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult;
