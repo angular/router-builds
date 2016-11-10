@@ -2623,6 +2623,9 @@
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
+            if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
+                extras.queryParams = this.removeEmptyProps(extras.queryParams);
+            }
             return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
         };
         /**
@@ -2644,6 +2647,15 @@
                 var urlTree = this.urlSerializer.parse(url);
                 return containsTree(this.currentUrlTree, urlTree, exact);
             }
+        };
+        Router.prototype.removeEmptyProps = function (params) {
+            return Object.keys(params).reduce(function (result, key) {
+                var value = params[key];
+                if (value !== null && value !== undefined) {
+                    result[key] = value;
+                }
+                return result;
+            }, {});
         };
         Router.prototype.processNavigations = function () {
             var _this = this;

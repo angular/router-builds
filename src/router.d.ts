@@ -425,6 +425,7 @@ export declare class Router {
      * Returns if the url is activated or not.
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
+    private removeEmptyProps(params);
     private processNavigations();
     private scheduleNavigation(rawUrl, extras);
     private executeScheduledNavigation({id, rawUrl, prevRawUrl, extras, resolve, reject});
