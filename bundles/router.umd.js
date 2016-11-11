@@ -2692,7 +2692,9 @@
             });
             var id = ++this.navigationId;
             this.navigations.next({ id: id, rawUrl: rawUrl, prevRawUrl: prevRawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
-            return promise;
+            // Make sure that the error is propagated even though `processNavigations` catch
+            // handler does not rethrow
+            return promise.catch(function (e) { return Promise.reject(e); });
         };
         Router.prototype.executeScheduledNavigation = function (_a) {
             var _this = this;
