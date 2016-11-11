@@ -3990,7 +3990,10 @@
         return router.routerState.root;
     }
     function initialRouterNavigation(router, ref, preloader, opts) {
-        return function () {
+        return function (bootstrappedComponentRef) {
+            if (bootstrappedComponentRef !== ref.components[0]) {
+                return;
+            }
             router.resetRootComponentType(ref.componentTypes[0]);
             preloader.setUpPreloading();
             if (opts.initialNavigation === false) {

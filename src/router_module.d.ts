@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, Compiler, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
+import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
@@ -142,7 +142,7 @@ export interface ExtraOptions {
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): () => void;
+export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
@@ -151,7 +151,7 @@ export declare function initialRouterNavigation(router: Router, ref: Application
 export declare const ROUTER_INITIALIZER: OpaqueToken;
 export declare function provideRouterInitializer(): ({
     provide: OpaqueToken;
-    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => () => void;
+    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => (bootstrappedComponentRef: ComponentRef<any>) => void;
     deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
 } | {
     provide: OpaqueToken;
