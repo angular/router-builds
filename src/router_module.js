@@ -10,6 +10,7 @@ import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, C
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
+import { getDOM } from './private_import_platform-browser';
 import { Router } from './router';
 import { ROUTES } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -201,11 +202,12 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
         router.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
+        var dom_1 = getDOM();
         router.events.subscribe(function (e) {
-            console.group("Router Event: " + e.constructor.name);
-            console.log(e.toString());
-            console.log(e);
-            console.groupEnd();
+            dom_1.logGroup("Router Event: " + e.constructor.name);
+            dom_1.log(e.toString());
+            dom_1.log(e);
+            dom_1.logGroupEnd();
         });
     }
     return router;
