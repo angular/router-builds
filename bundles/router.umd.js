@@ -172,10 +172,11 @@
      */
     var ROUTES = new _angular_core.OpaqueToken('ROUTES');
     var LoadedRouterConfig = (function () {
-        function LoadedRouterConfig(routes, injector, factoryResolver) {
+        function LoadedRouterConfig(routes, injector, factoryResolver, injectorFactory) {
             this.routes = routes;
             this.injector = injector;
             this.factoryResolver = factoryResolver;
+            this.injectorFactory = injectorFactory;
         }
         return LoadedRouterConfig;
     }());
@@ -187,7 +188,8 @@
         RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
             return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function (r) {
                 var ref = r.create(parentInjector);
-                return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
+                var injectorFactory = function (parent) { return r.create(parent).injector; };
+                return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver, injectorFactory);
             });
         };
         RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
@@ -948,7 +950,7 @@
         ApplyRedirects.prototype.getChildConfig = function (injector, route) {
             var _this = this;
             if (route.children) {
-                return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null));
+                return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null, null));
             }
             else if (route.loadChildren) {
                 return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function (shouldLoad) {
@@ -969,7 +971,7 @@
                 });
             }
             else {
-                return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null));
+                return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null, null));
             }
         };
         return ApplyRedirects;
@@ -3149,14 +3151,18 @@
                     useValue: outletMap
                 }];
             var config = parentLoadedConfig(future.snapshot);
-            var loadedFactoryResolver = null;
-            var loadedInjector = null;
+            var resolver = null;
+            var injector = null;
             if (config) {
-                loadedFactoryResolver = config.factoryResolver;
-                loadedInjector = config.injector;
-                resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: loadedFactoryResolver });
+                injector = config.injectorFactory(outlet.locationInjector);
+                resolver = config.factoryResolver;
+                resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: resolver });
             }
-            outlet.activate(future, loadedFactoryResolver, loadedInjector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
+            else {
+                injector = outlet.locationInjector;
+                resolver = outlet.locationFactoryResolver;
+            }
+            outlet.activate(future, resolver, injector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
         };
         ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
             var _this = this;
@@ -3627,6 +3633,16 @@
             parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
         }
         RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); };
+        Object.defineProperty(RouterOutlet.prototype, "locationInjector", {
+            get: function () { return this.location.injector; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RouterOutlet.prototype, "locationFactoryResolver", {
+            get: function () { return this.resolver; },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(RouterOutlet.prototype, "isActivated", {
             get: function () { return !!this.activated; },
             enumerable: true,
@@ -3658,7 +3674,7 @@
                 this.deactivateEvents.emit(c);
             }
         };
-        RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
+        RouterOutlet.prototype.activate = function (activatedRoute, resolver, injector, providers, outletMap) {
             if (this.isActivated) {
                 throw new Error('Cannot activate an already activated outlet');
             }
@@ -3666,14 +3682,7 @@
             this._activatedRoute = activatedRoute;
             var snapshot = activatedRoute._futureSnapshot;
             var component = snapshot._routeConfig.component;
-            var factory;
-            if (loadedResolver) {
-                factory = loadedResolver.resolveComponentFactory(component);
-            }
-            else {
-                factory = this.resolver.resolveComponentFactory(component);
-            }
-            var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+            var factory = resolver.resolveComponentFactory(component);
             var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
             this.activated = this.location.createComponent(factory, this.location.length, inj, []);
             this.activated.changeDetectorRef.detectChanges();

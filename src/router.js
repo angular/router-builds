@@ -885,14 +885,18 @@ var ActivateRoutes = (function () {
                 useValue: outletMap
             }];
         var config = parentLoadedConfig(future.snapshot);
-        var loadedFactoryResolver = null;
-        var loadedInjector = null;
+        var resolver = null;
+        var injector = null;
         if (config) {
-            loadedFactoryResolver = config.factoryResolver;
-            loadedInjector = config.injector;
-            resolved.push({ provide: ComponentFactoryResolver, useValue: loadedFactoryResolver });
+            injector = config.injectorFactory(outlet.locationInjector);
+            resolver = config.factoryResolver;
+            resolved.push({ provide: ComponentFactoryResolver, useValue: resolver });
         }
-        outlet.activate(future, loadedFactoryResolver, loadedInjector, ReflectiveInjector.resolve(resolved), outletMap);
+        else {
+            injector = outlet.locationInjector;
+            resolver = outlet.locationFactoryResolver;
+        }
+        outlet.activate(future, resolver, injector, ReflectiveInjector.resolve(resolved), outletMap);
     };
     ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
         var _this = this;

@@ -220,7 +220,7 @@ var ApplyRedirects = (function () {
     ApplyRedirects.prototype.getChildConfig = function (injector, route) {
         var _this = this;
         if (route.children) {
-            return of(new LoadedRouterConfig(route.children, injector, null));
+            return of(new LoadedRouterConfig(route.children, injector, null, null));
         }
         else if (route.loadChildren) {
             return mergeMap.call(runGuards(injector, route), function (shouldLoad) {
@@ -241,7 +241,7 @@ var ApplyRedirects = (function () {
             });
         }
         else {
-            return of(new LoadedRouterConfig([], injector, null));
+            return of(new LoadedRouterConfig([], injector, null, null));
         }
     };
     return ApplyRedirects;
