@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
+import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
@@ -24,6 +24,7 @@ export declare const ROUTER_CONFIGURATION: OpaqueToken;
  */
 export declare const ROUTER_FORROOT_GUARD: OpaqueToken;
 export declare const ROUTER_PROVIDERS: Provider[];
+export declare function routerNgProbeToken(): NgProbeToken;
 /**
  * @whatItDoes Adds router directives and providers.
  *
@@ -37,10 +38,9 @@ export declare const ROUTER_PROVIDERS: Provider[];
  * `RouterModule.forChild`.
  *
  * * `forRoot` creates a module that contains all the directives, the given routes, and the router
- * service itself.
+ *   service itself.
  * * `forChild` creates a module that contains all the directives and the given routes, but does not
- * include
- * the router service.
+ *   include the router service.
  *
  * When registered at the root, the module should be used as follows
  *
