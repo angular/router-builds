@@ -3337,7 +3337,9 @@
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     preserveQueryParams: toBool(this.preserveQueryParams),
-                    preserveFragment: toBool(this.preserveFragment)
+                    preserveFragment: toBool(this.preserveFragment),
+                    skipLocationChange: toBool(this.skipLocationChange),
+                    replaceUrl: toBool(this.replaceUrl),
                 });
             },
             enumerable: true,
@@ -3357,6 +3359,8 @@
             'fragment': [{ type: _angular_core.Input },],
             'preserveQueryParams': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
+            'skipLocationChange': [{ type: _angular_core.Input },],
+            'replaceUrl': [{ type: _angular_core.Input },],
             'routerLink': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click', [],] },],
         };
@@ -3419,7 +3423,9 @@
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     preserveQueryParams: toBool(this.preserveQueryParams),
-                    preserveFragment: toBool(this.preserveFragment)
+                    preserveFragment: toBool(this.preserveFragment),
+                    skipLocationChange: toBool(this.skipLocationChange),
+                    replaceUrl: toBool(this.replaceUrl),
                 });
             },
             enumerable: true,
@@ -3441,6 +3447,8 @@
             'routerLinkOptions': [{ type: _angular_core.Input },],
             'preserveQueryParams': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
+            'skipLocationChange': [{ type: _angular_core.Input },],
+            'replaceUrl': [{ type: _angular_core.Input },],
             'href': [{ type: _angular_core.HostBinding },],
             'routerLink': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],

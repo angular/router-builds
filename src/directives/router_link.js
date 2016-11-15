@@ -111,7 +111,9 @@ export var RouterLink = (function () {
                 queryParams: this.queryParams,
                 fragment: this.fragment,
                 preserveQueryParams: toBool(this.preserveQueryParams),
-                preserveFragment: toBool(this.preserveFragment)
+                preserveFragment: toBool(this.preserveFragment),
+                skipLocationChange: toBool(this.skipLocationChange),
+                replaceUrl: toBool(this.replaceUrl),
             });
         },
         enumerable: true,
@@ -131,6 +133,8 @@ export var RouterLink = (function () {
         'fragment': [{ type: Input },],
         'preserveQueryParams': [{ type: Input },],
         'preserveFragment': [{ type: Input },],
+        'skipLocationChange': [{ type: Input },],
+        'replaceUrl': [{ type: Input },],
         'routerLink': [{ type: Input },],
         'onClick': [{ type: HostListener, args: ['click', [],] },],
     };
@@ -193,7 +197,9 @@ export var RouterLinkWithHref = (function () {
                 queryParams: this.queryParams,
                 fragment: this.fragment,
                 preserveQueryParams: toBool(this.preserveQueryParams),
-                preserveFragment: toBool(this.preserveFragment)
+                preserveFragment: toBool(this.preserveFragment),
+                skipLocationChange: toBool(this.skipLocationChange),
+                replaceUrl: toBool(this.replaceUrl),
             });
         },
         enumerable: true,
@@ -215,6 +221,8 @@ export var RouterLinkWithHref = (function () {
         'routerLinkOptions': [{ type: Input },],
         'preserveQueryParams': [{ type: Input },],
         'preserveFragment': [{ type: Input },],
+        'skipLocationChange': [{ type: Input },],
+        'replaceUrl': [{ type: Input },],
         'href': [{ type: HostBinding },],
         'routerLink': [{ type: Input },],
         'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
