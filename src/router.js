@@ -456,7 +456,7 @@ export var Router = (function () {
         else if (urlTransition && prevRawUrl && this.urlHandlingStrategy.shouldProcessUrl(prevRawUrl)) {
             this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
             Promise.resolve()
-                .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType)); })
+                .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType).snapshot); })
                 .then(resolve, reject);
         }
         else {
@@ -472,54 +472,68 @@ export var Router = (function () {
             return Promise.resolve(false);
         }
         return new Promise(function (resolvePromise, rejectPromise) {
-            var state;
-            var navigationIsSuccessful;
-            var preActivation;
-            var appliedUrl;
-            var storedState = _this.currentRouterState;
-            var storedUrl = _this.currentUrlTree;
-            var routerState$;
+            // create an observable of the url and route state snapshot
+            // this operation do not result in any side effects
+            var urlAndSnapshot$;
             if (!precreatedState) {
                 var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
-                var snapshot$ = mergeMap.call(redirectsApplied$, function (u) {
-                    appliedUrl = u;
-                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-                });
-                var emitRecognzied$ = map.call(snapshot$, function (newRouterStateSnapshot) {
-                    _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-                    return newRouterStateSnapshot;
-                });
-                routerState$ = map.call(emitRecognzied$, function (routerStateSnapshot) {
-                    return createRouterState(routerStateSnapshot, _this.currentRouterState);
+                urlAndSnapshot$ = mergeMap.call(redirectsApplied$, function (appliedUrl) {
+                    return map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl)), function (snapshot) {
+                        _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
+                        return { appliedUrl: appliedUrl, snapshot: snapshot };
+                    });
                 });
             }
             else {
-                appliedUrl = url;
-                routerState$ = of(precreatedState);
+                urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            var preactivation$ = map.call(routerState$, function (newState) {
-                state = newState;
+            // run preactivation: guards and data resolvers
+            var preActivation;
+            var preactivationTraverse$ = map.call(urlAndSnapshot$, function (_a) {
+                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                 preActivation =
-                    new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
+                    new PreActivation(snapshot, _this.currentRouterState.snapshot, _this.injector);
                 preActivation.traverse(_this.outletMap);
+                return { appliedUrl: appliedUrl, snapshot: snapshot };
             });
-            var preactivation2$ = mergeMap.call(preactivation$, function () {
+            var preactivationCheckGuards = mergeMap.call(preactivationTraverse$, function (_a) {
+                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                 if (_this.navigationId !== id)
                     return of(false);
-                return preActivation.checkGuards();
+                return map.call(preActivation.checkGuards(), function (shouldActivate) {
+                    return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
+                });
             });
-            var resolveData$ = mergeMap.call(preactivation2$, function (shouldActivate) {
+            var preactivationResolveData$ = mergeMap.call(preactivationCheckGuards, function (p) {
                 if (_this.navigationId !== id)
                     return of(false);
-                if (shouldActivate) {
-                    return map.call(preActivation.resolveData(), function () { return shouldActivate; });
+                if (p.shouldActivate) {
+                    return map.call(preActivation.resolveData(), function () { return p; });
                 }
                 else {
-                    return of(shouldActivate);
+                    return of(p);
                 }
             });
-            resolveData$
-                .forEach(function (shouldActivate) {
+            // create router state
+            // this operation has side effects => route state is being affected
+            var routerState$ = map.call(preactivationResolveData$, function (_a) {
+                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
+                if (shouldActivate) {
+                    var state = createRouterState(snapshot, _this.currentRouterState);
+                    return { appliedUrl: appliedUrl, state: state, shouldActivate: shouldActivate };
+                }
+                else {
+                    return { appliedUrl: appliedUrl, state: null, shouldActivate: shouldActivate };
+                }
+            });
+            // applied the new router state
+            // this operation has side effects
+            var navigationIsSuccessful;
+            var storedState = _this.currentRouterState;
+            var storedUrl = _this.currentUrlTree;
+            routerState$
+                .forEach(function (_a) {
+                var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
                 if (!shouldActivate || id !== _this.navigationId) {
                     navigationIsSuccessful = false;
                     return;
@@ -542,7 +556,7 @@ export var Router = (function () {
                 .then(function () {
                 _this.navigated = true;
                 if (navigationIsSuccessful) {
-                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.currentUrlTree)));
                     resolvePromise(true);
                 }
                 else {
