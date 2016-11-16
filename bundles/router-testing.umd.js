@@ -1,9 +1,8 @@
 /**
- * @license Angular v0.0.0-PLACEHOLDER
+ * @license Angular v0.0.0-ROUTERPLACEHOLDER
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
- */
-(function (global, factory) {
+ */(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
     typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
     (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = global.ng.router.testing || {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
