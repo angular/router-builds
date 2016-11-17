@@ -3350,7 +3350,9 @@
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     preserveQueryParams: toBool(this.preserveQueryParams),
-                    preserveFragment: toBool(this.preserveFragment)
+                    preserveFragment: toBool(this.preserveFragment),
+                    skipLocationChange: toBool(this.skipLocationChange),
+                    replaceUrl: toBool(this.replaceUrl),
                 });
             },
             enumerable: true,
@@ -3370,6 +3372,8 @@
             'fragment': [{ type: _angular_core.Input },],
             'preserveQueryParams': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
+            'skipLocationChange': [{ type: _angular_core.Input },],
+            'replaceUrl': [{ type: _angular_core.Input },],
             'routerLink': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click', [],] },],
         };
@@ -3432,7 +3436,9 @@
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     preserveQueryParams: toBool(this.preserveQueryParams),
-                    preserveFragment: toBool(this.preserveFragment)
+                    preserveFragment: toBool(this.preserveFragment),
+                    skipLocationChange: toBool(this.skipLocationChange),
+                    replaceUrl: toBool(this.replaceUrl),
                 });
             },
             enumerable: true,
@@ -3454,6 +3460,8 @@
             'routerLinkOptions': [{ type: _angular_core.Input },],
             'preserveQueryParams': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
+            'skipLocationChange': [{ type: _angular_core.Input },],
+            'replaceUrl': [{ type: _angular_core.Input },],
             'href': [{ type: _angular_core.HostBinding },],
             'routerLink': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
@@ -3849,7 +3857,9 @@
      */
     var ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
     var ROUTER_PROVIDERS = [
-        _angular_common.Location, { provide: UrlSerializer, useClass: DefaultUrlSerializer }, {
+        _angular_common.Location,
+        { provide: UrlSerializer, useClass: DefaultUrlSerializer },
+        {
             provide: Router,
             useFactory: setupRouter,
             deps: [
@@ -3857,10 +3867,17 @@
                 _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new _angular_core.Optional()]
             ]
         },
-        RouterOutletMap, { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-        { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader }, RouterPreloader, NoPreloading,
-        PreloadAllModules, { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+        RouterOutletMap,
+        { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
+        { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader },
+        RouterPreloader,
+        NoPreloading,
+        PreloadAllModules,
+        { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } },
     ];
+    function routerNgProbeToken() {
+        return new _angular_core.NgProbeToken('Router', Router);
+    }
     /**
      * @whatItDoes Adds router directives and providers.
      *
@@ -3874,10 +3891,9 @@
      * `RouterModule.forChild`.
      *
      * * `forRoot` creates a module that contains all the directives, the given routes, and the router
-     * service itself.
+     *   service itself.
      * * `forChild` creates a module that contains all the directives and the given routes, but does not
-     * include
-     * the router service.
+     *   include the router service.
      *
      * When registered at the root, the module should be used as follows
      *
@@ -3931,12 +3947,15 @@
             return {
                 ngModule: RouterModule,
                 providers: [
-                    ROUTER_PROVIDERS, provideRoutes(routes), {
+                    ROUTER_PROVIDERS,
+                    provideRoutes(routes),
+                    {
                         provide: ROUTER_FORROOT_GUARD,
                         useFactory: provideForRootGuard,
                         deps: [[Router, new _angular_core.Optional(), new _angular_core.SkipSelf()]]
                     },
-                    { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
+                    { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
+                    {
                         provide: _angular_common.LocationStrategy,
                         useFactory: provideLocationStrategy,
                         deps: [
@@ -3948,8 +3967,9 @@
                         useExisting: config && config.preloadingStrategy ? config.preloadingStrategy :
                             NoPreloading
                     },
-                    provideRouterInitializer()
-                ]
+                    { provide: _angular_core.NgProbeToken, multi: true, useFactory: routerNgProbeToken },
+                    provideRouterInitializer(),
+                ],
             };
         };
         /**
@@ -3996,7 +4016,7 @@
     function provideRoutes(routes) {
         return [
             { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
-            { provide: ROUTES, multi: true, useValue: routes }
+            { provide: ROUTES, multi: true, useValue: routes },
         ];
     }
     function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy) {
@@ -4050,7 +4070,7 @@
                 useFactory: initialRouterNavigation,
                 deps: [Router, _angular_core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
             },
-            { provide: _angular_core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }
+            { provide: _angular_core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
         ];
     }
 
