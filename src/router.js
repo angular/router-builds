@@ -476,7 +476,7 @@ export var Router = (function () {
             // this operation do not result in any side effects
             var urlAndSnapshot$;
             if (!precreatedState) {
-                var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+                var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, _this.urlSerializer, url, _this.config);
                 urlAndSnapshot$ = mergeMap.call(redirectsApplied$, function (appliedUrl) {
                     return map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl)), function (snapshot) {
                         _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
@@ -531,6 +531,7 @@ export var Router = (function () {
             var navigationIsSuccessful;
             var storedState = _this.currentRouterState;
             var storedUrl = _this.currentUrlTree;
+            var storedUrlInLocation = _this.currentUrlTreeStoredInLocation;
             routerState$
                 .forEach(function (_a) {
                 var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
@@ -540,6 +541,8 @@ export var Router = (function () {
                 }
                 _this.currentUrlTree = appliedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+                _this.currentUrlTreeStoredInLocation =
+                    shouldPreventPushState ? _this.currentUrlTreeStoredInLocation : _this.rawUrlTree;
                 _this.currentRouterState = state;
                 if (!shouldPreventPushState) {
                     var path = _this.urlSerializer.serialize(_this.rawUrlTree);
@@ -583,13 +586,12 @@ export var Router = (function () {
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+                _this.location.replaceState(_this.serializeUrl(storedUrlInLocation));
             });
         });
     };
     Router.prototype.resetUrlToCurrentUrlTree = function () {
-        var path = this.urlSerializer.serialize(this.rawUrlTree);
-        this.location.replaceState(path);
+        this.location.replaceState(this.urlSerializer.serialize(this.currentUrlTreeStoredInLocation));
     };
     return Router;
 }());

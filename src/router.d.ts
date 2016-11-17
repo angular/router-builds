@@ -261,6 +261,7 @@ export declare class Router {
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
+    private currentUrlTreeStoredInLocation;
     private navigations;
     private routerEvents;
     private currentRouterState;
