@@ -80,9 +80,9 @@
             { type: _angular_core.Injectable },
         ];
         /** @nocollapse */
-        SpyNgModuleFactoryLoader.ctorParameters = [
+        SpyNgModuleFactoryLoader.ctorParameters = function () { return [
             { type: _angular_core.Compiler, },
-        ];
+        ]; };
         return SpyNgModuleFactoryLoader;
     }());
     /**
@@ -147,7 +147,7 @@
                     },] },
         ];
         /** @nocollapse */
-        RouterTestingModule.ctorParameters = [];
+        RouterTestingModule.ctorParameters = function () { return []; };
         return RouterTestingModule;
     }());
 

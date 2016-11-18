@@ -23,17 +23,17 @@ import { flatten } from './utils/collection';
  * @whatItDoes Contains a list of directives
  * @stable
  */
-var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
  * @whatItDoes Is used in DI to configure the router.
  * @stable
  */
-export var ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
+export var /** @type {?} */ ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
 /**
  * @docsNotRequired
  */
-export var ROUTER_FORROOT_GUARD = new OpaqueToken('ROUTER_FORROOT_GUARD');
-export var ROUTER_PROVIDERS = [
+export var /** @type {?} */ ROUTER_FORROOT_GUARD = new OpaqueToken('ROUTER_FORROOT_GUARD');
+export var /** @type {?} */ ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
     {
@@ -52,73 +52,76 @@ export var ROUTER_PROVIDERS = [
     PreloadAllModules,
     { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } },
 ];
+/**
+ * @return {?}
+ */
 export function routerNgProbeToken() {
     return new NgProbeToken('Router', Router);
 }
 /**
- * @whatItDoes Adds router directives and providers.
- *
- * @howToUse
- *
- * RouterModule can be imported multiple times: once per lazily-loaded bundle.
- * Since the router deals with a global shared resource--location, we cannot have
- * more than one router service active.
- *
- * That is why there are two ways to create the module: `RouterModule.forRoot` and
- * `RouterModule.forChild`.
- *
- * * `forRoot` creates a module that contains all the directives, the given routes, and the router
- *   service itself.
- * * `forChild` creates a module that contains all the directives and the given routes, but does not
- *   include the router service.
- *
- * When registered at the root, the module should be used as follows
- *
- * ```
- * @NgModule({
- *   imports: [RouterModule.forRoot(ROUTES)]
- * })
- * class MyNgModule {}
- * ```
- *
- * For submodules and lazy loaded submodules the module should be used as follows:
- *
- * ```
- * @NgModule({
- *   imports: [RouterModule.forChild(ROUTES)]
- * })
- * class MyNgModule {}
- * ```
- *
- * @description
- *
- * Managing state transitions is one of the hardest parts of building applications. This is
- * especially true on the web, where you also need to ensure that the state is reflected in the URL.
- * In addition, we often want to split applications into multiple bundles and load them on demand.
- * Doing this transparently is not trivial.
- *
- * The Angular 2 router solves these problems. Using the router, you can declaratively specify
- * application states, manage state transitions while taking care of the URL, and load bundles on
- * demand.
- *
- * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
- * overview of how the router should be used.
- *
- * @stable
+ *  *
+  * *
+  * RouterModule can be imported multiple times: once per lazily-loaded bundle.
+  * Since the router deals with a global shared resource--location, we cannot have
+  * more than one router service active.
+  * *
+  * That is why there are two ways to create the module: `RouterModule.forRoot` and
+  * `RouterModule.forChild`.
+  * *
+  * * `forRoot` creates a module that contains all the directives, the given routes, and the router
+  * service itself.
+  * * `forChild` creates a module that contains all the directives and the given routes, but does not
+  * include the router service.
+  * *
+  * When registered at the root, the module should be used as follows
+  * *
+  * ```
+  * imports: [RouterModule.forRoot(ROUTES)]
+  * })
+  * class MyNgModule {}
+  * ```
+  * *
+  * For submodules and lazy loaded submodules the module should be used as follows:
+  * *
+  * ```
+  * imports: [RouterModule.forChild(ROUTES)]
+  * })
+  * class MyNgModule {}
+  * ```
+  * *
+  * *
+  * Managing state transitions is one of the hardest parts of building applications. This is
+  * especially true on the web, where you also need to ensure that the state is reflected in the URL.
+  * In addition, we often want to split applications into multiple bundles and load them on demand.
+  * Doing this transparently is not trivial.
+  * *
+  * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+  * application states, manage state transitions while taking care of the URL, and load bundles on
+  * demand.
+  * *
+  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
+  * overview of how the router should be used.
+  * *
  */
 export var RouterModule = (function () {
+    /**
+     * @param {?} guard
+     */
     function RouterModule(guard) {
     }
     /**
-     * Creates a module with all the router providers and directives. It also optionally sets up an
-     * application listener to perform an initial navigation.
-     *
-     * Options:
-     * * `enableTracing` makes the router log all its internal events to the console.
-     * * `useHash` enables the location strategy that uses the URL fragment instead of the history
-     * API.
-     * * `initialNavigation` disables the initial navigation.
-     * * `errorHandler` provides a custom error handler.
+     *  Creates a module with all the router providers and directives. It also optionally sets up an
+      * application listener to perform an initial navigation.
+      * *
+      * Options:
+      * * `enableTracing` makes the router log all its internal events to the console.
+      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+      * API.
+      * * `initialNavigation` disables the initial navigation.
+      * * `errorHandler` provides a custom error handler.
+     * @param {?} routes
+     * @param {?=} config
+     * @return {?}
      */
     RouterModule.forRoot = function (routes, config) {
         return {
@@ -150,7 +153,9 @@ export var RouterModule = (function () {
         };
     };
     /**
-     * Creates a module with all the router directives and a provider registering routes.
+     *  Creates a module with all the router directives and a provider registering routes.
+     * @param {?} routes
+     * @return {?}
      */
     RouterModule.forChild = function (routes) {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
@@ -159,16 +164,35 @@ export var RouterModule = (function () {
         { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
     /** @nocollapse */
-    RouterModule.ctorParameters = [
+    RouterModule.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-    ];
+    ]; };
     return RouterModule;
 }());
+function RouterModule_tsickle_Closure_declarations() {
+    /** @type {?} */
+    RouterModule.decorators;
+    /**
+     * @nocollapse
+     * @type {?}
+     */
+    RouterModule.ctorParameters;
+}
+/**
+ * @param {?} platformLocationStrategy
+ * @param {?} baseHref
+ * @param {?=} options
+ * @return {?}
+ */
 export function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
     if (options === void 0) { options = {}; }
     return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :
         new PathLocationStrategy(platformLocationStrategy, baseHref);
 }
+/**
+ * @param {?} router
+ * @return {?}
+ */
 export function provideForRootGuard(router) {
     if (router) {
         throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
@@ -176,19 +200,17 @@ export function provideForRootGuard(router) {
     return 'guarded';
 }
 /**
- * @whatItDoes Registers routes.
- *
- * @howToUse
- *
- * ```
- * @NgModule({
- *   imports: [RouterModule.forChild(ROUTES)],
- *   providers: [provideRoutes(EXTRA_ROUTES)]
- * })
- * class MyNgModule {}
- * ```
- *
- * @stable
+ *  *
+  * *
+  * ```
+  * imports: [RouterModule.forChild(ROUTES)],
+  * providers: [provideRoutes(EXTRA_ROUTES)]
+  * })
+  * class MyNgModule {}
+  * ```
+  * *
+ * @param {?} routes
+ * @return {?}
  */
 export function provideRoutes(routes) {
     return [
@@ -196,9 +218,22 @@ export function provideRoutes(routes) {
         { provide: ROUTES, multi: true, useValue: routes },
     ];
 }
+/**
+ * @param {?} ref
+ * @param {?} urlSerializer
+ * @param {?} outletMap
+ * @param {?} location
+ * @param {?} injector
+ * @param {?} loader
+ * @param {?} compiler
+ * @param {?} config
+ * @param {?=} opts
+ * @param {?=} urlHandlingStrategy
+ * @return {?}
+ */
 export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy) {
     if (opts === void 0) { opts = {}; }
-    var router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+    var /** @type {?} */ router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -206,9 +241,9 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
         router.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
-        var dom_1 = getDOM();
+        var /** @type {?} */ dom_1 = getDOM();
         router.events.subscribe(function (e) {
-            dom_1.logGroup("Router Event: " + e.constructor.name);
+            dom_1.logGroup("Router Event: " + ((e.constructor)).name);
             dom_1.log(e.toString());
             dom_1.log(e);
             dom_1.logGroupEnd();
@@ -216,9 +251,20 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
     }
     return router;
 }
+/**
+ * @param {?} router
+ * @return {?}
+ */
 export function rootRoute(router) {
     return router.routerState.root;
 }
+/**
+ * @param {?} router
+ * @param {?} ref
+ * @param {?} preloader
+ * @param {?} opts
+ * @return {?}
+ */
 export function initialRouterNavigation(router, ref, preloader, opts) {
     return function (bootstrappedComponentRef) {
         if (bootstrappedComponentRef !== ref.components[0]) {
@@ -239,7 +285,10 @@ export function initialRouterNavigation(router, ref, preloader, opts) {
  *
  * @experimental
  */
-export var ROUTER_INITIALIZER = new OpaqueToken('Router Initializer');
+export var /** @type {?} */ ROUTER_INITIALIZER = new OpaqueToken('Router Initializer');
+/**
+ * @return {?}
+ */
 export function provideRouterInitializer() {
     return [
         {
