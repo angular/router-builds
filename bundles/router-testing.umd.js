@@ -1,5 +1,5 @@
 /**
- * @license Angular v0.0.0-ROUTERPLACEHOLDER
+ * @license Angular v3.3.0-beta.0-86ffa88
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
