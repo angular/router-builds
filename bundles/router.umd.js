@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-beta.0-86ffa88
+ * @license Angular v0.0.0-ROUTERPLACEHOLDER
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3635,6 +3635,7 @@
               var /** @type {?} */ navigationIsSuccessful;
               var /** @type {?} */ storedState = _this.currentRouterState;
               var /** @type {?} */ storedUrl = _this.currentUrlTree;
+              var /** @type {?} */ storedUrlInLocation = _this.currentUrlTreeStoredInLocation;
               routerState$
                   .forEach(function (_a) {
                   var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
@@ -3644,6 +3645,8 @@
                   }
                   _this.currentUrlTree = appliedUrl;
                   _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+                  _this.currentUrlTreeStoredInLocation =
+                      shouldPreventPushState ? _this.currentUrlTreeStoredInLocation : _this.rawUrlTree;
                   _this.currentRouterState = state;
                   if (!shouldPreventPushState) {
                       var /** @type {?} */ path = _this.urlSerializer.serialize(_this.rawUrlTree);
@@ -3687,7 +3690,7 @@
                   _this.currentRouterState = storedState;
                   _this.currentUrlTree = storedUrl;
                   _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                  _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+                  _this.location.replaceState(_this.serializeUrl(storedUrlInLocation));
               });
           });
       };
@@ -3695,8 +3698,7 @@
        * @return {?}
        */
       Router.prototype.resetUrlToCurrentUrlTree = function () {
-          var /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
-          this.location.replaceState(path);
+          this.location.replaceState(this.urlSerializer.serialize(this.currentUrlTreeStoredInLocation));
       };
       return Router;
   }());
