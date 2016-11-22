@@ -618,7 +618,6 @@ export var Router = (function () {
             var /** @type {?} */ navigationIsSuccessful;
             var /** @type {?} */ storedState = _this.currentRouterState;
             var /** @type {?} */ storedUrl = _this.currentUrlTree;
-            var /** @type {?} */ storedUrlInLocation = _this.currentUrlTreeStoredInLocation;
             routerState$
                 .forEach(function (_a) {
                 var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
@@ -628,8 +627,6 @@ export var Router = (function () {
                 }
                 _this.currentUrlTree = appliedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.currentUrlTreeStoredInLocation =
-                    shouldPreventPushState ? _this.currentUrlTreeStoredInLocation : _this.rawUrlTree;
                 _this.currentRouterState = state;
                 if (!shouldPreventPushState) {
                     var /** @type {?} */ path = _this.urlSerializer.serialize(_this.rawUrlTree);
@@ -673,7 +670,7 @@ export var Router = (function () {
                 _this.currentRouterState = storedState;
                 _this.currentUrlTree = storedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.location.replaceState(_this.serializeUrl(storedUrlInLocation));
+                _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
             });
         });
     };
@@ -681,7 +678,8 @@ export var Router = (function () {
      * @return {?}
      */
     Router.prototype.resetUrlToCurrentUrlTree = function () {
-        this.location.replaceState(this.urlSerializer.serialize(this.currentUrlTreeStoredInLocation));
+        var /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
+        this.location.replaceState(path);
     };
     return Router;
 }());
@@ -690,8 +688,6 @@ function Router_tsickle_Closure_declarations() {
     Router.prototype.currentUrlTree;
     /** @type {?} */
     Router.prototype.rawUrlTree;
-    /** @type {?} */
-    Router.prototype.currentUrlTreeStoredInLocation;
     /** @type {?} */
     Router.prototype.navigations;
     /** @type {?} */
