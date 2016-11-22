@@ -78,9 +78,9 @@ export var SpyNgModuleFactoryLoader = (function () {
         { type: Injectable },
     ];
     /** @nocollapse */
-    SpyNgModuleFactoryLoader.ctorParameters = function () { return [
+    SpyNgModuleFactoryLoader.ctorParameters = [
         { type: Compiler, },
-    ]; };
+    ];
     return SpyNgModuleFactoryLoader;
 }());
 /**
@@ -145,7 +145,7 @@ export var RouterTestingModule = (function () {
                 },] },
     ];
     /** @nocollapse */
-    RouterTestingModule.ctorParameters = function () { return []; };
+    RouterTestingModule.ctorParameters = [];
     return RouterTestingModule;
 }());
 //# sourceMappingURL=router_testing_module.js.map
