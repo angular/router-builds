@@ -16,5 +16,5 @@ export { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapsho
 export { PRIMARY_OUTLET } from './shared';
 export { UrlHandlingStrategy } from './url_handling_strategy';
 export { DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree } from './url_tree';
-export { __router_private__ } from './private_export';
+export * from './private_export';
 //# sourceMappingURL=index.js.map

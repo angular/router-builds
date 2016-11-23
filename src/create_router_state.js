@@ -8,38 +8,23 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ActivatedRoute, RouterState } from './router_state';
 import { TreeNode } from './utils/tree';
-/**
- * @param {?} curr
- * @param {?} prevState
- * @return {?}
- */
 export function createRouterState(curr, prevState) {
-    var /** @type {?} */ root = createNode(curr._root, prevState ? prevState._root : undefined);
+    var root = createNode(curr._root, prevState ? prevState._root : undefined);
     return new RouterState(root, curr);
 }
-/**
- * @param {?} curr
- * @param {?=} prevState
- * @return {?}
- */
 function createNode(curr, prevState) {
     if (prevState && equalRouteSnapshots(prevState.value.snapshot, curr.value)) {
-        var /** @type {?} */ value = prevState.value;
+        var value = prevState.value;
         value._futureSnapshot = curr.value;
-        var /** @type {?} */ children = createOrReuseChildren(curr, prevState);
+        var children = createOrReuseChildren(curr, prevState);
         return new TreeNode(value, children);
     }
     else {
-        var /** @type {?} */ value = createActivatedRoute(curr.value);
-        var /** @type {?} */ children = curr.children.map(function (c) { return createNode(c); });
+        var value = createActivatedRoute(curr.value);
+        var children = curr.children.map(function (c) { return createNode(c); });
         return new TreeNode(value, children);
     }
 }
-/**
- * @param {?} curr
- * @param {?} prevState
- * @return {?}
- */
 function createOrReuseChildren(curr, prevState) {
     return curr.children.map(function (child) {
         for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
@@ -51,18 +36,9 @@ function createOrReuseChildren(curr, prevState) {
         return createNode(child);
     });
 }
-/**
- * @param {?} c
- * @return {?}
- */
 function createActivatedRoute(c) {
     return new ActivatedRoute(new BehaviorSubject(c.url), new BehaviorSubject(c.params), new BehaviorSubject(c.queryParams), new BehaviorSubject(c.fragment), new BehaviorSubject(c.data), c.outlet, c.component, c);
 }
-/**
- * @param {?} a
- * @param {?} b
- * @return {?}
- */
 function equalRouteSnapshots(a, b) {
     return a._routeConfig === b._routeConfig;
 }
