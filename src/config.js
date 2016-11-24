@@ -6,12 +6,20 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { PRIMARY_OUTLET } from './shared';
+/**
+ * @param {?} config
+ * @return {?}
+ */
 export function validateConfig(config) {
     // forEach doesn't iterate undefined values
-    for (var i = 0; i < config.length; i++) {
+    for (var /** @type {?} */ i = 0; i < config.length; i++) {
         validateNode(config[i]);
     }
 }
+/**
+ * @param {?} route
+ * @return {?}
+ */
 function validateNode(route) {
     if (!route) {
         throw new Error("\n      Invalid route configuration: Encountered undefined route.\n      The reason might be an extra comma.\n       \n      Example: \n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
@@ -48,7 +56,7 @@ function validateNode(route) {
         throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
     }
     if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
-        var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+        var /** @type {?} */ exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
         throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
     }
     if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
