@@ -1,1 +1,1 @@
-{"__symbolic":"module","version":2,"metadata":{"UrlHandlingStrategy":{"__symbolic":"class"},"DefaultUrlHandlingStrategy":{"__symbolic":"class"}}}
+{"__symbolic":"module","version":2,"metadata":{"UrlHandlingStrategy":{"__symbolic":"class","members":{"shouldProcessUrl":[{"__symbolic":"method"}],"extract":[{"__symbolic":"method"}],"merge":[{"__symbolic":"method"}]}},"DefaultUrlHandlingStrategy":{"__symbolic":"class","members":{"shouldProcessUrl":[{"__symbolic":"method"}],"extract":[{"__symbolic":"method"}],"merge":[{"__symbolic":"method"}]}}}}
