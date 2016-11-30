@@ -99,11 +99,34 @@ export var RouterOutlet = (function () {
     /**
      * @return {?}
      */
+    RouterOutlet.prototype.detach = function () {
+        if (!this.activated)
+            throw new Error('Outlet is not activated');
+        this.location.detach();
+        var /** @type {?} */ r = this.activated;
+        this.activated = null;
+        this._activatedRoute = null;
+        return r;
+    };
+    /**
+     * @param {?} ref
+     * @param {?} activatedRoute
+     * @return {?}
+     */
+    RouterOutlet.prototype.attach = function (ref, activatedRoute) {
+        this.activated = ref;
+        this._activatedRoute = activatedRoute;
+        this.location.insert(ref.hostView);
+    };
+    /**
+     * @return {?}
+     */
     RouterOutlet.prototype.deactivate = function () {
         if (this.activated) {
             var /** @type {?} */ c = this.component;
             this.activated.destroy();
             this.activated = null;
+            this._activatedRoute = null;
             this.deactivateEvents.emit(c);
         }
     };

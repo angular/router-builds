@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
+import { DetachedRouteHandle, RouteReuseStrategy } from './route_reuse_strategy';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
@@ -244,6 +245,16 @@ export declare type Event = NavigationStart | NavigationEnd | NavigationCancel |
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
+ * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ */
+export declare class DefaultRouteReuseStrategy implements RouteReuseStrategy {
+    shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
+    shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle;
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+}
+/**
  * @whatItDoes Provides the navigation and url manipulation capabilities.
  *
  * See {@link Routes} for more details and examples.
@@ -281,6 +292,7 @@ export declare class Router {
      * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
      */
     urlHandlingStrategy: UrlHandlingStrategy;
+    routeReuseStrategy: RouteReuseStrategy;
     /**
      * Creates the router service.
      */

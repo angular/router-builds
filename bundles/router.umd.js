@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-beta.0-c4bbafc
+ * @license Angular v3.3.0-beta.0-42cf06f
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2164,46 +2164,72 @@
   }
 
   /**
+   * @param {?} routeReuseStrategy
    * @param {?} curr
    * @param {?} prevState
    * @return {?}
    */
-  function createRouterState(curr, prevState) {
-      var /** @type {?} */ root = createNode(curr._root, prevState ? prevState._root : undefined);
+  function createRouterState(routeReuseStrategy, curr, prevState) {
+      var /** @type {?} */ root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
       return new RouterState(root, curr);
   }
   /**
+   * @param {?} routeReuseStrategy
    * @param {?} curr
    * @param {?=} prevState
    * @return {?}
    */
-  function createNode(curr, prevState) {
-      if (prevState && equalRouteSnapshots(prevState.value.snapshot, curr.value)) {
+  function createNode(routeReuseStrategy, curr, prevState) {
+      // reuse an activated route that is currently displayed on the screen
+      if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
           var /** @type {?} */ value = prevState.value;
           value._futureSnapshot = curr.value;
-          var /** @type {?} */ children = createOrReuseChildren(curr, prevState);
+          var /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
           return new TreeNode(value, children);
+      }
+      else if (routeReuseStrategy.retrieve(curr.value)) {
+          var /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
+          setFutureSnapshotsOfActivatedRoutes(curr, tree);
+          return tree;
       }
       else {
           var /** @type {?} */ value = createActivatedRoute(curr.value);
-          var /** @type {?} */ children = curr.children.map(function (c) { return createNode(c); });
+          var /** @type {?} */ children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
           return new TreeNode(value, children);
       }
   }
   /**
    * @param {?} curr
+   * @param {?} result
+   * @return {?}
+   */
+  function setFutureSnapshotsOfActivatedRoutes(curr, result) {
+      if (curr.value.routeConfig !== result.value.routeConfig) {
+          throw new Error('Cannot reattach ActivatedRouteSnapshot created from a different route');
+      }
+      if (curr.children.length !== result.children.length) {
+          throw new Error('Cannot reattach ActivatedRouteSnapshot with a different number of children');
+      }
+      result.value._futureSnapshot = curr.value;
+      for (var /** @type {?} */ i = 0; i < curr.children.length; ++i) {
+          setFutureSnapshotsOfActivatedRoutes(curr.children[i], result.children[i]);
+      }
+  }
+  /**
+   * @param {?} routeReuseStrategy
+   * @param {?} curr
    * @param {?} prevState
    * @return {?}
    */
-  function createOrReuseChildren(curr, prevState) {
+  function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
       return curr.children.map(function (child) {
           for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
               var p = _a[_i];
-              if (equalRouteSnapshots(p.value.snapshot, child.value)) {
-                  return createNode(child, p);
+              if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
+                  return createNode(routeReuseStrategy, child, p);
               }
           }
-          return createNode(child);
+          return createNode(routeReuseStrategy, child);
       });
   }
   /**
@@ -2212,14 +2238,6 @@
    */
   function createActivatedRoute(c) {
       return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.queryParams), new rxjs_BehaviorSubject.BehaviorSubject(c.fragment), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
-  }
-  /**
-   * @param {?} a
-   * @param {?} b
-   * @return {?}
-   */
-  function equalRouteSnapshots(a, b) {
-      return a._routeConfig === b._routeConfig;
   }
 
   /**
@@ -3199,6 +3217,43 @@
       throw error;
   }
   /**
+   *  Does not detach any subtrees. Reuses routes as long as their route config is the same.
+   */
+  var DefaultRouteReuseStrategy = (function () {
+      function DefaultRouteReuseStrategy() {
+      }
+      /**
+       * @param {?} route
+       * @return {?}
+       */
+      DefaultRouteReuseStrategy.prototype.shouldDetach = function (route) { return false; };
+      /**
+       * @param {?} route
+       * @param {?} detachedTree
+       * @return {?}
+       */
+      DefaultRouteReuseStrategy.prototype.store = function (route, detachedTree) { };
+      /**
+       * @param {?} route
+       * @return {?}
+       */
+      DefaultRouteReuseStrategy.prototype.shouldAttach = function (route) { return false; };
+      /**
+       * @param {?} route
+       * @return {?}
+       */
+      DefaultRouteReuseStrategy.prototype.retrieve = function (route) { return null; };
+      /**
+       * @param {?} future
+       * @param {?} curr
+       * @return {?}
+       */
+      DefaultRouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) {
+          return future.routeConfig === curr.routeConfig;
+      };
+      return DefaultRouteReuseStrategy;
+  }());
+  /**
    *  *
     * See {@link Routes} for more details and examples.
     * *
@@ -3239,6 +3294,7 @@
            * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
            */
           this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
+          this.routeReuseStrategy = new DefaultRouteReuseStrategy();
           this.resetConfig(config);
           this.currentUrlTree = createEmptyUrlTree();
           this.rawUrlTree = this.currentUrlTree;
@@ -3623,7 +3679,7 @@
               var /** @type {?} */ routerState$ = rxjs_operator_map.map.call(preactivationResolveData$, function (_a) {
                   var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
                   if (shouldActivate) {
-                      var /** @type {?} */ state = createRouterState(snapshot, _this.currentRouterState);
+                      var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.currentRouterState);
                       return { appliedUrl: appliedUrl, state: state, shouldActivate: shouldActivate };
                   }
                   else {
@@ -3654,7 +3710,8 @@
                           _this.location.go(path);
                       }
                   }
-                  new ActivateRoutes(state, storedState).activate(_this.outletMap);
+                  new ActivateRoutes(_this.routeReuseStrategy, state, storedState)
+                      .activate(_this.outletMap);
                   navigationIsSuccessful = true;
               })
                   .then(function () {
@@ -3999,10 +4056,12 @@
   }());
   var ActivateRoutes = (function () {
       /**
+       * @param {?} routeReuseStrategy
        * @param {?} futureState
        * @param {?} currState
        */
-      function ActivateRoutes(futureState, currState) {
+      function ActivateRoutes(routeReuseStrategy, futureState, currState) {
+          this.routeReuseStrategy = routeReuseStrategy;
           this.futureState = futureState;
           this.currState = currState;
       }
@@ -4097,9 +4156,17 @@
               if (future.component) {
                   advanceActivatedRoute(future);
                   var /** @type {?} */ outlet = getOutlet(parentOutletMap, futureNode.value);
-                  var /** @type {?} */ outletMap = new RouterOutletMap();
-                  this.placeComponentIntoOutlet(outletMap, future, outlet);
-                  this.activateChildRoutes(futureNode, null, outletMap);
+                  if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
+                      var /** @type {?} */ stored = ((this.routeReuseStrategy.retrieve(future.snapshot)));
+                      this.routeReuseStrategy.store(future.snapshot, null);
+                      outlet.attach(stored.componentRef, stored.route.value);
+                      advanceActivatedRouteNodeAndItsChildren(stored.route);
+                  }
+                  else {
+                      var /** @type {?} */ outletMap = new RouterOutletMap();
+                      this.placeComponentIntoOutlet(outletMap, future, outlet);
+                      this.activateChildRoutes(futureNode, null, outletMap);
+                  }
               }
               else {
                   advanceActivatedRoute(future);
@@ -4138,6 +4205,29 @@
        * @return {?}
        */
       ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
+          if (this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
+              this.detachAndStoreRouteSubtree(route, parentOutletMap);
+          }
+          else {
+              this.deactiveRouteAndOutlet(route, parentOutletMap);
+          }
+      };
+      /**
+       * @param {?} route
+       * @param {?} parentOutletMap
+       * @return {?}
+       */
+      ActivateRoutes.prototype.detachAndStoreRouteSubtree = function (route, parentOutletMap) {
+          var /** @type {?} */ outlet = getOutlet(parentOutletMap, route.value);
+          var /** @type {?} */ componentRef = outlet.detach();
+          this.routeReuseStrategy.store(route.value.snapshot, { componentRef: componentRef, route: route });
+      };
+      /**
+       * @param {?} route
+       * @param {?} parentOutletMap
+       * @return {?}
+       */
+      ActivateRoutes.prototype.deactiveRouteAndOutlet = function (route, parentOutletMap) {
           var _this = this;
           var /** @type {?} */ prevChildren = nodeChildrenAsMap(route);
           var /** @type {?} */ outlet = null;
@@ -4164,6 +4254,14 @@
       };
       return ActivateRoutes;
   }());
+  /**
+   * @param {?} node
+   * @return {?}
+   */
+  function advanceActivatedRouteNodeAndItsChildren(node) {
+      advanceActivatedRoute(node.value);
+      node.children.forEach(advanceActivatedRouteNodeAndItsChildren);
+  }
   /**
    * @param {?} snapshot
    * @return {?}
@@ -4748,11 +4846,34 @@
       /**
        * @return {?}
        */
+      RouterOutlet.prototype.detach = function () {
+          if (!this.activated)
+              throw new Error('Outlet is not activated');
+          this.location.detach();
+          var /** @type {?} */ r = this.activated;
+          this.activated = null;
+          this._activatedRoute = null;
+          return r;
+      };
+      /**
+       * @param {?} ref
+       * @param {?} activatedRoute
+       * @return {?}
+       */
+      RouterOutlet.prototype.attach = function (ref, activatedRoute) {
+          this.activated = ref;
+          this._activatedRoute = activatedRoute;
+          this.location.insert(ref.hostView);
+      };
+      /**
+       * @return {?}
+       */
       RouterOutlet.prototype.deactivate = function () {
           if (this.activated) {
               var /** @type {?} */ c = this.component;
               this.activated.destroy();
               this.activated = null;
+              this._activatedRoute = null;
               this.deactivateEvents.emit(c);
           }
       };
@@ -4793,6 +4914,60 @@
           'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
       };
       return RouterOutlet;
+  }());
+
+  /**
+   * @license
+   * Copyright Google Inc. All Rights Reserved.
+   *
+   * Use of this source code is governed by an MIT-style license that can be
+   * found in the LICENSE file at https://angular.io/license
+   */
+  /**
+   *  *
+   * @abstract
+   */
+  var RouteReuseStrategy = (function () {
+      function RouteReuseStrategy() {
+      }
+      /**
+       *  Determines if this route (and its subtree) should be detached to be reused later.
+       * @abstract
+       * @param {?} route
+       * @return {?}
+       */
+      RouteReuseStrategy.prototype.shouldDetach = function (route) { };
+      /**
+       *  Stores the detached route.
+       * @abstract
+       * @param {?} route
+       * @param {?} handle
+       * @return {?}
+       */
+      RouteReuseStrategy.prototype.store = function (route, handle) { };
+      /**
+       *  Determines if this route (and its subtree) should be reattached.
+       * @abstract
+       * @param {?} route
+       * @return {?}
+       */
+      RouteReuseStrategy.prototype.shouldAttach = function (route) { };
+      /**
+       *  Retrieves the previously stored route.
+       * @abstract
+       * @param {?} route
+       * @return {?}
+       */
+      RouteReuseStrategy.prototype.retrieve = function (route) { };
+      /**
+       *  Determines if a route should be reused.
+       * @abstract
+       * @param {?} future
+       * @param {?} curr
+       * @return {?}
+       */
+      RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
+      return RouteReuseStrategy;
   }());
 
   var /** @type {?} */ getDOM = _angular_platformBrowser.__platform_browser_private__.getDOM;
@@ -4968,7 +5143,8 @@
           useFactory: setupRouter,
           deps: [
               _angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader,
-              _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new _angular_core.Optional()]
+              _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new _angular_core.Optional()],
+              [RouteReuseStrategy, new _angular_core.Optional()]
           ]
       },
       RouterOutletMap,
@@ -5147,13 +5323,17 @@
    * @param {?} config
    * @param {?=} opts
    * @param {?=} urlHandlingStrategy
+   * @param {?=} routeReuseStrategy
    * @return {?}
    */
-  function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy) {
+  function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
       if (opts === void 0) { opts = {}; }
       var /** @type {?} */ router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
       if (urlHandlingStrategy) {
           router.urlHandlingStrategy = urlHandlingStrategy;
+      }
+      if (routeReuseStrategy) {
+          router.routeReuseStrategy = routeReuseStrategy;
       }
       if (opts.errorHandler) {
           router.errorHandler = opts.errorHandler;
@@ -5228,6 +5408,7 @@
   exports.RouterLinkWithHref = RouterLinkWithHref;
   exports.RouterLinkActive = RouterLinkActive;
   exports.RouterOutlet = RouterOutlet;
+  exports.RouteReuseStrategy = RouteReuseStrategy;
   exports.NavigationCancel = NavigationCancel;
   exports.NavigationEnd = NavigationEnd;
   exports.NavigationError = NavigationError;

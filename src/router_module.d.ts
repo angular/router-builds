@@ -8,6 +8,7 @@
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
+import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { RouterPreloader } from './router_preloader';
@@ -140,7 +141,7 @@ export interface ExtraOptions {
      */
     preloadingStrategy?: any;
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
 /**

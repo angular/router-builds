@@ -182,6 +182,43 @@ function defaultErrorHandler(error) {
     throw error;
 }
 /**
+ *  Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ */
+export var DefaultRouteReuseStrategy = (function () {
+    function DefaultRouteReuseStrategy() {
+    }
+    /**
+     * @param {?} route
+     * @return {?}
+     */
+    DefaultRouteReuseStrategy.prototype.shouldDetach = function (route) { return false; };
+    /**
+     * @param {?} route
+     * @param {?} detachedTree
+     * @return {?}
+     */
+    DefaultRouteReuseStrategy.prototype.store = function (route, detachedTree) { };
+    /**
+     * @param {?} route
+     * @return {?}
+     */
+    DefaultRouteReuseStrategy.prototype.shouldAttach = function (route) { return false; };
+    /**
+     * @param {?} route
+     * @return {?}
+     */
+    DefaultRouteReuseStrategy.prototype.retrieve = function (route) { return null; };
+    /**
+     * @param {?} future
+     * @param {?} curr
+     * @return {?}
+     */
+    DefaultRouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) {
+        return future.routeConfig === curr.routeConfig;
+    };
+    return DefaultRouteReuseStrategy;
+}());
+/**
  *  *
   * See {@link Routes} for more details and examples.
   * *
@@ -222,6 +259,7 @@ export var Router = (function () {
          * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
+        this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -606,7 +644,7 @@ export var Router = (function () {
             var /** @type {?} */ routerState$ = map.call(preactivationResolveData$, function (_a) {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
                 if (shouldActivate) {
-                    var /** @type {?} */ state = createRouterState(snapshot, _this.currentRouterState);
+                    var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.currentRouterState);
                     return { appliedUrl: appliedUrl, state: state, shouldActivate: shouldActivate };
                 }
                 else {
@@ -637,7 +675,8 @@ export var Router = (function () {
                         _this.location.go(path);
                     }
                 }
-                new ActivateRoutes(state, storedState).activate(_this.outletMap);
+                new ActivateRoutes(_this.routeReuseStrategy, state, storedState)
+                    .activate(_this.outletMap);
                 navigationIsSuccessful = true;
             })
                 .then(function () {
@@ -717,6 +756,8 @@ function Router_tsickle_Closure_declarations() {
      * @type {?}
      */
     Router.prototype.urlHandlingStrategy;
+    /** @type {?} */
+    Router.prototype.routeReuseStrategy;
     /** @type {?} */
     Router.prototype.rootComponentType;
     /** @type {?} */
@@ -1049,10 +1090,12 @@ function PreActivation_tsickle_Closure_declarations() {
 }
 var ActivateRoutes = (function () {
     /**
+     * @param {?} routeReuseStrategy
      * @param {?} futureState
      * @param {?} currState
      */
-    function ActivateRoutes(futureState, currState) {
+    function ActivateRoutes(routeReuseStrategy, futureState, currState) {
+        this.routeReuseStrategy = routeReuseStrategy;
         this.futureState = futureState;
         this.currState = currState;
     }
@@ -1147,9 +1190,17 @@ var ActivateRoutes = (function () {
             if (future.component) {
                 advanceActivatedRoute(future);
                 var /** @type {?} */ outlet = getOutlet(parentOutletMap, futureNode.value);
-                var /** @type {?} */ outletMap = new RouterOutletMap();
-                this.placeComponentIntoOutlet(outletMap, future, outlet);
-                this.activateChildRoutes(futureNode, null, outletMap);
+                if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
+                    var /** @type {?} */ stored = ((this.routeReuseStrategy.retrieve(future.snapshot)));
+                    this.routeReuseStrategy.store(future.snapshot, null);
+                    outlet.attach(stored.componentRef, stored.route.value);
+                    advanceActivatedRouteNodeAndItsChildren(stored.route);
+                }
+                else {
+                    var /** @type {?} */ outletMap = new RouterOutletMap();
+                    this.placeComponentIntoOutlet(outletMap, future, outlet);
+                    this.activateChildRoutes(futureNode, null, outletMap);
+                }
             }
             else {
                 advanceActivatedRoute(future);
@@ -1188,6 +1239,29 @@ var ActivateRoutes = (function () {
      * @return {?}
      */
     ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
+        if (this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
+            this.detachAndStoreRouteSubtree(route, parentOutletMap);
+        }
+        else {
+            this.deactiveRouteAndOutlet(route, parentOutletMap);
+        }
+    };
+    /**
+     * @param {?} route
+     * @param {?} parentOutletMap
+     * @return {?}
+     */
+    ActivateRoutes.prototype.detachAndStoreRouteSubtree = function (route, parentOutletMap) {
+        var /** @type {?} */ outlet = getOutlet(parentOutletMap, route.value);
+        var /** @type {?} */ componentRef = outlet.detach();
+        this.routeReuseStrategy.store(route.value.snapshot, { componentRef: componentRef, route: route });
+    };
+    /**
+     * @param {?} route
+     * @param {?} parentOutletMap
+     * @return {?}
+     */
+    ActivateRoutes.prototype.deactiveRouteAndOutlet = function (route, parentOutletMap) {
         var _this = this;
         var /** @type {?} */ prevChildren = nodeChildrenAsMap(route);
         var /** @type {?} */ outlet = null;
@@ -1216,9 +1290,19 @@ var ActivateRoutes = (function () {
 }());
 function ActivateRoutes_tsickle_Closure_declarations() {
     /** @type {?} */
+    ActivateRoutes.prototype.routeReuseStrategy;
+    /** @type {?} */
     ActivateRoutes.prototype.futureState;
     /** @type {?} */
     ActivateRoutes.prototype.currState;
+}
+/**
+ * @param {?} node
+ * @return {?}
+ */
+function advanceActivatedRouteNodeAndItsChildren(node) {
+    advanceActivatedRoute(node.value);
+    node.children.forEach(advanceActivatedRouteNodeAndItsChildren);
 }
 /**
  * @param {?} snapshot
