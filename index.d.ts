@@ -10,4 +10,9 @@
  * @description
  * Entry point for all public APIs of the router package.
  */
+import { Version } from '@angular/core';
+/**
+ * @stable
+ */
+export declare const VERSION: Version;
 export * from './src/index';

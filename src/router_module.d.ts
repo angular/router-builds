@@ -6,8 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, OpaqueToken, Provider } from '@angular/core';
+import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
+import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
 import { RouterPreloader } from './router_preloader';
@@ -24,6 +25,7 @@ export declare const ROUTER_CONFIGURATION: OpaqueToken;
  */
 export declare const ROUTER_FORROOT_GUARD: OpaqueToken;
 export declare const ROUTER_PROVIDERS: Provider[];
+export declare function routerNgProbeToken(): NgProbeToken;
 /**
  * @whatItDoes Adds router directives and providers.
  *
@@ -37,10 +39,9 @@ export declare const ROUTER_PROVIDERS: Provider[];
  * `RouterModule.forChild`.
  *
  * * `forRoot` creates a module that contains all the directives, the given routes, and the router
- * service itself.
+ *   service itself.
  * * `forChild` creates a module that contains all the directives and the given routes, but does not
- * include
- * the router service.
+ *   include the router service.
  *
  * When registered at the root, the module should be used as follows
  *
@@ -140,7 +141,7 @@ export interface ExtraOptions {
      */
     preloadingStrategy?: any;
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
 /**
