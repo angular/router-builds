@@ -9,6 +9,6 @@ import { Version } from '@angular/core';
 /**
  * @stable
  */
-export var /** @type {?} */ VERSION = new Version('3.3.0-rc.0-82c81cd');
+export var /** @type {?} */ VERSION = new Version('3.3.0-rc.0-614a35d');
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, RouteReuseStrategy, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RoutesRecognized, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, __router_private__ } from './src/index';
 //# sourceMappingURL=index.js.map
