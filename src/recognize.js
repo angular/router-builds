@@ -80,7 +80,7 @@ var Recognizer = (function () {
             return this.processChildren(config, segmentGroup);
         }
         else {
-            return this.processSegment(config, segmentGroup, 0, segmentGroup.segments, outlet);
+            return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
         }
     };
     /**
@@ -98,16 +98,15 @@ var Recognizer = (function () {
     /**
      * @param {?} config
      * @param {?} segmentGroup
-     * @param {?} pathIndex
      * @param {?} segments
      * @param {?} outlet
      * @return {?}
      */
-    Recognizer.prototype.processSegment = function (config, segmentGroup, pathIndex, segments, outlet) {
+    Recognizer.prototype.processSegment = function (config, segmentGroup, segments, outlet) {
         for (var _i = 0, config_1 = config; _i < config_1.length; _i++) {
             var r = config_1[_i];
             try {
-                return this.processSegmentAgainstRoute(r, segmentGroup, pathIndex, segments, outlet);
+                return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
             }
             catch (e) {
                 if (!(e instanceof NoMatch))
@@ -133,12 +132,11 @@ var Recognizer = (function () {
     /**
      * @param {?} route
      * @param {?} rawSegment
-     * @param {?} pathIndex
      * @param {?} segments
      * @param {?} outlet
      * @return {?}
      */
-    Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, pathIndex, segments, outlet) {
+    Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, segments, outlet) {
         if (route.redirectTo)
             throw new NoMatch();
         if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
@@ -161,7 +159,7 @@ var Recognizer = (function () {
             return [new TreeNode(snapshot, [])];
         }
         else {
-            var /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, pathIndex + lastChild, slicedSegments, PRIMARY_OUTLET);
+            var /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
             return [new TreeNode(snapshot, children)];
         }
     };
