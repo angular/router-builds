@@ -16,33 +16,36 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *
  * - `path` is a string that uses the route matcher DSL.
  * - `pathMatch` is a string that specifies the matching strategy.
+ * - `matcher` defines a custom strategy for path matching and supersedes `path` and `pathMatch`.
+ *   See {@link UrlMatcher} for more info.
  * - `component` is a component type.
  * - `redirectTo` is the url fragment which will replace the current matched segment.
  * - `outlet` is the name of the outlet the component should be placed into.
- * - `canActivate` is an array of DI tokens used to look up CanActivate handlers. See {@link
- * CanActivate} for more info.
+ * - `canActivate` is an array of DI tokens used to look up CanActivate handlers. See
+ *   {@link CanActivate} for more info.
  * - `canActivateChild` is an array of DI tokens used to look up CanActivateChild handlers. See
- * {@link
- * CanActivateChild} for more info.
- * - `canDeactivate` is an array of DI tokens used to look up CanDeactivate handlers. See {@link
- * CanDeactivate} for more info.
+ *   {@link CanActivateChild} for more info.
+ * - `canDeactivate` is an array of DI tokens used to look up CanDeactivate handlers. See
+ *   {@link CanDeactivate} for more info.
+ * - `canLoad` is an array of DI tokens used to look up CanDeactivate handlers. See
+ *   {@link CanLoad} for more info.
  * - `data` is additional data provided to the component via `ActivatedRoute`.
  * - `resolve` is a map of DI tokens used to look up data resolvers. See {@link Resolve} for more
- * info.
+ *   info.
  * - `children` is an array of child route definitions.
+ * - `loadChildren` is a reference to lazy loaded child routes. See {@link LoadChildren} for more
+ *   info.
  *
  * ### Simple Configuration
  *
  * ```
  * [{
  *   path: 'team/:id',
- *   component: Team,
- *   children: [
- *     {
- *       path: 'user/:name',
- *       component: User
- *     }
- *   ]
+  *  component: Team,
+ *   children: [{
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
  * }]
  * ```
  *
@@ -55,8 +58,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * [{
  *   path: 'team/:id',
  *   component: Team
- * },
- * {
+ * }, {
  *   path: 'chat/:user',
  *   component: Chat
  *   outlet: 'aux'
@@ -83,16 +85,13 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * [{
  *   path: 'team/:id',
  *   component: Team,
- *   children: [
- *     {
- *       path: 'legacy/user/:name',
- *       redirectTo: 'user/:name'
- *     },
- *     {
- *       path: 'user/:name',
- *       component: User
- *     }
- *   ]
+ *   children: [{
+ *     path: 'legacy/user/:name',
+ *     redirectTo: 'user/:name'
+ *   }, {
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
  * }]
  * ```
  *
@@ -112,16 +111,13 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * [{
  *   path: 'team/:id',
  *   component: Team,
- *   children: [
- *     {
- *       path: '',
- *       component: AllUsers
- *     },
- *     {
- *       path: 'user/:name',
- *       component: User
- *     }
- *   ]
+ *   children: [{
+ *     path: '',
+ *     component: AllUsers
+ *   }, {
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
  * }]
  * ```
  *
@@ -133,18 +129,14 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * [{
  *   path: 'team/:id',
  *   component: Team,
- *   children: [
- *     {
- *       path: '',
- *       component: WrapperCmp,
- *       children: [
- *         {
- *           path: 'user/:name',
- *           component: User
- *         }
- *       ]
- *     }
- *   ]
+ *   children: [{
+ *     path: '',
+ *     component: WrapperCmp,
+ *     children: [{
+ *       path: 'user/:name',
+ *       component: User
+ *     }]
+ *   }]
  * }]
  * ```
  *
@@ -169,8 +161,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *   path: '',
  *   pathMatch: 'prefix', //default
  *   redirectTo: 'main'
- * },
- * {
+ * }, {
  *   path: 'main',
  *   component: Main
  * }]
@@ -187,8 +178,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *   path: '',
  *   pathMatch: 'full',
  *   redirectTo: 'main'
- * },
- * {
+ * }, {
  *   path: 'main',
  *   component: Main
  * }]
@@ -241,8 +231,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *
  * Lazy loading speeds up our application load time by splitting it into multiple bundles, and
  * loading them on demand. The router is designed to make lazy loading simple and easy. Instead of
- * providing the children property, you can provide
- * the loadChildren property, as follows:
+ * providing the children property, you can provide the `loadChildren` property, as follows:
  *
  * ```
  * [{
@@ -253,9 +242,8 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * ```
  *
  * The router will use registered NgModuleFactoryLoader to fetch an NgModule associated with 'team'.
- * Then it will
- * extract the set of routes defined in that NgModule, and will transparently add those routes to
- * the main configuration.
+ * Then it will extract the set of routes defined in that NgModule, and will transparently add
+ * those routes to the main configuration.
  *
  * @stable use Routes
  */
@@ -319,7 +307,6 @@ export declare type ResolveData = {
 export declare type LoadChildrenCallback = () => Type<any> | Promise<Type<any>> | Observable<Type<any>>;
 /**
  * @whatItDoes The type of `loadChildren`.
- *
  * See {@link Routes} for more details.
  * @stable
  */

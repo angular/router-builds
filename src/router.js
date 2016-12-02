@@ -296,8 +296,16 @@ export var Router = (function () {
         // which does not work properly with zone.js in IE and Safari
         this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
             var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
+            var /** @type {?} */ lastNavigation = _this.navigations.value;
+            // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
+            // and that navigation results in 'replaceState' that leads to the same URL,
+            // we should skip those.
+            if (lastNavigation && lastNavigation.imperative &&
+                lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
+                return;
+            }
             setTimeout(function () {
-                _this.scheduleNavigation(rawUrlTree, { skipLocationChange: change['pop'], replaceUrl: true });
+                _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
             }, 0);
         })));
     };
@@ -434,11 +442,11 @@ export var Router = (function () {
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
         if (url instanceof UrlTree) {
-            return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), extras);
+            return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), true, extras);
         }
         else {
             var /** @type {?} */ urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), extras);
+            return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), true, extras);
         }
     };
     /**
@@ -533,14 +541,11 @@ export var Router = (function () {
     };
     /**
      * @param {?} rawUrl
+     * @param {?} imperative
      * @param {?} extras
      * @return {?}
      */
-    Router.prototype.scheduleNavigation = function (rawUrl, extras) {
-        var /** @type {?} */ prevRawUrl = this.navigations.value ? this.navigations.value.rawUrl : null;
-        if (prevRawUrl && prevRawUrl.toString() === rawUrl.toString()) {
-            return this.navigations.value.promise;
-        }
+    Router.prototype.scheduleNavigation = function (rawUrl, imperative, extras) {
         var /** @type {?} */ resolve = null;
         var /** @type {?} */ reject = null;
         var /** @type {?} */ promise = new Promise(function (res, rej) {
@@ -548,7 +553,7 @@ export var Router = (function () {
             reject = rej;
         });
         var /** @type {?} */ id = ++this.navigationId;
-        this.navigations.next({ id: id, rawUrl: rawUrl, prevRawUrl: prevRawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
+        this.navigations.next({ id: id, imperative: imperative, rawUrl: rawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
         // Make sure that the error is propagated even though `processNavigations` catch
         // handler does not rethrow
         return promise.catch(function (e) { return Promise.reject(e); });
@@ -559,17 +564,17 @@ export var Router = (function () {
      */
     Router.prototype.executeScheduledNavigation = function (_a) {
         var _this = this;
-        var id = _a.id, rawUrl = _a.rawUrl, prevRawUrl = _a.prevRawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
+        var id = _a.id, rawUrl = _a.rawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
         var /** @type {?} */ url = this.urlHandlingStrategy.extract(rawUrl);
-        var /** @type {?} */ prevUrl = prevRawUrl ? this.urlHandlingStrategy.extract(prevRawUrl) : null;
-        var /** @type {?} */ urlTransition = !prevUrl || url.toString() !== prevUrl.toString();
+        var /** @type {?} */ urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
         if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
             this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
             Promise.resolve()
                 .then(function (_) { return _this.runNavigate(url, rawUrl, extras.skipLocationChange, extras.replaceUrl, id, null); })
                 .then(resolve, reject);
         }
-        else if (urlTransition && prevRawUrl && this.urlHandlingStrategy.shouldProcessUrl(prevRawUrl)) {
+        else if (urlTransition && this.rawUrlTree &&
+            this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
             this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
             Promise.resolve()
                 .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType).snapshot); })

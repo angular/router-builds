@@ -439,8 +439,8 @@ export declare class Router {
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private removeEmptyProps(params);
     private processNavigations();
-    private scheduleNavigation(rawUrl, extras);
-    private executeScheduledNavigation({id, rawUrl, prevRawUrl, extras, resolve, reject});
+    private scheduleNavigation(rawUrl, imperative, extras);
+    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
     private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
     private resetUrlToCurrentUrlTree();
 }
