@@ -31,16 +31,13 @@ export interface NavigationExtras {
     * [{
     *   path: 'parent',
     *   component: ParentComponent,
-    *   children: [
-    *     {
-    *       path: 'list',
-    *       component: ListComponent
-    *     },
-    *     {
-    *       path: 'child',
-    *       component: ChildComponent
-    *     }
-    *   ]
+    *   children: [{
+    *     path: 'list',
+    *     component: ListComponent
+    *   },{
+    *     path: 'child',
+    *     component: ChildComponent
+    *   }]
     * }]
     * ```
     *

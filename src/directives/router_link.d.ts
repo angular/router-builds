@@ -16,26 +16,17 @@ import { UrlTree } from '../url_tree';
  * @howToUse
  *
  * Consider the following route configuration:
-
- * ```
- * [{ path: 'user/:name', component: UserCmp }]
- * ```
+ * `[{ path: 'user/:name', component: UserCmp }]`
  *
  * When linking to this `user/:name` route, you can write:
- *
- * ```
- * <a routerLink='/user/bob'>link to user component</a>
- * ```
+ * `<a routerLink='/user/bob'>link to user component</a>`
  *
  * @description
  *
  * The RouterLink directives let you link to specific parts of your app.
  *
  * Whe the link is static, you can use the directive as follows:
- *
- * ```
- * <a routerLink="/user/bob">link to user component</a>
- * ```
+ * `<a routerLink="/user/bob">link to user component</a>`
  *
  * If you use dynamic values to generate the link, you can pass an array of path
  * segments, followed by the params for each segment.
@@ -43,29 +34,31 @@ import { UrlTree } from '../url_tree';
  * For instance `['/team', teamId, 'user', userName, {details: true}]`
  * means that we want to generate a link to `/team/11/user/bob;details=true`.
  *
- * Multiple static segments can be merged into one (e.g., `['/team/11/user', userName, {details:
- true}]`).
+ * Multiple static segments can be merged into one
+ * (e.g., `['/team/11/user', userName, {details: true}]`).
  *
  * The first segment name can be prepended with `/`, `./`, or `../`:
  * * If the first segment begins with `/`, the router will look up the route from the root of the
- app.
+ *   app.
  * * If the first segment begins with `./`, or doesn't begin with a slash, the router will
- * instead look in the children of the current activated route.
+ *   instead look in the children of the current activated route.
  * * And if the first segment begins with `../`, the router will go up one level.
  *
  * You can set query params and fragment as follows:
  *
  * ```
- * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">link to user
- component</a>
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
+ *   link to user component
+ * </a>
  * ```
  * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
  *
  * You can also tell the directive to preserve the current query params and fragment:
  *
  * ```
- * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>link to user
- component</a>
+ * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+ *   link to user component
+ * </a>
  * ```
  *
  * The router link directive always treats the provided input as a delta to the current url.
@@ -85,7 +78,6 @@ import { UrlTree } from '../url_tree';
 export declare class RouterLink {
     private router;
     private route;
-    private locationStrategy;
     queryParams: {
         [k: string]: any;
     };
@@ -95,7 +87,7 @@ export declare class RouterLink {
     skipLocationChange: boolean;
     replaceUrl: boolean;
     private commands;
-    constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
+    constructor(router: Router, route: ActivatedRoute);
     routerLink: any[] | string;
     onClick(): boolean;
     urlTree: UrlTree;
@@ -119,10 +111,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
         [k: string]: any;
     };
     fragment: string;
-    routerLinkOptions: {
-        preserveQueryParams: boolean;
-        preserveFragment: boolean;
-    };
     preserveQueryParams: boolean;
     preserveFragment: boolean;
     skipLocationChange: boolean;

@@ -13,24 +13,16 @@ import { ActivatedRoute } from '../router_state';
  *  *
   * *
   * Consider the following route configuration:
-  * ```
-  * [{ path: 'user/:name', component: UserCmp }]
-  * ```
+  * `[{ path: 'user/:name', component: UserCmp }]`
   * *
   * When linking to this `user/:name` route, you can write:
-  * *
-  * ```
-  * <a routerLink='/user/bob'>link to user component</a>
-  * ```
+  * `<a routerLink='/user/bob'>link to user component</a>`
   * *
   * *
   * The RouterLink directives let you link to specific parts of your app.
   * *
   * Whe the link is static, you can use the directive as follows:
-  * *
-  * ```
-  * <a routerLink="/user/bob">link to user component</a>
-  * ```
+  * `<a routerLink="/user/bob">link to user component</a>`
   * *
   * If you use dynamic values to generate the link, you can pass an array of path
   * segments, followed by the params for each segment.
@@ -38,8 +30,8 @@ import { ActivatedRoute } from '../router_state';
   * For instance `['/team', teamId, 'user', userName, {details: true}]`
   * means that we want to generate a link to `/team/11/user/bob;details=true`.
   * *
-  * Multiple static segments can be merged into one (e.g., `['/team/11/user', userName, {details:
-  * true}]`).
+  * Multiple static segments can be merged into one
+  * (e.g., `['/team/11/user', userName, {details: true}]`).
   * *
   * The first segment name can be prepended with `/`, `./`, or `../`:
   * * If the first segment begins with `/`, the router will look up the route from the root of the
@@ -51,16 +43,18 @@ import { ActivatedRoute } from '../router_state';
   * You can set query params and fragment as follows:
   * *
   * ```
-  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">link to user
-  * component</a>
+  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
+  * link to user component
+  * </a>
   * ```
   * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
   * *
   * You can also tell the directive to preserve the current query params and fragment:
   * *
   * ```
-  * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>link to user
-  * component</a>
+  * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+  * link to user component
+  * </a>
   * ```
   * *
   * The router link directive always treats the provided input as a delta to the current url.
@@ -78,12 +72,10 @@ export var RouterLink = (function () {
     /**
      * @param {?} router
      * @param {?} route
-     * @param {?} locationStrategy
      */
-    function RouterLink(router, route, locationStrategy) {
+    function RouterLink(router, route) {
         this.router = router;
         this.route = route;
-        this.locationStrategy = locationStrategy;
         this.commands = [];
     }
     Object.defineProperty(RouterLink.prototype, "routerLink", {
@@ -106,7 +98,11 @@ export var RouterLink = (function () {
      * @return {?}
      */
     RouterLink.prototype.onClick = function () {
-        this.router.navigateByUrl(this.urlTree);
+        var /** @type {?} */ extras = {
+            skipLocationChange: attrBoolValue(this.skipLocationChange),
+            replaceUrl: attrBoolValue(this.replaceUrl),
+        };
+        this.router.navigateByUrl(this.urlTree, extras);
         return true;
     };
     Object.defineProperty(RouterLink.prototype, "urlTree", {
@@ -118,10 +114,8 @@ export var RouterLink = (function () {
                 relativeTo: this.route,
                 queryParams: this.queryParams,
                 fragment: this.fragment,
-                preserveQueryParams: toBool(this.preserveQueryParams),
-                preserveFragment: toBool(this.preserveFragment),
-                skipLocationChange: toBool(this.skipLocationChange),
-                replaceUrl: toBool(this.replaceUrl),
+                preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                preserveFragment: attrBoolValue(this.preserveFragment),
             });
         },
         enumerable: true,
@@ -134,7 +128,6 @@ export var RouterLink = (function () {
     RouterLink.ctorParameters = function () { return [
         { type: Router, },
         { type: ActivatedRoute, },
-        { type: LocationStrategy, },
     ]; };
     RouterLink.propDecorators = {
         'queryParams': [{ type: Input },],
@@ -176,8 +169,6 @@ function RouterLink_tsickle_Closure_declarations() {
     RouterLink.prototype.router;
     /** @type {?} */
     RouterLink.prototype.route;
-    /** @type {?} */
-    RouterLink.prototype.locationStrategy;
 }
 /**
  *  *
@@ -241,7 +232,11 @@ export var RouterLinkWithHref = (function () {
         if (typeof this.target === 'string' && this.target != '_self') {
             return true;
         }
-        this.router.navigateByUrl(this.urlTree);
+        var /** @type {?} */ extras = {
+            skipLocationChange: attrBoolValue(this.skipLocationChange),
+            replaceUrl: attrBoolValue(this.replaceUrl),
+        };
+        this.router.navigateByUrl(this.urlTree, extras);
         return false;
     };
     /**
@@ -259,10 +254,8 @@ export var RouterLinkWithHref = (function () {
                 relativeTo: this.route,
                 queryParams: this.queryParams,
                 fragment: this.fragment,
-                preserveQueryParams: toBool(this.preserveQueryParams),
-                preserveFragment: toBool(this.preserveFragment),
-                skipLocationChange: toBool(this.skipLocationChange),
-                replaceUrl: toBool(this.replaceUrl),
+                preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                preserveFragment: attrBoolValue(this.preserveFragment),
             });
         },
         enumerable: true,
@@ -281,7 +274,6 @@ export var RouterLinkWithHref = (function () {
         'target': [{ type: Input },],
         'queryParams': [{ type: Input },],
         'fragment': [{ type: Input },],
-        'routerLinkOptions': [{ type: Input },],
         'preserveQueryParams': [{ type: Input },],
         'preserveFragment': [{ type: Input },],
         'skipLocationChange': [{ type: Input },],
@@ -309,8 +301,6 @@ function RouterLinkWithHref_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkWithHref.prototype.fragment;
     /** @type {?} */
-    RouterLinkWithHref.prototype.routerLinkOptions;
-    /** @type {?} */
     RouterLinkWithHref.prototype.preserveQueryParams;
     /** @type {?} */
     RouterLinkWithHref.prototype.preserveFragment;
@@ -332,12 +322,10 @@ function RouterLinkWithHref_tsickle_Closure_declarations() {
     RouterLinkWithHref.prototype.locationStrategy;
 }
 /**
- * @param {?=} s
+ * @param {?} s
  * @return {?}
  */
-function toBool(s) {
-    if (s === '')
-        return true;
-    return !!s;
+function attrBoolValue(s) {
+    return s === '' || !!s;
 }
 //# sourceMappingURL=router_link.js.map
