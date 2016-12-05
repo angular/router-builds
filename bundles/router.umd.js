@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-rc.0-307c469
+ * @license Angular v3.3.0-rc.0-c767df0
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3326,20 +3326,22 @@
           var _this = this;
           // Zone.current.wrap is needed because of the issue with RxJS scheduler,
           // which does not work properly with zone.js in IE and Safari
-          this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
-              var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
-              var /** @type {?} */ lastNavigation = _this.navigations.value;
-              // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
-              // and that navigation results in 'replaceState' that leads to the same URL,
-              // we should skip those.
-              if (lastNavigation && lastNavigation.imperative &&
-                  lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
-                  return;
-              }
-              setTimeout(function () {
-                  _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
-              }, 0);
-          })));
+          if (!this.locationSubscription) {
+              this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
+                  var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
+                  var /** @type {?} */ lastNavigation = _this.navigations.value;
+                  // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
+                  // and that navigation results in 'replaceState' that leads to the same URL,
+                  // we should skip those.
+                  if (lastNavigation && lastNavigation.imperative &&
+                      lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
+                      return;
+                  }
+                  setTimeout(function () {
+                      _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
+                  }, 0);
+              })));
+          }
       };
       Object.defineProperty(Router.prototype, "routerState", {
           /**
@@ -3396,7 +3398,12 @@
        *  Disposes of the router.
        * @return {?}
        */
-      Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
+      Router.prototype.dispose = function () {
+          if (this.locationSubscription) {
+              this.locationSubscription.unsubscribe();
+              this.locationSubscription = null;
+          }
+      };
       /**
        *  Applies an array of commands to the current url tree and creates a new url tree.
         * *
@@ -5401,7 +5408,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-307c469');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-c767df0');
 
   exports.VERSION = VERSION;
   exports.RouterLink = RouterLink;

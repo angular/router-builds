@@ -36,4 +36,12 @@ export declare const RouterUpgradeInitializer: {
     useFactory: (ngUpgrade: UpgradeModule, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => Function;
     deps: (OpaqueToken | typeof UpgradeModule | typeof ApplicationRef | typeof RouterPreloader)[];
 };
-export declare function initialRouterNavigation(ngUpgrade: UpgradeModule, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): Function;
+/**
+ * @whatItDoes Sets up a location synchronization.
+ *
+ * History.pushState does not fire onPopState, so the angular2 location
+ * doesn't detect it. The workaround is to attach a location change listener
+ *
+ * @experimental
+ */
+export declare function setUpLocationSync(ngUpgrade: UpgradeModule): void;

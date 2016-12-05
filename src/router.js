@@ -294,20 +294,22 @@ export var Router = (function () {
         var _this = this;
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,
         // which does not work properly with zone.js in IE and Safari
-        this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
-            var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
-            var /** @type {?} */ lastNavigation = _this.navigations.value;
-            // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
-            // and that navigation results in 'replaceState' that leads to the same URL,
-            // we should skip those.
-            if (lastNavigation && lastNavigation.imperative &&
-                lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
-                return;
-            }
-            setTimeout(function () {
-                _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
-            }, 0);
-        })));
+        if (!this.locationSubscription) {
+            this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
+                var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
+                var /** @type {?} */ lastNavigation = _this.navigations.value;
+                // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
+                // and that navigation results in 'replaceState' that leads to the same URL,
+                // we should skip those.
+                if (lastNavigation && lastNavigation.imperative &&
+                    lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
+                    return;
+                }
+                setTimeout(function () {
+                    _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
+                }, 0);
+            })));
+        }
     };
     Object.defineProperty(Router.prototype, "routerState", {
         /**
@@ -364,7 +366,12 @@ export var Router = (function () {
      *  Disposes of the router.
      * @return {?}
      */
-    Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
+    Router.prototype.dispose = function () {
+        if (this.locationSubscription) {
+            this.locationSubscription.unsubscribe();
+            this.locationSubscription = null;
+        }
+    };
     /**
      *  Applies an array of commands to the current url tree and creates a new url tree.
       * *
