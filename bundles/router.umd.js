@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-rc.0-b8c839b
+ * @license Angular v3.3.0-rc.0-a132287
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -5409,7 +5409,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-b8c839b');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-a132287');
 
   exports.VERSION = VERSION;
   exports.RouterLink = RouterLink;
