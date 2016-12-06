@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-rc.0-93556a5
+ * @license Angular v3.3.0-rc.0-4bd8f58
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4344,7 +4344,7 @@
     * *
     * The RouterLink directives let you link to specific parts of your app.
     * *
-    * Whe the link is static, you can use the directive as follows:
+    * When the link is static, you can use the directive as follows:
     * `<a routerLink="/user/bob">link to user component</a>`
     * *
     * If you use dynamic values to generate the link, you can pass an array of path
@@ -5408,7 +5408,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-93556a5');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-rc.0-4bd8f58');
 
   exports.VERSION = VERSION;
   exports.RouterLink = RouterLink;
