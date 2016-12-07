@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { Version } from '@angular/core';
 /**
- * @module
- * @description
- * Entry point for all public APIs of the router package.
+ * @stable
  */
-export * from './src/index';
+export var /** @type {?} */ VERSION = new Version('3.3.0-rc.0-16efb13');
+//# sourceMappingURL=version.js.map

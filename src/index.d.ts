@@ -19,4 +19,5 @@ export { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapsho
 export { PRIMARY_OUTLET, Params } from './shared';
 export { UrlHandlingStrategy } from './url_handling_strategy';
 export { DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree } from './url_tree';
+export { VERSION } from './version';
 export * from './private_export';
