@@ -328,7 +328,7 @@ export interface Route {
     canLoad?: any[];
     data?: Data;
     resolve?: ResolveData;
-    children?: Route[];
+    children?: Routes;
     loadChildren?: LoadChildren;
 }
-export declare function validateConfig(config: Routes): void;
+export declare function validateConfig(config: Routes, parentPath?: string): void;
