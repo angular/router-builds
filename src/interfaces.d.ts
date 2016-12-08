@@ -294,7 +294,7 @@ export interface CanDeactivate<T> {
  * @stable
  */
 export interface Resolve<T> {
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any;
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Promise<T> | T;
 }
 /**
  * @whatItDoes Indicates that a class can implement to be a guard deciding if a children can be
