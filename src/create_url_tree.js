@@ -7,7 +7,7 @@
  */
 import { PRIMARY_OUTLET } from './shared';
 import { UrlSegment, UrlSegmentGroup, UrlTree } from './url_tree';
-import { forEach, shallowEqual, last } from './utils/collection';
+import { forEach, last, shallowEqual } from './utils/collection';
 /**
  * @param {?} route
  * @param {?} urlTree
