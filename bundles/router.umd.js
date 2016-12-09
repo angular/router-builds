@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-aaf6e05
+ * @license Angular v3.3.0-a006c14
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4405,11 +4405,17 @@
       /**
        * @param {?} router
        * @param {?} route
+       * @param {?} tabIndex
+       * @param {?} renderer
+       * @param {?} el
        */
-      function RouterLink(router, route) {
+      function RouterLink(router, route, tabIndex, renderer, el) {
           this.router = router;
           this.route = route;
           this.commands = [];
+          if (tabIndex == null) {
+              renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
+          }
       }
       Object.defineProperty(RouterLink.prototype, "routerLink", {
           /**
@@ -4461,6 +4467,9 @@
       RouterLink.ctorParameters = function () { return [
           { type: Router, },
           { type: ActivatedRoute, },
+          { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['tabindex',] },] },
+          { type: _angular_core.Renderer, },
+          { type: _angular_core.ElementRef, },
       ]; };
       RouterLink.propDecorators = {
           'queryParams': [{ type: _angular_core.Input },],
@@ -5412,7 +5421,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-aaf6e05');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-a006c14');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
