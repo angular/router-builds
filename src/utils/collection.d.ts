@@ -25,7 +25,7 @@ export declare function merge<V>(m1: {
 };
 export declare function forEach<K, V>(map: {
     [key: string]: V;
-}, callback: Function): void;
+}, callback: (v: V, k: string) => void): void;
 export declare function waitForMap<A, B>(obj: {
     [k: string]: A;
 }, fn: (k: string, a: A) => Observable<B>): Observable<{

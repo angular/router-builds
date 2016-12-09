@@ -10,7 +10,7 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
  * class MyComponent {
  *   constructor(router: Router) {
  *     const tree: UrlTree =
- * router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
+ *       router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
  *     const f = tree.fragment; // return 'fragment'
  *     const q = tree.queryParams; // returns {debug: 'true'}
  *     const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
@@ -30,69 +30,45 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
  * @stable
  */
 export declare class UrlTree {
-    /**
-    * The root segment group of the URL tree.
-     */
+    /** The root segment group of the URL tree */
     root: UrlSegmentGroup;
-    /**
-     * The query params of the URL.
-     */
+    /** The query params of the URL */
     queryParams: {
         [key: string]: string;
     };
-    /**
-     * The fragment of the URL.
-     */
+    /** The fragment of the URL */
     fragment: string;
-    /**
-     * @docsNotRequired
-     */
+    /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents the parsed URL segment.
+ * @whatItDoes Represents the parsed URL segment group.
  *
  * See {@link UrlTree} for more information.
  *
  * @stable
  */
 export declare class UrlSegmentGroup {
-    /**
-     * The URL segments of this group. See {@link UrlSegment} for more information.
-     */
+    /** The URL segments of this group. See {@link UrlSegment} for more information */
     segments: UrlSegment[];
-    /**
-     * The list of children of this group.
-     */
+    /** The list of children of this group */
     children: {
         [key: string]: UrlSegmentGroup;
     };
-    /**
-     * The parent node in the url tree.
-     */
+    /** The parent node in the url tree */
     parent: UrlSegmentGroup;
     constructor(
-        /**
-         * The URL segments of this group. See {@link UrlSegment} for more information.
-         */
+        /** The URL segments of this group. See {@link UrlSegment} for more information */
         segments: UrlSegment[], 
-        /**
-         * The list of children of this group.
-         */
+        /** The list of children of this group */
         children: {
         [key: string]: UrlSegmentGroup;
     });
-    /**
-     * Return true if the segment has child segments
-     */
+    /** Wether the segment has child segments */
     hasChildren(): boolean;
-    /**
-     * Returns the number of child sements.
-     */
+    /** Number of child segments */
     numberOfChildren: number;
-    /**
-     * @docsNotRequired
-     */
+    /** @docsNotRequired */
     toString(): string;
 }
 /**
@@ -115,36 +91,26 @@ export declare class UrlSegmentGroup {
  *
  * @description
  *
- * A UrlSegment is a part of a URL between the two slashes. It contains a path and
- * the matrix parameters associated with the segment.
+ * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+ * parameters associated with the segment.
  *
  * @stable
  */
 export declare class UrlSegment {
-    /**
-     * The path part of a URL segment.
-     */
+    /** The path part of a URL segment */
     path: string;
-    /**
-     * The matrix parameters associated with a segment.
-     */
+    /** The matrix parameters associated with a segment */
     parameters: {
-        [key: string]: string;
+        [name: string]: string;
     };
     constructor(
-        /**
-         * The path part of a URL segment.
-         */
+        /** The path part of a URL segment */
         path: string, 
-        /**
-         * The matrix parameters associated with a segment.
-         */
+        /** The matrix parameters associated with a segment */
         parameters: {
-        [key: string]: string;
+        [name: string]: string;
     });
-    /**
-     * @docsNotRequired
-     */
+    /** @docsNotRequired */
     toString(): string;
 }
 export declare function equalSegments(a: UrlSegment[], b: UrlSegment[]): boolean;
@@ -161,13 +127,9 @@ export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v
  * @stable
  */
 export declare abstract class UrlSerializer {
-    /**
-     * Parse a url into a {@link UrlTree}.
-     */
+    /** Parse a url into a {@link UrlTree} */
     abstract parse(url: string): UrlTree;
-    /**
-     * Converts a {@link UrlTree} into a url.
-     */
+    /** Converts a {@link UrlTree} into a url */
     abstract serialize(tree: UrlTree): string;
 }
 /**
@@ -189,13 +151,9 @@ export declare abstract class UrlSerializer {
  * @stable
  */
 export declare class DefaultUrlSerializer implements UrlSerializer {
-    /**
-     * Parse a url into a {@link UrlTree}.
-     */
+    /** Parses a url into a {@link UrlTree} */
     parse(url: string): UrlTree;
-    /**
-     * Converts a {@link UrlTree} into a url.
-     */
+    /** Converts a {@link UrlTree} into a url */
     serialize(tree: UrlTree): string;
 }
 export declare function serializePaths(segment: UrlSegmentGroup): string;

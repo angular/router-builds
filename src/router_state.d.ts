@@ -39,9 +39,7 @@ import { Tree } from './utils/tree';
  * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
-    /**
-     * The current snapshot of the router state.
-     */
+    /** The current snapshot of the router state */
     snapshot: RouterStateSnapshot;
     toString(): string;
 }
@@ -50,17 +48,18 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
 /**
  * @whatItDoes Contains the information about a route associated with a component loaded in an
  * outlet.
- * ActivatedRoute can also be used to traverse the router state tree.
+ * An `ActivatedRoute` can also be used to traverse the router state tree.
  *
  * @howToUse
  *
  * ```
- * @Component({templateUrl:'./my-component.html'})
+ * @Component({...})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
  *     const id: Observable<string> = route.params.map(p => p.id);
- *     const url: Observable<string> = route.url.map(s => s.join(''));
- *     const user = route.data.map(d => d.user); //includes `data` and `resolve`
+ *     const url: Observable<string> = route.url.map(segments => segments.join(''));
+ *     // route.data includes both `data` and `resolve`
+ *     const user = route.data.map(d => d.user);
  *   }
  * }
  * ```
@@ -68,70 +67,34 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * @stable
  */
 export declare class ActivatedRoute {
-    /**
-     *  The URL segments matched by this route. The observable will emit a new value when
-     *  the array of segments changes.
-     */
+    /** An observable of the URL segments matched by this route */
     url: Observable<UrlSegment[]>;
-    /**
-     * The matrix parameters scoped to this route. The observable will emit a new value when
-     * the set of the parameters changes.
-     */
+    /** An observable of the matrix parameters scoped to this route */
     params: Observable<Params>;
-    /**
-     * The query parameters shared by all the routes. The observable will emit a new value when
-     * the set of the parameters changes.
-     */
+    /** An observable of the query parameters shared by all the routes */
     queryParams: Observable<Params>;
-    /**
-     * The URL fragment shared by all the routes. The observable will emit a new value when
-     * the URL fragment changes.
-     */
+    /** An observable of the URL fragment shared by all the routes */
     fragment: Observable<string>;
-    /**
-     * The static and resolved data of this route. The observable will emit a new value when
-     * any of the resolvers returns a new object.
-     */
+    /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
-    /**
-     * The outlet name of the route. It's a constant.
-     */
+    /** The outlet name of the route. It's a constant */
     outlet: string;
-    /**
-     * The component of the route. It's a constant.
-     */
+    /** The component of the route. It's a constant */
     component: Type<any> | string;
-    /**
-     * The current snapshot of this route.
-     */
+    /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
-    /**
-     * The configuration used to match this route.
-     */
+    /** The configuration used to match this route */
     routeConfig: Route;
-    /**
-     * The root of the router state.
-     */
+    /** The root of the router state */
     root: ActivatedRoute;
-    /**
-     * The parent of this route in the router state tree.
-     */
+    /** The parent of this route in the router state tree */
     parent: ActivatedRoute;
-    /**
-     * The first child of this route in the router state tree.
-     */
+    /** The first child of this route in the router state tree */
     firstChild: ActivatedRoute;
-    /**
-     * The children of this route in the router state tree.
-     */
+    /** The children of this route in the router state tree */
     children: ActivatedRoute[];
-    /**
-     * The path from the root of the router state tree to this route.
-     */
+    /** The path from the root of the router state tree to this route */
     pathFromRoot: ActivatedRoute[];
-    /**
-     * @docsNotRequired
-     */
     toString(): string;
 }
 /**
@@ -156,61 +119,32 @@ export declare class ActivatedRoute {
  * @stable
  */
 export declare class ActivatedRouteSnapshot {
-    /**
-     *  The URL segments matched by this route.
-     */
+    /** The URL segments matched by this route */
     url: UrlSegment[];
-    /**
-     * The matrix parameters scoped to this route.
-     */
+    /** The matrix parameters scoped to this route */
     params: Params;
-    /**
-     * The query parameters shared by all the routes.
-     */
+    /** The query parameters shared by all the routes */
     queryParams: Params;
-    /**
-     * The URL fragment shared by all the routes.
-     */
+    /** The URL fragment shared by all the routes */
     fragment: string;
-    /**
-     * The static and resolved data of this route.
-     */
+    /** The static and resolved data of this route */
     data: Data;
-    /**
-     * The outlet name of the route.
-     */
+    /** The outlet name of the route */
     outlet: string;
-    /**
-     * The component of the route.
-     */
+    /** The component of the route */
     component: Type<any> | string;
-    /**
-     * The configuration used to match this route.
-     */
+    /** The configuration used to match this route */
     routeConfig: Route;
-    /**
-     * The root of the router state.
-     */
+    /** The root of the router state */
     root: ActivatedRouteSnapshot;
-    /**
-     * The parent of this route in the router state tree.
-     */
+    /** The parent of this route in the router state tree */
     parent: ActivatedRouteSnapshot;
-    /**
-     * The first child of this route in the router state tree.
-     */
+    /** The first child of this route in the router state tree */
     firstChild: ActivatedRouteSnapshot;
-    /**
-     * The children of this route in the router state tree.
-     */
+    /** The children of this route in the router state tree */
     children: ActivatedRouteSnapshot[];
-    /**
-     * The path from the root of the router state tree to this route.
-     */
+    /** The path from the root of the router state tree to this route */
     pathFromRoot: ActivatedRouteSnapshot[];
-    /**
-     * @docsNotRequired
-     */
     toString(): string;
 }
 /**

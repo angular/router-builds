@@ -6,4 +6,4 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { __platform_browser_private__ as r } from '@angular/platform-browser';
-export declare var getDOM: typeof r.getDOM;
+export declare const getDOM: typeof r.getDOM;

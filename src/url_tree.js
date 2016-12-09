@@ -24,10 +24,8 @@ export function containsTree(container, containee, exact) {
         return equalQueryParams(container.queryParams, containee.queryParams) &&
             equalSegmentGroups(container.root, containee.root);
     }
-    else {
-        return containsQueryParams(container.queryParams, containee.queryParams) &&
-            containsSegmentGroup(container.root, containee.root);
-    }
+    return containsQueryParams(container.queryParams, containee.queryParams) &&
+        containsSegmentGroup(container.root, containee.root);
 }
 /**
  * @param {?} container
@@ -151,17 +149,17 @@ export var UrlTree = (function () {
 }());
 function UrlTree_tsickle_Closure_declarations() {
     /**
-     * The root segment group of the URL tree.
+     * The root segment group of the URL tree
      * @type {?}
      */
     UrlTree.prototype.root;
     /**
-     * The query params of the URL.
+     * The query params of the URL
      * @type {?}
      */
     UrlTree.prototype.queryParams;
     /**
-     * The fragment of the URL.
+     * The fragment of the URL
      * @type {?}
      */
     UrlTree.prototype.fragment;
@@ -180,17 +178,18 @@ export var UrlSegmentGroup = (function () {
         var _this = this;
         this.segments = segments;
         this.children = children;
+        /** The parent node in the url tree */
         this.parent = null;
         forEach(children, function (v, k) { return v.parent = _this; });
     }
     /**
-     *  Return true if the segment has child segments
+     *  Wether the segment has child segments
      * @return {?}
      */
     UrlSegmentGroup.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
     Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
         /**
-         *  Returns the number of child sements.
+         *  Number of child segments
          * @return {?}
          */
         get: function () { return Object.keys(this.children).length; },
@@ -209,17 +208,17 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
     /** @type {?} */
     UrlSegmentGroup.prototype._segmentIndexShift;
     /**
-     * The parent node in the url tree.
+     * The parent node in the url tree
      * @type {?}
      */
     UrlSegmentGroup.prototype.parent;
     /**
-     * The URL segments of this group. See {@link UrlSegment} for more information.
+     * The URL segments of this group. See {@link UrlSegment} for more information
      * @type {?}
      */
     UrlSegmentGroup.prototype.segments;
     /**
-     * The list of children of this group.
+     * The list of children of this group
      * @type {?}
      */
     UrlSegmentGroup.prototype.children;
@@ -240,8 +239,8 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
   * ```
   * *
   * *
-  * A UrlSegment is a part of a URL between the two slashes. It contains a path and
-  * the matrix parameters associated with the segment.
+  * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+  * parameters associated with the segment.
   * *
  */
 export var UrlSegment = (function () {
@@ -261,12 +260,12 @@ export var UrlSegment = (function () {
 }());
 function UrlSegment_tsickle_Closure_declarations() {
     /**
-     * The path part of a URL segment.
+     * The path part of a URL segment
      * @type {?}
      */
     UrlSegment.prototype.path;
     /**
-     * The matrix parameters associated with a segment.
+     * The matrix parameters associated with a segment
      * @type {?}
      */
     UrlSegment.prototype.parameters;
@@ -332,14 +331,14 @@ export var UrlSerializer = (function () {
     function UrlSerializer() {
     }
     /**
-     *  Parse a url into a {@link UrlTree}.
+     *  Parse a url into a {@link UrlTree}
      * @abstract
      * @param {?} url
      * @return {?}
      */
     UrlSerializer.prototype.parse = function (url) { };
     /**
-     *  Converts a {@link UrlTree} into a url.
+     *  Converts a {@link UrlTree} into a url
      * @abstract
      * @param {?} tree
      * @return {?}
@@ -366,7 +365,7 @@ export var DefaultUrlSerializer = (function () {
     function DefaultUrlSerializer() {
     }
     /**
-     *  Parse a url into a {@link UrlTree}.
+     *  Parses a url into a {@link UrlTree}
      * @param {?} url
      * @return {?}
      */
@@ -375,7 +374,7 @@ export var DefaultUrlSerializer = (function () {
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
     };
     /**
-     *  Converts a {@link UrlTree} into a url.
+     *  Converts a {@link UrlTree} into a url
      * @param {?} tree
      * @return {?}
      */
@@ -565,9 +564,7 @@ var UrlParser = (function () {
         if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
             return new UrlSegmentGroup([], {});
         }
-        else {
-            return new UrlSegmentGroup([], this.parseChildren());
-        }
+        return new UrlSegmentGroup([], this.parseChildren());
     };
     /**
      * @return {?}
@@ -638,9 +635,7 @@ var UrlParser = (function () {
         if (this.peekStartsWith('#')) {
             return decodeURI(this.remaining.substring(1));
         }
-        else {
-            return null;
-        }
+        return null;
     };
     /**
      * @return {?}

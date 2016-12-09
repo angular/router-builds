@@ -302,17 +302,11 @@ export declare class Router {
      * Sets up the location change listener.
      */
     setUpLocationChangeListener(): void;
-    /**
-     * Returns the current route state.
-     */
+    /** The current route state */
     routerState: RouterState;
-    /**
-     * Returns the current url.
-     */
+    /** The current url */
     url: string;
-    /**
-     * Returns an observable of route events
-     */
+    /** An observable of router events */
     events: Observable<Event>;
     /**
      * Resets the configuration used for navigation and generating links.
@@ -324,18 +318,14 @@ export declare class Router {
      *  { path: 'team/:id', component: TeamCmp, children: [
      *    { path: 'simple', component: SimpleCmp },
      *    { path: 'user/:name', component: UserCmp }
-     *  ] }
+     *  ]}
      * ]);
      * ```
      */
     resetConfig(config: Routes): void;
-    /**
-     * @docsNotRequired
-     */
+    /** @docsNotRequired */
     ngOnDestroy(): void;
-    /**
-     * Disposes of the router.
-     */
+    /** Disposes of the router */
     dispose(): void;
     /**
      * Applies an array of commands to the current url tree and creates a new url tree.
@@ -383,9 +373,9 @@ export declare class Router {
      * Navigate based on the provided url. This navigation is always absolute.
      *
      * Returns a promise that:
-     * - is resolved with 'true' when navigation succeeds
-     * - is resolved with 'false' when navigation fails
-     * - is rejected when an error happens
+     * - resolves to 'true' when navigation succeeds,
+     * - resolves to 'false' when navigation fails,
+     * - is rejected when an error happens.
      *
      * ### Usage
      *
@@ -405,9 +395,9 @@ export declare class Router {
      * If no starting route is provided, the navigation is absolute.
      *
      * Returns a promise that:
-     * - is resolved with 'true' when navigation succeeds
-     * - is resolved with 'false' when navigation fails
-     * - is rejected when an error happens
+     * - resolves to 'true' when navigation succeeds,
+     * - resolves to 'false' when navigation fails,
+     * - is rejected when an error happens.
      *
      * ### Usage
      *
@@ -415,24 +405,18 @@ export declare class Router {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
      *
      * // Navigate without updating the URL
-     * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true });
+     * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta
-     * that is applied to the current URL.
+     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
+     * URL.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
-    /**
-     * Serializes a {@link UrlTree} into a string.
-     */
+    /** Serializes a {@link UrlTree} into a string */
     serializeUrl(url: UrlTree): string;
-    /**
-     * Parses a string into a {@link UrlTree}.
-     */
+    /** Parses a string into a {@link UrlTree} */
     parseUrl(url: string): UrlTree;
-    /**
-     * Returns if the url is activated or not.
-     */
+    /** Returns whether the url is activated */
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private removeEmptyProps(params);
     private processNavigations();
