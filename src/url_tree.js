@@ -465,8 +465,12 @@ function serializeParams(params) {
  * @return {?}
  */
 function serializeQueryParams(params) {
-    var /** @type {?} */ strs = pairs(params).map(function (p) { return (encode(p.first) + "=" + encode(p.second)); });
-    return strs.length > 0 ? "?" + strs.join("&") : '';
+    var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
+        var /** @type {?} */ value = params[name];
+        return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+            encode(name) + "=" + encode(value);
+    });
+    return strParams.length ? "?" + strParams.join("&") : '';
 }
 var Pair = (function () {
     /**
@@ -498,7 +502,7 @@ function pairs(obj) {
     }
     return res;
 }
-var /** @type {?} */ SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
+var /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -508,7 +512,7 @@ function matchSegments(str) {
     var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-var /** @type {?} */ QUERY_PARAM_RE = /^[^=\?&#]+/;
+var /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -518,7 +522,7 @@ function matchQueryParams(str) {
     var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
+var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -689,7 +693,21 @@ var UrlParser = (function () {
                 this.capture(value);
             }
         }
-        params[decode(key)] = decode(value);
+        var /** @type {?} */ decodedKey = decode(key);
+        var /** @type {?} */ decodedVal = decode(value);
+        if (params.hasOwnProperty(decodedKey)) {
+            // Append to existing values
+            var /** @type {?} */ currentVal = params[decodedKey];
+            if (!Array.isArray(currentVal)) {
+                currentVal = [currentVal];
+                params[decodedKey] = currentVal;
+            }
+            currentVal.push(decodedVal);
+        }
+        else {
+            // Create a new value
+            params[decodedKey] = decodedVal;
+        }
     };
     /**
      * @param {?} allowPrimary

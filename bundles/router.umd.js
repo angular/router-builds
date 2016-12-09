@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.3.0-4e3d58a
+ * @license Angular v3.3.0-5c6ec20
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -684,8 +684,12 @@
    * @return {?}
    */
   function serializeQueryParams(params) {
-      var /** @type {?} */ strs = pairs(params).map(function (p) { return (encode(p.first) + "=" + encode(p.second)); });
-      return strs.length > 0 ? "?" + strs.join("&") : '';
+      var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
+          var /** @type {?} */ value = params[name];
+          return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+              encode(name) + "=" + encode(value);
+      });
+      return strParams.length ? "?" + strParams.join("&") : '';
   }
   var Pair = (function () {
       /**
@@ -711,7 +715,7 @@
       }
       return res;
   }
-  var /** @type {?} */ SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
+  var /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
   /**
    * @param {?} str
    * @return {?}
@@ -721,7 +725,7 @@
       var /** @type {?} */ match = str.match(SEGMENT_RE);
       return match ? match[0] : '';
   }
-  var /** @type {?} */ QUERY_PARAM_RE = /^[^=\?&#]+/;
+  var /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
   /**
    * @param {?} str
    * @return {?}
@@ -731,7 +735,7 @@
       var /** @type {?} */ match = str.match(SEGMENT_RE);
       return match ? match[0] : '';
   }
-  var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
+  var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
   /**
    * @param {?} str
    * @return {?}
@@ -902,7 +906,21 @@
                   this.capture(value);
               }
           }
-          params[decode(key)] = decode(value);
+          var /** @type {?} */ decodedKey = decode(key);
+          var /** @type {?} */ decodedVal = decode(value);
+          if (params.hasOwnProperty(decodedKey)) {
+              // Append to existing values
+              var /** @type {?} */ currentVal = params[decodedKey];
+              if (!Array.isArray(currentVal)) {
+                  currentVal = [currentVal];
+                  params[decodedKey] = currentVal;
+              }
+              currentVal.push(decodedVal);
+          }
+          else {
+              // Create a new value
+              params[decodedKey] = decodedVal;
+          }
       };
       /**
        * @param {?} allowPrimary
@@ -5432,7 +5450,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-4e3d58a');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.3.0-5c6ec20');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
