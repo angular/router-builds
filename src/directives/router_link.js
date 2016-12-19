@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 import { NavigationEnd, Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -72,17 +72,11 @@ export var RouterLink = (function () {
     /**
      * @param {?} router
      * @param {?} route
-     * @param {?} tabIndex
-     * @param {?} renderer
-     * @param {?} el
      */
-    function RouterLink(router, route, tabIndex, renderer, el) {
+    function RouterLink(router, route) {
         this.router = router;
         this.route = route;
         this.commands = [];
-        if (tabIndex == null) {
-            renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
-        }
     }
     Object.defineProperty(RouterLink.prototype, "routerLink", {
         /**
@@ -134,9 +128,6 @@ export var RouterLink = (function () {
     RouterLink.ctorParameters = function () { return [
         { type: Router, },
         { type: ActivatedRoute, },
-        { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
-        { type: Renderer, },
-        { type: ElementRef, },
     ]; };
     RouterLink.propDecorators = {
         'queryParams': [{ type: Input },],
