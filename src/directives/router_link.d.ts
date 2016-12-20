@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { OnChanges, OnDestroy } from '@angular/core';
+import { ElementRef, OnChanges, OnDestroy, Renderer } from '@angular/core';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 import { UrlTree } from '../url_tree';
@@ -87,7 +87,7 @@ export declare class RouterLink {
     skipLocationChange: boolean;
     replaceUrl: boolean;
     private commands;
-    constructor(router: Router, route: ActivatedRoute);
+    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer, el: ElementRef);
     routerLink: any[] | string;
     onClick(): boolean;
     urlTree: UrlTree;
