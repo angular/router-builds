@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.0-f49ab56
+ * @license Angular v4.0.0-beta.0-eb2ceff
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3341,17 +3341,8 @@
           if (!this.locationSubscription) {
               this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
                   var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
-                  var /** @type {?} */ lastNavigation = _this.navigations.value;
-                  // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
-                  // and that navigation results in 'replaceState' that leads to the same URL,
-                  // we should skip those.
-                  if (lastNavigation && lastNavigation.imperative &&
-                      lastNavigation.rawUrl.toString() === rawUrlTree.toString()) {
-                      return;
-                  }
-                  setTimeout(function () {
-                      _this.scheduleNavigation(rawUrlTree, false, { skipLocationChange: change['pop'], replaceUrl: true });
-                  }, 0);
+                  var /** @type {?} */ source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
+                  setTimeout(function () { _this.scheduleNavigation(rawUrlTree, source, { replaceUrl: true }); }, 0);
               })));
           }
       };
@@ -3493,10 +3484,10 @@
       Router.prototype.navigateByUrl = function (url, extras) {
           if (extras === void 0) { extras = { skipLocationChange: false }; }
           if (url instanceof UrlTree) {
-              return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), true, extras);
+              return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), 'imperative', extras);
           }
           var /** @type {?} */ urlTree = this.urlSerializer.parse(url);
-          return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), true, extras);
+          return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), 'imperative', extras);
       };
       /**
        *  Navigate based on the provided array of commands and a starting point.
@@ -3590,11 +3581,26 @@
       };
       /**
        * @param {?} rawUrl
-       * @param {?} imperative
+       * @param {?} source
        * @param {?} extras
        * @return {?}
        */
-      Router.prototype.scheduleNavigation = function (rawUrl, imperative, extras) {
+      Router.prototype.scheduleNavigation = function (rawUrl, source, extras) {
+          var /** @type {?} */ lastNavigation = this.navigations.value;
+          // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
+          // and that navigation results in 'replaceState' that leads to the same URL,
+          // we should skip those.
+          if (lastNavigation && source !== 'imperative' && lastNavigation.source === 'imperative' &&
+              lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+              return null; // return value is not used
+          }
+          // Because of a bug in IE and Edge, the location class fires two events (popstate and
+          // hashchange)
+          // every single time. The second one should be ignored. Otherwise, the URL will flicker.
+          if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
+              lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+              return null; // return value is not used
+          }
           var /** @type {?} */ resolve = null;
           var /** @type {?} */ reject = null;
           var /** @type {?} */ promise = new Promise(function (res, rej) {
@@ -3602,7 +3608,7 @@
               reject = rej;
           });
           var /** @type {?} */ id = ++this.navigationId;
-          this.navigations.next({ id: id, imperative: imperative, rawUrl: rawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
+          this.navigations.next({ id: id, source: source, rawUrl: rawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
           // Make sure that the error is propagated even though `processNavigations` catch
           // handler does not rethrow
           return promise.catch(function (e) { return Promise.reject(e); });
@@ -5421,7 +5427,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.0-f49ab56');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.0-eb2ceff');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,

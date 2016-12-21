@@ -420,7 +420,7 @@ export declare class Router {
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private removeEmptyProps(params);
     private processNavigations();
-    private scheduleNavigation(rawUrl, imperative, extras);
+    private scheduleNavigation(rawUrl, source, extras);
     private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
     private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
     private resetUrlToCurrentUrlTree();
