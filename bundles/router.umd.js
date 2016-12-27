@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.1-9c69703
+ * @license Angular v4.0.0-beta.1-174334d
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2305,7 +2305,7 @@
    * @return {?}
    */
   function isMatrixParams(command) {
-      return typeof command === 'object' && !command.outlets && !command.segmentPath;
+      return typeof command === 'object' && command != null && !command.outlets && !command.segmentPath;
   }
   /**
    * @param {?} oldSegmentGroup
@@ -2352,7 +2352,7 @@
           if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
               throw new Error('Root segment cannot have matrix parameters');
           }
-          var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c.outlets; });
+          var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
           if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
               throw new Error('{outlets:{}} has to be the last command');
           }
@@ -2377,7 +2377,7 @@
       var /** @type {?} */ numberOfDoubleDots = 0;
       var /** @type {?} */ isAbsolute = false;
       var /** @type {?} */ res = commands.reduce(function (res, cmd, cmdIdx) {
-          if (typeof cmd === 'object') {
+          if (typeof cmd === 'object' && cmd != null) {
               if (cmd.outlets) {
                   var /** @type {?} */ outlets_1 = {};
                   forEach(cmd.outlets, function (commands, name) {
@@ -2467,8 +2467,9 @@
    * @return {?}
    */
   function getPath(command) {
-      if (typeof command === 'object' && command.outlets)
+      if (typeof command === 'object' && command != null && command.outlets) {
           return command.outlets[PRIMARY_OUTLET];
+      }
       return "" + command;
   }
   /**
@@ -4425,15 +4426,15 @@
       }
       Object.defineProperty(RouterLink.prototype, "routerLink", {
           /**
-           * @param {?} data
+           * @param {?} commands
            * @return {?}
            */
-          set: function (data) {
-              if (Array.isArray(data)) {
-                  this.commands = data;
+          set: function (commands) {
+              if (commands != null) {
+                  this.commands = Array.isArray(commands) ? commands : [commands];
               }
               else {
-                  this.commands = [data];
+                  this.commands = [];
               }
           },
           enumerable: true,
@@ -4485,7 +4486,7 @@
           'skipLocationChange': [{ type: _angular_core.Input },],
           'replaceUrl': [{ type: _angular_core.Input },],
           'routerLink': [{ type: _angular_core.Input },],
-          'onClick': [{ type: _angular_core.HostListener, args: ['click', [],] },],
+          'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
       };
       return RouterLink;
   }());
@@ -4515,15 +4516,15 @@
       }
       Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
           /**
-           * @param {?} data
+           * @param {?} commands
            * @return {?}
            */
-          set: function (data) {
-              if (Array.isArray(data)) {
-                  this.commands = data;
+          set: function (commands) {
+              if (commands != null) {
+                  this.commands = Array.isArray(commands) ? commands : [commands];
               }
               else {
-                  this.commands = [data];
+                  this.commands = [];
               }
           },
           enumerable: true,
@@ -5427,7 +5428,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-9c69703');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-174334d');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
