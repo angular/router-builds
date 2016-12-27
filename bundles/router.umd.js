@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.1-445ed43
+ * @license Angular v4.0.0-beta.1-69fa3bb
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4034,10 +4034,11 @@
               var /** @type {?} */ guard = _this.getToken(c, curr);
               var /** @type {?} */ observable;
               if (guard.canDeactivate) {
-                  observable = wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+                  observable =
+                      wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr, _this.future));
               }
               else {
-                  observable = wrapIntoObservable(guard(component, curr, _this.curr));
+                  observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
               }
               return rxjs_operator_first.first.call(observable);
           });
@@ -5428,7 +5429,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-445ed43');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-69fa3bb');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
