@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.1-eed8344
+ * @license Angular v4.0.0-beta.1-0eca960
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -1252,7 +1252,7 @@
               if (route.loadChildren) {
                   return rxjs_operator_map.map.call(this.configLoader.load(injector, route.loadChildren), function (r) {
                       ((route))._loadedConfig = r;
-                      return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+                      return new UrlSegmentGroup(segments, {});
                   });
               }
               else {
@@ -5429,7 +5429,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-eed8344');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-0eca960');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
