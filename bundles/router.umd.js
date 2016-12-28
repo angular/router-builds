@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.1-0ac8e10
+ * @license Angular v4.0.0-beta.1-07e0fce
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2169,22 +2169,23 @@
    */
   function advanceActivatedRoute(route) {
       if (route.snapshot) {
-          if (!shallowEqual(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
+          var /** @type {?} */ currentSnapshot = route.snapshot;
+          route.snapshot = route._futureSnapshot;
+          if (!shallowEqual(currentSnapshot.queryParams, route._futureSnapshot.queryParams)) {
               ((route.queryParams)).next(route._futureSnapshot.queryParams);
           }
-          if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
+          if (currentSnapshot.fragment !== route._futureSnapshot.fragment) {
               ((route.fragment)).next(route._futureSnapshot.fragment);
           }
-          if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+          if (!shallowEqual(currentSnapshot.params, route._futureSnapshot.params)) {
               ((route.params)).next(route._futureSnapshot.params);
           }
-          if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+          if (!shallowEqualArrays(currentSnapshot.url, route._futureSnapshot.url)) {
               ((route.url)).next(route._futureSnapshot.url);
           }
-          if (!equalParamsAndUrlSegments(route.snapshot, route._futureSnapshot)) {
+          if (!equalParamsAndUrlSegments(currentSnapshot, route._futureSnapshot)) {
               ((route.data)).next(route._futureSnapshot.data);
           }
-          route.snapshot = route._futureSnapshot;
       }
       else {
           route.snapshot = route._futureSnapshot;
@@ -5429,7 +5430,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-0ac8e10');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.1-07e0fce');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
