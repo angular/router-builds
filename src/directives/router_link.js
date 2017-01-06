@@ -80,15 +80,15 @@ export var RouterLink = (function () {
     }
     Object.defineProperty(RouterLink.prototype, "routerLink", {
         /**
-         * @param {?} data
+         * @param {?} commands
          * @return {?}
          */
-        set: function (data) {
-            if (Array.isArray(data)) {
-                this.commands = data;
+        set: function (commands) {
+            if (commands != null) {
+                this.commands = Array.isArray(commands) ? commands : [commands];
             }
             else {
-                this.commands = [data];
+                this.commands = [];
             }
         },
         enumerable: true,
@@ -137,7 +137,7 @@ export var RouterLink = (function () {
         'skipLocationChange': [{ type: Input },],
         'replaceUrl': [{ type: Input },],
         'routerLink': [{ type: Input },],
-        'onClick': [{ type: HostListener, args: ['click', [],] },],
+        'onClick': [{ type: HostListener, args: ['click',] },],
     };
     return RouterLink;
 }());
@@ -196,15 +196,15 @@ export var RouterLinkWithHref = (function () {
     }
     Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
         /**
-         * @param {?} data
+         * @param {?} commands
          * @return {?}
          */
-        set: function (data) {
-            if (Array.isArray(data)) {
-                this.commands = data;
+        set: function (commands) {
+            if (commands != null) {
+                this.commands = Array.isArray(commands) ? commands : [commands];
             }
             else {
-                this.commands = [data];
+                this.commands = [];
             }
         },
         enumerable: true,

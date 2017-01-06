@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.1-28a92b2
+ * @license Angular v3.4.1-56b4296
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -1252,7 +1252,7 @@
               if (route.loadChildren) {
                   return rxjs_operator_map.map.call(this.configLoader.load(injector, route.loadChildren), function (r) {
                       ((route))._loadedConfig = r;
-                      return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+                      return new UrlSegmentGroup(segments, {});
                   });
               }
               else {
@@ -2169,22 +2169,23 @@
    */
   function advanceActivatedRoute(route) {
       if (route.snapshot) {
-          if (!shallowEqual(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
+          var /** @type {?} */ currentSnapshot = route.snapshot;
+          route.snapshot = route._futureSnapshot;
+          if (!shallowEqual(currentSnapshot.queryParams, route._futureSnapshot.queryParams)) {
               ((route.queryParams)).next(route._futureSnapshot.queryParams);
           }
-          if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
+          if (currentSnapshot.fragment !== route._futureSnapshot.fragment) {
               ((route.fragment)).next(route._futureSnapshot.fragment);
           }
-          if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+          if (!shallowEqual(currentSnapshot.params, route._futureSnapshot.params)) {
               ((route.params)).next(route._futureSnapshot.params);
           }
-          if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+          if (!shallowEqualArrays(currentSnapshot.url, route._futureSnapshot.url)) {
               ((route.url)).next(route._futureSnapshot.url);
           }
-          if (!equalParamsAndUrlSegments(route.snapshot, route._futureSnapshot)) {
+          if (!equalParamsAndUrlSegments(currentSnapshot, route._futureSnapshot)) {
               ((route.data)).next(route._futureSnapshot.data);
           }
-          route.snapshot = route._futureSnapshot;
       }
       else {
           route.snapshot = route._futureSnapshot;
@@ -2305,7 +2306,7 @@
    * @return {?}
    */
   function isMatrixParams(command) {
-      return typeof command === 'object' && !command.outlets && !command.segmentPath;
+      return typeof command === 'object' && command != null && !command.outlets && !command.segmentPath;
   }
   /**
    * @param {?} oldSegmentGroup
@@ -2352,7 +2353,7 @@
           if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
               throw new Error('Root segment cannot have matrix parameters');
           }
-          var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c.outlets; });
+          var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
           if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
               throw new Error('{outlets:{}} has to be the last command');
           }
@@ -2377,7 +2378,7 @@
       var /** @type {?} */ numberOfDoubleDots = 0;
       var /** @type {?} */ isAbsolute = false;
       var /** @type {?} */ res = commands.reduce(function (res, cmd, cmdIdx) {
-          if (typeof cmd === 'object') {
+          if (typeof cmd === 'object' && cmd != null) {
               if (cmd.outlets) {
                   var /** @type {?} */ outlets_1 = {};
                   forEach(cmd.outlets, function (commands, name) {
@@ -2467,8 +2468,9 @@
    * @return {?}
    */
   function getPath(command) {
-      if (typeof command === 'object' && command.outlets)
+      if (typeof command === 'object' && command != null && command.outlets) {
           return command.outlets[PRIMARY_OUTLET];
+      }
       return "" + command;
   }
   /**
@@ -4419,15 +4421,15 @@
       }
       Object.defineProperty(RouterLink.prototype, "routerLink", {
           /**
-           * @param {?} data
+           * @param {?} commands
            * @return {?}
            */
-          set: function (data) {
-              if (Array.isArray(data)) {
-                  this.commands = data;
+          set: function (commands) {
+              if (commands != null) {
+                  this.commands = Array.isArray(commands) ? commands : [commands];
               }
               else {
-                  this.commands = [data];
+                  this.commands = [];
               }
           },
           enumerable: true,
@@ -4476,7 +4478,7 @@
           'skipLocationChange': [{ type: _angular_core.Input },],
           'replaceUrl': [{ type: _angular_core.Input },],
           'routerLink': [{ type: _angular_core.Input },],
-          'onClick': [{ type: _angular_core.HostListener, args: ['click', [],] },],
+          'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
       };
       return RouterLink;
   }());
@@ -4506,15 +4508,15 @@
       }
       Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
           /**
-           * @param {?} data
+           * @param {?} commands
            * @return {?}
            */
-          set: function (data) {
-              if (Array.isArray(data)) {
-                  this.commands = data;
+          set: function (commands) {
+              if (commands != null) {
+                  this.commands = Array.isArray(commands) ? commands : [commands];
               }
               else {
-                  this.commands = [data];
+                  this.commands = [];
               }
           },
           enumerable: true,
@@ -5418,7 +5420,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.1-28a92b2');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.1-56b4296');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
