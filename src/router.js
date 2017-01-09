@@ -471,6 +471,7 @@ export var Router = (function () {
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
+        validateCommands(commands);
         if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
             extras.queryParams = this.removeEmptyProps(extras.queryParams);
         }
@@ -1379,5 +1380,17 @@ function getOutlet(outletMap, route) {
         }
     }
     return outlet;
+}
+/**
+ * @param {?} commands
+ * @return {?}
+ */
+function validateCommands(commands) {
+    for (var /** @type {?} */ i = 0; i < commands.length; i++) {
+        var /** @type {?} */ cmd = commands[i];
+        if (cmd == null) {
+            throw new Error("The requested path contains " + cmd + " segment at index " + i);
+        }
+    }
 }
 //# sourceMappingURL=router.js.map
