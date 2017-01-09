@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.2-fb6c458
+ * @license Angular v4.0.0-beta.2-99aa49a
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4593,7 +4593,7 @@
           { type: _angular_common.LocationStrategy, },
       ]; };
       RouterLinkWithHref.propDecorators = {
-          'target': [{ type: _angular_core.Input },],
+          'target': [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
           'queryParams': [{ type: _angular_core.Input },],
           'fragment': [{ type: _angular_core.Input },],
           'preserveQueryParams': [{ type: _angular_core.Input },],
@@ -5430,7 +5430,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-fb6c458');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-99aa49a');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
