@@ -271,7 +271,7 @@ export var RouterLinkWithHref = (function () {
         { type: LocationStrategy, },
     ]; };
     RouterLinkWithHref.propDecorators = {
-        'target': [{ type: Input },],
+        'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
         'queryParams': [{ type: Input },],
         'fragment': [{ type: Input },],
         'preserveQueryParams': [{ type: Input },],
