@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.2-99aa49a
+ * @license Angular v4.0.0-beta.2-5d9cbd7
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -324,7 +324,7 @@
    * @return {?}
    */
   function containsQueryParams(container, containee) {
-      return Object.keys(containee) <= Object.keys(container) &&
+      return Object.keys(containee).length <= Object.keys(container).length &&
           Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
   }
   /**
@@ -5430,7 +5430,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-99aa49a');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-5d9cbd7');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,

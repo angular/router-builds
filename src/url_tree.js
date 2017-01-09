@@ -59,7 +59,7 @@ function equalSegmentGroups(container, containee) {
  * @return {?}
  */
 function containsQueryParams(container, containee) {
-    return Object.keys(containee) <= Object.keys(container) &&
+    return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
 }
 /**
