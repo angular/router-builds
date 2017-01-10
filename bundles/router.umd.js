@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.2-5d9cbd7
+ * @license Angular v4.0.0-beta.2-d4d3782
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2199,7 +2199,10 @@
    * @return {?}
    */
   function equalParamsAndUrlSegments(a, b) {
-      return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+      var /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+      var /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
+      return equalUrlParams && !parentsMismatch &&
+          (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
   }
 
   /**
@@ -3517,6 +3520,7 @@
        */
       Router.prototype.navigate = function (commands, extras) {
           if (extras === void 0) { extras = { skipLocationChange: false }; }
+          validateCommands(commands);
           if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
               extras.queryParams = this.removeEmptyProps(extras.queryParams);
           }
@@ -4349,6 +4353,18 @@
           }
       }
       return outlet;
+  }
+  /**
+   * @param {?} commands
+   * @return {?}
+   */
+  function validateCommands(commands) {
+      for (var /** @type {?} */ i = 0; i < commands.length; i++) {
+          var /** @type {?} */ cmd = commands[i];
+          if (cmd == null) {
+              throw new Error("The requested path contains " + cmd + " segment at index " + i);
+          }
+      }
   }
 
   /**
@@ -5430,7 +5446,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-5d9cbd7');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-d4d3782');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
