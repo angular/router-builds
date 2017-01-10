@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.2-9aeb8c5
+ * @license Angular v3.4.2-d43e5dd
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2199,10 +2199,7 @@
    * @return {?}
    */
   function equalParamsAndUrlSegments(a, b) {
-      var /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
-      var /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
-      return equalUrlParams && !parentsMismatch &&
-          (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
+      return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
   }
 
   /**
@@ -4039,11 +4036,10 @@
               var /** @type {?} */ guard = _this.getToken(c, curr);
               var /** @type {?} */ observable;
               if (guard.canDeactivate) {
-                  observable =
-                      wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr, _this.future));
+                  observable = wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
               }
               else {
-                  observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
+                  observable = wrapIntoObservable(guard(component, curr, _this.curr));
               }
               return rxjs_operator_first.first.call(observable);
           });
@@ -4430,17 +4426,11 @@
       /**
        * @param {?} router
        * @param {?} route
-       * @param {?} tabIndex
-       * @param {?} renderer
-       * @param {?} el
        */
-      function RouterLink(router, route, tabIndex, renderer, el) {
+      function RouterLink(router, route) {
           this.router = router;
           this.route = route;
           this.commands = [];
-          if (tabIndex == null) {
-              renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
-          }
       }
       Object.defineProperty(RouterLink.prototype, "routerLink", {
           /**
@@ -4492,9 +4482,6 @@
       RouterLink.ctorParameters = function () { return [
           { type: Router, },
           { type: ActivatedRoute, },
-          { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['tabindex',] },] },
-          { type: _angular_core.Renderer, },
-          { type: _angular_core.ElementRef, },
       ]; };
       RouterLink.propDecorators = {
           'queryParams': [{ type: _angular_core.Input },],
@@ -5446,7 +5433,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.2-9aeb8c5');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.2-d43e5dd');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,

@@ -518,9 +518,6 @@ export function advanceActivatedRoute(route) {
  * @return {?}
  */
 export function equalParamsAndUrlSegments(a, b) {
-    var /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
-    var /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
-    return equalUrlParams && !parentsMismatch &&
-        (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
+    return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
 }
 //# sourceMappingURL=router_state.js.map
