@@ -1049,10 +1049,11 @@ export var PreActivation = (function () {
             var /** @type {?} */ guard = _this.getToken(c, curr);
             var /** @type {?} */ observable;
             if (guard.canDeactivate) {
-                observable = wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+                observable =
+                    wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr, _this.future));
             }
             else {
-                observable = wrapIntoObservable(guard(component, curr, _this.curr));
+                observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
             }
             return first.call(observable);
         });

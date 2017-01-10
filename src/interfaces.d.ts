@@ -176,8 +176,9 @@ export interface CanActivateChild {
  *
  *   canDeactivate(
  *     component: TeamComponent,
- *     route: ActivatedRouteSnapshot,
- *     state: RouterStateSnapshot
+ *     currentRoute: ActivatedRouteSnapshot,
+ *     currentState: RouterStateSnapshot,
+ *     nextState: RouterStateSnapshot
  *   ): Observable<boolean>|Promise<boolean>|boolean {
  *     return this.permissions.canDeactivate(this.currentUser, route.params.id);
  *   }
@@ -214,7 +215,8 @@ export interface CanActivateChild {
  *   providers: [
  *     {
  *       provide: 'canDeactivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
+ *       useValue: (component: TeamComponent, currentRoute: ActivatedRouteSnapshot, currentState:
+ * RouterStateSnapshot, nextState: RouterStateSnapshot) => true
  *     }
  *   ]
  * })
@@ -224,7 +226,7 @@ export interface CanActivateChild {
  * @stable
  */
 export interface CanDeactivate<T> {
-    canDeactivate(component: T, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
+    canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
  * @whatItDoes Indicates that class can implement to be a data provider.
