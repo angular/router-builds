@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.2-6164eb2
+ * @license Angular v3.4.2-61ba223
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3517,6 +3517,7 @@
        */
       Router.prototype.navigate = function (commands, extras) {
           if (extras === void 0) { extras = { skipLocationChange: false }; }
+          validateCommands(commands);
           if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
               extras.queryParams = this.removeEmptyProps(extras.queryParams);
           }
@@ -4348,6 +4349,18 @@
           }
       }
       return outlet;
+  }
+  /**
+   * @param {?} commands
+   * @return {?}
+   */
+  function validateCommands(commands) {
+      for (var /** @type {?} */ i = 0; i < commands.length; i++) {
+          var /** @type {?} */ cmd = commands[i];
+          if (cmd == null) {
+              throw new Error("The requested path contains " + cmd + " segment at index " + i);
+          }
+      }
   }
 
   /**
@@ -5420,7 +5433,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.2-6164eb2');
+  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.2-61ba223');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,
