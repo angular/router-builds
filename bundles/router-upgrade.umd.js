@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.2-d7f2a3c
+ * @license Angular v3.4.2-4b56f79
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
