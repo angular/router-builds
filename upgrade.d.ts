@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, OpaqueToken } from '@angular/core';
+import { ApplicationRef, ComponentRef, InjectionToken } from '@angular/core';
 import { ExtraOptions, RouterPreloader } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
@@ -32,9 +32,9 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * @experimental
  */
 export declare const RouterUpgradeInitializer: {
-    provide: OpaqueToken;
+    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
     useFactory: (ngUpgrade: UpgradeModule, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => Function;
-    deps: (OpaqueToken | typeof UpgradeModule | typeof ApplicationRef | typeof RouterPreloader)[];
+    deps: (typeof UpgradeModule | typeof ApplicationRef | typeof RouterPreloader | InjectionToken<ExtraOptions>)[];
 };
 /**
  * @whatItDoes Sets up a location synchronization.

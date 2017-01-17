@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Compiler, OpaqueToken } from '@angular/core';
+import { Compiler, InjectionToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operator/map';
@@ -14,7 +14,7 @@ import { flatten, wrapIntoObservable } from './utils/collection';
 /**
  * @experimental
  */
-export var /** @type {?} */ ROUTES = new OpaqueToken('ROUTES');
+export var /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
 export var LoadedRouterConfig = (function () {
     /**
      * @param {?} routes

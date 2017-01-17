@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.3-5237b1c
+ * @license Angular v4.0.0-beta.3-d169c24
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -218,7 +218,7 @@
   /**
    * @experimental
    */
-  var /** @type {?} */ ROUTES = new _angular_core.OpaqueToken('ROUTES');
+  var /** @type {?} */ ROUTES = new _angular_core.InjectionToken('ROUTES');
   var LoadedRouterConfig = (function () {
       /**
        * @param {?} routes
@@ -5175,11 +5175,11 @@
    * @whatItDoes Is used in DI to configure the router.
    * @stable
    */
-  var /** @type {?} */ ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+  var /** @type {?} */ ROUTER_CONFIGURATION = new _angular_core.InjectionToken('ROUTER_CONFIGURATION');
   /**
    * @docsNotRequired
    */
-  var /** @type {?} */ ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
+  var /** @type {?} */ ROUTER_FORROOT_GUARD = new _angular_core.InjectionToken('ROUTER_FORROOT_GUARD');
   var /** @type {?} */ ROUTER_PROVIDERS = [
       _angular_common.Location,
       { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -5428,7 +5428,7 @@
    *
    * @experimental
    */
-  var /** @type {?} */ ROUTER_INITIALIZER = new _angular_core.OpaqueToken('Router Initializer');
+  var /** @type {?} */ ROUTER_INITIALIZER = new _angular_core.InjectionToken('Router Initializer');
   /**
    * @return {?}
    */
@@ -5446,7 +5446,7 @@
   /**
    * @stable
    */
-  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.3-5237b1c');
+  var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.3-d169c24');
 
   var /** @type {?} */ __router_private__ = {
       ROUTER_PROVIDERS: ROUTER_PROVIDERS,

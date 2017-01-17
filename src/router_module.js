@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, InjectionToken, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -29,11 +29,11 @@ var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWi
  * @whatItDoes Is used in DI to configure the router.
  * @stable
  */
-export var /** @type {?} */ ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
+export var /** @type {?} */ ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /**
  * @docsNotRequired
  */
-export var /** @type {?} */ ROUTER_FORROOT_GUARD = new OpaqueToken('ROUTER_FORROOT_GUARD');
+export var /** @type {?} */ ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
 export var /** @type {?} */ ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -291,7 +291,7 @@ export function initialRouterNavigation(router, ref, preloader, opts) {
  *
  * @experimental
  */
-export var /** @type {?} */ ROUTER_INITIALIZER = new OpaqueToken('Router Initializer');
+export var /** @type {?} */ ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 /**
  * @return {?}
  */

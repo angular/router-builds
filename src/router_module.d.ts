@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ApplicationRef, Compiler, ComponentRef, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Provider } from '@angular/core';
+import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
@@ -19,11 +19,11 @@ import { UrlSerializer } from './url_tree';
  * @whatItDoes Is used in DI to configure the router.
  * @stable
  */
-export declare const ROUTER_CONFIGURATION: OpaqueToken;
+export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 /**
  * @docsNotRequired
  */
-export declare const ROUTER_FORROOT_GUARD: OpaqueToken;
+export declare const ROUTER_FORROOT_GUARD: InjectionToken<void>;
 export declare const ROUTER_PROVIDERS: Provider[];
 export declare function routerNgProbeToken(): NgProbeToken;
 /**
@@ -149,13 +149,13 @@ export declare function initialRouterNavigation(router: Router, ref: Application
  *
  * @experimental
  */
-export declare const ROUTER_INITIALIZER: OpaqueToken;
+export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 export declare function provideRouterInitializer(): ({
-    provide: OpaqueToken;
+    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
     useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => (bootstrappedComponentRef: ComponentRef<any>) => void;
-    deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
+    deps: (typeof Router | typeof RouterPreloader | InjectionToken<ExtraOptions> | typeof ApplicationRef)[];
 } | {
-    provide: OpaqueToken;
+    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
-    useExisting: OpaqueToken;
+    useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
 })[];
