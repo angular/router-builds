@@ -104,7 +104,7 @@ function Navigation_tsickle_Closure_declarations() {
     Navigation.prototype.commands;
 }
 /**
- *  Transforms commands to a normalized `Navigation`
+ * Transforms commands to a normalized `Navigation`
  * @param {?} commands
  * @return {?}
  */
