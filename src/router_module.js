@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common/index';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, InjectionToken, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core/index';
+import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, InjectionToken, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -24,17 +24,17 @@ import { flatten } from './utils/collection';
  * @whatItDoes Contains a list of directives
  * @stable
  */
-const /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
  * @whatItDoes Is used in DI to configure the router.
  * @stable
  */
-export const /** @type {?} */ ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
+export var /** @type {?} */ ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /**
  * @docsNotRequired
  */
-export const /** @type {?} */ ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
-export const /** @type {?} */ ROUTER_PROVIDERS = [
+export var /** @type {?} */ ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
+export var /** @type {?} */ ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
     {
@@ -111,11 +111,11 @@ export function routerNgProbeToken() {
  *
  * \@stable
  */
-export class RouterModule {
+export var RouterModule = (function () {
     /**
      * @param {?} guard
      */
-    constructor(guard) {
+    function RouterModule(guard) {
     }
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
@@ -131,7 +131,7 @@ export class RouterModule {
      * @param {?=} config
      * @return {?}
      */
-    static forRoot(routes, config) {
+    RouterModule.forRoot = function (routes, config) {
         return {
             ngModule: RouterModule,
             providers: [
@@ -159,23 +159,24 @@ export class RouterModule {
                 provideRouterInitializer(),
             ],
         };
-    }
+    };
     /**
      * Creates a module with all the router directives and a provider registering routes.
      * @param {?} routes
      * @return {?}
      */
-    static forChild(routes) {
+    RouterModule.forChild = function (routes) {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
-    }
-}
-RouterModule.decorators = [
-    { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-];
-/** @nocollapse */
-RouterModule.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-];
+    };
+    RouterModule.decorators = [
+        { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+    ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+    ]; };
+    return RouterModule;
+}());
 function RouterModule_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterModule.decorators;
@@ -191,7 +192,8 @@ function RouterModule_tsickle_Closure_declarations() {
  * @param {?=} options
  * @return {?}
  */
-export function provideLocationStrategy(platformLocationStrategy, baseHref, options = {}) {
+export function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+    if (options === void 0) { options = {}; }
     return options.useHash ? new HashLocationStrategy(platformLocationStrategy, baseHref) :
         new PathLocationStrategy(platformLocationStrategy, baseHref);
 }
@@ -201,7 +203,7 @@ export function provideLocationStrategy(platformLocationStrategy, baseHref, opti
  */
 export function provideForRootGuard(router) {
     if (router) {
-        throw new Error(`RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.`);
+        throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
     }
     return 'guarded';
 }
@@ -242,8 +244,9 @@ export function provideRoutes(routes) {
  * @param {?=} routeReuseStrategy
  * @return {?}
  */
-export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts = {}, urlHandlingStrategy, routeReuseStrategy) {
-    const /** @type {?} */ router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+export function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+    if (opts === void 0) { opts = {}; }
+    var /** @type {?} */ router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -254,12 +257,12 @@ export function setupRouter(ref, urlSerializer, outletMap, location, injector, l
         router.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
-        const /** @type {?} */ dom = getDOM();
-        router.events.subscribe(e => {
-            dom.logGroup(`Router Event: ${((e.constructor)).name}`);
-            dom.log(e.toString());
-            dom.log(e);
-            dom.logGroupEnd();
+        var /** @type {?} */ dom_1 = getDOM();
+        router.events.subscribe(function (e) {
+            dom_1.logGroup("Router Event: " + ((e.constructor)).name);
+            dom_1.log(e.toString());
+            dom_1.log(e);
+            dom_1.logGroupEnd();
         });
     }
     return router;
@@ -279,7 +282,7 @@ export function rootRoute(router) {
  * @return {?}
  */
 export function initialRouterNavigation(router, ref, preloader, opts) {
-    return (bootstrappedComponentRef) => {
+    return function (bootstrappedComponentRef) {
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
@@ -298,7 +301,7 @@ export function initialRouterNavigation(router, ref, preloader, opts) {
  *
  * @experimental
  */
-export const /** @type {?} */ ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
+export var /** @type {?} */ ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 /**
  * @return {?}
  */

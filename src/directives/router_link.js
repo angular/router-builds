@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { LocationStrategy } from '@angular/common/index';
-import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer } from '@angular/core/index';
+import { LocationStrategy } from '@angular/common';
+import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer } from '@angular/core';
 import { NavigationEnd, Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -74,7 +74,7 @@ import { ActivatedRoute } from '../router_state';
  *
  * \@stable
  */
-export class RouterLink {
+export var RouterLink = (function () {
     /**
      * @param {?} router
      * @param {?} route
@@ -82,7 +82,7 @@ export class RouterLink {
      * @param {?} renderer
      * @param {?} el
      */
-    constructor(router, route, tabIndex, renderer, el) {
+    function RouterLink(router, route, tabIndex, renderer, el) {
         this.router = router;
         this.route = route;
         this.commands = [];
@@ -90,63 +90,72 @@ export class RouterLink {
             renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
         }
     }
+    Object.defineProperty(RouterLink.prototype, "routerLink", {
+        /**
+         * @param {?} commands
+         * @return {?}
+         */
+        set: function (commands) {
+            if (commands != null) {
+                this.commands = Array.isArray(commands) ? commands : [commands];
+            }
+            else {
+                this.commands = [];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
-     * @param {?} commands
      * @return {?}
      */
-    set routerLink(commands) {
-        if (commands != null) {
-            this.commands = Array.isArray(commands) ? commands : [commands];
-        }
-        else {
-            this.commands = [];
-        }
-    }
-    /**
-     * @return {?}
-     */
-    onClick() {
-        const /** @type {?} */ extras = {
+    RouterLink.prototype.onClick = function () {
+        var /** @type {?} */ extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return true;
-    }
-    /**
-     * @return {?}
-     */
-    get urlTree() {
-        return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
-            queryParams: this.queryParams,
-            fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
-            preserveFragment: attrBoolValue(this.preserveFragment),
-        });
-    }
-}
-RouterLink.decorators = [
-    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
-];
-/** @nocollapse */
-RouterLink.ctorParameters = () => [
-    { type: Router, },
-    { type: ActivatedRoute, },
-    { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
-    { type: Renderer, },
-    { type: ElementRef, },
-];
-RouterLink.propDecorators = {
-    'queryParams': [{ type: Input },],
-    'fragment': [{ type: Input },],
-    'preserveQueryParams': [{ type: Input },],
-    'preserveFragment': [{ type: Input },],
-    'skipLocationChange': [{ type: Input },],
-    'replaceUrl': [{ type: Input },],
-    'routerLink': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ['click',] },],
-};
+    };
+    Object.defineProperty(RouterLink.prototype, "urlTree", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                preserveFragment: attrBoolValue(this.preserveFragment),
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLink.decorators = [
+        { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLink.ctorParameters = function () { return [
+        { type: Router, },
+        { type: ActivatedRoute, },
+        { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
+        { type: Renderer, },
+        { type: ElementRef, },
+    ]; };
+    RouterLink.propDecorators = {
+        'queryParams': [{ type: Input },],
+        'fragment': [{ type: Input },],
+        'preserveQueryParams': [{ type: Input },],
+        'preserveFragment': [{ type: Input },],
+        'skipLocationChange': [{ type: Input },],
+        'replaceUrl': [{ type: Input },],
+        'routerLink': [{ type: Input },],
+        'onClick': [{ type: HostListener, args: ['click',] },],
+    };
+    return RouterLink;
+}());
 function RouterLink_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLink.decorators;
@@ -186,104 +195,114 @@ function RouterLink_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export class RouterLinkWithHref {
+export var RouterLinkWithHref = (function () {
     /**
      * @param {?} router
      * @param {?} route
      * @param {?} locationStrategy
      */
-    constructor(router, route, locationStrategy) {
+    function RouterLinkWithHref(router, route, locationStrategy) {
+        var _this = this;
         this.router = router;
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
-        this.subscription = router.events.subscribe(s => {
+        this.subscription = router.events.subscribe(function (s) {
             if (s instanceof NavigationEnd) {
-                this.updateTargetUrlAndHref();
+                _this.updateTargetUrlAndHref();
             }
         });
     }
-    /**
-     * @param {?} commands
-     * @return {?}
-     */
-    set routerLink(commands) {
-        if (commands != null) {
-            this.commands = Array.isArray(commands) ? commands : [commands];
-        }
-        else {
-            this.commands = [];
-        }
-    }
+    Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+        /**
+         * @param {?} commands
+         * @return {?}
+         */
+        set: function (commands) {
+            if (commands != null) {
+                this.commands = Array.isArray(commands) ? commands : [commands];
+            }
+            else {
+                this.commands = [];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @param {?} changes
      * @return {?}
      */
-    ngOnChanges(changes) { this.updateTargetUrlAndHref(); }
+    RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.subscription.unsubscribe(); }
+    RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     /**
      * @param {?} button
      * @param {?} ctrlKey
      * @param {?} metaKey
      * @return {?}
      */
-    onClick(button, ctrlKey, metaKey) {
+    RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
         if (button !== 0 || ctrlKey || metaKey) {
             return true;
         }
         if (typeof this.target === 'string' && this.target != '_self') {
             return true;
         }
-        const /** @type {?} */ extras = {
+        var /** @type {?} */ extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return false;
-    }
+    };
     /**
      * @return {?}
      */
-    updateTargetUrlAndHref() {
+    RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
         this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-    }
-    /**
-     * @return {?}
-     */
-    get urlTree() {
-        return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
-            queryParams: this.queryParams,
-            fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
-            preserveFragment: attrBoolValue(this.preserveFragment),
-        });
-    }
-}
-RouterLinkWithHref.decorators = [
-    { type: Directive, args: [{ selector: 'a[routerLink]' },] },
-];
-/** @nocollapse */
-RouterLinkWithHref.ctorParameters = () => [
-    { type: Router, },
-    { type: ActivatedRoute, },
-    { type: LocationStrategy, },
-];
-RouterLinkWithHref.propDecorators = {
-    'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
-    'queryParams': [{ type: Input },],
-    'fragment': [{ type: Input },],
-    'preserveQueryParams': [{ type: Input },],
-    'preserveFragment': [{ type: Input },],
-    'skipLocationChange': [{ type: Input },],
-    'replaceUrl': [{ type: Input },],
-    'href': [{ type: HostBinding },],
-    'routerLink': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
-};
+    };
+    Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                preserveFragment: attrBoolValue(this.preserveFragment),
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLinkWithHref.decorators = [
+        { type: Directive, args: [{ selector: 'a[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = function () { return [
+        { type: Router, },
+        { type: ActivatedRoute, },
+        { type: LocationStrategy, },
+    ]; };
+    RouterLinkWithHref.propDecorators = {
+        'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
+        'queryParams': [{ type: Input },],
+        'fragment': [{ type: Input },],
+        'preserveQueryParams': [{ type: Input },],
+        'preserveFragment': [{ type: Input },],
+        'skipLocationChange': [{ type: Input },],
+        'replaceUrl': [{ type: Input },],
+        'href': [{ type: HostBinding },],
+        'routerLink': [{ type: Input },],
+        'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
+    return RouterLinkWithHref;
+}());
 function RouterLinkWithHref_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkWithHref.decorators;

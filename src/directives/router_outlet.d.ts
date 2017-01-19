@@ -45,11 +45,11 @@ export declare class RouterOutlet implements OnDestroy {
     deactivateEvents: EventEmitter<any>;
     constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
     ngOnDestroy(): void;
-    readonly locationInjector: Injector;
-    readonly locationFactoryResolver: ComponentFactoryResolver;
-    readonly isActivated: boolean;
-    readonly component: Object;
-    readonly activatedRoute: ActivatedRoute;
+    locationInjector: Injector;
+    locationFactoryResolver: ComponentFactoryResolver;
+    isActivated: boolean;
+    component: Object;
+    activatedRoute: ActivatedRoute;
     detach(): ComponentRef<any>;
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;

@@ -45,7 +45,7 @@ function equalSegmentGroups(container, containee) {
         return false;
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
-    for (const c in containee.children) {
+    for (var c in containee.children) {
         if (!container.children[c])
             return false;
         if (!equalSegmentGroups(container.children[c], containee.children[c]))
@@ -60,7 +60,7 @@ function equalSegmentGroups(container, containee) {
  */
 function containsQueryParams(container, containee) {
     return Object.keys(containee).length <= Object.keys(container).length &&
-        Object.keys(containee).every(key => containee[key] === container[key]);
+        Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
 }
 /**
  * @param {?} container
@@ -78,7 +78,7 @@ function containsSegmentGroup(container, containee) {
  */
 function containsSegmentGroupHelper(container, containee, containeePaths) {
     if (container.segments.length > containeePaths.length) {
-        const /** @type {?} */ current = container.segments.slice(0, containeePaths.length);
+        var /** @type {?} */ current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
@@ -88,7 +88,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
-        for (const c in containee.children) {
+        for (var c in containee.children) {
             if (!container.children[c])
                 return false;
             if (!containsSegmentGroup(container.children[c], containee.children[c]))
@@ -97,8 +97,8 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         return true;
     }
     else {
-        const /** @type {?} */ current = containeePaths.slice(0, container.segments.length);
-        const /** @type {?} */ next = containeePaths.slice(container.segments.length);
+        var /** @type {?} */ current = containeePaths.slice(0, container.segments.length);
+        var /** @type {?} */ next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
         if (!container.children[PRIMARY_OUTLET])
@@ -135,14 +135,14 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *
  * \@stable
  */
-export class UrlTree {
+export var UrlTree = (function () {
     /**
      * \@internal
      * @param {?} root
      * @param {?} queryParams
      * @param {?} fragment
      */
-    constructor(root, queryParams, fragment) {
+    function UrlTree(root, queryParams, fragment) {
         this.root = root;
         this.queryParams = queryParams;
         this.fragment = fragment;
@@ -151,8 +151,9 @@ export class UrlTree {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return new DefaultUrlSerializer().serialize(this); }
-}
+    UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
+    return UrlTree;
+}());
 function UrlTree_tsickle_Closure_declarations() {
     /**
      * The root segment group of the URL tree
@@ -177,34 +178,40 @@ function UrlTree_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export class UrlSegmentGroup {
+export var UrlSegmentGroup = (function () {
     /**
      * @param {?} segments
      * @param {?} children
      */
-    constructor(segments, children) {
+    function UrlSegmentGroup(segments, children) {
+        var _this = this;
         this.segments = segments;
         this.children = children;
         /** The parent node in the url tree */
         this.parent = null;
-        forEach(children, (v, k) => v.parent = this);
+        forEach(children, function (v, k) { return v.parent = _this; });
     }
     /**
      * Wether the segment has child segments
      * @return {?}
      */
-    hasChildren() { return this.numberOfChildren > 0; }
-    /**
-     * Number of child segments
-     * @return {?}
-     */
-    get numberOfChildren() { return Object.keys(this.children).length; }
+    UrlSegmentGroup.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+    Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
+        /**
+         * Number of child segments
+         * @return {?}
+         */
+        get: function () { return Object.keys(this.children).length; },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return serializePaths(this); }
-}
+    UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
+    return UrlSegmentGroup;
+}());
 function UrlSegmentGroup_tsickle_Closure_declarations() {
     /**
      * \@internal
@@ -257,12 +264,12 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export class UrlSegment {
+export var UrlSegment = (function () {
     /**
      * @param {?} path
      * @param {?} parameters
      */
-    constructor(path, parameters) {
+    function UrlSegment(path, parameters) {
         this.path = path;
         this.parameters = parameters;
     }
@@ -270,8 +277,9 @@ export class UrlSegment {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return serializePath(this); }
-}
+    UrlSegment.prototype.toString = function () { return serializePath(this); };
+    return UrlSegment;
+}());
 function UrlSegment_tsickle_Closure_declarations() {
     /**
      * The path part of a URL segment
@@ -292,7 +300,7 @@ function UrlSegment_tsickle_Closure_declarations() {
 export function equalSegments(a, b) {
     if (a.length !== b.length)
         return false;
-    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
+    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
         if (a[i].path !== b[i].path)
             return false;
         if (!shallowEqual(a[i].parameters, b[i].parameters))
@@ -308,7 +316,7 @@ export function equalSegments(a, b) {
 export function equalPath(a, b) {
     if (a.length !== b.length)
         return false;
-    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
+    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
         if (a[i].path !== b[i].path)
             return false;
     }
@@ -320,13 +328,13 @@ export function equalPath(a, b) {
  * @return {?}
  */
 export function mapChildrenIntoArray(segment, fn) {
-    let /** @type {?} */ res = [];
-    forEach(segment.children, (child, childOutlet) => {
+    var /** @type {?} */ res = [];
+    forEach(segment.children, function (child, childOutlet) {
         if (childOutlet === PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
     });
-    forEach(segment.children, (child, childOutlet) => {
+    forEach(segment.children, function (child, childOutlet) {
         if (childOutlet !== PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
@@ -344,22 +352,25 @@ export function mapChildrenIntoArray(segment, fn) {
  * \@stable
  * @abstract
  */
-export class UrlSerializer {
+export var UrlSerializer = (function () {
+    function UrlSerializer() {
+    }
     /**
      * Parse a url into a {\@link UrlTree}
      * @abstract
      * @param {?} url
      * @return {?}
      */
-    parse(url) { }
+    UrlSerializer.prototype.parse = function (url) { };
     /**
      * Converts a {\@link UrlTree} into a url
      * @abstract
      * @param {?} tree
      * @return {?}
      */
-    serialize(tree) { }
-}
+    UrlSerializer.prototype.serialize = function (tree) { };
+    return UrlSerializer;
+}());
 /**
  * \@whatItDoes A default implementation of the {\@link UrlSerializer}.
  *
@@ -378,34 +389,37 @@ export class UrlSerializer {
  *
  * \@stable
  */
-export class DefaultUrlSerializer {
+export var DefaultUrlSerializer = (function () {
+    function DefaultUrlSerializer() {
+    }
     /**
      * Parses a url into a {\@link UrlTree}
      * @param {?} url
      * @return {?}
      */
-    parse(url) {
-        const /** @type {?} */ p = new UrlParser(url);
+    DefaultUrlSerializer.prototype.parse = function (url) {
+        var /** @type {?} */ p = new UrlParser(url);
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
-    }
+    };
     /**
      * Converts a {\@link UrlTree} into a url
      * @param {?} tree
      * @return {?}
      */
-    serialize(tree) {
-        const /** @type {?} */ segment = `/${serializeSegment(tree.root, true)}`;
-        const /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        const /** @type {?} */ fragment = tree.fragment !== null && tree.fragment !== undefined ? `#${encodeURI(tree.fragment)}` : '';
-        return `${segment}${query}${fragment}`;
-    }
-}
+    DefaultUrlSerializer.prototype.serialize = function (tree) {
+        var /** @type {?} */ segment = "/" + serializeSegment(tree.root, true);
+        var /** @type {?} */ query = serializeQueryParams(tree.queryParams);
+        var /** @type {?} */ fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
+        return "" + segment + query + fragment;
+    };
+    return DefaultUrlSerializer;
+}());
 /**
  * @param {?} segment
  * @return {?}
  */
 export function serializePaths(segment) {
-    return segment.segments.map(p => serializePath(p)).join('/');
+    return segment.segments.map(function (p) { return serializePath(p); }).join('/');
 }
 /**
  * @param {?} segment
@@ -414,32 +428,32 @@ export function serializePaths(segment) {
  */
 function serializeSegment(segment, root) {
     if (segment.hasChildren() && root) {
-        const /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
+        var /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
             serializeSegment(segment.children[PRIMARY_OUTLET], false) :
             '';
-        const /** @type {?} */ children = [];
-        forEach(segment.children, (v, k) => {
+        var /** @type {?} */ children_1 = [];
+        forEach(segment.children, function (v, k) {
             if (k !== PRIMARY_OUTLET) {
-                children.push(`${k}:${serializeSegment(v, false)}`);
+                children_1.push(k + ":" + serializeSegment(v, false));
             }
         });
-        if (children.length > 0) {
-            return `${primary}(${children.join('//')})`;
+        if (children_1.length > 0) {
+            return primary + "(" + children_1.join('//') + ")";
         }
         else {
-            return `${primary}`;
+            return "" + primary;
         }
     }
     else if (segment.hasChildren() && !root) {
-        const /** @type {?} */ children = mapChildrenIntoArray(segment, (v, k) => {
+        var /** @type {?} */ children = mapChildrenIntoArray(segment, function (v, k) {
             if (k === PRIMARY_OUTLET) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
             else {
-                return [`${k}:${serializeSegment(v, false)}`];
+                return [(k + ":" + serializeSegment(v, false))];
             }
         });
-        return `${serializePaths(segment)}/(${children.join('//')})`;
+        return serializePaths(segment) + "/(" + children.join('//') + ")";
     }
     else {
         return serializePaths(segment);
@@ -464,37 +478,38 @@ export function decode(s) {
  * @return {?}
  */
 export function serializePath(path) {
-    return `${encode(path.path)}${serializeParams(path.parameters)}`;
+    return "" + encode(path.path) + serializeParams(path.parameters);
 }
 /**
  * @param {?} params
  * @return {?}
  */
 function serializeParams(params) {
-    return pairs(params).map(p => `;${encode(p.first)}=${encode(p.second)}`).join('');
+    return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
 }
 /**
  * @param {?} params
  * @return {?}
  */
 function serializeQueryParams(params) {
-    const /** @type {?} */ strParams = Object.keys(params).map((name) => {
-        const /** @type {?} */ value = params[name];
-        return Array.isArray(value) ? value.map(v => `${encode(name)}=${encode(v)}`).join('&') :
-            `${encode(name)}=${encode(value)}`;
+    var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
+        var /** @type {?} */ value = params[name];
+        return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+            encode(name) + "=" + encode(value);
     });
-    return strParams.length ? `?${strParams.join("&")}` : '';
+    return strParams.length ? "?" + strParams.join("&") : '';
 }
-class Pair {
+var Pair = (function () {
     /**
      * @param {?} first
      * @param {?} second
      */
-    constructor(first, second) {
+    function Pair(first, second) {
         this.first = first;
         this.second = second;
     }
-}
+    return Pair;
+}());
 function Pair_tsickle_Closure_declarations() {
     /** @type {?} */
     Pair.prototype.first;
@@ -506,49 +521,49 @@ function Pair_tsickle_Closure_declarations() {
  * @return {?}
  */
 function pairs(obj) {
-    const /** @type {?} */ res = [];
-    for (const prop in obj) {
+    var /** @type {?} */ res = [];
+    for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             res.push(new Pair(prop, obj[prop]));
         }
     }
     return res;
 }
-const /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
+var /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchSegments(str) {
     SEGMENT_RE.lastIndex = 0;
-    const /** @type {?} */ match = str.match(SEGMENT_RE);
+    var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-const /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
+var /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchQueryParams(str) {
     QUERY_PARAM_RE.lastIndex = 0;
-    const /** @type {?} */ match = str.match(SEGMENT_RE);
+    var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-const /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
+var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchUrlQueryParamValue(str) {
     QUERY_PARAM_VALUE_RE.lastIndex = 0;
-    const /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
+    var /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
     return match ? match[0] : '';
 }
-class UrlParser {
+var UrlParser = (function () {
     /**
      * @param {?} url
      */
-    constructor(url) {
+    function UrlParser(url) {
         this.url = url;
         this.remaining = url;
     }
@@ -556,21 +571,21 @@ class UrlParser {
      * @param {?} str
      * @return {?}
      */
-    peekStartsWith(str) { return this.remaining.startsWith(str); }
+    UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
     /**
      * @param {?} str
      * @return {?}
      */
-    capture(str) {
+    UrlParser.prototype.capture = function (str) {
         if (!this.remaining.startsWith(str)) {
-            throw new Error(`Expected "${str}".`);
+            throw new Error("Expected \"" + str + "\".");
         }
         this.remaining = this.remaining.substring(str.length);
-    }
+    };
     /**
      * @return {?}
      */
-    parseRootSegment() {
+    UrlParser.prototype.parseRootSegment = function () {
         if (this.remaining.startsWith('/')) {
             this.capture('/');
         }
@@ -578,18 +593,18 @@ class UrlParser {
             return new UrlSegmentGroup([], {});
         }
         return new UrlSegmentGroup([], this.parseChildren());
-    }
+    };
     /**
      * @return {?}
      */
-    parseChildren() {
+    UrlParser.prototype.parseChildren = function () {
         if (this.remaining.length == 0) {
             return {};
         }
         if (this.peekStartsWith('/')) {
             this.capture('/');
         }
-        const /** @type {?} */ paths = [];
+        var /** @type {?} */ paths = [];
         if (!this.peekStartsWith('(')) {
             paths.push(this.parseSegments());
         }
@@ -597,12 +612,12 @@ class UrlParser {
             this.capture('/');
             paths.push(this.parseSegments());
         }
-        let /** @type {?} */ children = {};
+        var /** @type {?} */ children = {};
         if (this.peekStartsWith('/(')) {
             this.capture('/');
             children = this.parseParens(true);
         }
-        let /** @type {?} */ res = {};
+        var /** @type {?} */ res = {};
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
@@ -610,27 +625,27 @@ class UrlParser {
             res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
         }
         return res;
-    }
+    };
     /**
      * @return {?}
      */
-    parseSegments() {
-        const /** @type {?} */ path = matchSegments(this.remaining);
+    UrlParser.prototype.parseSegments = function () {
+        var /** @type {?} */ path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
-            throw new Error(`Empty path url segment cannot have parameters: '${this.remaining}'.`);
+            throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
         }
         this.capture(path);
-        let /** @type {?} */ matrixParams = {};
+        var /** @type {?} */ matrixParams = {};
         if (this.peekStartsWith(';')) {
             matrixParams = this.parseMatrixParams();
         }
         return new UrlSegment(decode(path), matrixParams);
-    }
+    };
     /**
      * @return {?}
      */
-    parseQueryParams() {
-        const /** @type {?} */ params = {};
+    UrlParser.prototype.parseQueryParams = function () {
+        var /** @type {?} */ params = {};
         if (this.peekStartsWith('?')) {
             this.capture('?');
             this.parseQueryParam(params);
@@ -640,72 +655,72 @@ class UrlParser {
             }
         }
         return params;
-    }
+    };
     /**
      * @return {?}
      */
-    parseFragment() {
+    UrlParser.prototype.parseFragment = function () {
         if (this.peekStartsWith('#')) {
             return decodeURI(this.remaining.substring(1));
         }
         return null;
-    }
+    };
     /**
      * @return {?}
      */
-    parseMatrixParams() {
-        const /** @type {?} */ params = {};
+    UrlParser.prototype.parseMatrixParams = function () {
+        var /** @type {?} */ params = {};
         while (this.remaining.length > 0 && this.peekStartsWith(';')) {
             this.capture(';');
             this.parseParam(params);
         }
         return params;
-    }
+    };
     /**
      * @param {?} params
      * @return {?}
      */
-    parseParam(params) {
-        const /** @type {?} */ key = matchSegments(this.remaining);
+    UrlParser.prototype.parseParam = function (params) {
+        var /** @type {?} */ key = matchSegments(this.remaining);
         if (!key) {
             return;
         }
         this.capture(key);
-        let /** @type {?} */ value = '';
+        var /** @type {?} */ value = '';
         if (this.peekStartsWith('=')) {
             this.capture('=');
-            const /** @type {?} */ valueMatch = matchSegments(this.remaining);
+            var /** @type {?} */ valueMatch = matchSegments(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
                 this.capture(value);
             }
         }
         params[decode(key)] = decode(value);
-    }
+    };
     /**
      * @param {?} params
      * @return {?}
      */
-    parseQueryParam(params) {
-        const /** @type {?} */ key = matchQueryParams(this.remaining);
+    UrlParser.prototype.parseQueryParam = function (params) {
+        var /** @type {?} */ key = matchQueryParams(this.remaining);
         if (!key) {
             return;
         }
         this.capture(key);
-        let /** @type {?} */ value = '';
+        var /** @type {?} */ value = '';
         if (this.peekStartsWith('=')) {
             this.capture('=');
-            const /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
+            var /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
                 this.capture(value);
             }
         }
-        const /** @type {?} */ decodedKey = decode(key);
-        const /** @type {?} */ decodedVal = decode(value);
+        var /** @type {?} */ decodedKey = decode(key);
+        var /** @type {?} */ decodedVal = decode(value);
         if (params.hasOwnProperty(decodedKey)) {
             // Append to existing values
-            let /** @type {?} */ currentVal = params[decodedKey];
+            var /** @type {?} */ currentVal = params[decodedKey];
             if (!Array.isArray(currentVal)) {
                 currentVal = [currentVal];
                 params[decodedKey] = currentVal;
@@ -716,23 +731,23 @@ class UrlParser {
             // Create a new value
             params[decodedKey] = decodedVal;
         }
-    }
+    };
     /**
      * @param {?} allowPrimary
      * @return {?}
      */
-    parseParens(allowPrimary) {
-        const /** @type {?} */ segments = {};
+    UrlParser.prototype.parseParens = function (allowPrimary) {
+        var /** @type {?} */ segments = {};
         this.capture('(');
         while (!this.peekStartsWith(')') && this.remaining.length > 0) {
-            const /** @type {?} */ path = matchSegments(this.remaining);
-            const /** @type {?} */ next = this.remaining[path.length];
+            var /** @type {?} */ path = matchSegments(this.remaining);
+            var /** @type {?} */ next = this.remaining[path.length];
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
             if (next !== '/' && next !== ')' && next !== ';') {
-                throw new Error(`Cannot parse url '${this.url}'`);
+                throw new Error("Cannot parse url '" + this.url + "'");
             }
-            let /** @type {?} */ outletName;
+            var /** @type {?} */ outletName = void 0;
             if (path.indexOf(':') > -1) {
                 outletName = path.substr(0, path.indexOf(':'));
                 this.capture(outletName);
@@ -741,7 +756,7 @@ class UrlParser {
             else if (allowPrimary) {
                 outletName = PRIMARY_OUTLET;
             }
-            const /** @type {?} */ children = this.parseChildren();
+            var /** @type {?} */ children = this.parseChildren();
             segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegmentGroup([], children);
             if (this.peekStartsWith('//')) {
@@ -750,8 +765,9 @@ class UrlParser {
         }
         this.capture(')');
         return segments;
-    }
-}
+    };
+    return UrlParser;
+}());
 function UrlParser_tsickle_Closure_declarations() {
     /** @type {?} */
     UrlParser.prototype.remaining;

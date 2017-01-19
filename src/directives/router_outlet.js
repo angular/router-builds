@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, Output, ReflectiveInjector, ViewContainerRef } from '@angular/core/index';
+import { Attribute, ComponentFactoryResolver, Directive, EventEmitter, Output, ReflectiveInjector, ViewContainerRef } from '@angular/core';
 import { RouterOutletMap } from '../router_outlet_map';
 import { PRIMARY_OUTLET } from '../shared';
 /**
@@ -33,14 +33,14 @@ import { PRIMARY_OUTLET } from '../shared';
  *
  * \@stable
  */
-export class RouterOutlet {
+export var RouterOutlet = (function () {
     /**
      * @param {?} parentOutletMap
      * @param {?} location
      * @param {?} resolver
      * @param {?} name
      */
-    constructor(parentOutletMap, location, resolver, name) {
+    function RouterOutlet(parentOutletMap, location, resolver, name) {
         this.parentOutletMap = parentOutletMap;
         this.location = location;
         this.resolver = resolver;
@@ -52,69 +52,89 @@ export class RouterOutlet {
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); }
+    RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); };
+    Object.defineProperty(RouterOutlet.prototype, "locationInjector", {
+        /**
+         * @return {?}
+         */
+        get: function () { return this.location.injector; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "locationFactoryResolver", {
+        /**
+         * @return {?}
+         */
+        get: function () { return this.resolver; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+        /**
+         * @return {?}
+         */
+        get: function () { return !!this.activated; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "component", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this.activated.instance;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this._activatedRoute;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
-    get locationInjector() { return this.location.injector; }
-    /**
-     * @return {?}
-     */
-    get locationFactoryResolver() { return this.resolver; }
-    /**
-     * @return {?}
-     */
-    get isActivated() { return !!this.activated; }
-    /**
-     * @return {?}
-     */
-    get component() {
-        if (!this.activated)
-            throw new Error('Outlet is not activated');
-        return this.activated.instance;
-    }
-    /**
-     * @return {?}
-     */
-    get activatedRoute() {
-        if (!this.activated)
-            throw new Error('Outlet is not activated');
-        return this._activatedRoute;
-    }
-    /**
-     * @return {?}
-     */
-    detach() {
+    RouterOutlet.prototype.detach = function () {
         if (!this.activated)
             throw new Error('Outlet is not activated');
         this.location.detach();
-        const /** @type {?} */ r = this.activated;
+        var /** @type {?} */ r = this.activated;
         this.activated = null;
         this._activatedRoute = null;
         return r;
-    }
+    };
     /**
      * @param {?} ref
      * @param {?} activatedRoute
      * @return {?}
      */
-    attach(ref, activatedRoute) {
+    RouterOutlet.prototype.attach = function (ref, activatedRoute) {
         this.activated = ref;
         this._activatedRoute = activatedRoute;
         this.location.insert(ref.hostView);
-    }
+    };
     /**
      * @return {?}
      */
-    deactivate() {
+    RouterOutlet.prototype.deactivate = function () {
         if (this.activated) {
-            const /** @type {?} */ c = this.component;
+            var /** @type {?} */ c = this.component;
             this.activated.destroy();
             this.activated = null;
             this._activatedRoute = null;
             this.deactivateEvents.emit(c);
         }
-    }
+    };
     /**
      * @param {?} activatedRoute
      * @param {?} resolver
@@ -123,35 +143,36 @@ export class RouterOutlet {
      * @param {?} outletMap
      * @return {?}
      */
-    activate(activatedRoute, resolver, injector, providers, outletMap) {
+    RouterOutlet.prototype.activate = function (activatedRoute, resolver, injector, providers, outletMap) {
         if (this.isActivated) {
             throw new Error('Cannot activate an already activated outlet');
         }
         this.outletMap = outletMap;
         this._activatedRoute = activatedRoute;
-        const /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
-        const /** @type {?} */ component = (snapshot._routeConfig.component);
-        const /** @type {?} */ factory = resolver.resolveComponentFactory(component);
-        const /** @type {?} */ inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
+        var /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
+        var /** @type {?} */ component = (snapshot._routeConfig.component);
+        var /** @type {?} */ factory = resolver.resolveComponentFactory(component);
+        var /** @type {?} */ inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
-    }
-}
-RouterOutlet.decorators = [
-    { type: Directive, args: [{ selector: 'router-outlet' },] },
-];
-/** @nocollapse */
-RouterOutlet.ctorParameters = () => [
-    { type: RouterOutletMap, },
-    { type: ViewContainerRef, },
-    { type: ComponentFactoryResolver, },
-    { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
-];
-RouterOutlet.propDecorators = {
-    'activateEvents': [{ type: Output, args: ['activate',] },],
-    'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
-};
+    };
+    RouterOutlet.decorators = [
+        { type: Directive, args: [{ selector: 'router-outlet' },] },
+    ];
+    /** @nocollapse */
+    RouterOutlet.ctorParameters = function () { return [
+        { type: RouterOutletMap, },
+        { type: ViewContainerRef, },
+        { type: ComponentFactoryResolver, },
+        { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
+    ]; };
+    RouterOutlet.propDecorators = {
+        'activateEvents': [{ type: Output, args: ['activate',] },],
+        'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
+    };
+    return RouterOutlet;
+}());
 function RouterOutlet_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterOutlet.decorators;

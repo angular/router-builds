@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectorRef, ContentChildren, Directive, ElementRef, Input, Renderer } from '@angular/core/index';
+import { ChangeDetectorRef, ContentChildren, Directive, ElementRef, Input, Renderer } from '@angular/core';
 import { NavigationEnd, Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 /**
@@ -71,14 +71,15 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  *
  * \@stable
  */
-export class RouterLinkActive {
+export var RouterLinkActive = (function () {
     /**
      * @param {?} router
      * @param {?} element
      * @param {?} renderer
      * @param {?} cdr
      */
-    constructor(router, element, renderer, cdr) {
+    function RouterLinkActive(router, element, renderer, cdr) {
+        var _this = this;
         this.router = router;
         this.element = element;
         this.renderer = renderer;
@@ -86,89 +87,103 @@ export class RouterLinkActive {
         this.classes = [];
         this.active = false;
         this.routerLinkActiveOptions = { exact: false };
-        this.subscription = router.events.subscribe(s => {
+        this.subscription = router.events.subscribe(function (s) {
             if (s instanceof NavigationEnd) {
-                this.update();
+                _this.update();
             }
         });
     }
+    Object.defineProperty(RouterLinkActive.prototype, "isActive", {
+        /**
+         * @return {?}
+         */
+        get: function () { return this.active; },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
-    get isActive() { return this.active; }
-    /**
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        this.links.changes.subscribe(_ => this.update());
-        this.linksWithHrefs.changes.subscribe(_ => this.update());
+    RouterLinkActive.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        this.links.changes.subscribe(function (_) { return _this.update(); });
+        this.linksWithHrefs.changes.subscribe(function (_) { return _this.update(); });
         this.update();
-    }
-    /**
-     * @param {?} data
-     * @return {?}
-     */
-    set routerLinkActive(data) {
-        const /** @type {?} */ classes = Array.isArray(data) ? data : data.split(' ');
-        this.classes = classes.filter(c => !!c);
-    }
+    };
+    Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
+        /**
+         * @param {?} data
+         * @return {?}
+         */
+        set: function (data) {
+            var /** @type {?} */ classes = Array.isArray(data) ? data : data.split(' ');
+            this.classes = classes.filter(function (c) { return !!c; });
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @param {?} changes
      * @return {?}
      */
-    ngOnChanges(changes) { this.update(); }
+    RouterLinkActive.prototype.ngOnChanges = function (changes) { this.update(); };
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.subscription.unsubscribe(); }
+    RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     /**
      * @return {?}
      */
-    update() {
+    RouterLinkActive.prototype.update = function () {
+        var _this = this;
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
+        var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
             this.active = hasActiveLinks;
-            this.classes.forEach(c => this.renderer.setElementClass(this.element.nativeElement, c, hasActiveLinks));
+            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, hasActiveLinks); });
             this.cdr.detectChanges();
         }
-    }
+    };
     /**
      * @param {?} router
      * @return {?}
      */
-    isLinkActive(router) {
-        return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
-    }
+    RouterLinkActive.prototype.isLinkActive = function (router) {
+        var _this = this;
+        return function (link) {
+            return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+        };
+    };
     /**
      * @return {?}
      */
-    hasActiveLinks() {
+    RouterLinkActive.prototype.hasActiveLinks = function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
-    }
-}
-RouterLinkActive.decorators = [
-    { type: Directive, args: [{
-                selector: '[routerLinkActive]',
-                exportAs: 'routerLinkActive',
-            },] },
-];
-/** @nocollapse */
-RouterLinkActive.ctorParameters = () => [
-    { type: Router, },
-    { type: ElementRef, },
-    { type: Renderer, },
-    { type: ChangeDetectorRef, },
-];
-RouterLinkActive.propDecorators = {
-    'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
-    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-    'routerLinkActiveOptions': [{ type: Input },],
-    'routerLinkActive': [{ type: Input },],
-};
+    };
+    RouterLinkActive.decorators = [
+        { type: Directive, args: [{
+                    selector: '[routerLinkActive]',
+                    exportAs: 'routerLinkActive',
+                },] },
+    ];
+    /** @nocollapse */
+    RouterLinkActive.ctorParameters = function () { return [
+        { type: Router, },
+        { type: ElementRef, },
+        { type: Renderer, },
+        { type: ChangeDetectorRef, },
+    ]; };
+    RouterLinkActive.propDecorators = {
+        'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
+        'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+        'routerLinkActiveOptions': [{ type: Input },],
+        'routerLinkActive': [{ type: Input },],
+    };
+    return RouterLinkActive;
+}());
 function RouterLinkActive_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkActive.decorators;

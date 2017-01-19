@@ -11,7 +11,9 @@
  * \@experimental
  * @abstract
  */
-export class UrlHandlingStrategy {
+export var UrlHandlingStrategy = (function () {
+    function UrlHandlingStrategy() {
+    }
     /**
      * Tells the router if this URL should be processed.
      *
@@ -23,7 +25,7 @@ export class UrlHandlingStrategy {
      * @param {?} url
      * @return {?}
      */
-    shouldProcessUrl(url) { }
+    UrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { };
     /**
      * Extracts the part of the URL that should be handled by the router.
      * The rest of the URL will remain untouched.
@@ -31,7 +33,7 @@ export class UrlHandlingStrategy {
      * @param {?} url
      * @return {?}
      */
-    extract(url) { }
+    UrlHandlingStrategy.prototype.extract = function (url) { };
     /**
      * Merges the URL fragment with the rest of the URL.
      * @abstract
@@ -39,27 +41,31 @@ export class UrlHandlingStrategy {
      * @param {?} rawUrl
      * @return {?}
      */
-    merge(newUrlPart, rawUrl) { }
-}
+    UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
+    return UrlHandlingStrategy;
+}());
 /**
  * \@experimental
  */
-export class DefaultUrlHandlingStrategy {
+export var DefaultUrlHandlingStrategy = (function () {
+    function DefaultUrlHandlingStrategy() {
+    }
     /**
      * @param {?} url
      * @return {?}
      */
-    shouldProcessUrl(url) { return true; }
+    DefaultUrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { return true; };
     /**
      * @param {?} url
      * @return {?}
      */
-    extract(url) { return url; }
+    DefaultUrlHandlingStrategy.prototype.extract = function (url) { return url; };
     /**
      * @param {?} newUrlPart
      * @param {?} wholeUrl
      * @return {?}
      */
-    merge(newUrlPart, wholeUrl) { return newUrlPart; }
-}
+    DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
+    return DefaultUrlHandlingStrategy;
+}());
 //# sourceMappingURL=url_handling_strategy.js.map

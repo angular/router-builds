@@ -20,12 +20,12 @@ export function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     if (commands.length === 0) {
         return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
     }
-    const /** @type {?} */ nav = computeNavigation(commands);
+    var /** @type {?} */ nav = computeNavigation(commands);
     if (nav.toRoot()) {
         return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
     }
-    const /** @type {?} */ startingPosition = findStartingPosition(nav, urlTree, route);
-    const /** @type {?} */ segmentGroup = startingPosition.processChildren ?
+    var /** @type {?} */ startingPosition = findStartingPosition(nav, urlTree, route);
+    var /** @type {?} */ segmentGroup = startingPosition.processChildren ?
         updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, nav.commands) :
         updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
     return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
@@ -58,8 +58,8 @@ function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) 
  * @return {?}
  */
 function replaceSegment(current, oldSegment, newSegment) {
-    const /** @type {?} */ children = {};
-    forEach(current.children, (c, outletName) => {
+    var /** @type {?} */ children = {};
+    forEach(current.children, function (c, outletName) {
         if (c === oldSegment) {
             children[outletName] = newSegment;
         }
@@ -69,20 +69,20 @@ function replaceSegment(current, oldSegment, newSegment) {
     });
     return new UrlSegmentGroup(current.segments, children);
 }
-class Navigation {
+var Navigation = (function () {
     /**
      * @param {?} isAbsolute
      * @param {?} numberOfDoubleDots
      * @param {?} commands
      */
-    constructor(isAbsolute, numberOfDoubleDots, commands) {
+    function Navigation(isAbsolute, numberOfDoubleDots, commands) {
         this.isAbsolute = isAbsolute;
         this.numberOfDoubleDots = numberOfDoubleDots;
         this.commands = commands;
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
             throw new Error('Root segment cannot have matrix parameters');
         }
-        const cmdWithOutlet = commands.find(c => typeof c === 'object' && c != null && c.outlets);
+        var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
         if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
@@ -90,10 +90,11 @@ class Navigation {
     /**
      * @return {?}
      */
-    toRoot() {
+    Navigation.prototype.toRoot = function () {
         return this.isAbsolute && this.commands.length === 1 && this.commands[0] == '/';
-    }
-}
+    };
+    return Navigation;
+}());
 function Navigation_tsickle_Closure_declarations() {
     /** @type {?} */
     Navigation.prototype.isAbsolute;
@@ -111,26 +112,26 @@ function computeNavigation(commands) {
     if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] === '/') {
         return new Navigation(true, 0, commands);
     }
-    let /** @type {?} */ numberOfDoubleDots = 0;
-    let /** @type {?} */ isAbsolute = false;
-    const /** @type {?} */ res = commands.reduce((res, cmd, cmdIdx) => {
+    var /** @type {?} */ numberOfDoubleDots = 0;
+    var /** @type {?} */ isAbsolute = false;
+    var /** @type {?} */ res = commands.reduce(function (res, cmd, cmdIdx) {
         if (typeof cmd === 'object' && cmd != null) {
             if (cmd.outlets) {
-                const /** @type {?} */ outlets = {};
-                forEach(cmd.outlets, (commands, name) => {
-                    outlets[name] = typeof commands === 'string' ? commands.split('/') : commands;
+                var /** @type {?} */ outlets_1 = {};
+                forEach(cmd.outlets, function (commands, name) {
+                    outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
                 });
-                return [...res, { outlets }];
+                return res.concat([{ outlets: outlets_1 }]);
             }
             if (cmd.segmentPath) {
-                return [...res, cmd.segmentPath];
+                return res.concat([cmd.segmentPath]);
             }
         }
         if (!(typeof cmd === 'string')) {
-            return [...res, cmd];
+            return res.concat([cmd]);
         }
         if (cmdIdx === 0) {
-            cmd.split('/').forEach((urlPart, partIndex) => {
+            cmd.split('/').forEach(function (urlPart, partIndex) {
                 if (partIndex == 0 && urlPart === '.') {
                 }
                 else if (partIndex == 0 && urlPart === '') {
@@ -145,22 +146,23 @@ function computeNavigation(commands) {
             });
             return res;
         }
-        return [...res, cmd];
+        return res.concat([cmd]);
     }, []);
     return new Navigation(isAbsolute, numberOfDoubleDots, res);
 }
-class Position {
+var Position = (function () {
     /**
      * @param {?} segmentGroup
      * @param {?} processChildren
      * @param {?} index
      */
-    constructor(segmentGroup, processChildren, index) {
+    function Position(segmentGroup, processChildren, index) {
         this.segmentGroup = segmentGroup;
         this.processChildren = processChildren;
         this.index = index;
     }
-}
+    return Position;
+}());
 function Position_tsickle_Closure_declarations() {
     /** @type {?} */
     Position.prototype.segmentGroup;
@@ -182,8 +184,8 @@ function findStartingPosition(nav, tree, route) {
     if (route.snapshot._lastPathIndex === -1) {
         return new Position(route.snapshot._urlSegment, true, 0);
     }
-    const /** @type {?} */ modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
-    const /** @type {?} */ index = route.snapshot._lastPathIndex + modifier;
+    var /** @type {?} */ modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
+    var /** @type {?} */ index = route.snapshot._lastPathIndex + modifier;
     return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
 }
 /**
@@ -193,9 +195,9 @@ function findStartingPosition(nav, tree, route) {
  * @return {?}
  */
 function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
-    let /** @type {?} */ g = group;
-    let /** @type {?} */ ci = index;
-    let /** @type {?} */ dd = numberOfDoubleDots;
+    var /** @type {?} */ g = group;
+    var /** @type {?} */ ci = index;
+    var /** @type {?} */ dd = numberOfDoubleDots;
     while (dd > ci) {
         dd -= ci;
         g = g.parent;
@@ -214,7 +216,7 @@ function getPath(command) {
     if (typeof command === 'object' && command != null && command.outlets) {
         return command.outlets[PRIMARY_OUTLET];
     }
-    return `${command}`;
+    return "" + command;
 }
 /**
  * @param {?} commands
@@ -222,10 +224,11 @@ function getPath(command) {
  */
 function getOutlets(commands) {
     if (!(typeof commands[0] === 'object'))
-        return { [PRIMARY_OUTLET]: commands };
+        return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
     if (commands[0].outlets === undefined)
-        return { [PRIMARY_OUTLET]: commands };
+        return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
     return commands[0].outlets;
+    var _a, _b;
 }
 /**
  * @param {?} segmentGroup
@@ -240,10 +243,10 @@ function updateSegmentGroup(segmentGroup, startIndex, commands) {
     if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
         return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
     }
-    const /** @type {?} */ m = prefixedWith(segmentGroup, startIndex, commands);
-    const /** @type {?} */ slicedCommands = commands.slice(m.commandIndex);
+    var /** @type {?} */ m = prefixedWith(segmentGroup, startIndex, commands);
+    var /** @type {?} */ slicedCommands = commands.slice(m.commandIndex);
     if (m.match && m.pathIndex < segmentGroup.segments.length) {
-        const /** @type {?} */ g = new UrlSegmentGroup(segmentGroup.segments.slice(0, m.pathIndex), {});
+        var /** @type {?} */ g = new UrlSegmentGroup(segmentGroup.segments.slice(0, m.pathIndex), {});
         g.children[PRIMARY_OUTLET] =
             new UrlSegmentGroup(segmentGroup.segments.slice(m.pathIndex), segmentGroup.children);
         return updateSegmentGroupChildren(g, 0, slicedCommands);
@@ -272,19 +275,19 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
         return new UrlSegmentGroup(segmentGroup.segments, {});
     }
     else {
-        const /** @type {?} */ outlets = getOutlets(commands);
-        const /** @type {?} */ children = {};
-        forEach(outlets, (commands, outlet) => {
+        var /** @type {?} */ outlets_2 = getOutlets(commands);
+        var /** @type {?} */ children_1 = {};
+        forEach(outlets_2, function (commands, outlet) {
             if (commands !== null) {
-                children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
+                children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
             }
         });
-        forEach(segmentGroup.children, (child, childOutlet) => {
-            if (outlets[childOutlet] === undefined) {
-                children[childOutlet] = child;
+        forEach(segmentGroup.children, function (child, childOutlet) {
+            if (outlets_2[childOutlet] === undefined) {
+                children_1[childOutlet] = child;
             }
         });
-        return new UrlSegmentGroup(segmentGroup.segments, children);
+        return new UrlSegmentGroup(segmentGroup.segments, children_1);
     }
 }
 /**
@@ -294,15 +297,15 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function prefixedWith(segmentGroup, startIndex, commands) {
-    let /** @type {?} */ currentCommandIndex = 0;
-    let /** @type {?} */ currentPathIndex = startIndex;
-    const /** @type {?} */ noMatch = { match: false, pathIndex: 0, commandIndex: 0 };
+    var /** @type {?} */ currentCommandIndex = 0;
+    var /** @type {?} */ currentPathIndex = startIndex;
+    var /** @type {?} */ noMatch = { match: false, pathIndex: 0, commandIndex: 0 };
     while (currentPathIndex < segmentGroup.segments.length) {
         if (currentCommandIndex >= commands.length)
             return noMatch;
-        const /** @type {?} */ path = segmentGroup.segments[currentPathIndex];
-        const /** @type {?} */ curr = getPath(commands[currentCommandIndex]);
-        const /** @type {?} */ next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
+        var /** @type {?} */ path = segmentGroup.segments[currentPathIndex];
+        var /** @type {?} */ curr = getPath(commands[currentCommandIndex]);
+        var /** @type {?} */ next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
         if (currentPathIndex > 0 && curr === undefined)
             break;
         if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
@@ -326,22 +329,22 @@ function prefixedWith(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function createNewSegmentGroup(segmentGroup, startIndex, commands) {
-    const /** @type {?} */ paths = segmentGroup.segments.slice(0, startIndex);
-    let /** @type {?} */ i = 0;
+    var /** @type {?} */ paths = segmentGroup.segments.slice(0, startIndex);
+    var /** @type {?} */ i = 0;
     while (i < commands.length) {
         if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
-            const /** @type {?} */ children = createNewSegmentChildren(commands[i].outlets);
+            var /** @type {?} */ children = createNewSegmentChildren(commands[i].outlets);
             return new UrlSegmentGroup(paths, children);
         }
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && isMatrixParams(commands[0])) {
-            const /** @type {?} */ p = segmentGroup.segments[startIndex];
+            var /** @type {?} */ p = segmentGroup.segments[startIndex];
             paths.push(new UrlSegment(p.path, commands[0]));
             i++;
             continue;
         }
-        const /** @type {?} */ curr = getPath(commands[i]);
-        const /** @type {?} */ next = (i < commands.length - 1) ? commands[i + 1] : null;
+        var /** @type {?} */ curr = getPath(commands[i]);
+        var /** @type {?} */ next = (i < commands.length - 1) ? commands[i + 1] : null;
         if (curr && next && isMatrixParams(next)) {
             paths.push(new UrlSegment(curr, stringify(next)));
             i += 2;
@@ -358,8 +361,8 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function createNewSegmentChildren(outlets) {
-    const /** @type {?} */ children = {};
-    forEach(outlets, (commands, outlet) => {
+    var /** @type {?} */ children = {};
+    forEach(outlets, function (commands, outlet) {
         if (commands !== null) {
             children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
         }
@@ -371,8 +374,8 @@ function createNewSegmentChildren(outlets) {
  * @return {?}
  */
 function stringify(params) {
-    const /** @type {?} */ res = {};
-    forEach(params, (v, k) => res[k] = `${v}`);
+    var /** @type {?} */ res = {};
+    forEach(params, function (v, k) { return res[k] = "" + v; });
     return res;
 }
 /**

@@ -303,11 +303,11 @@ export declare class Router {
      */
     setUpLocationChangeListener(): void;
     /** The current route state */
-    readonly routerState: RouterState;
+    routerState: RouterState;
     /** The current url */
-    readonly url: string;
+    url: string;
     /** An observable of router events */
-    readonly events: Observable<Event>;
+    events: Observable<Event>;
     /**
      * Resets the configuration used for navigation and generating links.
      *
