@@ -10,8 +10,8 @@
  *
  * \@stable
  */
-export var RouterOutletMap = (function () {
-    function RouterOutletMap() {
+export class RouterOutletMap {
+    constructor() {
         /** @internal */
         this._outlets = {};
     }
@@ -21,15 +21,14 @@ export var RouterOutletMap = (function () {
      * @param {?} outlet
      * @return {?}
      */
-    RouterOutletMap.prototype.registerOutlet = function (name, outlet) { this._outlets[name] = outlet; };
+    registerOutlet(name, outlet) { this._outlets[name] = outlet; }
     /**
      * Removes an outlet from this map.
      * @param {?} name
      * @return {?}
      */
-    RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
-    return RouterOutletMap;
-}());
+    removeOutlet(name) { this._outlets[name] = undefined; }
+}
 function RouterOutletMap_tsickle_Closure_declarations() {
     /**
      * \@internal

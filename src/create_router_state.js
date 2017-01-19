@@ -15,7 +15,7 @@ import { TreeNode } from './utils/tree';
  * @return {?}
  */
 export function createRouterState(routeReuseStrategy, curr, prevState) {
-    var /** @type {?} */ root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
+    const /** @type {?} */ root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
     return new RouterState(root, curr);
 }
 /**
@@ -27,19 +27,19 @@ export function createRouterState(routeReuseStrategy, curr, prevState) {
 function createNode(routeReuseStrategy, curr, prevState) {
     // reuse an activated route that is currently displayed on the screen
     if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
-        var /** @type {?} */ value = prevState.value;
+        const /** @type {?} */ value = prevState.value;
         value._futureSnapshot = curr.value;
-        var /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
+        const /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
         return new TreeNode(value, children);
     }
     else if (routeReuseStrategy.retrieve(curr.value)) {
-        var /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
+        const /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
         setFutureSnapshotsOfActivatedRoutes(curr, tree);
         return tree;
     }
     else {
-        var /** @type {?} */ value = createActivatedRoute(curr.value);
-        var /** @type {?} */ children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+        const /** @type {?} */ value = createActivatedRoute(curr.value);
+        const /** @type {?} */ children = curr.children.map(c => createNode(routeReuseStrategy, c));
         return new TreeNode(value, children);
     }
 }
@@ -56,7 +56,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
         throw new Error('Cannot reattach ActivatedRouteSnapshot with a different number of children');
     }
     result.value._futureSnapshot = curr.value;
-    for (var /** @type {?} */ i = 0; i < curr.children.length; ++i) {
+    for (let /** @type {?} */ i = 0; i < curr.children.length; ++i) {
         setFutureSnapshotsOfActivatedRoutes(curr.children[i], result.children[i]);
     }
 }
@@ -67,9 +67,8 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
  * @return {?}
  */
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
-    return curr.children.map(function (child) {
-        for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
-            var p = _a[_i];
+    return curr.children.map(child => {
+        for (const p of prevState.children) {
             if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
                 return createNode(routeReuseStrategy, child, p);
             }

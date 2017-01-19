@@ -5,11 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PRIMARY_OUTLET } from './shared';
 import { UrlSegment, equalSegments } from './url_tree';
@@ -42,24 +37,22 @@ import { Tree, TreeNode } from './utils/tree';
  *
  * \@stable
  */
-export var RouterState = (function (_super) {
-    __extends(RouterState, _super);
+export class RouterState extends Tree {
     /**
      * \@internal
      * @param {?} root
      * @param {?} snapshot
      */
-    function RouterState(root, snapshot) {
-        _super.call(this, root);
+    constructor(root, snapshot) {
+        super(root);
         this.snapshot = snapshot;
         setRouterStateSnapshot(this, root);
     }
     /**
      * @return {?}
      */
-    RouterState.prototype.toString = function () { return this.snapshot.toString(); };
-    return RouterState;
-}(Tree));
+    toString() { return this.snapshot.toString(); }
+}
 function RouterState_tsickle_Closure_declarations() {
     /**
      * The current snapshot of the router state
@@ -73,13 +66,13 @@ function RouterState_tsickle_Closure_declarations() {
  * @return {?}
  */
 export function createEmptyState(urlTree, rootComponent) {
-    var /** @type {?} */ snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    var /** @type {?} */ emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
-    var /** @type {?} */ emptyParams = new BehaviorSubject({});
-    var /** @type {?} */ emptyData = new BehaviorSubject({});
-    var /** @type {?} */ emptyQueryParams = new BehaviorSubject({});
-    var /** @type {?} */ fragment = new BehaviorSubject('');
-    var /** @type {?} */ activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
+    const /** @type {?} */ snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+    const /** @type {?} */ emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
+    const /** @type {?} */ emptyParams = new BehaviorSubject({});
+    const /** @type {?} */ emptyData = new BehaviorSubject({});
+    const /** @type {?} */ emptyQueryParams = new BehaviorSubject({});
+    const /** @type {?} */ fragment = new BehaviorSubject('');
+    const /** @type {?} */ activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
     activated.snapshot = snapshot.root;
     return new RouterState(new TreeNode(activated, []), snapshot);
 }
@@ -89,11 +82,11 @@ export function createEmptyState(urlTree, rootComponent) {
  * @return {?}
  */
 export function createEmptyStateSnapshot(urlTree, rootComponent) {
-    var /** @type {?} */ emptyParams = {};
-    var /** @type {?} */ emptyData = {};
-    var /** @type {?} */ emptyQueryParams = {};
-    var /** @type {?} */ fragment = '';
-    var /** @type {?} */ activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, {});
+    const /** @type {?} */ emptyParams = {};
+    const /** @type {?} */ emptyData = {};
+    const /** @type {?} */ emptyQueryParams = {};
+    const /** @type {?} */ fragment = '';
+    const /** @type {?} */ activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, {});
     return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 /**
@@ -117,7 +110,7 @@ export function createEmptyStateSnapshot(urlTree, rootComponent) {
  *
  * \@stable
  */
-export var ActivatedRoute = (function () {
+export class ActivatedRoute {
     /**
      * \@internal
      * @param {?} url
@@ -129,7 +122,7 @@ export var ActivatedRoute = (function () {
      * @param {?} component
      * @param {?} futureSnapshot
      */
-    function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
+    constructor(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
         this.url = url;
         this.params = params;
         this.queryParams = queryParams;
@@ -139,68 +132,43 @@ export var ActivatedRoute = (function () {
         this.component = component;
         this._futureSnapshot = futureSnapshot;
     }
-    Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
-        /**
-         * The configuration used to match this route
-         * @return {?}
-         */
-        get: function () { return this._futureSnapshot.routeConfig; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "root", {
-        /**
-         * The root of the router state
-         * @return {?}
-         */
-        get: function () { return this._routerState.root; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "parent", {
-        /**
-         * The parent of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.parent(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
-        /**
-         * The first child of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.firstChild(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "children", {
-        /**
-         * The children of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.children(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
-        /**
-         * The path from the root of the router state tree to this route
-         * @return {?}
-         */
-        get: function () { return this._routerState.pathFromRoot(this); },
-        enumerable: true,
-        configurable: true
-    });
+    /**
+     * The configuration used to match this route
+     * @return {?}
+     */
+    get routeConfig() { return this._futureSnapshot.routeConfig; }
+    /**
+     * The root of the router state
+     * @return {?}
+     */
+    get root() { return this._routerState.root; }
+    /**
+     * The parent of this route in the router state tree
+     * @return {?}
+     */
+    get parent() { return this._routerState.parent(this); }
+    /**
+     * The first child of this route in the router state tree
+     * @return {?}
+     */
+    get firstChild() { return this._routerState.firstChild(this); }
+    /**
+     * The children of this route in the router state tree
+     * @return {?}
+     */
+    get children() { return this._routerState.children(this); }
+    /**
+     * The path from the root of the router state tree to this route
+     * @return {?}
+     */
+    get pathFromRoot() { return this._routerState.pathFromRoot(this); }
     /**
      * @return {?}
      */
-    ActivatedRoute.prototype.toString = function () {
-        return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
-    };
-    return ActivatedRoute;
-}());
+    toString() {
+        return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
+    }
+}
 function ActivatedRoute_tsickle_Closure_declarations() {
     /**
      * The current snapshot of this route
@@ -256,27 +224,27 @@ function ActivatedRoute_tsickle_Closure_declarations() {
  * @return {?}
  */
 export function inheritedParamsDataResolve(route) {
-    var /** @type {?} */ pathToRoot = route.pathFromRoot;
-    var /** @type {?} */ inhertingStartingFrom = pathToRoot.length - 1;
+    const /** @type {?} */ pathToRoot = route.pathFromRoot;
+    let /** @type {?} */ inhertingStartingFrom = pathToRoot.length - 1;
     while (inhertingStartingFrom >= 1) {
-        var /** @type {?} */ current = pathToRoot[inhertingStartingFrom];
-        var /** @type {?} */ parent_1 = pathToRoot[inhertingStartingFrom - 1];
+        const /** @type {?} */ current = pathToRoot[inhertingStartingFrom];
+        const /** @type {?} */ parent = pathToRoot[inhertingStartingFrom - 1];
         // current route is an empty path => inherits its parent's params and data
         if (current.routeConfig && current.routeConfig.path === '') {
             inhertingStartingFrom--;
         }
-        else if (!parent_1.component) {
+        else if (!parent.component) {
             inhertingStartingFrom--;
         }
         else {
             break;
         }
     }
-    return pathToRoot.slice(inhertingStartingFrom).reduce(function (res, curr) {
-        var /** @type {?} */ params = merge(res.params, curr.params);
-        var /** @type {?} */ data = merge(res.data, curr.data);
-        var /** @type {?} */ resolve = merge(res.resolve, curr._resolvedData);
-        return { params: params, data: data, resolve: resolve };
+    return pathToRoot.slice(inhertingStartingFrom).reduce((res, curr) => {
+        const /** @type {?} */ params = merge(res.params, curr.params);
+        const /** @type {?} */ data = merge(res.data, curr.data);
+        const /** @type {?} */ resolve = merge(res.resolve, curr._resolvedData);
+        return { params, data, resolve };
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
 /**
@@ -300,7 +268,7 @@ export function inheritedParamsDataResolve(route) {
  *
  * \@stable
  */
-export var ActivatedRouteSnapshot = (function () {
+export class ActivatedRouteSnapshot {
     /**
      * \@internal
      * @param {?} url
@@ -315,7 +283,7 @@ export var ActivatedRouteSnapshot = (function () {
      * @param {?} lastPathIndex
      * @param {?} resolve
      */
-    function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
+    constructor(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
         this.url = url;
         this.params = params;
         this.queryParams = queryParams;
@@ -328,70 +296,45 @@ export var ActivatedRouteSnapshot = (function () {
         this._lastPathIndex = lastPathIndex;
         this._resolve = resolve;
     }
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
-        /**
-         * The configuration used to match this route
-         * @return {?}
-         */
-        get: function () { return this._routeConfig; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
-        /**
-         * The root of the router state
-         * @return {?}
-         */
-        get: function () { return this._routerState.root; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
-        /**
-         * The parent of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.parent(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
-        /**
-         * The first child of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.firstChild(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
-        /**
-         * The children of this route in the router state tree
-         * @return {?}
-         */
-        get: function () { return this._routerState.children(this); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
-        /**
-         * The path from the root of the router state tree to this route
-         * @return {?}
-         */
-        get: function () { return this._routerState.pathFromRoot(this); },
-        enumerable: true,
-        configurable: true
-    });
+    /**
+     * The configuration used to match this route
+     * @return {?}
+     */
+    get routeConfig() { return this._routeConfig; }
+    /**
+     * The root of the router state
+     * @return {?}
+     */
+    get root() { return this._routerState.root; }
+    /**
+     * The parent of this route in the router state tree
+     * @return {?}
+     */
+    get parent() { return this._routerState.parent(this); }
+    /**
+     * The first child of this route in the router state tree
+     * @return {?}
+     */
+    get firstChild() { return this._routerState.firstChild(this); }
+    /**
+     * The children of this route in the router state tree
+     * @return {?}
+     */
+    get children() { return this._routerState.children(this); }
+    /**
+     * The path from the root of the router state tree to this route
+     * @return {?}
+     */
+    get pathFromRoot() { return this._routerState.pathFromRoot(this); }
     /**
      * @return {?}
      */
-    ActivatedRouteSnapshot.prototype.toString = function () {
-        var /** @type {?} */ url = this.url.map(function (segment) { return segment.toString(); }).join('/');
-        var /** @type {?} */ matched = this._routeConfig ? this._routeConfig.path : '';
-        return "Route(url:'" + url + "', path:'" + matched + "')";
-    };
-    return ActivatedRouteSnapshot;
-}());
+    toString() {
+        const /** @type {?} */ url = this.url.map(segment => segment.toString()).join('/');
+        const /** @type {?} */ matched = this._routeConfig ? this._routeConfig.path : '';
+        return `Route(url:'${url}', path:'${matched}')`;
+    }
+}
 function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
     /**
      * \@internal *
@@ -484,24 +427,22 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var RouterStateSnapshot = (function (_super) {
-    __extends(RouterStateSnapshot, _super);
+export class RouterStateSnapshot extends Tree {
     /**
      * \@internal
      * @param {?} url
      * @param {?} root
      */
-    function RouterStateSnapshot(url, root) {
-        _super.call(this, root);
+    constructor(url, root) {
+        super(root);
         this.url = url;
         setRouterStateSnapshot(this, root);
     }
     /**
      * @return {?}
      */
-    RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
-    return RouterStateSnapshot;
-}(Tree));
+    toString() { return serializeNode(this._root); }
+}
 function RouterStateSnapshot_tsickle_Closure_declarations() {
     /**
      * The url from which this snapshot was created
@@ -516,15 +457,15 @@ function RouterStateSnapshot_tsickle_Closure_declarations() {
  */
 function setRouterStateSnapshot(state, node) {
     node.value._routerState = state;
-    node.children.forEach(function (c) { return setRouterStateSnapshot(state, c); });
+    node.children.forEach(c => setRouterStateSnapshot(state, c));
 }
 /**
  * @param {?} node
  * @return {?}
  */
 function serializeNode(node) {
-    var /** @type {?} */ c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
-    return "" + node.value + c;
+    const /** @type {?} */ c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(", ")} } ` : '';
+    return `${node.value}${c}`;
 }
 /**
  * The expectation is that the activate route is created with the right set of parameters.
@@ -535,7 +476,7 @@ function serializeNode(node) {
  */
 export function advanceActivatedRoute(route) {
     if (route.snapshot) {
-        var /** @type {?} */ currentSnapshot = route.snapshot;
+        const /** @type {?} */ currentSnapshot = route.snapshot;
         route.snapshot = route._futureSnapshot;
         if (!shallowEqual(currentSnapshot.queryParams, route._futureSnapshot.queryParams)) {
             ((route.queryParams)).next(route._futureSnapshot.queryParams);
@@ -565,8 +506,8 @@ export function advanceActivatedRoute(route) {
  * @return {?}
  */
 export function equalParamsAndUrlSegments(a, b) {
-    var /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
-    var /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
+    const /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+    const /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
     return equalUrlParams && !parentsMismatch &&
         (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
 }

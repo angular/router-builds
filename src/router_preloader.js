@@ -5,7 +5,7 @@
 *Use of this source code is governed by an MIT-style license that can be
 *found in the LICENSE file at https://angular.io/license
 */
-import { Compiler, Injectable, Injector, NgModuleFactoryLoader } from '@angular/core';
+import { Compiler, Injectable, Injector, NgModuleFactoryLoader } from '@angular/core/index';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
 import { _catch } from 'rxjs/operator/catch';
@@ -21,18 +21,15 @@ import { RouterConfigLoader } from './router_config_loader';
  * \@experimental
  * @abstract
  */
-export var PreloadingStrategy = (function () {
-    function PreloadingStrategy() {
-    }
+export class PreloadingStrategy {
     /**
      * @abstract
      * @param {?} route
      * @param {?} fn
      * @return {?}
      */
-    PreloadingStrategy.prototype.preload = function (route, fn) { };
-    return PreloadingStrategy;
-}());
+    preload(route, fn) { }
+}
 /**
  * \@whatItDoes Provides a preloading strategy that preloads all modules as quicky as possible.
  *
@@ -44,19 +41,16 @@ export var PreloadingStrategy = (function () {
  *
  * \@experimental
  */
-export var PreloadAllModules = (function () {
-    function PreloadAllModules() {
-    }
+export class PreloadAllModules {
     /**
      * @param {?} route
      * @param {?} fn
      * @return {?}
      */
-    PreloadAllModules.prototype.preload = function (route, fn) {
-        return _catch.call(fn(), function () { return of(null); });
-    };
-    return PreloadAllModules;
-}());
+    preload(route, fn) {
+        return _catch.call(fn(), () => of(null));
+    }
+}
 /**
  * \@whatItDoes Provides a preloading strategy that does not preload any modules.
  *
@@ -66,17 +60,14 @@ export var PreloadAllModules = (function () {
  *
  * \@experimental
  */
-export var NoPreloading = (function () {
-    function NoPreloading() {
-    }
+export class NoPreloading {
     /**
      * @param {?} route
      * @param {?} fn
      * @return {?}
      */
-    NoPreloading.prototype.preload = function (route, fn) { return of(null); };
-    return NoPreloading;
-}());
+    preload(route, fn) { return of(null); }
+}
 /**
  * The preloader optimistically loads all router configurations to
  * make navigations into lazily-loaded sections of the application faster.
@@ -89,7 +80,7 @@ export var NoPreloading = (function () {
  *
  * \@stable
  */
-export var RouterPreloader = (function () {
+export class RouterPreloader {
     /**
      * @param {?} router
      * @param {?} moduleLoader
@@ -97,7 +88,7 @@ export var RouterPreloader = (function () {
      * @param {?} injector
      * @param {?} preloadingStrategy
      */
-    function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
+    constructor(router, moduleLoader, compiler, injector, preloadingStrategy) {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
@@ -107,31 +98,29 @@ export var RouterPreloader = (function () {
     /**
      * @return {?}
      */
-    RouterPreloader.prototype.setUpPreloading = function () {
-        var _this = this;
-        var /** @type {?} */ navigations = filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
-        this.subscription = concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function (v) { });
-    };
+    setUpPreloading() {
+        const /** @type {?} */ navigations = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
+        this.subscription = concatMap.call(navigations, () => this.preload()).subscribe((v) => { });
+    }
     /**
      * @return {?}
      */
-    RouterPreloader.prototype.preload = function () { return this.processRoutes(this.injector, this.router.config); };
+    preload() { return this.processRoutes(this.injector, this.router.config); }
     /**
      * @return {?}
      */
-    RouterPreloader.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+    ngOnDestroy() { this.subscription.unsubscribe(); }
     /**
      * @param {?} injector
      * @param {?} routes
      * @return {?}
      */
-    RouterPreloader.prototype.processRoutes = function (injector, routes) {
-        var /** @type {?} */ res = [];
-        for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
-            var c = routes_1[_i];
+    processRoutes(injector, routes) {
+        const /** @type {?} */ res = [];
+        for (const c of routes) {
             // we already have the config loaded, just recurce
             if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
-                var /** @type {?} */ childConfig = ((c))._loadedConfig;
+                const /** @type {?} */ childConfig = ((c))._loadedConfig;
                 res.push(this.processRoutes(childConfig.injector, childConfig.routes));
             }
             else if (c.loadChildren && !c.canLoad) {
@@ -142,36 +131,34 @@ export var RouterPreloader = (function () {
             }
         }
         return mergeAll.call(from(res));
-    };
+    }
     /**
      * @param {?} injector
      * @param {?} route
      * @return {?}
      */
-    RouterPreloader.prototype.preloadConfig = function (injector, route) {
-        var _this = this;
-        return this.preloadingStrategy.preload(route, function () {
-            var /** @type {?} */ loaded = _this.loader.load(injector, route.loadChildren);
-            return mergeMap.call(loaded, function (config) {
-                var /** @type {?} */ c = route;
+    preloadConfig(injector, route) {
+        return this.preloadingStrategy.preload(route, () => {
+            const /** @type {?} */ loaded = this.loader.load(injector, route.loadChildren);
+            return mergeMap.call(loaded, (config) => {
+                const /** @type {?} */ c = route;
                 c._loadedConfig = config;
-                return _this.processRoutes(config.injector, config.routes);
+                return this.processRoutes(config.injector, config.routes);
             });
         });
-    };
-    RouterPreloader.decorators = [
-        { type: Injectable },
-    ];
-    /** @nocollapse */
-    RouterPreloader.ctorParameters = function () { return [
-        { type: Router, },
-        { type: NgModuleFactoryLoader, },
-        { type: Compiler, },
-        { type: Injector, },
-        { type: PreloadingStrategy, },
-    ]; };
-    return RouterPreloader;
-}());
+    }
+}
+RouterPreloader.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+RouterPreloader.ctorParameters = () => [
+    { type: Router, },
+    { type: NgModuleFactoryLoader, },
+    { type: Compiler, },
+    { type: Injector, },
+    { type: PreloadingStrategy, },
+];
 function RouterPreloader_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterPreloader.decorators;

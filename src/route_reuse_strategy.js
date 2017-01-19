@@ -11,16 +11,14 @@
  * \@experimental
  * @abstract
  */
-export var RouteReuseStrategy = (function () {
-    function RouteReuseStrategy() {
-    }
+export class RouteReuseStrategy {
     /**
      * Determines if this route (and its subtree) should be detached to be reused later
      * @abstract
      * @param {?} route
      * @return {?}
      */
-    RouteReuseStrategy.prototype.shouldDetach = function (route) { };
+    shouldDetach(route) { }
     /**
      * Stores the detached route
      * @abstract
@@ -28,21 +26,21 @@ export var RouteReuseStrategy = (function () {
      * @param {?} handle
      * @return {?}
      */
-    RouteReuseStrategy.prototype.store = function (route, handle) { };
+    store(route, handle) { }
     /**
      * Determines if this route (and its subtree) should be reattached
      * @abstract
      * @param {?} route
      * @return {?}
      */
-    RouteReuseStrategy.prototype.shouldAttach = function (route) { };
+    shouldAttach(route) { }
     /**
      * Retrieves the previously stored route
      * @abstract
      * @param {?} route
      * @return {?}
      */
-    RouteReuseStrategy.prototype.retrieve = function (route) { };
+    retrieve(route) { }
     /**
      * Determines if a route should be reused
      * @abstract
@@ -50,7 +48,6 @@ export var RouteReuseStrategy = (function () {
      * @param {?} curr
      * @return {?}
      */
-    RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
-    return RouteReuseStrategy;
-}());
+    shouldReuseRoute(future, curr) { }
+}
 //# sourceMappingURL=route_reuse_strategy.js.map

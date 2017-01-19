@@ -11,9 +11,7 @@
  * \@experimental
  * @abstract
  */
-export var UrlHandlingStrategy = (function () {
-    function UrlHandlingStrategy() {
-    }
+export class UrlHandlingStrategy {
     /**
      * Tells the router if this URL should be processed.
      *
@@ -25,7 +23,7 @@ export var UrlHandlingStrategy = (function () {
      * @param {?} url
      * @return {?}
      */
-    UrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { };
+    shouldProcessUrl(url) { }
     /**
      * Extracts the part of the URL that should be handled by the router.
      * The rest of the URL will remain untouched.
@@ -33,7 +31,7 @@ export var UrlHandlingStrategy = (function () {
      * @param {?} url
      * @return {?}
      */
-    UrlHandlingStrategy.prototype.extract = function (url) { };
+    extract(url) { }
     /**
      * Merges the URL fragment with the rest of the URL.
      * @abstract
@@ -41,31 +39,27 @@ export var UrlHandlingStrategy = (function () {
      * @param {?} rawUrl
      * @return {?}
      */
-    UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
-    return UrlHandlingStrategy;
-}());
+    merge(newUrlPart, rawUrl) { }
+}
 /**
  * \@experimental
  */
-export var DefaultUrlHandlingStrategy = (function () {
-    function DefaultUrlHandlingStrategy() {
-    }
+export class DefaultUrlHandlingStrategy {
     /**
      * @param {?} url
      * @return {?}
      */
-    DefaultUrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { return true; };
+    shouldProcessUrl(url) { return true; }
     /**
      * @param {?} url
      * @return {?}
      */
-    DefaultUrlHandlingStrategy.prototype.extract = function (url) { return url; };
+    extract(url) { return url; }
     /**
      * @param {?} newUrlPart
      * @param {?} wholeUrl
      * @return {?}
      */
-    DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
-    return DefaultUrlHandlingStrategy;
-}());
+    merge(newUrlPart, wholeUrl) { return newUrlPart; }
+}
 //# sourceMappingURL=url_handling_strategy.js.map

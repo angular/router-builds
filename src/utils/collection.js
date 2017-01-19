@@ -22,7 +22,7 @@ import { PRIMARY_OUTLET } from '../shared';
 export function shallowEqualArrays(a, b) {
     if (a.length !== b.length)
         return false;
-    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
         if (!shallowEqual(a[i], b[i]))
             return false;
     }
@@ -34,13 +34,13 @@ export function shallowEqualArrays(a, b) {
  * @return {?}
  */
 export function shallowEqual(a, b) {
-    var /** @type {?} */ k1 = Object.keys(a);
-    var /** @type {?} */ k2 = Object.keys(b);
+    const /** @type {?} */ k1 = Object.keys(a);
+    const /** @type {?} */ k2 = Object.keys(b);
     if (k1.length != k2.length) {
         return false;
     }
-    var /** @type {?} */ key;
-    for (var /** @type {?} */ i = 0; i < k1.length; i++) {
+    let /** @type {?} */ key;
+    for (let /** @type {?} */ i = 0; i < k1.length; i++) {
         key = k1[i];
         if (a[key] !== b[key]) {
             return false;
@@ -53,9 +53,9 @@ export function shallowEqual(a, b) {
  * @return {?}
  */
 export function flatten(a) {
-    var /** @type {?} */ target = [];
-    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
-        for (var /** @type {?} */ j = 0; j < a[i].length; ++j) {
+    const /** @type {?} */ target = [];
+    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
+        for (let /** @type {?} */ j = 0; j < a[i].length; ++j) {
             target.push(a[i][j]);
         }
     }
@@ -80,7 +80,7 @@ export function last(a) {
  * @return {?}
  */
 export function and(bools) {
-    return !bools.some(function (v) { return !v; });
+    return !bools.some(v => !v);
 }
 /**
  * @param {?} m1
@@ -88,13 +88,13 @@ export function and(bools) {
  * @return {?}
  */
 export function merge(m1, m2) {
-    var /** @type {?} */ m = {};
-    for (var attr in m1) {
+    const /** @type {?} */ m = {};
+    for (const attr in m1) {
         if (m1.hasOwnProperty(attr)) {
             m[attr] = m1[attr];
         }
     }
-    for (var attr in m2) {
+    for (const attr in m2) {
         if (m2.hasOwnProperty(attr)) {
             m[attr] = m2[attr];
         }
@@ -107,7 +107,7 @@ export function merge(m1, m2) {
  * @return {?}
  */
 export function forEach(map, callback) {
-    for (var prop in map) {
+    for (const prop in map) {
         if (map.hasOwnProperty(prop)) {
             callback(map[prop], prop);
         }
@@ -119,28 +119,28 @@ export function forEach(map, callback) {
  * @return {?}
  */
 export function waitForMap(obj, fn) {
-    var /** @type {?} */ waitFor = [];
-    var /** @type {?} */ res = {};
-    forEach(obj, function (a, k) {
+    const /** @type {?} */ waitFor = [];
+    const /** @type {?} */ res = {};
+    forEach(obj, (a, k) => {
         if (k === PRIMARY_OUTLET) {
-            waitFor.push(map.call(fn(k, a), function (_) {
+            waitFor.push(map.call(fn(k, a), (_) => {
                 res[k] = _;
                 return _;
             }));
         }
     });
-    forEach(obj, function (a, k) {
+    forEach(obj, (a, k) => {
         if (k !== PRIMARY_OUTLET) {
-            waitFor.push(map.call(fn(k, a), function (_) {
+            waitFor.push(map.call(fn(k, a), (_) => {
                 res[k] = _;
                 return _;
             }));
         }
     });
     if (waitFor.length > 0) {
-        var /** @type {?} */ concatted$ = concatAll.call(of.apply(void 0, waitFor));
-        var /** @type {?} */ last$ = l.last.call(concatted$);
-        return map.call(last$, function () { return res; });
+        const /** @type {?} */ concatted$ = concatAll.call(of(...waitFor));
+        const /** @type {?} */ last$ = l.last.call(concatted$);
+        return map.call(last$, () => res);
     }
     return of(res);
 }
@@ -149,8 +149,8 @@ export function waitForMap(obj, fn) {
  * @return {?}
  */
 export function andObservables(observables) {
-    var /** @type {?} */ merged$ = mergeAll.call(observables);
-    return every.call(merged$, function (result) { return result === true; });
+    const /** @type {?} */ merged$ = mergeAll.call(observables);
+    return every.call(merged$, (result) => result === true);
 }
 /**
  * @param {?} value

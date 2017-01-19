@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Version } from '@angular/core';
+import { Version } from '@angular/core/index';
 /**
  * @stable
  */
-export var /** @type {?} */ VERSION = new Version('4.0.0-beta.4-b049217');
+export const /** @type {?} */ VERSION = new Version('0.0.0-ROUTERPLACEHOLDER');
 //# sourceMappingURL=version.js.map
