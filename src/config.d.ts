@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Type } from '@angular/core';
+import { NgModuleFactory, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
@@ -304,7 +304,7 @@ export declare type ResolveData = {
  * See {@link Routes} for more details.
  * @stable
  */
-export declare type LoadChildrenCallback = () => Type<any> | Promise<Type<any>> | Observable<Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<Type<any>> | Observable<Type<any>>;
 /**
  * @whatItDoes The type of `loadChildren`.
  * See {@link Routes} for more details.
