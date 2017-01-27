@@ -311,7 +311,7 @@ export class Router {
          */
         this.navigated = false;
         /**
-         * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+         * Extracts and merges URLs. Used for AngularJS to Angular migrations.
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
@@ -801,7 +801,7 @@ function Router_tsickle_Closure_declarations() {
      */
     Router.prototype.navigated;
     /**
-     * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+     * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      * @type {?}
      */
     Router.prototype.urlHandlingStrategy;

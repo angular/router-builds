@@ -9,7 +9,7 @@
 }(this, function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
     /**
-     * @whatItDoes Creates an initializer that in addition to setting up the Angular 2
+     * @whatItDoes Creates an initializer that in addition to setting up the Angular
      * router sets up the ngRoute integration.
      *
      * @howToUse

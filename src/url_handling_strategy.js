@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a way to migrate Angular 1 applications to Angular 2.
+ * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
  *
  * \@experimental
  * @abstract

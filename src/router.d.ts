@@ -286,7 +286,7 @@ export declare class Router {
      */
     navigated: boolean;
     /**
-     * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+     * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      */
     urlHandlingStrategy: UrlHandlingStrategy;
     routeReuseStrategy: RouteReuseStrategy;

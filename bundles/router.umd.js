@@ -3108,7 +3108,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
-     * \@whatItDoes Provides a way to migrate Angular 1 applications to Angular 2.
+     * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
      *
      * \@experimental
      * @abstract
@@ -3377,7 +3377,7 @@
              */
             this.navigated = false;
             /**
-             * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+             * Extracts and merges URLs. Used for AngularJS to Angular migrations.
              */
             this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
             this.routeReuseStrategy = new DefaultRouteReuseStrategy();
@@ -5351,7 +5351,7 @@
      * In addition, we often want to split applications into multiple bundles and load them on demand.
      * Doing this transparently is not trivial.
      *
-     * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+     * The Angular router solves these problems. Using the router, you can declaratively specify
      * application states, manage state transitions while taking care of the URL, and load bundles on
      * demand.
      *
