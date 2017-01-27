@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "4.0.0-beta.5-e130bc1",
+  "version": "4.0.0-beta.5-4d5a4d8",
   "description": "Angular - the routing library",
   "main": "bundles/router.umd.js",
   "module": "index.js",
@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/angular/angular/blob/master/modules/%40angular/router/README.md",
   "peerDependencies": {
-    "@angular/core": "4.0.0-beta.5-e130bc1",
-    "@angular/common": "4.0.0-beta.5-e130bc1",
-    "@angular/platform-browser": "4.0.0-beta.5-e130bc1",
+    "@angular/core": "4.0.0-beta.5-4d5a4d8",
+    "@angular/common": "4.0.0-beta.5-4d5a4d8",
+    "@angular/platform-browser": "4.0.0-beta.5-4d5a4d8",
     "rxjs": "^5.0.1"
   }
 }
