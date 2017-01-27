@@ -28,7 +28,6 @@ import { ActivatedRoute } from '../router_state';
  *   (activate)='onActivate($event)'
  *   (deactivate)='onDeactivate($event)'></router-outlet>
  * ```
- * @selector 'a[routerLink]'
  * @ngModule RouterModule
  *
  * @stable
