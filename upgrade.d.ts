@@ -9,7 +9,7 @@ import { ApplicationRef, ComponentRef, InjectionToken } from '@angular/core';
 import { ExtraOptions, RouterPreloader } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
- * @whatItDoes Creates an initializer that in addition to setting up the Angular 2
+ * @whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
  *
  * @howToUse

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.5-d339d8b
+ * @license Angular v4.0.0-beta.5-da41a95
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -9,7 +9,7 @@
 }(this, function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
     /**
-     * @whatItDoes Creates an initializer that in addition to setting up the Angular 2
+     * @whatItDoes Creates an initializer that in addition to setting up the Angular
      * router sets up the ngRoute integration.
      *
      * @howToUse

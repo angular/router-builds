@@ -9,7 +9,7 @@ import { ApplicationRef } from '@angular/core';
 import { ROUTER_CONFIGURATION, ROUTER_INITIALIZER, Router, RouterPreloader } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
- * @whatItDoes Creates an initializer that in addition to setting up the Angular 2
+ * @whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
  *
  * @howToUse
