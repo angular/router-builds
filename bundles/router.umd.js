@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.5-1e729d7
+ * @license Angular v4.0.0-beta.5-b141a22
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4499,7 +4499,6 @@
      * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
      * `/user/(jim//aux:team)`.
      *
-     * \@selector ':not(a)[routerLink]'
      * \@ngModule RouterModule
      *
      * See {\@link Router.createUrlTree} for more information.
@@ -4593,7 +4592,6 @@
      *
      * See {\@link RouterLink} for more information.
      *
-     * \@selector 'a[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -4772,7 +4770,6 @@
      * This will set the active-link class on the div tag if the url is either '/user/jim' or
      * '/user/bob'.
      *
-     * \@selector ':not(a)[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -4911,7 +4908,6 @@
      *   (activate)='onActivate($event)'
      *   (deactivate)='onDeactivate($event)'></router-outlet>
      * ```
-     * \@selector 'a[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -5563,7 +5559,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-1e729d7');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-b141a22');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
