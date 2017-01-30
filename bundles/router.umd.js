@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.5-bc1320d
+ * @license Angular v4.0.0-beta.5-104c157
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3406,7 +3406,9 @@
          */
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
-            this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+            if (this.navigationId === 0) {
+                this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+            }
         };
         /**
          * Sets up the location change listener.
@@ -3820,8 +3822,8 @@
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
-                    _this.navigated = true;
                     if (navigationIsSuccessful) {
+                        _this.navigated = true;
                         _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.currentUrlTree)));
                         resolvePromise(true);
                     }
@@ -4076,7 +4078,7 @@
                 .filter(function (_) { return _ !== null; });
             return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function (d) {
                 var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function (c) {
-                    var /** @type {?} */ guard = _this.getToken(c, c.node);
+                    var /** @type {?} */ guard = _this.getToken(c, d.node);
                     var /** @type {?} */ observable;
                     if (guard.canActivateChild) {
                         observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -5559,7 +5561,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-bc1320d');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-104c157');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
