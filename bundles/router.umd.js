@@ -8,6 +8,9 @@
     (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.ng.platformBrowser,global.Rx.Observable.prototype));
 }(this, function (exports,_angular_common,_angular_core,rxjs_BehaviorSubject,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_first,rxjs_operator_map,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_operator_mergeAll,_angular_platformBrowser,rxjs_operator_filter) { 'use strict';
 
+    var /** @type {?} */ isPromise = _angular_core.__core_private__.isPromise;
+    var /** @type {?} */ isObservable = _angular_core.__core_private__.isObservable;
+
     /**
      * @license
      * Copyright Google Inc. All Rights Reserved.
@@ -206,10 +209,10 @@
      * @return {?}
      */
     function wrapIntoObservable(value) {
-        if (value instanceof rxjs_Observable.Observable) {
+        if (isObservable(value)) {
             return value;
         }
-        if (value instanceof Promise) {
+        if (isPromise(value)) {
             return rxjs_observable_fromPromise.fromPromise(value);
         }
         return rxjs_observable_of.of(value);
@@ -3533,10 +3536,28 @@
          * @return {?}
          */
         Router.prototype.createUrlTree = function (commands, _a) {
-            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, preserveFragment = _b.preserveFragment;
+            var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, queryParamsHandling = _b.queryParamsHandling, preserveFragment = _b.preserveFragment;
+            if (_angular_core.isDevMode() && preserveQueryParams && (console) && (console.warn)) {
+                console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
+            }
             var /** @type {?} */ a = relativeTo || this.routerState.root;
-            var /** @type {?} */ q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
             var /** @type {?} */ f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+            var /** @type {?} */ q = null;
+            if (queryParamsHandling) {
+                switch (queryParamsHandling) {
+                    case 'merge':
+                        q = merge(this.currentUrlTree.queryParams, queryParams);
+                        break;
+                    case 'preserve':
+                        q = this.currentUrlTree.queryParams;
+                        break;
+                    default:
+                        q = queryParams;
+                }
+            }
+            else {
+                q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+            }
             return createUrlTree(a, this.currentUrlTree, commands, q, f);
         };
         /**
@@ -4488,8 +4509,22 @@
      *
      * You can also tell the directive to preserve the current query params and fragment:
      *
+     * deprecated, use `queryParamsHandling` instead
+     *
      * ```
      * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+     *   link to user component
+     * </a>
+     * ```
+     *
+     * You can tell the directive to how to handle queryParams, available options are:
+     *  - 'merge' merge the queryParams into the current queryParams
+     *  - 'preserve' prserve the current queryParams
+     *  - default / '' use the queryParams only
+     *  same options for {\@link NavigationExtras.queryParamsHandling}
+     *
+     * ```
+     * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
      *   link to user component
      * </a>
      * ```
@@ -4539,6 +4574,20 @@
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(RouterLink.prototype, "preserveQueryParams", {
+            /**
+             * @param {?} value
+             * @return {?}
+             */
+            set: function (value) {
+                if (_angular_core.isDevMode() && (console) && (console.warn)) {
+                    console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
+                }
+                this.preserve = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @return {?}
          */
@@ -4559,7 +4608,8 @@
                     relativeTo: this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
-                    preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                    preserveQueryParams: attrBoolValue(this.preserve),
+                    queryParamsHandling: this.queryParamsHandling,
                     preserveFragment: attrBoolValue(this.preserveFragment),
                 });
             },
@@ -4580,11 +4630,12 @@
         RouterLink.propDecorators = {
             'queryParams': [{ type: _angular_core.Input },],
             'fragment': [{ type: _angular_core.Input },],
-            'preserveQueryParams': [{ type: _angular_core.Input },],
+            'queryParamsHandling': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
             'skipLocationChange': [{ type: _angular_core.Input },],
             'replaceUrl': [{ type: _angular_core.Input },],
             'routerLink': [{ type: _angular_core.Input },],
+            'preserveQueryParams': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
         };
         return RouterLink;
@@ -4628,6 +4679,20 @@
                 else {
                     this.commands = [];
                 }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RouterLinkWithHref.prototype, "preserveQueryParams", {
+            /**
+             * @param {?} value
+             * @return {?}
+             */
+            set: function (value) {
+                if (_angular_core.isDevMode() && (console) && (console.warn)) {
+                    console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
+                }
+                this.preserve = value;
             },
             enumerable: true,
             configurable: true
@@ -4676,7 +4741,8 @@
                     relativeTo: this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
-                    preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+                    preserveQueryParams: attrBoolValue(this.preserve),
+                    queryParamsHandling: this.queryParamsHandling,
                     preserveFragment: attrBoolValue(this.preserveFragment),
                 });
             },
@@ -4696,12 +4762,13 @@
             'target': [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
             'queryParams': [{ type: _angular_core.Input },],
             'fragment': [{ type: _angular_core.Input },],
-            'preserveQueryParams': [{ type: _angular_core.Input },],
+            'queryParamsHandling': [{ type: _angular_core.Input },],
             'preserveFragment': [{ type: _angular_core.Input },],
             'skipLocationChange': [{ type: _angular_core.Input },],
             'replaceUrl': [{ type: _angular_core.Input },],
             'href': [{ type: _angular_core.HostBinding },],
             'routerLink': [{ type: _angular_core.Input },],
+            'preserveQueryParams': [{ type: _angular_core.Input },],
             'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
         };
         return RouterLinkWithHref;

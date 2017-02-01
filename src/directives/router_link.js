@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common/index';
-import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer } from '@angular/core/index';
+import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer, isDevMode } from '@angular/core/index';
 import { NavigationEnd, Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -54,8 +54,22 @@ import { ActivatedRoute } from '../router_state';
  *
  * You can also tell the directive to preserve the current query params and fragment:
  *
+ * deprecated, use `queryParamsHandling` instead
+ *
  * ```
  * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+ *   link to user component
+ * </a>
+ * ```
+ *
+ * You can tell the directive to how to handle queryParams, available options are:
+ *  - 'merge' merge the queryParams into the current queryParams
+ *  - 'preserve' prserve the current queryParams
+ *  - default / '' use the queryParams only
+ *  same options for {\@link NavigationExtras.queryParamsHandling}
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
  *   link to user component
  * </a>
  * ```
@@ -102,6 +116,16 @@ export class RouterLink {
         }
     }
     /**
+     * @param {?} value
+     * @return {?}
+     */
+    set preserveQueryParams(value) {
+        if (isDevMode() && (console) && (console.warn)) {
+            console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
+        }
+        this.preserve = value;
+    }
+    /**
      * @return {?}
      */
     onClick() {
@@ -120,7 +144,8 @@ export class RouterLink {
             relativeTo: this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+            preserveQueryParams: attrBoolValue(this.preserve),
+            queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
     }
@@ -139,11 +164,12 @@ RouterLink.ctorParameters = () => [
 RouterLink.propDecorators = {
     'queryParams': [{ type: Input },],
     'fragment': [{ type: Input },],
-    'preserveQueryParams': [{ type: Input },],
+    'queryParamsHandling': [{ type: Input },],
     'preserveFragment': [{ type: Input },],
     'skipLocationChange': [{ type: Input },],
     'replaceUrl': [{ type: Input },],
     'routerLink': [{ type: Input },],
+    'preserveQueryParams': [{ type: Input },],
     'onClick': [{ type: HostListener, args: ['click',] },],
 };
 function RouterLink_tsickle_Closure_declarations() {
@@ -161,7 +187,7 @@ function RouterLink_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLink.prototype.fragment;
     /** @type {?} */
-    RouterLink.prototype.preserveQueryParams;
+    RouterLink.prototype.queryParamsHandling;
     /** @type {?} */
     RouterLink.prototype.preserveFragment;
     /** @type {?} */
@@ -170,6 +196,8 @@ function RouterLink_tsickle_Closure_declarations() {
     RouterLink.prototype.replaceUrl;
     /** @type {?} */
     RouterLink.prototype.commands;
+    /** @type {?} */
+    RouterLink.prototype.preserve;
     /** @type {?} */
     RouterLink.prototype.router;
     /** @type {?} */
@@ -214,6 +242,16 @@ export class RouterLinkWithHref {
         }
     }
     /**
+     * @param {?} value
+     * @return {?}
+     */
+    set preserveQueryParams(value) {
+        if (isDevMode() && (console) && (console.warn)) {
+            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
+        }
+        this.preserve = value;
+    }
+    /**
      * @param {?} changes
      * @return {?}
      */
@@ -256,7 +294,8 @@ export class RouterLinkWithHref {
             relativeTo: this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+            preserveQueryParams: attrBoolValue(this.preserve),
+            queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
     }
@@ -274,12 +313,13 @@ RouterLinkWithHref.propDecorators = {
     'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
     'queryParams': [{ type: Input },],
     'fragment': [{ type: Input },],
-    'preserveQueryParams': [{ type: Input },],
+    'queryParamsHandling': [{ type: Input },],
     'preserveFragment': [{ type: Input },],
     'skipLocationChange': [{ type: Input },],
     'replaceUrl': [{ type: Input },],
     'href': [{ type: HostBinding },],
     'routerLink': [{ type: Input },],
+    'preserveQueryParams': [{ type: Input },],
     'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
 };
 function RouterLinkWithHref_tsickle_Closure_declarations() {
@@ -299,7 +339,7 @@ function RouterLinkWithHref_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkWithHref.prototype.fragment;
     /** @type {?} */
-    RouterLinkWithHref.prototype.preserveQueryParams;
+    RouterLinkWithHref.prototype.queryParamsHandling;
     /** @type {?} */
     RouterLinkWithHref.prototype.preserveFragment;
     /** @type {?} */
@@ -310,6 +350,8 @@ function RouterLinkWithHref_tsickle_Closure_declarations() {
     RouterLinkWithHref.prototype.commands;
     /** @type {?} */
     RouterLinkWithHref.prototype.subscription;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.preserve;
     /** @type {?} */
     RouterLinkWithHref.prototype.href;
     /** @type {?} */

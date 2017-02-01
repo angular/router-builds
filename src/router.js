@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ReflectiveInjector } from '@angular/core/index';
+import { ComponentFactoryResolver, ReflectiveInjector, isDevMode } from '@angular/core/index';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -453,10 +453,28 @@ export class Router {
      * @param {?=} __1
      * @return {?}
      */
-    createUrlTree(commands, { relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment } = {}) {
+    createUrlTree(commands, { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = {}) {
+        if (isDevMode() && preserveQueryParams && (console) && (console.warn)) {
+            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
+        }
         const /** @type {?} */ a = relativeTo || this.routerState.root;
-        const /** @type {?} */ q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
         const /** @type {?} */ f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+        let /** @type {?} */ q = null;
+        if (queryParamsHandling) {
+            switch (queryParamsHandling) {
+                case 'merge':
+                    q = merge(this.currentUrlTree.queryParams, queryParams);
+                    break;
+                case 'preserve':
+                    q = this.currentUrlTree.queryParams;
+                    break;
+                default:
+                    q = queryParams;
+            }
+        }
+        else {
+            q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+        }
         return createUrlTree(a, this.currentUrlTree, commands, q, f);
     }
     /**
