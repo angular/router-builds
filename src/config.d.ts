@@ -312,6 +312,12 @@ export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any
  */
 export declare type LoadChildren = string | LoadChildrenCallback;
 /**
+ * @whatItDoes The type of `queryParamsHandling`.
+ * See {@link RouterLink} for more details.
+ * @stable
+ */
+export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
+/**
  * See {@link Routes} for more details.
  * @stable
  */

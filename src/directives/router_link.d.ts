@@ -7,6 +7,7 @@
  */
 import { LocationStrategy } from '@angular/common';
 import { ElementRef, OnChanges, OnDestroy, Renderer } from '@angular/core';
+import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 import { UrlTree } from '../url_tree';
@@ -55,8 +56,22 @@ import { UrlTree } from '../url_tree';
  *
  * You can also tell the directive to preserve the current query params and fragment:
  *
+ * deprecated, use `queryParamsHandling` instead
+ *
  * ```
  * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+ *   link to user component
+ * </a>
+ * ```
+ *
+ * You can tell the directive to how to handle queryParams, available options are:
+ *  - 'merge' merge the queryParams into the current queryParams
+ *  - 'preserve' prserve the current queryParams
+ *  - default / '' use the queryParams only
+ *  same options for {@link NavigationExtras.queryParamsHandling}
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
  *   link to user component
  * </a>
  * ```
@@ -81,13 +96,15 @@ export declare class RouterLink {
         [k: string]: any;
     };
     fragment: string;
-    preserveQueryParams: boolean;
+    queryParamsHandling: QueryParamsHandling;
     preserveFragment: boolean;
     skipLocationChange: boolean;
     replaceUrl: boolean;
     private commands;
+    private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer, el: ElementRef);
     routerLink: any[] | string;
+    preserveQueryParams: boolean;
     onClick(): boolean;
     urlTree: UrlTree;
 }
@@ -109,15 +126,17 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
         [k: string]: any;
     };
     fragment: string;
-    preserveQueryParams: boolean;
+    queryParamsHandling: QueryParamsHandling;
     preserveFragment: boolean;
     skipLocationChange: boolean;
     replaceUrl: boolean;
     private commands;
     private subscription;
+    private preserve;
     href: string;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     routerLink: any[] | string;
+    preserveQueryParams: boolean;
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;

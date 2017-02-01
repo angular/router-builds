@@ -8,7 +8,7 @@
 import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Routes } from './config';
+import { QueryParamsHandling, Routes } from './config';
 import { DetachedRouteHandle, RouteReuseStrategy } from './route_reuse_strategy';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
@@ -76,12 +76,25 @@ export interface NavigationExtras {
     /**
     * Preserves the query parameters for the next navigation.
     *
+    * deprecated, use `queryParamsHandling` instead
+    *
     * ```
     * // Preserve query params from /results?page=1 to /view?page=1
     * this.router.navigate(['/view'], { preserveQueryParams: true });
     * ```
+    *
+    * @deprecated
     */
     preserveQueryParams?: boolean;
+    /**
+    *  config strategy to handle the query parameters for the next navigation.
+    *
+    * ```
+    * // from /results?page=1 to /view?page=1&page=2
+    * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
+    * ```
+    */
+    queryParamsHandling?: QueryParamsHandling;
     /**
     * Preserves the fragment for the next navigation
     *
@@ -368,7 +381,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, preserveFragment}?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment}?: NavigationExtras): UrlTree;
     /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
