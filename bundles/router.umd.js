@@ -4507,9 +4507,8 @@
      * ```
      * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
      *
-     * You can also tell the directive to preserve the current query params and fragment:
-     *
-     * deprecated, use `queryParamsHandling` instead
+     * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
+     * directive to preserve the current query params and fragment:
      *
      * ```
      * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
@@ -4576,6 +4575,7 @@
         });
         Object.defineProperty(RouterLink.prototype, "preserveQueryParams", {
             /**
+             * @deprecated 4.0.0 use `queryParamsHandling` instead.
              * @param {?} value
              * @return {?}
              */
