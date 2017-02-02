@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.5-bc20e8a
+ * @license Angular v4.0.0-beta.5-69a4bb0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -4507,9 +4507,8 @@
      * ```
      * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
      *
-     * You can also tell the directive to preserve the current query params and fragment:
-     *
-     * deprecated, use `queryParamsHandling` instead
+     * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
+     * directive to preserve the current query params and fragment:
      *
      * ```
      * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
@@ -4576,6 +4575,7 @@
         });
         Object.defineProperty(RouterLink.prototype, "preserveQueryParams", {
             /**
+             * @deprecated 4.0.0 use `queryParamsHandling` instead.
              * @param {?} value
              * @return {?}
              */
@@ -5628,7 +5628,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-bc20e8a');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.5-69a4bb0');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
