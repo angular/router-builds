@@ -1,12 +1,15 @@
 /**
- * @license Angular v3.4.5-7ed39eb
- * (c) 2010-2016 Google, Inc. https://angular.io/
+ * @license Angular v3.4.6-343ee8a
+ * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/concatMap'), require('rxjs/operator/every'), require('rxjs/operator/first'), require('rxjs/operator/map'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/operator/mergeAll'), require('@angular/platform-browser'), require('rxjs/operator/filter')) :
     typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/BehaviorSubject', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/concatMap', 'rxjs/operator/every', 'rxjs/operator/first', 'rxjs/operator/map', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/operator/mergeAll', '@angular/platform-browser', 'rxjs/operator/filter'], factory) :
     (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.ng.platformBrowser,global.Rx.Observable.prototype));
 }(this, function (exports,_angular_common,_angular_core,rxjs_BehaviorSubject,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_first,rxjs_operator_map,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_operator_mergeAll,_angular_platformBrowser,rxjs_operator_filter) { 'use strict';
+
+    var /** @type {?} */ isPromise = _angular_core.__core_private__.isPromise;
+    var /** @type {?} */ isObservable = _angular_core.__core_private__.isObservable;
 
     /**
      * @license
@@ -206,10 +209,10 @@
      * @return {?}
      */
     function wrapIntoObservable(value) {
-        if (value instanceof rxjs_Observable.Observable) {
+        if (isObservable(value)) {
             return value;
         }
-        if (value instanceof Promise) {
+        if (isPromise(value)) {
             return rxjs_observable_fromPromise.fromPromise(value);
         }
         return rxjs_observable_of.of(value);
@@ -3403,7 +3406,9 @@
          */
         Router.prototype.initialNavigation = function () {
             this.setUpLocationChangeListener();
-            this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+            if (this.navigationId === 0) {
+                this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+            }
         };
         /**
          * Sets up the location change listener.
@@ -3817,8 +3822,8 @@
                     navigationIsSuccessful = true;
                 })
                     .then(function () {
-                    _this.navigated = true;
                     if (navigationIsSuccessful) {
+                        _this.navigated = true;
                         _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.currentUrlTree)));
                         resolvePromise(true);
                     }
@@ -4073,7 +4078,7 @@
                 .filter(function (_) { return _ !== null; });
             return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function (d) {
                 var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function (c) {
-                    var /** @type {?} */ guard = _this.getToken(c, c.node);
+                    var /** @type {?} */ guard = _this.getToken(c, d.node);
                     var /** @type {?} */ observable;
                     if (guard.canActivateChild) {
                         observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
@@ -4495,7 +4500,6 @@
      * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
      * `/user/(jim//aux:team)`.
      *
-     * \@selector ':not(a)[routerLink]'
      * \@ngModule RouterModule
      *
      * See {\@link Router.createUrlTree} for more information.
@@ -4580,7 +4584,6 @@
      *
      * See {\@link RouterLink} for more information.
      *
-     * \@selector 'a[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -4759,7 +4762,6 @@
      * This will set the active-link class on the div tag if the url is either '/user/jim' or
      * '/user/bob'.
      *
-     * \@selector ':not(a)[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -4898,7 +4900,6 @@
      *   (activate)='onActivate($event)'
      *   (deactivate)='onDeactivate($event)'></router-outlet>
      * ```
-     * \@selector 'a[routerLink]'
      * \@ngModule RouterModule
      *
      * \@stable
@@ -5550,7 +5551,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.5-7ed39eb');
+    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.6-343ee8a');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,

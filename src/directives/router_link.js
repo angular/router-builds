@@ -67,7 +67,6 @@ import { ActivatedRoute } from '../router_state';
  * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
  * `/user/(jim//aux:team)`.
  *
- * \@selector ':not(a)[routerLink]'
  * \@ngModule RouterModule
  *
  * See {\@link Router.createUrlTree} for more information.
@@ -181,7 +180,6 @@ function RouterLink_tsickle_Closure_declarations() {
  *
  * See {\@link RouterLink} for more information.
  *
- * \@selector 'a[routerLink]'
  * \@ngModule RouterModule
  *
  * \@stable

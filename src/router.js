@@ -348,7 +348,9 @@ export var Router = (function () {
      */
     Router.prototype.initialNavigation = function () {
         this.setUpLocationChangeListener();
-        this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+        if (this.navigationId === 0) {
+            this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+        }
     };
     /**
      * Sets up the location change listener.
@@ -762,8 +764,8 @@ export var Router = (function () {
                 navigationIsSuccessful = true;
             })
                 .then(function () {
-                _this.navigated = true;
                 if (navigationIsSuccessful) {
+                    _this.navigated = true;
                     _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.currentUrlTree)));
                     resolvePromise(true);
                 }
@@ -1077,7 +1079,7 @@ export var PreActivation = (function () {
             .filter(function (_) { return _ !== null; });
         return andObservables(map.call(from(canActivateChildGuards), function (d) {
             var /** @type {?} */ obs = map.call(from(d.guards), function (c) {
-                var /** @type {?} */ guard = _this.getToken(c, c.node);
+                var /** @type {?} */ guard = _this.getToken(c, d.node);
                 var /** @type {?} */ observable;
                 if (guard.canActivateChild) {
                     observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
