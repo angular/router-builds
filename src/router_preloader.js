@@ -129,7 +129,7 @@ export var RouterPreloader = (function () {
         var /** @type {?} */ res = [];
         for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
             var c = routes_1[_i];
-            // we already have the config loaded, just recurce
+            // we already have the config loaded, just recurse
             if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
                 var /** @type {?} */ childConfig = ((c))._loadedConfig;
                 res.push(this.processRoutes(childConfig.injector, childConfig.routes));

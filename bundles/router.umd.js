@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.6-7036e04
+ * @license Angular v4.0.0-beta.6-a378aab
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -5294,7 +5294,7 @@
             var /** @type {?} */ res = [];
             for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
                 var c = routes_1[_i];
-                // we already have the config loaded, just recurce
+                // we already have the config loaded, just recurse
                 if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
                     var /** @type {?} */ childConfig = ((c))._loadedConfig;
                     res.push(this.processRoutes(childConfig.injector, childConfig.routes));
@@ -5628,7 +5628,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.6-7036e04');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.6-a378aab');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
