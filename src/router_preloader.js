@@ -118,7 +118,7 @@ export class RouterPreloader {
     processRoutes(injector, routes) {
         const /** @type {?} */ res = [];
         for (const c of routes) {
-            // we already have the config loaded, just recurce
+            // we already have the config loaded, just recurse
             if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
                 const /** @type {?} */ childConfig = ((c))._loadedConfig;
                 res.push(this.processRoutes(childConfig.injector, childConfig.routes));
