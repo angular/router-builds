@@ -11,4 +11,5 @@
  * Entry point for all public APIs of the router package.
  */
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, RouteReuseStrategy, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RoutesRecognized, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, __router_private__ } from './src/index';
+// This file only reexports content of the `src` folder. Keep it that way.
 //# sourceMappingURL=index.js.map
