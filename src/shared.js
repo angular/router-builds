@@ -5,38 +5,28 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 /**
  * @whatItDoes Name of the primary outlet.
  *
  * @stable
  */
 export var /** @type {?} */ PRIMARY_OUTLET = 'primary';
-export var NavigationCancelingError = (function (_super) {
-    __extends(NavigationCancelingError, _super);
-    /**
-     * @param {?} message
-     */
-    function NavigationCancelingError(message) {
-        _super.call(this, message);
-        this.message = message;
-        this.stack = (new Error(message)).stack;
-    }
-    /**
-     * @return {?}
-     */
-    NavigationCancelingError.prototype.toString = function () { return this.message; };
-    return NavigationCancelingError;
-}(Error));
-function NavigationCancelingError_tsickle_Closure_declarations() {
-    /** @type {?} */
-    NavigationCancelingError.prototype.stack;
-    /** @type {?} */
-    NavigationCancelingError.prototype.message;
+var /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+/**
+ * @param {?} message
+ * @return {?}
+ */
+export function navigationCancelingError(message) {
+    var /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+    ((error))[NAVIGATION_CANCELING_ERROR] = true;
+    return error;
+}
+/**
+ * @param {?} error
+ * @return {?}
+ */
+export function isNavigationCancelingError(error) {
+    return ((error))[NAVIGATION_CANCELING_ERROR];
 }
 /**
  * @param {?} segments

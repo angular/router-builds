@@ -21,7 +21,7 @@ import { RouterConfigLoader } from './router_config_loader';
  * \@experimental
  * @abstract
  */
-export var PreloadingStrategy = (function () {
+var PreloadingStrategy = (function () {
     function PreloadingStrategy() {
     }
     /**
@@ -33,6 +33,7 @@ export var PreloadingStrategy = (function () {
     PreloadingStrategy.prototype.preload = function (route, fn) { };
     return PreloadingStrategy;
 }());
+export { PreloadingStrategy };
 /**
  * \@whatItDoes Provides a preloading strategy that preloads all modules as quicky as possible.
  *
@@ -44,7 +45,7 @@ export var PreloadingStrategy = (function () {
  *
  * \@experimental
  */
-export var PreloadAllModules = (function () {
+var PreloadAllModules = (function () {
     function PreloadAllModules() {
     }
     /**
@@ -57,6 +58,7 @@ export var PreloadAllModules = (function () {
     };
     return PreloadAllModules;
 }());
+export { PreloadAllModules };
 /**
  * \@whatItDoes Provides a preloading strategy that does not preload any modules.
  *
@@ -66,7 +68,7 @@ export var PreloadAllModules = (function () {
  *
  * \@experimental
  */
-export var NoPreloading = (function () {
+var NoPreloading = (function () {
     function NoPreloading() {
     }
     /**
@@ -77,6 +79,7 @@ export var NoPreloading = (function () {
     NoPreloading.prototype.preload = function (route, fn) { return of(null); };
     return NoPreloading;
 }());
+export { NoPreloading };
 /**
  * The preloader optimistically loads all router configurations to
  * make navigations into lazily-loaded sections of the application faster.
@@ -89,7 +92,7 @@ export var NoPreloading = (function () {
  *
  * \@stable
  */
-export var RouterPreloader = (function () {
+var RouterPreloader = (function () {
     /**
      * @param {?} router
      * @param {?} moduleLoader
@@ -159,19 +162,20 @@ export var RouterPreloader = (function () {
             });
         });
     };
-    RouterPreloader.decorators = [
-        { type: Injectable },
-    ];
-    /** @nocollapse */
-    RouterPreloader.ctorParameters = function () { return [
-        { type: Router, },
-        { type: NgModuleFactoryLoader, },
-        { type: Compiler, },
-        { type: Injector, },
-        { type: PreloadingStrategy, },
-    ]; };
     return RouterPreloader;
 }());
+export { RouterPreloader };
+RouterPreloader.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+RouterPreloader.ctorParameters = function () { return [
+    { type: Router, },
+    { type: NgModuleFactoryLoader, },
+    { type: Compiler, },
+    { type: Injector, },
+    { type: PreloadingStrategy, },
+]; };
 function RouterPreloader_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterPreloader.decorators;

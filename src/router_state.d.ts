@@ -84,17 +84,17 @@ export declare class ActivatedRoute {
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
     /** The configuration used to match this route */
-    routeConfig: Route;
+    readonly routeConfig: Route;
     /** The root of the router state */
-    root: ActivatedRoute;
+    readonly root: ActivatedRoute;
     /** The parent of this route in the router state tree */
-    parent: ActivatedRoute;
+    readonly parent: ActivatedRoute;
     /** The first child of this route in the router state tree */
-    firstChild: ActivatedRoute;
+    readonly firstChild: ActivatedRoute;
     /** The children of this route in the router state tree */
-    children: ActivatedRoute[];
+    readonly children: ActivatedRoute[];
     /** The path from the root of the router state tree to this route */
-    pathFromRoot: ActivatedRoute[];
+    readonly pathFromRoot: ActivatedRoute[];
     toString(): string;
 }
 /**
@@ -134,17 +134,17 @@ export declare class ActivatedRouteSnapshot {
     /** The component of the route */
     component: Type<any> | string;
     /** The configuration used to match this route */
-    routeConfig: Route;
+    readonly routeConfig: Route;
     /** The root of the router state */
-    root: ActivatedRouteSnapshot;
+    readonly root: ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
-    parent: ActivatedRouteSnapshot;
+    readonly parent: ActivatedRouteSnapshot;
     /** The first child of this route in the router state tree */
-    firstChild: ActivatedRouteSnapshot;
+    readonly firstChild: ActivatedRouteSnapshot;
     /** The children of this route in the router state tree */
-    children: ActivatedRouteSnapshot[];
+    readonly children: ActivatedRouteSnapshot[];
     /** The path from the root of the router state tree to this route */
-    pathFromRoot: ActivatedRouteSnapshot[];
+    readonly pathFromRoot: ActivatedRouteSnapshot[];
     toString(): string;
 }
 /**

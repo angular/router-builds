@@ -15,7 +15,7 @@ import { flatten, wrapIntoObservable } from './utils/collection';
  * @experimental
  */
 export var /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
-export var LoadedRouterConfig = (function () {
+var LoadedRouterConfig = (function () {
     /**
      * @param {?} routes
      * @param {?} injector
@@ -30,6 +30,7 @@ export var LoadedRouterConfig = (function () {
     }
     return LoadedRouterConfig;
 }());
+export { LoadedRouterConfig };
 function LoadedRouterConfig_tsickle_Closure_declarations() {
     /** @type {?} */
     LoadedRouterConfig.prototype.routes;
@@ -40,7 +41,7 @@ function LoadedRouterConfig_tsickle_Closure_declarations() {
     /** @type {?} */
     LoadedRouterConfig.prototype.injectorFactory;
 }
-export var RouterConfigLoader = (function () {
+var RouterConfigLoader = (function () {
     /**
      * @param {?} loader
      * @param {?} compiler
@@ -77,6 +78,7 @@ export var RouterConfigLoader = (function () {
     };
     return RouterConfigLoader;
 }());
+export { RouterConfigLoader };
 function RouterConfigLoader_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterConfigLoader.prototype.loader;

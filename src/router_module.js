@@ -111,7 +111,7 @@ export function routerNgProbeToken() {
  *
  * \@stable
  */
-export var RouterModule = (function () {
+var RouterModule = (function () {
     /**
      * @param {?} guard
      */
@@ -168,15 +168,16 @@ export var RouterModule = (function () {
     RouterModule.forChild = function (routes) {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     };
-    RouterModule.decorators = [
-        { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-    ];
-    /** @nocollapse */
-    RouterModule.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-    ]; };
     return RouterModule;
 }());
+export { RouterModule };
+RouterModule.decorators = [
+    { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+];
+/** @nocollapse */
+RouterModule.ctorParameters = function () { return [
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+]; };
 function RouterModule_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterModule.decorators;

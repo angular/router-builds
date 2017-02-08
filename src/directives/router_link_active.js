@@ -70,7 +70,7 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  *
  * \@stable
  */
-export var RouterLinkActive = (function () {
+var RouterLinkActive = (function () {
     /**
      * @param {?} router
      * @param {?} element
@@ -162,27 +162,28 @@ export var RouterLinkActive = (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.decorators = [
-        { type: Directive, args: [{
-                    selector: '[routerLinkActive]',
-                    exportAs: 'routerLinkActive',
-                },] },
-    ];
-    /** @nocollapse */
-    RouterLinkActive.ctorParameters = function () { return [
-        { type: Router, },
-        { type: ElementRef, },
-        { type: Renderer, },
-        { type: ChangeDetectorRef, },
-    ]; };
-    RouterLinkActive.propDecorators = {
-        'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
-        'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-        'routerLinkActiveOptions': [{ type: Input },],
-        'routerLinkActive': [{ type: Input },],
-    };
     return RouterLinkActive;
 }());
+export { RouterLinkActive };
+RouterLinkActive.decorators = [
+    { type: Directive, args: [{
+                selector: '[routerLinkActive]',
+                exportAs: 'routerLinkActive',
+            },] },
+];
+/** @nocollapse */
+RouterLinkActive.ctorParameters = function () { return [
+    { type: Router, },
+    { type: ElementRef, },
+    { type: Renderer, },
+    { type: ChangeDetectorRef, },
+]; };
+RouterLinkActive.propDecorators = {
+    'links': [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
+    'linksWithHrefs': [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+    'routerLinkActiveOptions': [{ type: Input },],
+    'routerLinkActive': [{ type: Input },],
+};
 function RouterLinkActive_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkActive.decorators;

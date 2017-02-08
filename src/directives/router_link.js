@@ -86,7 +86,7 @@ import { ActivatedRoute } from '../router_state';
  *
  * \@stable
  */
-export var RouterLink = (function () {
+var RouterLink = (function () {
     /**
      * @param {?} router
      * @param {?} route
@@ -161,30 +161,31 @@ export var RouterLink = (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.decorators = [
-        { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
-    ];
-    /** @nocollapse */
-    RouterLink.ctorParameters = function () { return [
-        { type: Router, },
-        { type: ActivatedRoute, },
-        { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
-        { type: Renderer, },
-        { type: ElementRef, },
-    ]; };
-    RouterLink.propDecorators = {
-        'queryParams': [{ type: Input },],
-        'fragment': [{ type: Input },],
-        'queryParamsHandling': [{ type: Input },],
-        'preserveFragment': [{ type: Input },],
-        'skipLocationChange': [{ type: Input },],
-        'replaceUrl': [{ type: Input },],
-        'routerLink': [{ type: Input },],
-        'preserveQueryParams': [{ type: Input },],
-        'onClick': [{ type: HostListener, args: ['click',] },],
-    };
     return RouterLink;
 }());
+export { RouterLink };
+RouterLink.decorators = [
+    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+];
+/** @nocollapse */
+RouterLink.ctorParameters = function () { return [
+    { type: Router, },
+    { type: ActivatedRoute, },
+    { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
+    { type: Renderer, },
+    { type: ElementRef, },
+]; };
+RouterLink.propDecorators = {
+    'queryParams': [{ type: Input },],
+    'fragment': [{ type: Input },],
+    'queryParamsHandling': [{ type: Input },],
+    'preserveFragment': [{ type: Input },],
+    'skipLocationChange': [{ type: Input },],
+    'replaceUrl': [{ type: Input },],
+    'routerLink': [{ type: Input },],
+    'preserveQueryParams': [{ type: Input },],
+    'onClick': [{ type: HostListener, args: ['click',] },],
+};
 function RouterLink_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLink.decorators;
@@ -225,7 +226,7 @@ function RouterLink_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var RouterLinkWithHref = (function () {
+var RouterLinkWithHref = (function () {
     /**
      * @param {?} router
      * @param {?} route
@@ -325,30 +326,31 @@ export var RouterLinkWithHref = (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.decorators = [
-        { type: Directive, args: [{ selector: 'a[routerLink]' },] },
-    ];
-    /** @nocollapse */
-    RouterLinkWithHref.ctorParameters = function () { return [
-        { type: Router, },
-        { type: ActivatedRoute, },
-        { type: LocationStrategy, },
-    ]; };
-    RouterLinkWithHref.propDecorators = {
-        'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
-        'queryParams': [{ type: Input },],
-        'fragment': [{ type: Input },],
-        'queryParamsHandling': [{ type: Input },],
-        'preserveFragment': [{ type: Input },],
-        'skipLocationChange': [{ type: Input },],
-        'replaceUrl': [{ type: Input },],
-        'href': [{ type: HostBinding },],
-        'routerLink': [{ type: Input },],
-        'preserveQueryParams': [{ type: Input },],
-        'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
-    };
     return RouterLinkWithHref;
 }());
+export { RouterLinkWithHref };
+RouterLinkWithHref.decorators = [
+    { type: Directive, args: [{ selector: 'a[routerLink]' },] },
+];
+/** @nocollapse */
+RouterLinkWithHref.ctorParameters = function () { return [
+    { type: Router, },
+    { type: ActivatedRoute, },
+    { type: LocationStrategy, },
+]; };
+RouterLinkWithHref.propDecorators = {
+    'target': [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
+    'queryParams': [{ type: Input },],
+    'fragment': [{ type: Input },],
+    'queryParamsHandling': [{ type: Input },],
+    'preserveFragment': [{ type: Input },],
+    'skipLocationChange': [{ type: Input },],
+    'replaceUrl': [{ type: Input },],
+    'href': [{ type: HostBinding },],
+    'routerLink': [{ type: Input },],
+    'preserveQueryParams': [{ type: Input },],
+    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+};
 function RouterLinkWithHref_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterLinkWithHref.decorators;

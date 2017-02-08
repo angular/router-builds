@@ -45,7 +45,7 @@ function equalSegmentGroups(container, containee) {
         return false;
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
-    for (var c in containee.children) {
+    for (var /** @type {?} */ c in containee.children) {
         if (!container.children[c])
             return false;
         if (!equalSegmentGroups(container.children[c], containee.children[c]))
@@ -88,7 +88,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
-        for (var c in containee.children) {
+        for (var /** @type {?} */ c in containee.children) {
             if (!container.children[c])
                 return false;
             if (!containsSegmentGroup(container.children[c], containee.children[c]))
@@ -135,7 +135,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *
  * \@stable
  */
-export var UrlTree = (function () {
+var UrlTree = (function () {
     /**
      * \@internal
      * @param {?} root
@@ -154,6 +154,7 @@ export var UrlTree = (function () {
     UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
     return UrlTree;
 }());
+export { UrlTree };
 function UrlTree_tsickle_Closure_declarations() {
     /**
      * The root segment group of the URL tree
@@ -178,7 +179,7 @@ function UrlTree_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var UrlSegmentGroup = (function () {
+var UrlSegmentGroup = (function () {
     /**
      * @param {?} segments
      * @param {?} children
@@ -212,6 +213,7 @@ export var UrlSegmentGroup = (function () {
     UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
     return UrlSegmentGroup;
 }());
+export { UrlSegmentGroup };
 function UrlSegmentGroup_tsickle_Closure_declarations() {
     /**
      * \@internal
@@ -264,7 +266,7 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var UrlSegment = (function () {
+var UrlSegment = (function () {
     /**
      * @param {?} path
      * @param {?} parameters
@@ -280,6 +282,7 @@ export var UrlSegment = (function () {
     UrlSegment.prototype.toString = function () { return serializePath(this); };
     return UrlSegment;
 }());
+export { UrlSegment };
 function UrlSegment_tsickle_Closure_declarations() {
     /**
      * The path part of a URL segment
@@ -352,7 +355,7 @@ export function mapChildrenIntoArray(segment, fn) {
  * \@stable
  * @abstract
  */
-export var UrlSerializer = (function () {
+var UrlSerializer = (function () {
     function UrlSerializer() {
     }
     /**
@@ -371,6 +374,7 @@ export var UrlSerializer = (function () {
     UrlSerializer.prototype.serialize = function (tree) { };
     return UrlSerializer;
 }());
+export { UrlSerializer };
 /**
  * \@whatItDoes A default implementation of the {\@link UrlSerializer}.
  *
@@ -389,7 +393,7 @@ export var UrlSerializer = (function () {
  *
  * \@stable
  */
-export var DefaultUrlSerializer = (function () {
+var DefaultUrlSerializer = (function () {
     function DefaultUrlSerializer() {
     }
     /**
@@ -414,6 +418,7 @@ export var DefaultUrlSerializer = (function () {
     };
     return DefaultUrlSerializer;
 }());
+export { DefaultUrlSerializer };
 /**
  * @param {?} segment
  * @return {?}
@@ -450,7 +455,7 @@ function serializeSegment(segment, root) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
             else {
-                return [(k + ":" + serializeSegment(v, false))];
+                return [k + ":" + serializeSegment(v, false)];
             }
         });
         return serializePaths(segment) + "/(" + children.join('//') + ")";
@@ -485,7 +490,7 @@ export function serializePath(path) {
  * @return {?}
  */
 function serializeParams(params) {
-    return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
+    return pairs(params).map(function (p) { return ";" + encode(p.first) + "=" + encode(p.second); }).join('');
 }
 /**
  * @param {?} params
@@ -494,7 +499,7 @@ function serializeParams(params) {
 function serializeQueryParams(params) {
     var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
         var /** @type {?} */ value = params[name];
-        return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+        return Array.isArray(value) ? value.map(function (v) { return encode(name) + "=" + encode(v); }).join('&') :
             encode(name) + "=" + encode(value);
     });
     return strParams.length ? "?" + strParams.join("&") : '';
@@ -522,7 +527,7 @@ function Pair_tsickle_Closure_declarations() {
  */
 function pairs(obj) {
     var /** @type {?} */ res = [];
-    for (var prop in obj) {
+    for (var /** @type {?} */ prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             res.push(new Pair(prop, obj[prop]));
         }

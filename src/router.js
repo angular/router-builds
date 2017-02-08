@@ -24,7 +24,7 @@ import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState, equalParamsAndUrlSegments, inheritedParamsDataResolve } from './router_state';
-import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
+import { PRIMARY_OUTLET, isNavigationCancelingError } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
@@ -33,7 +33,7 @@ import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from '
  *
  * \@stable
  */
-export var NavigationStart = (function () {
+var NavigationStart = (function () {
     /**
      * @param {?} id
      * @param {?} url
@@ -49,6 +49,7 @@ export var NavigationStart = (function () {
     NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
     return NavigationStart;
 }());
+export { NavigationStart };
 function NavigationStart_tsickle_Closure_declarations() {
     /**
      * \@docsNotRequired
@@ -66,7 +67,7 @@ function NavigationStart_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var NavigationEnd = (function () {
+var NavigationEnd = (function () {
     /**
      * @param {?} id
      * @param {?} url
@@ -86,6 +87,7 @@ export var NavigationEnd = (function () {
     };
     return NavigationEnd;
 }());
+export { NavigationEnd };
 function NavigationEnd_tsickle_Closure_declarations() {
     /**
      * \@docsNotRequired
@@ -108,7 +110,7 @@ function NavigationEnd_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var NavigationCancel = (function () {
+var NavigationCancel = (function () {
     /**
      * @param {?} id
      * @param {?} url
@@ -126,6 +128,7 @@ export var NavigationCancel = (function () {
     NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
     return NavigationCancel;
 }());
+export { NavigationCancel };
 function NavigationCancel_tsickle_Closure_declarations() {
     /**
      * \@docsNotRequired
@@ -148,7 +151,7 @@ function NavigationCancel_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var NavigationError = (function () {
+var NavigationError = (function () {
     /**
      * @param {?} id
      * @param {?} url
@@ -168,6 +171,7 @@ export var NavigationError = (function () {
     };
     return NavigationError;
 }());
+export { NavigationError };
 function NavigationError_tsickle_Closure_declarations() {
     /**
      * \@docsNotRequired
@@ -190,7 +194,7 @@ function NavigationError_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var RoutesRecognized = (function () {
+var RoutesRecognized = (function () {
     /**
      * @param {?} id
      * @param {?} url
@@ -212,6 +216,7 @@ export var RoutesRecognized = (function () {
     };
     return RoutesRecognized;
 }());
+export { RoutesRecognized };
 function RoutesRecognized_tsickle_Closure_declarations() {
     /**
      * \@docsNotRequired
@@ -244,7 +249,7 @@ function defaultErrorHandler(error) {
 /**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
-export var DefaultRouteReuseStrategy = (function () {
+var DefaultRouteReuseStrategy = (function () {
     function DefaultRouteReuseStrategy() {
     }
     /**
@@ -278,6 +283,7 @@ export var DefaultRouteReuseStrategy = (function () {
     };
     return DefaultRouteReuseStrategy;
 }());
+export { DefaultRouteReuseStrategy };
 /**
  * \@whatItDoes Provides the navigation and url manipulation capabilities.
  *
@@ -287,7 +293,7 @@ export var DefaultRouteReuseStrategy = (function () {
  *
  * \@stable
  */
-export var Router = (function () {
+var Router = (function () {
     /**
      * @param {?} rootComponentType
      * @param {?} urlSerializer
@@ -793,7 +799,7 @@ export var Router = (function () {
                     resolvePromise(false);
                 }
             }, function (e) {
-                if (e instanceof NavigationCancelingError) {
+                if (isNavigationCancelingError(e)) {
                     _this.resetUrlToCurrentUrlTree();
                     _this.navigated = true;
                     _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
@@ -824,6 +830,7 @@ export var Router = (function () {
     };
     return Router;
 }());
+export { Router };
 function Router_tsickle_Closure_declarations() {
     /** @type {?} */
     Router.prototype.currentUrlTree;
@@ -911,7 +918,7 @@ function CanDeactivate_tsickle_Closure_declarations() {
     /** @type {?} */
     CanDeactivate.prototype.route;
 }
-export var PreActivation = (function () {
+var PreActivation = (function () {
     /**
      * @param {?} future
      * @param {?} curr
@@ -1181,6 +1188,7 @@ export var PreActivation = (function () {
     };
     return PreActivation;
 }());
+export { PreActivation };
 function PreActivation_tsickle_Closure_declarations() {
     /** @type {?} */
     PreActivation.prototype.checks;

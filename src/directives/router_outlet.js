@@ -32,7 +32,7 @@ import { PRIMARY_OUTLET } from '../shared';
  *
  * \@stable
  */
-export var RouterOutlet = (function () {
+var RouterOutlet = (function () {
     /**
      * @param {?} parentOutletMap
      * @param {?} location
@@ -156,22 +156,23 @@ export var RouterOutlet = (function () {
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     };
-    RouterOutlet.decorators = [
-        { type: Directive, args: [{ selector: 'router-outlet' },] },
-    ];
-    /** @nocollapse */
-    RouterOutlet.ctorParameters = function () { return [
-        { type: RouterOutletMap, },
-        { type: ViewContainerRef, },
-        { type: ComponentFactoryResolver, },
-        { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
-    ]; };
-    RouterOutlet.propDecorators = {
-        'activateEvents': [{ type: Output, args: ['activate',] },],
-        'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
-    };
     return RouterOutlet;
 }());
+export { RouterOutlet };
+RouterOutlet.decorators = [
+    { type: Directive, args: [{ selector: 'router-outlet' },] },
+];
+/** @nocollapse */
+RouterOutlet.ctorParameters = function () { return [
+    { type: RouterOutletMap, },
+    { type: ViewContainerRef, },
+    { type: ComponentFactoryResolver, },
+    { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
+]; };
+RouterOutlet.propDecorators = {
+    'activateEvents': [{ type: Output, args: ['activate',] },],
+    'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
+};
 function RouterOutlet_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterOutlet.decorators;

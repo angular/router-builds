@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-export var Tree = (function () {
+var Tree = (function () {
     /**
      * @param {?} root
      */
@@ -67,6 +67,7 @@ export var Tree = (function () {
     Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
     return Tree;
 }());
+export { Tree };
 function Tree_tsickle_Closure_declarations() {
     /**
      * \@internal
@@ -109,7 +110,7 @@ function findPath(expected, c, collected) {
     }
     return [];
 }
-export var TreeNode = (function () {
+var TreeNode = (function () {
     /**
      * @param {?} value
      * @param {?} children
@@ -124,6 +125,7 @@ export var TreeNode = (function () {
     TreeNode.prototype.toString = function () { return "TreeNode(" + this.value + ")"; };
     return TreeNode;
 }());
+export { TreeNode };
 function TreeNode_tsickle_Closure_declarations() {
     /** @type {?} */
     TreeNode.prototype.value;

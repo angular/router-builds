@@ -15,7 +15,7 @@ import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { LoadedRouterConfig } from './router_config_loader';
-import { NavigationCancelingError, PRIMARY_OUTLET, defaultUrlMatcher } from './shared';
+import { PRIMARY_OUTLET, defaultUrlMatcher, navigationCancelingError } from './shared';
 import { UrlSegmentGroup, UrlTree } from './url_tree';
 import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
 var NoMatch = (function () {
@@ -71,7 +71,7 @@ function namedOutletsRedirect(redirectTo) {
  * @return {?}
  */
 function canLoadFails(route) {
-    return new Observable(function (obs) { return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+    return new Observable(function (obs) { return obs.error(navigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
 }
 /**
  * @param {?} injector

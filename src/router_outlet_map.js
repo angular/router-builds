@@ -10,7 +10,7 @@
  *
  * \@stable
  */
-export var RouterOutletMap = (function () {
+var RouterOutletMap = (function () {
     function RouterOutletMap() {
         /** @internal */
         this._outlets = {};
@@ -30,6 +30,7 @@ export var RouterOutletMap = (function () {
     RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
     return RouterOutletMap;
 }());
+export { RouterOutletMap };
 function RouterOutletMap_tsickle_Closure_declarations() {
     /**
      * \@internal

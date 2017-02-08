@@ -11,7 +11,7 @@
  * \@experimental
  * @abstract
  */
-export var RouteReuseStrategy = (function () {
+var RouteReuseStrategy = (function () {
     function RouteReuseStrategy() {
     }
     /**
@@ -53,4 +53,5 @@ export var RouteReuseStrategy = (function () {
     RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
     return RouteReuseStrategy;
 }());
+export { RouteReuseStrategy };
 //# sourceMappingURL=route_reuse_strategy.js.map

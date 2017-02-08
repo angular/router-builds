@@ -42,7 +42,7 @@ import { Tree, TreeNode } from './utils/tree';
  *
  * \@stable
  */
-export var RouterState = (function (_super) {
+var RouterState = (function (_super) {
     __extends(RouterState, _super);
     /**
      * \@internal
@@ -50,9 +50,10 @@ export var RouterState = (function (_super) {
      * @param {?} snapshot
      */
     function RouterState(root, snapshot) {
-        _super.call(this, root);
-        this.snapshot = snapshot;
-        setRouterStateSnapshot(this, root);
+        var _this = _super.call(this, root) || this;
+        _this.snapshot = snapshot;
+        setRouterStateSnapshot(_this, root);
+        return _this;
     }
     /**
      * @return {?}
@@ -60,6 +61,7 @@ export var RouterState = (function (_super) {
     RouterState.prototype.toString = function () { return this.snapshot.toString(); };
     return RouterState;
 }(Tree));
+export { RouterState };
 function RouterState_tsickle_Closure_declarations() {
     /**
      * The current snapshot of the router state
@@ -117,7 +119,7 @@ export function createEmptyStateSnapshot(urlTree, rootComponent) {
  *
  * \@stable
  */
-export var ActivatedRoute = (function () {
+var ActivatedRoute = (function () {
     /**
      * \@internal
      * @param {?} url
@@ -201,6 +203,7 @@ export var ActivatedRoute = (function () {
     };
     return ActivatedRoute;
 }());
+export { ActivatedRoute };
 function ActivatedRoute_tsickle_Closure_declarations() {
     /**
      * The current snapshot of this route
@@ -300,7 +303,7 @@ export function inheritedParamsDataResolve(route) {
  *
  * \@stable
  */
-export var ActivatedRouteSnapshot = (function () {
+var ActivatedRouteSnapshot = (function () {
     /**
      * \@internal
      * @param {?} url
@@ -392,6 +395,7 @@ export var ActivatedRouteSnapshot = (function () {
     };
     return ActivatedRouteSnapshot;
 }());
+export { ActivatedRouteSnapshot };
 function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
     /**
      * \@internal *
@@ -484,7 +488,7 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
  *
  * \@stable
  */
-export var RouterStateSnapshot = (function (_super) {
+var RouterStateSnapshot = (function (_super) {
     __extends(RouterStateSnapshot, _super);
     /**
      * \@internal
@@ -492,9 +496,10 @@ export var RouterStateSnapshot = (function (_super) {
      * @param {?} root
      */
     function RouterStateSnapshot(url, root) {
-        _super.call(this, root);
-        this.url = url;
-        setRouterStateSnapshot(this, root);
+        var _this = _super.call(this, root) || this;
+        _this.url = url;
+        setRouterStateSnapshot(_this, root);
+        return _this;
     }
     /**
      * @return {?}
@@ -502,6 +507,7 @@ export var RouterStateSnapshot = (function (_super) {
     RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
     return RouterStateSnapshot;
 }(Tree));
+export { RouterStateSnapshot };
 function RouterStateSnapshot_tsickle_Closure_declarations() {
     /**
      * The url from which this snapshot was created

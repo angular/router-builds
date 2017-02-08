@@ -108,7 +108,7 @@ export declare class RouterLink {
      */
     preserveQueryParams: boolean;
     onClick(): boolean;
-    urlTree: UrlTree;
+    readonly urlTree: UrlTree;
 }
 /**
  * @whatItDoes Lets you link to specific parts of your app.
@@ -143,5 +143,5 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref();
-    urlTree: UrlTree;
+    readonly urlTree: UrlTree;
 }

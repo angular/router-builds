@@ -67,7 +67,7 @@ export declare class UrlSegmentGroup {
     /** Wether the segment has child segments */
     hasChildren(): boolean;
     /** Number of child segments */
-    numberOfChildren: number;
+    readonly numberOfChildren: number;
     /** @docsNotRequired */
     toString(): string;
 }

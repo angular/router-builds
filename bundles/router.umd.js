@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.6-c33fda2
+ * @license Angular v4.0.0-beta.6-7a4c255
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -18,33 +18,29 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var __extends = (this && this.__extends) || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
     /**
      * @whatItDoes Name of the primary outlet.
      *
      * @stable
      */
     var /** @type {?} */ PRIMARY_OUTLET = 'primary';
-    var NavigationCancelingError = (function (_super) {
-        __extends(NavigationCancelingError, _super);
-        /**
-         * @param {?} message
-         */
-        function NavigationCancelingError(message) {
-            _super.call(this, message);
-            this.message = message;
-            this.stack = (new Error(message)).stack;
-        }
-        /**
-         * @return {?}
-         */
-        NavigationCancelingError.prototype.toString = function () { return this.message; };
-        return NavigationCancelingError;
-    }(Error));
+    var /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+    /**
+     * @param {?} message
+     * @return {?}
+     */
+    function navigationCancelingError(message) {
+        var /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+        ((error))[NAVIGATION_CANCELING_ERROR] = true;
+        return error;
+    }
+    /**
+     * @param {?} error
+     * @return {?}
+     */
+    function isNavigationCancelingError(error) {
+        return ((error))[NAVIGATION_CANCELING_ERROR];
+    }
     /**
      * @param {?} segments
      * @param {?} segmentGroup
@@ -141,12 +137,12 @@
      */
     function merge(m1, m2) {
         var /** @type {?} */ m = {};
-        for (var attr in m1) {
+        for (var /** @type {?} */ attr in m1) {
             if (m1.hasOwnProperty(attr)) {
                 m[attr] = m1[attr];
             }
         }
-        for (var attr in m2) {
+        for (var /** @type {?} */ attr in m2) {
             if (m2.hasOwnProperty(attr)) {
                 m[attr] = m2[attr];
             }
@@ -159,7 +155,7 @@
      * @return {?}
      */
     function forEach(map, callback) {
-        for (var prop in map) {
+        for (var /** @type {?} */ prop in map) {
             if (map.hasOwnProperty(prop)) {
                 callback(map[prop], prop);
             }
@@ -313,7 +309,7 @@
             return false;
         if (container.numberOfChildren !== containee.numberOfChildren)
             return false;
-        for (var c in containee.children) {
+        for (var /** @type {?} */ c in containee.children) {
             if (!container.children[c])
                 return false;
             if (!equalSegmentGroups(container.children[c], containee.children[c]))
@@ -356,7 +352,7 @@
         else if (container.segments.length === containeePaths.length) {
             if (!equalPath(container.segments, containeePaths))
                 return false;
-            for (var c in containee.children) {
+            for (var /** @type {?} */ c in containee.children) {
                 if (!container.children[c])
                     return false;
                 if (!containsSegmentGroup(container.children[c], containee.children[c]))
@@ -662,7 +658,7 @@
                     return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
                 }
                 else {
-                    return [(k + ":" + serializeSegment(v, false))];
+                    return [k + ":" + serializeSegment(v, false)];
                 }
             });
             return serializePaths(segment) + "/(" + children.join('//') + ")";
@@ -697,7 +693,7 @@
      * @return {?}
      */
     function serializeParams(params) {
-        return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
+        return pairs(params).map(function (p) { return ";" + encode(p.first) + "=" + encode(p.second); }).join('');
     }
     /**
      * @param {?} params
@@ -706,7 +702,7 @@
     function serializeQueryParams(params) {
         var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
             var /** @type {?} */ value = params[name];
-            return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+            return Array.isArray(value) ? value.map(function (v) { return encode(name) + "=" + encode(v); }).join('&') :
                 encode(name) + "=" + encode(value);
         });
         return strParams.length ? "?" + strParams.join("&") : '';
@@ -728,7 +724,7 @@
      */
     function pairs(obj) {
         var /** @type {?} */ res = [];
-        for (var prop in obj) {
+        for (var /** @type {?} */ prop in obj) {
             if (obj.hasOwnProperty(prop)) {
                 res.push(new Pair(prop, obj[prop]));
             }
@@ -1020,7 +1016,7 @@
      * @return {?}
      */
     function canLoadFails(route) {
-        return new rxjs_Observable.Observable(function (obs) { return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+        return new rxjs_Observable.Observable(function (obs) { return obs.error(navigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
     }
     /**
      * @param {?} injector
@@ -1827,7 +1823,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var __extends$1 = (this && this.__extends) || function (d, b) {
+    var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -1860,16 +1856,17 @@
      * \@stable
      */
     var RouterState = (function (_super) {
-        __extends$1(RouterState, _super);
+        __extends(RouterState, _super);
         /**
          * \@internal
          * @param {?} root
          * @param {?} snapshot
          */
         function RouterState(root, snapshot) {
-            _super.call(this, root);
-            this.snapshot = snapshot;
-            setRouterStateSnapshot(this, root);
+            var _this = _super.call(this, root) || this;
+            _this.snapshot = snapshot;
+            setRouterStateSnapshot(_this, root);
+            return _this;
         }
         /**
          * @return {?}
@@ -2179,16 +2176,17 @@
      * \@stable
      */
     var RouterStateSnapshot = (function (_super) {
-        __extends$1(RouterStateSnapshot, _super);
+        __extends(RouterStateSnapshot, _super);
         /**
          * \@internal
          * @param {?} url
          * @param {?} root
          */
         function RouterStateSnapshot(url, root) {
-            _super.call(this, root);
-            this.url = url;
-            setRouterStateSnapshot(this, root);
+            var _this = _super.call(this, root) || this;
+            _this.url = url;
+            setRouterStateSnapshot(_this, root);
+            return _this;
         }
         /**
          * @return {?}
@@ -2535,9 +2533,9 @@
      */
     function getOutlets(commands) {
         if (!(typeof commands[0] === 'object'))
-            return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
+            return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
         if (commands[0].outlets === undefined)
-            return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
+            return _b = {}, _b[PRIMARY_OUTLET] = commands, _b;
         return commands[0].outlets;
         var _a, _b;
     }
@@ -3854,7 +3852,7 @@
                         resolvePromise(false);
                     }
                 }, function (e) {
-                    if (e instanceof NavigationCancelingError) {
+                    if (isNavigationCancelingError(e)) {
                         _this.resetUrlToCurrentUrlTree();
                         _this.navigated = true;
                         _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
@@ -4616,30 +4614,30 @@
             enumerable: true,
             configurable: true
         });
-        RouterLink.decorators = [
-            { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
-        ];
-        /** @nocollapse */
-        RouterLink.ctorParameters = function () { return [
-            { type: Router, },
-            { type: ActivatedRoute, },
-            { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['tabindex',] },] },
-            { type: _angular_core.Renderer, },
-            { type: _angular_core.ElementRef, },
-        ]; };
-        RouterLink.propDecorators = {
-            'queryParams': [{ type: _angular_core.Input },],
-            'fragment': [{ type: _angular_core.Input },],
-            'queryParamsHandling': [{ type: _angular_core.Input },],
-            'preserveFragment': [{ type: _angular_core.Input },],
-            'skipLocationChange': [{ type: _angular_core.Input },],
-            'replaceUrl': [{ type: _angular_core.Input },],
-            'routerLink': [{ type: _angular_core.Input },],
-            'preserveQueryParams': [{ type: _angular_core.Input },],
-            'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
-        };
         return RouterLink;
     }());
+    RouterLink.decorators = [
+        { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLink.ctorParameters = function () { return [
+        { type: Router, },
+        { type: ActivatedRoute, },
+        { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['tabindex',] },] },
+        { type: _angular_core.Renderer, },
+        { type: _angular_core.ElementRef, },
+    ]; };
+    RouterLink.propDecorators = {
+        'queryParams': [{ type: _angular_core.Input },],
+        'fragment': [{ type: _angular_core.Input },],
+        'queryParamsHandling': [{ type: _angular_core.Input },],
+        'preserveFragment': [{ type: _angular_core.Input },],
+        'skipLocationChange': [{ type: _angular_core.Input },],
+        'replaceUrl': [{ type: _angular_core.Input },],
+        'routerLink': [{ type: _angular_core.Input },],
+        'preserveQueryParams': [{ type: _angular_core.Input },],
+        'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
+    };
     /**
      * \@whatItDoes Lets you link to specific parts of your app.
      *
@@ -4749,30 +4747,30 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.decorators = [
-            { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
-        ];
-        /** @nocollapse */
-        RouterLinkWithHref.ctorParameters = function () { return [
-            { type: Router, },
-            { type: ActivatedRoute, },
-            { type: _angular_common.LocationStrategy, },
-        ]; };
-        RouterLinkWithHref.propDecorators = {
-            'target': [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
-            'queryParams': [{ type: _angular_core.Input },],
-            'fragment': [{ type: _angular_core.Input },],
-            'queryParamsHandling': [{ type: _angular_core.Input },],
-            'preserveFragment': [{ type: _angular_core.Input },],
-            'skipLocationChange': [{ type: _angular_core.Input },],
-            'replaceUrl': [{ type: _angular_core.Input },],
-            'href': [{ type: _angular_core.HostBinding },],
-            'routerLink': [{ type: _angular_core.Input },],
-            'preserveQueryParams': [{ type: _angular_core.Input },],
-            'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
-        };
         return RouterLinkWithHref;
     }());
+    RouterLinkWithHref.decorators = [
+        { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = function () { return [
+        { type: Router, },
+        { type: ActivatedRoute, },
+        { type: _angular_common.LocationStrategy, },
+    ]; };
+    RouterLinkWithHref.propDecorators = {
+        'target': [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
+        'queryParams': [{ type: _angular_core.Input },],
+        'fragment': [{ type: _angular_core.Input },],
+        'queryParamsHandling': [{ type: _angular_core.Input },],
+        'preserveFragment': [{ type: _angular_core.Input },],
+        'skipLocationChange': [{ type: _angular_core.Input },],
+        'replaceUrl': [{ type: _angular_core.Input },],
+        'href': [{ type: _angular_core.HostBinding },],
+        'routerLink': [{ type: _angular_core.Input },],
+        'preserveQueryParams': [{ type: _angular_core.Input },],
+        'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
     /**
      * @param {?} s
      * @return {?}
@@ -4935,27 +4933,27 @@
             return this.links.some(this.isLinkActive(this.router)) ||
                 this.linksWithHrefs.some(this.isLinkActive(this.router));
         };
-        RouterLinkActive.decorators = [
-            { type: _angular_core.Directive, args: [{
-                        selector: '[routerLinkActive]',
-                        exportAs: 'routerLinkActive',
-                    },] },
-        ];
-        /** @nocollapse */
-        RouterLinkActive.ctorParameters = function () { return [
-            { type: Router, },
-            { type: _angular_core.ElementRef, },
-            { type: _angular_core.Renderer, },
-            { type: _angular_core.ChangeDetectorRef, },
-        ]; };
-        RouterLinkActive.propDecorators = {
-            'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
-            'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-            'routerLinkActiveOptions': [{ type: _angular_core.Input },],
-            'routerLinkActive': [{ type: _angular_core.Input },],
-        };
         return RouterLinkActive;
     }());
+    RouterLinkActive.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[routerLinkActive]',
+                    exportAs: 'routerLinkActive',
+                },] },
+    ];
+    /** @nocollapse */
+    RouterLinkActive.ctorParameters = function () { return [
+        { type: Router, },
+        { type: _angular_core.ElementRef, },
+        { type: _angular_core.Renderer, },
+        { type: _angular_core.ChangeDetectorRef, },
+    ]; };
+    RouterLinkActive.propDecorators = {
+        'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
+        'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+        'routerLinkActiveOptions': [{ type: _angular_core.Input },],
+        'routerLinkActive': [{ type: _angular_core.Input },],
+    };
 
     /**
      * \@whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
@@ -5105,22 +5103,22 @@
             this.activated.changeDetectorRef.detectChanges();
             this.activateEvents.emit(this.activated.instance);
         };
-        RouterOutlet.decorators = [
-            { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
-        ];
-        /** @nocollapse */
-        RouterOutlet.ctorParameters = function () { return [
-            { type: RouterOutletMap, },
-            { type: _angular_core.ViewContainerRef, },
-            { type: _angular_core.ComponentFactoryResolver, },
-            { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
-        ]; };
-        RouterOutlet.propDecorators = {
-            'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
-            'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
-        };
         return RouterOutlet;
     }());
+    RouterOutlet.decorators = [
+        { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+    ];
+    /** @nocollapse */
+    RouterOutlet.ctorParameters = function () { return [
+        { type: RouterOutletMap, },
+        { type: _angular_core.ViewContainerRef, },
+        { type: _angular_core.ComponentFactoryResolver, },
+        { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
+    ]; };
+    RouterOutlet.propDecorators = {
+        'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
+        'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
+    };
 
     /**
      * @license
@@ -5324,19 +5322,19 @@
                 });
             });
         };
-        RouterPreloader.decorators = [
-            { type: _angular_core.Injectable },
-        ];
-        /** @nocollapse */
-        RouterPreloader.ctorParameters = function () { return [
-            { type: Router, },
-            { type: _angular_core.NgModuleFactoryLoader, },
-            { type: _angular_core.Compiler, },
-            { type: _angular_core.Injector, },
-            { type: PreloadingStrategy, },
-        ]; };
         return RouterPreloader;
     }());
+    RouterPreloader.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    RouterPreloader.ctorParameters = function () { return [
+        { type: Router, },
+        { type: _angular_core.NgModuleFactoryLoader, },
+        { type: _angular_core.Compiler, },
+        { type: _angular_core.Injector, },
+        { type: PreloadingStrategy, },
+    ]; };
 
     /**
      * @whatItDoes Contains a list of directives
@@ -5486,15 +5484,15 @@
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
-        RouterModule.decorators = [
-            { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
-        ];
-        /** @nocollapse */
-        RouterModule.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-        ]; };
         return RouterModule;
     }());
+    RouterModule.decorators = [
+        { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+    ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+    ]; };
     /**
      * @param {?} platformLocationStrategy
      * @param {?} baseHref
@@ -5628,7 +5626,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.6-c33fda2');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.6-7a4c255');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,

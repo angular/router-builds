@@ -11,7 +11,7 @@
  * \@experimental
  * @abstract
  */
-export var UrlHandlingStrategy = (function () {
+var UrlHandlingStrategy = (function () {
     function UrlHandlingStrategy() {
     }
     /**
@@ -44,10 +44,11 @@ export var UrlHandlingStrategy = (function () {
     UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
     return UrlHandlingStrategy;
 }());
+export { UrlHandlingStrategy };
 /**
  * \@experimental
  */
-export var DefaultUrlHandlingStrategy = (function () {
+var DefaultUrlHandlingStrategy = (function () {
     function DefaultUrlHandlingStrategy() {
     }
     /**
@@ -68,4 +69,5 @@ export var DefaultUrlHandlingStrategy = (function () {
     DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
     return DefaultUrlHandlingStrategy;
 }());
+export { DefaultUrlHandlingStrategy };
 //# sourceMappingURL=url_handling_strategy.js.map

@@ -89,12 +89,12 @@ export function and(bools) {
  */
 export function merge(m1, m2) {
     var /** @type {?} */ m = {};
-    for (var attr in m1) {
+    for (var /** @type {?} */ attr in m1) {
         if (m1.hasOwnProperty(attr)) {
             m[attr] = m1[attr];
         }
     }
-    for (var attr in m2) {
+    for (var /** @type {?} */ attr in m2) {
         if (m2.hasOwnProperty(attr)) {
             m[attr] = m2[attr];
         }
@@ -107,7 +107,7 @@ export function merge(m1, m2) {
  * @return {?}
  */
 export function forEach(map, callback) {
-    for (var prop in map) {
+    for (var /** @type {?} */ prop in map) {
         if (map.hasOwnProperty(prop)) {
             callback(map[prop], prop);
         }

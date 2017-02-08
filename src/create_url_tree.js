@@ -224,9 +224,9 @@ function getPath(command) {
  */
 function getOutlets(commands) {
     if (!(typeof commands[0] === 'object'))
-        return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
+        return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
     if (commands[0].outlets === undefined)
-        return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
+        return _b = {}, _b[PRIMARY_OUTLET] = commands, _b;
     return commands[0].outlets;
     var _a, _b;
 }
