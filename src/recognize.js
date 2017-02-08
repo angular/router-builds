@@ -98,7 +98,7 @@ class Recognizer {
      * @return {?}
      */
     processSegment(config, segmentGroup, segments, outlet) {
-        for (const r of config) {
+        for (const /** @type {?} */ r of config) {
             try {
                 return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
             }
@@ -298,7 +298,7 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
  */
 function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
     const /** @type {?} */ res = {};
-    for (const r of routes) {
+    for (const /** @type {?} */ r of routes) {
         if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
             const /** @type {?} */ s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
@@ -320,7 +320,7 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
     res[PRIMARY_OUTLET] = primarySegment;
     primarySegment._sourceSegment = segmentGroup;
     primarySegment._segmentIndexShift = consumedSegments.length;
-    for (const r of routes) {
+    for (const /** @type {?} */ r of routes) {
         if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
             const /** @type {?} */ s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;

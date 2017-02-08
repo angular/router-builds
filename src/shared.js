@@ -11,25 +11,22 @@
  * @stable
  */
 export const /** @type {?} */ PRIMARY_OUTLET = 'primary';
-export class NavigationCancelingError extends Error {
-    /**
-     * @param {?} message
-     */
-    constructor(message) {
-        super(message);
-        this.message = message;
-        this.stack = (new Error(message)).stack;
-    }
-    /**
-     * @return {?}
-     */
-    toString() { return this.message; }
+const /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+/**
+ * @param {?} message
+ * @return {?}
+ */
+export function navigationCancelingError(message) {
+    const /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+    ((error))[NAVIGATION_CANCELING_ERROR] = true;
+    return error;
 }
-function NavigationCancelingError_tsickle_Closure_declarations() {
-    /** @type {?} */
-    NavigationCancelingError.prototype.stack;
-    /** @type {?} */
-    NavigationCancelingError.prototype.message;
+/**
+ * @param {?} error
+ * @return {?}
+ */
+export function isNavigationCancelingError(error) {
+    return ((error))[NAVIGATION_CANCELING_ERROR];
 }
 /**
  * @param {?} segments

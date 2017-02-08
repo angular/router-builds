@@ -89,12 +89,12 @@ export function and(bools) {
  */
 export function merge(m1, m2) {
     const /** @type {?} */ m = {};
-    for (const attr in m1) {
+    for (const /** @type {?} */ attr in m1) {
         if (m1.hasOwnProperty(attr)) {
             m[attr] = m1[attr];
         }
     }
-    for (const attr in m2) {
+    for (const /** @type {?} */ attr in m2) {
         if (m2.hasOwnProperty(attr)) {
             m[attr] = m2[attr];
         }
@@ -107,7 +107,7 @@ export function merge(m1, m2) {
  * @return {?}
  */
 export function forEach(map, callback) {
-    for (const prop in map) {
+    for (const /** @type {?} */ prop in map) {
         if (map.hasOwnProperty(prop)) {
             callback(map[prop], prop);
         }

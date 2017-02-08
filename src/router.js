@@ -24,7 +24,7 @@ import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, advanceActivatedRoute, createEmptyState, equalParamsAndUrlSegments, inheritedParamsDataResolve } from './router_state';
-import { NavigationCancelingError, PRIMARY_OUTLET } from './shared';
+import { PRIMARY_OUTLET, isNavigationCancelingError } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
@@ -761,7 +761,7 @@ export class Router {
                     resolvePromise(false);
                 }
             }, (e) => {
-                if (e instanceof NavigationCancelingError) {
+                if (isNavigationCancelingError(e)) {
                     this.resetUrlToCurrentUrlTree();
                     this.navigated = true;
                     this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), e.message));

@@ -68,7 +68,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
  */
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return curr.children.map(child => {
-        for (const p of prevState.children) {
+        for (const /** @type {?} */ p of prevState.children) {
             if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
                 return createNode(routeReuseStrategy, child, p);
             }

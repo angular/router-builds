@@ -9,9 +9,7 @@ export class Tree {
     /**
      * @param {?} root
      */
-    constructor(root) {
-        this._root = root;
-    }
+    constructor(root) { this._root = root; }
     /**
      * @return {?}
      */
@@ -77,7 +75,7 @@ function Tree_tsickle_Closure_declarations() {
 function findNode(expected, c) {
     if (expected === c.value)
         return c;
-    for (const cc of c.children) {
+    for (const /** @type {?} */ cc of c.children) {
         const /** @type {?} */ r = findNode(expected, cc);
         if (r)
             return r;
@@ -94,7 +92,7 @@ function findPath(expected, c, collected) {
     collected.push(c);
     if (expected === c.value)
         return collected;
-    for (const cc of c.children) {
+    for (const /** @type {?} */ cc of c.children) {
         const /** @type {?} */ cloned = collected.slice(0);
         const /** @type {?} */ r = findPath(expected, cc, cloned);
         if (r.length > 0)

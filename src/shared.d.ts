@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -13,7 +12,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *
  * @stable
  */
-export declare const PRIMARY_OUTLET: string;
+export declare const PRIMARY_OUTLET = "primary";
 /**
  * A collection of parameters.
  *
@@ -22,10 +21,6 @@ export declare const PRIMARY_OUTLET: string;
 export declare type Params = {
     [key: string]: any;
 };
-export declare class NavigationCancelingError extends Error {
-    message: string;
-    stack: any;
-    constructor(message: string);
-    toString(): string;
-}
+export declare function navigationCancelingError(message: string): Error;
+export declare function isNavigationCancelingError(error: Error): any;
 export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult;

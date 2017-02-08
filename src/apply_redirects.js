@@ -15,7 +15,7 @@ import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { LoadedRouterConfig } from './router_config_loader';
-import { NavigationCancelingError, PRIMARY_OUTLET, defaultUrlMatcher } from './shared';
+import { PRIMARY_OUTLET, defaultUrlMatcher, navigationCancelingError } from './shared';
 import { UrlSegmentGroup, UrlTree } from './url_tree';
 import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
 class NoMatch {
@@ -68,7 +68,7 @@ function namedOutletsRedirect(redirectTo) {
  * @return {?}
  */
 function canLoadFails(route) {
-    return new Observable((obs) => obs.error(new NavigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
+    return new Observable((obs) => obs.error(navigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
 }
 /**
  * @param {?} injector
@@ -481,7 +481,7 @@ class ApplyRedirects {
      */
     findOrReturn(redirectToUrlSegment, actualSegments) {
         let /** @type {?} */ idx = 0;
-        for (const s of actualSegments) {
+        for (const /** @type {?} */ s of actualSegments) {
             if (s.path === redirectToUrlSegment.path) {
                 actualSegments.splice(idx);
                 return s;
@@ -596,7 +596,7 @@ function mergeTrivialChildren(s) {
  */
 function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
     const /** @type {?} */ res = {};
-    for (const r of routes) {
+    for (const /** @type {?} */ r of routes) {
         if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
             res[getOutlet(r)] = new UrlSegmentGroup([], {});
         }
@@ -611,7 +611,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
 function createChildrenForEmptySegments(routes, primarySegmentGroup) {
     const /** @type {?} */ res = {};
     res[PRIMARY_OUTLET] = primarySegmentGroup;
-    for (const r of routes) {
+    for (const /** @type {?} */ r of routes) {
         if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
             res[getOutlet(r)] = new UrlSegmentGroup([], {});
         }

@@ -45,7 +45,7 @@ function equalSegmentGroups(container, containee) {
         return false;
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
-    for (const c in containee.children) {
+    for (const /** @type {?} */ c in containee.children) {
         if (!container.children[c])
             return false;
         if (!equalSegmentGroups(container.children[c], containee.children[c]))
@@ -88,7 +88,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
-        for (const c in containee.children) {
+        for (const /** @type {?} */ c in containee.children) {
             if (!container.children[c])
                 return false;
             if (!containsSegmentGroup(container.children[c], containee.children[c]))
@@ -507,7 +507,7 @@ function Pair_tsickle_Closure_declarations() {
  */
 function pairs(obj) {
     const /** @type {?} */ res = [];
-    for (const prop in obj) {
+    for (const /** @type {?} */ prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             res.push(new Pair(prop, obj[prop]));
         }

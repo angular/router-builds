@@ -115,8 +115,7 @@ export class RouterModule {
     /**
      * @param {?} guard
      */
-    constructor(guard) {
-    }
+    constructor(guard) { }
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
