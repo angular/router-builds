@@ -5,8 +5,10 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
+import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Compiler, Inject, Injectable, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, OpaqueToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { of } from 'rxjs/observable/of';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -102,7 +104,7 @@ export function routerNgProbeToken() {
  * In addition, we often want to split applications into multiple bundles and load them on demand.
  * Doing this transparently is not trivial.
  *
- * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+ * The Angular router solves these problems. Using the router, you can declaratively specify
  * application states, manage state transitions while taking care of the URL, and load bundles on
  * demand.
  *
@@ -275,26 +277,108 @@ export function rootRoute(router) {
     return router.routerState.root;
 }
 /**
- * @param {?} router
- * @param {?} ref
- * @param {?} preloader
- * @param {?} opts
- * @return {?}
+ * To initialize the router properly we need to do in two steps:
+ *
+ * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+ * a resolver or a guards executes asynchronously. Second, we need to actually run
+ * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+ * hook provided by the router to do that.
+ *
+ * The router navigation starts, reaches the point when preactivation is done, and then
+ * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
-export function initialRouterNavigation(router, ref, preloader, opts) {
-    return function (bootstrappedComponentRef) {
+export var RouterInitializer = (function () {
+    /**
+     * @param {?} injector
+     */
+    function RouterInitializer(injector) {
+        this.injector = injector;
+        this.resultOfPreactivationDone = new Subject();
+    }
+    /**
+     * @return {?}
+     */
+    RouterInitializer.prototype.appInitializer = function () {
+        var _this = this;
+        var /** @type {?} */ p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+        return p.then(function () {
+            var /** @type {?} */ resolve = null;
+            var /** @type {?} */ res = new Promise(function (r) { return resolve = r; });
+            var /** @type {?} */ router = _this.injector.get(Router);
+            var /** @type {?} */ opts = _this.injector.get(ROUTER_CONFIGURATION);
+            if (opts.initialNavigation === false) {
+                router.setUpLocationChangeListener();
+            }
+            else {
+                router.hooks.afterPreactivation = function () {
+                    // only the initial navigation should be delayed
+                    if (!_this.initNavigation) {
+                        _this.initNavigation = true;
+                        resolve(true);
+                        return _this.resultOfPreactivationDone;
+                    }
+                    else {
+                        return of(null);
+                    }
+                };
+                router.initialNavigation();
+            }
+            return res;
+        });
+    };
+    /**
+     * @param {?} bootstrappedComponentRef
+     * @return {?}
+     */
+    RouterInitializer.prototype.bootstrapListener = function (bootstrappedComponentRef) {
+        var /** @type {?} */ ref = this.injector.get(ApplicationRef);
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
-        router.resetRootComponentType(ref.componentTypes[0]);
+        var /** @type {?} */ preloader = this.injector.get(RouterPreloader);
         preloader.setUpPreloading();
-        if (opts.initialNavigation === false) {
-            router.setUpLocationChangeListener();
-        }
-        else {
-            router.initialNavigation();
-        }
+        var /** @type {?} */ router = this.injector.get(Router);
+        router.resetRootComponentType(ref.componentTypes[0]);
+        this.resultOfPreactivationDone.next(null);
+        this.resultOfPreactivationDone.complete();
     };
+    RouterInitializer.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    RouterInitializer.ctorParameters = function () { return [
+        { type: Injector, },
+    ]; };
+    return RouterInitializer;
+}());
+function RouterInitializer_tsickle_Closure_declarations() {
+    /** @type {?} */
+    RouterInitializer.decorators;
+    /**
+     * @nocollapse
+     * @type {?}
+     */
+    RouterInitializer.ctorParameters;
+    /** @type {?} */
+    RouterInitializer.prototype.initNavigation;
+    /** @type {?} */
+    RouterInitializer.prototype.resultOfPreactivationDone;
+    /** @type {?} */
+    RouterInitializer.prototype.injector;
+}
+/**
+ * @param {?} r
+ * @return {?}
+ */
+export function getAppInitializer(r) {
+    return r.appInitializer.bind(r);
+}
+/**
+ * @param {?} r
+ * @return {?}
+ */
+export function getBootstrapListener(r) {
+    return r.bootstrapListener.bind(r);
 }
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
@@ -307,11 +391,14 @@ export var /** @type {?} */ ROUTER_INITIALIZER = new OpaqueToken('Router Initial
  */
 export function provideRouterInitializer() {
     return [
+        RouterInitializer,
         {
-            provide: ROUTER_INITIALIZER,
-            useFactory: initialRouterNavigation,
-            deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+            provide: APP_INITIALIZER,
+            multi: true,
+            useFactory: getAppInitializer,
+            deps: [RouterInitializer]
         },
+        { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener, deps: [RouterInitializer] },
         { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
     ];
 }

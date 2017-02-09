@@ -11,7 +11,6 @@ import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
-import { RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -68,7 +67,7 @@ export declare function routerNgProbeToken(): NgProbeToken;
  * In addition, we often want to split applications into multiple bundles and load them on demand.
  * Doing this transparently is not trivial.
  *
- * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+ * The Angular router solves these problems. Using the router, you can declaratively specify
  * application states, manage state transitions while taking care of the URL, and load bundles on
  * demand.
  *
@@ -143,17 +142,42 @@ export interface ExtraOptions {
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
+/**
+ * To initialize the router properly we need to do in two steps:
+ *
+ * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+ * a resolver or a guards executes asynchronously. Second, we need to actually run
+ * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+ * hook provided by the router to do that.
+ *
+ * The router navigation starts, reaches the point when preactivation is done, and then
+ * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
+ */
+export declare class RouterInitializer {
+    private injector;
+    private initNavigation;
+    private resultOfPreactivationDone;
+    constructor(injector: Injector);
+    appInitializer(): Promise<any>;
+    bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
+}
+export declare function getAppInitializer(r: RouterInitializer): any;
+export declare function getBootstrapListener(r: RouterInitializer): any;
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
  * @experimental
  */
 export declare const ROUTER_INITIALIZER: OpaqueToken;
-export declare function provideRouterInitializer(): ({
+export declare function provideRouterInitializer(): (typeof RouterInitializer | {
+    provide: any;
+    multi: boolean;
+    useFactory: (r: RouterInitializer) => any;
+    deps: typeof RouterInitializer[];
+} | {
     provide: OpaqueToken;
-    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => (bootstrappedComponentRef: ComponentRef<any>) => void;
-    deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
+    useFactory: (r: RouterInitializer) => any;
+    deps: typeof RouterInitializer[];
 } | {
     provide: OpaqueToken;
     multi: boolean;
