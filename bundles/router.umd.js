@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.7-e90661a
+ * @license Angular v3.4.7-74cb575
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -5551,7 +5551,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.7-e90661a');
+    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.7-74cb575');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
