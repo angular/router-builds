@@ -14,5 +14,5 @@ import { Version } from '@angular/core';
 /**
  * @stable
  */
-export var /** @type {?} */ VERSION = new Version('4.0.0-beta.7-2769370');
+export var /** @type {?} */ VERSION = new Version('4.0.0-beta.7-d3f174a');
 //# sourceMappingURL=version.js.map
