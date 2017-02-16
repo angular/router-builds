@@ -9,6 +9,7 @@ import { Compiler, ComponentFactoryResolver, InjectionToken, Injector, NgModuleF
 import { Observable } from 'rxjs/Observable';
 import { LoadChildren, Route } from './config';
 /**
+ * @docsNotRequired
  * @experimental
  */
 export declare const ROUTES: InjectionToken<Route[][]>;

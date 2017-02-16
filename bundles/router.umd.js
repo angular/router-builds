@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.7-0e2fd9d
+ * @license Angular v4.0.0-beta.7-4a56b6e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -215,6 +215,7 @@
     }
 
     /**
+     * @docsNotRequired
      * @experimental
      */
     var /** @type {?} */ ROUTES = new _angular_core.InjectionToken('ROUTES');
@@ -5626,7 +5627,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.7-0e2fd9d');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.7-4a56b6e');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
@@ -5645,6 +5646,7 @@
     exports.NavigationStart = NavigationStart;
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
+    exports.ROUTES = ROUTES;
     exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
     exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
     exports.RouterModule = RouterModule;
@@ -5667,5 +5669,16 @@
     exports.UrlTree = UrlTree;
     exports.VERSION = VERSION;
     exports.__router_private__ = __router_private__;
+    exports.ɵa = ROUTER_FORROOT_GUARD;
+    exports.ɵb = ROUTER_PROVIDERS;
+    exports.ɵh = initialRouterNavigation;
+    exports.ɵe = provideForRootGuard;
+    exports.ɵd = provideLocationStrategy;
+    exports.ɵi = provideRouterInitializer;
+    exports.ɵg = rootRoute;
+    exports.ɵc = routerNgProbeToken;
+    exports.ɵf = setupRouter;
+    exports.ɵj = Tree;
+    exports.ɵk = TreeNode;
 
 }));

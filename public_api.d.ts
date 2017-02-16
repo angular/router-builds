@@ -8,11 +8,6 @@
 /**
  * @module
  * @description
- * Entry point for all public APIs of the common package.
+ * Entry point for all public APIs of the router package.
  */
-import { Version } from '@angular/core';
-/**
- * @stable
- */
-export var /** @type {?} */ VERSION = new Version('4.0.0-beta.7-4a56b6e');
-//# sourceMappingURL=version.js.map
+export * from './src/index';
