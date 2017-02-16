@@ -1,13 +1,6 @@
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Generated bundle index. Do not edit.
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the router package.
- */
-export * from './src/index';
+export * from './public_api';
+export { ROUTER_FORROOT_GUARD as ɵa, ROUTER_PROVIDERS as ɵb, initialRouterNavigation as ɵh, provideForRootGuard as ɵe, provideLocationStrategy as ɵd, provideRouterInitializer as ɵi, rootRoute as ɵg, routerNgProbeToken as ɵc, setupRouter as ɵf } from './src/router_module';
+export { Tree as ɵj, TreeNode as ɵk } from './src/utils/tree';

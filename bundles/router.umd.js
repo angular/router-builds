@@ -215,6 +215,7 @@
     }
 
     /**
+     * @docsNotRequired
      * @experimental
      */
     var /** @type {?} */ ROUTES = new _angular_core.InjectionToken('ROUTES');
@@ -5645,6 +5646,7 @@
     exports.NavigationStart = NavigationStart;
     exports.Router = Router;
     exports.RoutesRecognized = RoutesRecognized;
+    exports.ROUTES = ROUTES;
     exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
     exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
     exports.RouterModule = RouterModule;
@@ -5667,5 +5669,16 @@
     exports.UrlTree = UrlTree;
     exports.VERSION = VERSION;
     exports.__router_private__ = __router_private__;
+    exports.ɵa = ROUTER_FORROOT_GUARD;
+    exports.ɵb = ROUTER_PROVIDERS;
+    exports.ɵh = initialRouterNavigation;
+    exports.ɵe = provideForRootGuard;
+    exports.ɵd = provideLocationStrategy;
+    exports.ɵi = provideRouterInitializer;
+    exports.ɵg = rootRoute;
+    exports.ɵc = routerNgProbeToken;
+    exports.ɵf = setupRouter;
+    exports.ɵj = Tree;
+    exports.ɵk = TreeNode;
 
 }));

@@ -12,6 +12,7 @@ import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { flatten, wrapIntoObservable } from './utils/collection';
 /**
+ * @docsNotRequired
  * @experimental
  */
 export const /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
