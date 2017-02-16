@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { Route } from './config';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
 /**
- * @whatItDoes Indicates that a class can implement to be a guard deciding if a route can be
+ * @whatItDoes Interface that a class can implement to be a guard deciding if a route can be
  * activated.
  *
  * @howToUse
@@ -49,7 +49,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  * class AppModule {}
  * ```
  *
- * You can also provide a function with the same signature instead of the class:
+ * You can alternatively provide a function with the `canActivate` signature:
  *
  * ```
  * @NgModule({
@@ -78,7 +78,7 @@ export interface CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
- * @whatItDoes Indicates that a class can implement to be a guard deciding if a child route can be
+ * @whatItDoes Interface that a class can implement to be a guard deciding if a child route can be
  * activated.
  *
  * @howToUse
@@ -123,7 +123,7 @@ export interface CanActivate {
  * class AppModule {}
  * ```
  *
- * You can also provide a function with the same signature instead of the class:
+ * You can alternatively provide a function with the `canActivateChild` signature:
  *
  * ```
  * @NgModule({
@@ -157,7 +157,7 @@ export interface CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
- * @whatItDoes Indicates that a class can implement to be a guard deciding if a route can be
+ * @whatItDoes Interface that a class can implement to be a guard deciding if a route can be
  * deactivated.
  *
  * @howToUse
@@ -199,7 +199,7 @@ export interface CanActivateChild {
  * class AppModule {}
  * ```
  *
- * You can also provide a function with the same signature instead of the class:
+ * You can alternatively provide a function with the `canDeactivate` signature:
  *
  * ```
  * @NgModule({
@@ -229,7 +229,7 @@ export interface CanDeactivate<T> {
     canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean;
 }
 /**
- * @whatItDoes Indicates that class can implement to be a data provider.
+ * @whatItDoes Interface that class can implement to be a data provider.
  *
  * @howToUse
  *
@@ -269,7 +269,7 @@ export interface CanDeactivate<T> {
  * class AppModule {}
  * ```
  *
- * You can also provide a function with the same signature instead of the class.
+ * You can alternatively provide a function with the `resolve` signature:
  *
  * ```
  * @NgModule({
@@ -299,7 +299,7 @@ export interface Resolve<T> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Promise<T> | T;
 }
 /**
- * @whatItDoes Indicates that a class can implement to be a guard deciding if a children can be
+ * @whatItDoes Interface that a class can implement to be a guard deciding if a children can be
  * loaded.
  *
  * @howToUse
@@ -339,7 +339,7 @@ export interface Resolve<T> {
  * class AppModule {}
  * ```
  *
- * You can also provide a function with the same signature instead of the class:
+ * You can alternatively provide a function with the `canLoad` signature:
  *
  * ```
  * @NgModule({
