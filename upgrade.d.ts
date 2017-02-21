@@ -5,8 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, ComponentRef, InjectionToken } from '@angular/core';
-import { ExtraOptions, RouterPreloader } from '@angular/router';
+import { ComponentRef, InjectionToken } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
  * @whatItDoes Creates an initializer that in addition to setting up the Angular
@@ -32,9 +31,10 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * @experimental
  */
 export declare const RouterUpgradeInitializer: {
-    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: (ngUpgrade: UpgradeModule, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => Function;
-    deps: (typeof UpgradeModule | typeof ApplicationRef | typeof RouterPreloader | InjectionToken<ExtraOptions>)[];
+    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
+    multi: boolean;
+    useFactory: (ngUpgrade: UpgradeModule) => () => void;
+    deps: typeof UpgradeModule[];
 };
 /**
  * @whatItDoes Sets up a location synchronization.
