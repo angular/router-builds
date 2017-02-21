@@ -28,7 +28,7 @@ import { ActivatedRoute, advanceActivatedRoute, createEmptyState, equalParamsAnd
 import { PRIMARY_OUTLET, isNavigationCancelingError } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
-import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
+import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
  * @param {?} error
  * @return {?}
@@ -766,7 +766,7 @@ export class PreActivation {
         const /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (!equalParamsAndUrlSegments(future, curr)) {
+            if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             else {
@@ -794,6 +794,24 @@ export class PreActivation {
             else {
                 this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
             }
+        }
+    }
+    /**
+     * @param {?} curr
+     * @param {?} future
+     * @param {?} mode
+     * @return {?}
+     */
+    shouldRunGuardsAndResolvers(curr, future, mode) {
+        switch (mode) {
+            case 'always':
+                return true;
+            case 'paramsOrQueryParamsChange':
+                return !equalParamsAndUrlSegments(curr, future) ||
+                    !shallowEqual(curr.queryParams, future.queryParams);
+            case 'paramsChange':
+            default:
+                return !equalParamsAndUrlSegments(curr, future);
         }
     }
     /**

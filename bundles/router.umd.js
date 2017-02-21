@@ -1763,7 +1763,7 @@
      */
     function validateNode(route, fullPath) {
         if (!route) {
-            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n       \n      Example: \n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
         }
         if (Array.isArray(route)) {
             throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
@@ -4021,7 +4021,7 @@
             var /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
             // reusing the node
             if (curr && future._routeConfig === curr._routeConfig) {
-                if (!equalParamsAndUrlSegments(future, curr)) {
+                if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
                     this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
                 }
                 else {
@@ -4049,6 +4049,24 @@
                 else {
                     this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
                 }
+            }
+        };
+        /**
+         * @param {?} curr
+         * @param {?} future
+         * @param {?} mode
+         * @return {?}
+         */
+        PreActivation.prototype.shouldRunGuardsAndResolvers = function (curr, future, mode) {
+            switch (mode) {
+                case 'always':
+                    return true;
+                case 'paramsOrQueryParamsChange':
+                    return !equalParamsAndUrlSegments(curr, future) ||
+                        !shallowEqual(curr.queryParams, future.queryParams);
+                case 'paramsChange':
+                default:
+                    return !equalParamsAndUrlSegments(curr, future);
             }
         };
         /**
