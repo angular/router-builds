@@ -37,6 +37,14 @@ function defaultErrorHandler(error) {
     throw error;
 }
 /**
+ * \@internal
+ * @param {?} snapshot
+ * @return {?}
+ */
+function defaultRouterHook(snapshot) {
+    return of(null);
+}
+/**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
 export class DefaultRouteReuseStrategy {
@@ -110,6 +118,15 @@ export class Router {
          * Indicates if at least one navigation happened.
          */
         this.navigated = false;
+        /**
+         * Used by RouterModule. This allows us to
+         * pause the navigation either before preactivation or after it.
+         * @internal
+         */
+        this.hooks = {
+            beforePreactivation: defaultRouterHook,
+            afterPreactivation: defaultRouterHook
+        };
         /**
          * Extracts and merges URLs. Used for AngularJS to Angular migrations.
          */
@@ -492,22 +509,25 @@ export class Router {
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
+            const /** @type {?} */ beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, (p) => {
+                return map.call(this.hooks.beforePreactivation(p.snapshot), () => p);
+            });
             // run preactivation: guards and data resolvers
             let /** @type {?} */ preActivation;
-            const /** @type {?} */ preactivationTraverse$ = map.call(urlAndSnapshot$, ({ appliedUrl, snapshot }) => {
+            const /** @type {?} */ preactivationTraverse$ = map.call(beforePreactivationDone$, ({ appliedUrl, snapshot }) => {
                 preActivation =
                     new PreActivation(snapshot, this.currentRouterState.snapshot, this.injector);
                 preActivation.traverse(this.outletMap);
                 return { appliedUrl, snapshot };
             });
-            const /** @type {?} */ preactivationCheckGuards = mergeMap.call(preactivationTraverse$, ({ appliedUrl, snapshot }) => {
+            const /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationTraverse$, ({ appliedUrl, snapshot }) => {
                 if (this.navigationId !== id)
                     return of(false);
                 return map.call(preActivation.checkGuards(), (shouldActivate) => {
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                 });
             });
-            const /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards, (p) => {
+            const /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, (p) => {
                 if (this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate) {
@@ -517,9 +537,12 @@ export class Router {
                     return of(p);
                 }
             });
+            const /** @type {?} */ preactivationDone$ = mergeMap.call(preactivationResolveData$, (p) => {
+                return map.call(this.hooks.afterPreactivation(p.snapshot), () => p);
+            });
             // create router state
             // this operation has side effects => route state is being affected
-            const /** @type {?} */ routerState$ = map.call(preactivationResolveData$, ({ appliedUrl, snapshot, shouldActivate }) => {
+            const /** @type {?} */ routerState$ = map.call(preactivationDone$, ({ appliedUrl, snapshot, shouldActivate }) => {
                 if (shouldActivate) {
                     const /** @type {?} */ state = createRouterState(this.routeReuseStrategy, snapshot, this.currentRouterState);
                     return { appliedUrl, state, shouldActivate };
@@ -626,6 +649,13 @@ function Router_tsickle_Closure_declarations() {
      * @type {?}
      */
     Router.prototype.navigated;
+    /**
+     * Used by RouterModule. This allows us to
+     * pause the navigation either before preactivation or after it.
+     * \@internal
+     * @type {?}
+     */
+    Router.prototype.hooks;
     /**
      * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      * @type {?}
