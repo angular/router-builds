@@ -7,7 +7,7 @@
  */
 import { Compiler, ComponentFactoryResolver, InjectionToken, Injector, NgModuleFactoryLoader } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { LoadChildren, Route } from './config';
+import { Route } from './config';
 /**
  * @docsNotRequired
  * @experimental
@@ -23,7 +23,9 @@ export declare class LoadedRouterConfig {
 export declare class RouterConfigLoader {
     private loader;
     private compiler;
-    constructor(loader: NgModuleFactoryLoader, compiler: Compiler);
-    load(parentInjector: Injector, loadChildren: LoadChildren): Observable<LoadedRouterConfig>;
+    private onLoadStartListener;
+    private onLoadEndListener;
+    constructor(loader: NgModuleFactoryLoader, compiler: Compiler, onLoadStartListener?: (r: Route) => void, onLoadEndListener?: (r: Route) => void);
+    load(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
     private loadModuleFactory(loadChildren);
 }

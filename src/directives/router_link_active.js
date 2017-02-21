@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ChangeDetectorRef, ContentChildren, Directive, ElementRef, Input, Renderer } from '@angular/core';
-import { NavigationEnd, Router } from '../router';
+import { NavigationEnd } from '../events';
+import { Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 /**
  * \@whatItDoes Lets you add a CSS class to an element when the link's route becomes active.

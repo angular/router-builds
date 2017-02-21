@@ -13,7 +13,8 @@ import { concatMap } from 'rxjs/operator/concatMap';
 import { filter } from 'rxjs/operator/filter';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { mergeMap } from 'rxjs/operator/mergeMap';
-import { NavigationEnd, Router } from './router';
+import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart } from './events';
+import { Router } from './router';
 import { RouterConfigLoader } from './router_config_loader';
 /**
  * \@whatItDoes Provides a preloading strategy.
@@ -104,7 +105,9 @@ var RouterPreloader = (function () {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
-        this.loader = new RouterConfigLoader(moduleLoader, compiler);
+        var onStartLoad = function (r) { return router.triggerEvent(new RouteConfigLoadStart(r)); };
+        var onEndLoad = function (r) { return router.triggerEvent(new RouteConfigLoadEnd(r)); };
+        this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
     }
     ;
     /**
@@ -113,7 +116,7 @@ var RouterPreloader = (function () {
     RouterPreloader.prototype.setUpPreloading = function () {
         var _this = this;
         var /** @type {?} */ navigations = filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
-        this.subscription = concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function (v) { });
+        this.subscription = concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function () { });
     };
     /**
      * @return {?}
@@ -154,7 +157,7 @@ var RouterPreloader = (function () {
     RouterPreloader.prototype.preloadConfig = function (injector, route) {
         var _this = this;
         return this.preloadingStrategy.preload(route, function () {
-            var /** @type {?} */ loaded = _this.loader.load(injector, route.loadChildren);
+            var /** @type {?} */ loaded = _this.loader.load(injector, route);
             return mergeMap.call(loaded, function (config) {
                 var /** @type {?} */ c = route;
                 c._loadedConfig = config;

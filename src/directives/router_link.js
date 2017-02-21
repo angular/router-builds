@@ -7,7 +7,8 @@
  */
 import { LocationStrategy } from '@angular/common';
 import { Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer, isDevMode } from '@angular/core';
-import { NavigationEnd, Router } from '../router';
+import { NavigationEnd } from '../events';
+import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 /**
  * \@whatItDoes Lets you link to specific parts of your app.
