@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.8-fbe4b76
+ * @license Angular v4.0.0-beta.8-c2e0f71
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -1763,7 +1763,7 @@
      */
     function validateNode(route, fullPath) {
         if (!route) {
-            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n       \n      Example: \n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
         }
         if (Array.isArray(route)) {
             throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
@@ -4021,7 +4021,7 @@
             var /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
             // reusing the node
             if (curr && future._routeConfig === curr._routeConfig) {
-                if (!equalParamsAndUrlSegments(future, curr)) {
+                if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
                     this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
                 }
                 else {
@@ -4049,6 +4049,24 @@
                 else {
                     this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
                 }
+            }
+        };
+        /**
+         * @param {?} curr
+         * @param {?} future
+         * @param {?} mode
+         * @return {?}
+         */
+        PreActivation.prototype.shouldRunGuardsAndResolvers = function (curr, future, mode) {
+            switch (mode) {
+                case 'always':
+                    return true;
+                case 'paramsOrQueryParamsChange':
+                    return !equalParamsAndUrlSegments(curr, future) ||
+                        !shallowEqual(curr.queryParams, future.queryParams);
+                case 'paramsChange':
+                default:
+                    return !equalParamsAndUrlSegments(curr, future);
             }
         };
         /**
@@ -5647,7 +5665,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.8-fbe4b76');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-beta.8-c2e0f71');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
