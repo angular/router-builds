@@ -11,6 +11,7 @@ import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
+import { RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -142,42 +143,17 @@ export interface ExtraOptions {
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-/**
- * To initialize the router properly we need to do in two steps:
- *
- * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
- * a resolver or a guards executes asynchronously. Second, we need to actually run
- * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
- * hook provided by the router to do that.
- *
- * The router navigation starts, reaches the point when preactivation is done, and then
- * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
- */
-export declare class RouterInitializer {
-    private injector;
-    private initNavigation;
-    private resultOfPreactivationDone;
-    constructor(injector: Injector);
-    appInitializer(): Promise<any>;
-    bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-}
-export declare function getAppInitializer(r: RouterInitializer): any;
-export declare function getBootstrapListener(r: RouterInitializer): any;
+export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
  * @experimental
  */
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
-export declare function provideRouterInitializer(): (typeof RouterInitializer | {
-    provide: InjectionToken<(() => void)[]>;
-    multi: boolean;
-    useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
-} | {
+export declare function provideRouterInitializer(): ({
     provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => (bootstrappedComponentRef: ComponentRef<any>) => void;
+    deps: (typeof Router | typeof RouterPreloader | InjectionToken<ExtraOptions> | typeof ApplicationRef)[];
 } | {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;

@@ -28,21 +28,13 @@ import { ActivatedRoute, advanceActivatedRoute, createEmptyState, equalParamsAnd
 import { PRIMARY_OUTLET, isNavigationCancelingError } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
-import { andObservables, forEach, merge, shallowEqual, waitForMap, wrapIntoObservable } from './utils/collection';
+import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
 /**
  * @param {?} error
  * @return {?}
  */
 function defaultErrorHandler(error) {
     throw error;
-}
-/**
- * \@internal
- * @param {?} snapshot
- * @return {?}
- */
-function defaultRouterHook(snapshot) {
-    return of(null);
 }
 /**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
@@ -123,15 +115,6 @@ var Router = (function () {
          * Indicates if at least one navigation happened.
          */
         this.navigated = false;
-        /**
-         * Used by RouterModule. This allows us to
-         * pause the navigation either before preactivation or after it.
-         * @internal
-         */
-        this.hooks = {
-            beforePreactivation: defaultRouterHook,
-            afterPreactivation: defaultRouterHook
-        };
         /**
          * Extracts and merges URLs. Used for AngularJS to Angular migrations.
          */
@@ -534,19 +517,16 @@ var Router = (function () {
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            var /** @type {?} */ beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, function (p) {
-                return map.call(_this.hooks.beforePreactivation(p.snapshot), function () { return p; });
-            });
             // run preactivation: guards and data resolvers
             var /** @type {?} */ preActivation;
-            var /** @type {?} */ preactivationTraverse$ = map.call(beforePreactivationDone$, function (_a) {
+            var /** @type {?} */ preactivationTraverse$ = map.call(urlAndSnapshot$, function (_a) {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                 preActivation =
                     new PreActivation(snapshot, _this.currentRouterState.snapshot, _this.injector);
                 preActivation.traverse(_this.outletMap);
                 return { appliedUrl: appliedUrl, snapshot: snapshot };
             });
-            var /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationTraverse$, function (_a) {
+            var /** @type {?} */ preactivationCheckGuards = mergeMap.call(preactivationTraverse$, function (_a) {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                 if (_this.navigationId !== id)
                     return of(false);
@@ -554,7 +534,7 @@ var Router = (function () {
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                 });
             });
-            var /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, function (p) {
+            var /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards, function (p) {
                 if (_this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate) {
@@ -564,12 +544,9 @@ var Router = (function () {
                     return of(p);
                 }
             });
-            var /** @type {?} */ preactivationDone$ = mergeMap.call(preactivationResolveData$, function (p) {
-                return map.call(_this.hooks.afterPreactivation(p.snapshot), function () { return p; });
-            });
             // create router state
             // this operation has side effects => route state is being affected
-            var /** @type {?} */ routerState$ = map.call(preactivationDone$, function (_a) {
+            var /** @type {?} */ routerState$ = map.call(preactivationResolveData$, function (_a) {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
                 if (shouldActivate) {
                     var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.currentRouterState);
@@ -680,13 +657,6 @@ function Router_tsickle_Closure_declarations() {
      * @type {?}
      */
     Router.prototype.navigated;
-    /**
-     * Used by RouterModule. This allows us to
-     * pause the navigation either before preactivation or after it.
-     * \@internal
-     * @type {?}
-     */
-    Router.prototype.hooks;
     /**
      * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      * @type {?}
@@ -836,7 +806,7 @@ var PreActivation = (function () {
         var /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
+            if (!equalParamsAndUrlSegments(future, curr)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             else {
@@ -864,24 +834,6 @@ var PreActivation = (function () {
             else {
                 this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
             }
-        }
-    };
-    /**
-     * @param {?} curr
-     * @param {?} future
-     * @param {?} mode
-     * @return {?}
-     */
-    PreActivation.prototype.shouldRunGuardsAndResolvers = function (curr, future, mode) {
-        switch (mode) {
-            case 'always':
-                return true;
-            case 'paramsOrQueryParamsChange':
-                return !equalParamsAndUrlSegments(curr, future) ||
-                    !shallowEqual(curr.queryParams, future.queryParams);
-            case 'paramsChange':
-            default:
-                return !equalParamsAndUrlSegments(curr, future);
         }
     };
     /**

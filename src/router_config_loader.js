@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, NgModuleFactory } from '@angular/core';
+import { Compiler, InjectionToken } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operator/map';
@@ -85,14 +85,8 @@ var RouterConfigLoader = (function () {
             return fromPromise(this.loader.load(loadChildren));
         }
         else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
-                if (t instanceof NgModuleFactory) {
-                    return of(t);
-                }
-                else {
-                    return fromPromise(_this.compiler.compileModuleAsync(t));
-                }
-            });
+            var /** @type {?} */ offlineMode_1 = this.compiler instanceof Compiler;
+            return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) { return offlineMode_1 ? of(/** @type {?} */ (t)) : fromPromise(_this.compiler.compileModuleAsync(t)); });
         }
     };
     return RouterConfigLoader;
