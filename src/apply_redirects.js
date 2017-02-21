@@ -110,12 +110,10 @@ class ApplyRedirects {
                 // we need to run matching, so we can fetch all lazy-loaded modules
                 return this.match(e.urlTree);
             }
-            else if (e instanceof NoMatch) {
+            if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
             }
-            else {
-                throw e;
-            }
+            throw e;
         });
     }
     /**
@@ -129,9 +127,7 @@ class ApplyRedirects {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
             }
-            else {
-                throw e;
-            }
+            throw e;
         });
     }
     /**
@@ -164,9 +160,7 @@ class ApplyRedirects {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
             return map.call(this.expandChildren(injector, routes, segmentGroup), (children) => new UrlSegmentGroup([], children));
         }
-        else {
-            return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
-        }
+        return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
     }
     /**
      * @param {?} injector
@@ -191,10 +185,10 @@ class ApplyRedirects {
         const /** @type {?} */ processedRoutes$ = map.call(routes$, (r) => {
             const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return _catch.call(expanded$, (e) => {
-                if (e instanceof NoMatch)
+                if (e instanceof NoMatch) {
                     return of(null);
-                else
-                    throw e;
+                }
+                throw e;
             });
         });
         const /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
@@ -204,13 +198,9 @@ class ApplyRedirects {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
                 }
-                else {
-                    throw new NoMatch(segmentGroup);
-                }
+                throw new NoMatch(segmentGroup);
             }
-            else {
-                throw e;
-            }
+            throw e;
         });
     }
     /**
@@ -233,16 +223,16 @@ class ApplyRedirects {
      * @return {?}
      */
     expandSegmentAgainstRoute(injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-        if (getOutlet(route) !== outlet)
+        if (getOutlet(route) !== outlet) {
             return noMatch(segmentGroup);
-        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+        }
+        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects)) {
             return noMatch(segmentGroup);
+        }
         if (route.redirectTo === undefined) {
             return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
         }
-        else {
-            return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
-        }
+        return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
     }
     /**
      * @param {?} injector
@@ -257,9 +247,7 @@ class ApplyRedirects {
         if (route.path === '**') {
             return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
         }
-        else {
-            return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
-        }
+        return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
     }
     /**
      * @param {?} injector
@@ -273,12 +261,10 @@ class ApplyRedirects {
         if (route.redirectTo.startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        else {
-            return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
-                const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
-                return this.expandSegment(injector, group, routes, newSegments, outlet, false);
-            });
-        }
+        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+            const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
+            return this.expandSegment(injector, group, routes, newSegments, outlet, false);
+        });
     }
     /**
      * @param {?} injector
@@ -297,11 +283,9 @@ class ApplyRedirects {
         if (route.redirectTo.startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        else {
-            return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
-                return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-            });
-        }
+        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+            return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+        });
     }
     /**
      * @param {?} injector
@@ -313,38 +297,32 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(injector, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(injector, route.loadChildren), (r) => {
-                    ((route))._loadedConfig = r;
+                return map.call(this.configLoader.load(injector, route), (cfg) => {
+                    ((route))._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 });
             }
-            else {
-                return of(new UrlSegmentGroup(segments, {}));
+            return of(new UrlSegmentGroup(segments, {}));
+        }
+        const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
+        if (!matched)
+            return noMatch(rawSegmentGroup);
+        const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
+        const /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
+        return mergeMap.call(childConfig$, (routerConfig) => {
+            const /** @type {?} */ childInjector = routerConfig.injector;
+            const /** @type {?} */ childConfig = routerConfig.routes;
+            const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
+            if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+                const /** @type {?} */ expanded$ = this.expandChildren(childInjector, childConfig, segmentGroup);
+                return map.call(expanded$, (children) => new UrlSegmentGroup(consumedSegments, children));
             }
-        }
-        else {
-            const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
-            if (!matched)
-                return noMatch(rawSegmentGroup);
-            const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
-            const /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
-            return mergeMap.call(childConfig$, (routerConfig) => {
-                const /** @type {?} */ childInjector = routerConfig.injector;
-                const /** @type {?} */ childConfig = routerConfig.routes;
-                const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
-                if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                    const /** @type {?} */ expanded$ = this.expandChildren(childInjector, childConfig, segmentGroup);
-                    return map.call(expanded$, (children) => new UrlSegmentGroup(consumedSegments, children));
-                }
-                else if (childConfig.length === 0 && slicedSegments.length === 0) {
-                    return of(new UrlSegmentGroup(consumedSegments, {}));
-                }
-                else {
-                    const /** @type {?} */ expanded$ = this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-                    return map.call(expanded$, (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
-                }
-            });
-        }
+            if (childConfig.length === 0 && slicedSegments.length === 0) {
+                return of(new UrlSegmentGroup(consumedSegments, {}));
+            }
+            const /** @type {?} */ expanded$ = this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            return map.call(expanded$, (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
+        });
     }
     /**
      * @param {?} injector
@@ -355,27 +333,20 @@ class ApplyRedirects {
         if (route.children) {
             return of(new LoadedRouterConfig(route.children, injector, null, null));
         }
-        else if (route.loadChildren) {
+        if (route.loadChildren) {
             return mergeMap.call(runGuards(injector, route), (shouldLoad) => {
                 if (shouldLoad) {
-                    if (((route))._loadedConfig) {
-                        return of(((route))._loadedConfig);
-                    }
-                    else {
-                        return map.call(this.configLoader.load(injector, route.loadChildren), (r) => {
-                            ((route))._loadedConfig = r;
-                            return r;
+                    return ((route))._loadedConfig ?
+                        of(((route))._loadedConfig) :
+                        map.call(this.configLoader.load(injector, route), (cfg) => {
+                            ((route))._loadedConfig = cfg;
+                            return cfg;
                         });
-                    }
                 }
-                else {
-                    return canLoadFails(route);
-                }
+                return canLoadFails(route);
             });
         }
-        else {
-            return of(new LoadedRouterConfig([], injector, null, null));
-        }
+        return of(new LoadedRouterConfig([], injector, null, null));
     }
     /**
      * @param {?} route
@@ -390,12 +361,10 @@ class ApplyRedirects {
             if (c.numberOfChildren === 0) {
                 return of(res);
             }
-            else if (c.numberOfChildren > 1 || !c.children[PRIMARY_OUTLET]) {
+            if (c.numberOfChildren > 1 || !c.children[PRIMARY_OUTLET]) {
                 return namedOutletsRedirect(route.redirectTo);
             }
-            else {
-                c = c.children[PRIMARY_OUTLET];
-            }
+            c = c.children[PRIMARY_OUTLET];
         }
     }
     /**
@@ -405,7 +374,6 @@ class ApplyRedirects {
      * @return {?}
      */
     applyRedirectCommands(segments, redirectTo, posParams) {
-        const /** @type {?} */ t = this.urlSerializer.parse(redirectTo);
         return this.applyRedirectCreatreUrlTree(redirectTo, this.urlSerializer.parse(redirectTo), segments, posParams);
     }
     /**
@@ -427,12 +395,7 @@ class ApplyRedirects {
     createQueryParams(redirectToParams, actualParams) {
         const /** @type {?} */ res = {};
         forEach(redirectToParams, (v, k) => {
-            if (v.startsWith(':')) {
-                res[k] = actualParams[v.substring(1)];
-            }
-            else {
-                res[k] = v;
-            }
+            res[k] = v.startsWith(':') ? actualParams[v.substring(1)] : v;
         });
         return res;
     }
@@ -516,12 +479,7 @@ function runGuards(injector, route) {
         return of(true);
     const /** @type {?} */ obs = map.call(from(canLoad), (c) => {
         const /** @type {?} */ guard = injector.get(c);
-        if (guard.canLoad) {
-            return wrapIntoObservable(guard.canLoad(route));
-        }
-        else {
-            return wrapIntoObservable(guard(route));
-        }
+        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
 }
@@ -537,9 +495,7 @@ function match(segmentGroup, route, segments) {
         if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
             return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
         }
-        else {
-            return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
-        }
+        return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
     }
     const /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
     const /** @type {?} */ res = matcher(segments, segmentGroup, route);
@@ -565,14 +521,12 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
         const /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
         return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
     }
-    else if (slicedSegments.length === 0 &&
+    if (slicedSegments.length === 0 &&
         containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
         const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
         return { segmentGroup: mergeTrivialChildren(s), slicedSegments };
     }
-    else {
-        return { segmentGroup, slicedSegments };
-    }
+    return { segmentGroup, slicedSegments };
 }
 /**
  * @param {?} s
@@ -583,9 +537,7 @@ function mergeTrivialChildren(s) {
         const /** @type {?} */ c = s.children[PRIMARY_OUTLET];
         return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
     }
-    else {
-        return s;
-    }
+    return s;
 }
 /**
  * @param {?} segmentGroup
@@ -646,8 +598,9 @@ function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
  * @return {?}
  */
 function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
         return false;
+    }
     return r.path === '' && r.redirectTo !== undefined;
 }
 /**

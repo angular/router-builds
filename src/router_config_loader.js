@@ -44,21 +44,32 @@ export class RouterConfigLoader {
     /**
      * @param {?} loader
      * @param {?} compiler
+     * @param {?=} onLoadStartListener
+     * @param {?=} onLoadEndListener
      */
-    constructor(loader, compiler) {
+    constructor(loader, compiler, onLoadStartListener, onLoadEndListener) {
         this.loader = loader;
         this.compiler = compiler;
+        this.onLoadStartListener = onLoadStartListener;
+        this.onLoadEndListener = onLoadEndListener;
     }
     /**
      * @param {?} parentInjector
-     * @param {?} loadChildren
+     * @param {?} route
      * @return {?}
      */
-    load(parentInjector, loadChildren) {
-        return map.call(this.loadModuleFactory(loadChildren), (r) => {
-            const /** @type {?} */ ref = r.create(parentInjector);
-            const /** @type {?} */ injectorFactory = (parent) => r.create(parent).injector;
-            return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver, injectorFactory);
+    load(parentInjector, route) {
+        if (this.onLoadStartListener) {
+            this.onLoadStartListener(route);
+        }
+        const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(route.loadChildren);
+        return map.call(moduleFactory$, (factory) => {
+            if (this.onLoadEndListener) {
+                this.onLoadEndListener(route);
+            }
+            const /** @type {?} */ module = factory.create(parentInjector);
+            const /** @type {?} */ injectorFactory = (parent) => factory.create(parent).injector;
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module.injector, module.componentFactoryResolver, injectorFactory);
         });
     }
     /**
@@ -80,5 +91,9 @@ function RouterConfigLoader_tsickle_Closure_declarations() {
     RouterConfigLoader.prototype.loader;
     /** @type {?} */
     RouterConfigLoader.prototype.compiler;
+    /** @type {?} */
+    RouterConfigLoader.prototype.onLoadStartListener;
+    /** @type {?} */
+    RouterConfigLoader.prototype.onLoadEndListener;
 }
 //# sourceMappingURL=router_config_loader.js.map

@@ -20,6 +20,7 @@ import { applyRedirects } from './apply_redirects';
 import { validateConfig } from './config';
 import { createRouterState } from './create_router_state';
 import { createUrlTree } from './create_url_tree';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized } from './events';
 import { recognize } from './recognize';
 import { RouterConfigLoader } from './router_config_loader';
 import { RouterOutletMap } from './router_outlet_map';
@@ -28,207 +29,6 @@ import { PRIMARY_OUTLET, isNavigationCancelingError } from './shared';
 import { DefaultUrlHandlingStrategy } from './url_handling_strategy';
 import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { andObservables, forEach, merge, waitForMap, wrapIntoObservable } from './utils/collection';
-/**
- * \@whatItDoes Represents an event triggered when a navigation starts.
- *
- * \@stable
- */
-export class NavigationStart {
-    /**
-     * @param {?} id
-     * @param {?} url
-     */
-    constructor(id, url) {
-        this.id = id;
-        this.url = url;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
-}
-function NavigationStart_tsickle_Closure_declarations() {
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationStart.prototype.id;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationStart.prototype.url;
-}
-/**
- * \@whatItDoes Represents an event triggered when a navigation ends successfully.
- *
- * \@stable
- */
-export class NavigationEnd {
-    /**
-     * @param {?} id
-     * @param {?} url
-     * @param {?} urlAfterRedirects
-     */
-    constructor(id, url, urlAfterRedirects) {
-        this.id = id;
-        this.url = url;
-        this.urlAfterRedirects = urlAfterRedirects;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    toString() {
-        return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
-    }
-}
-function NavigationEnd_tsickle_Closure_declarations() {
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationEnd.prototype.id;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationEnd.prototype.url;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationEnd.prototype.urlAfterRedirects;
-}
-/**
- * \@whatItDoes Represents an event triggered when a navigation is canceled.
- *
- * \@stable
- */
-export class NavigationCancel {
-    /**
-     * @param {?} id
-     * @param {?} url
-     * @param {?} reason
-     */
-    constructor(id, url, reason) {
-        this.id = id;
-        this.url = url;
-        this.reason = reason;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
-}
-function NavigationCancel_tsickle_Closure_declarations() {
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationCancel.prototype.id;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationCancel.prototype.url;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationCancel.prototype.reason;
-}
-/**
- * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
- *
- * \@stable
- */
-export class NavigationError {
-    /**
-     * @param {?} id
-     * @param {?} url
-     * @param {?} error
-     */
-    constructor(id, url, error) {
-        this.id = id;
-        this.url = url;
-        this.error = error;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    toString() {
-        return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
-    }
-}
-function NavigationError_tsickle_Closure_declarations() {
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationError.prototype.id;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationError.prototype.url;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    NavigationError.prototype.error;
-}
-/**
- * \@whatItDoes Represents an event triggered when routes are recognized.
- *
- * \@stable
- */
-export class RoutesRecognized {
-    /**
-     * @param {?} id
-     * @param {?} url
-     * @param {?} urlAfterRedirects
-     * @param {?} state
-     */
-    constructor(id, url, urlAfterRedirects, state) {
-        this.id = id;
-        this.url = url;
-        this.urlAfterRedirects = urlAfterRedirects;
-        this.state = state;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    toString() {
-        return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
-    }
-}
-function RoutesRecognized_tsickle_Closure_declarations() {
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    RoutesRecognized.prototype.id;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    RoutesRecognized.prototype.url;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    RoutesRecognized.prototype.urlAfterRedirects;
-    /**
-     * \@docsNotRequired
-     * @type {?}
-     */
-    RoutesRecognized.prototype.state;
-}
 /**
  * @param {?} error
  * @return {?}
@@ -315,10 +115,12 @@ export class Router {
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
+        const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
+        const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
-        this.configLoader = new RouterConfigLoader(loader, compiler);
+        this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
         this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         this.processNavigations();
     }
@@ -374,6 +176,12 @@ export class Router {
      * @return {?}
      */
     get events() { return this.routerEvents; }
+    /**
+     * \@internal
+     * @param {?} e
+     * @return {?}
+     */
+    triggerEvent(e) { this.routerEvents.next(e); }
     /**
      * Resets the configuration used for navigation and generating links.
      *
@@ -501,11 +309,9 @@ export class Router {
      * @return {?}
      */
     navigateByUrl(url, extras = { skipLocationChange: false }) {
-        if (url instanceof UrlTree) {
-            return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), 'imperative', extras);
-        }
-        const /** @type {?} */ urlTree = this.urlSerializer.parse(url);
-        return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), 'imperative', extras);
+        const /** @type {?} */ urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
+        const /** @type {?} */ mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
+        return this.scheduleNavigation(mergedTree, 'imperative', extras);
     }
     /**
      * Navigate based on the provided array of commands and a starting point.
@@ -612,8 +418,8 @@ export class Router {
             return null; // return value is not used
         }
         // Because of a bug in IE and Edge, the location class fires two events (popstate and
-        // hashchange)
-        // every single time. The second one should be ignored. Otherwise, the URL will flicker.
+        // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
+        // flicker.
         if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
             lastNavigation.rawUrl.toString() === rawUrl.toString()) {
             return null; // return value is not used

@@ -8,6 +8,171 @@
     (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.ng.platformBrowser,global.Rx.Observable.prototype));
 }(this, function (exports,_angular_common,_angular_core,rxjs_BehaviorSubject,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_first,rxjs_operator_map,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_operator_mergeAll,_angular_platformBrowser,rxjs_operator_filter) { 'use strict';
 
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
+     * \@whatItDoes Represents an event triggered when a navigation starts.
+     *
+     * \@stable
+     */
+    var NavigationStart = (function () {
+        /**
+         * @param {?} id
+         * @param {?} url
+         */
+        function NavigationStart(id, url) {
+            this.id = id;
+            this.url = url;
+        }
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
+        return NavigationStart;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered when a navigation ends successfully.
+     *
+     * \@stable
+     */
+    var NavigationEnd = (function () {
+        /**
+         * @param {?} id
+         * @param {?} url
+         * @param {?} urlAfterRedirects
+         */
+        function NavigationEnd(id, url, urlAfterRedirects) {
+            this.id = id;
+            this.url = url;
+            this.urlAfterRedirects = urlAfterRedirects;
+        }
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        NavigationEnd.prototype.toString = function () {
+            return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
+        };
+        return NavigationEnd;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered when a navigation is canceled.
+     *
+     * \@stable
+     */
+    var NavigationCancel = (function () {
+        /**
+         * @param {?} id
+         * @param {?} url
+         * @param {?} reason
+         */
+        function NavigationCancel(id, url, reason) {
+            this.id = id;
+            this.url = url;
+            this.reason = reason;
+        }
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
+        return NavigationCancel;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+     *
+     * \@stable
+     */
+    var NavigationError = (function () {
+        /**
+         * @param {?} id
+         * @param {?} url
+         * @param {?} error
+         */
+        function NavigationError(id, url, error) {
+            this.id = id;
+            this.url = url;
+            this.error = error;
+        }
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        NavigationError.prototype.toString = function () {
+            return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
+        };
+        return NavigationError;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered when routes are recognized.
+     *
+     * \@stable
+     */
+    var RoutesRecognized = (function () {
+        /**
+         * @param {?} id
+         * @param {?} url
+         * @param {?} urlAfterRedirects
+         * @param {?} state
+         */
+        function RoutesRecognized(id, url, urlAfterRedirects, state) {
+            this.id = id;
+            this.url = url;
+            this.urlAfterRedirects = urlAfterRedirects;
+            this.state = state;
+        }
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        RoutesRecognized.prototype.toString = function () {
+            return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
+        };
+        return RoutesRecognized;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered before lazy loading a route config.
+     *
+     * \@experimental
+     */
+    var RouteConfigLoadStart = (function () {
+        /**
+         * @param {?} route
+         */
+        function RouteConfigLoadStart(route) {
+            this.route = route;
+        }
+        /**
+         * @return {?}
+         */
+        RouteConfigLoadStart.prototype.toString = function () { return "RouteConfigLoadStart(path: " + this.route.path + ")"; };
+        return RouteConfigLoadStart;
+    }());
+    /**
+     * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
+     *
+     * \@experimental
+     */
+    var RouteConfigLoadEnd = (function () {
+        /**
+         * @param {?} route
+         */
+        function RouteConfigLoadEnd(route) {
+            this.route = route;
+        }
+        /**
+         * @return {?}
+         */
+        RouteConfigLoadEnd.prototype.toString = function () { return "RouteConfigLoadEnd(path: " + this.route.path + ")"; };
+        return RouteConfigLoadEnd;
+    }());
+
     var /** @type {?} */ isPromise = _angular_core.__core_private__.isPromise;
     var /** @type {?} */ isObservable = _angular_core.__core_private__.isObservable;
 
@@ -238,21 +403,33 @@
         /**
          * @param {?} loader
          * @param {?} compiler
+         * @param {?=} onLoadStartListener
+         * @param {?=} onLoadEndListener
          */
-        function RouterConfigLoader(loader, compiler) {
+        function RouterConfigLoader(loader, compiler, onLoadStartListener, onLoadEndListener) {
             this.loader = loader;
             this.compiler = compiler;
+            this.onLoadStartListener = onLoadStartListener;
+            this.onLoadEndListener = onLoadEndListener;
         }
         /**
          * @param {?} parentInjector
-         * @param {?} loadChildren
+         * @param {?} route
          * @return {?}
          */
-        RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
-            return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function (r) {
-                var /** @type {?} */ ref = r.create(parentInjector);
-                var /** @type {?} */ injectorFactory = function (parent) { return r.create(parent).injector; };
-                return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver, injectorFactory);
+        RouterConfigLoader.prototype.load = function (parentInjector, route) {
+            var _this = this;
+            if (this.onLoadStartListener) {
+                this.onLoadStartListener(route);
+            }
+            var /** @type {?} */ moduleFactory$ = this.loadModuleFactory(route.loadChildren);
+            return rxjs_operator_map.map.call(moduleFactory$, function (factory) {
+                if (_this.onLoadEndListener) {
+                    _this.onLoadEndListener(route);
+                }
+                var /** @type {?} */ module = factory.create(parentInjector);
+                var /** @type {?} */ injectorFactory = function (parent) { return factory.create(parent).injector; };
+                return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module.injector, module.componentFactoryResolver, injectorFactory);
             });
         };
         /**
@@ -1060,12 +1237,10 @@
                     // we need to run matching, so we can fetch all lazy-loaded modules
                     return _this.match(e.urlTree);
                 }
-                else if (e instanceof NoMatch) {
+                if (e instanceof NoMatch) {
                     throw _this.noMatchError(e);
                 }
-                else {
-                    throw e;
-                }
+                throw e;
             });
         };
         /**
@@ -1082,9 +1257,7 @@
                 if (e instanceof NoMatch) {
                     throw _this.noMatchError(e);
                 }
-                else {
-                    throw e;
-                }
+                throw e;
             });
         };
         /**
@@ -1118,9 +1291,7 @@
             if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
                 return rxjs_operator_map.map.call(this.expandChildren(injector, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
             }
-            else {
-                return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
-            }
+            return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
         };
         /**
          * @param {?} injector
@@ -1147,10 +1318,10 @@
             var /** @type {?} */ processedRoutes$ = rxjs_operator_map.map.call(routes$, function (r) {
                 var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
                 return rxjs_operator_catch._catch.call(expanded$, function (e) {
-                    if (e instanceof NoMatch)
+                    if (e instanceof NoMatch) {
                         return rxjs_observable_of.of(null);
-                    else
-                        throw e;
+                    }
+                    throw e;
                 });
             });
             var /** @type {?} */ concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
@@ -1160,13 +1331,9 @@
                     if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                         return rxjs_observable_of.of(new UrlSegmentGroup([], {}));
                     }
-                    else {
-                        throw new NoMatch(segmentGroup);
-                    }
+                    throw new NoMatch(segmentGroup);
                 }
-                else {
-                    throw e;
-                }
+                throw e;
             });
         };
         /**
@@ -1189,16 +1356,16 @@
          * @return {?}
          */
         ApplyRedirects.prototype.expandSegmentAgainstRoute = function (injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-            if (getOutlet$1(route) !== outlet)
+            if (getOutlet$1(route) !== outlet) {
                 return noMatch(segmentGroup);
-            if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+            }
+            if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects)) {
                 return noMatch(segmentGroup);
+            }
             if (route.redirectTo === undefined) {
                 return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
             }
-            else {
-                return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
-            }
+            return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
         };
         /**
          * @param {?} injector
@@ -1213,9 +1380,7 @@
             if (route.path === '**') {
                 return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
             }
-            else {
-                return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
-            }
+            return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
         };
         /**
          * @param {?} injector
@@ -1230,12 +1395,10 @@
             if (route.redirectTo.startsWith('/')) {
                 return absoluteRedirect(newTree);
             }
-            else {
-                return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
-                    var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
-                    return _this.expandSegment(injector, group, routes, newSegments, outlet, false);
-                });
-            }
+            return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+                var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
+                return _this.expandSegment(injector, group, routes, newSegments, outlet, false);
+            });
         };
         /**
          * @param {?} injector
@@ -1255,11 +1418,9 @@
             if (route.redirectTo.startsWith('/')) {
                 return absoluteRedirect(newTree);
             }
-            else {
-                return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
-                    return _this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-                });
-            }
+            return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+                return _this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+            });
         };
         /**
          * @param {?} injector
@@ -1272,38 +1433,34 @@
             var _this = this;
             if (route.path === '**') {
                 if (route.loadChildren) {
-                    return rxjs_operator_map.map.call(this.configLoader.load(injector, route.loadChildren), function (r) {
-                        ((route))._loadedConfig = r;
+                    return rxjs_operator_map.map.call(this.configLoader.load(injector, route), function (cfg) {
+                        ((route))._loadedConfig = cfg;
                         return new UrlSegmentGroup(segments, {});
                     });
                 }
-                else {
-                    return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+                return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+            }
+            var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild;
+            if (!matched)
+                return noMatch(rawSegmentGroup);
+            var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
+            var /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
+            return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function (routerConfig) {
+                var /** @type {?} */ childInjector = routerConfig.injector;
+                var /** @type {?} */ childConfig = routerConfig.routes;
+                var _a = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
+                if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+                    var /** @type {?} */ expanded$_1 = _this.expandChildren(childInjector, childConfig, segmentGroup);
+                    return rxjs_operator_map.map.call(expanded$_1, function (children) { return new UrlSegmentGroup(consumedSegments, children); });
                 }
-            }
-            else {
-                var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments_1 = _a.consumedSegments, lastChild = _a.lastChild;
-                if (!matched)
-                    return noMatch(rawSegmentGroup);
-                var /** @type {?} */ rawSlicedSegments_1 = segments.slice(lastChild);
-                var /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
-                return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function (routerConfig) {
-                    var /** @type {?} */ childInjector = routerConfig.injector;
-                    var /** @type {?} */ childConfig = routerConfig.routes;
-                    var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
-                    if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                        var /** @type {?} */ expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
-                        return rxjs_operator_map.map.call(expanded$, function (children) { return new UrlSegmentGroup(consumedSegments_1, children); });
-                    }
-                    else if (childConfig.length === 0 && slicedSegments.length === 0) {
-                        return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments_1, {}));
-                    }
-                    else {
-                        var /** @type {?} */ expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-                        return rxjs_operator_map.map.call(expanded$, function (cs) { return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children); });
-                    }
+                if (childConfig.length === 0 && slicedSegments.length === 0) {
+                    return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments, {}));
+                }
+                var /** @type {?} */ expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+                return rxjs_operator_map.map.call(expanded$, function (cs) {
+                    return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children);
                 });
-            }
+            });
         };
         /**
          * @param {?} injector
@@ -1315,27 +1472,20 @@
             if (route.children) {
                 return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null, null));
             }
-            else if (route.loadChildren) {
+            if (route.loadChildren) {
                 return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function (shouldLoad) {
                     if (shouldLoad) {
-                        if (((route))._loadedConfig) {
-                            return rxjs_observable_of.of(((route))._loadedConfig);
-                        }
-                        else {
-                            return rxjs_operator_map.map.call(_this.configLoader.load(injector, route.loadChildren), function (r) {
-                                ((route))._loadedConfig = r;
-                                return r;
+                        return ((route))._loadedConfig ?
+                            rxjs_observable_of.of(((route))._loadedConfig) :
+                            rxjs_operator_map.map.call(_this.configLoader.load(injector, route), function (cfg) {
+                                ((route))._loadedConfig = cfg;
+                                return cfg;
                             });
-                        }
                     }
-                    else {
-                        return canLoadFails(route);
-                    }
+                    return canLoadFails(route);
                 });
             }
-            else {
-                return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null, null));
-            }
+            return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null, null));
         };
         /**
          * @param {?} route
@@ -1350,12 +1500,10 @@
                 if (c.numberOfChildren === 0) {
                     return rxjs_observable_of.of(res);
                 }
-                else if (c.numberOfChildren > 1 || !c.children[PRIMARY_OUTLET]) {
+                if (c.numberOfChildren > 1 || !c.children[PRIMARY_OUTLET]) {
                     return namedOutletsRedirect(route.redirectTo);
                 }
-                else {
-                    c = c.children[PRIMARY_OUTLET];
-                }
+                c = c.children[PRIMARY_OUTLET];
             }
         };
         /**
@@ -1365,7 +1513,6 @@
          * @return {?}
          */
         ApplyRedirects.prototype.applyRedirectCommands = function (segments, redirectTo, posParams) {
-            var /** @type {?} */ t = this.urlSerializer.parse(redirectTo);
             return this.applyRedirectCreatreUrlTree(redirectTo, this.urlSerializer.parse(redirectTo), segments, posParams);
         };
         /**
@@ -1387,12 +1534,7 @@
         ApplyRedirects.prototype.createQueryParams = function (redirectToParams, actualParams) {
             var /** @type {?} */ res = {};
             forEach(redirectToParams, function (v, k) {
-                if (v.startsWith(':')) {
-                    res[k] = actualParams[v.substring(1)];
-                }
-                else {
-                    res[k] = v;
-                }
+                res[k] = v.startsWith(':') ? actualParams[v.substring(1)] : v;
             });
             return res;
         };
@@ -1466,12 +1608,7 @@
             return rxjs_observable_of.of(true);
         var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function (c) {
             var /** @type {?} */ guard = injector.get(c);
-            if (guard.canLoad) {
-                return wrapIntoObservable(guard.canLoad(route));
-            }
-            else {
-                return wrapIntoObservable(guard(route));
-            }
+            return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
         });
         return andObservables(obs);
     }
@@ -1487,9 +1624,7 @@
             if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
                 return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
             }
-            else {
-                return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
-            }
+            return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
         }
         var /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
         var /** @type {?} */ res = matcher(segments, segmentGroup, route);
@@ -1515,14 +1650,12 @@
             var /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
             return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
         }
-        else if (slicedSegments.length === 0 &&
+        if (slicedSegments.length === 0 &&
             containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
             var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
             return { segmentGroup: mergeTrivialChildren(s), slicedSegments: slicedSegments };
         }
-        else {
-            return { segmentGroup: segmentGroup, slicedSegments: slicedSegments };
-        }
+        return { segmentGroup: segmentGroup, slicedSegments: slicedSegments };
     }
     /**
      * @param {?} s
@@ -1533,9 +1666,7 @@
             var /** @type {?} */ c = s.children[PRIMARY_OUTLET];
             return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
         }
-        else {
-            return s;
-        }
+        return s;
     }
     /**
      * @param {?} segmentGroup
@@ -1598,8 +1729,9 @@
      * @return {?}
      */
     function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+        if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
             return false;
+        }
         return r.path === '' && r.redirectTo !== undefined;
     }
     /**
@@ -3174,127 +3306,6 @@
     }());
 
     /**
-     * \@whatItDoes Represents an event triggered when a navigation starts.
-     *
-     * \@stable
-     */
-    var NavigationStart = (function () {
-        /**
-         * @param {?} id
-         * @param {?} url
-         */
-        function NavigationStart(id, url) {
-            this.id = id;
-            this.url = url;
-        }
-        /**
-         * \@docsNotRequired
-         * @return {?}
-         */
-        NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
-        return NavigationStart;
-    }());
-    /**
-     * \@whatItDoes Represents an event triggered when a navigation ends successfully.
-     *
-     * \@stable
-     */
-    var NavigationEnd = (function () {
-        /**
-         * @param {?} id
-         * @param {?} url
-         * @param {?} urlAfterRedirects
-         */
-        function NavigationEnd(id, url, urlAfterRedirects) {
-            this.id = id;
-            this.url = url;
-            this.urlAfterRedirects = urlAfterRedirects;
-        }
-        /**
-         * \@docsNotRequired
-         * @return {?}
-         */
-        NavigationEnd.prototype.toString = function () {
-            return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
-        };
-        return NavigationEnd;
-    }());
-    /**
-     * \@whatItDoes Represents an event triggered when a navigation is canceled.
-     *
-     * \@stable
-     */
-    var NavigationCancel = (function () {
-        /**
-         * @param {?} id
-         * @param {?} url
-         * @param {?} reason
-         */
-        function NavigationCancel(id, url, reason) {
-            this.id = id;
-            this.url = url;
-            this.reason = reason;
-        }
-        /**
-         * \@docsNotRequired
-         * @return {?}
-         */
-        NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
-        return NavigationCancel;
-    }());
-    /**
-     * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
-     *
-     * \@stable
-     */
-    var NavigationError = (function () {
-        /**
-         * @param {?} id
-         * @param {?} url
-         * @param {?} error
-         */
-        function NavigationError(id, url, error) {
-            this.id = id;
-            this.url = url;
-            this.error = error;
-        }
-        /**
-         * \@docsNotRequired
-         * @return {?}
-         */
-        NavigationError.prototype.toString = function () {
-            return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
-        };
-        return NavigationError;
-    }());
-    /**
-     * \@whatItDoes Represents an event triggered when routes are recognized.
-     *
-     * \@stable
-     */
-    var RoutesRecognized = (function () {
-        /**
-         * @param {?} id
-         * @param {?} url
-         * @param {?} urlAfterRedirects
-         * @param {?} state
-         */
-        function RoutesRecognized(id, url, urlAfterRedirects, state) {
-            this.id = id;
-            this.url = url;
-            this.urlAfterRedirects = urlAfterRedirects;
-            this.state = state;
-        }
-        /**
-         * \@docsNotRequired
-         * @return {?}
-         */
-        RoutesRecognized.prototype.toString = function () {
-            return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
-        };
-        return RoutesRecognized;
-    }());
-    /**
      * @param {?} error
      * @return {?}
      */
@@ -3359,6 +3370,7 @@
          * @param {?} config
          */
         function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+            var _this = this;
             this.rootComponentType = rootComponentType;
             this.urlSerializer = urlSerializer;
             this.outletMap = outletMap;
@@ -3383,10 +3395,12 @@
              */
             this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
             this.routeReuseStrategy = new DefaultRouteReuseStrategy();
+            var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
+            var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
-            this.configLoader = new RouterConfigLoader(loader, compiler);
+            this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
             this.processNavigations();
         }
@@ -3455,6 +3469,12 @@
             enumerable: true,
             configurable: true
         });
+        /**
+         * \@internal
+         * @param {?} e
+         * @return {?}
+         */
+        Router.prototype.triggerEvent = function (e) { this.routerEvents.next(e); };
         /**
          * Resets the configuration used for navigation and generating links.
          *
@@ -3584,11 +3604,9 @@
          */
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
-            if (url instanceof UrlTree) {
-                return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), 'imperative', extras);
-            }
-            var /** @type {?} */ urlTree = this.urlSerializer.parse(url);
-            return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), 'imperative', extras);
+            var /** @type {?} */ urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
+            var /** @type {?} */ mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
+            return this.scheduleNavigation(mergedTree, 'imperative', extras);
         };
         /**
          * Navigate based on the provided array of commands and a starting point.
@@ -3697,8 +3715,8 @@
                 return null; // return value is not used
             }
             // Because of a bug in IE and Edge, the location class fires two events (popstate and
-            // hashchange)
-            // every single time. The second one should be ignored. Otherwise, the URL will flicker.
+            // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
+            // flicker.
             if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
                 lastNavigation.rawUrl.toString() === rawUrl.toString()) {
                 return null; // return value is not used
@@ -5265,7 +5283,9 @@
             this.router = router;
             this.injector = injector;
             this.preloadingStrategy = preloadingStrategy;
-            this.loader = new RouterConfigLoader(moduleLoader, compiler);
+            var onStartLoad = function (r) { return router.triggerEvent(new RouteConfigLoadStart(r)); };
+            var onEndLoad = function (r) { return router.triggerEvent(new RouteConfigLoadEnd(r)); };
+            this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
         }
         ;
         /**
@@ -5274,7 +5294,7 @@
         RouterPreloader.prototype.setUpPreloading = function () {
             var _this = this;
             var /** @type {?} */ navigations = rxjs_operator_filter.filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
-            this.subscription = rxjs_operator_concatMap.concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function (v) { });
+            this.subscription = rxjs_operator_concatMap.concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function () { });
         };
         /**
          * @return {?}
@@ -5315,7 +5335,7 @@
         RouterPreloader.prototype.preloadConfig = function (injector, route) {
             var _this = this;
             return this.preloadingStrategy.preload(route, function () {
-                var /** @type {?} */ loaded = _this.loader.load(injector, route.loadChildren);
+                var /** @type {?} */ loaded = _this.loader.load(injector, route);
                 return rxjs_operator_mergeMap.mergeMap.call(loaded, function (config) {
                     var /** @type {?} */ c = route;
                     c._loadedConfig = config;
@@ -5639,13 +5659,15 @@
     exports.RouterLinkWithHref = RouterLinkWithHref;
     exports.RouterLinkActive = RouterLinkActive;
     exports.RouterOutlet = RouterOutlet;
-    exports.RouteReuseStrategy = RouteReuseStrategy;
     exports.NavigationCancel = NavigationCancel;
     exports.NavigationEnd = NavigationEnd;
     exports.NavigationError = NavigationError;
     exports.NavigationStart = NavigationStart;
-    exports.Router = Router;
+    exports.RouteConfigLoadEnd = RouteConfigLoadEnd;
+    exports.RouteConfigLoadStart = RouteConfigLoadStart;
     exports.RoutesRecognized = RoutesRecognized;
+    exports.RouteReuseStrategy = RouteReuseStrategy;
+    exports.Router = Router;
     exports.ROUTES = ROUTES;
     exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
     exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;

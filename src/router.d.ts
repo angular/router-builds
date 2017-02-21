@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { QueryParamsHandling, Routes } from './config';
+import { Event } from './events';
 import { DetachedRouteHandle, RouteReuseStrategy } from './route_reuse_strategy';
 import { RouterOutletMap } from './router_outlet_map';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
@@ -123,126 +124,6 @@ export interface NavigationExtras {
     */
     replaceUrl?: boolean;
 }
-/**
- * @whatItDoes Represents an event triggered when a navigation starts.
- *
- * @stable
- */
-export declare class NavigationStart {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
-    constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * @whatItDoes Represents an event triggered when a navigation ends successfully.
- *
- * @stable
- */
-export declare class NavigationEnd {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * @whatItDoes Represents an event triggered when a navigation is canceled.
- *
- * @stable
- */
-export declare class NavigationCancel {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
-    /** @docsNotRequired */
-    reason: string;
-    constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        reason: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * @whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
- *
- * @stable
- */
-export declare class NavigationError {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
-    /** @docsNotRequired */
-    error: any;
-    constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        error: any);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * @whatItDoes Represents an event triggered when routes are recognized.
- *
- * @stable
- */
-export declare class RoutesRecognized {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * @whatItDoes Represents a router event.
- *
- * Please see {@link NavigationStart}, {@link NavigationEnd}, {@link NavigationCancel}, {@link
- * NavigationError},
- * {@link RoutesRecognized} for more information.
- *
- * @stable
- */
-export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized;
 /**
  * @whatItDoes Error handler that is invoked when a navigation errors.
  *

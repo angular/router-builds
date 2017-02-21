@@ -13,7 +13,8 @@ import { concatMap } from 'rxjs/operator/concatMap';
 import { filter } from 'rxjs/operator/filter';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { mergeMap } from 'rxjs/operator/mergeMap';
-import { NavigationEnd, Router } from './router';
+import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart } from './events';
+import { Router } from './router';
 import { RouterConfigLoader } from './router_config_loader';
 /**
  * \@whatItDoes Provides a preloading strategy.
@@ -92,7 +93,9 @@ export class RouterPreloader {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
-        this.loader = new RouterConfigLoader(moduleLoader, compiler);
+        const onStartLoad = (r) => router.triggerEvent(new RouteConfigLoadStart(r));
+        const onEndLoad = (r) => router.triggerEvent(new RouteConfigLoadEnd(r));
+        this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
     }
     ;
     /**
@@ -100,7 +103,7 @@ export class RouterPreloader {
      */
     setUpPreloading() {
         const /** @type {?} */ navigations = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
-        this.subscription = concatMap.call(navigations, () => this.preload()).subscribe((v) => { });
+        this.subscription = concatMap.call(navigations, () => this.preload()).subscribe(() => { });
     }
     /**
      * @return {?}
@@ -139,7 +142,7 @@ export class RouterPreloader {
      */
     preloadConfig(injector, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const /** @type {?} */ loaded = this.loader.load(injector, route.loadChildren);
+            const /** @type {?} */ loaded = this.loader.load(injector, route);
             return mergeMap.call(loaded, (config) => {
                 const /** @type {?} */ c = route;
                 c._loadedConfig = config;
