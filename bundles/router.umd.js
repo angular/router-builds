@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.8-4f93ac8
+ * @license Angular v3.4.8-2a12346
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -268,8 +268,14 @@
                 return rxjs_observable_fromPromise.fromPromise(this.loader.load(loadChildren));
             }
             else {
-                var /** @type {?} */ offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
-                return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function (t) { return offlineMode_1 ? rxjs_observable_of.of(/** @type {?} */ (t)) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t)); });
+                return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
+                    if (t instanceof _angular_core.NgModuleFactory) {
+                        return rxjs_observable_of.of(t);
+                    }
+                    else {
+                        return rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t));
+                    }
+                });
             }
         };
         return RouterConfigLoader;
@@ -5644,7 +5650,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.8-4f93ac8');
+    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.8-2a12346');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,
