@@ -5,10 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common/index';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Compiler, Inject, Injectable, InjectionToken, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core/index';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
+import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common/index';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, ApplicationRef, Compiler, Inject, InjectionToken, Injector, NgModule, NgModuleFactoryLoader, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader } from '@angular/core/index';
 import { RouterLink, RouterLinkWithHref } from './directives/router_link';
 import { RouterLinkActive } from './directives/router_link_active';
 import { RouterOutlet } from './directives/router_outlet';
@@ -273,106 +271,26 @@ export function rootRoute(router) {
     return router.routerState.root;
 }
 /**
- * To initialize the router properly we need to do in two steps:
- *
- * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
- * a resolver or a guards executes asynchronously. Second, we need to actually run
- * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
- * hook provided by the router to do that.
- *
- * The router navigation starts, reaches the point when preactivation is done, and then
- * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
+ * @param {?} router
+ * @param {?} ref
+ * @param {?} preloader
+ * @param {?} opts
+ * @return {?}
  */
-export class RouterInitializer {
-    /**
-     * @param {?} injector
-     */
-    constructor(injector) {
-        this.injector = injector;
-        this.resultOfPreactivationDone = new Subject();
-    }
-    /**
-     * @return {?}
-     */
-    appInitializer() {
-        const /** @type {?} */ p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-        return p.then(() => {
-            let /** @type {?} */ resolve = null;
-            const /** @type {?} */ res = new Promise(r => resolve = r);
-            const /** @type {?} */ router = this.injector.get(Router);
-            const /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
-            if (opts.initialNavigation === false) {
-                router.setUpLocationChangeListener();
-            }
-            else {
-                router.hooks.afterPreactivation = () => {
-                    // only the initial navigation should be delayed
-                    if (!this.initNavigation) {
-                        this.initNavigation = true;
-                        resolve(true);
-                        return this.resultOfPreactivationDone;
-                    }
-                    else {
-                        return of(null);
-                    }
-                };
-                router.initialNavigation();
-            }
-            return res;
-        });
-    }
-    /**
-     * @param {?} bootstrappedComponentRef
-     * @return {?}
-     */
-    bootstrapListener(bootstrappedComponentRef) {
-        const /** @type {?} */ ref = this.injector.get(ApplicationRef);
+export function initialRouterNavigation(router, ref, preloader, opts) {
+    return (bootstrappedComponentRef) => {
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
-        const /** @type {?} */ preloader = this.injector.get(RouterPreloader);
-        preloader.setUpPreloading();
-        const /** @type {?} */ router = this.injector.get(Router);
         router.resetRootComponentType(ref.componentTypes[0]);
-        this.resultOfPreactivationDone.next(null);
-        this.resultOfPreactivationDone.complete();
-    }
-}
-RouterInitializer.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-RouterInitializer.ctorParameters = () => [
-    { type: Injector, },
-];
-function RouterInitializer_tsickle_Closure_declarations() {
-    /** @type {?} */
-    RouterInitializer.decorators;
-    /**
-     * @nocollapse
-     * @type {?}
-     */
-    RouterInitializer.ctorParameters;
-    /** @type {?} */
-    RouterInitializer.prototype.initNavigation;
-    /** @type {?} */
-    RouterInitializer.prototype.resultOfPreactivationDone;
-    /** @type {?} */
-    RouterInitializer.prototype.injector;
-}
-/**
- * @param {?} r
- * @return {?}
- */
-export function getAppInitializer(r) {
-    return r.appInitializer.bind(r);
-}
-/**
- * @param {?} r
- * @return {?}
- */
-export function getBootstrapListener(r) {
-    return r.bootstrapListener.bind(r);
+        preloader.setUpPreloading();
+        if (opts.initialNavigation === false) {
+            router.setUpLocationChangeListener();
+        }
+        else {
+            router.initialNavigation();
+        }
+    };
 }
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
@@ -385,14 +303,11 @@ export const /** @type {?} */ ROUTER_INITIALIZER = new InjectionToken('Router In
  */
 export function provideRouterInitializer() {
     return [
-        RouterInitializer,
         {
-            provide: APP_INITIALIZER,
-            multi: true,
-            useFactory: getAppInitializer,
-            deps: [RouterInitializer]
+            provide: ROUTER_INITIALIZER,
+            useFactory: initialRouterNavigation,
+            deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
         },
-        { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener, deps: [RouterInitializer] },
         { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
     ];
 }
