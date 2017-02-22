@@ -1,12 +1,29 @@
 /**
- * @license Angular v4.0.0-beta.8-bb0460b
+ * @license Angular v0.0.0-ROUTERPLACEHOLDER
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/router'), require('@angular/upgrade/static')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/router', '@angular/upgrade/static'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.upgrade = global.ng.router.upgrade || {}),global.ng.core,global.ng.router,global.ng.upgrade.static));
-}(this, function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
+    if (typeof define === "function" && define.amd) {
+        define('@angular/router/upgrade', ['exports', '@angular/core', '@angular/router', '@angular/upgrade/static'], factory);
+    } else if (typeof exports !== "undefined") {
+        factory(exports, require('@angular/core'), require('@angular/router'), require('@angular/upgrade/static'));
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports, global.ng.core, global.ng.router, global.ng.upgrade.static);
+        global.ng = global.ng || {};
+        global.ng.router = global.ng.router || {};
+        global.ng.router.upgrade = mod.exports;
+    }
+})(this, function (exports, _core, _router, _static) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.setUpLocationSync = exports.initialRouterNavigation = exports.RouterUpgradeInitializer = undefined;
+
 
     /**
      * @whatItDoes Creates an initializer that in addition to setting up the Angular
@@ -32,9 +49,9 @@
      * @experimental
      */
     var RouterUpgradeInitializer = {
-        provide: _angular_router.ROUTER_INITIALIZER,
+        provide: _router.ROUTER_INITIALIZER,
         useFactory: initialRouterNavigation,
-        deps: [_angular_upgrade_static.UpgradeModule, _angular_core.ApplicationRef, _angular_router.RouterPreloader, _angular_router.ROUTER_CONFIGURATION]
+        deps: [_static.UpgradeModule, _core.ApplicationRef, _router.RouterPreloader, _router.ROUTER_CONFIGURATION]
     };
     /**
      * @internal
@@ -42,16 +59,15 @@
     function initialRouterNavigation(ngUpgrade, ref, preloader, opts) {
         return function () {
             if (!ngUpgrade.$injector) {
-                throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
+                throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
             }
-            var router = ngUpgrade.injector.get(_angular_router.Router);
-            var ref = ngUpgrade.injector.get(_angular_core.ApplicationRef);
+            var router = ngUpgrade.injector.get(_router.Router);
+            var ref = ngUpgrade.injector.get(_core.ApplicationRef);
             router.resetRootComponentType(ref.componentTypes[0]);
             preloader.setUpPreloading();
             if (opts.initialNavigation === false) {
                 router.setUpLocationChangeListener();
-            }
-            else {
+            } else {
                 router.initialNavigation();
             }
             setUpLocationSync(ngUpgrade);
@@ -66,10 +82,9 @@
      * @experimental
      */
     function setUpLocationSync(ngUpgrade) {
-        var router = ngUpgrade.injector.get(_angular_router.Router);
+        var router = ngUpgrade.injector.get(_router.Router);
         var url = document.createElement('a');
-        ngUpgrade.$injector.get('$rootScope')
-            .$on('$locationChangeStart', function (_, next, __) {
+        ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
             url.href = next;
             router.navigateByUrl(url.pathname);
         });
@@ -78,5 +93,4 @@
     exports.RouterUpgradeInitializer = RouterUpgradeInitializer;
     exports.initialRouterNavigation = initialRouterNavigation;
     exports.setUpLocationSync = setUpLocationSync;
-
-}));
+});
