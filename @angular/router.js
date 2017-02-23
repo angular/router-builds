@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.8-175dbce
+ * @license Angular v4.0.0-beta.8-6b7937f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -5389,6 +5389,6 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-const /** @type {?} */ VERSION = new Version('4.0.0-beta.8-175dbce');
+const /** @type {?} */ VERSION = new Version('4.0.0-beta.8-6b7937f');
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, initialRouterNavigation as ɵg, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵh, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵi, TreeNode as ɵj };
