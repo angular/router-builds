@@ -25,7 +25,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * @experimental
  */
-var RouterUpgradeInitializer = {
+const RouterUpgradeInitializer = {
     provide: ROUTER_INITIALIZER,
     useFactory: initialRouterNavigation,
     deps: [UpgradeModule, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
@@ -34,12 +34,15 @@ var RouterUpgradeInitializer = {
  * @internal
  */
 function initialRouterNavigation(ngUpgrade, ref, preloader, opts) {
-    return function () {
+    return () => {
         if (!ngUpgrade.$injector) {
-            throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
+            throw new Error(`
+        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.
+        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
+      `);
         }
-        var router = ngUpgrade.injector.get(Router);
-        var ref = ngUpgrade.injector.get(ApplicationRef);
+        const router = ngUpgrade.injector.get(Router);
+        const ref = ngUpgrade.injector.get(ApplicationRef);
         router.resetRootComponentType(ref.componentTypes[0]);
         preloader.setUpPreloading();
         if (opts.initialNavigation === false) {
@@ -59,9 +62,9 @@ function initialRouterNavigation(ngUpgrade, ref, preloader, opts) {
  * @experimental
  */
 function setUpLocationSync(ngUpgrade) {
-    var router = ngUpgrade.injector.get(Router);
-    var url = document.createElement('a');
-    ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
+    const router = ngUpgrade.injector.get(Router);
+    const url = document.createElement('a');
+    ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', (_, next, __) => {
         url.href = next;
         router.navigateByUrl(url.pathname);
     });
