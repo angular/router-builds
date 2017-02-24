@@ -5538,7 +5538,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */VERSION = new _core.Version('4.0.0-beta.8-5094aef');
+    var /** @type {?} */VERSION = new _core.Version('4.0.0-beta.8-436a179');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
