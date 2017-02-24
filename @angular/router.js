@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-beta.8-be85103
+ * @license Angular v4.0.0-beta.8-41da599
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -1729,8 +1729,8 @@ function validateNode(route, fullPath) {
         throw new Error(`
       Invalid configuration of route '${fullPath}': Encountered undefined route.
       The reason might be an extra comma.
-       
-      Example: 
+
+      Example:
       const routes: Routes = [
         { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
         { path: 'dashboard',  component: DashboardComponent },, << two commas
@@ -3858,7 +3858,7 @@ class PreActivation {
         const /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (!equalParamsAndUrlSegments(future, curr)) {
+            if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
                 this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
             }
             else {
@@ -3886,6 +3886,24 @@ class PreActivation {
             else {
                 this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
             }
+        }
+    }
+    /**
+     * @param {?} curr
+     * @param {?} future
+     * @param {?} mode
+     * @return {?}
+     */
+    shouldRunGuardsAndResolvers(curr, future, mode) {
+        switch (mode) {
+            case 'always':
+                return true;
+            case 'paramsOrQueryParamsChange':
+                return !equalParamsAndUrlSegments(curr, future) ||
+                    !shallowEqual(curr.queryParams, future.queryParams);
+            case 'paramsChange':
+            default:
+                return !equalParamsAndUrlSegments(curr, future);
         }
     }
     /**
@@ -5389,6 +5407,6 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-const /** @type {?} */ VERSION = new Version('4.0.0-beta.8-be85103');
+const /** @type {?} */ VERSION = new Version('4.0.0-beta.8-41da599');
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, initialRouterNavigation as ɵg, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵh, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵi, TreeNode as ɵj };

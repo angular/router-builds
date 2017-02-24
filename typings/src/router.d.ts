@@ -330,6 +330,7 @@ export declare class PreActivation {
     resolveData(): Observable<any>;
     private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
     traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
+    private shouldRunGuardsAndResolvers(curr, future, mode);
     private deactiveRouteAndItsChildren(route, outlet);
     private runCanActivate(future);
     private runCanActivateChild(path);
