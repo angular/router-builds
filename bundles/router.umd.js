@@ -17,7 +17,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.ɵj = exports.ɵi = exports.ɵe = exports.ɵb = exports.ɵf = exports.ɵh = exports.ɵc = exports.ɵd = exports.ɵg = exports.ɵa = exports.ɵflatten = exports.ɵROUTER_PROVIDERS = exports.VERSION = exports.UrlTree = exports.UrlSerializer = exports.UrlSegmentGroup = exports.UrlSegment = exports.DefaultUrlSerializer = exports.UrlHandlingStrategy = exports.PRIMARY_OUTLET = exports.RouterStateSnapshot = exports.RouterState = exports.ActivatedRouteSnapshot = exports.ActivatedRoute = exports.RouterPreloader = exports.PreloadingStrategy = exports.PreloadAllModules = exports.NoPreloading = exports.RouterOutletMap = exports.provideRoutes = exports.RouterModule = exports.ROUTER_INITIALIZER = exports.ROUTER_CONFIGURATION = exports.ROUTES = exports.Router = exports.RouteReuseStrategy = exports.RoutesRecognized = exports.RouteConfigLoadStart = exports.RouteConfigLoadEnd = exports.NavigationStart = exports.NavigationError = exports.NavigationEnd = exports.NavigationCancel = exports.RouterOutlet = exports.RouterLinkActive = exports.RouterLinkWithHref = exports.RouterLink = undefined;
+    exports.ɵl = exports.ɵk = exports.ɵe = exports.ɵb = exports.ɵf = exports.ɵj = exports.ɵc = exports.ɵd = exports.ɵi = exports.ɵh = exports.ɵg = exports.ɵa = exports.ɵflatten = exports.ɵROUTER_PROVIDERS = exports.VERSION = exports.UrlTree = exports.UrlSerializer = exports.UrlSegmentGroup = exports.UrlSegment = exports.DefaultUrlSerializer = exports.UrlHandlingStrategy = exports.PRIMARY_OUTLET = exports.RouterStateSnapshot = exports.RouterState = exports.ActivatedRouteSnapshot = exports.ActivatedRoute = exports.RouterPreloader = exports.PreloadingStrategy = exports.PreloadAllModules = exports.NoPreloading = exports.RouterOutletMap = exports.provideRoutes = exports.RouterModule = exports.ROUTER_INITIALIZER = exports.ROUTER_CONFIGURATION = exports.ROUTES = exports.Router = exports.RouteReuseStrategy = exports.RoutesRecognized = exports.RouteConfigLoadStart = exports.RouteConfigLoadEnd = exports.NavigationStart = exports.NavigationError = exports.NavigationEnd = exports.NavigationCancel = exports.RouterOutlet = exports.RouterLinkActive = exports.RouterLinkWithHref = exports.RouterLink = undefined;
 
     var l = _interopRequireWildcard(_last);
 
@@ -585,9 +585,12 @@
                 if (typeof loadChildren === 'string') {
                     return (0, _fromPromise.fromPromise)(this.loader.load(loadChildren));
                 } else {
-                    var /** @type {?} */offlineMode = this.compiler instanceof _core.Compiler;
                     return _mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
-                        return offlineMode ? (0, _of.of)( /** @type {?} */t) : (0, _fromPromise.fromPromise)(_this2.compiler.compileModuleAsync(t));
+                        if (t instanceof _core.NgModuleFactory) {
+                            return (0, _of.of)(t);
+                        } else {
+                            return (0, _fromPromise.fromPromise)(_this2.compiler.compileModuleAsync(t));
+                        }
                     });
                 }
             }
@@ -3465,6 +3468,14 @@
         throw error;
     }
     /**
+     * \@internal
+     * @param {?} snapshot
+     * @return {?}
+     */
+    function defaultRouterHook(snapshot) {
+        return (0, _of.of)(null);
+    }
+    /**
      * Does not detach any subtrees. Reuses routes as long as their route config is the same.
      */
 
@@ -3536,6 +3547,15 @@
              * Indicates if at least one navigation happened.
              */
             this.navigated = false;
+            /**
+             * Used by RouterModule. This allows us to
+             * pause the navigation either before preactivation or after it.
+             * @internal
+             */
+            this.hooks = {
+                beforePreactivation: defaultRouterHook,
+                afterPreactivation: defaultRouterHook
+            };
             /**
              * Extracts and merges URLs. Used for AngularJS to Angular migrations.
              */
@@ -3802,9 +3822,14 @@
                     } else {
                         urlAndSnapshot$ = (0, _of.of)({ appliedUrl: url, snapshot: precreatedState });
                     }
+                    var /** @type {?} */beforePreactivationDone$ = _mergeMap.mergeMap.call(urlAndSnapshot$, function (p) {
+                        return _map.map.call(_this22.hooks.beforePreactivation(p.snapshot), function () {
+                            return p;
+                        });
+                    });
                     // run preactivation: guards and data resolvers
                     var /** @type {?} */preActivation = void 0;
-                    var /** @type {?} */preactivationTraverse$ = _map.map.call(urlAndSnapshot$, function (_ref6) {
+                    var /** @type {?} */preactivationTraverse$ = _map.map.call(beforePreactivationDone$, function (_ref6) {
                         var appliedUrl = _ref6.appliedUrl,
                             snapshot = _ref6.snapshot;
 
@@ -3812,7 +3837,7 @@
                         preActivation.traverse(_this22.outletMap);
                         return { appliedUrl: appliedUrl, snapshot: snapshot };
                     });
-                    var /** @type {?} */preactivationCheckGuards = _mergeMap.mergeMap.call(preactivationTraverse$, function (_ref7) {
+                    var /** @type {?} */preactivationCheckGuards$ = _mergeMap.mergeMap.call(preactivationTraverse$, function (_ref7) {
                         var appliedUrl = _ref7.appliedUrl,
                             snapshot = _ref7.snapshot;
 
@@ -3821,7 +3846,7 @@
                             return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                         });
                     });
-                    var /** @type {?} */preactivationResolveData$ = _mergeMap.mergeMap.call(preactivationCheckGuards, function (p) {
+                    var /** @type {?} */preactivationResolveData$ = _mergeMap.mergeMap.call(preactivationCheckGuards$, function (p) {
                         if (_this22.navigationId !== id) return (0, _of.of)(false);
                         if (p.shouldActivate) {
                             return _map.map.call(preActivation.resolveData(), function () {
@@ -3831,9 +3856,14 @@
                             return (0, _of.of)(p);
                         }
                     });
+                    var /** @type {?} */preactivationDone$ = _mergeMap.mergeMap.call(preactivationResolveData$, function (p) {
+                        return _map.map.call(_this22.hooks.afterPreactivation(p.snapshot), function () {
+                            return p;
+                        });
+                    });
                     // create router state
                     // this operation has side effects => route state is being affected
-                    var /** @type {?} */routerState$ = _map.map.call(preactivationResolveData$, function (_ref8) {
+                    var /** @type {?} */routerState$ = _map.map.call(preactivationDone$, function (_ref8) {
                         var appliedUrl = _ref8.appliedUrl,
                             snapshot = _ref8.snapshot,
                             shouldActivate = _ref8.shouldActivate;
@@ -5498,25 +5528,122 @@
         return router.routerState.root;
     }
     /**
-     * @param {?} router
-     * @param {?} ref
-     * @param {?} preloader
-     * @param {?} opts
+     * To initialize the router properly we need to do in two steps:
+     *
+     * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+     * a resolver or a guards executes asynchronously. Second, we need to actually run
+     * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+     * hook provided by the router to do that.
+     *
+     * The router navigation starts, reaches the point when preactivation is done, and then
+     * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
+     */
+
+    var RouterInitializer = function () {
+        /**
+         * @param {?} injector
+         */
+        function RouterInitializer(injector) {
+            _classCallCheck(this, RouterInitializer);
+
+            this.injector = injector;
+            this.initNavigation = false;
+            this.resultOfPreactivationDone = new _Subject.Subject();
+        }
+        /**
+         * @return {?}
+         */
+
+
+        _createClass(RouterInitializer, [{
+            key: 'appInitializer',
+            value: function appInitializer() {
+                var _this41 = this;
+
+                var /** @type {?} */p = this.injector.get(_common.LOCATION_INITIALIZED, Promise.resolve(null));
+                return p.then(function () {
+                    var /** @type {?} */resolve = null;
+                    var /** @type {?} */res = new Promise(function (r) {
+                        return resolve = r;
+                    });
+                    var /** @type {?} */router = _this41.injector.get(Router);
+                    var /** @type {?} */opts = _this41.injector.get(ROUTER_CONFIGURATION);
+                    if (_this41.isLegacyDisabled(opts) || _this41.isLegacyEnabled(opts)) {
+                        resolve(true);
+                    } else if (opts.initialNavigation === 'disabled') {
+                        router.setUpLocationChangeListener();
+                        resolve(true);
+                    } else if (opts.initialNavigation === 'enabled') {
+                        router.hooks.afterPreactivation = function () {
+                            // only the initial navigation should be delayed
+                            if (!_this41.initNavigation) {
+                                _this41.initNavigation = true;
+                                resolve(true);
+                                return _this41.resultOfPreactivationDone;
+                            } else {
+                                return (0, _of.of)(null);
+                            }
+                        };
+                        router.initialNavigation();
+                    } else {
+                        throw new Error('Invalid initialNavigation options: \'' + opts.initialNavigation + '\'');
+                    }
+                    return res;
+                });
+            }
+        }, {
+            key: 'bootstrapListener',
+            value: function bootstrapListener(bootstrappedComponentRef) {
+                var /** @type {?} */opts = this.injector.get(ROUTER_CONFIGURATION);
+                var /** @type {?} */preloader = this.injector.get(RouterPreloader);
+                var /** @type {?} */router = this.injector.get(Router);
+                var /** @type {?} */ref = this.injector.get(_core.ApplicationRef);
+                if (bootstrappedComponentRef !== ref.components[0]) {
+                    return;
+                }
+                if (this.isLegacyEnabled(opts)) {
+                    router.initialNavigation();
+                } else if (this.isLegacyDisabled(opts)) {
+                    router.setUpLocationChangeListener();
+                }
+                preloader.setUpPreloading();
+                router.resetRootComponentType(ref.componentTypes[0]);
+                this.resultOfPreactivationDone.next(null);
+                this.resultOfPreactivationDone.complete();
+            }
+        }, {
+            key: 'isLegacyEnabled',
+            value: function isLegacyEnabled(opts) {
+                return opts.initialNavigation === 'legacy_enabled' || opts.initialNavigation === true || opts.initialNavigation === undefined;
+            }
+        }, {
+            key: 'isLegacyDisabled',
+            value: function isLegacyDisabled(opts) {
+                return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
+            }
+        }]);
+
+        return RouterInitializer;
+    }();
+
+    RouterInitializer.decorators = [{ type: _core.Injectable }];
+    /** @nocollapse */
+    RouterInitializer.ctorParameters = function () {
+        return [{ type: _core.Injector }];
+    };
+    /**
+     * @param {?} r
      * @return {?}
      */
-    function initialRouterNavigation(router, ref, preloader, opts) {
-        return function (bootstrappedComponentRef) {
-            if (bootstrappedComponentRef !== ref.components[0]) {
-                return;
-            }
-            router.resetRootComponentType(ref.componentTypes[0]);
-            preloader.setUpPreloading();
-            if (opts.initialNavigation === false) {
-                router.setUpLocationChangeListener();
-            } else {
-                router.initialNavigation();
-            }
-        };
+    function getAppInitializer(r) {
+        return r.appInitializer.bind(r);
+    }
+    /**
+     * @param {?} r
+     * @return {?}
+     */
+    function getBootstrapListener(r) {
+        return r.bootstrapListener.bind(r);
     }
     /**
      * A token for the router initializer that will be called after the app is bootstrapped.
@@ -5528,17 +5655,18 @@
      * @return {?}
      */
     function provideRouterInitializer() {
-        return [{
-            provide: ROUTER_INITIALIZER,
-            useFactory: initialRouterNavigation,
-            deps: [Router, _core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
-        }, { provide: _core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }];
+        return [RouterInitializer, {
+            provide: _core.APP_INITIALIZER,
+            multi: true,
+            useFactory: getAppInitializer,
+            deps: [RouterInitializer]
+        }, { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener, deps: [RouterInitializer] }, { provide: _core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }];
     }
 
     /**
      * @stable
      */
-    var /** @type {?} */VERSION = new _core.Version('4.0.0-rc.2-1cff125');
+    var /** @type {?} */VERSION = new _core.Version('4.0.0-rc.2-5df998d');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
@@ -5578,13 +5706,15 @@
     exports.ɵROUTER_PROVIDERS = ROUTER_PROVIDERS;
     exports.ɵflatten = flatten;
     exports.ɵa = ROUTER_FORROOT_GUARD;
-    exports.ɵg = initialRouterNavigation;
+    exports.ɵg = RouterInitializer;
+    exports.ɵh = getAppInitializer;
+    exports.ɵi = getBootstrapListener;
     exports.ɵd = provideForRootGuard;
     exports.ɵc = provideLocationStrategy;
-    exports.ɵh = provideRouterInitializer;
+    exports.ɵj = provideRouterInitializer;
     exports.ɵf = rootRoute;
     exports.ɵb = routerNgProbeToken;
     exports.ɵe = setupRouter;
-    exports.ɵi = Tree;
-    exports.ɵj = TreeNode;
+    exports.ɵk = Tree;
+    exports.ɵl = TreeNode;
 });

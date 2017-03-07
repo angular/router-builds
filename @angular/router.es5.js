@@ -13,11 +13,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @license Angular v4.0.0-rc.2-1cff125
+ * @license Angular v4.0.0-rc.2-5df998d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
- */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy } from '@angular/common';
-import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, ReflectiveInjector, ComponentFactoryResolver, InjectionToken, Compiler, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, EventEmitter, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, Injectable, Version } from '@angular/core';
+ */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, ReflectiveInjector, ComponentFactoryResolver, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, EventEmitter, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -560,9 +560,12 @@ var RouterConfigLoader = function () {
             if (typeof loadChildren === 'string') {
                 return fromPromise(this.loader.load(loadChildren));
             } else {
-                var /** @type {?} */offlineMode = this.compiler instanceof Compiler;
                 return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
-                    return offlineMode ? of( /** @type {?} */t) : fromPromise(_this2.compiler.compileModuleAsync(t));
+                    if (t instanceof NgModuleFactory) {
+                        return of(t);
+                    } else {
+                        return fromPromise(_this2.compiler.compileModuleAsync(t));
+                    }
                 });
             }
         }
@@ -4001,6 +4004,14 @@ function defaultErrorHandler(error) {
     throw error;
 }
 /**
+ * \@internal
+ * @param {?} snapshot
+ * @return {?}
+ */
+function defaultRouterHook(snapshot) {
+    return of(null);
+}
+/**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
 
@@ -4109,6 +4120,15 @@ var Router = function () {
          * Indicates if at least one navigation happened.
          */
         this.navigated = false;
+        /**
+         * Used by RouterModule. This allows us to
+         * pause the navigation either before preactivation or after it.
+         * @internal
+         */
+        this.hooks = {
+            beforePreactivation: defaultRouterHook,
+            afterPreactivation: defaultRouterHook
+        };
         /**
          * Extracts and merges URLs. Used for AngularJS to Angular migrations.
          */
@@ -4567,9 +4587,14 @@ var Router = function () {
                 } else {
                     urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
                 }
+                var /** @type {?} */beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, function (p) {
+                    return map.call(_this22.hooks.beforePreactivation(p.snapshot), function () {
+                        return p;
+                    });
+                });
                 // run preactivation: guards and data resolvers
                 var /** @type {?} */preActivation = void 0;
-                var /** @type {?} */preactivationTraverse$ = map.call(urlAndSnapshot$, function (_ref6) {
+                var /** @type {?} */preactivationTraverse$ = map.call(beforePreactivationDone$, function (_ref6) {
                     var appliedUrl = _ref6.appliedUrl,
                         snapshot = _ref6.snapshot;
 
@@ -4577,7 +4602,7 @@ var Router = function () {
                     preActivation.traverse(_this22.outletMap);
                     return { appliedUrl: appliedUrl, snapshot: snapshot };
                 });
-                var /** @type {?} */preactivationCheckGuards = mergeMap.call(preactivationTraverse$, function (_ref7) {
+                var /** @type {?} */preactivationCheckGuards$ = mergeMap.call(preactivationTraverse$, function (_ref7) {
                     var appliedUrl = _ref7.appliedUrl,
                         snapshot = _ref7.snapshot;
 
@@ -4586,7 +4611,7 @@ var Router = function () {
                         return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                     });
                 });
-                var /** @type {?} */preactivationResolveData$ = mergeMap.call(preactivationCheckGuards, function (p) {
+                var /** @type {?} */preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, function (p) {
                     if (_this22.navigationId !== id) return of(false);
                     if (p.shouldActivate) {
                         return map.call(preActivation.resolveData(), function () {
@@ -4596,9 +4621,14 @@ var Router = function () {
                         return of(p);
                     }
                 });
+                var /** @type {?} */preactivationDone$ = mergeMap.call(preactivationResolveData$, function (p) {
+                    return map.call(_this22.hooks.afterPreactivation(p.snapshot), function () {
+                        return p;
+                    });
+                });
                 // create router state
                 // this operation has side effects => route state is being affected
-                var /** @type {?} */routerState$ = map.call(preactivationResolveData$, function (_ref8) {
+                var /** @type {?} */routerState$ = map.call(preactivationDone$, function (_ref8) {
                     var appliedUrl = _ref8.appliedUrl,
                         snapshot = _ref8.snapshot,
                         shouldActivate = _ref8.shouldActivate;
@@ -6652,25 +6682,137 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 /**
- * @param {?} router
- * @param {?} ref
- * @param {?} preloader
- * @param {?} opts
+ * To initialize the router properly we need to do in two steps:
+ *
+ * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+ * a resolver or a guards executes asynchronously. Second, we need to actually run
+ * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+ * hook provided by the router to do that.
+ *
+ * The router navigation starts, reaches the point when preactivation is done, and then
+ * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
+ */
+
+var RouterInitializer = function () {
+    /**
+     * @param {?} injector
+     */
+    function RouterInitializer(injector) {
+        _classCallCheck(this, RouterInitializer);
+
+        this.injector = injector;
+        this.initNavigation = false;
+        this.resultOfPreactivationDone = new Subject();
+    }
+    /**
+     * @return {?}
+     */
+
+
+    _createClass(RouterInitializer, [{
+        key: 'appInitializer',
+        value: function appInitializer() {
+            var _this41 = this;
+
+            var /** @type {?} */p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+            return p.then(function () {
+                var /** @type {?} */resolve = null;
+                var /** @type {?} */res = new Promise(function (r) {
+                    return resolve = r;
+                });
+                var /** @type {?} */router = _this41.injector.get(Router);
+                var /** @type {?} */opts = _this41.injector.get(ROUTER_CONFIGURATION);
+                if (_this41.isLegacyDisabled(opts) || _this41.isLegacyEnabled(opts)) {
+                    resolve(true);
+                } else if (opts.initialNavigation === 'disabled') {
+                    router.setUpLocationChangeListener();
+                    resolve(true);
+                } else if (opts.initialNavigation === 'enabled') {
+                    router.hooks.afterPreactivation = function () {
+                        // only the initial navigation should be delayed
+                        if (!_this41.initNavigation) {
+                            _this41.initNavigation = true;
+                            resolve(true);
+                            return _this41.resultOfPreactivationDone;
+                        } else {
+                            return of(null);
+                        }
+                    };
+                    router.initialNavigation();
+                } else {
+                    throw new Error('Invalid initialNavigation options: \'' + opts.initialNavigation + '\'');
+                }
+                return res;
+            });
+        }
+        /**
+         * @param {?} bootstrappedComponentRef
+         * @return {?}
+         */
+
+    }, {
+        key: 'bootstrapListener',
+        value: function bootstrapListener(bootstrappedComponentRef) {
+            var /** @type {?} */opts = this.injector.get(ROUTER_CONFIGURATION);
+            var /** @type {?} */preloader = this.injector.get(RouterPreloader);
+            var /** @type {?} */router = this.injector.get(Router);
+            var /** @type {?} */ref = this.injector.get(ApplicationRef);
+            if (bootstrappedComponentRef !== ref.components[0]) {
+                return;
+            }
+            if (this.isLegacyEnabled(opts)) {
+                router.initialNavigation();
+            } else if (this.isLegacyDisabled(opts)) {
+                router.setUpLocationChangeListener();
+            }
+            preloader.setUpPreloading();
+            router.resetRootComponentType(ref.componentTypes[0]);
+            this.resultOfPreactivationDone.next(null);
+            this.resultOfPreactivationDone.complete();
+        }
+        /**
+         * @param {?} opts
+         * @return {?}
+         */
+
+    }, {
+        key: 'isLegacyEnabled',
+        value: function isLegacyEnabled(opts) {
+            return opts.initialNavigation === 'legacy_enabled' || opts.initialNavigation === true || opts.initialNavigation === undefined;
+        }
+        /**
+         * @param {?} opts
+         * @return {?}
+         */
+
+    }, {
+        key: 'isLegacyDisabled',
+        value: function isLegacyDisabled(opts) {
+            return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
+        }
+    }]);
+
+    return RouterInitializer;
+}();
+
+RouterInitializer.decorators = [{ type: Injectable }];
+/** @nocollapse */
+RouterInitializer.ctorParameters = function () {
+    return [{ type: Injector }];
+};
+/**
+ * @param {?} r
  * @return {?}
  */
-function initialRouterNavigation(router, ref, preloader, opts) {
-    return function (bootstrappedComponentRef) {
-        if (bootstrappedComponentRef !== ref.components[0]) {
-            return;
-        }
-        router.resetRootComponentType(ref.componentTypes[0]);
-        preloader.setUpPreloading();
-        if (opts.initialNavigation === false) {
-            router.setUpLocationChangeListener();
-        } else {
-            router.initialNavigation();
-        }
-    };
+function getAppInitializer(r) {
+    return r.appInitializer.bind(r);
+}
+/**
+ * @param {?} r
+ * @return {?}
+ */
+function getBootstrapListener(r) {
+    return r.bootstrapListener.bind(r);
 }
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
@@ -6682,16 +6824,17 @@ var /** @type {?} */ROUTER_INITIALIZER = new InjectionToken('Router Initializer'
  * @return {?}
  */
 function provideRouterInitializer() {
-    return [{
-        provide: ROUTER_INITIALIZER,
-        useFactory: initialRouterNavigation,
-        deps: [Router, ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
-    }, { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }];
+    return [RouterInitializer, {
+        provide: APP_INITIALIZER,
+        multi: true,
+        useFactory: getAppInitializer,
+        deps: [RouterInitializer]
+    }, { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener, deps: [RouterInitializer] }, { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER }];
 }
 
 /**
  * @stable
  */
-var /** @type {?} */VERSION = new Version('4.0.0-rc.2-1cff125');
+var /** @type {?} */VERSION = new Version('4.0.0-rc.2-5df998d');
 
-export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, initialRouterNavigation as ɵg, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵh, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵi, TreeNode as ɵj };
+export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };

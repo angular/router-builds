@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.2-1cff125
+ * @license Angular v4.0.0-rc.2-5df998d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -22,7 +22,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.setUpLocationSync = exports.initialRouterNavigation = exports.RouterUpgradeInitializer = undefined;
+    exports.setUpLocationSync = exports.locationSyncBootstrapListener = exports.RouterUpgradeInitializer = undefined;
 
 
     /**
@@ -49,27 +49,16 @@
      * @experimental
      */
     var RouterUpgradeInitializer = {
-        provide: _router.ROUTER_INITIALIZER,
-        useFactory: initialRouterNavigation,
-        deps: [_static.UpgradeModule, _core.ApplicationRef, _router.RouterPreloader, _router.ROUTER_CONFIGURATION]
+        provide: _core.APP_BOOTSTRAP_LISTENER,
+        multi: true,
+        useFactory: locationSyncBootstrapListener,
+        deps: [_static.UpgradeModule]
     };
     /**
      * @internal
      */
-    function initialRouterNavigation(ngUpgrade, ref, preloader, opts) {
+    function locationSyncBootstrapListener(ngUpgrade) {
         return function () {
-            if (!ngUpgrade.$injector) {
-                throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
-            }
-            var router = ngUpgrade.injector.get(_router.Router);
-            var ref = ngUpgrade.injector.get(_core.ApplicationRef);
-            router.resetRootComponentType(ref.componentTypes[0]);
-            preloader.setUpPreloading();
-            if (opts.initialNavigation === false) {
-                router.setUpLocationChangeListener();
-            } else {
-                router.initialNavigation();
-            }
             setUpLocationSync(ngUpgrade);
         };
     }
@@ -82,6 +71,9 @@
      * @experimental
      */
     function setUpLocationSync(ngUpgrade) {
+        if (!ngUpgrade.$injector) {
+            throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
+        }
         var router = ngUpgrade.injector.get(_router.Router);
         var url = document.createElement('a');
         ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
@@ -91,6 +83,6 @@
     }
 
     exports.RouterUpgradeInitializer = RouterUpgradeInitializer;
-    exports.initialRouterNavigation = initialRouterNavigation;
+    exports.locationSyncBootstrapListener = locationSyncBootstrapListener;
     exports.setUpLocationSync = setUpLocationSync;
 });
