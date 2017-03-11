@@ -1,4 +1,8 @@
-import { Location, LocationStrategy } from '@angular/common';
+/**
+ * @license Angular v4.0.0-rc.3-6c8638c
+ * (c) 2010-2017 Google, Inc. https://angular.io/
+ * License: MIT
+ */import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Injectable, Compiler, Optional, Injector, NgModuleFactoryLoader, NgModule } from '@angular/core';
 import { ɵflatten, Router, provideRoutes, NoPreloading, PreloadingStrategy, UrlHandlingStrategy, ROUTES, RouterOutletMap, UrlSerializer, ɵROUTER_PROVIDERS, RouterModule } from '@angular/router';

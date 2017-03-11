@@ -1,29 +1,12 @@
 /**
- * @license Angular v4.0.0-rc.2-5ad5301
+ * @license Angular v4.0.0-rc.3-6c8638c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
-    if (typeof define === "function" && define.amd) {
-        define('@angular/router/upgrade', ['exports', '@angular/core', '@angular/router', '@angular/upgrade/static'], factory);
-    } else if (typeof exports !== "undefined") {
-        factory(exports, require('@angular/core'), require('@angular/router'), require('@angular/upgrade/static'));
-    } else {
-        var mod = {
-            exports: {}
-        };
-        factory(mod.exports, global.ng.core, global.ng.router, global.ng.upgrade.static);
-        global.ng = global.ng || {};
-        global.ng.router = global.ng.router || {};
-        global.ng.router.upgrade = mod.exports;
-    }
-})(this, function (exports, _core, _router, _static) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.setUpLocationSync = exports.locationSyncBootstrapListener = exports.RouterUpgradeInitializer = undefined;
-
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/router'), require('@angular/upgrade/static')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/router', '@angular/upgrade/static'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.upgrade = global.ng.router.upgrade || {}),global.ng.core,global.ng.router,global.ng.upgrade.static));
+}(this, function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
     /**
      * @whatItDoes Creates an initializer that in addition to setting up the Angular
@@ -49,18 +32,16 @@
      * @experimental
      */
     var RouterUpgradeInitializer = {
-        provide: _core.APP_BOOTSTRAP_LISTENER,
+        provide: _angular_core.APP_BOOTSTRAP_LISTENER,
         multi: true,
         useFactory: locationSyncBootstrapListener,
-        deps: [_static.UpgradeModule]
+        deps: [_angular_upgrade_static.UpgradeModule]
     };
     /**
      * @internal
      */
     function locationSyncBootstrapListener(ngUpgrade) {
-        return function () {
-            setUpLocationSync(ngUpgrade);
-        };
+        return function () { setUpLocationSync(ngUpgrade); };
     }
     /**
      * @whatItDoes Sets up a location synchronization.
@@ -72,11 +53,12 @@
      */
     function setUpLocationSync(ngUpgrade) {
         if (!ngUpgrade.$injector) {
-            throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
+            throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
         }
-        var router = ngUpgrade.injector.get(_router.Router);
+        var router = ngUpgrade.injector.get(_angular_router.Router);
         var url = document.createElement('a');
-        ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
+        ngUpgrade.$injector.get('$rootScope')
+            .$on('$locationChangeStart', function (_, next, __) {
             url.href = next;
             router.navigateByUrl(url.pathname);
         });
@@ -85,4 +67,5 @@
     exports.RouterUpgradeInitializer = RouterUpgradeInitializer;
     exports.locationSyncBootstrapListener = locationSyncBootstrapListener;
     exports.setUpLocationSync = setUpLocationSync;
-});
+
+}));

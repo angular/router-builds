@@ -10,4 +10,4 @@
  * @description
  * Entry point for all public APIs of the router/testing package.
  */
-export * from './src/testing';
+export * from './router_testing_module';

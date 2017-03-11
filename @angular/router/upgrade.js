@@ -1,4 +1,8 @@
-import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+/**
+ * @license Angular v4.0.0-rc.3-6c8638c
+ * (c) 2010-2017 Google, Inc. https://angular.io/
+ * License: MIT
+ */import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 

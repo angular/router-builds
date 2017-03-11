@@ -1,7 +1,10 @@
-import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+/**
+ * @license Angular v4.0.0-rc.3-6c8638c
+ * (c) 2010-2017 Google, Inc. https://angular.io/
+ * License: MIT
+ */ import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
-
 /**
  * @whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
@@ -35,9 +38,7 @@ var RouterUpgradeInitializer = {
  * @internal
  */
 function locationSyncBootstrapListener(ngUpgrade) {
-    return function () {
-        setUpLocationSync(ngUpgrade);
-    };
+    return function () { setUpLocationSync(ngUpgrade); };
 }
 /**
  * @whatItDoes Sets up a location synchronization.
@@ -49,14 +50,14 @@ function locationSyncBootstrapListener(ngUpgrade) {
  */
 function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
-        throw new Error('\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ');
+        throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
     }
     var router = ngUpgrade.injector.get(Router);
     var url = document.createElement('a');
-    ngUpgrade.$injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
+    ngUpgrade.$injector.get('$rootScope')
+        .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
         router.navigateByUrl(url.pathname);
     });
 }
-
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
