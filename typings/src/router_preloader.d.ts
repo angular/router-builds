@@ -65,6 +65,6 @@ export declare class RouterPreloader {
     setUpPreloading(): void;
     preload(): Observable<any>;
     ngOnDestroy(): void;
-    private processRoutes(injector, routes);
-    private preloadConfig(injector, route);
+    private processRoutes(ngModule, routes);
+    private preloadConfig(ngModule, route);
 }

@@ -159,7 +159,6 @@ export declare class Router {
     private urlSerializer;
     private outletMap;
     private location;
-    private injector;
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
@@ -169,6 +168,7 @@ export declare class Router {
     private locationSubscription;
     private navigationId;
     private configLoader;
+    private ngModule;
     /**
      * Error handler that is invoked when a navigation errors.
      *
@@ -322,9 +322,9 @@ export declare class Router {
 export declare class PreActivation {
     private future;
     private curr;
-    private injector;
+    private moduleInjector;
     private checks;
-    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, injector: Injector);
+    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector);
     traverse(parentOutletMap: RouterOutletMap): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;

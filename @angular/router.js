@@ -1,9 +1,9 @@
 /**
- * @license Angular v4.0.0-rc.3-f093501
+ * @license Angular v4.0.0-rc.3-13686bb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, ReflectiveInjector, ComponentFactoryResolver, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, EventEmitter, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
+import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, NgModuleRef, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, ReflectiveInjector, EventEmitter, ComponentFactoryResolver, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -393,15 +393,11 @@ const /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
 class LoadedRouterConfig {
     /**
      * @param {?} routes
-     * @param {?} injector
-     * @param {?} factoryResolver
-     * @param {?} injectorFactory
+     * @param {?} module
      */
-    constructor(routes, injector, factoryResolver, injectorFactory) {
+    constructor(routes, module) {
         this.routes = routes;
-        this.injector = injector;
-        this.factoryResolver = factoryResolver;
-        this.injectorFactory = injectorFactory;
+        this.module = module;
     }
 }
 class RouterConfigLoader {
@@ -432,8 +428,7 @@ class RouterConfigLoader {
                 this.onLoadEndListener(route);
             }
             const /** @type {?} */ module = factory.create(parentInjector);
-            const /** @type {?} */ injectorFactory = (parent) => factory.create(parent).injector;
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module.injector, module.componentFactoryResolver, injectorFactory);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
         });
     }
     /**
@@ -1186,37 +1181,37 @@ function canLoadFails(route) {
     return new Observable((obs) => obs.error(navigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
 }
 /**
- * @param {?} injector
+ * @param {?} moduleInjector
  * @param {?} configLoader
  * @param {?} urlSerializer
  * @param {?} urlTree
  * @param {?} config
  * @return {?}
  */
-function applyRedirects(injector, configLoader, urlSerializer, urlTree, config) {
-    return new ApplyRedirects(injector, configLoader, urlSerializer, urlTree, config).apply();
+function applyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config) {
+    return new ApplyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config).apply();
 }
 class ApplyRedirects {
     /**
-     * @param {?} injector
+     * @param {?} moduleInjector
      * @param {?} configLoader
      * @param {?} urlSerializer
      * @param {?} urlTree
      * @param {?} config
      */
-    constructor(injector, configLoader, urlSerializer, urlTree, config) {
-        this.injector = injector;
+    constructor(moduleInjector, configLoader, urlSerializer, urlTree, config) {
         this.configLoader = configLoader;
         this.urlSerializer = urlSerializer;
         this.urlTree = urlTree;
         this.config = config;
         this.allowRedirects = true;
+        this.ngModule = moduleInjector.get(NgModuleRef);
     }
     /**
      * @return {?}
      */
     apply() {
-        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
+        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
         const /** @type {?} */ urlTrees$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, this.urlTree.fragment));
         return _catch.call(urlTrees$, (e) => {
             if (e instanceof AbsoluteRedirect) {
@@ -1236,7 +1231,7 @@ class ApplyRedirects {
      * @return {?}
      */
     match(tree) {
-        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, tree.root, PRIMARY_OUTLET);
+        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
         const /** @type {?} */ mapped$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment));
         return _catch.call(mapped$, (e) => {
             if (e instanceof NoMatch) {
@@ -1265,29 +1260,29 @@ class ApplyRedirects {
         return new UrlTree(root, queryParams, fragment);
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
      * @param {?} outlet
      * @return {?}
      */
-    expandSegmentGroup(injector, routes, segmentGroup, outlet) {
+    expandSegmentGroup(ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(injector, routes, segmentGroup), (children) => new UrlSegmentGroup([], children));
+            return map.call(this.expandChildren(ngModule, routes, segmentGroup), (children) => new UrlSegmentGroup([], children));
         }
-        return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
+        return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
      * @return {?}
      */
-    expandChildren(injector, routes, segmentGroup) {
-        return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(injector, routes, child, childOutlet));
+    expandChildren(ngModule, routes, segmentGroup) {
+        return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} segments
@@ -1295,10 +1290,10 @@ class ApplyRedirects {
      * @param {?} allowRedirects
      * @return {?}
      */
-    expandSegment(injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+    expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
         const /** @type {?} */ routes$ = of(...routes);
         const /** @type {?} */ processedRoutes$ = map.call(routes$, (r) => {
-            const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+            const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return _catch.call(expanded$, (e) => {
                 if (e instanceof NoMatch) {
                     return of(null);
@@ -1328,7 +1323,7 @@ class ApplyRedirects {
         return segments.length === 0 && !segmentGroup.children[outlet];
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1337,7 +1332,7 @@ class ApplyRedirects {
      * @param {?} allowRedirects
      * @return {?}
      */
-    expandSegmentAgainstRoute(injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+    expandSegmentAgainstRoute(ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
         if (getOutlet$1(route) !== outlet) {
             return noMatch(segmentGroup);
         }
@@ -1345,12 +1340,12 @@ class ApplyRedirects {
             return noMatch(segmentGroup);
         }
         if (route.redirectTo === undefined) {
-            return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+            return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths);
         }
-        return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+        return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1358,31 +1353,31 @@ class ApplyRedirects {
      * @param {?} outlet
      * @return {?}
      */
-    expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet) {
+    expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet) {
         if (route.path === '**') {
-            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
+            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(ngModule, routes, route, outlet);
         }
-        return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+        return this.expandRegularSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet);
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} route
      * @param {?} outlet
      * @return {?}
      */
-    expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet) {
+    expandWildCardWithParamsAgainstRouteUsingRedirect(ngModule, routes, route, outlet) {
         const /** @type {?} */ newTree = this.applyRedirectCommands([], route.redirectTo, {});
         if (route.redirectTo.startsWith('/')) {
             return absoluteRedirect(newTree);
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
             const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
-            return this.expandSegment(injector, group, routes, newSegments, outlet, false);
+            return this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
         });
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1390,7 +1385,7 @@ class ApplyRedirects {
      * @param {?} outlet
      * @return {?}
      */
-    expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet) {
+    expandRegularSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet) {
         const { matched, consumedSegments, lastChild, positionalParamSegments } = match(segmentGroup, route, segments);
         if (!matched)
             return noMatch(segmentGroup);
@@ -1399,20 +1394,20 @@ class ApplyRedirects {
             return absoluteRedirect(newTree);
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
-            return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+            return this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
         });
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} rawSegmentGroup
      * @param {?} route
      * @param {?} segments
      * @return {?}
      */
-    matchSegmentAgainstRoute(injector, rawSegmentGroup, route, segments) {
+    matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(injector, route), (cfg) => {
+                return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
                     ((route))._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 });
@@ -1423,37 +1418,38 @@ class ApplyRedirects {
         if (!matched)
             return noMatch(rawSegmentGroup);
         const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
-        const /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
+        const /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
         return mergeMap.call(childConfig$, (routerConfig) => {
-            const /** @type {?} */ childInjector = routerConfig.injector;
+            const /** @type {?} */ childModule = routerConfig.module;
             const /** @type {?} */ childConfig = routerConfig.routes;
             const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                const /** @type {?} */ expanded$ = this.expandChildren(childInjector, childConfig, segmentGroup);
+                const /** @type {?} */ expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
                 return map.call(expanded$, (children) => new UrlSegmentGroup(consumedSegments, children));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
-            const /** @type {?} */ expanded$ = this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            const /** @type {?} */ expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
             return map.call(expanded$, (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
         });
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} route
      * @return {?}
      */
-    getChildConfig(injector, route) {
+    getChildConfig(ngModule, route) {
         if (route.children) {
-            return of(new LoadedRouterConfig(route.children, injector, null, null));
+            // The children belong to the same module
+            return of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            return mergeMap.call(runGuards(injector, route), (shouldLoad) => {
+            return mergeMap.call(runGuards(ngModule.injector, route), (shouldLoad) => {
                 if (shouldLoad) {
                     return ((route))._loadedConfig ?
                         of(((route))._loadedConfig) :
-                        map.call(this.configLoader.load(injector, route), (cfg) => {
+                        map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
                             ((route))._loadedConfig = cfg;
                             return cfg;
                         });
@@ -1461,7 +1457,7 @@ class ApplyRedirects {
                 return canLoadFails(route);
             });
         }
-        return of(new LoadedRouterConfig([], injector, null, null));
+        return of(new LoadedRouterConfig([], ngModule));
     }
     /**
      * @param {?} route
@@ -1570,16 +1566,16 @@ class ApplyRedirects {
     }
 }
 /**
- * @param {?} injector
+ * @param {?} moduleInjector
  * @param {?} route
  * @return {?}
  */
-function runGuards(injector, route) {
+function runGuards(moduleInjector, route) {
     const /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
     const /** @type {?} */ obs = map.call(from(canLoad), (c) => {
-        const /** @type {?} */ guard = injector.get(c);
+        const /** @type {?} */ guard = moduleInjector.get(c);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
@@ -3260,7 +3256,6 @@ class Router {
         this.urlSerializer = urlSerializer;
         this.outletMap = outletMap;
         this.location = location;
-        this.injector = injector;
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.routerEvents = new Subject();
@@ -3291,6 +3286,7 @@ class Router {
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
+        this.ngModule = injector.get(NgModuleRef);
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3655,7 +3651,8 @@ class Router {
             // this operation do not result in any side effects
             let /** @type {?} */ urlAndSnapshot$;
             if (!precreatedState) {
-                const /** @type {?} */ redirectsApplied$ = applyRedirects(this.injector, this.configLoader, this.urlSerializer, url, this.config);
+                const /** @type {?} */ moduleInjector = this.ngModule.injector;
+                const /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
                 urlAndSnapshot$ = mergeMap.call(redirectsApplied$, (appliedUrl) => {
                     return map.call(recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl)), (snapshot) => {
                         this.routerEvents.next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
@@ -3672,8 +3669,9 @@ class Router {
             // run preactivation: guards and data resolvers
             let /** @type {?} */ preActivation;
             const /** @type {?} */ preactivationTraverse$ = map.call(beforePreactivationDone$, ({ appliedUrl, snapshot }) => {
+                const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 preActivation =
-                    new PreActivation(snapshot, this.currentRouterState.snapshot, this.injector);
+                    new PreActivation(snapshot, this.currentRouterState.snapshot, moduleInjector);
                 preActivation.traverse(this.outletMap);
                 return { appliedUrl, snapshot };
             });
@@ -3803,12 +3801,12 @@ class PreActivation {
     /**
      * @param {?} future
      * @param {?} curr
-     * @param {?} injector
+     * @param {?} moduleInjector
      */
-    constructor(future, curr, injector) {
+    constructor(future, curr, moduleInjector) {
         this.future = future;
         this.curr = curr;
-        this.injector = injector;
+        this.moduleInjector = moduleInjector;
         this.checks = [];
     }
     /**
@@ -4074,7 +4072,7 @@ class PreActivation {
      */
     getToken(token, snapshot) {
         const /** @type {?} */ config = closestLoadedConfig(snapshot);
-        const /** @type {?} */ injector = config ? config.injector : this.injector;
+        const /** @type {?} */ injector = config ? config.module.injector : this.moduleInjector;
         return injector.get(token);
     }
 }
@@ -4203,23 +4201,9 @@ class ActivateRoutes {
      * @return {?}
      */
     placeComponentIntoOutlet(outletMap, future, outlet) {
-        const /** @type {?} */ resolved = ([{ provide: ActivatedRoute, useValue: future }, {
-                provide: RouterOutletMap,
-                useValue: outletMap
-            }]);
         const /** @type {?} */ config = parentLoadedConfig(future.snapshot);
-        let /** @type {?} */ resolver = null;
-        let /** @type {?} */ injector = null;
-        if (config) {
-            injector = config.injectorFactory(outlet.locationInjector);
-            resolver = config.factoryResolver;
-            resolved.push({ provide: ComponentFactoryResolver, useValue: resolver });
-        }
-        else {
-            injector = outlet.locationInjector;
-            resolver = outlet.locationFactoryResolver;
-        }
-        outlet.activate(future, resolver, injector, ReflectiveInjector.resolve(resolved), outletMap);
+        const /** @type {?} */ cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+        outlet.activateWith(future, cmpFactoryResolver, outletMap);
     }
     /**
      * @param {?} route
@@ -4851,10 +4835,12 @@ class RouterOutlet {
      */
     ngOnDestroy() { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); }
     /**
+     * @deprecated since v4 *
      * @return {?}
      */
     get locationInjector() { return this.location.injector; }
     /**
+     * @deprecated since v4 *
      * @return {?}
      */
     get locationFactoryResolver() { return this.resolver; }
@@ -4913,6 +4899,7 @@ class RouterOutlet {
         }
     }
     /**
+     * @deprecated since v4, use {\@link activateWith}
      * @param {?} activatedRoute
      * @param {?} resolver
      * @param {?} injector
@@ -4934,6 +4921,27 @@ class RouterOutlet {
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     }
+    /**
+     * @param {?} activatedRoute
+     * @param {?} resolver
+     * @param {?} outletMap
+     * @return {?}
+     */
+    activateWith(activatedRoute, resolver, outletMap) {
+        if (this.isActivated) {
+            throw new Error('Cannot activate an already activated outlet');
+        }
+        this.outletMap = outletMap;
+        this._activatedRoute = activatedRoute;
+        const /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
+        const /** @type {?} */ component = (snapshot._routeConfig.component);
+        resolver = resolver || this.resolver;
+        const /** @type {?} */ factory = resolver.resolveComponentFactory(component);
+        const /** @type {?} */ injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
+        this.activated = this.location.createComponent(factory, this.location.length, injector, []);
+        this.activated.changeDetectorRef.detectChanges();
+        this.activateEvents.emit(this.activated.instance);
+    }
 }
 RouterOutlet.decorators = [
     { type: Directive, args: [{ selector: 'router-outlet' },] },
@@ -4949,6 +4957,32 @@ RouterOutlet.propDecorators = {
     'activateEvents': [{ type: Output, args: ['activate',] },],
     'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
 };
+class OutletInjector {
+    /**
+     * @param {?} route
+     * @param {?} map
+     * @param {?} parent
+     */
+    constructor(route, map, parent) {
+        this.route = route;
+        this.map = map;
+        this.parent = parent;
+    }
+    /**
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
+     */
+    get(token, notFoundValue) {
+        if (token === ActivatedRoute) {
+            return this.route;
+        }
+        if (token === RouterOutletMap) {
+            return this.map;
+        }
+        return this.parent.get(token, notFoundValue);
+    }
+}
 
 /**
  * @license
@@ -5095,45 +5129,48 @@ class RouterPreloader {
     /**
      * @return {?}
      */
-    preload() { return this.processRoutes(this.injector, this.router.config); }
+    preload() {
+        const /** @type {?} */ ngModule = this.injector.get(NgModuleRef);
+        return this.processRoutes(ngModule, this.router.config);
+    }
     /**
      * @return {?}
      */
     ngOnDestroy() { this.subscription.unsubscribe(); }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @return {?}
      */
-    processRoutes(injector, routes) {
+    processRoutes(ngModule, routes) {
         const /** @type {?} */ res = [];
         for (const /** @type {?} */ c of routes) {
             // we already have the config loaded, just recurse
             if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
                 const /** @type {?} */ childConfig = ((c))._loadedConfig;
-                res.push(this.processRoutes(childConfig.injector, childConfig.routes));
+                res.push(this.processRoutes(childConfig.module, childConfig.routes));
             }
             else if (c.loadChildren && !c.canLoad) {
-                res.push(this.preloadConfig(injector, c));
+                res.push(this.preloadConfig(ngModule, c));
             }
             else if (c.children) {
-                res.push(this.processRoutes(injector, c.children));
+                res.push(this.processRoutes(ngModule, c.children));
             }
         }
         return mergeAll.call(from(res));
     }
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} route
      * @return {?}
      */
-    preloadConfig(injector, route) {
+    preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const /** @type {?} */ loaded = this.loader.load(injector, route);
+            const /** @type {?} */ loaded = this.loader.load(ngModule.injector, route);
             return mergeMap.call(loaded, (config) => {
                 const /** @type {?} */ c = route;
                 c._loadedConfig = config;
-                return this.processRoutes(config.injector, config.routes);
+                return this.processRoutes(config.module, config.routes);
             });
         });
     }
@@ -5536,6 +5573,6 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-const /** @type {?} */ VERSION = new Version('4.0.0-rc.3-f093501');
+const /** @type {?} */ VERSION = new Version('4.0.0-rc.3-13686bb');
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };

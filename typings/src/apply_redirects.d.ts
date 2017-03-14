@@ -10,4 +10,4 @@ import { Observable } from 'rxjs/Observable';
 import { Routes } from './config';
 import { RouterConfigLoader } from './router_config_loader';
 import { UrlSerializer, UrlTree } from './url_tree';
-export declare function applyRedirects(injector: Injector, configLoader: RouterConfigLoader, urlSerializer: UrlSerializer, urlTree: UrlTree, config: Routes): Observable<UrlTree>;
+export declare function applyRedirects(moduleInjector: Injector, configLoader: RouterConfigLoader, urlSerializer: UrlSerializer, urlTree: UrlTree, config: Routes): Observable<UrlTree>;
