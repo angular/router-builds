@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-0aad270
+ * @license Angular v4.0.0-rc.3-2c5a671
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
@@ -5475,8 +5475,9 @@ function routerNgProbeToken() {
 var RouterModule = (function () {
     /**
      * @param {?} guard
+     * @param {?} router
      */
-    function RouterModule(guard) {
+    function RouterModule(guard, router) {
     }
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
@@ -5537,6 +5538,7 @@ RouterModule.decorators = [
 /** @nocollapse */
 RouterModule.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+    { type: Router, decorators: [{ type: Optional },] },
 ]; };
 /**
  * @param {?} platformLocationStrategy
@@ -5770,5 +5772,5 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-0aad270');
+var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-2c5a671');
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };

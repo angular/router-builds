@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-0aad270
+ * @license Angular v4.0.0-rc.3-2c5a671
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -5460,8 +5460,9 @@
     var RouterModule = (function () {
         /**
          * @param {?} guard
+         * @param {?} router
          */
-        function RouterModule(guard) {
+        function RouterModule(guard, router) {
         }
         /**
          * Creates a module with all the router providers and directives. It also optionally sets up an
@@ -5522,6 +5523,7 @@
     /** @nocollapse */
     RouterModule.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+        { type: Router, decorators: [{ type: _angular_core.Optional },] },
     ]; };
     /**
      * @param {?} platformLocationStrategy
@@ -5755,7 +5757,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-0aad270');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-2c5a671');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
