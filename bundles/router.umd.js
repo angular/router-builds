@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-ec548ad
+ * @license Angular v4.0.0-rc.3-a9b1880
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -5795,7 +5795,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-ec548ad');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-a9b1880');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
