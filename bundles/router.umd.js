@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-3f38c6f
+ * @license Angular v4.0.0-rc.3-029d0f2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -2482,10 +2482,16 @@
      * @return {?}
      */
     function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
-        if (urlTree.root === oldSegmentGroup) {
-            return new UrlTree(newSegmentGroup, stringify(queryParams), fragment);
+        var /** @type {?} */ qp = {};
+        if (queryParams) {
+            forEach(queryParams, function (value, name) {
+                qp[name] = Array.isArray(value) ? value.map(function (v) { return "" + v; }) : "" + value;
+            });
         }
-        return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
+        if (urlTree.root === oldSegmentGroup) {
+            return new UrlTree(newSegmentGroup, qp, fragment);
+        }
+        return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), qp, fragment);
     }
     /**
      * @param {?} current
@@ -5811,7 +5817,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-3f38c6f');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-029d0f2');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
