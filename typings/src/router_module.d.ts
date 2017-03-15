@@ -77,7 +77,7 @@ export declare function routerNgProbeToken(): NgProbeToken;
  * @stable
  */
 export declare class RouterModule {
-    constructor(guard: any);
+    constructor(guard: any, router: Router);
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Compiler, ComponentFactoryResolver, InjectionToken, Injector, NgModuleFactoryLoader } from '@angular/core';
+import { Compiler, InjectionToken, Injector, NgModuleFactoryLoader, NgModuleRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Route } from './config';
 /**
@@ -15,10 +15,8 @@ import { Route } from './config';
 export declare const ROUTES: InjectionToken<Route[][]>;
 export declare class LoadedRouterConfig {
     routes: Route[];
-    injector: Injector;
-    factoryResolver: ComponentFactoryResolver;
-    injectorFactory: Function;
-    constructor(routes: Route[], injector: Injector, factoryResolver: ComponentFactoryResolver, injectorFactory: Function);
+    module: NgModuleRef<any>;
+    constructor(routes: Route[], module: NgModuleRef<any>);
 }
 export declare class RouterConfigLoader {
     private loader;

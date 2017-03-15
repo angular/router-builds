@@ -4,11 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-423bfb0
+ * @license Angular v4.0.0-rc.3-ec548ad
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, ReflectiveInjector, ComponentFactoryResolver, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, EventEmitter, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
+import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, NgModuleRef, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, ReflectiveInjector, EventEmitter, ComponentFactoryResolver, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -401,15 +401,11 @@ var /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
 var LoadedRouterConfig = (function () {
     /**
      * @param {?} routes
-     * @param {?} injector
-     * @param {?} factoryResolver
-     * @param {?} injectorFactory
+     * @param {?} module
      */
-    function LoadedRouterConfig(routes, injector, factoryResolver, injectorFactory) {
+    function LoadedRouterConfig(routes, module) {
         this.routes = routes;
-        this.injector = injector;
-        this.factoryResolver = factoryResolver;
-        this.injectorFactory = injectorFactory;
+        this.module = module;
     }
     return LoadedRouterConfig;
 }());
@@ -442,8 +438,7 @@ var RouterConfigLoader = (function () {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
-            var /** @type {?} */ injectorFactory = function (parent) { return factory.create(parent).injector; };
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module.injector, module.componentFactoryResolver, injectorFactory);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
         });
     };
     /**
@@ -1215,38 +1210,38 @@ function canLoadFails(route) {
     return new Observable(function (obs) { return obs.error(navigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
 }
 /**
- * @param {?} injector
+ * @param {?} moduleInjector
  * @param {?} configLoader
  * @param {?} urlSerializer
  * @param {?} urlTree
  * @param {?} config
  * @return {?}
  */
-function applyRedirects(injector, configLoader, urlSerializer, urlTree, config) {
-    return new ApplyRedirects(injector, configLoader, urlSerializer, urlTree, config).apply();
+function applyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config) {
+    return new ApplyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config).apply();
 }
 var ApplyRedirects = (function () {
     /**
-     * @param {?} injector
+     * @param {?} moduleInjector
      * @param {?} configLoader
      * @param {?} urlSerializer
      * @param {?} urlTree
      * @param {?} config
      */
-    function ApplyRedirects(injector, configLoader, urlSerializer, urlTree, config) {
-        this.injector = injector;
+    function ApplyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config) {
         this.configLoader = configLoader;
         this.urlSerializer = urlSerializer;
         this.urlTree = urlTree;
         this.config = config;
         this.allowRedirects = true;
+        this.ngModule = moduleInjector.get(NgModuleRef);
     }
     /**
      * @return {?}
      */
     ApplyRedirects.prototype.apply = function () {
         var _this = this;
-        var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
+        var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
         var /** @type {?} */ urlTrees$ = map.call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup, _this.urlTree.queryParams, _this.urlTree.fragment); });
         return _catch.call(urlTrees$, function (e) {
             if (e instanceof AbsoluteRedirect) {
@@ -1267,7 +1262,7 @@ var ApplyRedirects = (function () {
      */
     ApplyRedirects.prototype.match = function (tree) {
         var _this = this;
-        var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, tree.root, PRIMARY_OUTLET);
+        var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
         var /** @type {?} */ mapped$ = map.call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment); });
         return _catch.call(mapped$, function (e) {
             if (e instanceof NoMatch) {
@@ -1297,30 +1292,30 @@ var ApplyRedirects = (function () {
         var _a;
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
      * @param {?} outlet
      * @return {?}
      */
-    ApplyRedirects.prototype.expandSegmentGroup = function (injector, routes, segmentGroup, outlet) {
+    ApplyRedirects.prototype.expandSegmentGroup = function (ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(injector, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
+            return map.call(this.expandChildren(ngModule, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
         }
-        return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
+        return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
      * @return {?}
      */
-    ApplyRedirects.prototype.expandChildren = function (injector, routes, segmentGroup) {
+    ApplyRedirects.prototype.expandChildren = function (ngModule, routes, segmentGroup) {
         var _this = this;
-        return waitForMap(segmentGroup.children, function (childOutlet, child) { return _this.expandSegmentGroup(injector, routes, child, childOutlet); });
+        return waitForMap(segmentGroup.children, function (childOutlet, child) { return _this.expandSegmentGroup(ngModule, routes, child, childOutlet); });
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} segments
@@ -1328,11 +1323,11 @@ var ApplyRedirects = (function () {
      * @param {?} allowRedirects
      * @return {?}
      */
-    ApplyRedirects.prototype.expandSegment = function (injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+    ApplyRedirects.prototype.expandSegment = function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
         var _this = this;
         var /** @type {?} */ routes$ = of.apply(void 0, routes);
         var /** @type {?} */ processedRoutes$ = map.call(routes$, function (r) {
-            var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+            var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return _catch.call(expanded$, function (e) {
                 if (e instanceof NoMatch) {
                     return of(null);
@@ -1362,7 +1357,7 @@ var ApplyRedirects = (function () {
         return segments.length === 0 && !segmentGroup.children[outlet];
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1371,7 +1366,7 @@ var ApplyRedirects = (function () {
      * @param {?} allowRedirects
      * @return {?}
      */
-    ApplyRedirects.prototype.expandSegmentAgainstRoute = function (injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+    ApplyRedirects.prototype.expandSegmentAgainstRoute = function (ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
         if (getOutlet$1(route) !== outlet) {
             return noMatch(segmentGroup);
         }
@@ -1379,12 +1374,12 @@ var ApplyRedirects = (function () {
             return noMatch(segmentGroup);
         }
         if (route.redirectTo === undefined) {
-            return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+            return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths);
         }
-        return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+        return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1392,20 +1387,20 @@ var ApplyRedirects = (function () {
      * @param {?} outlet
      * @return {?}
      */
-    ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+    ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (ngModule, segmentGroup, routes, route, segments, outlet) {
         if (route.path === '**') {
-            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
+            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(ngModule, routes, route, outlet);
         }
-        return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+        return this.expandRegularSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet);
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @param {?} route
      * @param {?} outlet
      * @return {?}
      */
-    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (injector, routes, route, outlet) {
+    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (ngModule, routes, route, outlet) {
         var _this = this;
         var /** @type {?} */ newTree = this.applyRedirectCommands([], route.redirectTo, {});
         if (route.redirectTo.startsWith('/')) {
@@ -1413,11 +1408,11 @@ var ApplyRedirects = (function () {
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
             var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
-            return _this.expandSegment(injector, group, routes, newSegments, outlet, false);
+            return _this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
         });
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
      * @param {?} route
@@ -1425,7 +1420,7 @@ var ApplyRedirects = (function () {
      * @param {?} outlet
      * @return {?}
      */
-    ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+    ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (ngModule, segmentGroup, routes, route, segments, outlet) {
         var _this = this;
         var _a = match(segmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
         if (!matched)
@@ -1435,21 +1430,21 @@ var ApplyRedirects = (function () {
             return absoluteRedirect(newTree);
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
-            return _this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+            return _this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
         });
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} rawSegmentGroup
      * @param {?} route
      * @param {?} segments
      * @return {?}
      */
-    ApplyRedirects.prototype.matchSegmentAgainstRoute = function (injector, rawSegmentGroup, route, segments) {
+    ApplyRedirects.prototype.matchSegmentAgainstRoute = function (ngModule, rawSegmentGroup, route, segments) {
         var _this = this;
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(injector, route), function (cfg) {
+                return map.call(this.configLoader.load(ngModule.injector, route), function (cfg) {
                     ((route))._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 });
@@ -1460,38 +1455,39 @@ var ApplyRedirects = (function () {
         if (!matched)
             return noMatch(rawSegmentGroup);
         var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
-        var /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
+        var /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
         return mergeMap.call(childConfig$, function (routerConfig) {
-            var /** @type {?} */ childInjector = routerConfig.injector;
+            var /** @type {?} */ childModule = routerConfig.module;
             var /** @type {?} */ childConfig = routerConfig.routes;
             var _a = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                var /** @type {?} */ expanded$_1 = _this.expandChildren(childInjector, childConfig, segmentGroup);
+                var /** @type {?} */ expanded$_1 = _this.expandChildren(childModule, childConfig, segmentGroup);
                 return map.call(expanded$_1, function (children) { return new UrlSegmentGroup(consumedSegments, children); });
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
-            var /** @type {?} */ expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            var /** @type {?} */ expanded$ = _this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
             return map.call(expanded$, function (cs) { return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children); });
         });
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} route
      * @return {?}
      */
-    ApplyRedirects.prototype.getChildConfig = function (injector, route) {
+    ApplyRedirects.prototype.getChildConfig = function (ngModule, route) {
         var _this = this;
         if (route.children) {
-            return of(new LoadedRouterConfig(route.children, injector, null, null));
+            // The children belong to the same module
+            return of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            return mergeMap.call(runGuards(injector, route), function (shouldLoad) {
+            return mergeMap.call(runGuards(ngModule.injector, route), function (shouldLoad) {
                 if (shouldLoad) {
                     return ((route))._loadedConfig ?
                         of(((route))._loadedConfig) :
-                        map.call(_this.configLoader.load(injector, route), function (cfg) {
+                        map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
                             ((route))._loadedConfig = cfg;
                             return cfg;
                         });
@@ -1499,7 +1495,7 @@ var ApplyRedirects = (function () {
                 return canLoadFails(route);
             });
         }
-        return of(new LoadedRouterConfig([], injector, null, null));
+        return of(new LoadedRouterConfig([], ngModule));
     };
     /**
      * @param {?} route
@@ -1612,16 +1608,16 @@ var ApplyRedirects = (function () {
     return ApplyRedirects;
 }());
 /**
- * @param {?} injector
+ * @param {?} moduleInjector
  * @param {?} route
  * @return {?}
  */
-function runGuards(injector, route) {
+function runGuards(moduleInjector, route) {
     var /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
     var /** @type {?} */ obs = map.call(from(canLoad), function (c) {
-        var /** @type {?} */ guard = injector.get(c);
+        var /** @type {?} */ guard = moduleInjector.get(c);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
@@ -3376,7 +3372,6 @@ var Router = (function () {
         this.urlSerializer = urlSerializer;
         this.outletMap = outletMap;
         this.location = location;
-        this.injector = injector;
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.routerEvents = new Subject();
@@ -3407,6 +3402,7 @@ var Router = (function () {
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
+        this.ngModule = injector.get(NgModuleRef);
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3791,7 +3787,8 @@ var Router = (function () {
             // this operation do not result in any side effects
             var /** @type {?} */ urlAndSnapshot$;
             if (!precreatedState) {
-                var /** @type {?} */ redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, _this.urlSerializer, url, _this.config);
+                var /** @type {?} */ moduleInjector = _this.ngModule.injector;
+                var /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, _this.configLoader, _this.urlSerializer, url, _this.config);
                 urlAndSnapshot$ = mergeMap.call(redirectsApplied$, function (appliedUrl) {
                     return map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl)), function (snapshot) {
                         _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
@@ -3809,8 +3806,9 @@ var Router = (function () {
             var /** @type {?} */ preActivation;
             var /** @type {?} */ preactivationTraverse$ = map.call(beforePreactivationDone$, function (_a) {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
+                var /** @type {?} */ moduleInjector = _this.ngModule.injector;
                 preActivation =
-                    new PreActivation(snapshot, _this.currentRouterState.snapshot, _this.injector);
+                    new PreActivation(snapshot, _this.currentRouterState.snapshot, moduleInjector);
                 preActivation.traverse(_this.outletMap);
                 return { appliedUrl: appliedUrl, snapshot: snapshot };
             });
@@ -3950,12 +3948,12 @@ var PreActivation = (function () {
     /**
      * @param {?} future
      * @param {?} curr
-     * @param {?} injector
+     * @param {?} moduleInjector
      */
-    function PreActivation(future, curr, injector) {
+    function PreActivation(future, curr, moduleInjector) {
         this.future = future;
         this.curr = curr;
-        this.injector = injector;
+        this.moduleInjector = moduleInjector;
         this.checks = [];
     }
     /**
@@ -4229,7 +4227,7 @@ var PreActivation = (function () {
      */
     PreActivation.prototype.getToken = function (token, snapshot) {
         var /** @type {?} */ config = closestLoadedConfig(snapshot);
-        var /** @type {?} */ injector = config ? config.injector : this.injector;
+        var /** @type {?} */ injector = config ? config.module.injector : this.moduleInjector;
         return injector.get(token);
     };
     return PreActivation;
@@ -4361,23 +4359,9 @@ var ActivateRoutes = (function () {
      * @return {?}
      */
     ActivateRoutes.prototype.placeComponentIntoOutlet = function (outletMap, future, outlet) {
-        var /** @type {?} */ resolved = ([{ provide: ActivatedRoute, useValue: future }, {
-                provide: RouterOutletMap,
-                useValue: outletMap
-            }]);
         var /** @type {?} */ config = parentLoadedConfig(future.snapshot);
-        var /** @type {?} */ resolver = null;
-        var /** @type {?} */ injector = null;
-        if (config) {
-            injector = config.injectorFactory(outlet.locationInjector);
-            resolver = config.factoryResolver;
-            resolved.push({ provide: ComponentFactoryResolver, useValue: resolver });
-        }
-        else {
-            injector = outlet.locationInjector;
-            resolver = outlet.locationFactoryResolver;
-        }
-        outlet.activate(future, resolver, injector, ReflectiveInjector.resolve(resolved), outletMap);
+        var /** @type {?} */ cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+        outlet.activateWith(future, cmpFactoryResolver, outletMap);
     };
     /**
      * @param {?} route
@@ -5049,6 +5033,7 @@ var RouterOutlet = (function () {
     RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); };
     Object.defineProperty(RouterOutlet.prototype, "locationInjector", {
         /**
+         * @deprecated since v4 *
          * @return {?}
          */
         get: function () { return this.location.injector; },
@@ -5057,6 +5042,7 @@ var RouterOutlet = (function () {
     });
     Object.defineProperty(RouterOutlet.prototype, "locationFactoryResolver", {
         /**
+         * @deprecated since v4 *
          * @return {?}
          */
         get: function () { return this.resolver; },
@@ -5130,6 +5116,7 @@ var RouterOutlet = (function () {
         }
     };
     /**
+     * @deprecated since v4, use {\@link activateWith}
      * @param {?} activatedRoute
      * @param {?} resolver
      * @param {?} injector
@@ -5151,6 +5138,27 @@ var RouterOutlet = (function () {
         this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     };
+    /**
+     * @param {?} activatedRoute
+     * @param {?} resolver
+     * @param {?} outletMap
+     * @return {?}
+     */
+    RouterOutlet.prototype.activateWith = function (activatedRoute, resolver, outletMap) {
+        if (this.isActivated) {
+            throw new Error('Cannot activate an already activated outlet');
+        }
+        this.outletMap = outletMap;
+        this._activatedRoute = activatedRoute;
+        var /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
+        var /** @type {?} */ component = (snapshot._routeConfig.component);
+        resolver = resolver || this.resolver;
+        var /** @type {?} */ factory = resolver.resolveComponentFactory(component);
+        var /** @type {?} */ injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
+        this.activated = this.location.createComponent(factory, this.location.length, injector, []);
+        this.activated.changeDetectorRef.detectChanges();
+        this.activateEvents.emit(this.activated.instance);
+    };
     return RouterOutlet;
 }());
 RouterOutlet.decorators = [
@@ -5167,6 +5175,33 @@ RouterOutlet.propDecorators = {
     'activateEvents': [{ type: Output, args: ['activate',] },],
     'deactivateEvents': [{ type: Output, args: ['deactivate',] },],
 };
+var OutletInjector = (function () {
+    /**
+     * @param {?} route
+     * @param {?} map
+     * @param {?} parent
+     */
+    function OutletInjector(route, map, parent) {
+        this.route = route;
+        this.map = map;
+        this.parent = parent;
+    }
+    /**
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
+     */
+    OutletInjector.prototype.get = function (token, notFoundValue) {
+        if (token === ActivatedRoute) {
+            return this.route;
+        }
+        if (token === RouterOutletMap) {
+            return this.map;
+        }
+        return this.parent.get(token, notFoundValue);
+    };
+    return OutletInjector;
+}());
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -5324,47 +5359,50 @@ var RouterPreloader = (function () {
     /**
      * @return {?}
      */
-    RouterPreloader.prototype.preload = function () { return this.processRoutes(this.injector, this.router.config); };
+    RouterPreloader.prototype.preload = function () {
+        var /** @type {?} */ ngModule = this.injector.get(NgModuleRef);
+        return this.processRoutes(ngModule, this.router.config);
+    };
     /**
      * @return {?}
      */
     RouterPreloader.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} routes
      * @return {?}
      */
-    RouterPreloader.prototype.processRoutes = function (injector, routes) {
+    RouterPreloader.prototype.processRoutes = function (ngModule, routes) {
         var /** @type {?} */ res = [];
         for (var _i = 0, routes_5 = routes; _i < routes_5.length; _i++) {
             var c = routes_5[_i];
             // we already have the config loaded, just recurse
             if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
                 var /** @type {?} */ childConfig = ((c))._loadedConfig;
-                res.push(this.processRoutes(childConfig.injector, childConfig.routes));
+                res.push(this.processRoutes(childConfig.module, childConfig.routes));
             }
             else if (c.loadChildren && !c.canLoad) {
-                res.push(this.preloadConfig(injector, c));
+                res.push(this.preloadConfig(ngModule, c));
             }
             else if (c.children) {
-                res.push(this.processRoutes(injector, c.children));
+                res.push(this.processRoutes(ngModule, c.children));
             }
         }
         return mergeAll.call(from(res));
     };
     /**
-     * @param {?} injector
+     * @param {?} ngModule
      * @param {?} route
      * @return {?}
      */
-    RouterPreloader.prototype.preloadConfig = function (injector, route) {
+    RouterPreloader.prototype.preloadConfig = function (ngModule, route) {
         var _this = this;
         return this.preloadingStrategy.preload(route, function () {
-            var /** @type {?} */ loaded = _this.loader.load(injector, route);
+            var /** @type {?} */ loaded = _this.loader.load(ngModule.injector, route);
             return mergeMap.call(loaded, function (config) {
                 var /** @type {?} */ c = route;
                 c._loadedConfig = config;
-                return _this.processRoutes(config.injector, config.routes);
+                return _this.processRoutes(config.module, config.routes);
             });
         });
     };
@@ -5475,8 +5513,9 @@ function routerNgProbeToken() {
 var RouterModule = (function () {
     /**
      * @param {?} guard
+     * @param {?} router
      */
-    function RouterModule(guard) {
+    function RouterModule(guard, router) {
     }
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
@@ -5537,6 +5576,7 @@ RouterModule.decorators = [
 /** @nocollapse */
 RouterModule.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+    { type: Router, decorators: [{ type: Optional },] },
 ]; };
 /**
  * @param {?} platformLocationStrategy
@@ -5770,5 +5810,5 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-423bfb0');
+var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-ec548ad');
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
