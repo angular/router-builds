@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-4f7d62a
+ * @license Angular v4.0.0-rc.3-5c0ea20
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
@@ -3099,7 +3099,9 @@ function getResolve(route) {
  */
 class RouterOutletMap {
     constructor() {
-        /** @internal */
+        /**
+         * \@internal
+         */
         this._outlets = {};
     }
     /**
@@ -3273,7 +3275,7 @@ class Router {
         /**
          * Used by RouterModule. This allows us to
          * pause the navigation either before preactivation or after it.
-         * @internal
+         * \@internal
          */
         this.hooks = {
             beforePreactivation: defaultRouterHook,
@@ -4483,7 +4485,9 @@ class RouterLink {
 RouterLink.decorators = [
     { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLink.ctorParameters = () => [
     { type: Router, },
     { type: ActivatedRoute, },
@@ -4602,7 +4606,9 @@ class RouterLinkWithHref {
 RouterLinkWithHref.decorators = [
     { type: Directive, args: [{ selector: 'a[routerLink]' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLinkWithHref.ctorParameters = () => [
     { type: Router, },
     { type: ActivatedRoute, },
@@ -4776,7 +4782,9 @@ RouterLinkActive.decorators = [
                 exportAs: 'routerLinkActive',
             },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLinkActive.ctorParameters = () => [
     { type: Router, },
     { type: ElementRef, },
@@ -4946,7 +4954,9 @@ class RouterOutlet {
 RouterOutlet.decorators = [
     { type: Directive, args: [{ selector: 'router-outlet' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterOutlet.ctorParameters = () => [
     { type: RouterOutletMap, },
     { type: ViewContainerRef, },
@@ -5178,7 +5188,9 @@ class RouterPreloader {
 RouterPreloader.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterPreloader.ctorParameters = () => [
     { type: Router, },
     { type: NgModuleFactoryLoader, },
@@ -5339,7 +5351,9 @@ class RouterModule {
 RouterModule.decorators = [
     { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterModule.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
     { type: Router, decorators: [{ type: Optional },] },
@@ -5529,7 +5543,9 @@ class RouterInitializer {
 RouterInitializer.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterInitializer.ctorParameters = () => [
     { type: Injector, },
 ];
@@ -5573,6 +5589,6 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-const /** @type {?} */ VERSION = new Version('4.0.0-rc.3-4f7d62a');
+const /** @type {?} */ VERSION = new Version('4.0.0-rc.3-5c0ea20');
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };

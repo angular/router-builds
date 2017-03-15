@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-4f7d62a
+ * @license Angular v4.0.0-rc.3-5c0ea20
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3191,7 +3191,9 @@
      */
     var RouterOutletMap = (function () {
         function RouterOutletMap() {
-            /** @internal */
+            /**
+             * \@internal
+             */
             this._outlets = {};
         }
         /**
@@ -3374,7 +3376,7 @@
             /**
              * Used by RouterModule. This allows us to
              * pause the navigation either before preactivation or after it.
-             * @internal
+             * \@internal
              */
             this.hooks = {
                 beforePreactivation: defaultRouterHook,
@@ -4640,7 +4642,9 @@
     RouterLink.decorators = [
         { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterLink.ctorParameters = function () { return [
         { type: Router, },
         { type: ActivatedRoute, },
@@ -4773,7 +4777,9 @@
     RouterLinkWithHref.decorators = [
         { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterLinkWithHref.ctorParameters = function () { return [
         { type: Router, },
         { type: ActivatedRoute, },
@@ -4959,7 +4965,9 @@
                     exportAs: 'routerLinkActive',
                 },] },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterLinkActive.ctorParameters = function () { return [
         { type: Router, },
         { type: _angular_core.ElementRef, },
@@ -5149,7 +5157,9 @@
     RouterOutlet.decorators = [
         { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterOutlet.ctorParameters = function () { return [
         { type: RouterOutletMap, },
         { type: _angular_core.ViewContainerRef, },
@@ -5396,7 +5406,9 @@
     RouterPreloader.decorators = [
         { type: _angular_core.Injectable },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterPreloader.ctorParameters = function () { return [
         { type: Router, },
         { type: _angular_core.NgModuleFactoryLoader, },
@@ -5558,7 +5570,9 @@
     RouterModule.decorators = [
         { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterModule.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
         { type: Router, decorators: [{ type: _angular_core.Optional },] },
@@ -5752,7 +5766,9 @@
     RouterInitializer.decorators = [
         { type: _angular_core.Injectable },
     ];
-    /** @nocollapse */
+    /**
+     * @nocollapse
+     */
     RouterInitializer.ctorParameters = function () { return [
         { type: _angular_core.Injector, },
     ]; };
@@ -5795,7 +5811,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-4f7d62a');
+    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-5c0ea20');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;

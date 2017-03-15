@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.3-4f7d62a
+ * @license Angular v4.0.0-rc.3-5c0ea20
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
@@ -3206,7 +3206,9 @@ function getResolve(route) {
  */
 var RouterOutletMap = (function () {
     function RouterOutletMap() {
-        /** @internal */
+        /**
+         * \@internal
+         */
         this._outlets = {};
     }
     /**
@@ -3389,7 +3391,7 @@ var Router = (function () {
         /**
          * Used by RouterModule. This allows us to
          * pause the navigation either before preactivation or after it.
-         * @internal
+         * \@internal
          */
         this.hooks = {
             beforePreactivation: defaultRouterHook,
@@ -4655,7 +4657,9 @@ var RouterLink = (function () {
 RouterLink.decorators = [
     { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLink.ctorParameters = function () { return [
     { type: Router, },
     { type: ActivatedRoute, },
@@ -4788,7 +4792,9 @@ var RouterLinkWithHref = (function () {
 RouterLinkWithHref.decorators = [
     { type: Directive, args: [{ selector: 'a[routerLink]' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLinkWithHref.ctorParameters = function () { return [
     { type: Router, },
     { type: ActivatedRoute, },
@@ -4974,7 +4980,9 @@ RouterLinkActive.decorators = [
                 exportAs: 'routerLinkActive',
             },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterLinkActive.ctorParameters = function () { return [
     { type: Router, },
     { type: ElementRef, },
@@ -5164,7 +5172,9 @@ var RouterOutlet = (function () {
 RouterOutlet.decorators = [
     { type: Directive, args: [{ selector: 'router-outlet' },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterOutlet.ctorParameters = function () { return [
     { type: RouterOutletMap, },
     { type: ViewContainerRef, },
@@ -5411,7 +5421,9 @@ var RouterPreloader = (function () {
 RouterPreloader.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterPreloader.ctorParameters = function () { return [
     { type: Router, },
     { type: NgModuleFactoryLoader, },
@@ -5573,7 +5585,9 @@ var RouterModule = (function () {
 RouterModule.decorators = [
     { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterModule.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
     { type: Router, decorators: [{ type: Optional },] },
@@ -5767,7 +5781,9 @@ var RouterInitializer = (function () {
 RouterInitializer.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */
+/**
+ * @nocollapse
+ */
 RouterInitializer.ctorParameters = function () { return [
     { type: Injector, },
 ]; };
@@ -5810,5 +5826,5 @@ function provideRouterInitializer() {
 /**
  * @stable
  */
-var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-4f7d62a');
+var /** @type {?} */ VERSION = new Version('4.0.0-rc.3-5c0ea20');
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
