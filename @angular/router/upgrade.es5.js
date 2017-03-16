@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-a4076c7
+ * @license Angular v4.0.0-rc.3-992aa17
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
@@ -61,3 +61,4 @@ function setUpLocationSync(ngUpgrade) {
     });
 }
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
+//# sourceMappingURL=upgrade.es5.js.map

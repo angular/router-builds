@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-a4076c7
+ * @license Angular v4.0.0-rc.3-992aa17
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { Location, LocationStrategy } from '@angular/common';
@@ -138,3 +138,4 @@ RouterTestingModule.decorators = [
 RouterTestingModule.ctorParameters = () => [];
 
 export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
+//# sourceMappingURL=testing.js.map
