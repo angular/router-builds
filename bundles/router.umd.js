@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.4.9-80fe41a
+ * @license Angular v3.4.9-b0ae464
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -3306,6 +3306,14 @@
         throw error;
     }
     /**
+     * \@internal
+     * @param {?} snapshot
+     * @return {?}
+     */
+    function defaultRouterHook(snapshot) {
+        return rxjs_observable_of.of(null);
+    }
+    /**
      * Does not detach any subtrees. Reuses routes as long as their route config is the same.
      */
     var DefaultRouteReuseStrategy = (function () {
@@ -3384,6 +3392,16 @@
             this.navigated = false;
             /**
              * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+             * Used by RouterModule. This allows us to
+             * pause the navigation either before preactivation or after it.
+             * @internal
+             */
+            this.hooks = {
+                beforePreactivation: defaultRouterHook,
+                afterPreactivation: defaultRouterHook
+            };
+            /**
+             * Extracts and merges URLs. Used for AngularJS to Angular migrations.
              */
             this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
             this.routeReuseStrategy = new DefaultRouteReuseStrategy();
@@ -3760,16 +3778,19 @@
                 else {
                     urlAndSnapshot$ = rxjs_observable_of.of({ appliedUrl: url, snapshot: precreatedState });
                 }
+                var /** @type {?} */ beforePreactivationDone$ = rxjs_operator_mergeMap.mergeMap.call(urlAndSnapshot$, function (p) {
+                    return rxjs_operator_map.map.call(_this.hooks.beforePreactivation(p.snapshot), function () { return p; });
+                });
                 // run preactivation: guards and data resolvers
                 var /** @type {?} */ preActivation;
-                var /** @type {?} */ preactivationTraverse$ = rxjs_operator_map.map.call(urlAndSnapshot$, function (_a) {
+                var /** @type {?} */ preactivationTraverse$ = rxjs_operator_map.map.call(beforePreactivationDone$, function (_a) {
                     var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                     preActivation =
                         new PreActivation(snapshot, _this.currentRouterState.snapshot, _this.injector);
                     preActivation.traverse(_this.outletMap);
                     return { appliedUrl: appliedUrl, snapshot: snapshot };
                 });
-                var /** @type {?} */ preactivationCheckGuards = rxjs_operator_mergeMap.mergeMap.call(preactivationTraverse$, function (_a) {
+                var /** @type {?} */ preactivationCheckGuards$ = rxjs_operator_mergeMap.mergeMap.call(preactivationTraverse$, function (_a) {
                     var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                     if (_this.navigationId !== id)
                         return rxjs_observable_of.of(false);
@@ -3777,7 +3798,7 @@
                         return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                     });
                 });
-                var /** @type {?} */ preactivationResolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivationCheckGuards, function (p) {
+                var /** @type {?} */ preactivationResolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivationCheckGuards$, function (p) {
                     if (_this.navigationId !== id)
                         return rxjs_observable_of.of(false);
                     if (p.shouldActivate) {
@@ -3787,9 +3808,12 @@
                         return rxjs_observable_of.of(p);
                     }
                 });
+                var /** @type {?} */ preactivationDone$ = rxjs_operator_mergeMap.mergeMap.call(preactivationResolveData$, function (p) {
+                    return rxjs_operator_map.map.call(_this.hooks.afterPreactivation(p.snapshot), function () { return p; });
+                });
                 // create router state
                 // this operation has side effects => route state is being affected
-                var /** @type {?} */ routerState$ = rxjs_operator_map.map.call(preactivationResolveData$, function (_a) {
+                var /** @type {?} */ routerState$ = rxjs_operator_map.map.call(preactivationDone$, function (_a) {
                     var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
                     if (shouldActivate) {
                         var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.currentRouterState);
@@ -5513,26 +5537,123 @@
         return router.routerState.root;
     }
     /**
-     * @param {?} router
-     * @param {?} ref
-     * @param {?} preloader
-     * @param {?} opts
-     * @return {?}
+     * To initialize the router properly we need to do in two steps:
+     *
+     * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+     * a resolver or a guards executes asynchronously. Second, we need to actually run
+     * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+     * hook provided by the router to do that.
+     *
+     * The router navigation starts, reaches the point when preactivation is done, and then
+     * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
      */
-    function initialRouterNavigation(router, ref, preloader, opts) {
-        return function (bootstrappedComponentRef) {
+    var RouterInitializer = (function () {
+        /**
+         * @param {?} injector
+         */
+        function RouterInitializer(injector) {
+            this.injector = injector;
+            this.initNavigation = false;
+            this.resultOfPreactivationDone = new rxjs_Subject.Subject();
+        }
+        /**
+         * @return {?}
+         */
+        RouterInitializer.prototype.appInitializer = function () {
+            var _this = this;
+            var /** @type {?} */ p = this.injector.get(_angular_common.LOCATION_INITIALIZED, Promise.resolve(null));
+            return p.then(function () {
+                var /** @type {?} */ resolve = null;
+                var /** @type {?} */ res = new Promise(function (r) { return resolve = r; });
+                var /** @type {?} */ router = _this.injector.get(Router);
+                var /** @type {?} */ opts = _this.injector.get(ROUTER_CONFIGURATION);
+                if (_this.isLegacyDisabled(opts) || _this.isLegacyEnabled(opts)) {
+                    resolve(true);
+                }
+                else if (opts.initialNavigation === 'disabled') {
+                    router.setUpLocationChangeListener();
+                    resolve(true);
+                }
+                else if (opts.initialNavigation === 'enabled') {
+                    router.hooks.afterPreactivation = function () {
+                        // only the initial navigation should be delayed
+                        if (!_this.initNavigation) {
+                            _this.initNavigation = true;
+                            resolve(true);
+                            return _this.resultOfPreactivationDone;
+                        }
+                        else {
+                            return rxjs_observable_of.of(null);
+                        }
+                    };
+                    router.initialNavigation();
+                }
+                else {
+                    throw new Error("Invalid initialNavigation options: '" + opts.initialNavigation + "'");
+                }
+                return res;
+            });
+        };
+        /**
+         * @param {?} bootstrappedComponentRef
+         * @return {?}
+         */
+        RouterInitializer.prototype.bootstrapListener = function (bootstrappedComponentRef) {
+            var /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
+            var /** @type {?} */ preloader = this.injector.get(RouterPreloader);
+            var /** @type {?} */ router = this.injector.get(Router);
+            var /** @type {?} */ ref = this.injector.get(_angular_core.ApplicationRef);
             if (bootstrappedComponentRef !== ref.components[0]) {
                 return;
             }
-            router.resetRootComponentType(ref.componentTypes[0]);
-            preloader.setUpPreloading();
-            if (opts.initialNavigation === false) {
-                router.setUpLocationChangeListener();
-            }
-            else {
+            if (this.isLegacyEnabled(opts)) {
                 router.initialNavigation();
             }
+            else if (this.isLegacyDisabled(opts)) {
+                router.setUpLocationChangeListener();
+            }
+            preloader.setUpPreloading();
+            router.resetRootComponentType(ref.componentTypes[0]);
+            this.resultOfPreactivationDone.next(null);
+            this.resultOfPreactivationDone.complete();
         };
+        /**
+         * @param {?} opts
+         * @return {?}
+         */
+        RouterInitializer.prototype.isLegacyEnabled = function (opts) {
+            return opts.initialNavigation === 'legacy_enabled' || opts.initialNavigation === true ||
+                opts.initialNavigation === undefined;
+        };
+        /**
+         * @param {?} opts
+         * @return {?}
+         */
+        RouterInitializer.prototype.isLegacyDisabled = function (opts) {
+            return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
+        };
+        RouterInitializer.decorators = [
+            { type: _angular_core.Injectable },
+        ];
+        /** @nocollapse */
+        RouterInitializer.ctorParameters = function () { return [
+            { type: _angular_core.Injector, },
+        ]; };
+        return RouterInitializer;
+    }());
+    /**
+     * @param {?} r
+     * @return {?}
+     */
+    function getAppInitializer(r) {
+        return r.appInitializer.bind(r);
+    }
+    /**
+     * @param {?} r
+     * @return {?}
+     */
+    function getBootstrapListener(r) {
+        return r.bootstrapListener.bind(r);
     }
     /**
      * A token for the router initializer that will be called after the app is bootstrapped.
@@ -5545,11 +5666,14 @@
      */
     function provideRouterInitializer() {
         return [
+            RouterInitializer,
             {
-                provide: ROUTER_INITIALIZER,
-                useFactory: initialRouterNavigation,
-                deps: [Router, _angular_core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+                provide: _angular_core.APP_INITIALIZER,
+                multi: true,
+                useFactory: getAppInitializer,
+                deps: [RouterInitializer]
             },
+            { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener, deps: [RouterInitializer] },
             { provide: _angular_core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
         ];
     }
@@ -5557,7 +5681,7 @@
     /**
      * @stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.9-80fe41a');
+    var /** @type {?} */ VERSION = new _angular_core.Version('3.4.9-b0ae464');
 
     var /** @type {?} */ __router_private__ = {
         ROUTER_PROVIDERS: ROUTER_PROVIDERS,

@@ -5,8 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, OpaqueToken } from '@angular/core';
-import { ExtraOptions, RouterPreloader } from '@angular/router';
+import { OpaqueToken } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
  * @whatItDoes Creates an initializer that in addition to setting up the Angular 2
@@ -33,8 +32,9 @@ import { UpgradeModule } from '@angular/upgrade/static';
  */
 export declare const RouterUpgradeInitializer: {
     provide: OpaqueToken;
-    useFactory: (ngUpgrade: UpgradeModule, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => Function;
-    deps: (OpaqueToken | typeof UpgradeModule | typeof ApplicationRef | typeof RouterPreloader)[];
+    multi: boolean;
+    useFactory: (ngUpgrade: UpgradeModule) => () => void;
+    deps: typeof UpgradeModule[];
 };
 /**
  * @whatItDoes Sets up a location synchronization.

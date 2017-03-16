@@ -11,7 +11,6 @@ import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { RouterOutletMap } from './router_outlet_map';
-import { RouterPreloader } from './router_preloader';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -115,6 +114,31 @@ export declare function provideForRootGuard(router: Router): any;
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
+ * @whatItDoes Represents an option to configure when the initial navigation is performed.
+ *
+ * @description
+ * * 'enabled' - the initial navigation starts before the root component is created.
+ * The bootstrap is blocked until the initial navigation is complete.
+ * * 'disabled' - the initial navigation is not performed. The location listener is set up before
+ * the root component gets created.
+ * * 'legacy_enabled'- the initial navigation starts after the root component has been created.
+ * The bootstrap is not blocked until the initial navigation is complete. @deprecated
+ * * 'legacy_disabled'- the initial navigation is not performed. The location listener is set up
+ * after @deprecated
+ * the root component gets created.
+ * * `true` - same as 'legacy_enabled'. @deprecated
+ * * `false` - same as 'legacy_disabled'. @deprecated
+ *
+ * The 'enabled' option should be used for applications unless there is a reason to have
+ * more control over when the router starts its initial navigation due to some complex
+ * initialization logic. In this case, 'disabled' should be used.
+ *
+ * The 'legacy_enabled' and 'legacy_disabled' should not be used for new applications.
+ *
+ * @experimental
+ */
+export declare type InitialNavigation = boolean | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
+/**
  * @whatItDoes Represents options to configure the router.
  *
  * @stable
@@ -131,7 +155,7 @@ export interface ExtraOptions {
     /**
      * Disables the initial navigation.
      */
-    initialNavigation?: boolean;
+    initialNavigation?: InitialNavigation;
     /**
      * A custom error handler.
      */
@@ -143,17 +167,44 @@ export interface ExtraOptions {
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
-export declare function initialRouterNavigation(router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions): (bootstrappedComponentRef: ComponentRef<any>) => void;
+/**
+ * To initialize the router properly we need to do in two steps:
+ *
+ * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
+ * a resolver or a guards executes asynchronously. Second, we need to actually run
+ * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
+ * hook provided by the router to do that.
+ *
+ * The router navigation starts, reaches the point when preactivation is done, and then
+ * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
+ */
+export declare class RouterInitializer {
+    private injector;
+    private initNavigation;
+    private resultOfPreactivationDone;
+    constructor(injector: Injector);
+    appInitializer(): Promise<any>;
+    bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
+    private isLegacyEnabled(opts);
+    private isLegacyDisabled(opts);
+}
+export declare function getAppInitializer(r: RouterInitializer): any;
+export declare function getBootstrapListener(r: RouterInitializer): any;
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
  * @experimental
  */
 export declare const ROUTER_INITIALIZER: OpaqueToken;
-export declare function provideRouterInitializer(): ({
+export declare function provideRouterInitializer(): (typeof RouterInitializer | {
+    provide: any;
+    multi: boolean;
+    useFactory: (r: RouterInitializer) => any;
+    deps: typeof RouterInitializer[];
+} | {
     provide: OpaqueToken;
-    useFactory: (router: Router, ref: ApplicationRef, preloader: RouterPreloader, opts: ExtraOptions) => (bootstrappedComponentRef: ComponentRef<any>) => void;
-    deps: (OpaqueToken | typeof Router | typeof RouterPreloader | typeof ApplicationRef)[];
+    useFactory: (r: RouterInitializer) => any;
+    deps: typeof RouterInitializer[];
 } | {
     provide: OpaqueToken;
     multi: boolean;
