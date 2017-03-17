@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-480a407
+ * @license Angular v4.0.0-rc.4-fcaca45
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -185,11 +185,11 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
-     * @whatItDoes Name of the primary outlet.
+     * \@whatItDoes Name of the primary outlet.
      *
-     * @stable
+     * \@stable
      */
-    var /** @type {?} */ PRIMARY_OUTLET = 'primary';
+    var PRIMARY_OUTLET = 'primary';
     var /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
     /**
      * @param {?} message
@@ -276,6 +276,7 @@
         return true;
     }
     /**
+     * @template T
      * @param {?} a
      * @return {?}
      */
@@ -289,6 +290,7 @@
         return target;
     }
     /**
+     * @template T
      * @param {?} a
      * @return {?}
      */
@@ -296,6 +298,7 @@
         return a.length > 0 ? a[a.length - 1] : null;
     }
     /**
+     * @template V
      * @param {?} m1
      * @param {?} m2
      * @return {?}
@@ -315,6 +318,7 @@
         return m;
     }
     /**
+     * @template K, V
      * @param {?} map
      * @param {?} callback
      * @return {?}
@@ -327,6 +331,7 @@
         }
     }
     /**
+     * @template A, B
      * @param {?} obj
      * @param {?} fn
      * @return {?}
@@ -366,6 +371,7 @@
         return rxjs_operator_every.every.call(merged$, function (result) { return result === true; });
     }
     /**
+     * @template T
      * @param {?} value
      * @return {?}
      */
@@ -379,10 +385,10 @@
         return rxjs_observable_of.of(value);
     }
     /**
-     * @docsNotRequired
-     * @experimental
+     * \@docsNotRequired
+     * \@experimental
      */
-    var /** @type {?} */ ROUTES = new _angular_core.InjectionToken('ROUTES');
+    var ROUTES = new _angular_core.InjectionToken('ROUTES');
     var LoadedRouterConfig = (function () {
         /**
          * @param {?} routes
@@ -708,6 +714,7 @@
         return true;
     }
     /**
+     * @template T
      * @param {?} segment
      * @param {?} fn
      * @return {?}
@@ -896,6 +903,7 @@
         return Pair;
     }());
     /**
+     * @template T
      * @param {?} obj
      * @return {?}
      */
@@ -1892,6 +1900,7 @@
         return Tree;
     }());
     /**
+     * @template T
      * @param {?} expected
      * @param {?} c
      * @return {?}
@@ -1908,6 +1917,7 @@
         return null;
     }
     /**
+     * @template T
      * @param {?} expected
      * @param {?} c
      * @param {?} collected
@@ -2308,6 +2318,7 @@
         return RouterStateSnapshot;
     }(Tree));
     /**
+     * @template U, T
      * @param {?} state
      * @param {?} node
      * @return {?}
@@ -5423,19 +5434,19 @@
         { type: PreloadingStrategy, },
     ]; };
     /**
-     * @whatItDoes Contains a list of directives
-     * @stable
+     * \@whatItDoes Contains a list of directives
+     * \@stable
      */
-    var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
     /**
-     * @whatItDoes Is used in DI to configure the router.
-     * @stable
+     * \@whatItDoes Is used in DI to configure the router.
+     * \@stable
      */
-    var /** @type {?} */ ROUTER_CONFIGURATION = new _angular_core.InjectionToken('ROUTER_CONFIGURATION');
+    var ROUTER_CONFIGURATION = new _angular_core.InjectionToken('ROUTER_CONFIGURATION');
     /**
-     * @docsNotRequired
+     * \@docsNotRequired
      */
-    var /** @type {?} */ ROUTER_FORROOT_GUARD = new _angular_core.InjectionToken('ROUTER_FORROOT_GUARD');
+    var ROUTER_FORROOT_GUARD = new _angular_core.InjectionToken('ROUTER_FORROOT_GUARD');
     var /** @type {?} */ ROUTER_PROVIDERS = [
         _angular_common.Location,
         { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -5795,9 +5806,9 @@
     /**
      * A token for the router initializer that will be called after the app is bootstrapped.
      *
-     * @experimental
+     * \@experimental
      */
-    var /** @type {?} */ ROUTER_INITIALIZER = new _angular_core.InjectionToken('Router Initializer');
+    var ROUTER_INITIALIZER = new _angular_core.InjectionToken('Router Initializer');
     /**
      * @return {?}
      */
@@ -5815,9 +5826,9 @@
         ];
     }
     /**
-     * @stable
+     * \@stable
      */
-    var /** @type {?} */ VERSION = new _angular_core.Version('4.0.0-rc.3-480a407');
+    var VERSION = new _angular_core.Version('4.0.0-rc.4-fcaca45');
 
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
@@ -5870,3 +5881,4 @@
     exports.ɵl = TreeNode;
 
 }));
+//# sourceMappingURL=router.umd.js.map

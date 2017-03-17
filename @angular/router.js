@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.3-480a407
+ * @license Angular v4.0.0-rc.4-fcaca45
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
@@ -190,11 +190,11 @@ class RouteConfigLoadEnd {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @whatItDoes Name of the primary outlet.
+ * \@whatItDoes Name of the primary outlet.
  *
- * @stable
+ * \@stable
  */
-const /** @type {?} */ PRIMARY_OUTLET = 'primary';
+const PRIMARY_OUTLET = 'primary';
 const /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
 /**
  * @param {?} message
@@ -282,6 +282,7 @@ function shallowEqual(a, b) {
     return true;
 }
 /**
+ * @template T
  * @param {?} a
  * @return {?}
  */
@@ -295,6 +296,7 @@ function flatten(a) {
     return target;
 }
 /**
+ * @template T
  * @param {?} a
  * @return {?}
  */
@@ -302,6 +304,7 @@ function last(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
 /**
+ * @template V
  * @param {?} m1
  * @param {?} m2
  * @return {?}
@@ -321,6 +324,7 @@ function merge(m1, m2) {
     return m;
 }
 /**
+ * @template K, V
  * @param {?} map
  * @param {?} callback
  * @return {?}
@@ -333,6 +337,7 @@ function forEach(map, callback) {
     }
 }
 /**
+ * @template A, B
  * @param {?} obj
  * @param {?} fn
  * @return {?}
@@ -372,6 +377,7 @@ function andObservables(observables) {
     return every.call(merged$, (result) => result === true);
 }
 /**
+ * @template T
  * @param {?} value
  * @return {?}
  */
@@ -386,10 +392,10 @@ function wrapIntoObservable(value) {
 }
 
 /**
- * @docsNotRequired
- * @experimental
+ * \@docsNotRequired
+ * \@experimental
  */
-const /** @type {?} */ ROUTES = new InjectionToken('ROUTES');
+const ROUTES = new InjectionToken('ROUTES');
 class LoadedRouterConfig {
     /**
      * @param {?} routes
@@ -704,6 +710,7 @@ function equalPath(a, b) {
     return true;
 }
 /**
+ * @template T
  * @param {?} segment
  * @param {?} fn
  * @return {?}
@@ -885,6 +892,7 @@ class Pair {
     }
 }
 /**
+ * @template T
  * @param {?} obj
  * @return {?}
  */
@@ -1867,6 +1875,7 @@ class Tree {
     pathFromRoot(t) { return findPath(t, this._root, []).map(s => s.value); }
 }
 /**
+ * @template T
  * @param {?} expected
  * @param {?} c
  * @return {?}
@@ -1882,6 +1891,7 @@ function findNode(expected, c) {
     return null;
 }
 /**
+ * @template T
  * @param {?} expected
  * @param {?} c
  * @param {?} collected
@@ -2225,6 +2235,7 @@ class RouterStateSnapshot extends Tree {
     toString() { return serializeNode(this._root); }
 }
 /**
+ * @template U, T
  * @param {?} state
  * @param {?} node
  * @return {?}
@@ -5206,19 +5217,19 @@ RouterPreloader.ctorParameters = () => [
 ];
 
 /**
- * @whatItDoes Contains a list of directives
- * @stable
+ * \@whatItDoes Contains a list of directives
+ * \@stable
  */
-const /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
- * @whatItDoes Is used in DI to configure the router.
- * @stable
+ * \@whatItDoes Is used in DI to configure the router.
+ * \@stable
  */
-const /** @type {?} */ ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
+const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /**
- * @docsNotRequired
+ * \@docsNotRequired
  */
-const /** @type {?} */ ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
+const ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
 const /** @type {?} */ ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -5572,9 +5583,9 @@ function getBootstrapListener(r) {
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
- * @experimental
+ * \@experimental
  */
-const /** @type {?} */ ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
+const ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 /**
  * @return {?}
  */
@@ -5593,8 +5604,9 @@ function provideRouterInitializer() {
 }
 
 /**
- * @stable
+ * \@stable
  */
-const /** @type {?} */ VERSION = new Version('4.0.0-rc.3-480a407');
+const VERSION = new Version('4.0.0-rc.4-fcaca45');
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+//# sourceMappingURL=router.js.map
