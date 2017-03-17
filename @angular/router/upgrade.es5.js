@@ -1,10 +1,17 @@
 /**
- * @license Angular v4.0.0-rc.5-5c5c2ae
+ * @license Angular v4.0.0-rc.5-bcc29ff
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
@@ -60,5 +67,17 @@ function setUpLocationSync(ngUpgrade) {
         router.navigateByUrl(url.pathname);
     });
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the router/upgrade package.
+ */
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
 //# sourceMappingURL=upgrade.es5.js.map
