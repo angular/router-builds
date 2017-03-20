@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ParamMap } from './shared';
 export declare function createEmptyUrlTree(): UrlTree;
 export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
 /**
@@ -38,6 +46,7 @@ export declare class UrlTree {
     };
     /** The fragment of the URL */
     fragment: string;
+    readonly queryParamMap: ParamMap;
     /** @docsNotRequired */
     toString(): string;
 }
@@ -110,6 +119,7 @@ export declare class UrlSegment {
         parameters: {
         [name: string]: string;
     });
+    readonly parameterMap: ParamMap;
     /** @docsNotRequired */
     toString(): string;
 }

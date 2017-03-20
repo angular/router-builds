@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-f634c62
+ * @license Angular v4.0.0-rc.5-5da021c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -196,6 +196,53 @@ class RouteConfigLoadEnd {
  * \@stable
  */
 const PRIMARY_OUTLET = 'primary';
+class ParamsAsMap {
+    /**
+     * @param {?} params
+     */
+    constructor(params) { this.params = params || {}; }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    has(name) { return this.params.hasOwnProperty(name); }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    get(name) {
+        if (this.has(name)) {
+            const /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v[0] : v;
+        }
+        return null;
+    }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    getAll(name) {
+        if (this.has(name)) {
+            const /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v : [v];
+        }
+        return [];
+    }
+    /**
+     * @return {?}
+     */
+    get keys() { return Object.keys(this.params); }
+}
+/**
+ * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ *
+ * \@stable
+ * @param {?} params
+ * @return {?}
+ */
+function convertToParamMap(params) {
+    return new ParamsAsMap(params);
+}
 const NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
 /**
  * @param {?} message
@@ -632,6 +679,15 @@ class UrlTree {
         this.fragment = fragment;
     }
     /**
+     * @return {?}
+     */
+    get queryParamMap() {
+        if (!this._queryParamMap) {
+            this._queryParamMap = convertToParamMap(this.queryParams);
+        }
+        return this._queryParamMap;
+    }
+    /**
      * \@docsNotRequired
      * @return {?}
      */
@@ -705,6 +761,15 @@ class UrlSegment {
     constructor(path, parameters) {
         this.path = path;
         this.parameters = parameters;
+    }
+    /**
+     * @return {?}
+     */
+    get parameterMap() {
+        if (!this._parameterMap) {
+            this._parameterMap = convertToParamMap(this.parameters);
+        }
+        return this._parameterMap;
     }
     /**
      * \@docsNotRequired
@@ -2126,6 +2191,25 @@ class ActivatedRoute {
     /**
      * @return {?}
      */
+    get paramMap() {
+        if (!this._paramMap) {
+            this._paramMap = map.call(this.params, (p) => convertToParamMap(p));
+        }
+        return this._paramMap;
+    }
+    /**
+     * @return {?}
+     */
+    get queryParamMap() {
+        if (!this._queryParamMap) {
+            this._queryParamMap =
+                map.call(this.queryParams, (p) => convertToParamMap(p));
+        }
+        return this._queryParamMap;
+    }
+    /**
+     * @return {?}
+     */
     toString() {
         return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
     }
@@ -2238,6 +2322,24 @@ class ActivatedRouteSnapshot {
      * @return {?}
      */
     get pathFromRoot() { return this._routerState.pathFromRoot(this); }
+    /**
+     * @return {?}
+     */
+    get paramMap() {
+        if (!this._paramMap) {
+            this._paramMap = convertToParamMap(this.params);
+        }
+        return this._paramMap;
+    }
+    /**
+     * @return {?}
+     */
+    get queryParamMap() {
+        if (!this._queryParamMap) {
+            this._queryParamMap = convertToParamMap(this.queryParams);
+        }
+        return this._queryParamMap;
+    }
     /**
      * @return {?}
      */
@@ -5735,7 +5837,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-rc.5-f634c62');
+const VERSION = new Version('4.0.0-rc.5-5da021c');
 
 /**
  * @license
@@ -5772,5 +5874,5 @@ const VERSION = new Version('4.0.0-rc.5-f634c62');
  * Generated bundle index. Do not edit.
  */
 
-export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=router.js.map
