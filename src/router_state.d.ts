@@ -8,7 +8,7 @@
 import { Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Data, Route } from './config';
-import { Params } from './shared';
+import { ParamMap, Params } from './shared';
 import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
@@ -95,6 +95,8 @@ export declare class ActivatedRoute {
     readonly children: ActivatedRoute[];
     /** The path from the root of the router state tree to this route */
     readonly pathFromRoot: ActivatedRoute[];
+    readonly paramMap: Observable<ParamMap>;
+    readonly queryParamMap: Observable<ParamMap>;
     toString(): string;
 }
 /**
@@ -145,6 +147,8 @@ export declare class ActivatedRouteSnapshot {
     readonly children: ActivatedRouteSnapshot[];
     /** The path from the root of the router state tree to this route */
     readonly pathFromRoot: ActivatedRouteSnapshot[];
+    readonly paramMap: ParamMap;
+    readonly queryParamMap: ParamMap;
     toString(): string;
 }
 /**

@@ -4,11 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.5-d5a6e69
+ * @license Angular v4.0.0-rc.5-b7ba331
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
- */ import { LocationStrategy, Location, APP_BASE_HREF, PlatformLocation, PathLocationStrategy, HashLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { isDevMode, Directive, ElementRef, Renderer, Attribute, HostListener, Input, HostBinding, NgModuleRef, InjectionToken, NgModuleFactory, ɵisPromise, ɵisObservable, ChangeDetectorRef, ContentChildren, ReflectiveInjector, EventEmitter, ComponentFactoryResolver, ViewContainerRef, Output, SystemJsNgModuleLoader, NgModuleFactoryLoader, Optional, Compiler, Injector, ApplicationRef, NgProbeToken, Inject, SkipSelf, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, Injectable, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Version } from '@angular/core';
+ */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, ReflectiveInjector, Renderer, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -24,7 +24,7 @@ import { _catch } from 'rxjs/operator/catch';
 import { concatAll } from 'rxjs/operator/concatAll';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import * as l from 'rxjs/operator/last';
+import { last } from 'rxjs/operator/last';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { ɵgetDOM } from '@angular/platform-browser';
 import { filter } from 'rxjs/operator/filter';
@@ -205,7 +205,61 @@ var RouteConfigLoadEnd = (function () {
  * \@stable
  */
 var PRIMARY_OUTLET = 'primary';
-var /** @type {?} */ NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+var ParamsAsMap = (function () {
+    /**
+     * @param {?} params
+     */
+    function ParamsAsMap(params) {
+        this.params = params || {};
+    }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.has = function (name) { return this.params.hasOwnProperty(name); };
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.get = function (name) {
+        if (this.has(name)) {
+            var /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v[0] : v;
+        }
+        return null;
+    };
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.getAll = function (name) {
+        if (this.has(name)) {
+            var /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v : [v];
+        }
+        return [];
+    };
+    Object.defineProperty(ParamsAsMap.prototype, "keys", {
+        /**
+         * @return {?}
+         */
+        get: function () { return Object.keys(this.params); },
+        enumerable: true,
+        configurable: true
+    });
+    return ParamsAsMap;
+}());
+/**
+ * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ *
+ * \@stable
+ * @param {?} params
+ * @return {?}
+ */
+function convertToParamMap(params) {
+    return new ParamsAsMap(params);
+}
+var NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
 /**
  * @param {?} message
  * @return {?}
@@ -256,6 +310,13 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
         return { consumed: consumed, posParams: posParams };
     }
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} a
  * @param {?} b
@@ -309,9 +370,18 @@ function flatten(a) {
  * @param {?} a
  * @return {?}
  */
-function last(a) {
+/**
+ * @template T
+ * @param {?} a
+ * @return {?}
+ */
+function last$1(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
+/**
+ * @param {?} bools
+ * @return {?}
+ */
 /**
  * @template V
  * @param {?} m1
@@ -338,10 +408,10 @@ function merge(m1, m2) {
  * @param {?} callback
  * @return {?}
  */
-function forEach(map, callback) {
-    for (var /** @type {?} */ prop in map) {
-        if (map.hasOwnProperty(prop)) {
-            callback(map[prop], prop);
+function forEach(map$$1, callback) {
+    for (var /** @type {?} */ prop in map$$1) {
+        if (map$$1.hasOwnProperty(prop)) {
+            callback(map$$1[prop], prop);
         }
     }
 }
@@ -372,7 +442,7 @@ function waitForMap(obj, fn) {
     });
     if (waitFor.length > 0) {
         var /** @type {?} */ concatted$ = concatAll.call(of.apply(void 0, waitFor));
-        var /** @type {?} */ last$ = l.last.call(concatted$);
+        var /** @type {?} */ last$ = last.call(concatted$);
         return map.call(last$, function () { return res; });
     }
     return of(res);
@@ -399,6 +469,13 @@ function wrapIntoObservable(value) {
     }
     return of(value);
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * \@docsNotRequired
  * \@experimental
@@ -469,6 +546,13 @@ var RouterConfigLoader = (function () {
     };
     return RouterConfigLoader;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @return {?}
  */
@@ -609,6 +693,19 @@ var UrlTree = (function () {
         this.queryParams = queryParams;
         this.fragment = fragment;
     }
+    Object.defineProperty(UrlTree.prototype, "queryParamMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._queryParamMap) {
+                this._queryParamMap = convertToParamMap(this.queryParams);
+            }
+            return this._queryParamMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * \@docsNotRequired
      * @return {?}
@@ -691,6 +788,19 @@ var UrlSegment = (function () {
         this.path = path;
         this.parameters = parameters;
     }
+    Object.defineProperty(UrlSegment.prototype, "parameterMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._parameterMap) {
+                this._parameterMap = convertToParamMap(this.parameters);
+            }
+            return this._parameterMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * \@docsNotRequired
      * @return {?}
@@ -911,8 +1021,8 @@ var Pair = (function () {
      * @param {?} first
      * @param {?} second
      */
-    function Pair(first, second) {
-        this.first = first;
+    function Pair(first$$1, second) {
+        this.first = first$$1;
         this.second = second;
     }
     return Pair;
@@ -931,7 +1041,7 @@ function pairs(obj) {
     }
     return res;
 }
-var /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
+var SEGMENT_RE = /^[^\/()?;=&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -941,7 +1051,7 @@ function matchSegments(str) {
     var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-var /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
+var QUERY_PARAM_RE = /^[^=?&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -951,7 +1061,7 @@ function matchQueryParams(str) {
     var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
-var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
+var QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -1170,6 +1280,13 @@ var UrlParser = (function () {
     };
     return UrlParser;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var NoMatch = (function () {
     /**
      * @param {?=} segmentGroup
@@ -1760,6 +1877,13 @@ function getOutlet$1(route) {
     return route.outlet ? route.outlet : PRIMARY_OUTLET;
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @param {?} config
  * @param {?=} parentPath
  * @return {?}
@@ -1967,6 +2091,13 @@ var TreeNode = (function () {
     return TreeNode;
 }());
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Represents the state of the router.
  *
  * \@howToUse
@@ -2138,6 +2269,33 @@ var ActivatedRoute = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ActivatedRoute.prototype, "paramMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._paramMap) {
+                this._paramMap = map.call(this.params, function (p) { return convertToParamMap(p); });
+            }
+            return this._paramMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "queryParamMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._queryParamMap) {
+                this._queryParamMap =
+                    map.call(this.queryParams, function (p) { return convertToParamMap(p); });
+            }
+            return this._queryParamMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -2278,6 +2436,32 @@ var ActivatedRouteSnapshot = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "paramMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._paramMap) {
+                this._paramMap = convertToParamMap(this.params);
+            }
+            return this._paramMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "queryParamMap", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (!this._queryParamMap) {
+                this._queryParamMap = convertToParamMap(this.queryParams);
+            }
+            return this._queryParamMap;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -2395,6 +2579,13 @@ function equalParamsAndUrlSegments(a, b) {
         (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @param {?} routeReuseStrategy
  * @param {?} curr
  * @param {?} prevState
@@ -2470,6 +2661,13 @@ function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
 function createActivatedRoute(c) {
     return new ActivatedRoute(new BehaviorSubject(c.url), new BehaviorSubject(c.params), new BehaviorSubject(c.queryParams), new BehaviorSubject(c.fragment), new BehaviorSubject(c.data), c.outlet, c.component, c);
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} route
  * @param {?} urlTree
@@ -2551,7 +2749,7 @@ var Navigation = (function () {
             throw new Error('Root segment cannot have matrix parameters');
         }
         var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
-        if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
+        if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
     }
@@ -2839,6 +3037,13 @@ function stringify(params) {
 function compare(path, params, segment) {
     return path == segment.path && shallowEqual(params, segment.parameters);
 }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var NoMatch$1 = (function () {
     function NoMatch$1() {
     }
@@ -2969,7 +3174,7 @@ var Recognizer = (function () {
         if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
         if (route.path === '**') {
-            var /** @type {?} */ params = segments.length > 0 ? last(segments).parameters : {};
+            var /** @type {?} */ params = segments.length > 0 ? last$1(segments).parameters : {};
             var /** @type {?} */ snapshot_1 = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
             return [new TreeNode(snapshot_1, [])];
         }
@@ -3313,6 +3518,13 @@ var DefaultUrlHandlingStrategy = (function () {
     DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
     return DefaultUrlHandlingStrategy;
 }());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} error
  * @return {?}
@@ -4518,6 +4730,13 @@ function validateCommands(commands) {
     }
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Lets you link to specific parts of your app.
  *
  * \@howToUse
@@ -4838,6 +5057,13 @@ function attrBoolValue(s) {
     return s === '' || !!s;
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
  *
  * \@howToUse
@@ -5012,6 +5238,13 @@ RouterLinkActive.propDecorators = {
     'routerLinkActiveOptions': [{ type: Input },],
     'routerLinkActive': [{ type: Input },],
 };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * \@whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
  * state.
@@ -5208,9 +5441,9 @@ var OutletInjector = (function () {
      * @param {?} map
      * @param {?} parent
      */
-    function OutletInjector(route, map, parent) {
+    function OutletInjector(route, map$$1, parent) {
         this.route = route;
-        this.map = map;
+        this.map = map$$1;
         this.parent = parent;
     }
     /**
@@ -5284,6 +5517,13 @@ var RouteReuseStrategy = (function () {
     RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
     return RouteReuseStrategy;
 }());
+/**
+*@license
+*Copyright Google Inc. All Rights Reserved.
+*
+*Use of this source code is governed by an MIT-style license that can be
+*found in the LICENSE file at https://angular.io/license
+*/
 /**
  * \@whatItDoes Provides a preloading strategy.
  *
@@ -5449,6 +5689,13 @@ RouterPreloader.ctorParameters = function () { return [
     { type: PreloadingStrategy, },
 ]; };
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Contains a list of directives
  * \@stable
  */
@@ -5462,7 +5709,7 @@ var ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
  * \@docsNotRequired
  */
 var ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
-var /** @type {?} */ ROUTER_PROVIDERS = [
+var ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
     {
@@ -5841,8 +6088,50 @@ function provideRouterInitializer() {
     ];
 }
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the common package.
+ */
+/**
  * \@stable
  */
-var VERSION = new Version('4.0.0-rc.5-d5a6e69');
-export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+var VERSION = new Version('4.0.0-rc.5-b7ba331');
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the router package.
+ */
+// This file only reexports content of the `src` folder. Keep it that way.
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, RouterOutletMap, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=router.es5.js.map

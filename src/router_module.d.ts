@@ -126,8 +126,8 @@ export declare function provideRoutes(routes: Routes): any;
  * * 'legacy_disabled'- the initial navigation is not performed. The location listener is set up
  * after @deprecated
  * the root component gets created.
- * * `true` - same as 'legacy_enabled'. @deprecated
- * * `false` - same as 'legacy_disabled'. @deprecated
+ * * `true` - same as 'legacy_enabled'. @deprecated since v4
+ * * `false` - same as 'legacy_disabled'. @deprecated since v4
  *
  * The 'enabled' option should be used for applications unless there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
