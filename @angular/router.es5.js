@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-rc.6-376088d
+ * @license Angular v4.0.0-rc.6-08f2f08
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -2557,7 +2557,7 @@ function advanceActivatedRoute(route) {
         if (!shallowEqualArrays(currentSnapshot.url, route._futureSnapshot.url)) {
             ((route.url)).next(route._futureSnapshot.url);
         }
-        if (!equalParamsAndUrlSegments(currentSnapshot, route._futureSnapshot)) {
+        if (!shallowEqual(currentSnapshot.data, route._futureSnapshot.data)) {
             ((route.data)).next(route._futureSnapshot.data);
         }
     }
@@ -6102,7 +6102,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.0.0-rc.6-376088d');
+var VERSION = new Version('4.0.0-rc.6-08f2f08');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
