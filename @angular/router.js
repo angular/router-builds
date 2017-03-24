@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-ea848f7
+ * @license Angular v4.0.0-8785b2b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -1558,14 +1558,15 @@ class ApplyRedirects {
             return of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            return mergeMap.call(runGuards(ngModule.injector, route), (shouldLoad) => {
+            if (((route))._loadedConfig !== void 0) {
+                return of(((route))._loadedConfig);
+            }
+            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), (shouldLoad) => {
                 if (shouldLoad) {
-                    return ((route))._loadedConfig ?
-                        of(((route))._loadedConfig) :
-                        map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
-                            ((route))._loadedConfig = cfg;
-                            return cfg;
-                        });
+                    return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
+                        ((route))._loadedConfig = cfg;
+                        return cfg;
+                    });
                 }
                 return canLoadFails(route);
             });
@@ -1683,12 +1684,12 @@ class ApplyRedirects {
  * @param {?} route
  * @return {?}
  */
-function runGuards(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route) {
     const /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    const /** @type {?} */ obs = map.call(from(canLoad), (c) => {
-        const /** @type {?} */ guard = moduleInjector.get(c);
+    const /** @type {?} */ obs = map.call(from(canLoad), (injectionToken) => {
+        const /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
@@ -5837,7 +5838,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-ea848f7');
+const VERSION = new Version('4.0.0-8785b2b');
 
 /**
  * @license

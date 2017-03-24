@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-ea848f7
+ * @license Angular v4.0.0-8785b2b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -1608,14 +1608,15 @@ var ApplyRedirects = (function () {
             return of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            return mergeMap.call(runGuards(ngModule.injector, route), function (shouldLoad) {
+            if (((route))._loadedConfig !== void 0) {
+                return of(((route))._loadedConfig);
+            }
+            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
                 if (shouldLoad) {
-                    return ((route))._loadedConfig ?
-                        of(((route))._loadedConfig) :
-                        map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
-                            ((route))._loadedConfig = cfg;
-                            return cfg;
-                        });
+                    return map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
+                        ((route))._loadedConfig = cfg;
+                        return cfg;
+                    });
                 }
                 return canLoadFails(route);
             });
@@ -1737,12 +1738,12 @@ var ApplyRedirects = (function () {
  * @param {?} route
  * @return {?}
  */
-function runGuards(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route) {
     var /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    var /** @type {?} */ obs = map.call(from(canLoad), function (c) {
-        var /** @type {?} */ guard = moduleInjector.get(c);
+    var /** @type {?} */ obs = map.call(from(canLoad), function (injectionToken) {
+        var /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
@@ -6102,7 +6103,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.0.0-ea848f7');
+var VERSION = new Version('4.0.0-8785b2b');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

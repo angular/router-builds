@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-ea848f7
+ * @license Angular v4.0.0-8785b2b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-ea848f7
+ * @license Angular v4.0.0-8785b2b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -1597,14 +1597,15 @@ var ApplyRedirects = (function () {
             return rxjs_observable_of.of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            return rxjs_operator_mergeMap.mergeMap.call(runGuards(ngModule.injector, route), function (shouldLoad) {
+            if (((route))._loadedConfig !== void 0) {
+                return rxjs_observable_of.of(((route))._loadedConfig);
+            }
+            return rxjs_operator_mergeMap.mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
                 if (shouldLoad) {
-                    return ((route))._loadedConfig ?
-                        rxjs_observable_of.of(((route))._loadedConfig) :
-                        rxjs_operator_map.map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
-                            ((route))._loadedConfig = cfg;
-                            return cfg;
-                        });
+                    return rxjs_operator_map.map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
+                        ((route))._loadedConfig = cfg;
+                        return cfg;
+                    });
                 }
                 return canLoadFails(route);
             });
@@ -1726,12 +1727,12 @@ var ApplyRedirects = (function () {
  * @param {?} route
  * @return {?}
  */
-function runGuards(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route) {
     var /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return rxjs_observable_of.of(true);
-    var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function (c) {
-        var /** @type {?} */ guard = moduleInjector.get(c);
+    var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function (injectionToken) {
+        var /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     });
     return andObservables(obs);
@@ -6091,7 +6092,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.0.0-ea848f7');
+var VERSION = new _angular_core.Version('4.0.0-8785b2b');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
