@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-93d48f1
+ * @license Angular v4.0.0-f368381
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-93d48f1
+ * @license Angular v4.0.0-f368381
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -4185,7 +4185,8 @@ var PreActivation = (function () {
         this.future = future;
         this.curr = curr;
         this.moduleInjector = moduleInjector;
-        this.checks = [];
+        this.canActivateChecks = [];
+        this.canDeactivateChecks = [];
     }
     /**
      * @param {?} parentOutletMap
@@ -4201,40 +4202,21 @@ var PreActivation = (function () {
      */
     PreActivation.prototype.checkGuards = function () {
         var _this = this;
-        if (this.checks.length === 0)
+        if (this.canDeactivateChecks.length === 0 && this.canActivateChecks.length === 0) {
             return rxjs_observable_of.of(true);
-        var /** @type {?} */ checks$ = rxjs_observable_from.from(this.checks);
-        var /** @type {?} */ runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (s) {
-            if (s instanceof CanActivate) {
-                return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
-            }
-            else if (s instanceof CanDeactivate) {
-                // workaround https://github.com/Microsoft/TypeScript/issues/7271
-                var /** @type {?} */ s2 = (s);
-                return _this.runCanDeactivate(s2.component, s2.route);
-            }
-            else {
-                throw new Error('Cannot be reached');
-            }
-        });
-        return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
+        }
+        var /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
+        return rxjs_operator_mergeMap.mergeMap.call(canDeactivate$, function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : rxjs_observable_of.of(false); });
     };
     /**
      * @return {?}
      */
     PreActivation.prototype.resolveData = function () {
         var _this = this;
-        if (this.checks.length === 0)
+        if (this.canActivateChecks.length === 0)
             return rxjs_observable_of.of(null);
-        var /** @type {?} */ checks$ = rxjs_observable_from.from(this.checks);
-        var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (s) {
-            if (s instanceof CanActivate) {
-                return _this.runResolve(s.route);
-            }
-            else {
-                return rxjs_observable_of.of(null);
-            }
-        });
+        var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canActivateChecks);
+        var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (check) { return _this.runResolve(check.route); });
         return rxjs_operator_reduce.reduce.call(runningChecks$, function (_, __) { return _; });
     };
     /**
@@ -4267,7 +4249,8 @@ var PreActivation = (function () {
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
             if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
-                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
+                this.canActivateChecks.push(new CanActivate(futurePath));
+                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
             else {
                 // we need to set the data
@@ -4286,7 +4269,7 @@ var PreActivation = (function () {
             if (curr) {
                 this.deactiveRouteAndItsChildren(currNode, outlet);
             }
-            this.checks.push(new CanActivate(futurePath));
+            this.canActivateChecks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
@@ -4335,14 +4318,32 @@ var PreActivation = (function () {
             }
         });
         if (!r.component) {
-            this.checks.push(new CanDeactivate(null, r));
+            this.canDeactivateChecks.push(new CanDeactivate(null, r));
         }
         else if (outlet && outlet.isActivated) {
-            this.checks.push(new CanDeactivate(outlet.component, r));
+            this.canDeactivateChecks.push(new CanDeactivate(outlet.component, r));
         }
         else {
-            this.checks.push(new CanDeactivate(null, r));
+            this.canDeactivateChecks.push(new CanDeactivate(null, r));
         }
+    };
+    /**
+     * @return {?}
+     */
+    PreActivation.prototype.runCanDeactivateChecks = function () {
+        var _this = this;
+        var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canDeactivateChecks);
+        var /** @type {?} */ runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (check) { return _this.runCanDeactivate(check.component, check.route); });
+        return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
+    };
+    /**
+     * @return {?}
+     */
+    PreActivation.prototype.runCanActivateChecks = function () {
+        var _this = this;
+        var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canActivateChecks);
+        var /** @type {?} */ runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (check) { return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(check.path), _this.runCanActivate(check.route)])); });
+        return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
     };
     /**
      * @param {?} future
@@ -6102,7 +6103,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.0.0-93d48f1');
+var VERSION = new _angular_core.Version('4.0.0-f368381');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

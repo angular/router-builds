@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-93d48f1
+ * @license Angular v4.0.0-f368381
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -4017,7 +4017,8 @@ class PreActivation {
         this.future = future;
         this.curr = curr;
         this.moduleInjector = moduleInjector;
-        this.checks = [];
+        this.canActivateChecks = [];
+        this.canDeactivateChecks = [];
     }
     /**
      * @param {?} parentOutletMap
@@ -4032,39 +4033,20 @@ class PreActivation {
      * @return {?}
      */
     checkGuards() {
-        if (this.checks.length === 0)
+        if (this.canDeactivateChecks.length === 0 && this.canActivateChecks.length === 0) {
             return of(true);
-        const /** @type {?} */ checks$ = from(this.checks);
-        const /** @type {?} */ runningChecks$ = mergeMap.call(checks$, (s) => {
-            if (s instanceof CanActivate) {
-                return andObservables(from([this.runCanActivateChild(s.path), this.runCanActivate(s.route)]));
-            }
-            else if (s instanceof CanDeactivate) {
-                // workaround https://github.com/Microsoft/TypeScript/issues/7271
-                const /** @type {?} */ s2 = (s);
-                return this.runCanDeactivate(s2.component, s2.route);
-            }
-            else {
-                throw new Error('Cannot be reached');
-            }
-        });
-        return every.call(runningChecks$, (result) => result === true);
+        }
+        const /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
+        return mergeMap.call(canDeactivate$, (canDeactivate) => canDeactivate ? this.runCanActivateChecks() : of(false));
     }
     /**
      * @return {?}
      */
     resolveData() {
-        if (this.checks.length === 0)
+        if (this.canActivateChecks.length === 0)
             return of(null);
-        const /** @type {?} */ checks$ = from(this.checks);
-        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (s) => {
-            if (s instanceof CanActivate) {
-                return this.runResolve(s.route);
-            }
-            else {
-                return of(null);
-            }
-        });
+        const /** @type {?} */ checks$ = from(this.canActivateChecks);
+        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => this.runResolve(check.route));
         return reduce.call(runningChecks$, (_, __) => _);
     }
     /**
@@ -4096,7 +4078,8 @@ class PreActivation {
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
             if (this.shouldRunGuardsAndResolvers(curr, future, future._routeConfig.runGuardsAndResolvers)) {
-                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
+                this.canActivateChecks.push(new CanActivate(futurePath));
+                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
             else {
                 // we need to set the data
@@ -4115,7 +4098,7 @@ class PreActivation {
             if (curr) {
                 this.deactiveRouteAndItsChildren(currNode, outlet);
             }
-            this.checks.push(new CanActivate(futurePath));
+            this.canActivateChecks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
@@ -4163,14 +4146,30 @@ class PreActivation {
             }
         });
         if (!r.component) {
-            this.checks.push(new CanDeactivate(null, r));
+            this.canDeactivateChecks.push(new CanDeactivate(null, r));
         }
         else if (outlet && outlet.isActivated) {
-            this.checks.push(new CanDeactivate(outlet.component, r));
+            this.canDeactivateChecks.push(new CanDeactivate(outlet.component, r));
         }
         else {
-            this.checks.push(new CanDeactivate(null, r));
+            this.canDeactivateChecks.push(new CanDeactivate(null, r));
         }
+    }
+    /**
+     * @return {?}
+     */
+    runCanDeactivateChecks() {
+        const /** @type {?} */ checks$ = from(this.canDeactivateChecks);
+        const /** @type {?} */ runningChecks$ = mergeMap.call(checks$, (check) => this.runCanDeactivate(check.component, check.route));
+        return every.call(runningChecks$, (result) => result === true);
+    }
+    /**
+     * @return {?}
+     */
+    runCanActivateChecks() {
+        const /** @type {?} */ checks$ = from(this.canActivateChecks);
+        const /** @type {?} */ runningChecks$ = mergeMap.call(checks$, (check) => andObservables(from([this.runCanActivateChild(check.path), this.runCanActivate(check.route)])));
+        return every.call(runningChecks$, (result) => result === true);
     }
     /**
      * @param {?} future
@@ -5844,7 +5843,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-93d48f1');
+const VERSION = new Version('4.0.0-f368381');
 
 /**
  * @license
