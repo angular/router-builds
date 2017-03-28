@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-8e03f65
+ * @license Angular v4.0.0-a5c972a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-8e03f65
+ * @license Angular v4.0.0-a5c972a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -342,11 +342,17 @@ function shallowEqual(a, b) {
 }
 /**
  * @template T
- * @param {?} arr
+ * @param {?} a
  * @return {?}
  */
-function flatten(arr) {
-    return Array.prototype.concat.apply([], arr);
+function flatten(a) {
+    var /** @type {?} */ target = [];
+    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+        for (var /** @type {?} */ j = 0; j < a[i].length; ++j) {
+            target.push(a[i][j]);
+        }
+    }
+    return target;
 }
 /**
  * @template T
@@ -365,6 +371,26 @@ function last$1(a) {
  * @param {?} bools
  * @return {?}
  */
+/**
+ * @template V
+ * @param {?} m1
+ * @param {?} m2
+ * @return {?}
+ */
+function merge(m1, m2) {
+    var /** @type {?} */ m = {};
+    for (var /** @type {?} */ attr in m1) {
+        if (m1.hasOwnProperty(attr)) {
+            m[attr] = m1[attr];
+        }
+    }
+    for (var /** @type {?} */ attr in m2) {
+        if (m2.hasOwnProperty(attr)) {
+            m[attr] = m2[attr];
+        }
+    }
+    return m;
+}
 /**
  * @template K, V
  * @param {?} map
@@ -1250,15 +1276,6 @@ var UrlParser = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$1 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 var NoMatch = (function () {
     /**
      * @param {?=} segmentGroup
@@ -1791,7 +1808,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
             res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
         }
     }
-    return __assign$1({}, children, res);
+    return merge(children, res);
 }
 /**
  * @param {?} routes
@@ -2070,15 +2087,6 @@ var TreeNode = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$2 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 /**
  * \@whatItDoes Represents the state of the router.
  *
@@ -2309,9 +2317,9 @@ function inheritedParamsDataResolve(route) {
         }
     }
     return pathToRoot.slice(inhertingStartingFrom).reduce(function (res, curr) {
-        var /** @type {?} */ params = __assign$2({}, res.params, curr.params);
-        var /** @type {?} */ data = __assign$2({}, res.data, curr.data);
-        var /** @type {?} */ resolve = __assign$2({}, res.resolve, curr._resolvedData);
+        var /** @type {?} */ params = merge(res.params, curr.params);
+        var /** @type {?} */ data = merge(res.data, curr.data);
+        var /** @type {?} */ resolve = merge(res.resolve, curr._resolvedData);
         return { params: params, data: data, resolve: resolve };
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
@@ -3026,15 +3034,6 @@ function compare(path, params, segment) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$3 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 var NoMatch$1 = (function () {
     function NoMatch$1() {
     }
@@ -3237,7 +3236,7 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     var /** @type {?} */ posParams = {};
     forEach(res.posParams, function (v, k) { posParams[k] = v.path; });
-    var /** @type {?} */ parameters = __assign$3({}, posParams, res.consumed[res.consumed.length - 1].parameters);
+    var /** @type {?} */ parameters = merge(posParams, res.consumed[res.consumed.length - 1].parameters);
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
 }
 /**
@@ -3327,7 +3326,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
             res[getOutlet$2(r)] = s;
         }
     }
-    return __assign$3({}, children, res);
+    return merge(children, res);
 }
 /**
  * @param {?} segmentGroup
@@ -3516,15 +3515,6 @@ var DefaultUrlHandlingStrategy = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 /**
  * @param {?} error
  * @return {?}
@@ -3802,7 +3792,7 @@ var Router = (function () {
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
-                    q = __assign({}, this.currentUrlTree.queryParams, queryParams);
+                    q = merge(this.currentUrlTree.queryParams, queryParams);
                     break;
                 case 'preserve':
                     q = this.currentUrlTree.queryParams;
@@ -4434,7 +4424,7 @@ var PreActivation = (function () {
         var /** @type {?} */ resolve = future._resolve;
         return rxjs_operator_map.map.call(this.resolveNode(resolve, future), function (resolvedData) {
             future._resolvedData = resolvedData;
-            future.data = __assign({}, future.data, inheritedParamsDataResolve(future).resolve);
+            future.data = merge(future.data, inheritedParamsDataResolve(future).resolve);
             return null;
         });
     };
@@ -6102,7 +6092,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.0.0-8e03f65');
+var VERSION = new _angular_core.Version('4.0.0-a5c972a');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
