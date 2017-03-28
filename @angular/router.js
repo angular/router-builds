@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-a580f8c
+ * @license Angular v4.0.0-0c36f23
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -665,7 +665,7 @@ class UrlTree {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return new DefaultUrlSerializer().serialize(this); }
+    toString() { return DEFAULT_SERIALIZER.serialize(this); }
 }
 /**
  * \@whatItDoes Represents the parsed URL segment group.
@@ -868,6 +868,7 @@ class DefaultUrlSerializer {
         return `${segment}${query}${fragment}`;
     }
 }
+const DEFAULT_SERIALIZER = new DefaultUrlSerializer();
 /**
  * @param {?} segment
  * @return {?}
@@ -5843,7 +5844,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-a580f8c');
+const VERSION = new Version('4.0.0-0c36f23');
 
 /**
  * @license

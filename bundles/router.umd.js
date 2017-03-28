@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-a580f8c
+ * @license Angular v4.0.0-0c36f23
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-a580f8c
+ * @license Angular v4.0.0-0c36f23
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -673,7 +673,7 @@ var UrlTree = (function () {
      * \@docsNotRequired
      * @return {?}
      */
-    UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
+    UrlTree.prototype.toString = function () { return DEFAULT_SERIALIZER.serialize(this); };
     return UrlTree;
 }());
 /**
@@ -894,6 +894,7 @@ var DefaultUrlSerializer = (function () {
     };
     return DefaultUrlSerializer;
 }());
+var DEFAULT_SERIALIZER = new DefaultUrlSerializer();
 /**
  * @param {?} segment
  * @return {?}
@@ -6103,7 +6104,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.0.0-a580f8c');
+var VERSION = new _angular_core.Version('4.0.0-0c36f23');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
