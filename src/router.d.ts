@@ -16,7 +16,6 @@ import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapsho
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
-import { TreeNode } from './utils/tree';
 /**
  * @whatItDoes Represents the extra options used during navigation.
  *
@@ -323,15 +322,18 @@ export declare class PreActivation {
     private future;
     private curr;
     private moduleInjector;
-    private checks;
+    private canActivateChecks;
+    private canDeactivateChecks;
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector);
     traverse(parentOutletMap: RouterOutletMap): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;
     private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
-    traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
+    private traverseRoutes(futureNode, currNode, parentOutletMap, futurePath);
     private shouldRunGuardsAndResolvers(curr, future, mode);
     private deactiveRouteAndItsChildren(route, outlet);
+    private runCanDeactivateChecks();
+    private runCanActivateChecks();
     private runCanActivate(future);
     private runCanActivateChild(path);
     private extractCanActivateChild(p);
