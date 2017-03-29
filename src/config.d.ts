@@ -347,4 +347,7 @@ export interface Route {
     loadChildren?: LoadChildren;
     runGuardsAndResolvers?: RunGuardsAndResolvers;
 }
+export interface InternalRoute extends Route {
+    _loadedConfig?: any;
+}
 export declare function validateConfig(config: Routes, parentPath?: string): void;
