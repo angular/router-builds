@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-910c0d9
+ * @license Angular v4.0.0-d58a242
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.0.0-910c0d9
+ * @license Angular v4.0.0-d58a242
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -966,7 +966,7 @@ function serializePath(path) {
  * @return {?}
  */
 function serializeParams(params) {
-    return pairs(params).map(function (p) { return ";" + encode(p.first) + "=" + encode(p.second); }).join('');
+    return Object.keys(params).map(function (key) { return ";" + encode(key) + "=" + encode(params[key]); }).join('');
 }
 /**
  * @param {?} params
@@ -979,31 +979,6 @@ function serializeQueryParams(params) {
             encode(name) + "=" + encode(value);
     });
     return strParams.length ? "?" + strParams.join("&") : '';
-}
-var Pair = (function () {
-    /**
-     * @param {?} first
-     * @param {?} second
-     */
-    function Pair(first$$1, second) {
-        this.first = first$$1;
-        this.second = second;
-    }
-    return Pair;
-}());
-/**
- * @template T
- * @param {?} obj
- * @return {?}
- */
-function pairs(obj) {
-    var /** @type {?} */ res = [];
-    for (var /** @type {?} */ prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-            res.push(new Pair(prop, obj[prop]));
-        }
-    }
-    return res;
 }
 var SEGMENT_RE = /^[^\/()?;=&#]+/;
 /**
@@ -1543,7 +1518,7 @@ var ApplyRedirects = (function () {
         if (route.path === '**') {
             if (route.loadChildren) {
                 return rxjs_operator_map.map.call(this.configLoader.load(ngModule.injector, route), function (cfg) {
-                    ((route))._loadedConfig = cfg;
+                    route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 });
             }
@@ -1587,7 +1562,7 @@ var ApplyRedirects = (function () {
             return rxjs_operator_mergeMap.mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
                 if (shouldLoad) {
                     return rxjs_operator_map.map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
-                        ((route))._loadedConfig = cfg;
+                        route._loadedConfig = cfg;
                         return cfg;
                     });
                 }
@@ -3103,9 +3078,7 @@ var Recognizer = (function () {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
             return this.processChildren(config, segmentGroup);
         }
-        else {
-            return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
-        }
+        return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
     };
     /**
      * @param {?} config
@@ -3140,9 +3113,7 @@ var Recognizer = (function () {
         if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
             return [];
         }
-        else {
-            throw new NoMatch$1();
-        }
+        throw new NoMatch$1();
     };
     /**
      * @param {?} segmentGroup
@@ -3163,7 +3134,7 @@ var Recognizer = (function () {
     Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, segments, outlet) {
         if (route.redirectTo)
             throw new NoMatch$1();
-        if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
+        if ((route.outlet || PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
         if (route.path === '**') {
             var /** @type {?} */ params = segments.length > 0 ? last$1(segments).parameters : {};
@@ -3176,16 +3147,14 @@ var Recognizer = (function () {
         var _b = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _b.segmentGroup, slicedSegments = _b.slicedSegments;
         var /** @type {?} */ snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-            var /** @type {?} */ children = this.processChildren(childConfig, segmentGroup);
-            return [new TreeNode(snapshot, children)];
+            var /** @type {?} */ children_3 = this.processChildren(childConfig, segmentGroup);
+            return [new TreeNode(snapshot, children_3)];
         }
-        else if (childConfig.length === 0 && slicedSegments.length === 0) {
+        if (childConfig.length === 0 && slicedSegments.length === 0) {
             return [new TreeNode(snapshot, [])];
         }
-        else {
-            var /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
-            return [new TreeNode(snapshot, children)];
-        }
+        var /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
+        return [new TreeNode(snapshot, children)];
     };
     return Recognizer;
 }());
@@ -3210,12 +3179,10 @@ function getChildConfig(route) {
     if (route.children) {
         return route.children;
     }
-    else if (route.loadChildren) {
-        return ((route))._loadedConfig.routes;
+    if (route.loadChildren) {
+        return route._loadedConfig.routes;
     }
-    else {
-        return [];
-    }
+    return [];
 }
 /**
  * @param {?} segmentGroup
@@ -3228,9 +3195,7 @@ function match$1(segmentGroup, route, segments) {
         if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
             throw new NoMatch$1();
         }
-        else {
-            return { consumedSegments: [], lastChild: 0, parameters: {} };
-        }
+        return { consumedSegments: [], lastChild: 0, parameters: {} };
     }
     var /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
     var /** @type {?} */ res = matcher(segments, segmentGroup, route);
@@ -3291,24 +3256,22 @@ function getPathIndexShift(segmentGroup) {
 function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-        var /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments: [] };
+        var /** @type {?} */ s_1 = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+        s_1._sourceSegment = segmentGroup;
+        s_1._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s_1, slicedSegments: [] };
     }
-    else if (slicedSegments.length === 0 &&
+    if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-        var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments: slicedSegments };
+        var /** @type {?} */ s_2 = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        s_2._sourceSegment = segmentGroup;
+        s_2._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s_2, slicedSegments: slicedSegments };
     }
-    else {
-        var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments: slicedSegments };
-    }
+    var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+    s._sourceSegment = segmentGroup;
+    s._segmentIndexShift = consumedSegments.length;
+    return { segmentGroup: s, slicedSegments: slicedSegments };
 }
 /**
  * @param {?} segmentGroup
@@ -3360,10 +3323,7 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
  * @return {?}
  */
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes
-        .filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) &&
-        getOutlet$2(r) !== PRIMARY_OUTLET; })
-        .length > 0;
+    return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$2(r) !== PRIMARY_OUTLET; });
 }
 /**
  * @param {?} segmentGroup
@@ -3372,7 +3332,7 @@ function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, 
  * @return {?}
  */
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); }).length > 0;
+    return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); });
 }
 /**
  * @param {?} segmentGroup
@@ -3381,8 +3341,9 @@ function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
  * @return {?}
  */
 function emptyPathMatch(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
         return false;
+    }
     return r.path === '' && r.redirectTo === undefined;
 }
 /**
@@ -3390,21 +3351,21 @@ function emptyPathMatch(segmentGroup, slicedSegments, r) {
  * @return {?}
  */
 function getOutlet$2(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+    return route.outlet || PRIMARY_OUTLET;
 }
 /**
  * @param {?} route
  * @return {?}
  */
 function getData(route) {
-    return route.data ? route.data : {};
+    return route.data || {};
 }
 /**
  * @param {?} route
  * @return {?}
  */
 function getResolve(route) {
-    return route.resolve ? route.resolve : {};
+    return route.resolve || {};
 }
 /**
  * @license
@@ -4664,14 +4625,12 @@ function advanceActivatedRouteNodeAndItsChildren(node) {
  * @return {?}
  */
 function parentLoadedConfig(snapshot) {
-    var /** @type {?} */ s = snapshot.parent;
-    while (s) {
-        var /** @type {?} */ c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        if (c && c.component)
+    for (var /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
+        var /** @type {?} */ route = s._routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
+        if (route && route.component)
             return null;
-        s = s.parent;
     }
     return null;
 }
@@ -4682,24 +4641,24 @@ function parentLoadedConfig(snapshot) {
 function closestLoadedConfig(snapshot) {
     if (!snapshot)
         return null;
-    var /** @type {?} */ s = snapshot.parent;
-    while (s) {
-        var /** @type {?} */ c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        s = s.parent;
+    for (var /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
+        var /** @type {?} */ route = s._routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
     }
     return null;
 }
 /**
+ * @template T
  * @param {?} node
  * @return {?}
  */
 function nodeChildrenAsMap(node) {
-    return node ? node.children.reduce(function (m, c) {
-        m[c.value.outlet] = c;
-        return m;
-    }, {}) : {};
+    var /** @type {?} */ map$$1 = {};
+    if (node) {
+        node.children.forEach(function (child) { return map$$1[child.value.outlet] = child; });
+    }
+    return map$$1;
 }
 /**
  * @param {?} outletMap
@@ -5644,17 +5603,18 @@ var RouterPreloader = (function () {
     RouterPreloader.prototype.processRoutes = function (ngModule, routes) {
         var /** @type {?} */ res = [];
         for (var _i = 0, routes_5 = routes; _i < routes_5.length; _i++) {
-            var c = routes_5[_i];
+            var r = routes_5[_i];
+            var /** @type {?} */ route = r;
             // we already have the config loaded, just recurse
-            if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
-                var /** @type {?} */ childConfig = ((c))._loadedConfig;
-                res.push(this.processRoutes(childConfig.module, childConfig.routes));
+            if (route.loadChildren && !route.canLoad && route._loadedConfig) {
+                var /** @type {?} */ childConfig = route._loadedConfig;
+                res.push(this.processRoutes(ngModule, childConfig.routes));
             }
-            else if (c.loadChildren && !c.canLoad) {
-                res.push(this.preloadConfig(ngModule, c));
+            else if (route.loadChildren && !route.canLoad) {
+                res.push(this.preloadConfig(ngModule, route));
             }
-            else if (c.children) {
-                res.push(this.processRoutes(ngModule, c.children));
+            else if (route.children) {
+                res.push(this.processRoutes(ngModule, route.children));
             }
         }
         return rxjs_operator_mergeAll.mergeAll.call(rxjs_observable_from.from(res));
@@ -5669,8 +5629,7 @@ var RouterPreloader = (function () {
         return this.preloadingStrategy.preload(route, function () {
             var /** @type {?} */ loaded = _this.loader.load(ngModule.injector, route);
             return rxjs_operator_mergeMap.mergeMap.call(loaded, function (config) {
-                var /** @type {?} */ c = route;
-                c._loadedConfig = config;
+                route._loadedConfig = config;
                 return _this.processRoutes(config.module, config.routes);
             });
         });
@@ -6104,7 +6063,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.0.0-910c0d9');
+var VERSION = new _angular_core.Version('4.0.0-d58a242');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

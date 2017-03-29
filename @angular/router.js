@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-910c0d9
+ * @license Angular v4.0.0-d58a242
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -940,7 +940,7 @@ function serializePath(path) {
  * @return {?}
  */
 function serializeParams(params) {
-    return pairs(params).map(p => `;${encode(p.first)}=${encode(p.second)}`).join('');
+    return Object.keys(params).map(key => `;${encode(key)}=${encode(params[key])}`).join('');
 }
 /**
  * @param {?} params
@@ -953,30 +953,6 @@ function serializeQueryParams(params) {
             `${encode(name)}=${encode(value)}`;
     });
     return strParams.length ? `?${strParams.join("&")}` : '';
-}
-class Pair {
-    /**
-     * @param {?} first
-     * @param {?} second
-     */
-    constructor(first$$1, second) {
-        this.first = first$$1;
-        this.second = second;
-    }
-}
-/**
- * @template T
- * @param {?} obj
- * @return {?}
- */
-function pairs(obj) {
-    const /** @type {?} */ res = [];
-    for (const /** @type {?} */ prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-            res.push(new Pair(prop, obj[prop]));
-        }
-    }
-    return res;
 }
 const SEGMENT_RE = /^[^\/()?;=&#]+/;
 /**
@@ -1504,7 +1480,7 @@ class ApplyRedirects {
         if (route.path === '**') {
             if (route.loadChildren) {
                 return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
-                    ((route))._loadedConfig = cfg;
+                    route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 });
             }
@@ -1547,7 +1523,7 @@ class ApplyRedirects {
             return mergeMap.call(runCanLoadGuard(ngModule.injector, route), (shouldLoad) => {
                 if (shouldLoad) {
                     return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
-                        ((route))._loadedConfig = cfg;
+                        route._loadedConfig = cfg;
                         return cfg;
                     });
                 }
@@ -2980,9 +2956,7 @@ class Recognizer {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
             return this.processChildren(config, segmentGroup);
         }
-        else {
-            return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
-        }
+        return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
     }
     /**
      * @param {?} config
@@ -3015,9 +2989,7 @@ class Recognizer {
         if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
             return [];
         }
-        else {
-            throw new NoMatch$1();
-        }
+        throw new NoMatch$1();
     }
     /**
      * @param {?} segmentGroup
@@ -3038,7 +3010,7 @@ class Recognizer {
     processSegmentAgainstRoute(route, rawSegment, segments, outlet) {
         if (route.redirectTo)
             throw new NoMatch$1();
-        if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
+        if ((route.outlet || PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
         if (route.path === '**') {
             const /** @type {?} */ params = segments.length > 0 ? last$1(segments).parameters : {};
@@ -3054,13 +3026,11 @@ class Recognizer {
             const /** @type {?} */ children = this.processChildren(childConfig, segmentGroup);
             return [new TreeNode(snapshot, children)];
         }
-        else if (childConfig.length === 0 && slicedSegments.length === 0) {
+        if (childConfig.length === 0 && slicedSegments.length === 0) {
             return [new TreeNode(snapshot, [])];
         }
-        else {
-            const /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
-            return [new TreeNode(snapshot, children)];
-        }
+        const /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
+        return [new TreeNode(snapshot, children)];
     }
 }
 /**
@@ -3084,12 +3054,10 @@ function getChildConfig(route) {
     if (route.children) {
         return route.children;
     }
-    else if (route.loadChildren) {
-        return ((route))._loadedConfig.routes;
+    if (route.loadChildren) {
+        return route._loadedConfig.routes;
     }
-    else {
-        return [];
-    }
+    return [];
 }
 /**
  * @param {?} segmentGroup
@@ -3102,9 +3070,7 @@ function match$1(segmentGroup, route, segments) {
         if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
             throw new NoMatch$1();
         }
-        else {
-            return { consumedSegments: [], lastChild: 0, parameters: {} };
-        }
+        return { consumedSegments: [], lastChild: 0, parameters: {} };
     }
     const /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
     const /** @type {?} */ res = matcher(segments, segmentGroup, route);
@@ -3170,19 +3136,17 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments: [] };
     }
-    else if (slicedSegments.length === 0 &&
+    if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
         const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
         s._sourceSegment = segmentGroup;
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments };
     }
-    else {
-        const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments };
-    }
+    const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+    s._sourceSegment = segmentGroup;
+    s._segmentIndexShift = consumedSegments.length;
+    return { segmentGroup: s, slicedSegments };
 }
 /**
  * @param {?} segmentGroup
@@ -3232,10 +3196,7 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
  * @return {?}
  */
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes
-        .filter(r => emptyPathMatch(segmentGroup, slicedSegments, r) &&
-        getOutlet$2(r) !== PRIMARY_OUTLET)
-        .length > 0;
+    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$2(r) !== PRIMARY_OUTLET);
 }
 /**
  * @param {?} segmentGroup
@@ -3244,7 +3205,7 @@ function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, 
  * @return {?}
  */
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
-    return routes.filter(r => emptyPathMatch(segmentGroup, slicedSegments, r)).length > 0;
+    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r));
 }
 /**
  * @param {?} segmentGroup
@@ -3253,8 +3214,9 @@ function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
  * @return {?}
  */
 function emptyPathMatch(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
         return false;
+    }
     return r.path === '' && r.redirectTo === undefined;
 }
 /**
@@ -3262,21 +3224,21 @@ function emptyPathMatch(segmentGroup, slicedSegments, r) {
  * @return {?}
  */
 function getOutlet$2(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+    return route.outlet || PRIMARY_OUTLET;
 }
 /**
  * @param {?} route
  * @return {?}
  */
 function getData(route) {
-    return route.data ? route.data : {};
+    return route.data || {};
 }
 /**
  * @param {?} route
  * @return {?}
  */
 function getResolve(route) {
-    return route.resolve ? route.resolve : {};
+    return route.resolve || {};
 }
 
 /**
@@ -4481,14 +4443,12 @@ function advanceActivatedRouteNodeAndItsChildren(node) {
  * @return {?}
  */
 function parentLoadedConfig(snapshot) {
-    let /** @type {?} */ s = snapshot.parent;
-    while (s) {
-        const /** @type {?} */ c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        if (c && c.component)
+    for (let /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
+        const /** @type {?} */ route = s._routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
+        if (route && route.component)
             return null;
-        s = s.parent;
     }
     return null;
 }
@@ -4499,24 +4459,24 @@ function parentLoadedConfig(snapshot) {
 function closestLoadedConfig(snapshot) {
     if (!snapshot)
         return null;
-    let /** @type {?} */ s = snapshot.parent;
-    while (s) {
-        const /** @type {?} */ c = s._routeConfig;
-        if (c && c._loadedConfig)
-            return c._loadedConfig;
-        s = s.parent;
+    for (let /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
+        const /** @type {?} */ route = s._routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
     }
     return null;
 }
 /**
+ * @template T
  * @param {?} node
  * @return {?}
  */
 function nodeChildrenAsMap(node) {
-    return node ? node.children.reduce((m, c) => {
-        m[c.value.outlet] = c;
-        return m;
-    }, {}) : {};
+    const /** @type {?} */ map$$1 = {};
+    if (node) {
+        node.children.forEach(child => map$$1[child.value.outlet] = child);
+    }
+    return map$$1;
 }
 /**
  * @param {?} outletMap
@@ -5390,17 +5350,18 @@ class RouterPreloader {
      */
     processRoutes(ngModule, routes) {
         const /** @type {?} */ res = [];
-        for (const /** @type {?} */ c of routes) {
+        for (const /** @type {?} */ r of routes) {
+            const /** @type {?} */ route = r;
             // we already have the config loaded, just recurse
-            if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
-                const /** @type {?} */ childConfig = ((c))._loadedConfig;
-                res.push(this.processRoutes(childConfig.module, childConfig.routes));
+            if (route.loadChildren && !route.canLoad && route._loadedConfig) {
+                const /** @type {?} */ childConfig = route._loadedConfig;
+                res.push(this.processRoutes(ngModule, childConfig.routes));
             }
-            else if (c.loadChildren && !c.canLoad) {
-                res.push(this.preloadConfig(ngModule, c));
+            else if (route.loadChildren && !route.canLoad) {
+                res.push(this.preloadConfig(ngModule, route));
             }
-            else if (c.children) {
-                res.push(this.processRoutes(ngModule, c.children));
+            else if (route.children) {
+                res.push(this.processRoutes(ngModule, route.children));
             }
         }
         return mergeAll.call(from(res));
@@ -5414,8 +5375,7 @@ class RouterPreloader {
         return this.preloadingStrategy.preload(route, () => {
             const /** @type {?} */ loaded = this.loader.load(ngModule.injector, route);
             return mergeMap.call(loaded, (config) => {
-                const /** @type {?} */ c = route;
-                c._loadedConfig = config;
+                route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
             });
         });
@@ -5844,7 +5804,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-910c0d9');
+const VERSION = new Version('4.0.0-d58a242');
 
 /**
  * @license
