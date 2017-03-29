@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-0c36f23
+ * @license Angular v4.0.0-4916278
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5844,7 +5844,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.0.0-0c36f23');
+const VERSION = new Version('4.0.0-4916278');
 
 /**
  * @license
