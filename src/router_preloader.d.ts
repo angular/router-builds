@@ -18,7 +18,7 @@ export declare abstract class PreloadingStrategy {
     abstract preload(route: Route, fn: () => Observable<any>): Observable<any>;
 }
 /**
- * @whatItDoes Provides a preloading strategy that preloads all modules as quicky as possible.
+ * @whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * @howToUse
  *

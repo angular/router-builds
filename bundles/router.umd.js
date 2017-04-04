@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-7764c5c
+ * @license Angular v4.1.0-beta.0-7b005aa
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-7764c5c
+ * @license Angular v4.1.0-beta.0-7b005aa
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -5504,7 +5504,7 @@ var PreloadingStrategy = (function () {
     return PreloadingStrategy;
 }());
 /**
- * \@whatItDoes Provides a preloading strategy that preloads all modules as quicky as possible.
+ * \@whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * \@howToUse
  *
@@ -6063,7 +6063,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.1.0-beta.0-7764c5c');
+var VERSION = new _angular_core.Version('4.1.0-beta.0-7b005aa');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
