@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-f4f621a
+ * @license Angular v4.1.0-beta.0-294a205
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-f4f621a
+ * @license Angular v4.1.0-beta.0-294a205
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -5381,7 +5381,10 @@ var RouterOutlet = (function () {
     return RouterOutlet;
 }());
 RouterOutlet.decorators = [
-    { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+    { type: _angular_core.Directive, args: [{
+                selector: 'router-outlet',
+                exportAs: 'outlet'
+            },] },
 ];
 /**
  * @nocollapse
@@ -6063,7 +6066,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.1.0-beta.0-f4f621a');
+var VERSION = new _angular_core.Version('4.1.0-beta.0-294a205');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
