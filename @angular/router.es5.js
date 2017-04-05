@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-294a205
+ * @license Angular v4.1.0-beta.0-f4b5784
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5392,10 +5392,7 @@ var RouterOutlet = (function () {
     return RouterOutlet;
 }());
 RouterOutlet.decorators = [
-    { type: Directive, args: [{
-                selector: 'router-outlet',
-                exportAs: 'outlet'
-            },] },
+    { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
 ];
 /**
  * @nocollapse
@@ -6077,7 +6074,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.1.0-beta.0-294a205');
+var VERSION = new Version('4.1.0-beta.0-f4b5784');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
