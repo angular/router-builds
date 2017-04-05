@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-64f1bf6
+ * @license Angular v4.1.0-beta.0-c933b75
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5259,7 +5259,7 @@ class PreloadingStrategy {
     preload(route, fn) { }
 }
 /**
- * \@whatItDoes Provides a preloading strategy that preloads all modules as quicky as possible.
+ * \@whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * \@howToUse
  *
@@ -5804,7 +5804,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-beta.0-64f1bf6');
+const VERSION = new Version('4.1.0-beta.0-c933b75');
 
 /**
  * @license
