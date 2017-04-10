@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-96aa236
+ * @license Angular v4.1.0-beta.0-83527fd
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-96aa236
+ * @license Angular v4.1.0-beta.0-83527fd
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -5608,7 +5608,7 @@ var RouterPreloader = (function () {
             // we already have the config loaded, just recurse
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 var /** @type {?} */ childConfig = route._loadedConfig;
-                res.push(this.processRoutes(ngModule, childConfig.routes));
+                res.push(this.processRoutes(childConfig.module, childConfig.routes));
             }
             else if (route.loadChildren && !route.canLoad) {
                 res.push(this.preloadConfig(ngModule, route));
@@ -6063,7 +6063,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.1.0-beta.0-96aa236');
+var VERSION = new _angular_core.Version('4.1.0-beta.0-83527fd');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

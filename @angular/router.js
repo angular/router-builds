@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-96aa236
+ * @license Angular v4.1.0-beta.0-83527fd
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5355,7 +5355,7 @@ class RouterPreloader {
             // we already have the config loaded, just recurse
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 const /** @type {?} */ childConfig = route._loadedConfig;
-                res.push(this.processRoutes(ngModule, childConfig.routes));
+                res.push(this.processRoutes(childConfig.module, childConfig.routes));
             }
             else if (route.loadChildren && !route.canLoad) {
                 res.push(this.preloadConfig(ngModule, route));
@@ -5804,7 +5804,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-beta.0-96aa236');
+const VERSION = new Version('4.1.0-beta.0-83527fd');
 
 /**
  * @license
