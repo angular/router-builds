@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-46ce331
+ * @license Angular v4.1.0-beta.0-a487563
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.0-46ce331
+ * @license Angular v4.1.0-beta.0-a487563
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -272,32 +272,31 @@ function isNavigationCancelingError(error) {
  * @return {?}
  */
 function defaultUrlMatcher(segments, segmentGroup, route) {
-    var /** @type {?} */ path = route.path;
-    var /** @type {?} */ parts = path.split('/');
-    var /** @type {?} */ posParams = {};
-    var /** @type {?} */ consumed = [];
-    var /** @type {?} */ currentIndex = 0;
-    for (var /** @type {?} */ i = 0; i < parts.length; ++i) {
-        if (currentIndex >= segments.length)
-            return null;
-        var /** @type {?} */ current = segments[currentIndex];
-        var /** @type {?} */ p = parts[i];
-        var /** @type {?} */ isPosParam = p.startsWith(':');
-        if (!isPosParam && p !== current.path)
-            return null;
-        if (isPosParam) {
-            posParams[p.substring(1)] = current;
-        }
-        consumed.push(current);
-        currentIndex++;
-    }
-    if (route.pathMatch === 'full' &&
-        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+    var /** @type {?} */ parts = route.path.split('/');
+    if (parts.length > segments.length) {
+        // The actual URL is shorter than the config, no match
         return null;
     }
-    else {
-        return { consumed: consumed, posParams: posParams };
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || parts.length < segments.length)) {
+        // The config is longer than the actual URL but we are looking for a full match, return null
+        return null;
     }
+    var /** @type {?} */ posParams = {};
+    // Check each config part against the actual URL
+    for (var /** @type {?} */ index = 0; index < parts.length; index++) {
+        var /** @type {?} */ part = parts[index];
+        var /** @type {?} */ segment = segments[index];
+        var /** @type {?} */ isParameter = part.startsWith(':');
+        if (isParameter) {
+            posParams[part.substring(1)] = segment;
+        }
+        else if (part !== segment.path) {
+            // The actual URL part does not match the config, no match
+            return null;
+        }
+    }
+    return { consumed: segments.slice(0, parts.length), posParams: posParams };
 }
 /**
  * @license
@@ -353,11 +352,6 @@ function flatten(arr) {
  * @param {?} a
  * @return {?}
  */
-/**
- * @template T
- * @param {?} a
- * @return {?}
- */
 function last$1(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
@@ -385,30 +379,24 @@ function forEach(map$$1, callback) {
  * @return {?}
  */
 function waitForMap(obj, fn) {
-    var /** @type {?} */ waitFor = [];
+    if (Object.keys(obj).length === 0) {
+        return rxjs_observable_of.of({});
+    }
+    var /** @type {?} */ waitHead = [];
+    var /** @type {?} */ waitTail = [];
     var /** @type {?} */ res = {};
     forEach(obj, function (a, k) {
+        var /** @type {?} */ mapped = rxjs_operator_map.map.call(fn(k, a), function (r) { return res[k] = r; });
         if (k === PRIMARY_OUTLET) {
-            waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
-                res[k] = _;
-                return _;
-            }));
+            waitHead.push(mapped);
+        }
+        else {
+            waitTail.push(mapped);
         }
     });
-    forEach(obj, function (a, k) {
-        if (k !== PRIMARY_OUTLET) {
-            waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
-                res[k] = _;
-                return _;
-            }));
-        }
-    });
-    if (waitFor.length > 0) {
-        var /** @type {?} */ concatted$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitFor));
-        var /** @type {?} */ last$ = rxjs_operator_last.last.call(concatted$);
-        return rxjs_operator_map.map.call(last$, function () { return res; });
-    }
-    return rxjs_observable_of.of(res);
+    var /** @type {?} */ concat$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitHead.concat(waitTail)));
+    var /** @type {?} */ last$ = rxjs_operator_last.last.call(concat$);
+    return rxjs_operator_map.map.call(last$, function () { return res; });
 }
 /**
  * @param {?} observables
@@ -772,34 +760,22 @@ var UrlSegment = (function () {
     return UrlSegment;
 }());
 /**
- * @param {?} a
- * @param {?} b
+ * @param {?} as
+ * @param {?} bs
  * @return {?}
  */
-function equalSegments(a, b) {
-    if (a.length !== b.length)
-        return false;
-    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
-        if (a[i].path !== b[i].path)
-            return false;
-        if (!shallowEqual(a[i].parameters, b[i].parameters))
-            return false;
-    }
-    return true;
+function equalSegments(as, bs) {
+    return equalPath(as, bs) && as.every(function (a, i) { return shallowEqual(a.parameters, bs[i].parameters); });
 }
 /**
- * @param {?} a
- * @param {?} b
+ * @param {?} as
+ * @param {?} bs
  * @return {?}
  */
-function equalPath(a, b) {
-    if (a.length !== b.length)
+function equalPath(as, bs) {
+    if (as.length !== bs.length)
         return false;
-    for (var /** @type {?} */ i = 0; i < a.length; ++i) {
-        if (a[i].path !== b[i].path)
-            return false;
-    }
-    return true;
+    return as.every(function (a, i) { return a.path === bs[i].path; });
 }
 /**
  * @template T
@@ -889,7 +865,7 @@ var DefaultUrlSerializer = (function () {
     DefaultUrlSerializer.prototype.serialize = function (tree) {
         var /** @type {?} */ segment = "/" + serializeSegment(tree.root, true);
         var /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        var /** @type {?} */ fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
+        var /** @type {?} */ fragment = typeof tree.fragment === "string" ? "#" + encodeURI(tree.fragment) : '';
         return "" + segment + query + fragment;
     };
     return DefaultUrlSerializer;
@@ -908,7 +884,10 @@ function serializePaths(segment) {
  * @return {?}
  */
 function serializeSegment(segment, root) {
-    if (segment.hasChildren() && root) {
+    if (!segment.hasChildren()) {
+        return serializePaths(segment);
+    }
+    if (root) {
         var /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
             serializeSegment(segment.children[PRIMARY_OUTLET], false) :
             '';
@@ -918,26 +897,16 @@ function serializeSegment(segment, root) {
                 children_1.push(k + ":" + serializeSegment(v, false));
             }
         });
-        if (children_1.length > 0) {
-            return primary + "(" + children_1.join('//') + ")";
-        }
-        else {
-            return "" + primary;
-        }
+        return children_1.length > 0 ? primary + "(" + children_1.join('//') + ")" : primary;
     }
-    else if (segment.hasChildren() && !root) {
+    else {
         var /** @type {?} */ children = mapChildrenIntoArray(segment, function (v, k) {
             if (k === PRIMARY_OUTLET) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
-            else {
-                return [k + ":" + serializeSegment(v, false)];
-            }
+            return [k + ":" + serializeSegment(v, false)];
         });
         return serializePaths(segment) + "/(" + children.join('//') + ")";
-    }
-    else {
-        return serializePaths(segment);
     }
 }
 /**
@@ -986,7 +955,6 @@ var SEGMENT_RE = /^[^\/()?;=&#]+/;
  * @return {?}
  */
 function matchSegments(str) {
-    SEGMENT_RE.lastIndex = 0;
     var /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
@@ -996,8 +964,7 @@ var QUERY_PARAM_RE = /^[^=?&#]+/;
  * @return {?}
  */
 function matchQueryParams(str) {
-    QUERY_PARAM_RE.lastIndex = 0;
-    var /** @type {?} */ match = str.match(SEGMENT_RE);
+    var /** @type {?} */ match = str.match(QUERY_PARAM_RE);
     return match ? match[0] : '';
 }
 var QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
@@ -1006,7 +973,6 @@ var QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
  * @return {?}
  */
 function matchUrlQueryParamValue(str) {
-    QUERY_PARAM_VALUE_RE.lastIndex = 0;
     var /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
     return match ? match[0] : '';
 }
@@ -1019,49 +985,47 @@ var UrlParser = (function () {
         this.remaining = url;
     }
     /**
-     * @param {?} str
-     * @return {?}
-     */
-    UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
-    /**
-     * @param {?} str
-     * @return {?}
-     */
-    UrlParser.prototype.capture = function (str) {
-        if (!this.remaining.startsWith(str)) {
-            throw new Error("Expected \"" + str + "\".");
-        }
-        this.remaining = this.remaining.substring(str.length);
-    };
-    /**
      * @return {?}
      */
     UrlParser.prototype.parseRootSegment = function () {
-        if (this.remaining.startsWith('/')) {
-            this.capture('/');
-        }
-        if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
+        this.consumeOptional('/');
+        if (this.remaining === '' || this.peekStartsWith('?') || this.peekStartsWith('#')) {
             return new UrlSegmentGroup([], {});
         }
+        // The root segment group never has segments
         return new UrlSegmentGroup([], this.parseChildren());
     };
     /**
      * @return {?}
      */
+    UrlParser.prototype.parseQueryParams = function () {
+        var /** @type {?} */ params = {};
+        if (this.consumeOptional('?')) {
+            do {
+                this.parseQueryParam(params);
+            } while (this.consumeOptional('&'));
+        }
+        return params;
+    };
+    /**
+     * @return {?}
+     */
+    UrlParser.prototype.parseFragment = function () { return this.consumeOptional('#') ? decodeURI(this.remaining) : null; };
+    /**
+     * @return {?}
+     */
     UrlParser.prototype.parseChildren = function () {
-        if (this.remaining.length == 0) {
+        if (this.remaining === '') {
             return {};
         }
-        if (this.peekStartsWith('/')) {
-            this.capture('/');
-        }
-        var /** @type {?} */ paths = [];
+        this.consumeOptional('/');
+        var /** @type {?} */ segments = [];
         if (!this.peekStartsWith('(')) {
-            paths.push(this.parseSegments());
+            segments.push(this.parseSegment());
         }
         while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
             this.capture('/');
-            paths.push(this.parseSegments());
+            segments.push(this.parseSegment());
         }
         var /** @type {?} */ children = {};
         if (this.peekStartsWith('/(')) {
@@ -1072,57 +1036,28 @@ var UrlParser = (function () {
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
-        if (paths.length > 0 || Object.keys(children).length > 0) {
-            res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
+        if (segments.length > 0 || Object.keys(children).length > 0) {
+            res[PRIMARY_OUTLET] = new UrlSegmentGroup(segments, children);
         }
         return res;
     };
     /**
      * @return {?}
      */
-    UrlParser.prototype.parseSegments = function () {
+    UrlParser.prototype.parseSegment = function () {
         var /** @type {?} */ path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
             throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
         }
         this.capture(path);
-        var /** @type {?} */ matrixParams = {};
-        if (this.peekStartsWith(';')) {
-            matrixParams = this.parseMatrixParams();
-        }
-        return new UrlSegment(decode(path), matrixParams);
-    };
-    /**
-     * @return {?}
-     */
-    UrlParser.prototype.parseQueryParams = function () {
-        var /** @type {?} */ params = {};
-        if (this.peekStartsWith('?')) {
-            this.capture('?');
-            this.parseQueryParam(params);
-            while (this.remaining.length > 0 && this.peekStartsWith('&')) {
-                this.capture('&');
-                this.parseQueryParam(params);
-            }
-        }
-        return params;
-    };
-    /**
-     * @return {?}
-     */
-    UrlParser.prototype.parseFragment = function () {
-        if (this.peekStartsWith('#')) {
-            return decodeURI(this.remaining.substring(1));
-        }
-        return null;
+        return new UrlSegment(decode(path), this.parseMatrixParams());
     };
     /**
      * @return {?}
      */
     UrlParser.prototype.parseMatrixParams = function () {
         var /** @type {?} */ params = {};
-        while (this.remaining.length > 0 && this.peekStartsWith(';')) {
-            this.capture(';');
+        while (this.consumeOptional(';')) {
             this.parseParam(params);
         }
         return params;
@@ -1138,8 +1073,7 @@ var UrlParser = (function () {
         }
         this.capture(key);
         var /** @type {?} */ value = '';
-        if (this.peekStartsWith('=')) {
-            this.capture('=');
+        if (this.consumeOptional('=')) {
             var /** @type {?} */ valueMatch = matchSegments(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
@@ -1159,8 +1093,7 @@ var UrlParser = (function () {
         }
         this.capture(key);
         var /** @type {?} */ value = '';
-        if (this.peekStartsWith('=')) {
-            this.capture('=');
+        if (this.consumeOptional('=')) {
             var /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
@@ -1190,7 +1123,7 @@ var UrlParser = (function () {
     UrlParser.prototype.parseParens = function (allowPrimary) {
         var /** @type {?} */ segments = {};
         this.capture('(');
-        while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+        while (!this.consumeOptional(')') && this.remaining.length > 0) {
             var /** @type {?} */ path = matchSegments(this.remaining);
             var /** @type {?} */ next = this.remaining[path.length];
             // if is is not one of these characters, then the segment was unescaped
@@ -1210,12 +1143,34 @@ var UrlParser = (function () {
             var /** @type {?} */ children = this.parseChildren();
             segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegmentGroup([], children);
-            if (this.peekStartsWith('//')) {
-                this.capture('//');
-            }
+            this.consumeOptional('//');
         }
-        this.capture(')');
         return segments;
+    };
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    UrlParser.prototype.consumeOptional = function (str) {
+        if (this.peekStartsWith(str)) {
+            this.remaining = this.remaining.substring(str.length);
+            return true;
+        }
+        return false;
+    };
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    UrlParser.prototype.capture = function (str) {
+        if (!this.consumeOptional(str)) {
+            throw new Error("Expected \"" + str + "\".");
+        }
     };
     return UrlParser;
 }());
@@ -1283,6 +1238,9 @@ function canLoadFails(route) {
     return new rxjs_Observable.Observable(function (obs) { return obs.error(navigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
 }
 /**
+ * Returns the `UrlTree` with the redirection applied.
+ *
+ * Lazy modules are loaded along the way.
  * @param {?} moduleInjector
  * @param {?} configLoader
  * @param {?} urlSerializer
@@ -1443,13 +1401,13 @@ var ApplyRedirects = (function () {
         if (getOutlet$1(route) !== outlet) {
             return noMatch(segmentGroup);
         }
-        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects)) {
-            return noMatch(segmentGroup);
-        }
         if (route.redirectTo === undefined) {
             return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths);
         }
-        return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
+        if (allowRedirects && this.allowRedirects) {
+            return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
+        }
+        return noMatch(segmentGroup);
     };
     /**
      * @param {?} ngModule
@@ -1556,8 +1514,9 @@ var ApplyRedirects = (function () {
             return rxjs_observable_of.of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            if (((route))._loadedConfig !== void 0) {
-                return rxjs_observable_of.of(((route))._loadedConfig);
+            // lazy children belong to the loaded module
+            if (route._loadedConfig !== undefined) {
+                return rxjs_observable_of.of(route._loadedConfig);
             }
             return rxjs_operator_mergeMap.mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
                 if (shouldLoad) {
@@ -1703,7 +1662,6 @@ function runCanLoadGuard(moduleInjector, route) {
  * @return {?}
  */
 function match(segmentGroup, route, segments) {
-    var /** @type {?} */ noMatch = { matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {} };
     if (route.path === '') {
         if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
             return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
@@ -1712,13 +1670,16 @@ function match(segmentGroup, route, segments) {
     }
     var /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
     var /** @type {?} */ res = matcher(segments, segmentGroup, route);
-    if (!res)
-        return noMatch;
+    if (!res) {
+        return {
+            matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {},
+        };
+    }
     return {
         matched: true,
         consumedSegments: res.consumed,
         lastChild: res.consumed.length,
-        positionalParamSegments: res.posParams
+        positionalParamSegments: res.posParams,
     };
 }
 /**
@@ -1763,7 +1724,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
     var /** @type {?} */ res = {};
     for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
         var r = routes_1[_i];
-        if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+        if (isEmptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
             res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
         }
     }
@@ -1787,33 +1748,30 @@ function createChildrenForEmptySegments(routes, primarySegmentGroup) {
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} routes
  * @return {?}
  */
-function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes
-        .filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r) &&
-        getOutlet$1(r) !== PRIMARY_OUTLET; })
-        .length > 0;
+function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, routes) {
+    return routes.some(function (r) { return isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet$1(r) !== PRIMARY_OUTLET; });
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} routes
  * @return {?}
  */
-function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r); }).length > 0;
+function containsEmptyPathRedirects(segmentGroup, segments, routes) {
+    return routes.some(function (r) { return isEmptyPathRedirect(segmentGroup, segments, r); });
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} r
  * @return {?}
  */
-function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
+function isEmptyPathRedirect(segmentGroup, segments, r) {
+    if ((segmentGroup.hasChildren() || segments.length > 0) && r.pathMatch === 'full') {
         return false;
     }
     return r.path === '' && r.redirectTo !== undefined;
@@ -1823,7 +1781,7 @@ function emptyPathRedirect(segmentGroup, slicedSegments, r) {
  * @return {?}
  */
 function getOutlet$1(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+    return route.outlet || PRIMARY_OUTLET;
 }
 /**
  * @license
@@ -2075,8 +2033,7 @@ var __assign$2 = (undefined && undefined.__assign) || Object.assign || function 
  *
  * \@description
  * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments,
- * the extracted parameters, and the resolved data.
+ * segments, the extracted parameters, and the resolved data.
  *
  * See {\@link ActivatedRoute} for more information.
  *
@@ -6063,7 +6020,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.1.0-beta.0-46ce331');
+var VERSION = new _angular_core.Version('4.1.0-beta.0-a487563');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
