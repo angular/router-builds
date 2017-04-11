@@ -123,8 +123,8 @@ export declare class UrlSegment {
     /** @docsNotRequired */
     toString(): string;
 }
-export declare function equalSegments(a: UrlSegment[], b: UrlSegment[]): boolean;
-export declare function equalPath(a: UrlSegment[], b: UrlSegment[]): boolean;
+export declare function equalSegments(as: UrlSegment[], bs: UrlSegment[]): boolean;
+export declare function equalPath(as: UrlSegment[], bs: UrlSegment[]): boolean;
 export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v: UrlSegmentGroup, k: string) => T[]): T[];
 /**
  * @whatItDoes Serializes and deserializes a URL string into a URL tree.
