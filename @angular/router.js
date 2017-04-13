@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.0-f4b5784
+ * @license Angular v4.1.0-beta.1-c664486
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -267,32 +267,31 @@ function isNavigationCancelingError(error) {
  * @return {?}
  */
 function defaultUrlMatcher(segments, segmentGroup, route) {
-    const /** @type {?} */ path = route.path;
-    const /** @type {?} */ parts = path.split('/');
-    const /** @type {?} */ posParams = {};
-    const /** @type {?} */ consumed = [];
-    let /** @type {?} */ currentIndex = 0;
-    for (let /** @type {?} */ i = 0; i < parts.length; ++i) {
-        if (currentIndex >= segments.length)
-            return null;
-        const /** @type {?} */ current = segments[currentIndex];
-        const /** @type {?} */ p = parts[i];
-        const /** @type {?} */ isPosParam = p.startsWith(':');
-        if (!isPosParam && p !== current.path)
-            return null;
-        if (isPosParam) {
-            posParams[p.substring(1)] = current;
-        }
-        consumed.push(current);
-        currentIndex++;
-    }
-    if (route.pathMatch === 'full' &&
-        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+    const /** @type {?} */ parts = route.path.split('/');
+    if (parts.length > segments.length) {
+        // The actual URL is shorter than the config, no match
         return null;
     }
-    else {
-        return { consumed, posParams };
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || parts.length < segments.length)) {
+        // The config is longer than the actual URL but we are looking for a full match, return null
+        return null;
     }
+    const /** @type {?} */ posParams = {};
+    // Check each config part against the actual URL
+    for (let /** @type {?} */ index = 0; index < parts.length; index++) {
+        const /** @type {?} */ part = parts[index];
+        const /** @type {?} */ segment = segments[index];
+        const /** @type {?} */ isParameter = part.startsWith(':');
+        if (isParameter) {
+            posParams[part.substring(1)] = segment;
+        }
+        else if (part !== segment.path) {
+            // The actual URL part does not match the config, no match
+            return null;
+        }
+    }
+    return { consumed: segments.slice(0, parts.length), posParams };
 }
 
 /**
@@ -349,12 +348,6 @@ function flatten(arr) {
  * @param {?} a
  * @return {?}
  */
-
-/**
- * @template T
- * @param {?} a
- * @return {?}
- */
 function last$1(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
@@ -383,30 +376,24 @@ function forEach(map$$1, callback) {
  * @return {?}
  */
 function waitForMap(obj, fn) {
-    const /** @type {?} */ waitFor = [];
+    if (Object.keys(obj).length === 0) {
+        return of({});
+    }
+    const /** @type {?} */ waitHead = [];
+    const /** @type {?} */ waitTail = [];
     const /** @type {?} */ res = {};
     forEach(obj, (a, k) => {
+        const /** @type {?} */ mapped = map.call(fn(k, a), (r) => res[k] = r);
         if (k === PRIMARY_OUTLET) {
-            waitFor.push(map.call(fn(k, a), (_) => {
-                res[k] = _;
-                return _;
-            }));
+            waitHead.push(mapped);
+        }
+        else {
+            waitTail.push(mapped);
         }
     });
-    forEach(obj, (a, k) => {
-        if (k !== PRIMARY_OUTLET) {
-            waitFor.push(map.call(fn(k, a), (_) => {
-                res[k] = _;
-                return _;
-            }));
-        }
-    });
-    if (waitFor.length > 0) {
-        const /** @type {?} */ concatted$ = concatAll.call(of(...waitFor));
-        const /** @type {?} */ last$ = last.call(concatted$);
-        return map.call(last$, () => res);
-    }
-    return of(res);
+    const /** @type {?} */ concat$ = concatAll.call(of(...waitHead, ...waitTail));
+    const /** @type {?} */ last$ = last.call(concat$);
+    return map.call(last$, () => res);
 }
 /**
  * @param {?} observables
@@ -752,34 +739,22 @@ class UrlSegment {
     toString() { return serializePath(this); }
 }
 /**
- * @param {?} a
- * @param {?} b
+ * @param {?} as
+ * @param {?} bs
  * @return {?}
  */
-function equalSegments(a, b) {
-    if (a.length !== b.length)
-        return false;
-    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
-        if (a[i].path !== b[i].path)
-            return false;
-        if (!shallowEqual(a[i].parameters, b[i].parameters))
-            return false;
-    }
-    return true;
+function equalSegments(as, bs) {
+    return equalPath(as, bs) && as.every((a, i) => shallowEqual(a.parameters, bs[i].parameters));
 }
 /**
- * @param {?} a
- * @param {?} b
+ * @param {?} as
+ * @param {?} bs
  * @return {?}
  */
-function equalPath(a, b) {
-    if (a.length !== b.length)
+function equalPath(as, bs) {
+    if (as.length !== bs.length)
         return false;
-    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
-        if (a[i].path !== b[i].path)
-            return false;
-    }
-    return true;
+    return as.every((a, i) => a.path === bs[i].path);
 }
 /**
  * @template T
@@ -864,7 +839,7 @@ class DefaultUrlSerializer {
     serialize(tree) {
         const /** @type {?} */ segment = `/${serializeSegment(tree.root, true)}`;
         const /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        const /** @type {?} */ fragment = tree.fragment !== null && tree.fragment !== undefined ? `#${encodeURI(tree.fragment)}` : '';
+        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeURI(tree.fragment)}` : '';
         return `${segment}${query}${fragment}`;
     }
 }
@@ -882,7 +857,10 @@ function serializePaths(segment) {
  * @return {?}
  */
 function serializeSegment(segment, root) {
-    if (segment.hasChildren() && root) {
+    if (!segment.hasChildren()) {
+        return serializePaths(segment);
+    }
+    if (root) {
         const /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
             serializeSegment(segment.children[PRIMARY_OUTLET], false) :
             '';
@@ -892,26 +870,16 @@ function serializeSegment(segment, root) {
                 children.push(`${k}:${serializeSegment(v, false)}`);
             }
         });
-        if (children.length > 0) {
-            return `${primary}(${children.join('//')})`;
-        }
-        else {
-            return `${primary}`;
-        }
+        return children.length > 0 ? `${primary}(${children.join('//')})` : primary;
     }
-    else if (segment.hasChildren() && !root) {
+    else {
         const /** @type {?} */ children = mapChildrenIntoArray(segment, (v, k) => {
             if (k === PRIMARY_OUTLET) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
-            else {
-                return [`${k}:${serializeSegment(v, false)}`];
-            }
+            return [`${k}:${serializeSegment(v, false)}`];
         });
         return `${serializePaths(segment)}/(${children.join('//')})`;
-    }
-    else {
-        return serializePaths(segment);
     }
 }
 /**
@@ -960,7 +928,6 @@ const SEGMENT_RE = /^[^\/()?;=&#]+/;
  * @return {?}
  */
 function matchSegments(str) {
-    SEGMENT_RE.lastIndex = 0;
     const /** @type {?} */ match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
@@ -970,8 +937,7 @@ const QUERY_PARAM_RE = /^[^=?&#]+/;
  * @return {?}
  */
 function matchQueryParams(str) {
-    QUERY_PARAM_RE.lastIndex = 0;
-    const /** @type {?} */ match = str.match(SEGMENT_RE);
+    const /** @type {?} */ match = str.match(QUERY_PARAM_RE);
     return match ? match[0] : '';
 }
 const QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
@@ -980,7 +946,6 @@ const QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
  * @return {?}
  */
 function matchUrlQueryParamValue(str) {
-    QUERY_PARAM_VALUE_RE.lastIndex = 0;
     const /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
     return match ? match[0] : '';
 }
@@ -993,49 +958,47 @@ class UrlParser {
         this.remaining = url;
     }
     /**
-     * @param {?} str
-     * @return {?}
-     */
-    peekStartsWith(str) { return this.remaining.startsWith(str); }
-    /**
-     * @param {?} str
-     * @return {?}
-     */
-    capture(str) {
-        if (!this.remaining.startsWith(str)) {
-            throw new Error(`Expected "${str}".`);
-        }
-        this.remaining = this.remaining.substring(str.length);
-    }
-    /**
      * @return {?}
      */
     parseRootSegment() {
-        if (this.remaining.startsWith('/')) {
-            this.capture('/');
-        }
-        if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
+        this.consumeOptional('/');
+        if (this.remaining === '' || this.peekStartsWith('?') || this.peekStartsWith('#')) {
             return new UrlSegmentGroup([], {});
         }
+        // The root segment group never has segments
         return new UrlSegmentGroup([], this.parseChildren());
     }
     /**
      * @return {?}
      */
+    parseQueryParams() {
+        const /** @type {?} */ params = {};
+        if (this.consumeOptional('?')) {
+            do {
+                this.parseQueryParam(params);
+            } while (this.consumeOptional('&'));
+        }
+        return params;
+    }
+    /**
+     * @return {?}
+     */
+    parseFragment() { return this.consumeOptional('#') ? decodeURI(this.remaining) : null; }
+    /**
+     * @return {?}
+     */
     parseChildren() {
-        if (this.remaining.length == 0) {
+        if (this.remaining === '') {
             return {};
         }
-        if (this.peekStartsWith('/')) {
-            this.capture('/');
-        }
-        const /** @type {?} */ paths = [];
+        this.consumeOptional('/');
+        const /** @type {?} */ segments = [];
         if (!this.peekStartsWith('(')) {
-            paths.push(this.parseSegments());
+            segments.push(this.parseSegment());
         }
         while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
             this.capture('/');
-            paths.push(this.parseSegments());
+            segments.push(this.parseSegment());
         }
         let /** @type {?} */ children = {};
         if (this.peekStartsWith('/(')) {
@@ -1046,57 +1009,28 @@ class UrlParser {
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
-        if (paths.length > 0 || Object.keys(children).length > 0) {
-            res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
+        if (segments.length > 0 || Object.keys(children).length > 0) {
+            res[PRIMARY_OUTLET] = new UrlSegmentGroup(segments, children);
         }
         return res;
     }
     /**
      * @return {?}
      */
-    parseSegments() {
+    parseSegment() {
         const /** @type {?} */ path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
             throw new Error(`Empty path url segment cannot have parameters: '${this.remaining}'.`);
         }
         this.capture(path);
-        let /** @type {?} */ matrixParams = {};
-        if (this.peekStartsWith(';')) {
-            matrixParams = this.parseMatrixParams();
-        }
-        return new UrlSegment(decode(path), matrixParams);
-    }
-    /**
-     * @return {?}
-     */
-    parseQueryParams() {
-        const /** @type {?} */ params = {};
-        if (this.peekStartsWith('?')) {
-            this.capture('?');
-            this.parseQueryParam(params);
-            while (this.remaining.length > 0 && this.peekStartsWith('&')) {
-                this.capture('&');
-                this.parseQueryParam(params);
-            }
-        }
-        return params;
-    }
-    /**
-     * @return {?}
-     */
-    parseFragment() {
-        if (this.peekStartsWith('#')) {
-            return decodeURI(this.remaining.substring(1));
-        }
-        return null;
+        return new UrlSegment(decode(path), this.parseMatrixParams());
     }
     /**
      * @return {?}
      */
     parseMatrixParams() {
         const /** @type {?} */ params = {};
-        while (this.remaining.length > 0 && this.peekStartsWith(';')) {
-            this.capture(';');
+        while (this.consumeOptional(';')) {
             this.parseParam(params);
         }
         return params;
@@ -1112,8 +1046,7 @@ class UrlParser {
         }
         this.capture(key);
         let /** @type {?} */ value = '';
-        if (this.peekStartsWith('=')) {
-            this.capture('=');
+        if (this.consumeOptional('=')) {
             const /** @type {?} */ valueMatch = matchSegments(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
@@ -1133,8 +1066,7 @@ class UrlParser {
         }
         this.capture(key);
         let /** @type {?} */ value = '';
-        if (this.peekStartsWith('=')) {
-            this.capture('=');
+        if (this.consumeOptional('=')) {
             const /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
@@ -1164,7 +1096,7 @@ class UrlParser {
     parseParens(allowPrimary) {
         const /** @type {?} */ segments = {};
         this.capture('(');
-        while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+        while (!this.consumeOptional(')') && this.remaining.length > 0) {
             const /** @type {?} */ path = matchSegments(this.remaining);
             const /** @type {?} */ next = this.remaining[path.length];
             // if is is not one of these characters, then the segment was unescaped
@@ -1184,12 +1116,34 @@ class UrlParser {
             const /** @type {?} */ children = this.parseChildren();
             segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegmentGroup([], children);
-            if (this.peekStartsWith('//')) {
-                this.capture('//');
-            }
+            this.consumeOptional('//');
         }
-        this.capture(')');
         return segments;
+    }
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    peekStartsWith(str) { return this.remaining.startsWith(str); }
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    consumeOptional(str) {
+        if (this.peekStartsWith(str)) {
+            this.remaining = this.remaining.substring(str.length);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * @param {?} str
+     * @return {?}
+     */
+    capture(str) {
+        if (!this.consumeOptional(str)) {
+            throw new Error(`Expected "${str}".`);
+        }
     }
 }
 
@@ -1253,6 +1207,9 @@ function canLoadFails(route) {
     return new Observable((obs) => obs.error(navigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
 }
 /**
+ * Returns the `UrlTree` with the redirection applied.
+ *
+ * Lazy modules are loaded along the way.
  * @param {?} moduleInjector
  * @param {?} configLoader
  * @param {?} urlSerializer
@@ -1408,13 +1365,13 @@ class ApplyRedirects {
         if (getOutlet$1(route) !== outlet) {
             return noMatch(segmentGroup);
         }
-        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects)) {
-            return noMatch(segmentGroup);
-        }
         if (route.redirectTo === undefined) {
             return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths);
         }
-        return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
+        if (allowRedirects && this.allowRedirects) {
+            return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
+        }
+        return noMatch(segmentGroup);
     }
     /**
      * @param {?} ngModule
@@ -1517,8 +1474,9 @@ class ApplyRedirects {
             return of(new LoadedRouterConfig(route.children, ngModule));
         }
         if (route.loadChildren) {
-            if (((route))._loadedConfig !== void 0) {
-                return of(((route))._loadedConfig);
+            // lazy children belong to the loaded module
+            if (route._loadedConfig !== undefined) {
+                return of(route._loadedConfig);
             }
             return mergeMap.call(runCanLoadGuard(ngModule.injector, route), (shouldLoad) => {
                 if (shouldLoad) {
@@ -1660,7 +1618,6 @@ function runCanLoadGuard(moduleInjector, route) {
  * @return {?}
  */
 function match(segmentGroup, route, segments) {
-    const /** @type {?} */ noMatch = { matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {} };
     if (route.path === '') {
         if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
             return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
@@ -1669,13 +1626,16 @@ function match(segmentGroup, route, segments) {
     }
     const /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
     const /** @type {?} */ res = matcher(segments, segmentGroup, route);
-    if (!res)
-        return noMatch;
+    if (!res) {
+        return {
+            matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {},
+        };
+    }
     return {
         matched: true,
         consumedSegments: res.consumed,
         lastChild: res.consumed.length,
-        positionalParamSegments: res.posParams
+        positionalParamSegments: res.posParams,
     };
 }
 /**
@@ -1719,7 +1679,7 @@ function mergeTrivialChildren(s) {
 function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
     const /** @type {?} */ res = {};
     for (const /** @type {?} */ r of routes) {
-        if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+        if (isEmptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
             res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
         }
     }
@@ -1742,33 +1702,30 @@ function createChildrenForEmptySegments(routes, primarySegmentGroup) {
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} routes
  * @return {?}
  */
-function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes
-        .filter(r => emptyPathRedirect(segmentGroup, slicedSegments, r) &&
-        getOutlet$1(r) !== PRIMARY_OUTLET)
-        .length > 0;
+function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, routes) {
+    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet$1(r) !== PRIMARY_OUTLET);
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} routes
  * @return {?}
  */
-function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
-    return routes.filter(r => emptyPathRedirect(segmentGroup, slicedSegments, r)).length > 0;
+function containsEmptyPathRedirects(segmentGroup, segments, routes) {
+    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r));
 }
 /**
  * @param {?} segmentGroup
- * @param {?} slicedSegments
+ * @param {?} segments
  * @param {?} r
  * @return {?}
  */
-function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
+function isEmptyPathRedirect(segmentGroup, segments, r) {
+    if ((segmentGroup.hasChildren() || segments.length > 0) && r.pathMatch === 'full') {
         return false;
     }
     return r.path === '' && r.redirectTo !== undefined;
@@ -1778,7 +1735,7 @@ function emptyPathRedirect(segmentGroup, slicedSegments, r) {
  * @return {?}
  */
 function getOutlet$1(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+    return route.outlet || PRIMARY_OUTLET;
 }
 
 /**
@@ -2031,8 +1988,7 @@ var __assign$2 = (undefined && undefined.__assign) || Object.assign || function(
  *
  * \@description
  * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments,
- * the extracted parameters, and the resolved data.
+ * segments, the extracted parameters, and the resolved data.
  *
  * See {\@link ActivatedRoute} for more information.
  *
@@ -5064,6 +5020,16 @@ class RouterOutlet {
     /**
      * @return {?}
      */
+    get activeRouteData() {
+        let /** @type {?} */ data;
+        if (this.activated) {
+            data = this._activatedRoute.snapshot.data;
+        }
+        return data || {};
+    }
+    /**
+     * @return {?}
+     */
     detach() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
@@ -5355,7 +5321,7 @@ class RouterPreloader {
             // we already have the config loaded, just recurse
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 const /** @type {?} */ childConfig = route._loadedConfig;
-                res.push(this.processRoutes(ngModule, childConfig.routes));
+                res.push(this.processRoutes(childConfig.module, childConfig.routes));
             }
             else if (route.loadChildren && !route.canLoad) {
                 res.push(this.preloadConfig(ngModule, route));
@@ -5804,7 +5770,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-beta.0-f4b5784');
+const VERSION = new Version('4.1.0-beta.1-c664486');
 
 /**
  * @license

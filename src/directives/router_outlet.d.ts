@@ -51,6 +51,9 @@ export declare class RouterOutlet implements OnDestroy {
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
+    readonly activeRouteData: {
+        [key: string]: any;
+    };
     detach(): ComponentRef<any>;
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
