@@ -45,7 +45,7 @@ export declare class UrlTree {
         [key: string]: string;
     };
     /** The fragment of the URL */
-    fragment: string;
+    fragment: string | null;
     readonly queryParamMap: ParamMap;
     /** @docsNotRequired */
     toString(): string;
@@ -65,7 +65,7 @@ export declare class UrlSegmentGroup {
         [key: string]: UrlSegmentGroup;
     };
     /** The parent node in the url tree */
-    parent: UrlSegmentGroup;
+    parent: UrlSegmentGroup | null;
     constructor(
         /** The URL segments of this group. See {@link UrlSegment} for more information */
         segments: UrlSegment[], 
