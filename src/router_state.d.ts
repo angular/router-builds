@@ -42,8 +42,8 @@ export declare class RouterState extends Tree<ActivatedRoute> {
     snapshot: RouterStateSnapshot;
     toString(): string;
 }
-export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any> | null): RouterState;
-export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any> | null): RouterStateSnapshot;
+export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any>): RouterState;
+export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any>): RouterStateSnapshot;
 /**
  * @whatItDoes Contains the information about a route associated with a component loaded in an
  * outlet.
@@ -79,17 +79,17 @@ export declare class ActivatedRoute {
     /** The outlet name of the route. It's a constant */
     outlet: string;
     /** The component of the route. It's a constant */
-    component: Type<any> | string | null;
+    component: Type<any> | string;
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
     /** The configuration used to match this route */
-    readonly routeConfig: Route | null;
+    readonly routeConfig: Route;
     /** The root of the router state */
     readonly root: ActivatedRoute;
     /** The parent of this route in the router state tree */
-    readonly parent: ActivatedRoute | null;
+    readonly parent: ActivatedRoute;
     /** The first child of this route in the router state tree */
-    readonly firstChild: ActivatedRoute | null;
+    readonly firstChild: ActivatedRoute;
     /** The children of this route in the router state tree */
     readonly children: ActivatedRoute[];
     /** The path from the root of the router state tree to this route */
@@ -133,15 +133,15 @@ export declare class ActivatedRouteSnapshot {
     /** The outlet name of the route */
     outlet: string;
     /** The component of the route */
-    component: Type<any> | string | null;
+    component: Type<any> | string;
     /** The configuration used to match this route */
-    readonly routeConfig: Route | null;
+    readonly routeConfig: Route;
     /** The root of the router state */
     readonly root: ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
-    readonly parent: ActivatedRouteSnapshot | null;
+    readonly parent: ActivatedRouteSnapshot;
     /** The first child of this route in the router state tree */
-    readonly firstChild: ActivatedRouteSnapshot | null;
+    readonly firstChild: ActivatedRouteSnapshot;
     /** The children of this route in the router state tree */
     readonly children: ActivatedRouteSnapshot[];
     /** The path from the root of the router state tree to this route */
