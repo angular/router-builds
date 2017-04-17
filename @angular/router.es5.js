@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-5b141fb
+ * @license Angular v4.1.0-beta.1-82417b3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5124,9 +5124,8 @@ var RouterLinkActive = (function () {
         var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
-            this.active = hasActiveLinks;
             this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, hasActiveLinks); });
-            this.cdr.detectChanges();
+            Promise.resolve(hasActiveLinks).then(function (active) { return _this.active = active; });
         }
     };
     /**
@@ -6030,7 +6029,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.1.0-beta.1-5b141fb');
+var VERSION = new Version('4.1.0-beta.1-82417b3');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
