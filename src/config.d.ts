@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModuleFactory, Type } from '@angular/core';
+import { NgModuleFactory, NgModuleRef, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
@@ -347,7 +347,9 @@ export interface Route {
     loadChildren?: LoadChildren;
     runGuardsAndResolvers?: RunGuardsAndResolvers;
 }
-export interface InternalRoute extends Route {
-    _loadedConfig?: any;
+export declare class LoadedRouterConfig {
+    routes: Route[];
+    module: NgModuleRef<any>;
+    constructor(routes: Route[], module: NgModuleRef<any>);
 }
 export declare function validateConfig(config: Routes, parentPath?: string): void;

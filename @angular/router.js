@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-6f3710e
+ * @license Angular v4.1.0-beta.1-b46aba9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -301,6 +301,119 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+class LoadedRouterConfig {
+    /**
+     * @param {?} routes
+     * @param {?} module
+     */
+    constructor(routes, module) {
+        this.routes = routes;
+        this.module = module;
+    }
+}
+/**
+ * @param {?} config
+ * @param {?=} parentPath
+ * @return {?}
+ */
+function validateConfig(config, parentPath = '') {
+    // forEach doesn't iterate undefined values
+    for (let /** @type {?} */ i = 0; i < config.length; i++) {
+        const /** @type {?} */ route = config[i];
+        const /** @type {?} */ fullPath = getFullPath(parentPath, route);
+        validateNode(route, fullPath);
+    }
+}
+/**
+ * @param {?} route
+ * @param {?} fullPath
+ * @return {?}
+ */
+function validateNode(route, fullPath) {
+    if (!route) {
+        throw new Error(`
+      Invalid configuration of route '${fullPath}': Encountered undefined route.
+      The reason might be an extra comma.
+
+      Example:
+      const routes: Routes = [
+        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+        { path: 'dashboard',  component: DashboardComponent },, << two commas
+        { path: 'detail/:id', component: HeroDetailComponent }
+      ];
+    `);
+    }
+    if (Array.isArray(route)) {
+        throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
+    }
+    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+        throw new Error(`Invalid configuration of route '${fullPath}': a componentless route cannot have a named outlet set`);
+    }
+    if (route.redirectTo && route.children) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
+    }
+    if (route.redirectTo && route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
+    }
+    if (route.children && route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
+    }
+    if (route.redirectTo && route.component) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
+    }
+    if (route.path && route.matcher) {
+        throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
+    }
+    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
+    }
+    if (route.path === void 0 && route.matcher === void 0) {
+        throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
+    }
+    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+        throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
+    }
+    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+        const /** @type {?} */ exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
+        throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
+    }
+    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
+    }
+    if (route.children) {
+        validateConfig(route.children, fullPath);
+    }
+}
+/**
+ * @param {?} parentPath
+ * @param {?} currentRoute
+ * @return {?}
+ */
+function getFullPath(parentPath, currentRoute) {
+    if (!currentRoute) {
+        return parentPath;
+    }
+    if (!parentPath && !currentRoute.path) {
+        return '';
+    }
+    else if (parentPath && !currentRoute.path) {
+        return `${parentPath}/`;
+    }
+    else if (!parentPath && currentRoute.path) {
+        return currentRoute.path;
+    }
+    else {
+        return `${parentPath}/${currentRoute.path}`;
+    }
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * @param {?} a
  * @param {?} b
@@ -416,80 +529,6 @@ function wrapIntoObservable(value) {
         return fromPromise(value);
     }
     return of(value);
-}
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * \@docsNotRequired
- * \@experimental
- */
-const ROUTES = new InjectionToken('ROUTES');
-class LoadedRouterConfig {
-    /**
-     * @param {?} routes
-     * @param {?} module
-     */
-    constructor(routes, module) {
-        this.routes = routes;
-        this.module = module;
-    }
-}
-class RouterConfigLoader {
-    /**
-     * @param {?} loader
-     * @param {?} compiler
-     * @param {?=} onLoadStartListener
-     * @param {?=} onLoadEndListener
-     */
-    constructor(loader, compiler, onLoadStartListener, onLoadEndListener) {
-        this.loader = loader;
-        this.compiler = compiler;
-        this.onLoadStartListener = onLoadStartListener;
-        this.onLoadEndListener = onLoadEndListener;
-    }
-    /**
-     * @param {?} parentInjector
-     * @param {?} route
-     * @return {?}
-     */
-    load(parentInjector, route) {
-        if (this.onLoadStartListener) {
-            this.onLoadStartListener(route);
-        }
-        const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-        return map.call(moduleFactory$, (factory) => {
-            if (this.onLoadEndListener) {
-                this.onLoadEndListener(route);
-            }
-            const /** @type {?} */ module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
-        });
-    }
-    /**
-     * @param {?} loadChildren
-     * @return {?}
-     */
-    loadModuleFactory(loadChildren) {
-        if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
-        }
-        else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), (t) => {
-                if (t instanceof NgModuleFactory) {
-                    return of(t);
-                }
-                else {
-                    return fromPromise(this.compiler.compileModuleAsync(t));
-                }
-            });
-        }
-    }
 }
 
 /**
@@ -1736,109 +1775,6 @@ function isEmptyPathRedirect(segmentGroup, segments, r) {
  */
 function getOutlet$1(route) {
     return route.outlet || PRIMARY_OUTLET;
-}
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @param {?} config
- * @param {?=} parentPath
- * @return {?}
- */
-function validateConfig(config, parentPath = '') {
-    // forEach doesn't iterate undefined values
-    for (let /** @type {?} */ i = 0; i < config.length; i++) {
-        const /** @type {?} */ route = config[i];
-        const /** @type {?} */ fullPath = getFullPath(parentPath, route);
-        validateNode(route, fullPath);
-    }
-}
-/**
- * @param {?} route
- * @param {?} fullPath
- * @return {?}
- */
-function validateNode(route, fullPath) {
-    if (!route) {
-        throw new Error(`
-      Invalid configuration of route '${fullPath}': Encountered undefined route.
-      The reason might be an extra comma.
-
-      Example:
-      const routes: Routes = [
-        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        { path: 'dashboard',  component: DashboardComponent },, << two commas
-        { path: 'detail/:id', component: HeroDetailComponent }
-      ];
-    `);
-    }
-    if (Array.isArray(route)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
-    }
-    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': a componentless route cannot have a named outlet set`);
-    }
-    if (route.redirectTo && route.children) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
-    }
-    if (route.redirectTo && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
-    }
-    if (route.children && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
-    }
-    if (route.redirectTo && route.component) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
-    }
-    if (route.path && route.matcher) {
-        throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-        throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-        throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        const /** @type {?} */ exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
-        throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
-    }
-    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
-    }
-    if (route.children) {
-        validateConfig(route.children, fullPath);
-    }
-}
-/**
- * @param {?} parentPath
- * @param {?} currentRoute
- * @return {?}
- */
-function getFullPath(parentPath, currentRoute) {
-    if (!currentRoute) {
-        return parentPath;
-    }
-    if (!parentPath && !currentRoute.path) {
-        return '';
-    }
-    else if (parentPath && !currentRoute.path) {
-        return `${parentPath}/`;
-    }
-    else if (!parentPath && currentRoute.path) {
-        return currentRoute.path;
-    }
-    else {
-        return `${parentPath}/${currentRoute.path}`;
-    }
 }
 
 /**
@@ -3195,6 +3131,70 @@ function getData(route) {
  */
 function getResolve(route) {
     return route.resolve || {};
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * \@docsNotRequired
+ * \@experimental
+ */
+const ROUTES = new InjectionToken('ROUTES');
+class RouterConfigLoader {
+    /**
+     * @param {?} loader
+     * @param {?} compiler
+     * @param {?=} onLoadStartListener
+     * @param {?=} onLoadEndListener
+     */
+    constructor(loader, compiler, onLoadStartListener, onLoadEndListener) {
+        this.loader = loader;
+        this.compiler = compiler;
+        this.onLoadStartListener = onLoadStartListener;
+        this.onLoadEndListener = onLoadEndListener;
+    }
+    /**
+     * @param {?} parentInjector
+     * @param {?} route
+     * @return {?}
+     */
+    load(parentInjector, route) {
+        if (this.onLoadStartListener) {
+            this.onLoadStartListener(route);
+        }
+        const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(route.loadChildren);
+        return map.call(moduleFactory$, (factory) => {
+            if (this.onLoadEndListener) {
+                this.onLoadEndListener(route);
+            }
+            const /** @type {?} */ module = factory.create(parentInjector);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
+        });
+    }
+    /**
+     * @param {?} loadChildren
+     * @return {?}
+     */
+    loadModuleFactory(loadChildren) {
+        if (typeof loadChildren === 'string') {
+            return fromPromise(this.loader.load(loadChildren));
+        }
+        else {
+            return mergeMap.call(wrapIntoObservable(loadChildren()), (t) => {
+                if (t instanceof NgModuleFactory) {
+                    return of(t);
+                }
+                else {
+                    return fromPromise(this.compiler.compileModuleAsync(t));
+                }
+            });
+        }
+    }
 }
 
 /**
@@ -4894,9 +4894,8 @@ class RouterLinkActive {
         const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
-            this.active = hasActiveLinks;
             this.classes.forEach(c => this.renderer.setElementClass(this.element.nativeElement, c, hasActiveLinks));
-            this.cdr.detectChanges();
+            Promise.resolve(hasActiveLinks).then(active => this.active = active);
         }
     }
     /**
@@ -5021,11 +5020,7 @@ class RouterOutlet {
      * @return {?}
      */
     get activeRouteData() {
-        let /** @type {?} */ data;
-        if (this.activated) {
-            data = this._activatedRoute.snapshot.data;
-        }
-        return data || {};
+        return this.activated ? this._activatedRoute.snapshot.data : {};
     }
     /**
      * @return {?}
@@ -5295,8 +5290,8 @@ class RouterPreloader {
      * @return {?}
      */
     setUpPreloading() {
-        const /** @type {?} */ navigations = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
-        this.subscription = concatMap.call(navigations, () => this.preload()).subscribe(() => { });
+        const /** @type {?} */ navigations$ = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
+        this.subscription = concatMap.call(navigations$, () => this.preload()).subscribe(() => { });
     }
     /**
      * @return {?}
@@ -5316,8 +5311,7 @@ class RouterPreloader {
      */
     processRoutes(ngModule, routes) {
         const /** @type {?} */ res = [];
-        for (const /** @type {?} */ r of routes) {
-            const /** @type {?} */ route = r;
+        for (const /** @type {?} */ route of routes) {
             // we already have the config loaded, just recurse
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 const /** @type {?} */ childConfig = route._loadedConfig;
@@ -5339,8 +5333,8 @@ class RouterPreloader {
      */
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const /** @type {?} */ loaded = this.loader.load(ngModule.injector, route);
-            return mergeMap.call(loaded, (config) => {
+            const /** @type {?} */ loaded$ = this.loader.load(ngModule.injector, route);
+            return mergeMap.call(loaded$, (config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
             });
@@ -5770,7 +5764,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-beta.1-6f3710e');
+const VERSION = new Version('4.1.0-beta.1-b46aba9');
 
 /**
  * @license

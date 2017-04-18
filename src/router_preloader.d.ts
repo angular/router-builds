@@ -5,7 +5,7 @@
 *Use of this source code is governed by an MIT-style license that can be
 *found in the LICENSE file at https://angular.io/license
 */
-import { Compiler, Injector, NgModuleFactoryLoader } from '@angular/core';
+import { Compiler, Injector, NgModuleFactoryLoader, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Route } from './config';
 import { Router } from './router';
@@ -55,7 +55,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  *
  * @stable
  */
-export declare class RouterPreloader {
+export declare class RouterPreloader implements OnDestroy {
     private router;
     private injector;
     private preloadingStrategy;
