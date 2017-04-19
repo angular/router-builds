@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-beta.1-9d40ab9
+ * @license Angular v4.1.0-beta.1-648de7d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -6030,7 +6030,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.1.0-beta.1-9d40ab9');
+var VERSION = new Version('4.1.0-beta.1-648de7d');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
