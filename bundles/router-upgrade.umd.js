@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-beta.1-70384db
+ * @license Angular v4.1.0-rc.0-46b20be
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -9,7 +9,7 @@
 }(this, (function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
 /**
- * @license Angular v4.1.0-beta.1-70384db
+ * @license Angular v4.1.0-rc.0-46b20be
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -71,7 +71,7 @@ function setUpLocationSync(ngUpgrade) {
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router.navigateByUrl(url.pathname);
+        router.navigateByUrl(url.pathname + url.search);
     });
 }
 
