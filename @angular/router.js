@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5011,17 +5011,7 @@ class RouterOutlet {
     /**
      * @return {?}
      */
-    get activatedRoute() {
-        if (!this.activated)
-            throw new Error('Outlet is not activated');
-        return this._activatedRoute;
-    }
-    /**
-     * @return {?}
-     */
-    get activeRouteData() {
-        return this.activated ? this._activatedRoute.snapshot.data : {};
-    }
+    get activatedRoute() { return this._activatedRoute; }
     /**
      * @return {?}
      */
@@ -5076,7 +5066,7 @@ class RouterOutlet {
         const /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         const /** @type {?} */ inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
-        this.activated.changeDetectorRef.detectChanges();
+        // this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     }
     /**
@@ -5097,7 +5087,7 @@ class RouterOutlet {
         const /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         const /** @type {?} */ injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
         this.activated = this.location.createComponent(factory, this.location.length, injector, []);
-        this.activated.changeDetectorRef.detectChanges();
+        // this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     }
 }
@@ -5764,7 +5754,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-rc.0-46b20be');
+const VERSION = new Version('4.1.0-ed4eaf3');
 
 /**
  * @license

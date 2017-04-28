@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-rc.0-46b20be
+ * @license Angular v4.1.0-ed4eaf3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -5249,21 +5249,7 @@ var RouterOutlet = (function () {
         /**
          * @return {?}
          */
-        get: function () {
-            if (!this.activated)
-                throw new Error('Outlet is not activated');
-            return this._activatedRoute;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "activeRouteData", {
-        /**
-         * @return {?}
-         */
-        get: function () {
-            return this.activated ? this._activatedRoute.snapshot.data : {};
-        },
+        get: function () { return this._activatedRoute; },
         enumerable: true,
         configurable: true
     });
@@ -5321,7 +5307,7 @@ var RouterOutlet = (function () {
         var /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         var /** @type {?} */ inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
-        this.activated.changeDetectorRef.detectChanges();
+        // this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     };
     /**
@@ -5342,7 +5328,7 @@ var RouterOutlet = (function () {
         var /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         var /** @type {?} */ injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
         this.activated = this.location.createComponent(factory, this.location.length, injector, []);
-        this.activated.changeDetectorRef.detectChanges();
+        // this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     };
     return RouterOutlet;
@@ -6029,7 +6015,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.1.0-rc.0-46b20be');
+var VERSION = new _angular_core.Version('4.1.0-ed4eaf3');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
