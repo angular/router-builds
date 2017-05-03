@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-5ba8c14
+ * @license Angular v4.1.0-71f5b73
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5051,7 +5051,7 @@ class RouterOutlet {
         }
     }
     /**
-     * @deprecated since v4, use {\@link activateWith}
+     * @deprecated since v4, use {\@link #activateWith}
      * @param {?} activatedRoute
      * @param {?} resolver
      * @param {?} injector
@@ -5758,7 +5758,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-5ba8c14');
+const VERSION = new Version('4.1.0-71f5b73');
 
 /**
  * @license

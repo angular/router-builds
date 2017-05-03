@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.1.0-5ba8c14
+ * @license Angular v4.1.0-71f5b73
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5303,7 +5303,7 @@ var RouterOutlet = (function () {
         }
     };
     /**
-     * @deprecated since v4, use {\@link activateWith}
+     * @deprecated since v4, use {\@link #activateWith}
      * @param {?} activatedRoute
      * @param {?} resolver
      * @param {?} injector
@@ -6030,7 +6030,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.1.0-5ba8c14');
+var VERSION = new Version('4.1.0-71f5b73');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
