@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.1.0-a619991
+ * @license Angular v4.2.0-beta.0-61c2f47
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5015,6 +5015,15 @@ class RouterOutlet {
     /**
      * @return {?}
      */
+    get activatedRouteData() {
+        if (this._activatedRoute) {
+            return this._activatedRoute.snapshot.data;
+        }
+        return {};
+    }
+    /**
+     * @return {?}
+     */
     detach() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
@@ -5047,7 +5056,7 @@ class RouterOutlet {
         }
     }
     /**
-     * @deprecated since v4, use {\@link activateWith}
+     * @deprecated since v4, use {\@link #activateWith}
      * @param {?} activatedRoute
      * @param {?} resolver
      * @param {?} injector
@@ -5066,7 +5075,7 @@ class RouterOutlet {
         const /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         const /** @type {?} */ inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
         this.activated = this.location.createComponent(factory, this.location.length, inj, []);
-        // this.activated.changeDetectorRef.detectChanges();
+        //this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     }
     /**
@@ -5087,7 +5096,7 @@ class RouterOutlet {
         const /** @type {?} */ factory = ((resolver.resolveComponentFactory(component)));
         const /** @type {?} */ injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
         this.activated = this.location.createComponent(factory, this.location.length, injector, []);
-        // this.activated.changeDetectorRef.detectChanges();
+        //this.activated.changeDetectorRef.detectChanges();
         this.activateEvents.emit(this.activated.instance);
     }
 }
@@ -5754,7 +5763,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.1.0-a619991');
+const VERSION = new Version('4.2.0-beta.0-61c2f47');
 
 /**
  * @license
