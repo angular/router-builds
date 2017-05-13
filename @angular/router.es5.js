@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.2.0-beta.1-38c524d
+ * @license Angular v4.2.0-beta.1-4a599ee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -531,10 +531,7 @@ function wrapIntoObservable(value) {
         return value;
     }
     if (ɵisPromise(value)) {
-        // Use `Promise.resolve()` to wrap promise-like instances.
-        // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
-        // change detection.
-        return fromPromise(Promise.resolve(value));
+        return fromPromise(value);
     }
     return of(value);
 }
@@ -6040,7 +6037,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.2.0-beta.1-38c524d');
+var VERSION = new Version('4.2.0-beta.1-4a599ee');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

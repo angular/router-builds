@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-38c524d
+ * @license Angular v4.2.0-beta.1-4a599ee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -526,10 +526,7 @@ function wrapIntoObservable(value) {
         return value;
     }
     if (ɵisPromise(value)) {
-        // Use `Promise.resolve()` to wrap promise-like instances.
-        // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
-        // change detection.
-        return fromPromise(Promise.resolve(value));
+        return fromPromise(value);
     }
     return of(value);
 }
@@ -5768,7 +5765,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.2.0-beta.1-38c524d');
+const VERSION = new Version('4.2.0-beta.1-4a599ee');
 
 /**
  * @license

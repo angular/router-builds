@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-38c524d
+ * @license Angular v4.2.0-beta.1-4a599ee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -14,7 +14,7 @@ var __extends = (undefined && undefined.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
- * @license Angular v4.2.0-beta.1-38c524d
+ * @license Angular v4.2.0-beta.1-4a599ee
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -520,10 +520,7 @@ function wrapIntoObservable(value) {
         return value;
     }
     if (_angular_core.ɵisPromise(value)) {
-        // Use `Promise.resolve()` to wrap promise-like instances.
-        // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
-        // change detection.
-        return rxjs_observable_fromPromise.fromPromise(Promise.resolve(value));
+        return rxjs_observable_fromPromise.fromPromise(value);
     }
     return rxjs_observable_of.of(value);
 }
@@ -6029,7 +6026,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.2.0-beta.1-38c524d');
+var VERSION = new _angular_core.Version('4.2.0-beta.1-4a599ee');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
