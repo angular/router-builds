@@ -1,10 +1,15 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 /**
- * @license Angular v4.2.0-beta.1-af99cf2
+ * @license Angular v4.2.0-beta.1-9a7f5d5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -721,7 +726,9 @@ var UrlSegmentGroup = (function () {
         var _this = this;
         this.segments = segments;
         this.children = children;
-        /** The parent node in the url tree */
+        /**
+         * The parent node in the url tree
+         */
         this.parent = null;
         forEach(children, function (v, k) { return v.parent = _this; });
     }
@@ -1224,15 +1231,6 @@ var UrlParser = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$1 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 var NoMatch = (function () {
     /**
      * @param {?=} segmentGroup
@@ -1777,7 +1775,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
             res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
         }
     }
-    return __assign$1({}, children, res);
+    return Object.assign({}, children, res);
 }
 /**
  * @param {?} routes
@@ -1960,15 +1958,6 @@ var TreeNode = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$2 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 /**
  * \@whatItDoes Represents the state of the router.
  *
@@ -2189,6 +2178,7 @@ function inheritedParamsDataResolve(route) {
         // current route is an empty path => inherits its parent's params and data
         if (current.routeConfig && current.routeConfig.path === '') {
             inhertingStartingFrom--;
+            // parent is componentless => current route should inherit its params and data
         }
         else if (!parent.component) {
             inhertingStartingFrom--;
@@ -2198,9 +2188,9 @@ function inheritedParamsDataResolve(route) {
         }
     }
     return pathToRoot.slice(inhertingStartingFrom).reduce(function (res, curr) {
-        var /** @type {?} */ params = __assign$2({}, res.params, curr.params);
-        var /** @type {?} */ data = __assign$2({}, res.data, curr.data);
-        var /** @type {?} */ resolve = __assign$2({}, res.resolve, curr._resolvedData);
+        var /** @type {?} */ params = Object.assign({}, res.params, curr.params);
+        var /** @type {?} */ data = Object.assign({}, res.data, curr.data);
+        var /** @type {?} */ resolve = Object.assign({}, res.resolve, curr._resolvedData);
         return { params: params, data: data, resolve: resolve };
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
@@ -2479,6 +2469,7 @@ function createNode(routeReuseStrategy, curr, prevState) {
         value._futureSnapshot = curr.value;
         var /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
         return new TreeNode(value, children);
+        // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
     else if (routeReuseStrategy.retrieve(curr.value)) {
         var /** @type {?} */ tree_1 = ((routeReuseStrategy.retrieve(curr.value))).route;
@@ -2662,6 +2653,7 @@ function computeNavigation(commands) {
         if (cmdIdx === 0) {
             cmd.split('/').forEach(function (urlPart, partIndex) {
                 if (partIndex == 0 && urlPart === '.') {
+                    // skip './a'
                 }
                 else if (partIndex == 0 && urlPart === '') {
                     isAbsolute = true;
@@ -2915,15 +2907,6 @@ function compare(path, params, segment) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$3 = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 var NoMatch$1 = (function () {
     function NoMatch$1() {
     }
@@ -3116,7 +3099,7 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     var /** @type {?} */ posParams = {};
     forEach(/** @type {?} */ ((res.posParams)), function (v, k) { posParams[k] = v.path; });
-    var /** @type {?} */ parameters = __assign$3({}, posParams, res.consumed[res.consumed.length - 1].parameters);
+    var /** @type {?} */ parameters = Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters);
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
 }
 /**
@@ -3204,7 +3187,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
             res[getOutlet$2(r)] = s;
         }
     }
-    return __assign$3({}, children, res);
+    return Object.assign({}, children, res);
 }
 /**
  * @param {?} segmentGroup
@@ -3457,15 +3440,6 @@ var DefaultUrlHandlingStrategy = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign = (undefined && undefined.__assign) || Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-    }
-    return t;
-};
 /**
  * @param {?} error
  * @return {?}
@@ -3551,7 +3525,7 @@ var Router = (function () {
         /**
          * Error handler that is invoked when a navigation errors.
          *
-         * See {@link ErrorHandler} for more information.
+         * See {\@link ErrorHandler} for more information.
          */
         this.errorHandler = defaultErrorHandler;
         /**
@@ -3743,7 +3717,7 @@ var Router = (function () {
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
-                    q = __assign({}, this.currentUrlTree.queryParams, queryParams);
+                    q = Object.assign({}, this.currentUrlTree.queryParams, queryParams);
                     break;
                 case 'preserve':
                     q = this.currentUrlTree.queryParams;
@@ -3925,6 +3899,8 @@ var Router = (function () {
             Promise.resolve()
                 .then(function (_) { return _this.runNavigate(url, rawUrl, !!extras.skipLocationChange, !!extras.replaceUrl, id, null); })
                 .then(resolve, reject);
+            // we cannot process the current URL, but we could process the previous one =>
+            // we need to do some cleanup
         }
         else if (urlTransition && this.rawUrlTree &&
             this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
@@ -4201,6 +4177,7 @@ var PreActivation = (function () {
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
@@ -4214,6 +4191,7 @@ var PreActivation = (function () {
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
@@ -4376,7 +4354,7 @@ var PreActivation = (function () {
         var /** @type {?} */ resolve = future._resolve;
         return map.call(this.resolveNode(resolve, future), function (resolvedData) {
             future._resolvedData = resolvedData;
-            future.data = __assign({}, future.data, inheritedParamsDataResolve(future).resolve);
+            future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future).resolve);
             return null;
         });
     };
@@ -4468,6 +4446,7 @@ var ActivateRoutes = (function () {
             if (future.component) {
                 var /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
                 this.deactivateChildRoutes(futureNode, currNode, outlet.outletMap);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.deactivateChildRoutes(futureNode, currNode, parentOutletMap);
@@ -4496,6 +4475,7 @@ var ActivateRoutes = (function () {
             if (future.component) {
                 var /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
                 this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.activateChildRoutes(futureNode, currNode, parentOutletMap);
@@ -4518,6 +4498,7 @@ var ActivateRoutes = (function () {
                     this.placeComponentIntoOutlet(outletMap, future, outlet);
                     this.activateChildRoutes(futureNode, null, outletMap);
                 }
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 advanceActivatedRoute(future);
@@ -5586,9 +5567,11 @@ var RouterPreloader = (function () {
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 var /** @type {?} */ childConfig = route._loadedConfig;
                 res.push(this.processRoutes(childConfig.module, childConfig.routes));
+                // no config loaded, fetch the config
             }
             else if (route.loadChildren && !route.canLoad) {
                 res.push(this.preloadConfig(ngModule, route));
+                // recurse into children
             }
             else if (route.children) {
                 res.push(this.processRoutes(ngModule, route.children));
@@ -5927,6 +5910,7 @@ var RouterInitializer = (function () {
                         _this.initNavigation = true;
                         resolve(true);
                         return _this.resultOfPreactivationDone;
+                        // subsequent navigations should not be delayed
                     }
                     else {
                         return (of(null));
@@ -6040,7 +6024,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.2.0-beta.1-af99cf2');
+var VERSION = new Version('4.2.0-beta.1-9a7f5d5');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

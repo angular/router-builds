@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-af99cf2
+ * @license Angular v4.2.0-beta.1-9a7f5d5
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -711,7 +711,9 @@ class UrlSegmentGroup {
     constructor(segments, children) {
         this.segments = segments;
         this.children = children;
-        /** The parent node in the url tree */
+        /**
+         * The parent node in the url tree
+         */
         this.parent = null;
         forEach(children, (v, k) => v.parent = this);
     }
@@ -1198,14 +1200,6 @@ class UrlParser {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$1 = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 class NoMatch {
     /**
      * @param {?=} segmentGroup
@@ -1732,7 +1726,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
             res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
         }
     }
-    return __assign$1({}, children, res);
+    return Object.assign({}, children, res);
 }
 /**
  * @param {?} routes
@@ -1906,14 +1900,6 @@ class TreeNode {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$2 = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 /**
  * \@whatItDoes Represents the state of the router.
  *
@@ -2098,6 +2084,7 @@ function inheritedParamsDataResolve(route) {
         // current route is an empty path => inherits its parent's params and data
         if (current.routeConfig && current.routeConfig.path === '') {
             inhertingStartingFrom--;
+            // parent is componentless => current route should inherit its params and data
         }
         else if (!parent.component) {
             inhertingStartingFrom--;
@@ -2107,9 +2094,9 @@ function inheritedParamsDataResolve(route) {
         }
     }
     return pathToRoot.slice(inhertingStartingFrom).reduce((res, curr) => {
-        const /** @type {?} */ params = __assign$2({}, res.params, curr.params);
-        const /** @type {?} */ data = __assign$2({}, res.data, curr.data);
-        const /** @type {?} */ resolve = __assign$2({}, res.resolve, curr._resolvedData);
+        const /** @type {?} */ params = Object.assign({}, res.params, curr.params);
+        const /** @type {?} */ data = Object.assign({}, res.data, curr.data);
+        const /** @type {?} */ resolve = Object.assign({}, res.resolve, curr._resolvedData);
         return { params, data, resolve };
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
@@ -2353,6 +2340,7 @@ function createNode(routeReuseStrategy, curr, prevState) {
         value._futureSnapshot = curr.value;
         const /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
         return new TreeNode(value, children);
+        // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
     else if (routeReuseStrategy.retrieve(curr.value)) {
         const /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
@@ -2535,6 +2523,7 @@ function computeNavigation(commands) {
         if (cmdIdx === 0) {
             cmd.split('/').forEach((urlPart, partIndex) => {
                 if (partIndex == 0 && urlPart === '.') {
+                    // skip './a'
                 }
                 else if (partIndex == 0 && urlPart === '') {
                     isAbsolute = true;
@@ -2787,14 +2776,6 @@ function compare(path, params, segment) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign$3 = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 class NoMatch$1 {
 }
 /**
@@ -2980,7 +2961,7 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     const /** @type {?} */ posParams = {};
     forEach(/** @type {?} */ ((res.posParams)), (v, k) => { posParams[k] = v.path; });
-    const /** @type {?} */ parameters = __assign$3({}, posParams, res.consumed[res.consumed.length - 1].parameters);
+    const /** @type {?} */ parameters = Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters);
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters };
 }
 /**
@@ -3067,7 +3048,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
             res[getOutlet$2(r)] = s;
         }
     }
-    return __assign$3({}, children, res);
+    return Object.assign({}, children, res);
 }
 /**
  * @param {?} segmentGroup
@@ -3313,14 +3294,6 @@ class DefaultUrlHandlingStrategy {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 /**
  * @param {?} error
  * @return {?}
@@ -3402,7 +3375,7 @@ class Router {
         /**
          * Error handler that is invoked when a navigation errors.
          *
-         * See {@link ErrorHandler} for more information.
+         * See {\@link ErrorHandler} for more information.
          */
         this.errorHandler = defaultErrorHandler;
         /**
@@ -3580,7 +3553,7 @@ class Router {
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
-                    q = __assign({}, this.currentUrlTree.queryParams, queryParams);
+                    q = Object.assign({}, this.currentUrlTree.queryParams, queryParams);
                     break;
                 case 'preserve':
                     q = this.currentUrlTree.queryParams;
@@ -3757,6 +3730,8 @@ class Router {
             Promise.resolve()
                 .then((_) => this.runNavigate(url, rawUrl, !!extras.skipLocationChange, !!extras.replaceUrl, id, null))
                 .then(resolve, reject);
+            // we cannot process the current URL, but we could process the previous one =>
+            // we need to do some cleanup
         }
         else if (urlTransition && this.rawUrlTree &&
             this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
@@ -4018,6 +3993,7 @@ class PreActivation {
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
@@ -4031,6 +4007,7 @@ class PreActivation {
             // If we have a component, we need to go through an outlet.
             if (future.component) {
                 this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
@@ -4187,7 +4164,7 @@ class PreActivation {
         const /** @type {?} */ resolve = future._resolve;
         return map.call(this.resolveNode(resolve, future), (resolvedData) => {
             future._resolvedData = resolvedData;
-            future.data = __assign({}, future.data, inheritedParamsDataResolve(future).resolve);
+            future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future).resolve);
             return null;
         });
     }
@@ -4275,6 +4252,7 @@ class ActivateRoutes {
             if (future.component) {
                 const /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
                 this.deactivateChildRoutes(futureNode, currNode, outlet.outletMap);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.deactivateChildRoutes(futureNode, currNode, parentOutletMap);
@@ -4303,6 +4281,7 @@ class ActivateRoutes {
             if (future.component) {
                 const /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
                 this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 this.activateChildRoutes(futureNode, currNode, parentOutletMap);
@@ -4325,6 +4304,7 @@ class ActivateRoutes {
                     this.placeComponentIntoOutlet(outletMap, future, outlet);
                     this.activateChildRoutes(futureNode, null, outletMap);
                 }
+                // if we have a componentless route, we recurse but keep the same outlet map.
             }
             else {
                 advanceActivatedRoute(future);
@@ -5320,9 +5300,11 @@ class RouterPreloader {
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
                 const /** @type {?} */ childConfig = route._loadedConfig;
                 res.push(this.processRoutes(childConfig.module, childConfig.routes));
+                // no config loaded, fetch the config
             }
             else if (route.loadChildren && !route.canLoad) {
                 res.push(this.preloadConfig(ngModule, route));
+                // recurse into children
             }
             else if (route.children) {
                 res.push(this.processRoutes(ngModule, route.children));
@@ -5655,6 +5637,7 @@ class RouterInitializer {
                         this.initNavigation = true;
                         resolve(true);
                         return this.resultOfPreactivationDone;
+                        // subsequent navigations should not be delayed
                     }
                     else {
                         return (of(null));
@@ -5768,7 +5751,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.2.0-beta.1-af99cf2');
+const VERSION = new Version('4.2.0-beta.1-9a7f5d5');
 
 /**
  * @license
