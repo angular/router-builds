@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-6531806
+ * @license Angular v4.2.0-beta.1-86b7bd9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -9,7 +9,7 @@
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v4.2.0-beta.1-6531806
+ * @license Angular v4.2.0-beta.1-86b7bd9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -97,8 +97,8 @@ SpyNgModuleFactoryLoader.ctorParameters = function () { return [
  *
  * @stable
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
-    var router = new _angular_router.Router(null, urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
+function setupTestingRouter(urlSerializer, outletMap, location, loader, compiler, injector, routes, urlHandlingStrategy) {
+    var router = new _angular_router.Router(null, urlSerializer, outletMap, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -147,8 +147,8 @@ RouterTestingModule.decorators = [
                         provide: _angular_router.Router,
                         useFactory: setupTestingRouter,
                         deps: [
-                            _angular_router.UrlSerializer, _angular_router.ChildrenOutletContexts, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector,
-                            _angular_router.ROUTES, [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
+                            _angular_router.UrlSerializer, _angular_router.RouterOutletMap, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector, _angular_router.ROUTES,
+                            [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
                         ]
                     },
                     { provide: _angular_router.PreloadingStrategy, useExisting: _angular_router.NoPreloading }, _angular_router.provideRoutes([])

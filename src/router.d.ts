@@ -10,9 +10,9 @@ import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { QueryParamsHandling, Routes } from './config';
 import { Event } from './events';
-import { RouteReuseStrategy } from './route_reuse_strategy';
-import { ChildrenOutletContexts } from './router_outlet_context';
-import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
+import { DetachedRouteHandle, RouteReuseStrategy } from './route_reuse_strategy';
+import { RouterOutletMap } from './router_outlet_map';
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
@@ -135,6 +135,16 @@ export interface NavigationExtras {
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
+ * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ */
+export declare class DefaultRouteReuseStrategy implements RouteReuseStrategy {
+    shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
+    shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+}
+/**
  * @whatItDoes Provides the navigation and url manipulation capabilities.
  *
  * See {@link Routes} for more details and examples.
@@ -146,7 +156,7 @@ export declare type ErrorHandler = (error: any) => any;
 export declare class Router {
     private rootComponentType;
     private urlSerializer;
-    private rootContexts;
+    private outletMap;
     private location;
     config: Routes;
     private currentUrlTree;
@@ -176,7 +186,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
@@ -315,13 +325,13 @@ export declare class PreActivation {
     private canActivateChecks;
     private canDeactivateChecks;
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector);
-    traverse(parentContexts: ChildrenOutletContexts): void;
+    traverse(parentOutletMap: RouterOutletMap): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;
-    private traverseChildRoutes(futureNode, currNode, contexts, futurePath);
-    private traverseRoutes(futureNode, currNode, parentContexts, futurePath);
+    private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
+    private traverseRoutes(futureNode, currNode, parentOutletMap, futurePath);
     private shouldRunGuardsAndResolvers(curr, future, mode);
-    private deactivateRouteAndItsChildren(route, context);
+    private deactiveRouteAndItsChildren(route, outlet);
     private runCanDeactivateChecks();
     private runCanActivateChecks();
     private runCanActivate(future);

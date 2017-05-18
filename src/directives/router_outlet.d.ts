@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ComponentRef, EventEmitter, Injector, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { ChildrenOutletContexts } from '../router_outlet_context';
+import { ComponentFactoryResolver, ComponentRef, EventEmitter, Injector, OnDestroy, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
+import { RouterOutletMap } from '../router_outlet_map';
 import { ActivatedRoute } from '../router_state';
 /**
  * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
@@ -32,18 +32,18 @@ import { ActivatedRoute } from '../router_state';
  *
  * @stable
  */
-export declare class RouterOutlet implements OnDestroy, OnInit {
-    private parentContexts;
+export declare class RouterOutlet implements OnDestroy {
+    private parentOutletMap;
     private location;
     private resolver;
+    private name;
     private activated;
     private _activatedRoute;
-    private name;
+    outletMap: RouterOutletMap;
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
-    constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
+    constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
     ngOnDestroy(): void;
-    ngOnInit(): void;
     /** @deprecated since v4 **/
     readonly locationInjector: Injector;
     /** @deprecated since v4 **/
@@ -51,14 +51,10 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to detach the subtree
-     */
     detach(): ComponentRef<any>;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
-     */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
-    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+    /** @deprecated since v4, use {@link #activateWith} */
+    activate(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver, injector: Injector, providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void;
+    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null, outletMap: RouterOutletMap): void;
 }
