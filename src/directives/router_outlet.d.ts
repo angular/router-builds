@@ -52,6 +52,9 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
+    readonly activatedRouteData: {
+        [name: string]: any;
+    };
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      */

@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-b10029c
+ * @license Angular v4.2.0-beta.1-f1a9e3c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -19,7 +19,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-beta.1-b10029c
+ * @license Angular v4.2.0-beta.1-f1a9e3c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -5367,6 +5367,19 @@ var RouterOutlet = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRouteData", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (this._activatedRoute) {
+                return this._activatedRoute.snapshot.data;
+            }
+            return {};
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      * @return {?}
@@ -5428,7 +5441,7 @@ var RouterOutlet = (function () {
     return RouterOutlet;
 }());
 RouterOutlet.decorators = [
-    { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+    { type: _angular_core.Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
 ];
 /**
  * @nocollapse
@@ -6058,7 +6071,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.2.0-beta.1-b10029c');
+var VERSION = new _angular_core.Version('4.2.0-beta.1-f1a9e3c');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

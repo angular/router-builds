@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-beta.1-b10029c
+ * @license Angular v4.2.0-beta.1-f1a9e3c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5123,6 +5123,15 @@ class RouterOutlet {
         return (this._activatedRoute);
     }
     /**
+     * @return {?}
+     */
+    get activatedRouteData() {
+        if (this._activatedRoute) {
+            return this._activatedRoute.snapshot.data;
+        }
+        return {};
+    }
+    /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      * @return {?}
      */
@@ -5182,7 +5191,7 @@ class RouterOutlet {
     }
 }
 RouterOutlet.decorators = [
-    { type: Directive, args: [{ selector: 'router-outlet' },] },
+    { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
 ];
 /**
  * @nocollapse
@@ -5795,7 +5804,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.2.0-beta.1-b10029c');
+const VERSION = new Version('4.2.0-beta.1-f1a9e3c');
 
 /**
  * @license

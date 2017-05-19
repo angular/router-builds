@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-beta.1-b10029c
+ * @license Angular v4.2.0-beta.1-f1a9e3c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -5378,6 +5378,19 @@ var RouterOutlet = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRouteData", {
+        /**
+         * @return {?}
+         */
+        get: function () {
+            if (this._activatedRoute) {
+                return this._activatedRoute.snapshot.data;
+            }
+            return {};
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      * @return {?}
@@ -5439,7 +5452,7 @@ var RouterOutlet = (function () {
     return RouterOutlet;
 }());
 RouterOutlet.decorators = [
-    { type: Directive, args: [{ selector: 'router-outlet' },] },
+    { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
 ];
 /**
  * @nocollapse
@@ -6069,7 +6082,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.2.0-beta.1-b10029c');
+var VERSION = new Version('4.2.0-beta.1-f1a9e3c');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
