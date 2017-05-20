@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.0-3d382dc
+ * @license Angular v4.2.0-rc.0-c8b08f3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */(function (global, factory) {
@@ -19,7 +19,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-rc.0-3d382dc
+ * @license Angular v4.2.0-rc.0-c8b08f3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ /**
@@ -6071,7 +6071,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.2.0-rc.0-3d382dc');
+var VERSION = new _angular_core.Version('4.2.0-rc.0-c8b08f3');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

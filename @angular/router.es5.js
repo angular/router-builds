@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * @license Angular v4.2.0-rc.0-3d382dc
+ * @license Angular v4.2.0-rc.0-c8b08f3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -6082,7 +6082,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.2.0-rc.0-3d382dc');
+var VERSION = new Version('4.2.0-rc.0-c8b08f3');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
