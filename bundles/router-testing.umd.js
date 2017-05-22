@@ -1,18 +1,20 @@
 /**
- * @license Angular v4.2.0-rc.0-ce18fdb
+ * @license Angular v4.2.0-rc.0-afd703d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
- */(function (global, factory) {
+ */
+(function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = global.ng.router.testing || {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v4.2.0-rc.0-ce18fdb
+ * @license Angular v4.2.0-rc.0-afd703d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
- */ /**
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
