@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/angular/angular/blob/master/modules/%40angular/router/README.md",
   "peerDependencies": {
-    "@angular/core": "4.2.0-rc.0-11c10b2",
-    "@angular/common": "4.2.0-rc.0-11c10b2",
-    "@angular/platform-browser": "4.2.0-rc.0-11c10b2",
+    "@angular/core": "4.2.0-rc.0-6e41add",
+    "@angular/common": "4.2.0-rc.0-6e41add",
+    "@angular/platform-browser": "4.2.0-rc.0-6e41add",
     "rxjs": "^5.0.1"
   }
 }
