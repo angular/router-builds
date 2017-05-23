@@ -24,9 +24,9 @@
     "tslib": "^1.7.1"
   },
   "peerDependencies": {
-    "@angular/core": "4.2.0-rc.0-fa809ec",
-    "@angular/common": "4.2.0-rc.0-fa809ec",
-    "@angular/platform-browser": "4.2.0-rc.0-fa809ec",
+    "@angular/core": "4.2.0-rc.0-eba59aa",
+    "@angular/common": "4.2.0-rc.0-eba59aa",
+    "@angular/platform-browser": "4.2.0-rc.0-eba59aa",
     "rxjs": "^5.0.1"
   }
 }
