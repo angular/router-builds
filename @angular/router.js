@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.2-d5ce086
+ * @license Angular v4.2.0-rc.2-4c32cb9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4693,10 +4693,11 @@ class RouterLinkWithHref {
      * @param {?} button
      * @param {?} ctrlKey
      * @param {?} metaKey
+     * @param {?} shiftKey
      * @return {?}
      */
-    onClick(button, ctrlKey, metaKey) {
-        if (button !== 0 || ctrlKey || metaKey) {
+    onClick(button, ctrlKey, metaKey, shiftKey) {
+        if (button !== 0 || ctrlKey || metaKey || shiftKey) {
             return true;
         }
         if (typeof this.target === 'string' && this.target != '_self') {
@@ -4751,7 +4752,7 @@ RouterLinkWithHref.propDecorators = {
     'href': [{ type: HostBinding },],
     'routerLink': [{ type: Input },],
     'preserveQueryParams': [{ type: Input },],
-    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    'onClick': [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] },],
 };
 /**
  * @param {?} s

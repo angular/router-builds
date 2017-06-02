@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.0-rc.2-d5ce086
+ * @license Angular v4.2.0-rc.2-4c32cb9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.2.0-rc.2-d5ce086
+ * @license Angular v4.2.0-rc.2-4c32cb9
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4918,10 +4918,11 @@ var RouterLinkWithHref = (function () {
      * @param {?} button
      * @param {?} ctrlKey
      * @param {?} metaKey
+     * @param {?} shiftKey
      * @return {?}
      */
-    RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
-        if (button !== 0 || ctrlKey || metaKey) {
+    RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
+        if (button !== 0 || ctrlKey || metaKey || shiftKey) {
             return true;
         }
         if (typeof this.target === 'string' && this.target != '_self') {
@@ -4981,7 +4982,7 @@ RouterLinkWithHref.propDecorators = {
     'href': [{ type: _angular_core.HostBinding },],
     'routerLink': [{ type: _angular_core.Input },],
     'preserveQueryParams': [{ type: _angular_core.Input },],
-    'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] },],
 };
 /**
  * @param {?} s
