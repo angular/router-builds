@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.2-ce00fa3
+ * @license Angular v4.2.2-2cc931e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
