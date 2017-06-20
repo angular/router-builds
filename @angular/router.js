@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.3-63a5f33
+ * @license Angular v4.2.3-77860a0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3562,10 +3562,11 @@ class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      * @param {?} commands
-     * @param {?=} __1
+     * @param {?=} navigationExtras
      * @return {?}
      */
-    createUrlTree(commands, { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = {}) {
+    createUrlTree(commands, navigationExtras = {}) {
+        const { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = navigationExtras;
         if (isDevMode() && preserveQueryParams && (console) && (console.warn)) {
             console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
         }
@@ -5806,7 +5807,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.2.3-63a5f33');
+const VERSION = new Version('4.2.3-77860a0');
 
 /**
  * @license
