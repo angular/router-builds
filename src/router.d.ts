@@ -251,7 +251,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment}?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
     /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
