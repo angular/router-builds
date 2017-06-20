@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.2.2-c59c390
+ * @license Angular v4.2.2-009651e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3718,12 +3718,11 @@ var Router = (function () {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      * @param {?} commands
-     * @param {?=} navigationExtras
+     * @param {?=} __1
      * @return {?}
      */
-    Router.prototype.createUrlTree = function (commands, navigationExtras) {
-        if (navigationExtras === void 0) { navigationExtras = {}; }
-        var relativeTo = navigationExtras.relativeTo, queryParams = navigationExtras.queryParams, fragment = navigationExtras.fragment, preserveQueryParams = navigationExtras.preserveQueryParams, queryParamsHandling = navigationExtras.queryParamsHandling, preserveFragment = navigationExtras.preserveFragment;
+    Router.prototype.createUrlTree = function (commands, _a) {
+        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, queryParamsHandling = _b.queryParamsHandling, preserveFragment = _b.preserveFragment;
         if (isDevMode() && preserveQueryParams && (console) && (console.warn)) {
             console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
         }
@@ -6076,7 +6075,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.2.2-c59c390');
+var VERSION = new Version('4.2.2-009651e');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
