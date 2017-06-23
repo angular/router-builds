@@ -1,10 +1,10 @@
 /**
- * @license Angular v4.3.0-beta.0-81734cf
+ * @license Angular v4.3.0-beta.0-3165fd3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -4558,7 +4558,7 @@ class RouterLink {
         this.route = route;
         this.commands = [];
         if (tabIndex == null) {
-            renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
+            renderer.setAttribute(el.nativeElement, 'tabindex', '0');
         }
     }
     /**
@@ -4619,7 +4619,7 @@ RouterLink.ctorParameters = () => [
     { type: Router, },
     { type: ActivatedRoute, },
     { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
-    { type: Renderer, },
+    { type: Renderer2, },
     { type: ElementRef, },
 ];
 RouterLink.propDecorators = {
@@ -4891,7 +4891,14 @@ class RouterLinkActive {
         const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
-            this.classes.forEach(c => this.renderer.setElementClass(this.element.nativeElement, c, hasActiveLinks));
+            this.classes.forEach((c) => {
+                if (hasActiveLinks) {
+                    this.renderer.addClass(this.element.nativeElement, c);
+                }
+                else {
+                    this.renderer.removeClass(this.element.nativeElement, c);
+                }
+            });
             Promise.resolve(hasActiveLinks).then(active => this.active = active);
         }
     }
@@ -4922,7 +4929,7 @@ RouterLinkActive.decorators = [
 RouterLinkActive.ctorParameters = () => [
     { type: Router, },
     { type: ElementRef, },
-    { type: Renderer, },
+    { type: Renderer2, },
     { type: ChangeDetectorRef, },
 ];
 RouterLinkActive.propDecorators = {
@@ -5807,7 +5814,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-beta.0-81734cf');
+const VERSION = new Version('4.3.0-beta.0-3165fd3');
 
 /**
  * @license

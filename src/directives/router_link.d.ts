@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { ElementRef, OnChanges, OnDestroy, Renderer } from '@angular/core';
+import { ElementRef, OnChanges, OnDestroy, Renderer2 } from '@angular/core';
 import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
@@ -101,7 +101,7 @@ export declare class RouterLink {
     replaceUrl: boolean;
     private commands;
     private preserve;
-    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer, el: ElementRef);
+    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
     routerLink: any[] | string;
     /**
      * @deprecated 4.0.0 use `queryParamsHandling` instead.

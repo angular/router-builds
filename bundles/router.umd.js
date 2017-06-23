@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.0-81734cf
+ * @license Angular v4.3.0-beta.0-3165fd3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-beta.0-81734cf
+ * @license Angular v4.3.0-beta.0-3165fd3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4761,7 +4761,7 @@ var RouterLink = (function () {
         this.route = route;
         this.commands = [];
         if (tabIndex == null) {
-            renderer.setElementAttribute(el.nativeElement, 'tabindex', '0');
+            renderer.setAttribute(el.nativeElement, 'tabindex', '0');
         }
     }
     Object.defineProperty(RouterLink.prototype, "routerLink", {
@@ -4835,7 +4835,7 @@ RouterLink.ctorParameters = function () { return [
     { type: Router, },
     { type: ActivatedRoute, },
     { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['tabindex',] },] },
-    { type: _angular_core.Renderer, },
+    { type: _angular_core.Renderer2, },
     { type: _angular_core.ElementRef, },
 ]; };
 RouterLink.propDecorators = {
@@ -5131,7 +5131,14 @@ var RouterLinkActive = (function () {
         var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
         // react only when status has changed to prevent unnecessary dom updates
         if (this.active !== hasActiveLinks) {
-            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, hasActiveLinks); });
+            this.classes.forEach(function (c) {
+                if (hasActiveLinks) {
+                    _this.renderer.addClass(_this.element.nativeElement, c);
+                }
+                else {
+                    _this.renderer.removeClass(_this.element.nativeElement, c);
+                }
+            });
             Promise.resolve(hasActiveLinks).then(function (active) { return _this.active = active; });
         }
     };
@@ -5164,7 +5171,7 @@ RouterLinkActive.decorators = [
 RouterLinkActive.ctorParameters = function () { return [
     { type: Router, },
     { type: _angular_core.ElementRef, },
-    { type: _angular_core.Renderer, },
+    { type: _angular_core.Renderer2, },
     { type: _angular_core.ChangeDetectorRef, },
 ]; };
 RouterLinkActive.propDecorators = {
@@ -6091,7 +6098,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.3.0-beta.0-81734cf');
+var VERSION = new _angular_core.Version('4.3.0-beta.0-3165fd3');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
