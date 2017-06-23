@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "4.3.0-beta.0-8b4acbb",
+  "version": "4.3.0-beta.0-eacc36b",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./@angular/router.es5.js",
@@ -24,9 +24,9 @@
     "tslib": "^1.7.1"
   },
   "peerDependencies": {
-    "@angular/core": "4.3.0-beta.0-8b4acbb",
-    "@angular/common": "4.3.0-beta.0-8b4acbb",
-    "@angular/platform-browser": "4.3.0-beta.0-8b4acbb",
+    "@angular/core": "4.3.0-beta.0-eacc36b",
+    "@angular/common": "4.3.0-beta.0-eacc36b",
+    "@angular/platform-browser": "4.3.0-beta.0-eacc36b",
     "rxjs": "^5.0.1"
   }
 }
