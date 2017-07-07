@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-c69fff1
+ * @license Angular v4.3.0-beta.1-ae27af7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1034,11 +1034,25 @@ function serializeSegment(segment, root) {
     }
 }
 /**
+ * This method is intended for encoding *key* or *value* parts of query component. We need a custom
+ * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
+ * encoded per http://tools.ietf.org/html/rfc3986:
+ *    query         = *( pchar / "/" / "?" )
+ *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "\@"
+ *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+ *    pct-encoded   = "%" HEXDIG HEXDIG
+ *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+ *                     / "*" / "+" / "," / ";" / "="
  * @param {?} s
  * @return {?}
  */
 function encode(s) {
-    return encodeURIComponent(s);
+    return encodeURIComponent(s)
+        .replace(/%40/g, '@')
+        .replace(/%3A/gi, ':')
+        .replace(/%24/g, '$')
+        .replace(/%2C/gi, ',')
+        .replace(/%3B/gi, ';');
 }
 /**
  * @param {?} s
@@ -5934,7 +5948,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-beta.1-c69fff1');
+const VERSION = new Version('4.3.0-beta.1-ae27af7');
 
 /**
  * @license
