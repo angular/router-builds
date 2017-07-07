@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-6bae73c
+ * @license Angular v4.3.0-beta.1-cb16e9c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5948,7 +5948,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-beta.1-6bae73c');
+const VERSION = new Version('4.3.0-beta.1-cb16e9c');
 
 /**
  * @license
