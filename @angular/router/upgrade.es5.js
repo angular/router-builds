@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.2.5-670f2e5
+ * @license Angular v4.2.5-3e61bf7
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -65,7 +65,7 @@ function setUpLocationSync(ngUpgrade) {
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router.navigateByUrl(url.pathname + url.search);
+        router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
 /**
