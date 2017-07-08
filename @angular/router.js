@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-beta.1-9dd550f
+ * @license Angular v4.3.0-beta.1-c723d42
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -825,7 +825,7 @@ class UrlSegmentGroup {
         forEach(children, (v, k) => v.parent = this);
     }
     /**
-     * Wether the segment has child segments
+     * Whether the segment has child segments
      * @return {?}
      */
     hasChildren() { return this.numberOfChildren > 0; }
@@ -5948,7 +5948,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-beta.1-9dd550f');
+const VERSION = new Version('4.3.0-beta.1-c723d42');
 
 /**
  * @license

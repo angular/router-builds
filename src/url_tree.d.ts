@@ -73,7 +73,7 @@ export declare class UrlSegmentGroup {
         children: {
         [key: string]: UrlSegmentGroup;
     });
-    /** Wether the segment has child segments */
+    /** Whether the segment has child segments */
     hasChildren(): boolean;
     /** Number of child segments */
     readonly numberOfChildren: number;
