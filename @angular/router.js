@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-2a2fe11
+ * @license Angular v4.3.0-ad3029e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,6 +12,8 @@ import { of } from 'rxjs/observable/of';
 import { concatMap } from 'rxjs/operator/concatMap';
 import { every } from 'rxjs/operator/every';
 import { first } from 'rxjs/operator/first';
+import { last } from 'rxjs/operator/last';
+import * as l from 'rxjs/operator/last';
 import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { reduce } from 'rxjs/operator/reduce';
@@ -20,8 +22,6 @@ import { _catch } from 'rxjs/operator/catch';
 import { concatAll } from 'rxjs/operator/concatAll';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { last } from 'rxjs/operator/last';
-import * as l from 'rxjs/operator/last';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { ɵgetDOM } from '@angular/platform-browser';
 import { filter } from 'rxjs/operator/filter';
@@ -4332,11 +4332,32 @@ class PreActivation {
      * @return {?}
      */
     resolveNode(resolve, future) {
-        return waitForMap(resolve, (k, v) => {
-            const /** @type {?} */ resolver = this.getToken(v, future);
-            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
-                wrapIntoObservable(resolver(future, this.future));
+        const /** @type {?} */ keys = Object.keys(resolve);
+        if (keys.length === 0) {
+            return of({});
+        }
+        if (keys.length === 1) {
+            const /** @type {?} */ key = keys[0];
+            return map.call(this.getResolver(resolve[key], future), (value) => { return { [key]: value }; });
+        }
+        const /** @type {?} */ data = {};
+        const /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), (key) => {
+            return map.call(this.getResolver(resolve[key], future), (value) => {
+                data[key] = value;
+                return value;
+            });
         });
+        return map.call(last.call(runningResolvers$), () => data);
+    }
+    /**
+     * @param {?} injectionToken
+     * @param {?} future
+     * @return {?}
+     */
+    getResolver(injectionToken, future) {
+        const /** @type {?} */ resolver = this.getToken(injectionToken, future);
+        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
+            wrapIntoObservable(resolver(future, this.future));
     }
     /**
      * @param {?} token
@@ -5948,7 +5969,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-2a2fe11');
+const VERSION = new Version('4.3.0-ad3029e');
 
 /**
  * @license
