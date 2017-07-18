@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-ad3029e
+ * @license Angular v4.3.0-eb6fb5f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3625,6 +3625,7 @@ class Router {
     resetConfig(config) {
         validateConfig(config);
         this.config = config;
+        this.navigated = false;
     }
     /**
      * \@docsNotRequired
@@ -5969,7 +5970,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-ad3029e');
+const VERSION = new Version('4.3.0-eb6fb5f');
 
 /**
  * @license
