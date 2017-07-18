@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.3.0-17b7bc3
+ * @license Angular v4.3.0-f19bd5f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6250,7 +6250,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.3.0-17b7bc3');
+var VERSION = new Version('4.3.0-f19bd5f');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
