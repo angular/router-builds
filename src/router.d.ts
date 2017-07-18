@@ -332,5 +332,6 @@ export declare class PreActivation {
     private runCanDeactivate(component, curr);
     private runResolve(future);
     private resolveNode(resolve, future);
+    private getResolver(injectionToken, future);
     private getToken(token, snapshot);
 }

@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.3.0-37c626e
+ * @license Angular v4.3.0-17b7bc3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -13,6 +13,7 @@ import { of } from 'rxjs/observable/of';
 import { concatMap } from 'rxjs/operator/concatMap';
 import { every } from 'rxjs/operator/every';
 import { first } from 'rxjs/operator/first';
+import { last } from 'rxjs/operator/last';
 import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { reduce } from 'rxjs/operator/reduce';
@@ -21,7 +22,6 @@ import { _catch } from 'rxjs/operator/catch';
 import { concatAll } from 'rxjs/operator/concatAll';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { last } from 'rxjs/operator/last';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { ɵgetDOM } from '@angular/platform-browser';
 import { filter } from 'rxjs/operator/filter';
@@ -3215,7 +3215,8 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     var /** @type {?} */ posParams = {};
     forEach(/** @type {?} */ ((res.posParams)), function (v, k) { posParams[k] = v.path; });
-    var /** @type {?} */ parameters = Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters);
+    var /** @type {?} */ parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
+        posParams;
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
 }
 /**
@@ -3785,6 +3786,7 @@ var Router = (function () {
     Router.prototype.resetConfig = function (config) {
         validateConfig(config);
         this.config = config;
+        this.navigated = false;
     };
     /**
      * \@docsNotRequired
@@ -4319,10 +4321,9 @@ var PreActivation = (function () {
         var /** @type {?} */ context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future._routeConfig)).runGuardsAndResolvers)) {
+            var /** @type {?} */ shouldRunGuardsAndResolvers = this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future._routeConfig)).runGuardsAndResolvers);
+            if (shouldRunGuardsAndResolvers) {
                 this.canActivateChecks.push(new CanActivate(futurePath));
-                var /** @type {?} */ outlet = ((((context)).outlet));
-                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
             else {
                 // we need to set the data
@@ -4336,6 +4337,10 @@ var PreActivation = (function () {
             }
             else {
                 this.traverseChildRoutes(futureNode, currNode, parentContexts, futurePath);
+            }
+            if (shouldRunGuardsAndResolvers) {
+                var /** @type {?} */ outlet = ((((context)).outlet));
+                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
         }
         else {
@@ -4520,11 +4525,35 @@ var PreActivation = (function () {
      */
     PreActivation.prototype.resolveNode = function (resolve, future) {
         var _this = this;
-        return waitForMap(resolve, function (k, v) {
-            var /** @type {?} */ resolver = _this.getToken(v, future);
-            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
-                wrapIntoObservable(resolver(future, _this.future));
+        var /** @type {?} */ keys = Object.keys(resolve);
+        if (keys.length === 0) {
+            return of({});
+        }
+        if (keys.length === 1) {
+            var /** @type {?} */ key_1 = keys[0];
+            return map.call(this.getResolver(resolve[key_1], future), function (value) {
+                return _a = {}, _a[key_1] = value, _a;
+                var _a;
+            });
+        }
+        var /** @type {?} */ data = {};
+        var /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), function (key) {
+            return map.call(_this.getResolver(resolve[key], future), function (value) {
+                data[key] = value;
+                return value;
+            });
         });
+        return map.call(last.call(runningResolvers$), function () { return data; });
+    };
+    /**
+     * @param {?} injectionToken
+     * @param {?} future
+     * @return {?}
+     */
+    PreActivation.prototype.getResolver = function (injectionToken, future) {
+        var /** @type {?} */ resolver = this.getToken(injectionToken, future);
+        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
+            wrapIntoObservable(resolver(future, this.future));
     };
     /**
      * @param {?} token
@@ -6221,7 +6250,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.3.0-37c626e');
+var VERSION = new Version('4.3.0-17b7bc3');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

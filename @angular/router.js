@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-37c626e
+ * @license Angular v4.3.0-17b7bc3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,6 +12,8 @@ import { of } from 'rxjs/observable/of';
 import { concatMap } from 'rxjs/operator/concatMap';
 import { every } from 'rxjs/operator/every';
 import { first } from 'rxjs/operator/first';
+import { last } from 'rxjs/operator/last';
+import * as l from 'rxjs/operator/last';
 import { map } from 'rxjs/operator/map';
 import { mergeMap } from 'rxjs/operator/mergeMap';
 import { reduce } from 'rxjs/operator/reduce';
@@ -20,8 +22,6 @@ import { _catch } from 'rxjs/operator/catch';
 import { concatAll } from 'rxjs/operator/concatAll';
 import { EmptyError } from 'rxjs/util/EmptyError';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { last } from 'rxjs/operator/last';
-import * as l from 'rxjs/operator/last';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { ɵgetDOM } from '@angular/platform-browser';
 import { filter } from 'rxjs/operator/filter';
@@ -3082,7 +3082,8 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     const /** @type {?} */ posParams = {};
     forEach(/** @type {?} */ ((res.posParams)), (v, k) => { posParams[k] = v.path; });
-    const /** @type {?} */ parameters = Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters);
+    const /** @type {?} */ parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
+        posParams;
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters };
 }
 /**
@@ -3625,6 +3626,7 @@ class Router {
     resetConfig(config) {
         validateConfig(config);
         this.config = config;
+        this.navigated = false;
     }
     /**
      * \@docsNotRequired
@@ -4138,10 +4140,9 @@ class PreActivation {
         const /** @type {?} */ context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
         // reusing the node
         if (curr && future._routeConfig === curr._routeConfig) {
-            if (this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future._routeConfig)).runGuardsAndResolvers)) {
+            const /** @type {?} */ shouldRunGuardsAndResolvers = this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future._routeConfig)).runGuardsAndResolvers);
+            if (shouldRunGuardsAndResolvers) {
                 this.canActivateChecks.push(new CanActivate(futurePath));
-                const /** @type {?} */ outlet = ((((context)).outlet));
-                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
             else {
                 // we need to set the data
@@ -4155,6 +4156,10 @@ class PreActivation {
             }
             else {
                 this.traverseChildRoutes(futureNode, currNode, parentContexts, futurePath);
+            }
+            if (shouldRunGuardsAndResolvers) {
+                const /** @type {?} */ outlet = ((((context)).outlet));
+                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
         }
         else {
@@ -4332,11 +4337,32 @@ class PreActivation {
      * @return {?}
      */
     resolveNode(resolve, future) {
-        return waitForMap(resolve, (k, v) => {
-            const /** @type {?} */ resolver = this.getToken(v, future);
-            return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
-                wrapIntoObservable(resolver(future, this.future));
+        const /** @type {?} */ keys = Object.keys(resolve);
+        if (keys.length === 0) {
+            return of({});
+        }
+        if (keys.length === 1) {
+            const /** @type {?} */ key = keys[0];
+            return map.call(this.getResolver(resolve[key], future), (value) => { return { [key]: value }; });
+        }
+        const /** @type {?} */ data = {};
+        const /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), (key) => {
+            return map.call(this.getResolver(resolve[key], future), (value) => {
+                data[key] = value;
+                return value;
+            });
         });
+        return map.call(last.call(runningResolvers$), () => data);
+    }
+    /**
+     * @param {?} injectionToken
+     * @param {?} future
+     * @return {?}
+     */
+    getResolver(injectionToken, future) {
+        const /** @type {?} */ resolver = this.getToken(injectionToken, future);
+        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
+            wrapIntoObservable(resolver(future, this.future));
     }
     /**
      * @param {?} token
@@ -5948,7 +5974,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.0-37c626e');
+const VERSION = new Version('4.3.0-17b7bc3');
 
 /**
  * @license
