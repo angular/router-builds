@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.0-8de44cf
+ * @license Angular v5.0.0-beta.0-31cb418
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.0-8de44cf
+ * @license Angular v5.0.0-beta.0-31cb418
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6265,7 +6265,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.0-8de44cf');
+var VERSION = new _angular_core.Version('5.0.0-beta.0-31cb418');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
