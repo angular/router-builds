@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,16 +36,248 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.0-abee785
+ * @license Angular v5.0.0-beta.0-b7a6f52
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * \@whatItDoes Name of the primary outlet.
  *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * \@stable
+ */
+var PRIMARY_OUTLET = 'primary';
+/**
+ * Matrix and Query parameters.
+ *
+ * `ParamMap` makes it easier to work with parameters as they could have either a single value or
+ * multiple value. Because this should be known by the user, calling `get` or `getAll` returns the
+ * correct type (either `string` or `string[]`).
+ *
+ * The API is inspired by the URLSearchParams interface.
+ * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+ *
+ * \@stable
+ * @record
+ */
+function ParamMap() { }
+var ParamsAsMap = (function () {
+    /**
+     * @param {?} params
+     */
+    function ParamsAsMap(params) {
+        this.params = params || {};
+    }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.has = function (name) { return this.params.hasOwnProperty(name); };
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.get = function (name) {
+        if (this.has(name)) {
+            var /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v[0] : v;
+        }
+        return null;
+    };
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    ParamsAsMap.prototype.getAll = function (name) {
+        if (this.has(name)) {
+            var /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v : [v];
+        }
+        return [];
+    };
+    Object.defineProperty(ParamsAsMap.prototype, "keys", {
+        /**
+         * @return {?}
+         */
+        get: function () { return Object.keys(this.params); },
+        enumerable: true,
+        configurable: true
+    });
+    return ParamsAsMap;
+}());
+/**
+ * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ *
+ * \@stable
+ * @param {?} params
+ * @return {?}
+ */
+function convertToParamMap(params) {
+    return new ParamsAsMap(params);
+}
+var NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+/**
+ * @param {?} message
+ * @return {?}
+ */
+function navigationCancelingError(message) {
+    var /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+    ((error))[NAVIGATION_CANCELING_ERROR] = true;
+    return error;
+}
+/**
+ * @param {?} error
+ * @return {?}
+ */
+function isNavigationCancelingError(error) {
+    return ((error))[NAVIGATION_CANCELING_ERROR];
+}
+/**
+ * @param {?} segments
+ * @param {?} segmentGroup
+ * @param {?} route
+ * @return {?}
+ */
+function defaultUrlMatcher(segments, segmentGroup, route) {
+    var /** @type {?} */ parts = ((route.path)).split('/');
+    if (parts.length > segments.length) {
+        // The actual URL is shorter than the config, no match
+        return null;
+    }
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || parts.length < segments.length)) {
+        // The config is longer than the actual URL but we are looking for a full match, return null
+        return null;
+    }
+    var /** @type {?} */ posParams = {};
+    // Check each config part against the actual URL
+    for (var /** @type {?} */ index = 0; index < parts.length; index++) {
+        var /** @type {?} */ part = parts[index];
+        var /** @type {?} */ segment = segments[index];
+        var /** @type {?} */ isParameter = part.startsWith(':');
+        if (isParameter) {
+            posParams[part.substring(1)] = segment;
+        }
+        else if (part !== segment.path) {
+            // The actual URL part does not match the config, no match
+            return null;
+        }
+    }
+    return { consumed: segments.slice(0, parts.length), posParams: posParams };
+}
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * See {\@link Routes} for more details.
+ * \@stable
+ * @record
+ */
+function Route() { }
+var LoadedRouterConfig = (function () {
+    /**
+     * @param {?} routes
+     * @param {?} module
+     */
+    function LoadedRouterConfig(routes, module) {
+        this.routes = routes;
+        this.module = module;
+    }
+    return LoadedRouterConfig;
+}());
+/**
+ * @param {?} config
+ * @param {?=} parentPath
+ * @return {?}
+ */
+function validateConfig(config, parentPath) {
+    if (parentPath === void 0) { parentPath = ''; }
+    // forEach doesn't iterate undefined values
+    for (var /** @type {?} */ i = 0; i < config.length; i++) {
+        var /** @type {?} */ route = config[i];
+        var /** @type {?} */ fullPath = getFullPath(parentPath, route);
+        validateNode(route, fullPath);
+    }
+}
+/**
+ * @param {?} route
+ * @param {?} fullPath
+ * @return {?}
+ */
+function validateNode(route, fullPath) {
+    if (!route) {
+        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+    }
+    if (Array.isArray(route)) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
+    }
+    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route cannot have a named outlet set");
+    }
+    if (route.redirectTo && route.children) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
+    }
+    if (route.redirectTo && route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
+    }
+    if (route.children && route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
+    }
+    if (route.redirectTo && route.component) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
+    }
+    if (route.path && route.matcher) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
+    }
+    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
+    }
+    if (route.path === void 0 && route.matcher === void 0) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
+    }
+    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+        throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
+    }
+    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+        var /** @type {?} */ exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+        throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+    }
+    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+    }
+    if (route.children) {
+        validateConfig(route.children, fullPath);
+    }
+}
+/**
+ * @param {?} parentPath
+ * @param {?} currentRoute
+ * @return {?}
+ */
+function getFullPath(parentPath, currentRoute) {
+    if (!currentRoute) {
+        return parentPath;
+    }
+    if (!parentPath && !currentRoute.path) {
+        return '';
+    }
+    else if (parentPath && !currentRoute.path) {
+        return parentPath + "/";
+    }
+    else if (!parentPath && currentRoute.path) {
+        return currentRoute.path;
+    }
+    else {
+        return parentPath + "/" + currentRoute.path;
+    }
+}
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@whatItDoes Represents an event triggered when a navigation starts.
@@ -315,226 +547,9 @@ var ResolveEnd = (function () {
     return ResolveEnd;
 }());
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
-/**
- * \@whatItDoes Name of the primary outlet.
- *
- * \@stable
- */
-var PRIMARY_OUTLET = 'primary';
-var ParamsAsMap = (function () {
-    /**
-     * @param {?} params
-     */
-    function ParamsAsMap(params) {
-        this.params = params || {};
-    }
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    ParamsAsMap.prototype.has = function (name) { return this.params.hasOwnProperty(name); };
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    ParamsAsMap.prototype.get = function (name) {
-        if (this.has(name)) {
-            var /** @type {?} */ v = this.params[name];
-            return Array.isArray(v) ? v[0] : v;
-        }
-        return null;
-    };
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    ParamsAsMap.prototype.getAll = function (name) {
-        if (this.has(name)) {
-            var /** @type {?} */ v = this.params[name];
-            return Array.isArray(v) ? v : [v];
-        }
-        return [];
-    };
-    Object.defineProperty(ParamsAsMap.prototype, "keys", {
-        /**
-         * @return {?}
-         */
-        get: function () { return Object.keys(this.params); },
-        enumerable: true,
-        configurable: true
-    });
-    return ParamsAsMap;
-}());
-/**
- * Convert a {\@link Params} instance to a {\@link ParamMap}.
- *
- * \@stable
- * @param {?} params
- * @return {?}
- */
-function convertToParamMap(params) {
-    return new ParamsAsMap(params);
-}
-var NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
-/**
- * @param {?} message
- * @return {?}
- */
-function navigationCancelingError(message) {
-    var /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
-    ((error))[NAVIGATION_CANCELING_ERROR] = true;
-    return error;
-}
-/**
- * @param {?} error
- * @return {?}
- */
-function isNavigationCancelingError(error) {
-    return ((error))[NAVIGATION_CANCELING_ERROR];
-}
-/**
- * @param {?} segments
- * @param {?} segmentGroup
- * @param {?} route
- * @return {?}
- */
-function defaultUrlMatcher(segments, segmentGroup, route) {
-    var /** @type {?} */ parts = ((route.path)).split('/');
-    if (parts.length > segments.length) {
-        // The actual URL is shorter than the config, no match
-        return null;
-    }
-    if (route.pathMatch === 'full' &&
-        (segmentGroup.hasChildren() || parts.length < segments.length)) {
-        // The config is longer than the actual URL but we are looking for a full match, return null
-        return null;
-    }
-    var /** @type {?} */ posParams = {};
-    // Check each config part against the actual URL
-    for (var /** @type {?} */ index = 0; index < parts.length; index++) {
-        var /** @type {?} */ part = parts[index];
-        var /** @type {?} */ segment = segments[index];
-        var /** @type {?} */ isParameter = part.startsWith(':');
-        if (isParameter) {
-            posParams[part.substring(1)] = segment;
-        }
-        else if (part !== segment.path) {
-            // The actual URL part does not match the config, no match
-            return null;
-        }
-    }
-    return { consumed: segments.slice(0, parts.length), posParams: posParams };
-}
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var LoadedRouterConfig = (function () {
-    /**
-     * @param {?} routes
-     * @param {?} module
-     */
-    function LoadedRouterConfig(routes, module) {
-        this.routes = routes;
-        this.module = module;
-    }
-    return LoadedRouterConfig;
-}());
-/**
- * @param {?} config
- * @param {?=} parentPath
- * @return {?}
- */
-function validateConfig(config, parentPath) {
-    if (parentPath === void 0) { parentPath = ''; }
-    // forEach doesn't iterate undefined values
-    for (var /** @type {?} */ i = 0; i < config.length; i++) {
-        var /** @type {?} */ route = config[i];
-        var /** @type {?} */ fullPath = getFullPath(parentPath, route);
-        validateNode(route, fullPath);
-    }
-}
-/**
- * @param {?} route
- * @param {?} fullPath
- * @return {?}
- */
-function validateNode(route, fullPath) {
-    if (!route) {
-        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
-    }
-    if (Array.isArray(route)) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
-    }
-    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route cannot have a named outlet set");
-    }
-    if (route.redirectTo && route.children) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
-    }
-    if (route.redirectTo && route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
-    }
-    if (route.children && route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
-    }
-    if (route.redirectTo && route.component) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
-    }
-    if (route.path && route.matcher) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-        throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        var /** @type {?} */ exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
-        throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
-    }
-    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
-    }
-    if (route.children) {
-        validateConfig(route.children, fullPath);
-    }
-}
-/**
- * @param {?} parentPath
- * @param {?} currentRoute
- * @return {?}
- */
-function getFullPath(parentPath, currentRoute) {
-    if (!currentRoute) {
-        return parentPath;
-    }
-    if (!parentPath && !currentRoute.path) {
-        return '';
-    }
-    else if (parentPath && !currentRoute.path) {
-        return parentPath + "/";
-    }
-    else if (!parentPath && currentRoute.path) {
-        return currentRoute.path;
-    }
-    else {
-        return parentPath + "/" + currentRoute.path;
-    }
-}
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -660,6 +675,10 @@ function wrapIntoObservable(value) {
     }
     return rxjs_observable_of.of(value);
 }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -976,20 +995,6 @@ function mapChildrenIntoArray(segment, fn) {
 var UrlSerializer = (function () {
     function UrlSerializer() {
     }
-    /**
-     * Parse a url into a {\@link UrlTree}
-     * @abstract
-     * @param {?} url
-     * @return {?}
-     */
-    UrlSerializer.prototype.parse = function (url) { };
-    /**
-     * Converts a {\@link UrlTree} into a url
-     * @abstract
-     * @param {?} tree
-     * @return {?}
-     */
-    UrlSerializer.prototype.serialize = function (tree) { };
     return UrlSerializer;
 }());
 /**
@@ -1030,7 +1035,7 @@ var DefaultUrlSerializer = (function () {
     DefaultUrlSerializer.prototype.serialize = function (tree) {
         var /** @type {?} */ segment = "/" + serializeSegment(tree.root, true);
         var /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        var /** @type {?} */ fragment = typeof tree.fragment === "string" ? "#" + encodeURI(/** @type {?} */ ((tree.fragment))) : '';
+        var /** @type {?} */ fragment = typeof tree.fragment === "string" ? "#" + encodeURI((((tree.fragment)))) : '';
         return "" + segment + query + fragment;
     };
     return DefaultUrlSerializer;
@@ -1355,6 +1360,10 @@ var UrlParser = (function () {
     };
     return UrlParser;
 }());
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -1962,13 +1971,20 @@ function getOutlet(route) {
     return route.outlet || PRIMARY_OUTLET;
 }
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var Tree = (function () {
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */ var Tree = (function () {
     /**
      * @param {?} root
      */
@@ -2082,11 +2098,8 @@ var TreeNode = (function () {
     return TreeNode;
 }());
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@whatItDoes Represents the state of the router.
@@ -2124,7 +2137,7 @@ var RouterState = (function (_super) {
     function RouterState(root, snapshot) {
         var _this = _super.call(this, root) || this;
         _this.snapshot = snapshot;
-        setRouterState(_this, root);
+        setRouterState(/** @type {?} */ (_this), root);
         return _this;
     }
     /**
@@ -2498,7 +2511,7 @@ var RouterStateSnapshot = (function (_super) {
     function RouterStateSnapshot(url, root) {
         var _this = _super.call(this, root) || this;
         _this.url = url;
-        setRouterState(_this, root);
+        setRouterState(/** @type {?} */ (_this), root);
         return _this;
     }
     /**
@@ -2570,6 +2583,10 @@ function equalParamsAndUrlSegments(a, b) {
     return equalUrlParams && !parentsMismatch &&
         (!a.parent || equalParamsAndUrlSegments(a.parent, /** @type {?} */ ((b.parent))));
 }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -2655,11 +2672,8 @@ function createActivatedRoute(c) {
     return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.queryParams), new rxjs_BehaviorSubject.BehaviorSubject(c.fragment), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @param {?} route
@@ -2741,7 +2755,7 @@ var Navigation = (function () {
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
             throw new Error('Root segment cannot have matrix parameters');
         }
-        var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
+        var /** @type {?} */ cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
         if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
@@ -3032,11 +3046,8 @@ function compare(path, params, segment) {
     return path == segment.path && shallowEqual(params, segment.parameters);
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 var NoMatch$1 = (function () {
     function NoMatch$1() {
@@ -3396,11 +3407,8 @@ function getResolve(route) {
     return route.resolve || {};
 }
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@whatItDoes Provides a way to customize when activated routes get reused.
@@ -3411,45 +3419,6 @@ function getResolve(route) {
 var RouteReuseStrategy = (function () {
     function RouteReuseStrategy() {
     }
-    /**
-     * Determines if this route (and its subtree) should be detached to be reused later
-     * @abstract
-     * @param {?} route
-     * @return {?}
-     */
-    RouteReuseStrategy.prototype.shouldDetach = function (route) { };
-    /**
-     * Stores the detached route.
-     *
-     * Storing a `null` value should erase the previously stored value.
-     * @abstract
-     * @param {?} route
-     * @param {?} handle
-     * @return {?}
-     */
-    RouteReuseStrategy.prototype.store = function (route, handle) { };
-    /**
-     * Determines if this route (and its subtree) should be reattached
-     * @abstract
-     * @param {?} route
-     * @return {?}
-     */
-    RouteReuseStrategy.prototype.shouldAttach = function (route) { };
-    /**
-     * Retrieves the previously stored route
-     * @abstract
-     * @param {?} route
-     * @return {?}
-     */
-    RouteReuseStrategy.prototype.retrieve = function (route) { };
-    /**
-     * Determines if a route should be reused
-     * @abstract
-     * @param {?} future
-     * @param {?} curr
-     * @return {?}
-     */
-    RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
     return RouteReuseStrategy;
 }());
 /**
@@ -3489,6 +3458,10 @@ var DefaultRouteReuseStrategy = (function () {
     };
     return DefaultRouteReuseStrategy;
 }());
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -3556,11 +3529,8 @@ var RouterConfigLoader = (function () {
     return RouterConfigLoader;
 }());
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
@@ -3571,34 +3541,6 @@ var RouterConfigLoader = (function () {
 var UrlHandlingStrategy = (function () {
     function UrlHandlingStrategy() {
     }
-    /**
-     * Tells the router if this URL should be processed.
-     *
-     * When it returns true, the router will execute the regular navigation.
-     * When it returns false, the router will set the router state to an empty state.
-     * As a result, all the active components will be destroyed.
-     *
-     * @abstract
-     * @param {?} url
-     * @return {?}
-     */
-    UrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { };
-    /**
-     * Extracts the part of the URL that should be handled by the router.
-     * The rest of the URL will remain untouched.
-     * @abstract
-     * @param {?} url
-     * @return {?}
-     */
-    UrlHandlingStrategy.prototype.extract = function (url) { };
-    /**
-     * Merges the URL fragment with the rest of the URL.
-     * @abstract
-     * @param {?} newUrlPart
-     * @param {?} rawUrl
-     * @return {?}
-     */
-    UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
     return UrlHandlingStrategy;
 }());
 /**
@@ -3626,12 +3568,16 @@ var DefaultUrlHandlingStrategy = (function () {
     return DefaultUrlHandlingStrategy;
 }());
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
+/**
+ * \@whatItDoes Represents the extra options used during navigation.
+ *
+ * \@stable
+ * @record
+ */
+function NavigationExtras() { }
 /**
  * @param {?} error
  * @return {?}
@@ -3701,8 +3647,8 @@ var Router = (function () {
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
-        var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
-        var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
+        var /** @type {?} */ onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
+        var /** @type {?} */ onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(_angular_core.NgModuleRef);
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
@@ -4832,6 +4778,10 @@ function validateCommands(commands) {
     }
 }
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -4995,9 +4945,7 @@ var RouterLink = (function () {
 RouterLink.decorators = [
     { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterLink.ctorParameters = function () { return [
     { type: Router, },
     { type: ActivatedRoute, },
@@ -5006,15 +4954,15 @@ RouterLink.ctorParameters = function () { return [
     { type: _angular_core.ElementRef, },
 ]; };
 RouterLink.propDecorators = {
-    'queryParams': [{ type: _angular_core.Input },],
-    'fragment': [{ type: _angular_core.Input },],
-    'queryParamsHandling': [{ type: _angular_core.Input },],
-    'preserveFragment': [{ type: _angular_core.Input },],
-    'skipLocationChange': [{ type: _angular_core.Input },],
-    'replaceUrl': [{ type: _angular_core.Input },],
-    'routerLink': [{ type: _angular_core.Input },],
-    'preserveQueryParams': [{ type: _angular_core.Input },],
-    'onClick': [{ type: _angular_core.HostListener, args: ['click',] },],
+    "queryParams": [{ type: _angular_core.Input },],
+    "fragment": [{ type: _angular_core.Input },],
+    "queryParamsHandling": [{ type: _angular_core.Input },],
+    "preserveFragment": [{ type: _angular_core.Input },],
+    "skipLocationChange": [{ type: _angular_core.Input },],
+    "replaceUrl": [{ type: _angular_core.Input },],
+    "routerLink": [{ type: _angular_core.Input },],
+    "preserveQueryParams": [{ type: _angular_core.Input },],
+    "onClick": [{ type: _angular_core.HostListener, args: ['click',] },],
 };
 /**
  * \@whatItDoes Lets you link to specific parts of your app.
@@ -5131,26 +5079,24 @@ var RouterLinkWithHref = (function () {
 RouterLinkWithHref.decorators = [
     { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterLinkWithHref.ctorParameters = function () { return [
     { type: Router, },
     { type: ActivatedRoute, },
     { type: _angular_common.LocationStrategy, },
 ]; };
 RouterLinkWithHref.propDecorators = {
-    'target': [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
-    'queryParams': [{ type: _angular_core.Input },],
-    'fragment': [{ type: _angular_core.Input },],
-    'queryParamsHandling': [{ type: _angular_core.Input },],
-    'preserveFragment': [{ type: _angular_core.Input },],
-    'skipLocationChange': [{ type: _angular_core.Input },],
-    'replaceUrl': [{ type: _angular_core.Input },],
-    'href': [{ type: _angular_core.HostBinding },],
-    'routerLink': [{ type: _angular_core.Input },],
-    'preserveQueryParams': [{ type: _angular_core.Input },],
-    'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] },],
+    "target": [{ type: _angular_core.HostBinding, args: ['attr.target',] }, { type: _angular_core.Input },],
+    "queryParams": [{ type: _angular_core.Input },],
+    "fragment": [{ type: _angular_core.Input },],
+    "queryParamsHandling": [{ type: _angular_core.Input },],
+    "preserveFragment": [{ type: _angular_core.Input },],
+    "skipLocationChange": [{ type: _angular_core.Input },],
+    "replaceUrl": [{ type: _angular_core.Input },],
+    "href": [{ type: _angular_core.HostBinding },],
+    "routerLink": [{ type: _angular_core.Input },],
+    "preserveQueryParams": [{ type: _angular_core.Input },],
+    "onClick": [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] },],
 };
 /**
  * @param {?} s
@@ -5159,6 +5105,10 @@ RouterLinkWithHref.propDecorators = {
 function attrBoolValue(s) {
     return s === '' || !!s;
 }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -5332,9 +5282,7 @@ RouterLinkActive.decorators = [
                 exportAs: 'routerLinkActive',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterLinkActive.ctorParameters = function () { return [
     { type: Router, },
     { type: _angular_core.ElementRef, },
@@ -5342,17 +5290,14 @@ RouterLinkActive.ctorParameters = function () { return [
     { type: _angular_core.ChangeDetectorRef, },
 ]; };
 RouterLinkActive.propDecorators = {
-    'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
-    'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-    'routerLinkActiveOptions': [{ type: _angular_core.Input },],
-    'routerLinkActive': [{ type: _angular_core.Input },],
+    "links": [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
+    "linksWithHrefs": [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+    "routerLinkActiveOptions": [{ type: _angular_core.Input },],
+    "routerLinkActive": [{ type: _angular_core.Input },],
 };
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * Store contextual information about a {\@link RouterOutlet}
@@ -5436,6 +5381,10 @@ var ChildrenOutletContexts = (function () {
     ChildrenOutletContexts.prototype.getContext = function (childName) { return this.contexts.get(childName) || null; };
     return ChildrenOutletContexts;
 }());
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -5637,9 +5586,7 @@ var RouterOutlet = (function () {
 RouterOutlet.decorators = [
     { type: _angular_core.Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterOutlet.ctorParameters = function () { return [
     { type: ChildrenOutletContexts, },
     { type: _angular_core.ViewContainerRef, },
@@ -5648,8 +5595,8 @@ RouterOutlet.ctorParameters = function () { return [
     { type: _angular_core.ChangeDetectorRef, },
 ]; };
 RouterOutlet.propDecorators = {
-    'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
-    'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
+    "activateEvents": [{ type: _angular_core.Output, args: ['activate',] },],
+    "deactivateEvents": [{ type: _angular_core.Output, args: ['deactivate',] },],
 };
 var OutletInjector = (function () {
     /**
@@ -5679,6 +5626,367 @@ var OutletInjector = (function () {
     return OutletInjector;
 }());
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
+ * activated.
+ *
+ * \@howToUse
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canActivate(user: UserToken, id: string): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * \@Injectable()
+ * class CanActivateTeam implements CanActivate {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canActivate(
+ *     route: ActivatedRouteSnapshot,
+ *     state: RouterStateSnapshot
+ *   ): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canActivate(this.currentUser, route.params.id);
+ *   }
+ * }
+ *
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         canActivate: [CanActivateTeam]
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanActivateTeam, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * You can alternatively provide a function with the `canActivate` signature:
+ *
+ * ```
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         canActivate: ['canActivateTeam']
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'canActivateTeam',
+ *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * \@stable
+ * @record
+ */
+function CanActivate$1() { }
+/**
+ * \@whatItDoes Interface that a class can implement to be a guard deciding if a child route can be
+ * activated.
+ *
+ * \@howToUse
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canActivate(user: UserToken, id: string): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * \@Injectable()
+ * class CanActivateTeam implements CanActivateChild {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canActivateChild(
+ *     route: ActivatedRouteSnapshot,
+ *     state: RouterStateSnapshot
+ *   ): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canActivate(this.currentUser, route.params.id);
+ *   }
+ * }
+ *
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'root',
+ *         canActivateChild: [CanActivateTeam],
+ *         children: [
+ *           {
+ *              path: 'team/:id',
+ *              component: Team
+ *           }
+ *         ]
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanActivateTeam, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * You can alternatively provide a function with the `canActivateChild` signature:
+ *
+ * ```
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'root',
+ *         canActivateChild: ['canActivateTeam'],
+ *         children: [
+ *           {
+ *             path: 'team/:id',
+ *             component: Team
+ *           }
+ *         ]
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'canActivateTeam',
+ *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * \@stable
+ * @record
+ */
+function CanActivateChild() { }
+/**
+ * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
+ * deactivated.
+ *
+ * \@howToUse
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canDeactivate(user: UserToken, id: string): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * \@Injectable()
+ * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canDeactivate(
+ *     component: TeamComponent,
+ *     currentRoute: ActivatedRouteSnapshot,
+ *     currentState: RouterStateSnapshot,
+ *     nextState: RouterStateSnapshot
+ *   ): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canDeactivate(this.currentUser, route.params.id);
+ *   }
+ * }
+ *
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         canDeactivate: [CanDeactivateTeam]
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanDeactivateTeam, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * You can alternatively provide a function with the `canDeactivate` signature:
+ *
+ * ```
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         canDeactivate: ['canDeactivateTeam']
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'canDeactivateTeam',
+ *       useValue: (component: TeamComponent, currentRoute: ActivatedRouteSnapshot, currentState:
+ * RouterStateSnapshot, nextState: RouterStateSnapshot) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * \@stable
+ * @record
+ */
+function CanDeactivate$1() { }
+/**
+ * \@whatItDoes Interface that class can implement to be a data provider.
+ *
+ * \@howToUse
+ *
+ * ```
+ * class Backend {
+ *   fetchTeam(id: string) {
+ *     return 'someTeam';
+ *   }
+ * }
+ *
+ * \@Injectable()
+ * class TeamResolver implements Resolve<Team> {
+ *   constructor(private backend: Backend) {}
+ *
+ *   resolve(
+ *     route: ActivatedRouteSnapshot,
+ *     state: RouterStateSnapshot
+ *   ): Observable<any>|Promise<any>|any {
+ *     return this.backend.fetchTeam(route.params.id);
+ *   }
+ * }
+ *
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         resolve: {
+ *           team: TeamResolver
+ *         }
+ *       }
+ *     ])
+ *   ],
+ *   providers: [TeamResolver]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * You can alternatively provide a function with the `resolve` signature:
+ *
+ * ```
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         resolve: {
+ *           team: 'teamResolver'
+ *         }
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'teamResolver',
+ *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => 'team'
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ * \@stable
+ * @record
+ */
+function Resolve() { }
+/**
+ * \@whatItDoes Interface that a class can implement to be a guard deciding if a children can be
+ * loaded.
+ *
+ * \@howToUse
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canLoadChildren(user: UserToken, id: string): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * \@Injectable()
+ * class CanLoadTeamSection implements CanLoad {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canLoad(route: Route): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canLoadChildren(this.currentUser, route);
+ *   }
+ * }
+ *
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         loadChildren: 'team.js',
+ *         canLoad: [CanLoadTeamSection]
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanLoadTeamSection, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * You can alternatively provide a function with the `canLoad` signature:
+ *
+ * ```
+ * \@NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamCmp,
+ *         loadChildren: 'team.js',
+ *         canLoad: ['canLoadTeamSection']
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'canLoadTeamSection',
+ *       useValue: (route: Route) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * \@stable
+ * @record
+ */
+function CanLoad() { }
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
 *@license
 *Copyright Google Inc. All Rights Reserved.
 *
@@ -5694,13 +6002,6 @@ var OutletInjector = (function () {
 var PreloadingStrategy = (function () {
     function PreloadingStrategy() {
     }
-    /**
-     * @abstract
-     * @param {?} route
-     * @param {?} fn
-     * @return {?}
-     */
-    PreloadingStrategy.prototype.preload = function (route, fn) { };
     return PreloadingStrategy;
 }());
 /**
@@ -5771,8 +6072,8 @@ var RouterPreloader = (function () {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
-        var onStartLoad = function (r) { return router.triggerEvent(new RouteConfigLoadStart(r)); };
-        var onEndLoad = function (r) { return router.triggerEvent(new RouteConfigLoadEnd(r)); };
+        var /** @type {?} */ onStartLoad = function (r) { return router.triggerEvent(new RouteConfigLoadStart(r)); };
+        var /** @type {?} */ onEndLoad = function (r) { return router.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
     }
     
@@ -5840,9 +6141,7 @@ var RouterPreloader = (function () {
 RouterPreloader.decorators = [
     { type: _angular_core.Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterPreloader.ctorParameters = function () { return [
     { type: Router, },
     { type: _angular_core.NgModuleFactoryLoader, },
@@ -5850,6 +6149,10 @@ RouterPreloader.ctorParameters = function () { return [
     { type: _angular_core.Injector, },
     { type: PreloadingStrategy, },
 ]; };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -6011,9 +6314,7 @@ var RouterModule = (function () {
 RouterModule.decorators = [
     { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterModule.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
     { type: Router, decorators: [{ type: _angular_core.Optional },] },
@@ -6063,6 +6364,13 @@ function provideRoutes(routes) {
     ];
 }
 /**
+ * \@whatItDoes Represents options to configure the router.
+ *
+ * \@stable
+ * @record
+ */
+function ExtraOptions() { }
+/**
  * @param {?} ref
  * @param {?} urlSerializer
  * @param {?} contexts
@@ -6091,7 +6399,7 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.enableTracing) {
         var /** @type {?} */ dom_1 = _angular_platformBrowser.ɵgetDOM();
         router.events.subscribe(function (e) {
-            dom_1.logGroup("Router Event: " + ((e.constructor)).name);
+            dom_1.logGroup("Router Event: " + (((e.constructor))).name);
             dom_1.log(e.toString());
             dom_1.log(e);
             dom_1.logGroupEnd();
@@ -6208,9 +6516,7 @@ var RouterInitializer = (function () {
 RouterInitializer.decorators = [
     { type: _angular_core.Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 RouterInitializer.ctorParameters = function () { return [
     { type: _angular_core.Injector, },
 ]; };
@@ -6251,6 +6557,10 @@ function provideRouterInitializer() {
     ];
 }
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -6265,8 +6575,9 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.0-abee785');
+var VERSION = new _angular_core.Version('5.0.0-beta.0-b7a6f52');
 
+exports.Route = Route;
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
 exports.RouterLinkActive = RouterLinkActive;
@@ -6282,9 +6593,16 @@ exports.ResolveStart = ResolveStart;
 exports.RouteConfigLoadEnd = RouteConfigLoadEnd;
 exports.RouteConfigLoadStart = RouteConfigLoadStart;
 exports.RoutesRecognized = RoutesRecognized;
+exports.CanActivate = CanActivate$1;
+exports.CanActivateChild = CanActivateChild;
+exports.CanDeactivate = CanDeactivate$1;
+exports.CanLoad = CanLoad;
+exports.Resolve = Resolve;
 exports.RouteReuseStrategy = RouteReuseStrategy;
+exports.NavigationExtras = NavigationExtras;
 exports.Router = Router;
 exports.ROUTES = ROUTES;
+exports.ExtraOptions = ExtraOptions;
 exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
 exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
 exports.RouterModule = RouterModule;
@@ -6300,6 +6618,7 @@ exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
 exports.RouterState = RouterState;
 exports.RouterStateSnapshot = RouterStateSnapshot;
 exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
+exports.ParamMap = ParamMap;
 exports.convertToParamMap = convertToParamMap;
 exports.UrlHandlingStrategy = UrlHandlingStrategy;
 exports.DefaultUrlSerializer = DefaultUrlSerializer;
