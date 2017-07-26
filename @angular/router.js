@@ -1,10 +1,10 @@
 /**
- * @license Angular v5.0.0-beta.0-205abe8
+ * @license Angular v5.0.0-beta.0-086f4aa
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise, ɵstringify } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -3348,7 +3348,12 @@ class RouterConfigLoader {
                 this.onLoadEndListener(route);
             }
             const /** @type {?} */ module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
+            const /** @type {?} */ parentRoutes = new Set(flatten(parentInjector.get(ROUTES)));
+            const /** @type {?} */ moduleRoutes = flatten(module.injector.get(ROUTES)).filter(route => !parentRoutes.has(route));
+            if (moduleRoutes.length === 0) {
+                throw new Error(`A lazy loaded module must define at least 1 route, but it seems like the '${ɵstringify(factory.moduleType)}' module hasn't defined any. Have you imported RouterModule.forChild(ROUTES) in this module?`);
+            }
+            return new LoadedRouterConfig(moduleRoutes, module);
         });
     }
     /**
@@ -4183,7 +4188,7 @@ class PreActivation {
      */
     runCanActivateChecks() {
         const /** @type {?} */ checks$ = from(this.canActivateChecks);
-        const /** @type {?} */ runningChecks$ = mergeMap.call(checks$, (check) => andObservables(from([this.runCanActivateChild(check.path), this.runCanActivate(check.route)])));
+        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => andObservables(from([this.runCanActivateChild(check.path), this.runCanActivate(check.route)])));
         return every.call(runningChecks$, (result) => result === true);
     }
     /**
@@ -6285,7 +6290,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.0-205abe8');
+const VERSION = new Version('5.0.0-beta.0-086f4aa');
 
 /**
  * @fileoverview added by tsickle
