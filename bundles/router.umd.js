@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.0-4ce29f3
+ * @license Angular v4.3.1-bcea196
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3530,7 +3530,12 @@ var RouterConfigLoader = (function () {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
+            var /** @type {?} */ parentRoutes = new Set(flatten(parentInjector.get(ROUTES)));
+            var /** @type {?} */ moduleRoutes = flatten(module.injector.get(ROUTES)).filter(function (route) { return !parentRoutes.has(route); });
+            if (moduleRoutes.length === 0) {
+                throw new Error("A lazy loaded module must define at least 1 route, but it seems like the '" + _angular_core.ɵstringify(factory.moduleType) + "' module hasn't defined any. Have you imported RouterModule.forChild(ROUTES) in this module?");
+            }
+            return new LoadedRouterConfig(moduleRoutes, module);
         });
     };
     /**
@@ -4436,7 +4441,7 @@ var PreActivation = (function () {
     PreActivation.prototype.runCanActivateChecks = function () {
         var _this = this;
         var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (check) { return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(check.path), _this.runCanActivate(check.route)])); });
+        var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (check) { return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(check.path), _this.runCanActivate(check.route)])); });
         return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
     };
     /**
@@ -6265,7 +6270,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.3.0-4ce29f3');
+var VERSION = new _angular_core.Version('4.3.1-bcea196');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
