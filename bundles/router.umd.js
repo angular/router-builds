@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.0-fae47d8
+ * @license Angular v5.0.0-beta.0-a7f2468
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.0-fae47d8
+ * @license Angular v5.0.0-beta.0-a7f2468
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3503,12 +3503,7 @@ var RouterConfigLoader = (function () {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
-            var /** @type {?} */ parentRoutes = new Set(flatten(parentInjector.get(ROUTES)));
-            var /** @type {?} */ moduleRoutes = flatten(module.injector.get(ROUTES)).filter(function (route) { return !parentRoutes.has(route); });
-            if (moduleRoutes.length === 0) {
-                throw new Error("A lazy loaded module must define at least 1 route, but it seems like the '" + _angular_core.ɵstringify(factory.moduleType) + "' module hasn't defined any. Have you imported RouterModule.forChild(ROUTES) in this module?");
-            }
-            return new LoadedRouterConfig(moduleRoutes, module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
         });
     };
     /**
@@ -6580,7 +6575,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.0-fae47d8');
+var VERSION = new _angular_core.Version('5.0.0-beta.0-a7f2468');
 
 exports.Route = Route;
 exports.RouterLink = RouterLink;

@@ -1,11 +1,11 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v5.0.0-beta.0-fae47d8
+ * @license Angular v5.0.0-beta.0-a7f2468
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise, ɵstringify } from '@angular/core';
+import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -3488,12 +3488,7 @@ var RouterConfigLoader = (function () {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
-            var /** @type {?} */ parentRoutes = new Set(flatten(parentInjector.get(ROUTES)));
-            var /** @type {?} */ moduleRoutes = flatten(module.injector.get(ROUTES)).filter(function (route) { return !parentRoutes.has(route); });
-            if (moduleRoutes.length === 0) {
-                throw new Error("A lazy loaded module must define at least 1 route, but it seems like the '" + ɵstringify(factory.moduleType) + "' module hasn't defined any. Have you imported RouterModule.forChild(ROUTES) in this module?");
-            }
-            return new LoadedRouterConfig(moduleRoutes, module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
         });
     };
     /**
@@ -6565,7 +6560,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.0-fae47d8');
+var VERSION = new Version('5.0.0-beta.0-a7f2468');
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
