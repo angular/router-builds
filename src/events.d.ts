@@ -8,11 +8,24 @@
 import { Route } from './config';
 import { RouterStateSnapshot } from './router_state';
 /**
- * @whatItDoes Represents an event triggered when a navigation starts.
+ * @whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
- * @stable
+ * Example:
+ *
+ * ```
+ * class MyService {
+ *   constructor(public router: Router, logger: Logger) {
+ *     router.events.filter(e => e instanceof RouterEvent).subscribe(e => {
+ *       logger.log(e.id, e.url);
+ *     });
+ *   }
+ * }
+ * ```
+ *
+ * @experimental
  */
-export declare class NavigationStart {
+export declare class RouterEvent {
     /** @docsNotRequired */
     id: number;
     /** @docsNotRequired */
@@ -22,6 +35,43 @@ export declare class NavigationStart {
         id: number, 
         /** @docsNotRequired */
         url: string);
+}
+/**
+ * @whatItDoes Base for events tied to a specific `Route`, as opposed to events for the Router
+ * lifecycle. `RouteEvent`s may be fired multiple times during a single navigation and will
+ * always receive the `Route` they pertain to.
+ *
+ * Example:
+ *
+ * ```
+ * class MyService {
+ *   constructor(public router: Router, spinner: Spinner) {
+ *     router.events.filter(e => e instanceof RouteEvent).subscribe(e => {
+ *       if (e instanceof ChildActivationStart) {
+ *         spinner.start(e.route);
+ *       } else if (e instanceof ChildActivationEnd) {
+ *         spinner.end(e.route);
+ *       }
+ *     });
+ *   }
+ * }
+ * ```
+ *
+ * @experimental
+ */
+export declare class RouteEvent {
+    /** @docsNotRequired */
+    route: Route;
+    constructor(
+        /** @docsNotRequired */
+        route: Route);
+}
+/**
+ * @whatItDoes Represents an event triggered when a navigation starts.
+ *
+ * @stable
+ */
+export declare class NavigationStart extends RouterEvent {
     /** @docsNotRequired */
     toString(): string;
 }
@@ -30,11 +80,7 @@ export declare class NavigationStart {
  *
  * @stable
  */
-export declare class NavigationEnd {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class NavigationEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     constructor(
@@ -52,11 +98,7 @@ export declare class NavigationEnd {
  *
  * @stable
  */
-export declare class NavigationCancel {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class NavigationCancel extends RouterEvent {
     /** @docsNotRequired */
     reason: string;
     constructor(
@@ -74,11 +116,7 @@ export declare class NavigationCancel {
  *
  * @stable
  */
-export declare class NavigationError {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
     constructor(
@@ -96,11 +134,7 @@ export declare class NavigationError {
  *
  * @stable
  */
-export declare class RoutesRecognized {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class RoutesRecognized extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     /** @docsNotRequired */
@@ -118,35 +152,11 @@ export declare class RoutesRecognized {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered before lazy loading a route config.
- *
- * @experimental
- */
-export declare class RouteConfigLoadStart {
-    route: Route;
-    constructor(route: Route);
-    toString(): string;
-}
-/**
- * @whatItDoes Represents an event triggered when a route has been lazy loaded.
- *
- * @experimental
- */
-export declare class RouteConfigLoadEnd {
-    route: Route;
-    constructor(route: Route);
-    toString(): string;
-}
-/**
  * @whatItDoes Represents the start of the Guard phase of routing.
  *
  * @experimental
  */
-export declare class GuardsCheckStart {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class GuardsCheckStart extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     /** @docsNotRequired */
@@ -167,11 +177,7 @@ export declare class GuardsCheckStart {
  *
  * @experimental
  */
-export declare class GuardsCheckEnd {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class GuardsCheckEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     /** @docsNotRequired */
@@ -199,11 +205,7 @@ export declare class GuardsCheckEnd {
  *
  * @experimental
  */
-export declare class ResolveStart {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class ResolveStart extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     /** @docsNotRequired */
@@ -225,11 +227,7 @@ export declare class ResolveStart {
  *
  * @experimental
  */
-export declare class ResolveEnd {
-    /** @docsNotRequired */
-    id: number;
-    /** @docsNotRequired */
-    url: string;
+export declare class ResolveEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     /** @docsNotRequired */
@@ -246,6 +244,40 @@ export declare class ResolveEnd {
     toString(): string;
 }
 /**
+ * @whatItDoes Represents an event triggered before lazy loading a route config.
+ *
+ * @experimental
+ */
+export declare class RouteConfigLoadStart extends RouteEvent {
+    toString(): string;
+}
+/**
+ * @whatItDoes Represents an event triggered when a route has been lazy loaded.
+ *
+ * @experimental
+ */
+export declare class RouteConfigLoadEnd extends RouteEvent {
+    toString(): string;
+}
+/**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ChildActivationEnd} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ChildActivationStart extends RouteEvent {
+    toString(): string;
+}
+/**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ChildActivationStart} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ChildActivationEnd extends RouteEvent {
+    toString(): string;
+}
+/**
  * @whatItDoes Represents a router event, allowing you to track the lifecycle of the router.
  *
  * The sequence of router events is:
@@ -255,13 +287,15 @@ export declare class ResolveEnd {
  * - {@link RouteConfigLoadEnd},
  * - {@link RoutesRecognized},
  * - {@link GuardsCheckStart},
+ * - {@link ChildActivationStart},
  * - {@link GuardsCheckEnd},
  * - {@link ResolveStart},
  * - {@link ResolveEnd},
+ * - {@link ChildActivationEnd}
  * - {@link NavigationEnd},
  * - {@link NavigationCancel},
  * - {@link NavigationError}
  *
  * @stable
  */
-export declare type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | RouteConfigLoadStart | RouteConfigLoadEnd | GuardsCheckStart | GuardsCheckEnd | ResolveStart | ResolveEnd;
+export declare type Event = RouterEvent | RouteEvent;
