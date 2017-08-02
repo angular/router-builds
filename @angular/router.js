@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.3-24db1ed
+ * @license Angular v4.3.3-baf4ce0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1792,7 +1792,10 @@ function match(segmentGroup, route, segments) {
     const /** @type {?} */ res = matcher(segments, segmentGroup, route);
     if (!res) {
         return {
-            matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {},
+            matched: false,
+            consumedSegments: /** @type {?} */ ([]),
+            lastChild: 0,
+            positionalParamSegments: {},
         };
     }
     return {
@@ -4482,7 +4485,7 @@ class ActivateRoutes {
         if (context) {
             const /** @type {?} */ children = nodeChildrenAsMap(route);
             const /** @type {?} */ contexts = route.value.component ? context.children : parentContexts;
-            forEach(children, (v, k) => { this.deactivateRouteAndItsChildren(v, contexts); });
+            forEach(children, (v, k) => this.deactivateRouteAndItsChildren(v, contexts));
             if (context.outlet) {
                 // Destroy the component
                 context.outlet.deactivate();
@@ -5974,7 +5977,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.3-24db1ed');
+const VERSION = new Version('4.3.3-baf4ce0');
 
 /**
  * @license
