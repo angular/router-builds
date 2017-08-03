@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.2-81cb5bc
+ * @license Angular v5.0.0-beta.2-3a227a1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v5.0.0-beta.2-81cb5bc
+ * @license Angular v5.0.0-beta.2-3a227a1
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -805,7 +805,7 @@ function wrapIntoObservable(value) {
         // change detection.
         return rxjs_observable_fromPromise.fromPromise(Promise.resolve(value));
     }
-    return rxjs_observable_of.of(value);
+    return rxjs_observable_of.of(/** @type {?} */ (value));
 }
 /**
  * @fileoverview added by tsickle
@@ -6753,7 +6753,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.2-81cb5bc');
+var VERSION = new _angular_core.Version('5.0.0-beta.2-3a227a1');
 
 exports.Route = Route;
 exports.RouterLink = RouterLink;
