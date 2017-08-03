@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.3-e0021d4
+ * @license Angular v4.3.3-4176832
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ function __extends(d, b) {
 }
 
 /**
- * @license Angular v4.3.3-e0021d4
+ * @license Angular v4.3.3-4176832
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -658,7 +658,7 @@ function wrapIntoObservable(value) {
         // change detection.
         return rxjs_observable_fromPromise.fromPromise(Promise.resolve(value));
     }
-    return rxjs_observable_of.of(value);
+    return rxjs_observable_of.of(/** @type {?} */ (value));
 }
 /**
  * @license
@@ -4895,7 +4895,7 @@ function validateCommands(commands) {
  *
  * You can tell the directive to how to handle queryParams, available options are:
  *  - 'merge' merge the queryParams into the current queryParams
- *  - 'preserve' prserve the current queryParams
+ *  - 'preserve' preserve the current queryParams
  *  - default / '' use the queryParams only
  *  same options for {\@link NavigationExtras#queryParamsHandling}
  *
@@ -6268,7 +6268,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('4.3.3-e0021d4');
+var VERSION = new _angular_core.Version('4.3.3-4176832');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

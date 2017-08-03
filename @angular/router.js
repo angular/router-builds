@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.3.3-e0021d4
+ * @license Angular v4.3.3-4176832
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -638,7 +638,7 @@ function wrapIntoObservable(value) {
         // change detection.
         return fromPromise(Promise.resolve(value));
     }
-    return of(value);
+    return of(/** @type {?} */ (value));
 }
 
 /**
@@ -4685,7 +4685,7 @@ function validateCommands(commands) {
  *
  * You can tell the directive to how to handle queryParams, available options are:
  *  - 'merge' merge the queryParams into the current queryParams
- *  - 'preserve' prserve the current queryParams
+ *  - 'preserve' preserve the current queryParams
  *  - default / '' use the queryParams only
  *  same options for {\@link NavigationExtras#queryParamsHandling}
  *
@@ -5977,7 +5977,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('4.3.3-e0021d4');
+const VERSION = new Version('4.3.3-4176832');
 
 /**
  * @license
