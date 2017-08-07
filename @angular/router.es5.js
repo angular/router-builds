@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v5.0.0-beta.2-10897d6
+ * @license Angular v5.0.0-beta.2-f9f8924
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6738,7 +6738,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.2-10897d6');
+var VERSION = new Version('5.0.0-beta.2-f9f8924');
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
