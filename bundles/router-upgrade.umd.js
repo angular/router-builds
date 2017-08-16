@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.4-9aa0521
+ * @license Angular v5.0.0-beta.4-43226cb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
 /**
- * @license Angular v5.0.0-beta.4-9aa0521
+ * @license Angular v5.0.0-beta.4-43226cb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
