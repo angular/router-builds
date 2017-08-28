@@ -15,3 +15,8 @@ export declare class TreeNode<T> {
     constructor(value: T, children: TreeNode<T>[]);
     toString(): string;
 }
+export declare function nodeChildrenAsMap<T extends {
+    outlet: string;
+}>(node: TreeNode<T> | null): {
+    [outlet: string]: TreeNode<T>;
+};

@@ -1,8 +1,9 @@
 /**
- * @license Angular v4.2.0-beta.0-4874765
+ * @license Angular v5.0.0-beta.4-d64c935
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
- */ import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+ */
+import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
@@ -64,7 +65,7 @@ function setUpLocationSync(ngUpgrade) {
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router.navigateByUrl(url.pathname + url.search);
+        router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
 /**
