@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -20,7 +20,6 @@ import { EmptyError } from 'rxjs/util/EmptyError';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { every } from 'rxjs/operator/every';
 import { last } from 'rxjs/operator/last';
-import * as l from 'rxjs/operator/last';
 import { mergeAll } from 'rxjs/operator/mergeAll';
 import { reduce } from 'rxjs/operator/reduce';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -6423,7 +6422,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.5-ee04217');
+const VERSION = new Version('5.0.0-beta.5-fd701b0');
 
 /**
  * @fileoverview added by tsickle
@@ -6463,7 +6462,7 @@ const VERSION = new Version('5.0.0-beta.5-ee04217');
 /**
  * @module
  * @description
- * Entry point for all public APIs of the router package.
+ * Entry point for all public APIs of this package.
  */
 
 // This file only reexports content of the `src` folder. Keep it that way.
@@ -6477,4 +6476,4 @@ const VERSION = new Version('5.0.0-beta.5-ee04217');
  */
 
 export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, RouterEvent as ɵa, ROUTER_FORROOT_GUARD as ɵb, RouterInitializer as ɵh, getAppInitializer as ɵi, getBootstrapListener as ɵj, provideForRootGuard as ɵe, provideLocationStrategy as ɵd, provideRouterInitializer as ɵk, rootRoute as ɵg, routerNgProbeToken as ɵc, setupRouter as ɵf, Tree as ɵl, TreeNode as ɵm };
-//# sourceMappingURL=router.js.map
+//# sourceMappingURL=index.js.map

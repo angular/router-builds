@@ -1,18 +1,22 @@
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = global.ng.router.testing || {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
+	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v5.0.0-beta.5-ee04217
+ * @license Angular v5.0.0-beta.5-fd701b0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
+ */
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -22,16 +26,16 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @whatItDoes Allows to simulate the loading of ng modules in tests.
+ * \@whatItDoes Allows to simulate the loading of ng modules in tests.
  *
- * @howToUse
+ * \@howToUse
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
  *
- * @Component({template: 'lazy-loaded'})
+ * \@Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}
- * @NgModule({
+ * \@NgModule({
  *   declarations: [LazyLoadedComponent],
  *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
  * })
@@ -48,26 +52,32 @@
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- * @stable
+ * \@stable
  */
 var SpyNgModuleFactoryLoader = (function () {
+    /**
+     * @param {?} compiler
+     */
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
-         * @docsNotRequired
+         * \@docsNotRequired
          */
         this._stubbedModules = {};
     }
     Object.defineProperty(SpyNgModuleFactoryLoader.prototype, "stubbedModules", {
         /**
-         * @docsNotRequired
+         * \@docsNotRequired
+         * @return {?}
          */
         get: function () { return this._stubbedModules; },
         /**
-         * @docsNotRequired
+         * \@docsNotRequired
+         * @param {?} modules
+         * @return {?}
          */
         set: function (modules) {
-            var res = {};
+            var /** @type {?} */ res = {};
             for (var _i = 0, _a = Object.keys(modules); _i < _a.length; _i++) {
                 var t = _a[_i];
                 res[t] = this.compiler.compileModuleAsync(modules[t]);
@@ -77,12 +87,16 @@ var SpyNgModuleFactoryLoader = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @param {?} path
+     * @return {?}
+     */
     SpyNgModuleFactoryLoader.prototype.load = function (path) {
         if (this._stubbedModules[path]) {
             return this._stubbedModules[path];
         }
         else {
-            return Promise.reject(new Error("Cannot find module " + path));
+            return (Promise.reject(new Error("Cannot find module " + path)));
         }
     };
     return SpyNgModuleFactoryLoader;
@@ -97,19 +111,28 @@ SpyNgModuleFactoryLoader.ctorParameters = function () { return [
 /**
  * Router setup factory function used for testing.
  *
- * @stable
+ * \@stable
+ * @param {?} urlSerializer
+ * @param {?} contexts
+ * @param {?} location
+ * @param {?} loader
+ * @param {?} compiler
+ * @param {?} injector
+ * @param {?} routes
+ * @param {?=} urlHandlingStrategy
+ * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
-    var router = new _angular_router.Router(null, urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
+    var /** @type {?} */ router = new _angular_router.Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
     return router;
 }
 /**
- * @whatItDoes Sets up the router to be used for testing.
+ * \@whatItDoes Sets up the router to be used for testing.
  *
- * @howToUse
+ * \@howToUse
  *
  * ```
  * beforeEach(() => {
@@ -123,17 +146,21 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * });
  * ```
  *
- * @description
+ * \@description
  *
  * The modules sets up the router to be used for testing.
- * It provides spy implementations of {@link Location}, {@link LocationStrategy}, and {@link
+ * It provides spy implementations of {\@link Location}, {\@link LocationStrategy}, and {\@link
  * NgModuleFactoryLoader}.
  *
- * @stable
+ * \@stable
  */
 var RouterTestingModule = (function () {
     function RouterTestingModule() {
     }
+    /**
+     * @param {?} routes
+     * @return {?}
+     */
     RouterTestingModule.withRoutes = function (routes) {
         return { ngModule: RouterTestingModule, providers: [_angular_router.provideRoutes(routes)] };
     };
