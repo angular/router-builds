@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Route } from './config';
-import { RouterStateSnapshot } from './router_state';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
 /**
  * @whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
@@ -35,36 +35,6 @@ export declare class RouterEvent {
         id: number, 
         /** @docsNotRequired */
         url: string);
-}
-/**
- * @whatItDoes Base for events tied to a specific `Route`, as opposed to events for the Router
- * lifecycle. `RouteEvent`s may be fired multiple times during a single navigation and will
- * always receive the `Route` they pertain to.
- *
- * Example:
- *
- * ```
- * class MyService {
- *   constructor(public router: Router, spinner: Spinner) {
- *     router.events.filter(e => e instanceof RouteEvent).subscribe(e => {
- *       if (e instanceof ChildActivationStart) {
- *         spinner.start(e.route);
- *       } else if (e instanceof ChildActivationEnd) {
- *         spinner.end(e.route);
- *       }
- *     });
- *   }
- * }
- * ```
- *
- * @experimental
- */
-export declare class RouteEvent {
-    /** @docsNotRequired */
-    route: Route;
-    constructor(
-        /** @docsNotRequired */
-        route: Route);
 }
 /**
  * @whatItDoes Represents an event triggered when a navigation starts.
@@ -248,7 +218,12 @@ export declare class ResolveEnd extends RouterEvent {
  *
  * @experimental
  */
-export declare class RouteConfigLoadStart extends RouteEvent {
+export declare class RouteConfigLoadStart {
+    /** @docsNotRequired */
+    route: Route;
+    constructor(
+        /** @docsNotRequired */
+        route: Route);
     toString(): string;
 }
 /**
@@ -256,7 +231,12 @@ export declare class RouteConfigLoadStart extends RouteEvent {
  *
  * @experimental
  */
-export declare class RouteConfigLoadEnd extends RouteEvent {
+export declare class RouteConfigLoadEnd {
+    /** @docsNotRequired */
+    route: Route;
+    constructor(
+        /** @docsNotRequired */
+        route: Route);
     toString(): string;
 }
 /**
@@ -265,7 +245,12 @@ export declare class RouteConfigLoadEnd extends RouteEvent {
  *
  * @experimental
  */
-export declare class ChildActivationStart extends RouteEvent {
+export declare class ChildActivationStart {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
@@ -274,7 +259,12 @@ export declare class ChildActivationStart extends RouteEvent {
  *
  * @experimental
  */
-export declare class ChildActivationEnd extends RouteEvent {
+export declare class ChildActivationEnd {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
@@ -298,4 +288,4 @@ export declare class ChildActivationEnd extends RouteEvent {
  *
  * @stable
  */
-export declare type Event = RouterEvent | RouteEvent;
+export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd;

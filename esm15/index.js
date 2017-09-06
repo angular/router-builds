@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-fa6b802
+ * @license Angular v5.0.0-beta.6-66f0ab0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -296,37 +296,6 @@ class RouterEvent {
     }
 }
 /**
- * \@whatItDoes Base for events tied to a specific `Route`, as opposed to events for the Router
- * lifecycle. `RouteEvent`s may be fired multiple times during a single navigation and will
- * always receive the `Route` they pertain to.
- *
- * Example:
- *
- * ```
- * class MyService {
- *   constructor(public router: Router, spinner: Spinner) {
- *     router.events.filter(e => e instanceof RouteEvent).subscribe(e => {
- *       if (e instanceof ChildActivationStart) {
- *         spinner.start(e.route);
- *       } else if (e instanceof ChildActivationEnd) {
- *         spinner.end(e.route);
- *       }
- *     });
- *   }
- * }
- * ```
- *
- * \@experimental
- */
-class RouteEvent {
-    /**
-     * @param {?} route
-     */
-    constructor(route) {
-        this.route = route;
-    }
-}
-/**
  * \@whatItDoes Represents an event triggered when a navigation starts.
  *
  * \@stable
@@ -569,7 +538,13 @@ class ResolveEnd extends RouterEvent {
  *
  * \@experimental
  */
-class RouteConfigLoadStart extends RouteEvent {
+class RouteConfigLoadStart {
+    /**
+     * @param {?} route
+     */
+    constructor(route) {
+        this.route = route;
+    }
     /**
      * @return {?}
      */
@@ -580,7 +555,13 @@ class RouteConfigLoadStart extends RouteEvent {
  *
  * \@experimental
  */
-class RouteConfigLoadEnd extends RouteEvent {
+class RouteConfigLoadEnd {
+    /**
+     * @param {?} route
+     */
+    constructor(route) {
+        this.route = route;
+    }
     /**
      * @return {?}
      */
@@ -592,11 +573,20 @@ class RouteConfigLoadEnd extends RouteEvent {
  *
  * \@experimental
  */
-class ChildActivationStart extends RouteEvent {
+class ChildActivationStart {
+    /**
+     * @param {?} snapshot
+     */
+    constructor(snapshot) {
+        this.snapshot = snapshot;
+    }
     /**
      * @return {?}
      */
-    toString() { return `ChildActivationStart(path: '${this.route.path}')`; }
+    toString() {
+        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return `ChildActivationStart(path: '${path}')`;
+    }
 }
 /**
  * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
@@ -604,11 +594,20 @@ class ChildActivationStart extends RouteEvent {
  *
  * \@experimental
  */
-class ChildActivationEnd extends RouteEvent {
+class ChildActivationEnd {
+    /**
+     * @param {?} snapshot
+     */
+    constructor(snapshot) {
+        this.snapshot = snapshot;
+    }
     /**
      * @return {?}
      */
-    toString() { return `ChildActivationEnd(path: '${this.route.path}')`; }
+    toString() {
+        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return `ChildActivationEnd(path: '${path}')`;
+    }
 }
 
 /**
@@ -3223,8 +3222,8 @@ class PreActivation {
     runCanActivateChecks() {
         const /** @type {?} */ checks$ = from(this.canActivateChecks);
         const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => andObservables(from([
-            this.fireChildActivationStart(check.path), this.runCanActivateChild(check.path),
-            this.runCanActivate(check.route)
+            this.fireChildActivationStart(check.route.parent),
+            this.runCanActivateChild(check.path), this.runCanActivate(check.route)
         ])));
         return every.call(runningChecks$, (result) => result === true);
         // this.fireChildActivationStart(check.path),
@@ -3236,19 +3235,14 @@ class PreActivation {
      * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
-     * @param {?} path
+     * @param {?} snapshot
      * @return {?}
      */
-    fireChildActivationStart(path) {
-        if (!this.forwardEvent)
-            return of(true);
-        const /** @type {?} */ childActivations = path.slice(0, path.length - 1).reverse().filter(_ => _ !== null);
-        return andObservables(map.call(from(childActivations), (snapshot) => {
-            if (this.forwardEvent && snapshot._routeConfig) {
-                this.forwardEvent(new ChildActivationStart(snapshot._routeConfig));
-            }
-            return of(true);
-        }));
+    fireChildActivationStart(snapshot) {
+        if (snapshot !== null && this.forwardEvent) {
+            this.forwardEvent(new ChildActivationStart(snapshot));
+        }
+        return of(true);
     }
     /**
      * @param {?} future
@@ -4606,8 +4600,8 @@ class ActivateRoutes {
     activateChildRoutes(futureNode, currNode, contexts) {
         const /** @type {?} */ children = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(c => { this.activateRoutes(c, children[c.value.outlet], contexts); });
-        if (futureNode.children.length && futureNode.value.routeConfig) {
-            this.forwardEvent(new ChildActivationEnd(futureNode.value.routeConfig));
+        if (futureNode.children.length) {
+            this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
     }
     /**
@@ -6422,7 +6416,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.6-fa6b802');
+const VERSION = new Version('5.0.0-beta.6-66f0ab0');
 
 /**
  * @fileoverview added by tsickle
@@ -6475,5 +6469,5 @@ const VERSION = new Version('5.0.0-beta.6-fa6b802');
  * Generated bundle index. Do not edit.
  */
 
-export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, RouterEvent as ɵa, ROUTER_FORROOT_GUARD as ɵb, RouterInitializer as ɵh, getAppInitializer as ɵi, getBootstrapListener as ɵj, provideForRootGuard as ɵe, provideLocationStrategy as ɵd, provideRouterInitializer as ɵk, rootRoute as ɵg, routerNgProbeToken as ɵc, setupRouter as ɵf, Tree as ɵl, TreeNode as ɵm };
+export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=index.js.map

@@ -7,7 +7,7 @@
  */
 import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { RouteEvent } from './events';
+import { Event } from './events';
 import { ChildrenOutletContexts } from './router_outlet_context';
 import { RouterStateSnapshot } from './router_state';
 /**
@@ -20,7 +20,7 @@ export declare class PreActivation {
     private forwardEvent;
     private canActivateChecks;
     private canDeactivateChecks;
-    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: (evt: RouteEvent) => void);
+    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: (evt: Event) => void);
     initalize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;
@@ -48,7 +48,7 @@ export declare class PreActivation {
      * return
      * `true` so checks continue to run.
      */
-    private fireChildActivationStart(path);
+    private fireChildActivationStart(snapshot);
     private runCanActivate(future);
     private runCanActivateChild(path);
     private extractCanActivateChild(p);

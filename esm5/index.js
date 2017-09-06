@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-fa6b802
+ * @license Angular v5.0.0-beta.6-66f0ab0
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -297,38 +297,6 @@ var RouterEvent = (function () {
     return RouterEvent;
 }());
 /**
- * \@whatItDoes Base for events tied to a specific `Route`, as opposed to events for the Router
- * lifecycle. `RouteEvent`s may be fired multiple times during a single navigation and will
- * always receive the `Route` they pertain to.
- *
- * Example:
- *
- * ```
- * class MyService {
- *   constructor(public router: Router, spinner: Spinner) {
- *     router.events.filter(e => e instanceof RouteEvent).subscribe(e => {
- *       if (e instanceof ChildActivationStart) {
- *         spinner.start(e.route);
- *       } else if (e instanceof ChildActivationEnd) {
- *         spinner.end(e.route);
- *       }
- *     });
- *   }
- * }
- * ```
- *
- * \@experimental
- */
-var RouteEvent = (function () {
-    /**
-     * @param {?} route
-     */
-    function RouteEvent(route) {
-        this.route = route;
-    }
-    return RouteEvent;
-}());
-/**
  * \@whatItDoes Represents an event triggered when a navigation starts.
  *
  * \@stable
@@ -600,67 +568,81 @@ var ResolveEnd = (function (_super) {
  *
  * \@experimental
  */
-var RouteConfigLoadStart = (function (_super) {
-    __extends(RouteConfigLoadStart, _super);
-    function RouteConfigLoadStart() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var RouteConfigLoadStart = (function () {
+    /**
+     * @param {?} route
+     */
+    function RouteConfigLoadStart(route) {
+        this.route = route;
     }
     /**
      * @return {?}
      */
     RouteConfigLoadStart.prototype.toString = function () { return "RouteConfigLoadStart(path: " + this.route.path + ")"; };
     return RouteConfigLoadStart;
-}(RouteEvent));
+}());
 /**
  * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
  *
  * \@experimental
  */
-var RouteConfigLoadEnd = (function (_super) {
-    __extends(RouteConfigLoadEnd, _super);
-    function RouteConfigLoadEnd() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var RouteConfigLoadEnd = (function () {
+    /**
+     * @param {?} route
+     */
+    function RouteConfigLoadEnd(route) {
+        this.route = route;
     }
     /**
      * @return {?}
      */
     RouteConfigLoadEnd.prototype.toString = function () { return "RouteConfigLoadEnd(path: " + this.route.path + ")"; };
     return RouteConfigLoadEnd;
-}(RouteEvent));
+}());
 /**
  * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
  * {\@link ChildActivationEnd} for use of this experimental API.
  *
  * \@experimental
  */
-var ChildActivationStart = (function (_super) {
-    __extends(ChildActivationStart, _super);
-    function ChildActivationStart() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var ChildActivationStart = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ChildActivationStart(snapshot) {
+        this.snapshot = snapshot;
     }
     /**
      * @return {?}
      */
-    ChildActivationStart.prototype.toString = function () { return "ChildActivationStart(path: '" + this.route.path + "')"; };
+    ChildActivationStart.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationStart(path: '" + path + "')";
+    };
     return ChildActivationStart;
-}(RouteEvent));
+}());
 /**
  * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
  * {\@link ChildActivationStart} for use of this experimental API.
  *
  * \@experimental
  */
-var ChildActivationEnd = (function (_super) {
-    __extends(ChildActivationEnd, _super);
-    function ChildActivationEnd() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var ChildActivationEnd = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ChildActivationEnd(snapshot) {
+        this.snapshot = snapshot;
     }
     /**
      * @return {?}
      */
-    ChildActivationEnd.prototype.toString = function () { return "ChildActivationEnd(path: '" + this.route.path + "')"; };
+    ChildActivationEnd.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationEnd(path: '" + path + "')";
+    };
     return ChildActivationEnd;
-}(RouteEvent));
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -3417,8 +3399,8 @@ var PreActivation = (function () {
         var _this = this;
         var /** @type {?} */ checks$ = from(this.canActivateChecks);
         var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) { return andObservables(from([
-            _this.fireChildActivationStart(check.path), _this.runCanActivateChild(check.path),
-            _this.runCanActivate(check.route)
+            _this.fireChildActivationStart(check.route.parent),
+            _this.runCanActivateChild(check.path), _this.runCanActivate(check.route)
         ])); });
         return every.call(runningChecks$, function (result) { return result === true; });
         // this.fireChildActivationStart(check.path),
@@ -3430,20 +3412,14 @@ var PreActivation = (function () {
      * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
-     * @param {?} path
+     * @param {?} snapshot
      * @return {?}
      */
-    PreActivation.prototype.fireChildActivationStart = function (path) {
-        var _this = this;
-        if (!this.forwardEvent)
-            return of(true);
-        var /** @type {?} */ childActivations = path.slice(0, path.length - 1).reverse().filter(function (_) { return _ !== null; });
-        return andObservables(map.call(from(childActivations), function (snapshot) {
-            if (_this.forwardEvent && snapshot._routeConfig) {
-                _this.forwardEvent(new ChildActivationStart(snapshot._routeConfig));
-            }
-            return of(true);
-        }));
+    PreActivation.prototype.fireChildActivationStart = function (snapshot) {
+        if (snapshot !== null && this.forwardEvent) {
+            this.forwardEvent(new ChildActivationStart(snapshot));
+        }
+        return of(true);
     };
     /**
      * @param {?} future
@@ -4862,8 +4838,8 @@ var ActivateRoutes = (function () {
         var _this = this;
         var /** @type {?} */ children = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(function (c) { _this.activateRoutes(c, children[c.value.outlet], contexts); });
-        if (futureNode.children.length && futureNode.value.routeConfig) {
-            this.forwardEvent(new ChildActivationEnd(futureNode.value.routeConfig));
+        if (futureNode.children.length) {
+            this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
     };
     /**
@@ -6768,7 +6744,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.6-fa6b802');
+var VERSION = new Version('5.0.0-beta.6-66f0ab0');
 
 /**
  * @fileoverview added by tsickle
@@ -6821,5 +6797,5 @@ var VERSION = new Version('5.0.0-beta.6-fa6b802');
  * Generated bundle index. Do not edit.
  */
 
-export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, RouterEvent as ɵa, ROUTER_FORROOT_GUARD as ɵb, RouterInitializer as ɵh, getAppInitializer as ɵi, getBootstrapListener as ɵj, provideForRootGuard as ɵe, provideLocationStrategy as ɵd, provideRouterInitializer as ɵk, rootRoute as ɵg, routerNgProbeToken as ɵc, setupRouter as ɵf, Tree as ɵl, TreeNode as ɵm };
+export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=index.js.map
