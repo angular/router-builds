@@ -3,17 +3,11 @@
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
-}(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
+import { Location, LocationStrategy } from '@angular/common';
+import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
+import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
+import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
 
-/**
- * @license Angular v5.0.0-beta.6-f2945c6
- * (c) 2010-2017 Google, Inc. https://angular.io/
- * License: MIT
- */
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
@@ -102,11 +96,11 @@ var SpyNgModuleFactoryLoader = (function () {
     return SpyNgModuleFactoryLoader;
 }());
 SpyNgModuleFactoryLoader.decorators = [
-    { type: _angular_core.Injectable },
+    { type: Injectable },
 ];
 /** @nocollapse */
 SpyNgModuleFactoryLoader.ctorParameters = function () { return [
-    { type: _angular_core.Compiler, },
+    { type: Compiler, },
 ]; };
 /**
  * Router setup factory function used for testing.
@@ -123,7 +117,7 @@ SpyNgModuleFactoryLoader.ctorParameters = function () { return [
  * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
-    var /** @type {?} */ router = new _angular_router.Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
+    var /** @type {?} */ router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -162,36 +156,74 @@ var RouterTestingModule = (function () {
      * @return {?}
      */
     RouterTestingModule.withRoutes = function (routes) {
-        return { ngModule: RouterTestingModule, providers: [_angular_router.provideRoutes(routes)] };
+        return { ngModule: RouterTestingModule, providers: [provideRoutes(routes)] };
     };
     return RouterTestingModule;
 }());
 RouterTestingModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                exports: [_angular_router.RouterModule],
+    { type: NgModule, args: [{
+                exports: [RouterModule],
                 providers: [
-                    _angular_router.ɵROUTER_PROVIDERS, { provide: _angular_common.Location, useClass: _angular_common_testing.SpyLocation },
-                    { provide: _angular_common.LocationStrategy, useClass: _angular_common_testing.MockLocationStrategy },
-                    { provide: _angular_core.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                        provide: _angular_router.Router,
+                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                    { provide: LocationStrategy, useClass: MockLocationStrategy },
+                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                        provide: Router,
                         useFactory: setupTestingRouter,
                         deps: [
-                            _angular_router.UrlSerializer, _angular_router.ChildrenOutletContexts, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector,
-                            _angular_router.ROUTES, [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
+                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                            ROUTES, [UrlHandlingStrategy, new Optional()]
                         ]
                     },
-                    { provide: _angular_router.PreloadingStrategy, useExisting: _angular_router.NoPreloading }, _angular_router.provideRoutes([])
+                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
                 ]
             },] },
 ];
 /** @nocollapse */
 RouterTestingModule.ctorParameters = function () { return []; };
 
-exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
-exports.setupTestingRouter = setupTestingRouter;
-exports.RouterTestingModule = RouterTestingModule;
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the router/testing package.
+ */
 
-Object.defineProperty(exports, '__esModule', { value: true });
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of this package.
+ */
 
-})));
-//# sourceMappingURL=router-testing.umd.js.map
+// This file only reexports content of the `src` folder. Keep it that way.
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
+//# sourceMappingURL=index.js.map

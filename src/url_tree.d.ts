@@ -45,7 +45,7 @@ export declare class UrlTree {
         [key: string]: string;
     };
     /** The fragment of the URL */
-    fragment: string;
+    fragment: string | null;
     readonly queryParamMap: ParamMap;
     /** @docsNotRequired */
     toString(): string;
@@ -65,7 +65,7 @@ export declare class UrlSegmentGroup {
         [key: string]: UrlSegmentGroup;
     };
     /** The parent node in the url tree */
-    parent: UrlSegmentGroup;
+    parent: UrlSegmentGroup | null;
     constructor(
         /** The URL segments of this group. See {@link UrlSegment} for more information */
         segments: UrlSegment[], 
@@ -73,7 +73,7 @@ export declare class UrlSegmentGroup {
         children: {
         [key: string]: UrlSegmentGroup;
     });
-    /** Wether the segment has child segments */
+    /** Whether the segment has child segments */
     hasChildren(): boolean;
     /** Number of child segments */
     readonly numberOfChildren: number;
@@ -123,8 +123,8 @@ export declare class UrlSegment {
     /** @docsNotRequired */
     toString(): string;
 }
-export declare function equalSegments(a: UrlSegment[], b: UrlSegment[]): boolean;
-export declare function equalPath(a: UrlSegment[], b: UrlSegment[]): boolean;
+export declare function equalSegments(as: UrlSegment[], bs: UrlSegment[]): boolean;
+export declare function equalPath(as: UrlSegment[], bs: UrlSegment[]): boolean;
 export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v: UrlSegmentGroup, k: string) => T[]): T[];
 /**
  * @whatItDoes Serializes and deserializes a URL string into a URL tree.
@@ -167,6 +167,17 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
     serialize(tree: UrlTree): string;
 }
 export declare function serializePaths(segment: UrlSegmentGroup): string;
+/**
+ * This method is intended for encoding *key* or *value* parts of query component. We need a custom
+ * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
+ * encoded per http://tools.ietf.org/html/rfc3986:
+ *    query         = *( pchar / "/" / "?" )
+ *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+ *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+ *    pct-encoded   = "%" HEXDIG HEXDIG
+ *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+ *                     / "*" / "+" / "," / ";" / "="
+ */
 export declare function encode(s: string): string;
 export declare function decode(s: string): string;
 export declare function serializePath(path: UrlSegment): string;

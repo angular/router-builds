@@ -1,5 +1,5 @@
 /**
- * @license Angular v4.0.0-rc.5-c5cc3be
+ * @license Angular v5.0.0-beta.6-f2945c6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */ 

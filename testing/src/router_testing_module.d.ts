@@ -7,7 +7,7 @@
  */
 import { Location } from '@angular/common';
 import { Compiler, Injector, ModuleWithProviders, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
-import { Route, Router, RouterOutletMap, Routes, UrlHandlingStrategy, UrlSerializer } from '@angular/router';
+import { ChildrenOutletContexts, Route, Router, Routes, UrlHandlingStrategy, UrlSerializer } from '@angular/router';
 /**
  * @whatItDoes Allows to simulate the loading of ng modules in tests.
  *
@@ -60,7 +60,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
  *
  * @stable
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
 /**
  * @whatItDoes Sets up the router to be used for testing.
  *

@@ -25,7 +25,7 @@ export declare type Params = {
  * Matrix and Query parameters.
  *
  * `ParamMap` makes it easier to work with parameters as they could have either a single value or
- * multiple value. Because this should be know by the user calling `get` or `getAll` returns the
+ * multiple value. Because this should be known by the user, calling `get` or `getAll` returns the
  * correct type (either `string` or `string[]`).
  *
  * The API is inspired by the URLSearchParams interface.
@@ -59,4 +59,4 @@ export interface ParamMap {
 export declare function convertToParamMap(params: Params): ParamMap;
 export declare function navigationCancelingError(message: string): Error;
 export declare function isNavigationCancelingError(error: Error): any;
-export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult;
+export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;

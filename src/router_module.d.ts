@@ -10,7 +10,7 @@ import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, Modul
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
-import { RouterOutletMap } from './router_outlet_map';
+import { ChildrenOutletContexts } from './router_outlet_context';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -165,7 +165,7 @@ export interface ExtraOptions {
      */
     preloadingStrategy?: any;
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 /**
  * To initialize the router properly we need to do in two steps:
