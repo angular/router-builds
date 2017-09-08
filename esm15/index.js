@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-8f79150
+ * @license Angular v5.0.0-beta.6-626555c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5404,16 +5404,6 @@ class RouterOutlet {
         }
     }
     /**
-     * @deprecated since v4 *
-     * @return {?}
-     */
-    get locationInjector() { return this.location.injector; }
-    /**
-     * @deprecated since v4 *
-     * @return {?}
-     */
-    get locationFactoryResolver() { return this.resolver; }
-    /**
      * @return {?}
      */
     get isActivated() { return !!this.activated; }
@@ -6477,7 +6467,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.6-8f79150');
+const VERSION = new Version('5.0.0-beta.6-626555c');
 
 /**
  * @fileoverview added by tsickle

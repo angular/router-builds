@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-8f79150
+ * @license Angular v5.0.0-beta.6-626555c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-beta.6-8f79150
+ * @license Angular v5.0.0-beta.6-626555c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5710,24 +5710,6 @@ var RouterOutlet = (function () {
             }
         }
     };
-    Object.defineProperty(RouterOutlet.prototype, "locationInjector", {
-        /**
-         * @deprecated since v4 *
-         * @return {?}
-         */
-        get: function () { return this.location.injector; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "locationFactoryResolver", {
-        /**
-         * @deprecated since v4 *
-         * @return {?}
-         */
-        get: function () { return this.resolver; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(RouterOutlet.prototype, "isActivated", {
         /**
          * @return {?}
@@ -6829,7 +6811,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.6-8f79150');
+var VERSION = new _angular_core.Version('5.0.0-beta.6-626555c');
 
 exports.Route = Route;
 exports.RouterLink = RouterLink;
