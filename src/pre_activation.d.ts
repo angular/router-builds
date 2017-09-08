@@ -48,6 +48,15 @@ export declare class PreActivation {
      * return
      * `true` so checks continue to run.
      */
+    private fireActivationStart(snapshot);
+    /**
+     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * level.
+     * In other words, if you're activating `a` and `b` below, `path` will contain the
+     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * return
+     * `true` so checks continue to run.
+     */
     private fireChildActivationStart(snapshot);
     private runCanActivate(future);
     private runCanActivateChild(path);

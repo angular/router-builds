@@ -268,6 +268,34 @@ export declare class ChildActivationEnd {
     toString(): string;
 }
 /**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ActivationEnd} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ActivationStart {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ActivationStart} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ActivationEnd {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
  * @whatItDoes Represents a router event, allowing you to track the lifecycle of the router.
  *
  * The sequence of router events is:
@@ -288,4 +316,4 @@ export declare class ChildActivationEnd {
  *
  * @stable
  */
-export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd;
+export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd;

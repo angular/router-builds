@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-a69172f
+ * @license Angular v5.0.0-beta.6-8f79150
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -642,6 +642,50 @@ var ChildActivationEnd = (function () {
         return "ChildActivationEnd(path: '" + path + "')";
     };
     return ChildActivationEnd;
+}());
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationEnd} for use of this experimental API.
+ *
+ * \@experimental
+ */
+var ActivationStart = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ActivationStart(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    ActivationStart.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationStart(path: '" + path + "')";
+    };
+    return ActivationStart;
+}());
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationStart} for use of this experimental API.
+ *
+ * \@experimental
+ */
+var ActivationEnd = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ActivationEnd(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    ActivationEnd.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationEnd(path: '" + path + "')";
+    };
+    return ActivationEnd;
 }());
 
 /**
@@ -3399,11 +3443,27 @@ var PreActivation = (function () {
         var _this = this;
         var /** @type {?} */ checks$ = from(this.canActivateChecks);
         var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) { return andObservables(from([
-            _this.fireChildActivationStart(check.route.parent),
+            _this.fireChildActivationStart(check.route.parent), _this.fireActivationStart(check.route),
             _this.runCanActivateChild(check.path), _this.runCanActivate(check.route)
         ])); });
         return every.call(runningChecks$, function (result) { return result === true; });
         // this.fireChildActivationStart(check.path),
+    };
+    /**
+     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * level.
+     * In other words, if you're activating `a` and `b` below, `path` will contain the
+     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * return
+     * `true` so checks continue to run.
+     * @param {?} snapshot
+     * @return {?}
+     */
+    PreActivation.prototype.fireActivationStart = function (snapshot) {
+        if (snapshot !== null && this.forwardEvent) {
+            this.forwardEvent(new ActivationStart(snapshot));
+        }
+        return of(true);
     };
     /**
      * This should fire off `ChildActivationStart` events for each route being activated at this
@@ -4837,7 +4897,10 @@ var ActivateRoutes = (function () {
     ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
         var _this = this;
         var /** @type {?} */ children = nodeChildrenAsMap(currNode);
-        futureNode.children.forEach(function (c) { _this.activateRoutes(c, children[c.value.outlet], contexts); });
+        futureNode.children.forEach(function (c) {
+            _this.activateRoutes(c, children[c.value.outlet], contexts);
+            _this.forwardEvent(new ActivationEnd(c.value.snapshot));
+        });
         if (futureNode.children.length) {
             this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
@@ -6744,7 +6807,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.6-a69172f');
+var VERSION = new Version('5.0.0-beta.6-8f79150');
 
 /**
  * @fileoverview added by tsickle
@@ -6797,5 +6860,5 @@ var VERSION = new Version('5.0.0-beta.6-a69172f');
  * Generated bundle index. Do not edit.
  */
 
-export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=index.js.map

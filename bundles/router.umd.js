@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-a69172f
+ * @license Angular v5.0.0-beta.6-8f79150
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-beta.6-a69172f
+ * @license Angular v5.0.0-beta.6-8f79150
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -664,6 +664,50 @@ var ChildActivationEnd = (function () {
         return "ChildActivationEnd(path: '" + path + "')";
     };
     return ChildActivationEnd;
+}());
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationEnd} for use of this experimental API.
+ *
+ * \@experimental
+ */
+var ActivationStart = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ActivationStart(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    ActivationStart.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationStart(path: '" + path + "')";
+    };
+    return ActivationStart;
+}());
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationStart} for use of this experimental API.
+ *
+ * \@experimental
+ */
+var ActivationEnd = (function () {
+    /**
+     * @param {?} snapshot
+     */
+    function ActivationEnd(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    ActivationEnd.prototype.toString = function () {
+        var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return "ChildActivationEnd(path: '" + path + "')";
+    };
+    return ActivationEnd;
 }());
 
 /**
@@ -3421,11 +3465,27 @@ var PreActivation = (function () {
         var _this = this;
         var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canActivateChecks);
         var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (check) { return andObservables(rxjs_observable_from.from([
-            _this.fireChildActivationStart(check.route.parent),
+            _this.fireChildActivationStart(check.route.parent), _this.fireActivationStart(check.route),
             _this.runCanActivateChild(check.path), _this.runCanActivate(check.route)
         ])); });
         return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
         // this.fireChildActivationStart(check.path),
+    };
+    /**
+     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * level.
+     * In other words, if you're activating `a` and `b` below, `path` will contain the
+     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * return
+     * `true` so checks continue to run.
+     * @param {?} snapshot
+     * @return {?}
+     */
+    PreActivation.prototype.fireActivationStart = function (snapshot) {
+        if (snapshot !== null && this.forwardEvent) {
+            this.forwardEvent(new ActivationStart(snapshot));
+        }
+        return rxjs_observable_of.of(true);
     };
     /**
      * This should fire off `ChildActivationStart` events for each route being activated at this
@@ -4859,7 +4919,10 @@ var ActivateRoutes = (function () {
     ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
         var _this = this;
         var /** @type {?} */ children = nodeChildrenAsMap(currNode);
-        futureNode.children.forEach(function (c) { _this.activateRoutes(c, children[c.value.outlet], contexts); });
+        futureNode.children.forEach(function (c) {
+            _this.activateRoutes(c, children[c.value.outlet], contexts);
+            _this.forwardEvent(new ActivationEnd(c.value.snapshot));
+        });
         if (futureNode.children.length) {
             this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
@@ -6766,13 +6829,15 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.6-a69172f');
+var VERSION = new _angular_core.Version('5.0.0-beta.6-8f79150');
 
 exports.Route = Route;
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
 exports.RouterLinkActive = RouterLinkActive;
 exports.RouterOutlet = RouterOutlet;
+exports.ActivationEnd = ActivationEnd;
+exports.ActivationStart = ActivationStart;
 exports.ChildActivationEnd = ChildActivationEnd;
 exports.ChildActivationStart = ChildActivationStart;
 exports.GuardsCheckEnd = GuardsCheckEnd;

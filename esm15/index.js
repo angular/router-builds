@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-a69172f
+ * @license Angular v5.0.0-beta.6-8f79150
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -595,6 +595,48 @@ class ChildActivationStart {
  * \@experimental
  */
 class ChildActivationEnd {
+    /**
+     * @param {?} snapshot
+     */
+    constructor(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    toString() {
+        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return `ChildActivationEnd(path: '${path}')`;
+    }
+}
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationEnd} for use of this experimental API.
+ *
+ * \@experimental
+ */
+class ActivationStart {
+    /**
+     * @param {?} snapshot
+     */
+    constructor(snapshot) {
+        this.snapshot = snapshot;
+    }
+    /**
+     * @return {?}
+     */
+    toString() {
+        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        return `ChildActivationStart(path: '${path}')`;
+    }
+}
+/**
+ * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {\@link ActivationStart} for use of this experimental API.
+ *
+ * \@experimental
+ */
+class ActivationEnd {
     /**
      * @param {?} snapshot
      */
@@ -3222,11 +3264,27 @@ class PreActivation {
     runCanActivateChecks() {
         const /** @type {?} */ checks$ = from(this.canActivateChecks);
         const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => andObservables(from([
-            this.fireChildActivationStart(check.route.parent),
+            this.fireChildActivationStart(check.route.parent), this.fireActivationStart(check.route),
             this.runCanActivateChild(check.path), this.runCanActivate(check.route)
         ])));
         return every.call(runningChecks$, (result) => result === true);
         // this.fireChildActivationStart(check.path),
+    }
+    /**
+     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * level.
+     * In other words, if you're activating `a` and `b` below, `path` will contain the
+     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * return
+     * `true` so checks continue to run.
+     * @param {?} snapshot
+     * @return {?}
+     */
+    fireActivationStart(snapshot) {
+        if (snapshot !== null && this.forwardEvent) {
+            this.forwardEvent(new ActivationStart(snapshot));
+        }
+        return of(true);
     }
     /**
      * This should fire off `ChildActivationStart` events for each route being activated at this
@@ -4599,7 +4657,10 @@ class ActivateRoutes {
      */
     activateChildRoutes(futureNode, currNode, contexts) {
         const /** @type {?} */ children = nodeChildrenAsMap(currNode);
-        futureNode.children.forEach(c => { this.activateRoutes(c, children[c.value.outlet], contexts); });
+        futureNode.children.forEach(c => {
+            this.activateRoutes(c, children[c.value.outlet], contexts);
+            this.forwardEvent(new ActivationEnd(c.value.snapshot));
+        });
         if (futureNode.children.length) {
             this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
@@ -6416,7 +6477,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.6-a69172f');
+const VERSION = new Version('5.0.0-beta.6-8f79150');
 
 /**
  * @fileoverview added by tsickle
@@ -6469,5 +6530,5 @@ const VERSION = new Version('5.0.0-beta.6-a69172f');
  * Generated bundle index. Do not edit.
  */
 
-export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=index.js.map
