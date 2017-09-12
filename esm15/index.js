@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -24,244 +24,6 @@ import { mergeAll } from 'rxjs/operator/mergeAll';
 import { reduce } from 'rxjs/operator/reduce';
 import { ɵgetDOM } from '@angular/platform-browser';
 import { filter } from 'rxjs/operator/filter';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * \@whatItDoes Name of the primary outlet.
- *
- * \@stable
- */
-const PRIMARY_OUTLET = 'primary';
-/**
- * Matrix and Query parameters.
- *
- * `ParamMap` makes it easier to work with parameters as they could have either a single value or
- * multiple value. Because this should be known by the user, calling `get` or `getAll` returns the
- * correct type (either `string` or `string[]`).
- *
- * The API is inspired by the URLSearchParams interface.
- * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
- *
- * \@stable
- * @record
- */
-function ParamMap() { }
-class ParamsAsMap {
-    /**
-     * @param {?} params
-     */
-    constructor(params) { this.params = params || {}; }
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    has(name) { return this.params.hasOwnProperty(name); }
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    get(name) {
-        if (this.has(name)) {
-            const /** @type {?} */ v = this.params[name];
-            return Array.isArray(v) ? v[0] : v;
-        }
-        return null;
-    }
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    getAll(name) {
-        if (this.has(name)) {
-            const /** @type {?} */ v = this.params[name];
-            return Array.isArray(v) ? v : [v];
-        }
-        return [];
-    }
-    /**
-     * @return {?}
-     */
-    get keys() { return Object.keys(this.params); }
-}
-/**
- * Convert a {\@link Params} instance to a {\@link ParamMap}.
- *
- * \@stable
- * @param {?} params
- * @return {?}
- */
-function convertToParamMap(params) {
-    return new ParamsAsMap(params);
-}
-const NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
-/**
- * @param {?} message
- * @return {?}
- */
-function navigationCancelingError(message) {
-    const /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
-    ((error))[NAVIGATION_CANCELING_ERROR] = true;
-    return error;
-}
-/**
- * @param {?} error
- * @return {?}
- */
-function isNavigationCancelingError(error) {
-    return ((error))[NAVIGATION_CANCELING_ERROR];
-}
-/**
- * @param {?} segments
- * @param {?} segmentGroup
- * @param {?} route
- * @return {?}
- */
-function defaultUrlMatcher(segments, segmentGroup, route) {
-    const /** @type {?} */ parts = ((route.path)).split('/');
-    if (parts.length > segments.length) {
-        // The actual URL is shorter than the config, no match
-        return null;
-    }
-    if (route.pathMatch === 'full' &&
-        (segmentGroup.hasChildren() || parts.length < segments.length)) {
-        // The config is longer than the actual URL but we are looking for a full match, return null
-        return null;
-    }
-    const /** @type {?} */ posParams = {};
-    // Check each config part against the actual URL
-    for (let /** @type {?} */ index = 0; index < parts.length; index++) {
-        const /** @type {?} */ part = parts[index];
-        const /** @type {?} */ segment = segments[index];
-        const /** @type {?} */ isParameter = part.startsWith(':');
-        if (isParameter) {
-            posParams[part.substring(1)] = segment;
-        }
-        else if (part !== segment.path) {
-            // The actual URL part does not match the config, no match
-            return null;
-        }
-    }
-    return { consumed: segments.slice(0, parts.length), posParams };
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * See {\@link Routes} for more details.
- * \@stable
- * @record
- */
-function Route() { }
-class LoadedRouterConfig {
-    /**
-     * @param {?} routes
-     * @param {?} module
-     */
-    constructor(routes, module) {
-        this.routes = routes;
-        this.module = module;
-    }
-}
-/**
- * @param {?} config
- * @param {?=} parentPath
- * @return {?}
- */
-function validateConfig(config, parentPath = '') {
-    // forEach doesn't iterate undefined values
-    for (let /** @type {?} */ i = 0; i < config.length; i++) {
-        const /** @type {?} */ route = config[i];
-        const /** @type {?} */ fullPath = getFullPath(parentPath, route);
-        validateNode(route, fullPath);
-    }
-}
-/**
- * @param {?} route
- * @param {?} fullPath
- * @return {?}
- */
-function validateNode(route, fullPath) {
-    if (!route) {
-        throw new Error(`
-      Invalid configuration of route '${fullPath}': Encountered undefined route.
-      The reason might be an extra comma.
-
-      Example:
-      const routes: Routes = [
-        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        { path: 'dashboard',  component: DashboardComponent },, << two commas
-        { path: 'detail/:id', component: HeroDetailComponent }
-      ];
-    `);
-    }
-    if (Array.isArray(route)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
-    }
-    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': a componentless route cannot have a named outlet set`);
-    }
-    if (route.redirectTo && route.children) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
-    }
-    if (route.redirectTo && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
-    }
-    if (route.children && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
-    }
-    if (route.redirectTo && route.component) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
-    }
-    if (route.path && route.matcher) {
-        throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-        throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-        throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        const /** @type {?} */ exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
-        throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
-    }
-    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
-    }
-    if (route.children) {
-        validateConfig(route.children, fullPath);
-    }
-}
-/**
- * @param {?} parentPath
- * @param {?} currentRoute
- * @return {?}
- */
-function getFullPath(parentPath, currentRoute) {
-    if (!currentRoute) {
-        return parentPath;
-    }
-    if (!parentPath && !currentRoute.path) {
-        return '';
-    }
-    else if (parentPath && !currentRoute.path) {
-        return `${parentPath}/`;
-    }
-    else if (!parentPath && currentRoute.path) {
-        return currentRoute.path;
-    }
-    else {
-        return `${parentPath}/${currentRoute.path}`;
-    }
-}
 
 /**
  * @fileoverview added by tsickle
@@ -318,9 +80,9 @@ class NavigationEnd extends RouterEvent {
      * @param {?} url
      * @param {?} urlAfterRedirects
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects) {
         super(id, url);
@@ -345,9 +107,9 @@ class NavigationCancel extends RouterEvent {
      * @param {?} url
      * @param {?} reason
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, reason) {
         super(id, url);
@@ -370,9 +132,9 @@ class NavigationError extends RouterEvent {
      * @param {?} url
      * @param {?} error
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, error) {
         super(id, url);
@@ -398,9 +160,9 @@ class RoutesRecognized extends RouterEvent {
      * @param {?} urlAfterRedirects
      * @param {?} state
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects, state) {
         super(id, url);
@@ -427,9 +189,9 @@ class GuardsCheckStart extends RouterEvent {
      * @param {?} urlAfterRedirects
      * @param {?} state
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects, state) {
         super(id, url);
@@ -456,9 +218,9 @@ class GuardsCheckEnd extends RouterEvent {
      * @param {?} state
      * @param {?} shouldActivate
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects, state, shouldActivate) {
         super(id, url);
@@ -488,9 +250,9 @@ class ResolveStart extends RouterEvent {
      * @param {?} urlAfterRedirects
      * @param {?} state
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects, state) {
         super(id, url);
@@ -517,9 +279,9 @@ class ResolveEnd extends RouterEvent {
      * @param {?} urlAfterRedirects
      * @param {?} state
      */
-    constructor(
+    constructor(/** @docsNotRequired */
         /** @docsNotRequired */
-        id, 
+        id, /** @docsNotRequired */
         /** @docsNotRequired */
         url, urlAfterRedirects, state) {
         super(id, url);
@@ -649,6 +411,244 @@ class ActivationEnd {
     toString() {
         const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ChildActivationEnd(path: '${path}')`;
+    }
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * \@whatItDoes Name of the primary outlet.
+ *
+ * \@stable
+ */
+const PRIMARY_OUTLET = 'primary';
+/**
+ * Matrix and Query parameters.
+ *
+ * `ParamMap` makes it easier to work with parameters as they could have either a single value or
+ * multiple value. Because this should be known by the user, calling `get` or `getAll` returns the
+ * correct type (either `string` or `string[]`).
+ *
+ * The API is inspired by the URLSearchParams interface.
+ * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+ *
+ * \@stable
+ * @record
+ */
+
+class ParamsAsMap {
+    /**
+     * @param {?} params
+     */
+    constructor(params) { this.params = params || {}; }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    has(name) { return this.params.hasOwnProperty(name); }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    get(name) {
+        if (this.has(name)) {
+            const /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v[0] : v;
+        }
+        return null;
+    }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    getAll(name) {
+        if (this.has(name)) {
+            const /** @type {?} */ v = this.params[name];
+            return Array.isArray(v) ? v : [v];
+        }
+        return [];
+    }
+    /**
+     * @return {?}
+     */
+    get keys() { return Object.keys(this.params); }
+}
+/**
+ * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ *
+ * \@stable
+ * @param {?} params
+ * @return {?}
+ */
+function convertToParamMap(params) {
+    return new ParamsAsMap(params);
+}
+const NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
+/**
+ * @param {?} message
+ * @return {?}
+ */
+function navigationCancelingError(message) {
+    const /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+    (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR] = true;
+    return error;
+}
+/**
+ * @param {?} error
+ * @return {?}
+ */
+function isNavigationCancelingError(error) {
+    return (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR];
+}
+/**
+ * @param {?} segments
+ * @param {?} segmentGroup
+ * @param {?} route
+ * @return {?}
+ */
+function defaultUrlMatcher(segments, segmentGroup, route) {
+    const /** @type {?} */ parts = /** @type {?} */ ((route.path)).split('/');
+    if (parts.length > segments.length) {
+        // The actual URL is shorter than the config, no match
+        return null;
+    }
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || parts.length < segments.length)) {
+        // The config is longer than the actual URL but we are looking for a full match, return null
+        return null;
+    }
+    const /** @type {?} */ posParams = {};
+    // Check each config part against the actual URL
+    for (let /** @type {?} */ index = 0; index < parts.length; index++) {
+        const /** @type {?} */ part = parts[index];
+        const /** @type {?} */ segment = segments[index];
+        const /** @type {?} */ isParameter = part.startsWith(':');
+        if (isParameter) {
+            posParams[part.substring(1)] = segment;
+        }
+        else if (part !== segment.path) {
+            // The actual URL part does not match the config, no match
+            return null;
+        }
+    }
+    return { consumed: segments.slice(0, parts.length), posParams };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * See {\@link Routes} for more details.
+ * \@stable
+ * @record
+ */
+
+class LoadedRouterConfig {
+    /**
+     * @param {?} routes
+     * @param {?} module
+     */
+    constructor(routes, module) {
+        this.routes = routes;
+        this.module = module;
+    }
+}
+/**
+ * @param {?} config
+ * @param {?=} parentPath
+ * @return {?}
+ */
+function validateConfig(config, parentPath = '') {
+    // forEach doesn't iterate undefined values
+    for (let /** @type {?} */ i = 0; i < config.length; i++) {
+        const /** @type {?} */ route = config[i];
+        const /** @type {?} */ fullPath = getFullPath(parentPath, route);
+        validateNode(route, fullPath);
+    }
+}
+/**
+ * @param {?} route
+ * @param {?} fullPath
+ * @return {?}
+ */
+function validateNode(route, fullPath) {
+    if (!route) {
+        throw new Error(`
+      Invalid configuration of route '${fullPath}': Encountered undefined route.
+      The reason might be an extra comma.
+
+      Example:
+      const routes: Routes = [
+        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+        { path: 'dashboard',  component: DashboardComponent },, << two commas
+        { path: 'detail/:id', component: HeroDetailComponent }
+      ];
+    `);
+    }
+    if (Array.isArray(route)) {
+        throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
+    }
+    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+        throw new Error(`Invalid configuration of route '${fullPath}': a componentless route cannot have a named outlet set`);
+    }
+    if (route.redirectTo && route.children) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
+    }
+    if (route.redirectTo && route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
+    }
+    if (route.children && route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
+    }
+    if (route.redirectTo && route.component) {
+        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
+    }
+    if (route.path && route.matcher) {
+        throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
+    }
+    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+        throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
+    }
+    if (route.path === void 0 && route.matcher === void 0) {
+        throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
+    }
+    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+        throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
+    }
+    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+        const /** @type {?} */ exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
+        throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
+    }
+    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
+    }
+    if (route.children) {
+        validateConfig(route.children, fullPath);
+    }
+}
+/**
+ * @param {?} parentPath
+ * @param {?} currentRoute
+ * @return {?}
+ */
+function getFullPath(parentPath, currentRoute) {
+    if (!currentRoute) {
+        return parentPath;
+    }
+    if (!parentPath && !currentRoute.path) {
+        return '';
+    }
+    else if (parentPath && !currentRoute.path) {
+        return `${parentPath}/`;
+    }
+    else if (!parentPath && currentRoute.path) {
+        return currentRoute.path;
+    }
+    else {
+        return `${parentPath}/${currentRoute.path}`;
     }
 }
 
@@ -1127,7 +1127,7 @@ class DefaultUrlSerializer {
     serialize(tree) {
         const /** @type {?} */ segment = `/${serializeSegment(tree.root, true)}`;
         const /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeURI((((tree.fragment))))}` : '';
+        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeURI((/** @type {?} */ ((tree.fragment))))}` : '';
         return `${segment}${query}${fragment}`;
     }
 }
@@ -1408,7 +1408,7 @@ class UrlParser {
             if (next !== '/' && next !== ')' && next !== ';') {
                 throw new Error(`Cannot parse url '${this.url}'`);
             }
-            let /** @type {?} */ outletName = ((undefined));
+            let /** @type {?} */ outletName = /** @type {?} */ ((undefined));
             if (path.indexOf(':') > -1) {
                 outletName = path.substr(0, path.indexOf(':'));
                 this.capture(outletName);
@@ -1695,7 +1695,7 @@ class ApplyRedirects {
      */
     expandWildCardWithParamsAgainstRouteUsingRedirect(ngModule, routes, route, outlet) {
         const /** @type {?} */ newTree = this.applyRedirectCommands([], /** @type {?} */ ((route.redirectTo)), {});
-        if (((route.redirectTo)).startsWith('/')) {
+        if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
@@ -1717,7 +1717,7 @@ class ApplyRedirects {
         if (!matched)
             return noMatch(segmentGroup);
         const /** @type {?} */ newTree = this.applyRedirectCommands(consumedSegments, /** @type {?} */ ((route.redirectTo)), /** @type {?} */ (positionalParamSegments));
-        if (((route.redirectTo)).startsWith('/')) {
+        if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
         return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
@@ -2050,17 +2050,7 @@ function getOutlet(route) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */ class Tree {
+class Tree {
     /**
      * @param {?} root
      */
@@ -2558,25 +2548,25 @@ function advanceActivatedRoute(route) {
         const /** @type {?} */ nextSnapshot = route._futureSnapshot;
         route.snapshot = nextSnapshot;
         if (!shallowEqual(currentSnapshot.queryParams, nextSnapshot.queryParams)) {
-            ((route.queryParams)).next(nextSnapshot.queryParams);
+            (/** @type {?} */ (route.queryParams)).next(nextSnapshot.queryParams);
         }
         if (currentSnapshot.fragment !== nextSnapshot.fragment) {
-            ((route.fragment)).next(nextSnapshot.fragment);
+            (/** @type {?} */ (route.fragment)).next(nextSnapshot.fragment);
         }
         if (!shallowEqual(currentSnapshot.params, nextSnapshot.params)) {
-            ((route.params)).next(nextSnapshot.params);
+            (/** @type {?} */ (route.params)).next(nextSnapshot.params);
         }
         if (!shallowEqualArrays(currentSnapshot.url, nextSnapshot.url)) {
-            ((route.url)).next(nextSnapshot.url);
+            (/** @type {?} */ (route.url)).next(nextSnapshot.url);
         }
         if (!shallowEqual(currentSnapshot.data, nextSnapshot.data)) {
-            ((route.data)).next(nextSnapshot.data);
+            (/** @type {?} */ (route.data)).next(nextSnapshot.data);
         }
     }
     else {
         route.snapshot = route._futureSnapshot;
         // this is for resolved data
-        ((route.data)).next(route._futureSnapshot.data);
+        (/** @type {?} */ (route.data)).next(route._futureSnapshot.data);
     }
 }
 /**
@@ -2628,7 +2618,7 @@ function createNode(routeReuseStrategy, curr, prevState) {
         // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
     else if (routeReuseStrategy.retrieve(curr.value)) {
-        const /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
+        const /** @type {?} */ tree = (/** @type {?} */ (routeReuseStrategy.retrieve(curr.value))).route;
         setFutureSnapshotsOfActivatedRoutes(curr, tree);
         return tree;
     }
@@ -2808,9 +2798,11 @@ function computeNavigation(commands) {
                     // skip './a'
                 }
                 else if (partIndex == 0 && urlPart === '') {
+                    //  '/a'
                     isAbsolute = true;
                 }
                 else if (urlPart === '..') {
+                    //  '../a'
                     numberOfDoubleDots++;
                 }
                 else if (urlPart != '') {
@@ -2864,7 +2856,7 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
     let /** @type {?} */ dd = numberOfDoubleDots;
     while (dd > ci) {
         dd -= ci;
-        g = ((g.parent));
+        g = /** @type {?} */ ((g.parent));
         if (!g) {
             throw new Error('Invalid number of \'../\'');
         }
@@ -3184,7 +3176,7 @@ class PreActivation {
                 this.setupChildRouteGuards(futureNode, currNode, parentContexts, futurePath);
             }
             if (shouldRunGuardsAndResolvers) {
-                const /** @type {?} */ outlet = ((((context)).outlet));
+                const /** @type {?} */ outlet = /** @type {?} */ ((/** @type {?} */ ((context)).outlet));
                 this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
         }
@@ -3494,7 +3486,7 @@ class Recognizer {
             this.inheritParamsAndData(routeState._root);
             return of(routeState);
         }
-        catch (e) {
+        catch (/** @type {?} */ e) {
             return new Observable((obs) => obs.error(e));
         }
     }
@@ -3544,7 +3536,7 @@ class Recognizer {
             try {
                 return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
             }
-            catch (e) {
+            catch (/** @type {?} */ e) {
                 if (!(e instanceof NoMatch$1))
                     throw e;
             }
@@ -3576,7 +3568,7 @@ class Recognizer {
         if ((route.outlet || PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
         if (route.path === '**') {
-            const /** @type {?} */ params = segments.length > 0 ? ((last$1(segments))).parameters : {};
+            const /** @type {?} */ params = segments.length > 0 ? /** @type {?} */ ((last$1(segments))).parameters : {};
             const /** @type {?} */ snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
             return [new TreeNode(snapshot, [])];
         }
@@ -3618,7 +3610,7 @@ function getChildConfig(route) {
         return route.children;
     }
     if (route.loadChildren) {
-        return ((route._loadedConfig)).routes;
+        return /** @type {?} */ ((route._loadedConfig)).routes;
     }
     return [];
 }
@@ -3964,7 +3956,7 @@ class DefaultUrlHandlingStrategy {
  * \@stable
  * @record
  */
-function NavigationExtras() { }
+
 /**
  * @param {?} error
  * @return {?}
@@ -3978,7 +3970,7 @@ function defaultErrorHandler(error) {
  * @return {?}
  */
 function defaultRouterHook(snapshot) {
-    return (of(null));
+    return /** @type {?} */ (of(null));
 }
 /**
  * \@whatItDoes Provides the navigation and url manipulation capabilities.
@@ -3991,6 +3983,7 @@ function defaultRouterHook(snapshot) {
  */
 class Router {
     /**
+     * Creates the router service.
      * @param {?} rootComponentType
      * @param {?} urlSerializer
      * @param {?} rootContexts
@@ -4073,7 +4066,7 @@ class Router {
         // Zone.current.wrap is needed because of the issue with RxJS scheduler,
         // which does not work properly with zone.js in IE and Safari
         if (!this.locationSubscription) {
-            this.locationSubscription = (this.location.subscribe(Zone.current.wrap((change) => {
+            this.locationSubscription = /** @type {?} */ (this.location.subscribe(Zone.current.wrap((change) => {
                 const /** @type {?} */ rawUrlTree = this.urlSerializer.parse(change['url']);
                 const /** @type {?} */ source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 setTimeout(() => { this.scheduleNavigation(rawUrlTree, source, { replaceUrl: true }); }, 0);
@@ -4134,7 +4127,7 @@ class Router {
     dispose() {
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
-            this.locationSubscription = ((null));
+            this.locationSubscription = /** @type {?} */ ((null));
         }
     }
     /**
@@ -4183,7 +4176,7 @@ class Router {
      */
     createUrlTree(commands, navigationExtras = {}) {
         const { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = navigationExtras;
-        if (isDevMode() && preserveQueryParams && (console) && (console.warn)) {
+        if (isDevMode() && preserveQueryParams && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
             console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
         }
         const /** @type {?} */ a = relativeTo || this.routerState.root;
@@ -4316,7 +4309,7 @@ class Router {
                 return nav.promise.catch(() => { });
             }
             else {
-                return (of(null));
+                return /** @type {?} */ (of(null));
             }
         })
             .subscribe(() => { });
@@ -4512,7 +4505,7 @@ class Router {
                     try {
                         resolvePromise(this.errorHandler(e));
                     }
-                    catch (ee) {
+                    catch (/** @type {?} */ ee) {
                         rejectPromise(ee);
                     }
                 }
@@ -4692,7 +4685,7 @@ class ActivateRoutes {
                 // if we have a normal route, we need to place the component into the outlet and recurse.
                 const /** @type {?} */ context = parentContexts.getOrCreateContext(future.outlet);
                 if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
-                    const /** @type {?} */ stored = ((this.routeReuseStrategy.retrieve(future.snapshot)));
+                    const /** @type {?} */ stored = (/** @type {?} */ (this.routeReuseStrategy.retrieve(future.snapshot)));
                     this.routeReuseStrategy.store(future.snapshot, null);
                     context.children.onOutletReAttached(stored.contexts);
                     context.attachRef = stored.componentRef;
@@ -4881,7 +4874,7 @@ class RouterLink {
      * @return {?}
      */
     set preserveQueryParams(value) {
-        if (isDevMode() && (console) && (console.warn)) {
+        if (isDevMode() && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
             console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
         }
         this.preserve = value;
@@ -4976,7 +4969,7 @@ class RouterLinkWithHref {
      * @return {?}
      */
     set preserveQueryParams(value) {
-        if (isDevMode() && (console) && (console.warn)) {
+        if (isDevMode() && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
             console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
         }
         this.preserve = value;
@@ -5421,7 +5414,7 @@ class RouterOutlet {
     get activatedRoute() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
-        return (this._activatedRoute);
+        return /** @type {?} */ (this._activatedRoute);
     }
     /**
      * @return {?}
@@ -5479,7 +5472,7 @@ class RouterOutlet {
         }
         this._activatedRoute = activatedRoute;
         const /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
-        const /** @type {?} */ component = (((snapshot._routeConfig)).component);
+        const /** @type {?} */ component = /** @type {?} */ (/** @type {?} */ ((snapshot._routeConfig)).component);
         resolver = resolver || this.resolver;
         const /** @type {?} */ factory = resolver.resolveComponentFactory(component);
         const /** @type {?} */ childContexts = this.parentContexts.getOrCreateContext(this.name).children;
@@ -5532,364 +5525,6 @@ class OutletInjector {
         return this.parent.get(token, notFoundValue);
     }
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
- * activated.
- *
- * \@howToUse
- *
- * ```
- * class UserToken {}
- * class Permissions {
- *   canActivate(user: UserToken, id: string): boolean {
- *     return true;
- *   }
- * }
- *
- * \@Injectable()
- * class CanActivateTeam implements CanActivate {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
- *
- *   canActivate(
- *     route: ActivatedRouteSnapshot,
- *     state: RouterStateSnapshot
- *   ): Observable<boolean>|Promise<boolean>|boolean {
- *     return this.permissions.canActivate(this.currentUser, route.params.id);
- *   }
- * }
- *
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         canActivate: [CanActivateTeam]
- *       }
- *     ])
- *   ],
- *   providers: [CanActivateTeam, UserToken, Permissions]
- * })
- * class AppModule {}
- * ```
- *
- * You can alternatively provide a function with the `canActivate` signature:
- *
- * ```
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         canActivate: ['canActivateTeam']
- *       }
- *     ])
- *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
- * })
- * class AppModule {}
- * ```
- *
- * \@stable
- * @record
- */
-function CanActivate$1() { }
-/**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a child route can be
- * activated.
- *
- * \@howToUse
- *
- * ```
- * class UserToken {}
- * class Permissions {
- *   canActivate(user: UserToken, id: string): boolean {
- *     return true;
- *   }
- * }
- *
- * \@Injectable()
- * class CanActivateTeam implements CanActivateChild {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
- *
- *   canActivateChild(
- *     route: ActivatedRouteSnapshot,
- *     state: RouterStateSnapshot
- *   ): Observable<boolean>|Promise<boolean>|boolean {
- *     return this.permissions.canActivate(this.currentUser, route.params.id);
- *   }
- * }
- *
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'root',
- *         canActivateChild: [CanActivateTeam],
- *         children: [
- *           {
- *              path: 'team/:id',
- *              component: Team
- *           }
- *         ]
- *       }
- *     ])
- *   ],
- *   providers: [CanActivateTeam, UserToken, Permissions]
- * })
- * class AppModule {}
- * ```
- *
- * You can alternatively provide a function with the `canActivateChild` signature:
- *
- * ```
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'root',
- *         canActivateChild: ['canActivateTeam'],
- *         children: [
- *           {
- *             path: 'team/:id',
- *             component: Team
- *           }
- *         ]
- *       }
- *     ])
- *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
- * })
- * class AppModule {}
- * ```
- *
- * \@stable
- * @record
- */
-function CanActivateChild() { }
-/**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
- * deactivated.
- *
- * \@howToUse
- *
- * ```
- * class UserToken {}
- * class Permissions {
- *   canDeactivate(user: UserToken, id: string): boolean {
- *     return true;
- *   }
- * }
- *
- * \@Injectable()
- * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
- *
- *   canDeactivate(
- *     component: TeamComponent,
- *     currentRoute: ActivatedRouteSnapshot,
- *     currentState: RouterStateSnapshot,
- *     nextState: RouterStateSnapshot
- *   ): Observable<boolean>|Promise<boolean>|boolean {
- *     return this.permissions.canDeactivate(this.currentUser, route.params.id);
- *   }
- * }
- *
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         canDeactivate: [CanDeactivateTeam]
- *       }
- *     ])
- *   ],
- *   providers: [CanDeactivateTeam, UserToken, Permissions]
- * })
- * class AppModule {}
- * ```
- *
- * You can alternatively provide a function with the `canDeactivate` signature:
- *
- * ```
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         canDeactivate: ['canDeactivateTeam']
- *       }
- *     ])
- *   ],
- *   providers: [
- *     {
- *       provide: 'canDeactivateTeam',
- *       useValue: (component: TeamComponent, currentRoute: ActivatedRouteSnapshot, currentState:
- * RouterStateSnapshot, nextState: RouterStateSnapshot) => true
- *     }
- *   ]
- * })
- * class AppModule {}
- * ```
- *
- * \@stable
- * @record
- */
-function CanDeactivate$1() { }
-/**
- * \@whatItDoes Interface that class can implement to be a data provider.
- *
- * \@howToUse
- *
- * ```
- * class Backend {
- *   fetchTeam(id: string) {
- *     return 'someTeam';
- *   }
- * }
- *
- * \@Injectable()
- * class TeamResolver implements Resolve<Team> {
- *   constructor(private backend: Backend) {}
- *
- *   resolve(
- *     route: ActivatedRouteSnapshot,
- *     state: RouterStateSnapshot
- *   ): Observable<any>|Promise<any>|any {
- *     return this.backend.fetchTeam(route.params.id);
- *   }
- * }
- *
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         resolve: {
- *           team: TeamResolver
- *         }
- *       }
- *     ])
- *   ],
- *   providers: [TeamResolver]
- * })
- * class AppModule {}
- * ```
- *
- * You can alternatively provide a function with the `resolve` signature:
- *
- * ```
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         resolve: {
- *           team: 'teamResolver'
- *         }
- *       }
- *     ])
- *   ],
- *   providers: [
- *     {
- *       provide: 'teamResolver',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => 'team'
- *     }
- *   ]
- * })
- * class AppModule {}
- * ```
- * \@stable
- * @record
- */
-function Resolve() { }
-/**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a children can be
- * loaded.
- *
- * \@howToUse
- *
- * ```
- * class UserToken {}
- * class Permissions {
- *   canLoadChildren(user: UserToken, id: string): boolean {
- *     return true;
- *   }
- * }
- *
- * \@Injectable()
- * class CanLoadTeamSection implements CanLoad {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
- *
- *   canLoad(route: Route): Observable<boolean>|Promise<boolean>|boolean {
- *     return this.permissions.canLoadChildren(this.currentUser, route);
- *   }
- * }
- *
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         loadChildren: 'team.js',
- *         canLoad: [CanLoadTeamSection]
- *       }
- *     ])
- *   ],
- *   providers: [CanLoadTeamSection, UserToken, Permissions]
- * })
- * class AppModule {}
- * ```
- *
- * You can alternatively provide a function with the `canLoad` signature:
- *
- * ```
- * \@NgModule({
- *   imports: [
- *     RouterModule.forRoot([
- *       {
- *         path: 'team/:id',
- *         component: TeamCmp,
- *         loadChildren: 'team.js',
- *         canLoad: ['canLoadTeamSection']
- *       }
- *     ])
- *   ],
- *   providers: [
- *     {
- *       provide: 'canLoadTeamSection',
- *       useValue: (route: Route) => true
- *     }
- *   ]
- * })
- * class AppModule {}
- * ```
- *
- * \@stable
- * @record
- */
-function CanLoad() { }
 
 /**
  * @fileoverview added by tsickle
@@ -6263,7 +5898,7 @@ function provideRoutes(routes) {
  * \@stable
  * @record
  */
-function ExtraOptions() { }
+
 /**
  * @param {?} ref
  * @param {?} urlSerializer
@@ -6292,7 +5927,7 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.enableTracing) {
         const /** @type {?} */ dom = ɵgetDOM();
         router.events.subscribe(e => {
-            dom.logGroup(`Router Event: ${(((e.constructor))).name}`);
+            dom.logGroup(`Router Event: ${((/** @type {?} */ (e.constructor))).name}`);
             dom.log(e.toString());
             dom.log(e);
             dom.logGroupEnd();
@@ -6333,7 +5968,7 @@ class RouterInitializer {
     appInitializer() {
         const /** @type {?} */ p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
         return p.then(() => {
-            let /** @type {?} */ resolve = ((null));
+            let /** @type {?} */ resolve = /** @type {?} */ ((null));
             const /** @type {?} */ res = new Promise(r => resolve = r);
             const /** @type {?} */ router = this.injector.get(Router);
             const /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
@@ -6354,7 +5989,7 @@ class RouterInitializer {
                         // subsequent navigations should not be delayed
                     }
                     else {
-                        return (of(null));
+                        return /** @type {?} */ (of(null));
                     }
                 };
                 router.initialNavigation();
@@ -6467,7 +6102,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.6-112e777');
+const VERSION = new Version('5.0.0-beta.6-ca5aeba');
 
 /**
  * @fileoverview added by tsickle
@@ -6484,13 +6119,6 @@ const VERSION = new Version('5.0.0-beta.6-112e777');
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 
 /**
@@ -6520,5 +6148,5 @@ const VERSION = new Version('5.0.0-beta.6-112e777');
  * Generated bundle index. Do not edit.
  */
 
-export { Route, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, CanActivate$1 as CanActivate, CanActivateChild, CanDeactivate$1 as CanDeactivate, CanLoad, Resolve, RouteReuseStrategy, NavigationExtras, Router, ROUTES, ExtraOptions, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, ParamMap, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
 //# sourceMappingURL=index.js.map

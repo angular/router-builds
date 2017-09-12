@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.6-112e777
+ * @license Angular v5.0.0-beta.6-ca5aeba
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -85,7 +85,7 @@ class SpyNgModuleFactoryLoader {
             return this._stubbedModules[path];
         }
         else {
-            return (Promise.reject(new Error(`Cannot find module ${path}`)));
+            return /** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`)));
         }
     }
 }
