@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter, Injector, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { ChildrenOutletContexts } from '../router_outlet_context';
 import { ActivatedRoute } from '../router_state';
 /**
@@ -45,10 +45,6 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
     ngOnDestroy(): void;
     ngOnInit(): void;
-    /** @deprecated since v4 **/
-    readonly locationInjector: Injector;
-    /** @deprecated since v4 **/
-    readonly locationFactoryResolver: ComponentFactoryResolver;
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
