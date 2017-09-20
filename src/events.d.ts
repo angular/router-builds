@@ -306,9 +306,11 @@ export declare class ActivationEnd {
  * - {@link RoutesRecognized},
  * - {@link GuardsCheckStart},
  * - {@link ChildActivationStart},
+ * - {@link ActivationStart},
  * - {@link GuardsCheckEnd},
  * - {@link ResolveStart},
  * - {@link ResolveEnd},
+ * - {@link ActivationEnd}
  * - {@link ChildActivationEnd}
  * - {@link NavigationEnd},
  * - {@link NavigationCancel},

@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-b14c2d1
+ * @license Angular v5.0.0-beta.7-2c4107c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -411,7 +411,7 @@ var ActivationStart = (function () {
      */
     function () {
         var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-        return "ChildActivationStart(path: '" + path + "')";
+        return "ActivationStart(path: '" + path + "')";
     };
     return ActivationStart;
 }());
@@ -433,7 +433,7 @@ var ActivationEnd = (function () {
      */
     function () {
         var /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-        return "ChildActivationEnd(path: '" + path + "')";
+        return "ActivationEnd(path: '" + path + "')";
     };
     return ActivationEnd;
 }());
@@ -3684,20 +3684,20 @@ var PreActivation = (function () {
         // this.fireChildActivationStart(check.path),
     };
     /**
-     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * This should fire off `ActivationStart` events for each route being activated at this
      * level.
      * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
      * @param {?} snapshot
      * @return {?}
      */
     PreActivation.prototype.fireActivationStart = /**
-     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * This should fire off `ActivationStart` events for each route being activated at this
      * level.
      * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
      * @param {?} snapshot
@@ -7252,7 +7252,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.7-b14c2d1');
+var VERSION = new Version('5.0.0-beta.7-2c4107c');
 
 /**
  * @fileoverview added by tsickle

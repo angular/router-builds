@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-b14c2d1
+ * @license Angular v5.0.0-beta.7-2c4107c
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -389,7 +389,7 @@ class ActivationStart {
      */
     toString() {
         const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-        return `ChildActivationStart(path: '${path}')`;
+        return `ActivationStart(path: '${path}')`;
     }
 }
 /**
@@ -410,7 +410,7 @@ class ActivationEnd {
      */
     toString() {
         const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-        return `ChildActivationEnd(path: '${path}')`;
+        return `ActivationEnd(path: '${path}')`;
     }
 }
 
@@ -3258,10 +3258,10 @@ class PreActivation {
         // this.fireChildActivationStart(check.path),
     }
     /**
-     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * This should fire off `ActivationStart` events for each route being activated at this
      * level.
      * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
      * @param {?} snapshot
@@ -6089,7 +6089,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.7-b14c2d1');
+const VERSION = new Version('5.0.0-beta.7-2c4107c');
 
 /**
  * @fileoverview added by tsickle
