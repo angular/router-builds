@@ -152,12 +152,12 @@ export declare class Router {
     private currentUrlTree;
     private rawUrlTree;
     private navigations;
-    private routerEvents;
-    private currentRouterState;
     private locationSubscription;
     private navigationId;
     private configLoader;
     private ngModule;
+    readonly events: Observable<Event>;
+    readonly routerState: RouterState;
     /**
      * Error handler that is invoked when a navigation errors.
      *
@@ -185,12 +185,8 @@ export declare class Router {
      * Sets up the location change listener.
      */
     setUpLocationChangeListener(): void;
-    /** The current route state */
-    readonly routerState: RouterState;
     /** The current url */
     readonly url: string;
-    /** An observable of router events */
-    readonly events: Observable<Event>;
     /**
      * Resets the configuration used for navigation and generating links.
      *
