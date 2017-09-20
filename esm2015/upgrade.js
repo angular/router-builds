@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-9d2236a
+ * @license Angular v5.0.0-beta.7-5751865
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -41,7 +41,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * \@experimental
  */
-var RouterUpgradeInitializer = {
+const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: locationSyncBootstrapListener,
@@ -53,7 +53,7 @@ var RouterUpgradeInitializer = {
  * @return {?}
  */
 function locationSyncBootstrapListener(ngUpgrade) {
-    return function () { setUpLocationSync(ngUpgrade); };
+    return () => { setUpLocationSync(ngUpgrade); };
 }
 /**
  * \@whatItDoes Sets up a location synchronization.
@@ -67,12 +67,15 @@ function locationSyncBootstrapListener(ngUpgrade) {
  */
 function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
-        throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
+        throw new Error(`
+        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.
+        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
+      `);
     }
-    var /** @type {?} */ router = ngUpgrade.injector.get(Router);
-    var /** @type {?} */ url = document.createElement('a');
+    const /** @type {?} */ router = ngUpgrade.injector.get(Router);
+    const /** @type {?} */ url = document.createElement('a');
     ngUpgrade.$injector.get('$rootScope')
-        .$on('$locationChangeStart', function (_, next, __) {
+        .$on('$locationChangeStart', (_, next, __) => {
         url.href = next;
         router.navigateByUrl(url.pathname + url.search + url.hash);
     });
@@ -106,4 +109,4 @@ function setUpLocationSync(ngUpgrade) {
  */
 
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=upgrade.js.map

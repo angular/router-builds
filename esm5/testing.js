@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-9d2236a
+ * @license Angular v5.0.0-beta.7-5751865
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -48,54 +48,67 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTES, Route
  *
  * \@stable
  */
-class SpyNgModuleFactoryLoader {
-    /**
-     * @param {?} compiler
-     */
-    constructor(compiler) {
+var SpyNgModuleFactoryLoader = (function () {
+    function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
          * \@docsNotRequired
          */
         this._stubbedModules = {};
     }
-    /**
-     * \@docsNotRequired
-     * @param {?} modules
-     * @return {?}
-     */
-    set stubbedModules(modules) {
-        const /** @type {?} */ res = {};
-        for (const /** @type {?} */ t of Object.keys(modules)) {
-            res[t] = this.compiler.compileModuleAsync(modules[t]);
-        }
-        this._stubbedModules = res;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    get stubbedModules() { return this._stubbedModules; }
+    Object.defineProperty(SpyNgModuleFactoryLoader.prototype, "stubbedModules", {
+        /**
+         * @docsNotRequired
+         */
+        get: /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        function () { return this._stubbedModules; },
+        /**
+         * @docsNotRequired
+         */
+        set: /**
+         * \@docsNotRequired
+         * @param {?} modules
+         * @return {?}
+         */
+        function (modules) {
+            var /** @type {?} */ res = {};
+            for (var _i = 0, _a = Object.keys(modules); _i < _a.length; _i++) {
+                var t = _a[_i];
+                res[t] = this.compiler.compileModuleAsync(modules[t]);
+            }
+            this._stubbedModules = res;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @param {?} path
      * @return {?}
      */
-    load(path) {
+    SpyNgModuleFactoryLoader.prototype.load = /**
+     * @param {?} path
+     * @return {?}
+     */
+    function (path) {
         if (this._stubbedModules[path]) {
             return this._stubbedModules[path];
         }
         else {
-            return /** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`)));
+            return /** @type {?} */ (Promise.reject(new Error("Cannot find module " + path)));
         }
-    }
-}
-SpyNgModuleFactoryLoader.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-SpyNgModuleFactoryLoader.ctorParameters = () => [
-    { type: Compiler, },
-];
+    };
+    SpyNgModuleFactoryLoader.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    SpyNgModuleFactoryLoader.ctorParameters = function () { return [
+        { type: Compiler, },
+    ]; };
+    return SpyNgModuleFactoryLoader;
+}());
 /**
  * Router setup factory function used for testing.
  *
@@ -111,7 +124,7 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
  * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
-    const /** @type {?} */ router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    var /** @type {?} */ router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -142,35 +155,42 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  * \@stable
  */
-class RouterTestingModule {
+var RouterTestingModule = (function () {
+    function RouterTestingModule() {
+    }
     /**
      * @param {?} routes
      * @return {?}
      */
-    static withRoutes(routes) {
+    RouterTestingModule.withRoutes = /**
+     * @param {?} routes
+     * @return {?}
+     */
+    function (routes) {
         return { ngModule: RouterTestingModule, providers: [provideRoutes(routes)] };
-    }
-}
-RouterTestingModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [RouterModule],
-                providers: [
-                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                    { provide: LocationStrategy, useClass: MockLocationStrategy },
-                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                        provide: Router,
-                        useFactory: setupTestingRouter,
-                        deps: [
-                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                            ROUTES, [UrlHandlingStrategy, new Optional()]
-                        ]
-                    },
-                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
-                ]
-            },] },
-];
-/** @nocollapse */
-RouterTestingModule.ctorParameters = () => [];
+    };
+    RouterTestingModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [RouterModule],
+                    providers: [
+                        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                        { provide: LocationStrategy, useClass: MockLocationStrategy },
+                        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: Router,
+                            useFactory: setupTestingRouter,
+                            deps: [
+                                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                                ROUTES, [UrlHandlingStrategy, new Optional()]
+                            ]
+                        },
+                        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                    ]
+                },] },
+    ];
+    /** @nocollapse */
+    RouterTestingModule.ctorParameters = function () { return []; };
+    return RouterTestingModule;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -217,4 +237,4 @@ RouterTestingModule.ctorParameters = () => [];
  */
 
 export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=testing.js.map
