@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-bed8ac7
+ * @license Angular v5.0.0-beta.7-14e8e88
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-beta.7-bed8ac7
+ * @license Angular v5.0.0-beta.7-14e8e88
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3439,8 +3439,15 @@ function compare(path, params, segment) {
 var CanActivate = (function () {
     function CanActivate(path) {
         this.path = path;
-        this.route = this.path[this.path.length - 1];
     }
+    Object.defineProperty(CanActivate.prototype, "route", {
+        get: /**
+         * @return {?}
+         */
+        function () { return this.path[this.path.length - 1]; },
+        enumerable: true,
+        configurable: true
+    });
     return CanActivate;
 }());
 var CanDeactivate = (function () {
@@ -7266,7 +7273,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-beta.7-bed8ac7');
+var VERSION = new _angular_core.Version('5.0.0-beta.7-14e8e88');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
