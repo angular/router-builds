@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-b3db3f8
+ * @license Angular v5.0.0-beta.7-a9d32a3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -500,7 +500,7 @@ function navigationCancelingError(message) {
  * @return {?}
  */
 function isNavigationCancelingError(error) {
-    return (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR];
+    return error && (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR];
 }
 /**
  * @param {?} segments
@@ -3083,7 +3083,7 @@ class PreActivation {
      * @param {?} parentContexts
      * @return {?}
      */
-    initalize(parentContexts) {
+    initialize(parentContexts) {
         const /** @type {?} */ futureRoot = this.future._root;
         const /** @type {?} */ currRoot = this.curr ? this.curr._root : null;
         this.setupChildRouteGuards(futureRoot, currRoot, parentContexts, [futureRoot.value]);
@@ -4399,7 +4399,7 @@ class Router {
             const /** @type {?} */ preactivationSetup$ = map.call(beforePreactivationDone$, ({ appliedUrl, snapshot }) => {
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, this.routerState.snapshot, moduleInjector, (evt) => this.triggerEvent(evt));
-                preActivation.initalize(this.rootContexts);
+                preActivation.initialize(this.rootContexts);
                 return { appliedUrl, snapshot };
             });
             const /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationSetup$, ({ appliedUrl, snapshot }) => {
@@ -6085,7 +6085,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-beta.7-b3db3f8');
+const VERSION = new Version('5.0.0-beta.7-a9d32a3');
 
 /**
  * @fileoverview added by tsickle

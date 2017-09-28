@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-b3db3f8
+ * @license Angular v5.0.0-beta.7-a9d32a3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -540,7 +540,7 @@ function navigationCancelingError(message) {
  * @return {?}
  */
 function isNavigationCancelingError(error) {
-    return (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR];
+    return error && (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR];
 }
 /**
  * @param {?} segments
@@ -3444,7 +3444,7 @@ var PreActivation = (function () {
      * @param {?} parentContexts
      * @return {?}
      */
-    PreActivation.prototype.initalize = /**
+    PreActivation.prototype.initialize = /**
      * @param {?} parentContexts
      * @return {?}
      */
@@ -5279,7 +5279,7 @@ var Router = (function () {
                 var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
                 var /** @type {?} */ moduleInjector = _this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, _this.routerState.snapshot, moduleInjector, function (evt) { return _this.triggerEvent(evt); });
-                preActivation.initalize(_this.rootContexts);
+                preActivation.initialize(_this.rootContexts);
                 return { appliedUrl: appliedUrl, snapshot: snapshot };
             });
             var /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationSetup$, function (_a) {
@@ -7244,7 +7244,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.7-b3db3f8');
+var VERSION = new Version('5.0.0-beta.7-a9d32a3');
 
 /**
  * @fileoverview added by tsickle

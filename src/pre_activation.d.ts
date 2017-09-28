@@ -21,7 +21,7 @@ export declare class PreActivation {
     private canActivateChecks;
     private canDeactivateChecks;
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
-    initalize(parentContexts: ChildrenOutletContexts): void;
+    initialize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;
     isDeactivating(): boolean;
