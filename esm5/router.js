@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-c1b029a
+ * @license Angular v5.0.0-beta.7-2b84b86
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3417,15 +3417,8 @@ function compare(path, params, segment) {
 var CanActivate = (function () {
     function CanActivate(path) {
         this.path = path;
+        this.route = this.path[this.path.length - 1];
     }
-    Object.defineProperty(CanActivate.prototype, "route", {
-        get: /**
-         * @return {?}
-         */
-        function () { return this.path[this.path.length - 1]; },
-        enumerable: true,
-        configurable: true
-    });
     return CanActivate;
 }());
 var CanDeactivate = (function () {
@@ -7251,7 +7244,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-beta.7-c1b029a');
+var VERSION = new Version('5.0.0-beta.7-2b84b86');
 
 /**
  * @fileoverview added by tsickle
