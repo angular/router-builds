@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.1-f83989b
+ * @license Angular v5.0.0-rc.1-a8920eb
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5179,8 +5179,15 @@ var Router = (function () {
         }
         // Because of a bug in IE and Edge, the location class fires two events (popstate and
         // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
-        // flicker.
+        // flicker. Handles the case when a popstate was emitted first.
         if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
+            lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+            return Promise.resolve(true); // return value is not used
+        }
+        // Because of a bug in IE and Edge, the location class fires two events (popstate and
+        // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
+        // flicker. Handles the case when a hashchange was emitted first.
+        if (lastNavigation && source == 'popstate' && lastNavigation.source === 'hashchange' &&
             lastNavigation.rawUrl.toString() === rawUrl.toString()) {
             return Promise.resolve(true); // return value is not used
         }
@@ -5209,7 +5216,7 @@ var Router = (function () {
         var id = _a.id, rawUrl = _a.rawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
         var /** @type {?} */ url = this.urlHandlingStrategy.extract(rawUrl);
         var /** @type {?} */ urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
-        if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+        if (this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
             (/** @type {?} */ (this.events)).next(new NavigationStart(id, this.serializeUrl(url)));
             Promise.resolve()
                 .then(function (_) {
@@ -5236,8 +5243,8 @@ var Router = (function () {
     /**
      * @param {?} url
      * @param {?} rawUrl
-     * @param {?} shouldPreventPushState
-     * @param {?} shouldReplaceUrl
+     * @param {?} skipLocationChange
+     * @param {?} replaceUrl
      * @param {?} id
      * @param {?} precreatedState
      * @return {?}
@@ -5245,16 +5252,15 @@ var Router = (function () {
     Router.prototype.runNavigate = /**
      * @param {?} url
      * @param {?} rawUrl
-     * @param {?} shouldPreventPushState
-     * @param {?} shouldReplaceUrl
+     * @param {?} skipLocationChange
+     * @param {?} replaceUrl
      * @param {?} id
      * @param {?} precreatedState
      * @return {?}
      */
-    function (url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+    function (url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState) {
         var _this = this;
         if (id !== this.navigationId) {
-            this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
             (/** @type {?} */ (this.events))
                 .next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
             return Promise.resolve(false);
@@ -5343,9 +5349,9 @@ var Router = (function () {
                 _this.currentUrlTree = appliedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                 (/** @type {?} */ (_this)).routerState = state;
-                if (!shouldPreventPushState) {
+                if (!skipLocationChange) {
                     var /** @type {?} */ path = _this.urlSerializer.serialize(_this.rawUrlTree);
-                    if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+                    if (_this.location.isCurrentPathEqualTo(path) || replaceUrl) {
                         _this.location.replaceState(path);
                     }
                     else {
@@ -5390,7 +5396,7 @@ var Router = (function () {
                 (/** @type {?} */ (_this)).routerState = storedState;
                 _this.currentUrlTree = storedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+                _this.resetUrlToCurrentUrlTree();
             });
         });
     };
@@ -5401,8 +5407,7 @@ var Router = (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
-        this.location.replaceState(path);
+        this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree));
     };
     return Router;
 }());
@@ -7251,7 +7256,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-rc.1-f83989b');
+var VERSION = new Version('5.0.0-rc.1-a8920eb');
 
 /**
  * @fileoverview added by tsickle
