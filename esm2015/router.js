@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.1-46992b4
+ * @license Angular v5.0.0-rc.1-566606e
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6088,7 +6088,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-rc.1-46992b4');
+const VERSION = new Version('5.0.0-rc.1-566606e');
 
 /**
  * @fileoverview added by tsickle
