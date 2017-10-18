@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 /**
- * @license Angular v4.4.5-3342a82
+ * @license Angular v4.4.5-269f5ac
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5283,19 +5283,20 @@ var RouterLinkActive = (function () {
         var _this = this;
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
-        // react only when status has changed to prevent unnecessary dom updates
-        if (this.active !== hasActiveLinks) {
-            this.classes.forEach(function (c) {
-                if (hasActiveLinks) {
-                    _this.renderer.addClass(_this.element.nativeElement, c);
-                }
-                else {
-                    _this.renderer.removeClass(_this.element.nativeElement, c);
-                }
-            });
-            Promise.resolve(hasActiveLinks).then(function (active) { return _this.active = active; });
-        }
+        Promise.resolve().then(function () {
+            var /** @type {?} */ hasActiveLinks = _this.hasActiveLinks();
+            if (_this.active !== hasActiveLinks) {
+                _this.active = hasActiveLinks;
+                _this.classes.forEach(function (c) {
+                    if (hasActiveLinks) {
+                        _this.renderer.addClass(_this.element.nativeElement, c);
+                    }
+                    else {
+                        _this.renderer.removeClass(_this.element.nativeElement, c);
+                    }
+                });
+            }
+        });
     };
     /**
      * @param {?} router
@@ -6252,7 +6253,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('4.4.5-3342a82');
+var VERSION = new Version('4.4.5-269f5ac');
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
