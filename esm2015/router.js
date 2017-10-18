@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.2-5a9ed2d
+ * @license Angular v5.0.0-rc.2-b0c7ea8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5170,20 +5170,19 @@ class RouterLinkActive {
     update() {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        Promise.resolve().then(() => {
-            const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
-            if (this.isActive !== hasActiveLinks) {
-                (/** @type {?} */ (this)).isActive = hasActiveLinks;
-                this.classes.forEach((c) => {
-                    if (hasActiveLinks) {
-                        this.renderer.addClass(this.element.nativeElement, c);
-                    }
-                    else {
-                        this.renderer.removeClass(this.element.nativeElement, c);
-                    }
-                });
-            }
-        });
+        const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
+        // react only when status has changed to prevent unnecessary dom updates
+        if (this.isActive !== hasActiveLinks) {
+            this.classes.forEach((c) => {
+                if (hasActiveLinks) {
+                    this.renderer.addClass(this.element.nativeElement, c);
+                }
+                else {
+                    this.renderer.removeClass(this.element.nativeElement, c);
+                }
+            });
+            Promise.resolve(hasActiveLinks).then(active => (/** @type {?} */ (this)).isActive = active);
+        }
     }
     /**
      * @param {?} router
@@ -6089,7 +6088,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.0.0-rc.2-5a9ed2d');
+const VERSION = new Version('5.0.0-rc.2-b0c7ea8');
 
 /**
  * @fileoverview added by tsickle

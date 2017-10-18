@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.2-5a9ed2d
+ * @license Angular v5.0.0-rc.2-b0c7ea8
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6151,20 +6151,21 @@ var RouterLinkActive = (function () {
         var _this = this;
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        Promise.resolve().then(function () {
-            var /** @type {?} */ hasActiveLinks = _this.hasActiveLinks();
-            if (_this.isActive !== hasActiveLinks) {
-                (/** @type {?} */ (_this)).isActive = hasActiveLinks;
-                _this.classes.forEach(function (c) {
-                    if (hasActiveLinks) {
-                        _this.renderer.addClass(_this.element.nativeElement, c);
-                    }
-                    else {
-                        _this.renderer.removeClass(_this.element.nativeElement, c);
-                    }
-                });
-            }
-        });
+        var /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
+        // react only when status has changed to prevent unnecessary dom updates
+        if (this.isActive !== hasActiveLinks) {
+            this.classes.forEach(function (c) {
+                if (hasActiveLinks) {
+                    _this.renderer.addClass(_this.element.nativeElement, c);
+                }
+                else {
+                    _this.renderer.removeClass(_this.element.nativeElement, c);
+                }
+            });
+            Promise.resolve(hasActiveLinks).then(function (active) {
+                return (/** @type {?} */ (_this)).isActive = active;
+            });
+        }
     };
     /**
      * @param {?} router
@@ -7250,7 +7251,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0-rc.2-5a9ed2d');
+var VERSION = new Version('5.0.0-rc.2-b0c7ea8');
 
 /**
  * @fileoverview added by tsickle
