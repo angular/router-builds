@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.4-bde5701
+ * @license Angular v5.0.0-rc.4-a0ae120
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-rc.4-bde5701
+ * @license Angular v5.0.0-rc.4-a0ae120
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4621,6 +4621,13 @@ var Router = (function () {
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
+        /**
+         * Define what the router should do if it receives a navigation request to the current URL.
+         * By default, the router will ignore this navigation. However, this prevents features such
+         * as a "refresh" button. Use this option to configure the behavior when navigating to the
+         * current URL. Default is 'ignore'.
+         */
+        this.onSameUrlNavigation = 'ignore';
         var /** @type {?} */ onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var /** @type {?} */ onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(_angular_core.NgModuleRef);
@@ -5201,8 +5208,15 @@ var Router = (function () {
         }
         // Because of a bug in IE and Edge, the location class fires two events (popstate and
         // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
-        // flicker.
+        // flicker. Handles the case when a popstate was emitted first.
         if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
+            lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+            return Promise.resolve(true); // return value is not used
+        }
+        // Because of a bug in IE and Edge, the location class fires two events (popstate and
+        // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
+        // flicker. Handles the case when a hashchange was emitted first.
+        if (lastNavigation && source == 'popstate' && lastNavigation.source === 'hashchange' &&
             lastNavigation.rawUrl.toString() === rawUrl.toString()) {
             return Promise.resolve(true); // return value is not used
         }
@@ -5231,7 +5245,8 @@ var Router = (function () {
         var id = _a.id, rawUrl = _a.rawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
         var /** @type {?} */ url = this.urlHandlingStrategy.extract(rawUrl);
         var /** @type {?} */ urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
-        if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+        if ((this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
+            this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
             (/** @type {?} */ (this.events)).next(new NavigationStart(id, this.serializeUrl(url)));
             Promise.resolve()
                 .then(function (_) {
@@ -5258,8 +5273,8 @@ var Router = (function () {
     /**
      * @param {?} url
      * @param {?} rawUrl
-     * @param {?} shouldPreventPushState
-     * @param {?} shouldReplaceUrl
+     * @param {?} skipLocationChange
+     * @param {?} replaceUrl
      * @param {?} id
      * @param {?} precreatedState
      * @return {?}
@@ -5267,16 +5282,15 @@ var Router = (function () {
     Router.prototype.runNavigate = /**
      * @param {?} url
      * @param {?} rawUrl
-     * @param {?} shouldPreventPushState
-     * @param {?} shouldReplaceUrl
+     * @param {?} skipLocationChange
+     * @param {?} replaceUrl
      * @param {?} id
      * @param {?} precreatedState
      * @return {?}
      */
-    function (url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+    function (url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState) {
         var _this = this;
         if (id !== this.navigationId) {
-            this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
             (/** @type {?} */ (this.events))
                 .next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
             return Promise.resolve(false);
@@ -5365,9 +5379,9 @@ var Router = (function () {
                 _this.currentUrlTree = appliedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
                 (/** @type {?} */ (_this)).routerState = state;
-                if (!shouldPreventPushState) {
+                if (!skipLocationChange) {
                     var /** @type {?} */ path = _this.urlSerializer.serialize(_this.rawUrlTree);
-                    if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+                    if (_this.location.isCurrentPathEqualTo(path) || replaceUrl) {
                         _this.location.replaceState(path);
                     }
                     else {
@@ -5412,7 +5426,7 @@ var Router = (function () {
                 (/** @type {?} */ (_this)).routerState = storedState;
                 _this.currentUrlTree = storedUrl;
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+                _this.resetUrlToCurrentUrlTree();
             });
         });
     };
@@ -5423,8 +5437,7 @@ var Router = (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
-        this.location.replaceState(path);
+        this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree));
     };
     return Router;
 }());
@@ -6913,23 +6926,29 @@ var RouterModule = (function () {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options:
+     * Options (see {@link ExtraOptions}):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
+     * * `preloadingStrategy` configures a preloading strategy (see {@link PreloadAllModules}).
+     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
+     * {@link ExtraOptions} for more details.
      */
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options:
+     * Options (see {\@link ExtraOptions}):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
+     * * `preloadingStrategy` configures a preloading strategy (see {\@link PreloadAllModules}).
+     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
+     * {\@link ExtraOptions} for more details.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -6938,12 +6957,15 @@ var RouterModule = (function () {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options:
+     * Options (see {\@link ExtraOptions}):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
+     * * `preloadingStrategy` configures a preloading strategy (see {\@link PreloadAllModules}).
+     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
+     * {\@link ExtraOptions} for more details.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -7088,6 +7110,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
             dom_1.log(e);
             dom_1.logGroupEnd();
         });
+    }
+    if (opts.onSameUrlNavigation) {
+        router.onSameUrlNavigation = opts.onSameUrlNavigation;
     }
     return router;
 }
@@ -7272,7 +7297,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-rc.4-bde5701');
+var VERSION = new _angular_core.Version('5.0.0-rc.4-a0ae120');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
