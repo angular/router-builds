@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-rc.9-3a86654
+ * @license Angular v5.0.0-171ae15
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.0-rc.9-3a86654
+ * @license Angular v5.0.0-171ae15
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5774,10 +5774,12 @@ function validateCommands(commands) {
  * ```
  *
  * You can tell the directive to how to handle queryParams, available options are:
- *  - 'merge' merge the queryParams into the current queryParams
- *  - 'preserve' preserve the current queryParams
- *  - default / '' use the queryParams only
- *  same options for {\@link NavigationExtras#queryParamsHandling}
+ *  - `'merge'`: merge the queryParams into the current queryParams
+ *  - `'preserve'`: preserve the current queryParams
+ *  - default/`''`: use the queryParams only
+ *
+ * Same options for {\@link NavigationExtras#queryParamsHandling
+ * NavigationExtras#queryParamsHandling}.
  *
  * ```
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
@@ -5792,9 +5794,9 @@ function validateCommands(commands) {
  * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
  * `/user/(jim//aux:team)`.
  *
- * \@ngModule RouterModule
+ * See {\@link Router#createUrlTree createUrlTree} for more information.
  *
- * See {\@link Router#createUrlTree} for more information.
+ * \@ngModule RouterModule
  *
  * \@stable
  */
@@ -7297,7 +7299,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.0-rc.9-3a86654');
+var VERSION = new _angular_core.Version('5.0.0-171ae15');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
