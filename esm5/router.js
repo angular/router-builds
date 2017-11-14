@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-b9bd320
+ * @license Angular v5.1.0-beta.0-12af6d3
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4929,6 +4929,9 @@ var Router = (function () {
         else {
             q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams || null;
         }
+        if (q !== null) {
+            q = this.removeEmptyProps(q);
+        }
         return createUrlTree(a, this.currentUrlTree, commands, /** @type {?} */ ((q)), /** @type {?} */ ((f)));
     };
     /**
@@ -5075,9 +5078,6 @@ var Router = (function () {
     function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
         validateCommands(commands);
-        if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
-            extras.queryParams = this.removeEmptyProps(extras.queryParams);
-        }
         return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
     };
     /** Serializes a {@link UrlTree} into a string */
@@ -7277,7 +7277,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.1.0-beta.0-b9bd320');
+var VERSION = new Version('5.1.0-beta.0-12af6d3');
 
 /**
  * @fileoverview added by tsickle
