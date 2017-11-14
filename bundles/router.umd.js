@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.1-7acbc19
+ * @license Angular v5.0.1-91efc7f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.0.1-7acbc19
+ * @license Angular v5.0.1-91efc7f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4944,6 +4944,9 @@ var Router = (function () {
         else {
             q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams || null;
         }
+        if (q !== null) {
+            q = this.removeEmptyProps(q);
+        }
         return createUrlTree(a, this.currentUrlTree, commands, /** @type {?} */ ((q)), /** @type {?} */ ((f)));
     };
     /**
@@ -5090,9 +5093,6 @@ var Router = (function () {
     function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
         validateCommands(commands);
-        if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
-            extras.queryParams = this.removeEmptyProps(extras.queryParams);
-        }
         return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
     };
     /** Serializes a {@link UrlTree} into a string */
@@ -7274,7 +7274,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.0.1-7acbc19');
+var VERSION = new _angular_core.Version('5.0.1-91efc7f');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
