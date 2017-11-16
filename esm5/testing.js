@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -48,7 +48,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTES, Route
  *
  * \@stable
  */
-var SpyNgModuleFactoryLoader = (function () {
+var SpyNgModuleFactoryLoader = /** @class */ (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
@@ -155,7 +155,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  * \@stable
  */
-var RouterTestingModule = (function () {
+var RouterTestingModule = /** @class */ (function () {
     function RouterTestingModule() {
     }
     /**

@@ -210,11 +210,11 @@ export declare function provideRouterInitializer(): (typeof RouterInitializer | 
     provide: InjectionToken<(() => void)[]>;
     multi: boolean;
     useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    deps: (typeof RouterInitializer)[];
 } | {
     provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
     useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    deps: (typeof RouterInitializer)[];
 } | {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;

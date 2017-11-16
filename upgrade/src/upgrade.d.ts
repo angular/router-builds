@@ -34,7 +34,7 @@ export declare const RouterUpgradeInitializer: {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useFactory: (ngUpgrade: UpgradeModule) => () => void;
-    deps: typeof UpgradeModule[];
+    deps: (typeof UpgradeModule)[];
 };
 /**
  * @whatItDoes Sets up a location synchronization.

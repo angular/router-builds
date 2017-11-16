@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,13 +44,20 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-beta.0-f8658cd
+ * @license Angular v5.1.0-beta.0-336041a
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 /**
  * \@whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
@@ -70,7 +77,7 @@ var __assign = Object.assign || function __assign(t) {
  *
  * \@experimental
  */
-var RouterEvent = (function () {
+var RouterEvent = /** @class */ (function () {
     function RouterEvent(id, url) {
         this.id = id;
         this.url = url;
@@ -82,7 +89,7 @@ var RouterEvent = (function () {
  *
  * \@stable
  */
-var NavigationStart = (function (_super) {
+var NavigationStart = /** @class */ (function (_super) {
     __extends(NavigationStart, _super);
     function NavigationStart() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -104,7 +111,7 @@ var NavigationStart = (function (_super) {
  *
  * \@stable
  */
-var NavigationEnd = (function (_super) {
+var NavigationEnd = /** @class */ (function (_super) {
     __extends(NavigationEnd, _super);
     function NavigationEnd(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -134,7 +141,7 @@ var NavigationEnd = (function (_super) {
  *
  * \@stable
  */
-var NavigationCancel = (function (_super) {
+var NavigationCancel = /** @class */ (function (_super) {
     __extends(NavigationCancel, _super);
     function NavigationCancel(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -162,7 +169,7 @@ var NavigationCancel = (function (_super) {
  *
  * \@stable
  */
-var NavigationError = (function (_super) {
+var NavigationError = /** @class */ (function (_super) {
     __extends(NavigationError, _super);
     function NavigationError(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -192,7 +199,7 @@ var NavigationError = (function (_super) {
  *
  * \@stable
  */
-var RoutesRecognized = (function (_super) {
+var RoutesRecognized = /** @class */ (function (_super) {
     __extends(RoutesRecognized, _super);
     function RoutesRecognized(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -223,7 +230,7 @@ var RoutesRecognized = (function (_super) {
  *
  * \@experimental
  */
-var GuardsCheckStart = (function (_super) {
+var GuardsCheckStart = /** @class */ (function (_super) {
     __extends(GuardsCheckStart, _super);
     function GuardsCheckStart(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -251,7 +258,7 @@ var GuardsCheckStart = (function (_super) {
  *
  * \@experimental
  */
-var GuardsCheckEnd = (function (_super) {
+var GuardsCheckEnd = /** @class */ (function (_super) {
     __extends(GuardsCheckEnd, _super);
     function GuardsCheckEnd(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -283,7 +290,7 @@ var GuardsCheckEnd = (function (_super) {
  *
  * \@experimental
  */
-var ResolveStart = (function (_super) {
+var ResolveStart = /** @class */ (function (_super) {
     __extends(ResolveStart, _super);
     function ResolveStart(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -312,7 +319,7 @@ var ResolveStart = (function (_super) {
  *
  * \@experimental
  */
-var ResolveEnd = (function (_super) {
+var ResolveEnd = /** @class */ (function (_super) {
     __extends(ResolveEnd, _super);
     function ResolveEnd(/** @docsNotRequired */
         /** @docsNotRequired */
@@ -340,7 +347,7 @@ var ResolveEnd = (function (_super) {
  *
  * \@experimental
  */
-var RouteConfigLoadStart = (function () {
+var RouteConfigLoadStart = /** @class */ (function () {
     function RouteConfigLoadStart(route) {
         this.route = route;
     }
@@ -358,7 +365,7 @@ var RouteConfigLoadStart = (function () {
  *
  * \@experimental
  */
-var RouteConfigLoadEnd = (function () {
+var RouteConfigLoadEnd = /** @class */ (function () {
     function RouteConfigLoadEnd(route) {
         this.route = route;
     }
@@ -377,7 +384,7 @@ var RouteConfigLoadEnd = (function () {
  *
  * \@experimental
  */
-var ChildActivationStart = (function () {
+var ChildActivationStart = /** @class */ (function () {
     function ChildActivationStart(snapshot) {
         this.snapshot = snapshot;
     }
@@ -399,7 +406,7 @@ var ChildActivationStart = (function () {
  *
  * \@experimental
  */
-var ChildActivationEnd = (function () {
+var ChildActivationEnd = /** @class */ (function () {
     function ChildActivationEnd(snapshot) {
         this.snapshot = snapshot;
     }
@@ -421,7 +428,7 @@ var ChildActivationEnd = (function () {
  *
  * \@experimental
  */
-var ActivationStart = (function () {
+var ActivationStart = /** @class */ (function () {
     function ActivationStart(snapshot) {
         this.snapshot = snapshot;
     }
@@ -443,7 +450,7 @@ var ActivationStart = (function () {
  *
  * \@experimental
  */
-var ActivationEnd = (function () {
+var ActivationEnd = /** @class */ (function () {
     function ActivationEnd(snapshot) {
         this.snapshot = snapshot;
     }
@@ -465,6 +472,13 @@ var ActivationEnd = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Name of the primary outlet.
  *
  * \@stable
@@ -484,7 +498,7 @@ var PRIMARY_OUTLET = 'primary';
  * @record
  */
 
-var ParamsAsMap = (function () {
+var ParamsAsMap = /** @class */ (function () {
     function ParamsAsMap(params) {
         this.params = params || {};
     }
@@ -603,12 +617,19 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * See {\@link Routes} for more details.
  * \@stable
  * @record
  */
 
-var LoadedRouterConfig = (function () {
+var LoadedRouterConfig = /** @class */ (function () {
     function LoadedRouterConfig(routes, module) {
         this.routes = routes;
         this.module = module;
@@ -977,7 +998,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *
  * \@stable
  */
-var UrlTree = (function () {
+var UrlTree = /** @class */ (function () {
     /** @internal */
     function UrlTree(root, queryParams, fragment) {
         this.root = root;
@@ -1016,7 +1037,7 @@ var UrlTree = (function () {
  *
  * \@stable
  */
-var UrlSegmentGroup = (function () {
+var UrlSegmentGroup = /** @class */ (function () {
     function UrlSegmentGroup(segments, children) {
         var _this = this;
         this.segments = segments;
@@ -1084,7 +1105,7 @@ var UrlSegmentGroup = (function () {
  *
  * \@stable
  */
-var UrlSegment = (function () {
+var UrlSegment = /** @class */ (function () {
     function UrlSegment(path, parameters) {
         this.path = path;
         this.parameters = parameters;
@@ -1163,7 +1184,7 @@ function mapChildrenIntoArray(segment, fn) {
  * \@stable
  * @abstract
  */
-var UrlSerializer = (function () {
+var UrlSerializer = /** @class */ (function () {
     function UrlSerializer() {
     }
     return UrlSerializer;
@@ -1186,7 +1207,7 @@ var UrlSerializer = (function () {
  *
  * \@stable
  */
-var DefaultUrlSerializer = (function () {
+var DefaultUrlSerializer = /** @class */ (function () {
     function DefaultUrlSerializer() {
     }
     /** Parses a url into a {@link UrlTree} */
@@ -1343,7 +1364,7 @@ function matchUrlQueryParamValue(str) {
     var /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
     return match ? match[0] : '';
 }
-var UrlParser = (function () {
+var UrlParser = /** @class */ (function () {
     function UrlParser(url) {
         this.url = url;
         this.remaining = url;
@@ -1594,13 +1615,13 @@ var UrlParser = (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var NoMatch = (function () {
+var NoMatch = /** @class */ (function () {
     function NoMatch(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
     }
     return NoMatch;
 }());
-var AbsoluteRedirect = (function () {
+var AbsoluteRedirect = /** @class */ (function () {
     function AbsoluteRedirect(urlTree) {
         this.urlTree = urlTree;
     }
@@ -1652,7 +1673,7 @@ function canLoadFails(route) {
 function applyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config) {
     return new ApplyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config).apply();
 }
-var ApplyRedirects = (function () {
+var ApplyRedirects = /** @class */ (function () {
     function ApplyRedirects(moduleInjector, configLoader, urlSerializer, urlTree, config) {
         this.configLoader = configLoader;
         this.urlSerializer = urlSerializer;
@@ -2341,7 +2362,14 @@ function getOutlet(route) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var Tree = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var Tree = /** @class */ (function () {
     function Tree(root) {
         this._root = root;
     }
@@ -2476,7 +2504,7 @@ function findPath(value, node) {
     }
     return [];
 }
-var TreeNode = (function () {
+var TreeNode = /** @class */ (function () {
     function TreeNode(value, children) {
         this.value = value;
         this.children = children;
@@ -2508,6 +2536,13 @@ function nodeChildrenAsMap(node) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Represents the state of the router.
  *
  * \@howToUse
@@ -2533,7 +2568,7 @@ function nodeChildrenAsMap(node) {
  *
  * \@stable
  */
-var RouterState = (function (_super) {
+var RouterState = /** @class */ (function (_super) {
     __extends(RouterState, _super);
     /** @internal */
     function RouterState(root, snapshot) {
@@ -2601,7 +2636,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  *
  * \@stable
  */
-var ActivatedRoute = (function () {
+var ActivatedRoute = /** @class */ (function () {
     /** @internal */
     function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
         this.url = url;
@@ -2762,7 +2797,7 @@ function inheritedParamsDataResolve(route) {
  *
  * \@stable
  */
-var ActivatedRouteSnapshot = (function () {
+var ActivatedRouteSnapshot = /** @class */ (function () {
     /** @internal */
     function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
         this.url = url;
@@ -2891,7 +2926,7 @@ var ActivatedRouteSnapshot = (function () {
  *
  * \@stable
  */
-var RouterStateSnapshot = (function (_super) {
+var RouterStateSnapshot = /** @class */ (function (_super) {
     __extends(RouterStateSnapshot, _super);
     /** @internal */
     function RouterStateSnapshot(url, root) {
@@ -3067,6 +3102,13 @@ function createActivatedRoute(c) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @param {?} route
  * @param {?} urlTree
  * @param {?} commands
@@ -3133,7 +3175,7 @@ function replaceSegment(current, oldSegment, newSegment) {
     });
     return new UrlSegmentGroup(current.segments, children);
 }
-var Navigation = (function () {
+var Navigation = /** @class */ (function () {
     function Navigation(isAbsolute, numberOfDoubleDots, commands) {
         this.isAbsolute = isAbsolute;
         this.numberOfDoubleDots = numberOfDoubleDots;
@@ -3207,7 +3249,7 @@ function computeNavigation(commands) {
     }, []);
     return new Navigation(isAbsolute, numberOfDoubleDots, res);
 }
-var Position = (function () {
+var Position = /** @class */ (function () {
     function Position(segmentGroup, processChildren, index) {
         this.segmentGroup = segmentGroup;
         this.processChildren = processChildren;
@@ -3436,7 +3478,14 @@ function compare(path, params, segment) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var CanActivate = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var CanActivate = /** @class */ (function () {
     function CanActivate(path) {
         this.path = path;
     }
@@ -3450,7 +3499,7 @@ var CanActivate = (function () {
     });
     return CanActivate;
 }());
-var CanDeactivate = (function () {
+var CanDeactivate = /** @class */ (function () {
     function CanDeactivate(component, route) {
         this.component = component;
         this.route = route;
@@ -3460,7 +3509,7 @@ var CanDeactivate = (function () {
 /**
  * This class bundles the actions involved in preactivation of a route.
  */
-var PreActivation = (function () {
+var PreActivation = /** @class */ (function () {
     function PreActivation(future, curr, moduleInjector, forwardEvent) {
         this.future = future;
         this.curr = curr;
@@ -3955,7 +4004,14 @@ function closestLoadedConfig(snapshot) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var NoMatch$1 = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var NoMatch$1 = /** @class */ (function () {
     function NoMatch() {
     }
     return NoMatch;
@@ -3970,7 +4026,7 @@ var NoMatch$1 = (function () {
 function recognize(rootComponentType, config, urlTree, url) {
     return new Recognizer(rootComponentType, config, urlTree, url).recognize();
 }
-var Recognizer = (function () {
+var Recognizer = /** @class */ (function () {
     function Recognizer(rootComponentType, config, urlTree, url) {
         this.rootComponentType = rootComponentType;
         this.config = config;
@@ -4350,12 +4406,19 @@ function getResolve(route) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Provides a way to customize when activated routes get reused.
  *
  * \@experimental
  * @abstract
  */
-var RouteReuseStrategy = (function () {
+var RouteReuseStrategy = /** @class */ (function () {
     function RouteReuseStrategy() {
     }
     return RouteReuseStrategy;
@@ -4363,7 +4426,7 @@ var RouteReuseStrategy = (function () {
 /**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
-var DefaultRouteReuseStrategy = (function () {
+var DefaultRouteReuseStrategy = /** @class */ (function () {
     function DefaultRouteReuseStrategy() {
     }
     /**
@@ -4436,7 +4499,7 @@ var DefaultRouteReuseStrategy = (function () {
  * \@experimental
  */
 var ROUTES = new _angular_core.InjectionToken('ROUTES');
-var RouterConfigLoader = (function () {
+var RouterConfigLoader = /** @class */ (function () {
     function RouterConfigLoader(loader, compiler, onLoadStartListener, onLoadEndListener) {
         this.loader = loader;
         this.compiler = compiler;
@@ -4499,12 +4562,19 @@ var RouterConfigLoader = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
  *
  * \@experimental
  * @abstract
  */
-var UrlHandlingStrategy = (function () {
+var UrlHandlingStrategy = /** @class */ (function () {
     function UrlHandlingStrategy() {
     }
     return UrlHandlingStrategy;
@@ -4512,7 +4582,7 @@ var UrlHandlingStrategy = (function () {
 /**
  * \@experimental
  */
-var DefaultUrlHandlingStrategy = (function () {
+var DefaultUrlHandlingStrategy = /** @class */ (function () {
     function DefaultUrlHandlingStrategy() {
     }
     /**
@@ -4552,6 +4622,13 @@ var DefaultUrlHandlingStrategy = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * \@whatItDoes Represents the extra options used during navigation.
  *
  * \@stable
@@ -4582,7 +4659,7 @@ function defaultRouterHook(snapshot) {
  *
  * \@stable
  */
-var Router = (function () {
+var Router = /** @class */ (function () {
     /**
      * Creates the router service.
      */
@@ -5441,7 +5518,7 @@ var Router = (function () {
     };
     return Router;
 }());
-var ActivateRoutes = (function () {
+var ActivateRoutes = /** @class */ (function () {
     function ActivateRoutes(routeReuseStrategy, futureState, currState, forwardEvent) {
         this.routeReuseStrategy = routeReuseStrategy;
         this.futureState = futureState;
@@ -5800,7 +5877,7 @@ function validateCommands(commands) {
  *
  * \@stable
  */
-var RouterLink = (function () {
+var RouterLink = /** @class */ (function () {
     function RouterLink(router, route, tabIndex, renderer, el) {
         this.router = router;
         this.route = route;
@@ -5904,7 +5981,7 @@ var RouterLink = (function () {
  *
  * \@stable
  */
-var RouterLinkWithHref = (function () {
+var RouterLinkWithHref = /** @class */ (function () {
     function RouterLinkWithHref(router, route, locationStrategy) {
         var _this = this;
         this.router = router;
@@ -6122,7 +6199,7 @@ function attrBoolValue(s) {
  *
  * \@stable
  */
-var RouterLinkActive = (function () {
+var RouterLinkActive = /** @class */ (function () {
     function RouterLinkActive(router, element, renderer, cdr) {
         var _this = this;
         this.router = router;
@@ -6254,11 +6331,18 @@ var RouterLinkActive = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Store contextual information about a {\@link RouterOutlet}
  *
  * \@stable
  */
-var OutletContext = (function () {
+var OutletContext = /** @class */ (function () {
     function OutletContext() {
         this.outlet = null;
         this.route = null;
@@ -6273,7 +6357,7 @@ var OutletContext = (function () {
  *
  * \@stable
  */
-var ChildrenOutletContexts = (function () {
+var ChildrenOutletContexts = /** @class */ (function () {
     function ChildrenOutletContexts() {
         this.contexts = new Map();
     }
@@ -6411,7 +6495,7 @@ var ChildrenOutletContexts = (function () {
  *
  * \@stable
  */
-var RouterOutlet = (function () {
+var RouterOutlet = /** @class */ (function () {
     function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {
         this.parentContexts = parentContexts;
         this.location = location;
@@ -6598,7 +6682,7 @@ var RouterOutlet = (function () {
     };
     return RouterOutlet;
 }());
-var OutletInjector = (function () {
+var OutletInjector = /** @class */ (function () {
     function OutletInjector(route, childContexts, parent) {
         this.route = route;
         this.childContexts = childContexts;
@@ -6643,7 +6727,7 @@ var OutletInjector = (function () {
  * \@experimental
  * @abstract
  */
-var PreloadingStrategy = (function () {
+var PreloadingStrategy = /** @class */ (function () {
     function PreloadingStrategy() {
     }
     return PreloadingStrategy;
@@ -6659,7 +6743,7 @@ var PreloadingStrategy = (function () {
  *
  * \@experimental
  */
-var PreloadAllModules = (function () {
+var PreloadAllModules = /** @class */ (function () {
     function PreloadAllModules() {
     }
     /**
@@ -6686,7 +6770,7 @@ var PreloadAllModules = (function () {
  *
  * \@experimental
  */
-var NoPreloading = (function () {
+var NoPreloading = /** @class */ (function () {
     function NoPreloading() {
     }
     /**
@@ -6714,7 +6798,7 @@ var NoPreloading = (function () {
  *
  * \@stable
  */
-var RouterPreloader = (function () {
+var RouterPreloader = /** @class */ (function () {
     function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
         this.router = router;
         this.injector = injector;
@@ -6920,7 +7004,7 @@ function routerNgProbeToken() {
  *
  * \@stable
  */
-var RouterModule = (function () {
+var RouterModule = /** @class */ (function () {
     // Note: We are injecting the Router so it gets created eagerly...
     function RouterModule(guard, router) {
     }
@@ -7136,7 +7220,7 @@ function rootRoute(router) {
  * The router navigation starts, reaches the point when preactivation is done, and then
  * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
-var RouterInitializer = (function () {
+var RouterInitializer = /** @class */ (function () {
     function RouterInitializer(injector) {
         this.injector = injector;
         this.initNavigation = false;
@@ -7299,7 +7383,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.1.0-beta.0-f8658cd');
+var VERSION = new _angular_core.Version('5.1.0-beta.0-336041a');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
