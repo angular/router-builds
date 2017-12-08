@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-ddada6e
+ * @license Angular v5.1.0-3ce3b4d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3097,11 +3097,8 @@ class CanActivate {
      */
     constructor(path) {
         this.path = path;
+        this.route = this.path[this.path.length - 1];
     }
-    /**
-     * @return {?}
-     */
-    get route() { return this.path[this.path.length - 1]; }
 }
 class CanDeactivate {
     /**
@@ -6203,7 +6200,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.1.0-ddada6e');
+const VERSION = new Version('5.1.0-3ce3b4d');
 
 /**
  * @fileoverview added by tsickle
