@@ -309,5 +309,6 @@ export declare class Router {
     private scheduleNavigation(rawUrl, source, extras);
     private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
     private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
+    private resetStateAndUrl(storedState, storedUrl, rawUrl);
     private resetUrlToCurrentUrlTree();
 }

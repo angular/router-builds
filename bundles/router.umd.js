@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-9dd60a5
+ * @license Angular v5.1.0-baeec4d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.1.0-9dd60a5
+ * @license Angular v5.1.0-baeec4d
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5484,13 +5484,14 @@ var Router = /** @class */ (function () {
                 }
             }, function (e) {
                 if (isNavigationCancelingError(e)) {
-                    _this.resetUrlToCurrentUrlTree();
                     _this.navigated = true;
+                    _this.resetStateAndUrl(storedState, storedUrl, rawUrl);
                     (/** @type {?} */ (_this.events))
                         .next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
                     resolvePromise(false);
                 }
                 else {
+                    _this.resetStateAndUrl(storedState, storedUrl, rawUrl);
                     (/** @type {?} */ (_this.events))
                         .next(new NavigationError(id, _this.serializeUrl(url), e));
                     try {
@@ -5500,12 +5501,26 @@ var Router = /** @class */ (function () {
                         rejectPromise(ee);
                     }
                 }
-                (/** @type {?} */ (_this)).routerState = storedState;
-                _this.currentUrlTree = storedUrl;
-                _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
-                _this.resetUrlToCurrentUrlTree();
             });
         });
+    };
+    /**
+     * @param {?} storedState
+     * @param {?} storedUrl
+     * @param {?} rawUrl
+     * @return {?}
+     */
+    Router.prototype.resetStateAndUrl = /**
+     * @param {?} storedState
+     * @param {?} storedUrl
+     * @param {?} rawUrl
+     * @return {?}
+     */
+    function (storedState, storedUrl, rawUrl) {
+        (/** @type {?} */ (this)).routerState = storedState;
+        this.currentUrlTree = storedUrl;
+        this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
+        this.resetUrlToCurrentUrlTree();
     };
     /**
      * @return {?}
@@ -7383,7 +7398,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.1.0-9dd60a5');
+var VERSION = new _angular_core.Version('5.1.0-baeec4d');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
