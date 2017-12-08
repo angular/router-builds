@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.1.0-ef534c0
+ * @license Angular v5.1.0-d8cc09b
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4575,13 +4575,14 @@ class Router {
                 }
             }, (e) => {
                 if (isNavigationCancelingError(e)) {
-                    this.resetUrlToCurrentUrlTree();
                     this.navigated = true;
+                    this.resetStateAndUrl(storedState, storedUrl, rawUrl);
                     (/** @type {?} */ (this.events))
                         .next(new NavigationCancel(id, this.serializeUrl(url), e.message));
                     resolvePromise(false);
                 }
                 else {
+                    this.resetStateAndUrl(storedState, storedUrl, rawUrl);
                     (/** @type {?} */ (this.events))
                         .next(new NavigationError(id, this.serializeUrl(url), e));
                     try {
@@ -4591,12 +4592,20 @@ class Router {
                         rejectPromise(ee);
                     }
                 }
-                (/** @type {?} */ (this)).routerState = storedState;
-                this.currentUrlTree = storedUrl;
-                this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
-                this.resetUrlToCurrentUrlTree();
             });
         });
+    }
+    /**
+     * @param {?} storedState
+     * @param {?} storedUrl
+     * @param {?} rawUrl
+     * @return {?}
+     */
+    resetStateAndUrl(storedState, storedUrl, rawUrl) {
+        (/** @type {?} */ (this)).routerState = storedState;
+        this.currentUrlTree = storedUrl;
+        this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
+        this.resetUrlToCurrentUrlTree();
     }
     /**
      * @return {?}
@@ -6194,7 +6203,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.1.0-ef534c0');
+const VERSION = new Version('5.1.0-d8cc09b');
 
 /**
  * @fileoverview added by tsickle
