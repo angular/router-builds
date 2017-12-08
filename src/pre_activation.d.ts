@@ -21,7 +21,7 @@ export declare class PreActivation {
     private canActivateChecks;
     private canDeactivateChecks;
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
-    initalize(parentContexts: ChildrenOutletContexts): void;
+    initialize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
     resolveData(): Observable<any>;
     isDeactivating(): boolean;
@@ -41,10 +41,10 @@ export declare class PreActivation {
     private runCanDeactivateChecks();
     private runCanActivateChecks();
     /**
-     * This should fire off `ChildActivationStart` events for each route being activated at this
+     * This should fire off `ActivationStart` events for each route being activated at this
      * level.
      * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
      * return
      * `true` so checks continue to run.
      */

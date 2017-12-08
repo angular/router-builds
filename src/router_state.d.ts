@@ -134,7 +134,7 @@ export declare class ActivatedRouteSnapshot {
     outlet: string;
     /** The component of the route */
     component: Type<any> | string | null;
-    /** The configuration used to match this route */
+    /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /** The root of the router state */
     readonly root: ActivatedRouteSnapshot;

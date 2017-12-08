@@ -23,12 +23,12 @@ import { UrlSerializer, UrlTree } from './url_tree';
  */
 export interface NavigationExtras {
     /**
-    * Enables relative navigation from the current ActivatedRoute.
-    *
-    * Configuration:
-    *
-    * ```
-    * [{
+     * Enables relative navigation from the current ActivatedRoute.
+     *
+     * Configuration:
+     *
+     * ```
+     * [{
     *   path: 'parent',
     *   component: ParentComponent,
     *   children: [{
@@ -39,88 +39,88 @@ export interface NavigationExtras {
     *     component: ChildComponent
     *   }]
     * }]
-    * ```
-    *
-    * Navigate to list route from child route:
-    *
-    * ```
-    *  @Component({...})
-    *  class ChildComponent {
+     * ```
+     *
+     * Navigate to list route from child route:
+     *
+     * ```
+     *  @Component({...})
+     *  class ChildComponent {
     *    constructor(private router: Router, private route: ActivatedRoute) {}
     *
     *    go() {
     *      this.router.navigate(['../list'], { relativeTo: this.route });
     *    }
     *  }
-    * ```
-    */
+     * ```
+     */
     relativeTo?: ActivatedRoute | null;
     /**
-    * Sets query parameters to the URL.
-    *
-    * ```
-    * // Navigate to /results?page=1
-    * this.router.navigate(['/results'], { queryParams: { page: 1 } });
-    * ```
-    */
+     * Sets query parameters to the URL.
+     *
+     * ```
+     * // Navigate to /results?page=1
+     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     */
     queryParams?: Params | null;
     /**
-    * Sets the hash fragment for the URL.
-    *
-    * ```
-    * // Navigate to /results#top
-    * this.router.navigate(['/results'], { fragment: 'top' });
-    * ```
-    */
+     * Sets the hash fragment for the URL.
+     *
+     * ```
+     * // Navigate to /results#top
+     * this.router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     */
     fragment?: string;
     /**
-    * Preserves the query parameters for the next navigation.
-    *
-    * deprecated, use `queryParamsHandling` instead
-    *
-    * ```
-    * // Preserve query params from /results?page=1 to /view?page=1
-    * this.router.navigate(['/view'], { preserveQueryParams: true });
-    * ```
-    *
-    * @deprecated since v4
-    */
+     * Preserves the query parameters for the next navigation.
+     *
+     * deprecated, use `queryParamsHandling` instead
+     *
+     * ```
+     * // Preserve query params from /results?page=1 to /view?page=1
+     * this.router.navigate(['/view'], { preserveQueryParams: true });
+     * ```
+     *
+     * @deprecated since v4
+     */
     preserveQueryParams?: boolean;
     /**
-    *  config strategy to handle the query parameters for the next navigation.
-    *
-    * ```
-    * // from /results?page=1 to /view?page=1&page=2
-    * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
-    * ```
-    */
+     *  config strategy to handle the query parameters for the next navigation.
+     *
+     * ```
+     * // from /results?page=1 to /view?page=1&page=2
+     * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
+     * ```
+     */
     queryParamsHandling?: QueryParamsHandling | null;
     /**
-    * Preserves the fragment for the next navigation
-    *
-    * ```
-    * // Preserve fragment from /results#top to /view#top
-    * this.router.navigate(['/view'], { preserveFragment: true });
-    * ```
-    */
+     * Preserves the fragment for the next navigation
+     *
+     * ```
+     * // Preserve fragment from /results#top to /view#top
+     * this.router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     */
     preserveFragment?: boolean;
     /**
-    * Navigates without pushing a new state into history.
-    *
-    * ```
-    * // Navigate silently to /view
-    * this.router.navigate(['/view'], { skipLocationChange: true });
-    * ```
-    */
+     * Navigates without pushing a new state into history.
+     *
+     * ```
+     * // Navigate silently to /view
+     * this.router.navigate(['/view'], { skipLocationChange: true });
+     * ```
+     */
     skipLocationChange?: boolean;
     /**
-    * Navigates while replacing the current state in history.
-    *
-    * ```
-    * // Navigate to /view
-    * this.router.navigate(['/view'], { replaceUrl: true });
-    * ```
-    */
+     * Navigates while replacing the current state in history.
+     *
+     * ```
+     * // Navigate to /view
+     * this.router.navigate(['/view'], { replaceUrl: true });
+     * ```
+     */
     replaceUrl?: boolean;
 }
 /**
@@ -152,12 +152,12 @@ export declare class Router {
     private currentUrlTree;
     private rawUrlTree;
     private navigations;
-    private routerEvents;
-    private currentRouterState;
     private locationSubscription;
     private navigationId;
     private configLoader;
     private ngModule;
+    readonly events: Observable<Event>;
+    readonly routerState: RouterState;
     /**
      * Error handler that is invoked when a navigation errors.
      *
@@ -174,6 +174,13 @@ export declare class Router {
     urlHandlingStrategy: UrlHandlingStrategy;
     routeReuseStrategy: RouteReuseStrategy;
     /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * By default, the router will ignore this navigation. However, this prevents features such
+     * as a "refresh" button. Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     */
+    onSameUrlNavigation: 'reload' | 'ignore';
+    /**
      * Creates the router service.
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
@@ -185,12 +192,8 @@ export declare class Router {
      * Sets up the location change listener.
      */
     setUpLocationChangeListener(): void;
-    /** The current route state */
-    readonly routerState: RouterState;
     /** The current url */
     readonly url: string;
-    /** An observable of router events */
-    readonly events: Observable<Event>;
     /**
      * Resets the configuration used for navigation and generating links.
      *
@@ -305,6 +308,7 @@ export declare class Router {
     private processNavigations();
     private scheduleNavigation(rawUrl, source, extras);
     private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
-    private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
+    private resetStateAndUrl(storedState, storedUrl, rawUrl);
     private resetUrlToCurrentUrlTree();
 }

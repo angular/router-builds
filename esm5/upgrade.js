@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -41,7 +41,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * \@experimental
  */
-const RouterUpgradeInitializer = {
+var RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: locationSyncBootstrapListener,
@@ -53,7 +53,7 @@ const RouterUpgradeInitializer = {
  * @return {?}
  */
 function locationSyncBootstrapListener(ngUpgrade) {
-    return () => { setUpLocationSync(ngUpgrade); };
+    return function () { setUpLocationSync(ngUpgrade); };
 }
 /**
  * \@whatItDoes Sets up a location synchronization.
@@ -67,15 +67,12 @@ function locationSyncBootstrapListener(ngUpgrade) {
  */
 function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
-        throw new Error(`
-        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.
-        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
-      `);
+        throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
     }
-    const /** @type {?} */ router = ngUpgrade.injector.get(Router);
-    const /** @type {?} */ url = document.createElement('a');
+    var /** @type {?} */ router = ngUpgrade.injector.get(Router);
+    var /** @type {?} */ url = document.createElement('a');
     ngUpgrade.$injector.get('$rootScope')
-        .$on('$locationChangeStart', (_, next, __) => {
+        .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
         router.navigateByUrl(url.pathname + url.search + url.hash);
     });
@@ -109,4 +106,4 @@ function setUpLocationSync(ngUpgrade) {
  */
 
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=upgrade.js.map

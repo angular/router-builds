@@ -1,16 +1,16 @@
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
+	typeof define === 'function' && define.amd ? define('@angular/router/testing', ['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v5.0.0-beta.7-3215c4b
+ * @license Angular v5.1.0-5a0076f
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -54,7 +54,7 @@
  *
  * \@stable
  */
-var SpyNgModuleFactoryLoader = (function () {
+var SpyNgModuleFactoryLoader = /** @class */ (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
@@ -161,7 +161,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  * \@stable
  */
-var RouterTestingModule = (function () {
+var RouterTestingModule = /** @class */ (function () {
     function RouterTestingModule() {
     }
     /**
