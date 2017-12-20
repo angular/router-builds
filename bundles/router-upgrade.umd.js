@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -63,7 +63,7 @@ function locationSyncBootstrapListener(ngUpgrade) {
     return function () { setUpLocationSync(ngUpgrade); };
 }
 /**
- * \@whatItDoes Sets up a location synchronization using the provided UpgradeModule.
+ * \@whatItDoes Sets up a location synchronization.
  *
  * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener
@@ -76,32 +76,18 @@ function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
         throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
     }
-    setUpRouterSync(ngUpgrade.injector, ngUpgrade.$injector);
-}
-/**
- * \@whatItDoes Sets up a router synchronization using the Angular and AngularJS injectors.
- *
- * History.pushState does not fire onPopState, so the Angular location
- * doesn't detect it. The workaround is to attach a location change listener
- *
- * \@experimental
- * @param {?} injector
- * @param {?} $injector
- * @return {?}
- */
-function setUpRouterSync(injector, $injector) {
-    var /** @type {?} */ router = injector.get(_angular_router.Router);
+    var /** @type {?} */ router = ngUpgrade.injector.get(_angular_router.Router);
     var /** @type {?} */ url = document.createElement('a');
-    $injector.get('$rootScope').$on('$locationChangeStart', function (_, next, __) {
+    ngUpgrade.$injector.get('$rootScope')
+        .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router.navigateByUrl(url.pathname + url.search + url.hash, { replaceUrl: true });
+        router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
 
 exports.RouterUpgradeInitializer = RouterUpgradeInitializer;
 exports.locationSyncBootstrapListener = locationSyncBootstrapListener;
 exports.setUpLocationSync = setUpLocationSync;
-exports.setUpRouterSync = setUpRouterSync;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

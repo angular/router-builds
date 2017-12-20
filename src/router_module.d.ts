@@ -174,6 +174,15 @@ export interface ExtraOptions {
      * current URL. Default is 'ignore'.
      */
     onSameUrlNavigation?: 'reload' | 'ignore';
+    /**
+     * Defines how the router merges params, data and resolved data from parent to child
+     * routes. Available options are:
+     *
+     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+     *   routes.
+     * - `'always'`, enables unconditional inheritance of parent params.
+     */
+    paramsInheritanceStrategy?: 'emptyOnly' | 'always';
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;

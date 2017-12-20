@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2376,29 +2376,43 @@ class ActivatedRoute {
     }
 }
 /**
+ * Returns the inherited params, data, and resolve for a given route.
+ * By default, this only inherits values up to the nearest path-less or component-less route.
  * \@internal
  * @param {?} route
+ * @param {?=} paramsInheritanceStrategy
  * @return {?}
  */
-function inheritedParamsDataResolve(route) {
-    const /** @type {?} */ pathToRoot = route.pathFromRoot;
-    let /** @type {?} */ inhertingStartingFrom = pathToRoot.length - 1;
-    while (inhertingStartingFrom >= 1) {
-        const /** @type {?} */ current = pathToRoot[inhertingStartingFrom];
-        const /** @type {?} */ parent = pathToRoot[inhertingStartingFrom - 1];
-        // current route is an empty path => inherits its parent's params and data
-        if (current.routeConfig && current.routeConfig.path === '') {
-            inhertingStartingFrom--;
-            // parent is componentless => current route should inherit its params and data
-        }
-        else if (!parent.component) {
-            inhertingStartingFrom--;
-        }
-        else {
-            break;
+function inheritedParamsDataResolve(route, paramsInheritanceStrategy = 'emptyOnly') {
+    const /** @type {?} */ pathFromRoot = route.pathFromRoot;
+    let /** @type {?} */ inheritingStartingFrom = 0;
+    if (paramsInheritanceStrategy !== 'always') {
+        inheritingStartingFrom = pathFromRoot.length - 1;
+        while (inheritingStartingFrom >= 1) {
+            const /** @type {?} */ current = pathFromRoot[inheritingStartingFrom];
+            const /** @type {?} */ parent = pathFromRoot[inheritingStartingFrom - 1];
+            // current route is an empty path => inherits its parent's params and data
+            if (current.routeConfig && current.routeConfig.path === '') {
+                inheritingStartingFrom--;
+                // parent is componentless => current route should inherit its params and data
+            }
+            else if (!parent.component) {
+                inheritingStartingFrom--;
+            }
+            else {
+                break;
+            }
         }
     }
-    return pathToRoot.slice(inhertingStartingFrom).reduce((res, curr) => {
+    return flattenInherited(pathFromRoot.slice(inheritingStartingFrom));
+}
+/**
+ * \@internal
+ * @param {?} pathFromRoot
+ * @return {?}
+ */
+function flattenInherited(pathFromRoot) {
+    return pathFromRoot.reduce((res, curr) => {
         const /** @type {?} */ params = Object.assign({}, res.params, curr.params);
         const /** @type {?} */ data = Object.assign({}, res.data, curr.data);
         const /** @type {?} */ resolve = Object.assign({}, res.resolve, curr._resolvedData);
@@ -2562,7 +2576,7 @@ function setRouterState(state, node) {
  * @return {?}
  */
 function serializeNode(node) {
-    const /** @type {?} */ c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(", ")} } ` : '';
+    const /** @type {?} */ c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(', ')} } ` : '';
     return `${node.value}${c}`;
 }
 /**
@@ -3148,13 +3162,14 @@ class PreActivation {
         return mergeMap.call(canDeactivate$, (canDeactivate) => canDeactivate ? this.runCanActivateChecks() : of(false));
     }
     /**
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
-    resolveData() {
+    resolveData(paramsInheritanceStrategy) {
         if (!this.isActivating())
             return of(null);
         const /** @type {?} */ checks$ = from(this.canActivateChecks);
-        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => this.runResolve(check.route));
+        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => this.runResolve(check.route, paramsInheritanceStrategy));
         return reduce.call(runningChecks$, (_, __) => _);
     }
     /**
@@ -3416,13 +3431,14 @@ class PreActivation {
     }
     /**
      * @param {?} future
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
-    runResolve(future) {
+    runResolve(future, paramsInheritanceStrategy) {
         const /** @type {?} */ resolve = future._resolve;
         return map.call(this.resolveNode(resolve, future), (resolvedData) => {
             future._resolvedData = resolvedData;
-            future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future).resolve);
+            future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
             return null;
         });
     }
@@ -3503,10 +3519,12 @@ class NoMatch$1 {
  * @param {?} config
  * @param {?} urlTree
  * @param {?} url
+ * @param {?=} paramsInheritanceStrategy
  * @return {?}
  */
-function recognize(rootComponentType, config, urlTree, url) {
-    return new Recognizer(rootComponentType, config, urlTree, url).recognize();
+function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly') {
+    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy)
+        .recognize();
 }
 class Recognizer {
     /**
@@ -3514,12 +3532,14 @@ class Recognizer {
      * @param {?} config
      * @param {?} urlTree
      * @param {?} url
+     * @param {?} paramsInheritanceStrategy
      */
-    constructor(rootComponentType, config, urlTree, url) {
+    constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
         this.rootComponentType = rootComponentType;
         this.config = config;
         this.urlTree = urlTree;
         this.url = url;
+        this.paramsInheritanceStrategy = paramsInheritanceStrategy;
     }
     /**
      * @return {?}
@@ -3544,7 +3564,7 @@ class Recognizer {
      */
     inheritParamsAndData(routeNode) {
         const /** @type {?} */ route = routeNode.value;
-        const /** @type {?} */ i = inheritedParamsDataResolve(route);
+        const /** @type {?} */ i = inheritedParamsDataResolve(route, this.paramsInheritanceStrategy);
         route.params = Object.freeze(i.params);
         route.data = Object.freeze(i.data);
         routeNode.children.forEach(n => this.inheritParamsAndData(n));
@@ -4102,6 +4122,15 @@ class Router {
          * current URL. Default is 'ignore'.
          */
         this.onSameUrlNavigation = 'ignore';
+        /**
+         * Defines how the router merges params, data and resolved data from parent to child
+         * routes. Available options are:
+         *
+         * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+         *   routes.
+         * - `'always'`, enables unconditional inheritance of parent params.
+         */
+        this.paramsInheritanceStrategy = 'emptyOnly';
         const /** @type {?} */ onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const /** @type {?} */ onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
@@ -4472,7 +4501,7 @@ class Router {
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 const /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
                 urlAndSnapshot$ = mergeMap.call(redirectsApplied$, (appliedUrl) => {
-                    return map.call(recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl)), (snapshot) => {
+                    return map.call(recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy), (snapshot) => {
                         (/** @type {?} */ (this.events))
                             .next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
                         return { appliedUrl, snapshot };
@@ -4507,7 +4536,7 @@ class Router {
                     return of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
                     this.triggerEvent(new ResolveStart(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
-                    return map.call(preActivation.resolveData(), () => {
+                    return map.call(preActivation.resolveData(this.paramsInheritanceStrategy), () => {
                         this.triggerEvent(new ResolveEnd(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
                         return p;
                     });
@@ -6031,6 +6060,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.onSameUrlNavigation) {
         router.onSameUrlNavigation = opts.onSameUrlNavigation;
     }
+    if (opts.paramsInheritanceStrategy) {
+        router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+    }
     return router;
 }
 /**
@@ -6200,7 +6232,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.2.0-beta.0-f593552');
+const VERSION = new Version('5.2.0-beta.0-135ead6');
 
 /**
  * @fileoverview added by tsickle

@@ -1,12 +1,12 @@
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
-import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
+import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
 
 /**
  * @fileoverview added by tsickle
@@ -110,6 +110,15 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     return SpyNgModuleFactoryLoader;
 }());
 /**
+ * @param {?} opts
+ * @return {?}
+ */
+function isUrlHandlingStrategy(opts) {
+    // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
+    // runtime.
+    return 'shouldProcessUrl' in opts;
+}
+/**
  * Router setup factory function used for testing.
  *
  * \@stable
@@ -120,11 +129,21 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
  * @param {?} compiler
  * @param {?} injector
  * @param {?} routes
+ * @param {?=} opts
  * @param {?=} urlHandlingStrategy
  * @return {?}
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
+function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     var /** @type {?} */ router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    // Handle deprecated argument ordering.
+    if (opts) {
+        if (isUrlHandlingStrategy(opts)) {
+            router.urlHandlingStrategy = opts;
+        }
+        else if (opts.paramsInheritanceStrategy) {
+            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+        }
+    }
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -160,14 +179,22 @@ var RouterTestingModule = /** @class */ (function () {
     }
     /**
      * @param {?} routes
+     * @param {?=} config
      * @return {?}
      */
     RouterTestingModule.withRoutes = /**
      * @param {?} routes
+     * @param {?=} config
      * @return {?}
      */
-    function (routes) {
-        return { ngModule: RouterTestingModule, providers: [provideRoutes(routes)] };
+    function (routes, config) {
+        return {
+            ngModule: RouterTestingModule,
+            providers: [
+                provideRoutes(routes),
+                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
+            ]
+        };
     };
     RouterTestingModule.decorators = [
         { type: NgModule, args: [{
@@ -180,7 +207,7 @@ var RouterTestingModule = /** @class */ (function () {
                             useFactory: setupTestingRouter,
                             deps: [
                                 UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                                ROUTES, [UrlHandlingStrategy, new Optional()]
+                                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
                             ]
                         },
                         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])

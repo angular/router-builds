@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v5.2.0-beta.0-f593552
+ * @license Angular v5.2.0-beta.0-135ead6
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -116,6 +116,15 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     return SpyNgModuleFactoryLoader;
 }());
 /**
+ * @param {?} opts
+ * @return {?}
+ */
+function isUrlHandlingStrategy(opts) {
+    // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
+    // runtime.
+    return 'shouldProcessUrl' in opts;
+}
+/**
  * Router setup factory function used for testing.
  *
  * \@stable
@@ -126,11 +135,21 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
  * @param {?} compiler
  * @param {?} injector
  * @param {?} routes
+ * @param {?=} opts
  * @param {?=} urlHandlingStrategy
  * @return {?}
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
+function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     var /** @type {?} */ router = new _angular_router.Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
+    // Handle deprecated argument ordering.
+    if (opts) {
+        if (isUrlHandlingStrategy(opts)) {
+            router.urlHandlingStrategy = opts;
+        }
+        else if (opts.paramsInheritanceStrategy) {
+            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+        }
+    }
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -166,14 +185,22 @@ var RouterTestingModule = /** @class */ (function () {
     }
     /**
      * @param {?} routes
+     * @param {?=} config
      * @return {?}
      */
     RouterTestingModule.withRoutes = /**
      * @param {?} routes
+     * @param {?=} config
      * @return {?}
      */
-    function (routes) {
-        return { ngModule: RouterTestingModule, providers: [_angular_router.provideRoutes(routes)] };
+    function (routes, config) {
+        return {
+            ngModule: RouterTestingModule,
+            providers: [
+                _angular_router.provideRoutes(routes),
+                { provide: _angular_router.ROUTER_CONFIGURATION, useValue: config ? config : {} },
+            ]
+        };
     };
     RouterTestingModule.decorators = [
         { type: _angular_core.NgModule, args: [{
@@ -186,7 +213,7 @@ var RouterTestingModule = /** @class */ (function () {
                             useFactory: setupTestingRouter,
                             deps: [
                                 _angular_router.UrlSerializer, _angular_router.ChildrenOutletContexts, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector,
-                                _angular_router.ROUTES, [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
+                                _angular_router.ROUTES, _angular_router.ROUTER_CONFIGURATION, [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
                             ]
                         },
                         { provide: _angular_router.PreloadingStrategy, useExisting: _angular_router.NoPreloading }, _angular_router.provideRoutes([])
