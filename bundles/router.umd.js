@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.1-86a36ea
+ * @license Angular v5.2.0-beta.1-83c1383
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.0-beta.1-86a36ea
+ * @license Angular v5.2.0-beta.1-83c1383
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1828,7 +1828,7 @@ var ApplyRedirects = /** @class */ (function () {
         var /** @type {?} */ concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
         var /** @type {?} */ first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function (s) { return !!s; });
         return rxjs_operator_catch._catch.call(first$, function (e, _) {
-            if (e instanceof rxjs_util_EmptyError.EmptyError) {
+            if (e instanceof rxjs_util_EmptyError.EmptyError || e.name === 'EmptyError') {
                 if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return rxjs_observable_of.of(new UrlSegmentGroup([], {}));
                 }
@@ -7431,7 +7431,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.2.0-beta.1-86a36ea');
+var VERSION = new _angular_core.Version('5.2.0-beta.1-83c1383');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-beta.1-86a36ea
+ * @license Angular v5.2.0-beta.1-83c1383
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1652,7 +1652,7 @@ class ApplyRedirects {
         const /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
         const /** @type {?} */ first$ = first.call(concattedProcessedRoutes$, (s) => !!s);
         return _catch.call(first$, (e, _) => {
-            if (e instanceof EmptyError) {
+            if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
                 }
@@ -6237,7 +6237,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('5.2.0-beta.1-86a36ea');
+const VERSION = new Version('5.2.0-beta.1-83c1383');
 
 /**
  * @fileoverview added by tsickle
