@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.1.3-5efb751
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.1.3-d3c0425
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
@@ -7381,7 +7381,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('5.1.3-5efb751');
+var VERSION = new Version('5.1.3-d3c0425');
 
 /**
  * @fileoverview added by tsickle
