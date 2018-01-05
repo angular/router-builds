@@ -13,8 +13,17 @@ export declare function shallowEqual(a: {
 }, b: {
     [x: string]: any;
 }): boolean;
+/**
+ * Flattens single-level nested arrays.
+ */
 export declare function flatten<T>(arr: T[][]): T[];
+/**
+ * Return the last element of an array.
+ */
 export declare function last<T>(a: T[]): T | null;
+/**
+ * Verifys all booleans in an array are `true`.
+ */
 export declare function and(bools: boolean[]): boolean;
 export declare function forEach<K, V>(map: {
     [key: string]: V;
@@ -24,5 +33,9 @@ export declare function waitForMap<A, B>(obj: {
 }, fn: (k: string, a: A) => Observable<B>): Observable<{
     [k: string]: B;
 }>;
+/**
+ * ANDs Observables by merging all input observables, reducing to an Observable verifying all
+ * input Observables return `true`.
+ */
 export declare function andObservables(observables: Observable<Observable<any>>): Observable<boolean>;
 export declare function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>): Observable<T>;

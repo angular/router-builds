@@ -18,7 +18,7 @@ export declare class RouterConfigLoader {
     private compiler;
     private onLoadStartListener;
     private onLoadEndListener;
-    constructor(loader: NgModuleFactoryLoader, compiler: Compiler, onLoadStartListener?: (r: Route) => void, onLoadEndListener?: (r: Route) => void);
+    constructor(loader: NgModuleFactoryLoader, compiler: Compiler, onLoadStartListener?: ((r: Route) => void) | undefined, onLoadEndListener?: ((r: Route) => void) | undefined);
     load(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
     private loadModuleFactory(loadChildren);
 }

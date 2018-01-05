@@ -1,6 +1,6 @@
 /**
- * @license Angular v4.2.2-ee03ff1
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-7bec6a2
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */ 
- export * from './testing/index'
+ export * from './testing/testing'
