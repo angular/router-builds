@@ -181,6 +181,15 @@ export declare class Router {
      */
     onSameUrlNavigation: 'reload' | 'ignore';
     /**
+     * Defines how the router merges params, data and resolved data from parent to child
+     * routes. Available options are:
+     *
+     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+     *   routes.
+     * - `'always'`, enables unconditional inheritance of parent params.
+     */
+    paramsInheritanceStrategy: 'emptyOnly' | 'always';
+    /**
      * Creates the router service.
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);

@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.2.0-beta.0-057b357
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-d2808aa
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
@@ -44,8 +44,8 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.0-beta.0-057b357
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v5.2.0-rc.0-d2808aa
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
@@ -1828,7 +1828,7 @@ var ApplyRedirects = /** @class */ (function () {
         var /** @type {?} */ concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
         var /** @type {?} */ first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function (s) { return !!s; });
         return rxjs_operator_catch._catch.call(first$, function (e, _) {
-            if (e instanceof rxjs_util_EmptyError.EmptyError) {
+            if (e instanceof rxjs_util_EmptyError.EmptyError || e.name === 'EmptyError') {
                 if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return rxjs_observable_of.of(new UrlSegmentGroup([], {}));
                 }
@@ -2747,29 +2747,44 @@ var ActivatedRoute = /** @class */ (function () {
     return ActivatedRoute;
 }());
 /**
+ * Returns the inherited params, data, and resolve for a given route.
+ * By default, this only inherits values up to the nearest path-less or component-less route.
  * \@internal
  * @param {?} route
+ * @param {?=} paramsInheritanceStrategy
  * @return {?}
  */
-function inheritedParamsDataResolve(route) {
-    var /** @type {?} */ pathToRoot = route.pathFromRoot;
-    var /** @type {?} */ inhertingStartingFrom = pathToRoot.length - 1;
-    while (inhertingStartingFrom >= 1) {
-        var /** @type {?} */ current = pathToRoot[inhertingStartingFrom];
-        var /** @type {?} */ parent_1 = pathToRoot[inhertingStartingFrom - 1];
-        // current route is an empty path => inherits its parent's params and data
-        if (current.routeConfig && current.routeConfig.path === '') {
-            inhertingStartingFrom--;
-            // parent is componentless => current route should inherit its params and data
-        }
-        else if (!parent_1.component) {
-            inhertingStartingFrom--;
-        }
-        else {
-            break;
+function inheritedParamsDataResolve(route, paramsInheritanceStrategy) {
+    if (paramsInheritanceStrategy === void 0) { paramsInheritanceStrategy = 'emptyOnly'; }
+    var /** @type {?} */ pathFromRoot = route.pathFromRoot;
+    var /** @type {?} */ inheritingStartingFrom = 0;
+    if (paramsInheritanceStrategy !== 'always') {
+        inheritingStartingFrom = pathFromRoot.length - 1;
+        while (inheritingStartingFrom >= 1) {
+            var /** @type {?} */ current = pathFromRoot[inheritingStartingFrom];
+            var /** @type {?} */ parent_1 = pathFromRoot[inheritingStartingFrom - 1];
+            // current route is an empty path => inherits its parent's params and data
+            if (current.routeConfig && current.routeConfig.path === '') {
+                inheritingStartingFrom--;
+                // parent is componentless => current route should inherit its params and data
+            }
+            else if (!parent_1.component) {
+                inheritingStartingFrom--;
+            }
+            else {
+                break;
+            }
         }
     }
-    return pathToRoot.slice(inhertingStartingFrom).reduce(function (res, curr) {
+    return flattenInherited(pathFromRoot.slice(inheritingStartingFrom));
+}
+/**
+ * \@internal
+ * @param {?} pathFromRoot
+ * @return {?}
+ */
+function flattenInherited(pathFromRoot) {
+    return pathFromRoot.reduce(function (res, curr) {
         var /** @type {?} */ params = __assign({}, res.params, curr.params);
         var /** @type {?} */ data = __assign({}, res.data, curr.data);
         var /** @type {?} */ resolve = __assign({}, res.resolve, curr._resolvedData);
@@ -2959,7 +2974,7 @@ function setRouterState(state, node) {
  * @return {?}
  */
 function serializeNode(node) {
-    var /** @type {?} */ c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
+    var /** @type {?} */ c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(', ') + " } " : '';
     return "" + node.value + c;
 }
 /**
@@ -3539,17 +3554,19 @@ var PreActivation = /** @class */ (function () {
         return rxjs_operator_mergeMap.mergeMap.call(canDeactivate$, function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : rxjs_observable_of.of(false); });
     };
     /**
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
     PreActivation.prototype.resolveData = /**
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
-    function () {
+    function (paramsInheritanceStrategy) {
         var _this = this;
         if (!this.isActivating())
             return rxjs_observable_of.of(null);
         var /** @type {?} */ checks$ = rxjs_observable_from.from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (check) { return _this.runResolve(check.route); });
+        var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); });
         return rxjs_operator_reduce.reduce.call(runningChecks$, function (_, __) { return _; });
     };
     /**
@@ -3900,17 +3917,19 @@ var PreActivation = /** @class */ (function () {
     };
     /**
      * @param {?} future
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
     PreActivation.prototype.runResolve = /**
      * @param {?} future
+     * @param {?} paramsInheritanceStrategy
      * @return {?}
      */
-    function (future) {
+    function (future, paramsInheritanceStrategy) {
         var /** @type {?} */ resolve = future._resolve;
         return rxjs_operator_map.map.call(this.resolveNode(resolve, future), function (resolvedData) {
             future._resolvedData = resolvedData;
-            future.data = __assign({}, future.data, inheritedParamsDataResolve(future).resolve);
+            future.data = __assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
             return null;
         });
     };
@@ -4014,17 +4033,21 @@ var NoMatch$1 = /** @class */ (function () {
  * @param {?} config
  * @param {?} urlTree
  * @param {?} url
+ * @param {?=} paramsInheritanceStrategy
  * @return {?}
  */
-function recognize(rootComponentType, config, urlTree, url) {
-    return new Recognizer(rootComponentType, config, urlTree, url).recognize();
+function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
+    if (paramsInheritanceStrategy === void 0) { paramsInheritanceStrategy = 'emptyOnly'; }
+    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy)
+        .recognize();
 }
 var Recognizer = /** @class */ (function () {
-    function Recognizer(rootComponentType, config, urlTree, url) {
+    function Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
         this.rootComponentType = rootComponentType;
         this.config = config;
         this.urlTree = urlTree;
         this.url = url;
+        this.paramsInheritanceStrategy = paramsInheritanceStrategy;
     }
     /**
      * @return {?}
@@ -4057,7 +4080,7 @@ var Recognizer = /** @class */ (function () {
     function (routeNode) {
         var _this = this;
         var /** @type {?} */ route = routeNode.value;
-        var /** @type {?} */ i = inheritedParamsDataResolve(route);
+        var /** @type {?} */ i = inheritedParamsDataResolve(route, this.paramsInheritanceStrategy);
         route.params = Object.freeze(i.params);
         route.data = Object.freeze(i.data);
         routeNode.children.forEach(function (n) { return _this.inheritParamsAndData(n); });
@@ -4161,16 +4184,21 @@ var Recognizer = /** @class */ (function () {
             throw new NoMatch$1();
         if ((route.outlet || PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
+        var /** @type {?} */ snapshot;
+        var /** @type {?} */ consumedSegments = [];
+        var /** @type {?} */ rawSlicedSegments = [];
         if (route.path === '**') {
             var /** @type {?} */ params = segments.length > 0 ? /** @type {?} */ ((last$1(segments))).parameters : {};
-            var /** @type {?} */ snapshot_1 = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
-            return [new TreeNode(snapshot_1, [])];
+            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
-        var _a = match$1(rawSegment, route, segments), consumedSegments = _a.consumedSegments, parameters = _a.parameters, lastChild = _a.lastChild;
-        var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
+        else {
+            var /** @type {?} */ result = match$1(rawSegment, route, segments);
+            consumedSegments = result.consumedSegments;
+            rawSlicedSegments = segments.slice(result.lastChild);
+            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(this.urlTree.queryParams), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+        }
         var /** @type {?} */ childConfig = getChildConfig(route);
-        var _b = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _b.segmentGroup, slicedSegments = _b.slicedSegments;
-        var /** @type {?} */ snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze(this.urlTree.queryParams), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+        var _a = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
             var /** @type {?} */ children_1 = this.processChildren(childConfig, segmentGroup);
             return [new TreeNode(snapshot, children_1)];
@@ -4698,6 +4726,15 @@ var Router = /** @class */ (function () {
          * current URL. Default is 'ignore'.
          */
         this.onSameUrlNavigation = 'ignore';
+        /**
+         * Defines how the router merges params, data and resolved data from parent to child
+         * routes. Available options are:
+         *
+         * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+         *   routes.
+         * - `'always'`, enables unconditional inheritance of parent params.
+         */
+        this.paramsInheritanceStrategy = 'emptyOnly';
         var /** @type {?} */ onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var /** @type {?} */ onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(_angular_core.NgModuleRef);
@@ -5373,7 +5410,7 @@ var Router = /** @class */ (function () {
                 var /** @type {?} */ moduleInjector = _this.ngModule.injector;
                 var /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, _this.configLoader, _this.urlSerializer, url, _this.config);
                 urlAndSnapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function (appliedUrl) {
-                    return rxjs_operator_map.map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl)), function (snapshot) {
+                    return rxjs_operator_map.map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl), _this.paramsInheritanceStrategy), function (snapshot) {
                         (/** @type {?} */ (_this.events))
                             .next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
                         return { appliedUrl: appliedUrl, snapshot: snapshot };
@@ -5410,7 +5447,7 @@ var Router = /** @class */ (function () {
                     return rxjs_observable_of.of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
                     _this.triggerEvent(new ResolveStart(id, _this.serializeUrl(url), p.appliedUrl, p.snapshot));
-                    return rxjs_operator_map.map.call(preActivation.resolveData(), function () {
+                    return rxjs_operator_map.map.call(preActivation.resolveData(_this.paramsInheritanceStrategy), function () {
                         _this.triggerEvent(new ResolveEnd(id, _this.serializeUrl(url), p.appliedUrl, p.snapshot));
                         return p;
                     });
@@ -7208,6 +7245,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.onSameUrlNavigation) {
         router.onSameUrlNavigation = opts.onSameUrlNavigation;
     }
+    if (opts.paramsInheritanceStrategy) {
+        router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+    }
     return router;
 }
 /**
@@ -7384,14 +7424,9 @@ function provideRouterInitializer() {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @module
- * @description
- * Entry point for all public APIs of the common package.
- */
-/**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.2.0-beta.0-057b357');
+var VERSION = new _angular_core.Version('5.2.0-rc.0-d2808aa');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
