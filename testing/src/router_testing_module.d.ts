@@ -78,7 +78,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  *   TestBed.configureTestModule({
  *     imports: [
  *       RouterTestingModule.withRoutes(
- *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
+ *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
  *       )
  *     ]
  *   });
