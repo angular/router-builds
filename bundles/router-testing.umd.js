@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.0-72246d4
+ * @license Angular v5.2.0-a76ab1f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
 
 /**
- * @license Angular v5.2.0-72246d4
+ * @license Angular v5.2.0-a76ab1f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -165,7 +165,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *   TestBed.configureTestModule({
  *     imports: [
  *       RouterTestingModule.withRoutes(
- *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
+ *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
  *       )
  *     ]
  *   });
