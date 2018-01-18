@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { ElementRef, OnChanges, OnDestroy, Renderer } from '@angular/core';
+import { ElementRef, OnChanges, OnDestroy, Renderer2 } from '@angular/core';
 import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
@@ -64,10 +64,12 @@ import { UrlTree } from '../url_tree';
  * ```
  *
  * You can tell the directive to how to handle queryParams, available options are:
- *  - 'merge' merge the queryParams into the current queryParams
- *  - 'preserve' prserve the current queryParams
- *  - default / '' use the queryParams only
- *  same options for {@link NavigationExtras#queryParamsHandling}
+ *  - `'merge'`: merge the queryParams into the current queryParams
+ *  - `'preserve'`: preserve the current queryParams
+ *  - default/`''`: use the queryParams only
+ *
+ * Same options for {@link NavigationExtras#queryParamsHandling
+ * NavigationExtras#queryParamsHandling}.
  *
  * ```
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
@@ -82,9 +84,9 @@ import { UrlTree } from '../url_tree';
  * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
  * `/user/(jim//aux:team)`.
  *
- * @ngModule RouterModule
+ * See {@link Router#createUrlTree createUrlTree} for more information.
  *
- * See {@link Router#createUrlTree} for more information.
+ * @ngModule RouterModule
  *
  * @stable
  */
@@ -101,7 +103,7 @@ export declare class RouterLink {
     replaceUrl: boolean;
     private commands;
     private preserve;
-    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer, el: ElementRef);
+    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
     routerLink: any[] | string;
     /**
      * @deprecated 4.0.0 use `queryParamsHandling` instead.

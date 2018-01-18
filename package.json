@@ -1,10 +1,10 @@
 {
   "name": "@angular/router",
-  "version": "4.2.2-a6c99f0",
+  "version": "5.2.0-2717a3e",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
-  "module": "./@angular/router.es5.js",
-  "es2015": "./@angular/router.js",
+  "module": "./esm5/router.js",
+  "es2015": "./esm2015/router.js",
   "typings": "./router.d.ts",
   "keywords": [
     "angular",
@@ -19,14 +19,14 @@
   "bugs": {
     "url": "https://github.com/angular/angular/issues"
   },
-  "homepage": "https://github.com/angular/angular/blob/master/modules/%40angular/router/README.md",
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {
     "tslib": "^1.7.1"
   },
   "peerDependencies": {
-    "@angular/core": "4.2.2-a6c99f0",
-    "@angular/common": "4.2.2-a6c99f0",
-    "@angular/platform-browser": "4.2.2-a6c99f0",
-    "rxjs": "^5.0.1"
+    "@angular/core": "5.2.0-2717a3e",
+    "@angular/common": "5.2.0-2717a3e",
+    "@angular/platform-browser": "5.2.0-2717a3e",
+    "rxjs": "^5.5.0"
   }
 }
