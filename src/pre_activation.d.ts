@@ -9,7 +9,7 @@ import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Event } from './events';
 import { ChildrenOutletContexts } from './router_outlet_context';
-import { ParamsInheritanceStrategy, RouterStateSnapshot } from './router_state';
+import { RouterStateSnapshot } from './router_state';
 /**
  * This class bundles the actions involved in preactivation of a route.
  */
@@ -23,7 +23,7 @@ export declare class PreActivation {
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
     initialize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
-    resolveData(paramsInheritanceStrategy: ParamsInheritanceStrategy): Observable<any>;
+    resolveData(paramsInheritanceStrategy: 'emptyOnly' | 'always'): Observable<any>;
     isDeactivating(): boolean;
     isActivating(): boolean;
     /**
