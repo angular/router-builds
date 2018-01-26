@@ -98,6 +98,7 @@ export declare class ActivatedRoute {
     readonly queryParamMap: Observable<ParamMap>;
     toString(): string;
 }
+export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
 /**
  * @whatItDoes Contains the information about a route associated with a component loaded in an
  * outlet
