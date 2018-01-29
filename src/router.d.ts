@@ -168,6 +168,7 @@ export declare class Router {
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
+    private lastSuccessfulId;
     /**
      * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      */
@@ -315,8 +316,8 @@ export declare class Router {
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private removeEmptyProps(params);
     private processNavigations();
-    private scheduleNavigation(rawUrl, source, extras);
-    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
+    private scheduleNavigation(rawUrl, source, state, extras);
+    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject, source, state});
     private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
     private resetStateAndUrl(storedState, storedUrl, rawUrl);
     private resetUrlToCurrentUrlTree();
