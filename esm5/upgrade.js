@@ -1,10 +1,16 @@
 /**
- * @license Angular v4.0.0-rc.5-3993f69
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-beta.1-27a2515
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
- */ import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+ */
+import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -13,13 +19,13 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @whatItDoes Creates an initializer that in addition to setting up the Angular
+ * \@whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
  *
- * @howToUse
+ * \@howToUse
  *
  * ```
- * @NgModule({
+ * \@NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
  *   UpgradeModule
@@ -33,7 +39,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * }
  * ```
  *
- * @experimental
+ * \@experimental
  */
 var RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
@@ -42,31 +48,40 @@ var RouterUpgradeInitializer = {
     deps: [UpgradeModule]
 };
 /**
- * @internal
+ * \@internal
+ * @param {?} ngUpgrade
+ * @return {?}
  */
 function locationSyncBootstrapListener(ngUpgrade) {
     return function () { setUpLocationSync(ngUpgrade); };
 }
 /**
- * @whatItDoes Sets up a location synchronization.
+ * \@whatItDoes Sets up a location synchronization.
  *
- * History.pushState does not fire onPopState, so the angular2 location
+ * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener
  *
- * @experimental
+ * \@experimental
+ * @param {?} ngUpgrade
+ * @return {?}
  */
 function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
         throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
     }
-    var router = ngUpgrade.injector.get(Router);
-    var url = document.createElement('a');
+    var /** @type {?} */ router = ngUpgrade.injector.get(Router);
+    var /** @type {?} */ url = document.createElement('a');
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router.navigateByUrl(url.pathname);
+        router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -77,7 +92,18 @@ function setUpLocationSync(ngUpgrade) {
 /**
  * @module
  * @description
- * Entry point for all public APIs of the router/upgrade package.
+ * Entry point for all public APIs of this package.
  */
+
+// This file only reexports content of the `src` folder. Keep it that way.
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
-//# sourceMappingURL=upgrade.es5.js.map
+//# sourceMappingURL=upgrade.js.map

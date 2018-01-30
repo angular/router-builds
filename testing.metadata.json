@@ -1,1 +1,1 @@
-{"alias": "./testing/index.metadata.json"}
+{"__symbolic":"module","version":3,"metadata":{},"exports":[{"from":"./testing/testing"}],"flatModuleIndexRedirect":true}

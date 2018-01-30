@@ -10,7 +10,7 @@ import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, Modul
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
-import { RouterOutletMap } from './router_outlet_map';
+import { ChildrenOutletContexts } from './router_outlet_context';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -82,12 +82,15 @@ export declare class RouterModule {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options:
+     * Options (see {@link ExtraOptions}):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
+     * * `preloadingStrategy` configures a preloading strategy (see {@link PreloadAllModules}).
+     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
+     * {@link ExtraOptions} for more details.
      */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     /**
@@ -126,8 +129,8 @@ export declare function provideRoutes(routes: Routes): any;
  * * 'legacy_disabled'- the initial navigation is not performed. The location listener is set up
  * after @deprecated
  * the root component gets created.
- * * `true` - same as 'legacy_enabled'. @deprecated
- * * `false` - same as 'legacy_disabled'. @deprecated
+ * * `true` - same as 'legacy_enabled'. @deprecated since v4
+ * * `false` - same as 'legacy_disabled'. @deprecated since v4
  *
  * The 'enabled' option should be used for applications unless there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
@@ -164,8 +167,24 @@ export interface ExtraOptions {
      * Configures a preloading strategy. See {@link PreloadAllModules}.
      */
     preloadingStrategy?: any;
+    /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * By default, the router will ignore this navigation. However, this prevents features such
+     * as a "refresh" button. Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     */
+    onSameUrlNavigation?: 'reload' | 'ignore';
+    /**
+     * Defines how the router merges params, data and resolved data from parent to child
+     * routes. Available options are:
+     *
+     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+     *   routes.
+     * - `'always'`, enables unconditional inheritance of parent params.
+     */
+    paramsInheritanceStrategy?: 'emptyOnly' | 'always';
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 /**
  * To initialize the router properly we need to do in two steps:
@@ -200,11 +219,11 @@ export declare function provideRouterInitializer(): (typeof RouterInitializer | 
     provide: InjectionToken<(() => void)[]>;
     multi: boolean;
     useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    deps: (typeof RouterInitializer)[];
 } | {
     provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
     useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    deps: (typeof RouterInitializer)[];
 } | {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;

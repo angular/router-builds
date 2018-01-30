@@ -1,1 +1,1 @@
-{"alias": "./upgrade/index.metadata.json"}
+{"__symbolic":"module","version":3,"metadata":{},"exports":[{"from":"./upgrade/upgrade"}],"flatModuleIndexRedirect":true}
