@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.3-102d06b
+ * @license Angular v5.2.3-ce51ea9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.3-102d06b
+ * @license Angular v5.2.3-ce51ea9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4797,14 +4797,15 @@ var Router = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
-        // which does not work properly with zone.js in IE and Safari
+        // Don't need to use Zone.wrap any more, because zone.js
+        // already patch onPopState, so location change callback will
+        // run into ngZone
         if (!this.locationSubscription) {
-            this.locationSubscription = /** @type {?} */ (this.location.subscribe(Zone.current.wrap(function (change) {
+            this.locationSubscription = /** @type {?} */ (this.location.subscribe(function (change) {
                 var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
                 var /** @type {?} */ source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 setTimeout(function () { _this.scheduleNavigation(rawUrlTree, source, { replaceUrl: true }); }, 0);
-            })));
+            }));
         }
     };
     Object.defineProperty(Router.prototype, "url", {
@@ -7426,7 +7427,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.2.3-102d06b');
+var VERSION = new _angular_core.Version('5.2.3-ce51ea9');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
