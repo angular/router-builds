@@ -318,6 +318,11 @@ export declare class Router {
     private scheduleNavigation(rawUrl, source, extras);
     private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
     private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
+    /**
+     * Performs the logic of activating routes. This is a synchronous process by default. While this
+     * is a private method, it could be overridden to make activation asynchronous.
+     */
+    private activateRoutes(state, storedState, storedUrl, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
     private resetStateAndUrl(storedState, storedUrl, rawUrl);
     private resetUrlToCurrentUrlTree();
 }
