@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.5-b3ffeaa
+ * @license Angular v6.0.0-beta.5-45eff4c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -690,6 +690,14 @@ function getFullPath(parentPath, currentRoute) {
     else {
         return `${parentPath}/${currentRoute.path}`;
     }
+}
+/**
+ * @param {?} r
+ * @return {?}
+ */
+function copyConfig(r) {
+    const /** @type {?} */ children = r.children && r.children.map(copyConfig);
+    return children ? Object.assign({}, r, { children }) : Object.assign({}, r);
 }
 
 /**
@@ -3987,7 +3995,7 @@ class RouterConfigLoader {
                 this.onLoadEndListener(route);
             }
             const /** @type {?} */ module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
         });
     }
     /**
@@ -4236,7 +4244,7 @@ class Router {
      */
     resetConfig(config) {
         validateConfig(config);
-        this.config = config;
+        this.config = config.map(copyConfig);
         this.navigated = false;
         this.lastSuccessfulId = -1;
     }
@@ -6277,7 +6285,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-beta.5-b3ffeaa');
+const VERSION = new Version('6.0.0-beta.5-45eff4c');
 
 /**
  * @fileoverview added by tsickle
