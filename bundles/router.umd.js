@@ -1,5 +1,5 @@
 /**
- * @license Angular v5.2.6-1776239
+ * @license Angular v5.2.6-150bac3
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v5.2.6-1776239
+ * @license Angular v5.2.6-150bac3
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -721,6 +721,14 @@ function getFullPath(parentPath, currentRoute) {
     else {
         return parentPath + "/" + currentRoute.path;
     }
+}
+/**
+ * @param {?} r
+ * @return {?}
+ */
+function copyConfig(r) {
+    var /** @type {?} */ children = r.children && r.children.map(copyConfig);
+    return children ? __assign({}, r, { children: children }) : __assign({}, r);
 }
 
 /**
@@ -4548,7 +4556,7 @@ var RouterConfigLoader = /** @class */ (function () {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)), module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
         });
     };
     /**
@@ -4878,7 +4886,7 @@ var Router = /** @class */ (function () {
      */
     function (config) {
         validateConfig(config);
-        this.config = config;
+        this.config = config.map(copyConfig);
         this.navigated = false;
     };
     /** @docsNotRequired */
@@ -7459,7 +7467,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('5.2.6-1776239');
+var VERSION = new _angular_core.Version('5.2.6-150bac3');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
