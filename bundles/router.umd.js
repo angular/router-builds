@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.6-0451fd9
+ * @license Angular v6.0.0-beta.6-ba8df8a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.6-0451fd9
+ * @license Angular v6.0.0-beta.6-ba8df8a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -7492,7 +7492,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('6.0.0-beta.6-0451fd9');
+var VERSION = new _angular_core.Version('6.0.0-beta.6-ba8df8a');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
