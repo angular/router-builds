@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.6-2c75acc
+ * @license Angular v6.0.0-beta.6-fa974c7
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1175,7 +1175,7 @@ class DefaultUrlSerializer {
     serialize(tree) {
         const /** @type {?} */ segment = `/${serializeSegment(tree.root, true)}`;
         const /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeURI((/** @type {?} */ ((tree.fragment))))}` : '';
+        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeUriQuery((/** @type {?} */ ((tree.fragment))))}` : '';
         return `${segment}${query}${fragment}`;
     }
 }
@@ -1219,9 +1219,10 @@ function serializeSegment(segment, root) {
     }
 }
 /**
- * This method is intended for encoding *key* or *value* parts of query component. We need a custom
- * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
- * encoded per http://tools.ietf.org/html/rfc3986:
+ * Encodes a URI string with the default encoding. This function will only ever be called from
+ * `encodeUriQuery` or `encodeUriSegment` as it's the base set of encodings to be used. We need
+ * a custom encoding because encodeURIComponent is too aggressive and encodes stuff that doesn't
+ * have to be encoded per http://tools.ietf.org/html/rfc3986:
  *    query         = *( pchar / "/" / "?" )
  *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "\@"
  *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -1231,13 +1232,35 @@ function serializeSegment(segment, root) {
  * @param {?} s
  * @return {?}
  */
-function encode(s) {
+function encodeUriString(s) {
     return encodeURIComponent(s)
         .replace(/%40/g, '@')
         .replace(/%3A/gi, ':')
         .replace(/%24/g, '$')
-        .replace(/%2C/gi, ',')
-        .replace(/%3B/gi, ';');
+        .replace(/%2C/gi, ',');
+}
+/**
+ * This function should be used to encode both keys and values in a query string key/value or the
+ * URL fragment. In the following URL, you need to call encodeUriQuery on "k", "v" and "f":
+ *
+ * http://www.site.org/html;mk=mv?k=v#f
+ * @param {?} s
+ * @return {?}
+ */
+function encodeUriQuery(s) {
+    return encodeUriString(s).replace(/%3B/gi, ';');
+}
+/**
+ * This function should be run on any URI segment as well as the key and value in a key/value
+ * pair for matrix params. In the following URL, you need to call encodeUriSegment on "html",
+ * "mk", and "mv":
+ *
+ * http://www.site.org/html;mk=mv?k=v#f
+ * @param {?} s
+ * @return {?}
+ */
+function encodeUriSegment(s) {
+    return encodeUriString(s).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/%26/gi, '&');
 }
 /**
  * @param {?} s
@@ -1247,18 +1270,27 @@ function decode(s) {
     return decodeURIComponent(s);
 }
 /**
+ * @param {?} s
+ * @return {?}
+ */
+function decodeQuery(s) {
+    return decode(s.replace(/\+/g, '%20'));
+}
+/**
  * @param {?} path
  * @return {?}
  */
 function serializePath(path) {
-    return `${encode(path.path)}${serializeParams(path.parameters)}`;
+    return `${encodeUriSegment(path.path)}${serializeMatrixParams(path.parameters)}`;
 }
 /**
  * @param {?} params
  * @return {?}
  */
-function serializeParams(params) {
-    return Object.keys(params).map(key => `;${encode(key)}=${encode(params[key])}`).join('');
+function serializeMatrixParams(params) {
+    return Object.keys(params)
+        .map(key => `;${encodeUriSegment(key)}=${encodeUriSegment(params[key])}`)
+        .join('');
 }
 /**
  * @param {?} params
@@ -1267,8 +1299,9 @@ function serializeParams(params) {
 function serializeQueryParams(params) {
     const /** @type {?} */ strParams = Object.keys(params).map((name) => {
         const /** @type {?} */ value = params[name];
-        return Array.isArray(value) ? value.map(v => `${encode(name)}=${encode(v)}`).join('&') :
-            `${encode(name)}=${encode(value)}`;
+        return Array.isArray(value) ?
+            value.map(v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join('&') :
+            `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
     });
     return strParams.length ? `?${strParams.join("&")}` : '';
 }
@@ -1334,7 +1367,7 @@ class UrlParser {
      * @return {?}
      */
     parseFragment() {
-        return this.consumeOptional('#') ? decodeURI(this.remaining) : null;
+        return this.consumeOptional('#') ? decodeURIComponent(this.remaining) : null;
     }
     /**
      * @return {?}
@@ -1425,8 +1458,8 @@ class UrlParser {
                 this.capture(value);
             }
         }
-        const /** @type {?} */ decodedKey = decode(key);
-        const /** @type {?} */ decodedVal = decode(value);
+        const /** @type {?} */ decodedKey = decodeQuery(key);
+        const /** @type {?} */ decodedVal = decodeQuery(value);
         if (params.hasOwnProperty(decodedKey)) {
             // Append to existing values
             let /** @type {?} */ currentVal = params[decodedKey];
@@ -6285,7 +6318,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-beta.6-2c75acc');
+const VERSION = new Version('6.0.0-beta.6-fa974c7');
 
 /**
  * @fileoverview added by tsickle
