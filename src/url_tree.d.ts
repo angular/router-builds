@@ -168,12 +168,19 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
 }
 export declare function serializePaths(segment: UrlSegmentGroup): string;
 /**
- * This function should be used to encode both keys and values in a query string key/value or the
- * URL fragment. In the following URL, you need to call encodeUriQuery on "k", "v" and "f":
+ * This function should be used to encode both keys and values in a query string key/value. In
+ * the following URL, you need to call encodeUriQuery on "k" and "v":
  *
  * http://www.site.org/html;mk=mv?k=v#f
  */
 export declare function encodeUriQuery(s: string): string;
+/**
+ * This function should be used to encode a URL fragment. In the following URL, you need to call
+ * encodeUriFragment on "f":
+ *
+ * http://www.site.org/html;mk=mv?k=v#f
+ */
+export declare function encodeUriFragment(s: string): string;
 /**
  * This function should be run on any URI segment as well as the key and value in a key/value
  * pair for matrix params. In the following URL, you need to call encodeUriSegment on "html",
