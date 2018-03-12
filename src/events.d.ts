@@ -8,6 +8,16 @@
 import { Route } from './config';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
 /**
+ * @whatItDoes Identifies the trigger of the navigation.
+ *
+ * * 'imperative'--triggered by `router.navigateByUrl` or `router.navigate`.
+ * * 'popstate'--triggered by a popstate event
+ * * 'hashchange'--triggered by a hashchange event
+ *
+ * @experimental
+ */
+export declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
+/**
  * @whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
@@ -42,6 +52,40 @@ export declare class RouterEvent {
  * @stable
  */
 export declare class NavigationStart extends RouterEvent {
+    /**
+     * Identifies the trigger of the navigation.
+     *
+     * * 'imperative'--triggered by `router.navigateByUrl` or `router.navigate`.
+     * * 'popstate'--triggered by a popstate event
+     * * 'hashchange'--triggered by a hashchange event
+     */
+    navigationTrigger?: 'imperative' | 'popstate' | 'hashchange';
+    /**
+     * This contains the navigation id that pushed the history record that the router navigates
+     * back to. This is not null only when the navigation is triggered by a popstate event.
+     *
+     * The router assigns a navigationId to every router transition/navigation. Even when the user
+     * clicks on the back button in the browser, a new navigation id will be created. So from
+     * the perspective of the router, the router never "goes back". By using the `restoredState`
+     * and its navigationId, you can implement behavior that differentiates between creating new
+     * states
+     * and popstate events. In the latter case you can restore some remembered state (e.g., scroll
+     * position).
+     */
+    restoredState?: {
+        navigationId: number;
+    } | null;
+    constructor(
+        /** @docsNotRequired */
+        id: number, 
+        /** @docsNotRequired */
+        url: string, 
+        /** @docsNotRequired */
+        navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
+        /** @docsNotRequired */
+        restoredState?: {
+        navigationId: number;
+    } | null);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -268,6 +312,34 @@ export declare class ChildActivationEnd {
     toString(): string;
 }
 /**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ActivationEnd} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ActivationStart {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
+ * {@link ActivationStart} for use of this experimental API.
+ *
+ * @experimental
+ */
+export declare class ActivationEnd {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    constructor(
+        /** @docsNotRequired */
+        snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
  * @whatItDoes Represents a router event, allowing you to track the lifecycle of the router.
  *
  * The sequence of router events is:
@@ -278,9 +350,11 @@ export declare class ChildActivationEnd {
  * - {@link RoutesRecognized},
  * - {@link GuardsCheckStart},
  * - {@link ChildActivationStart},
+ * - {@link ActivationStart},
  * - {@link GuardsCheckEnd},
  * - {@link ResolveStart},
  * - {@link ResolveEnd},
+ * - {@link ActivationEnd}
  * - {@link ChildActivationEnd}
  * - {@link NavigationEnd},
  * - {@link NavigationCancel},
@@ -288,4 +362,4 @@ export declare class ChildActivationEnd {
  *
  * @stable
  */
-export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd;
+export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd;

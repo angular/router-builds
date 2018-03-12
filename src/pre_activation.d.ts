@@ -20,10 +20,10 @@ export declare class PreActivation {
     private forwardEvent;
     private canActivateChecks;
     private canDeactivateChecks;
-    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: (evt: Event) => void);
-    initalize(parentContexts: ChildrenOutletContexts): void;
+    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
+    initialize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
-    resolveData(): Observable<any>;
+    resolveData(paramsInheritanceStrategy: 'emptyOnly' | 'always'): Observable<any>;
     isDeactivating(): boolean;
     isActivating(): boolean;
     /**
@@ -41,6 +41,15 @@ export declare class PreActivation {
     private runCanDeactivateChecks();
     private runCanActivateChecks();
     /**
+     * This should fire off `ActivationStart` events for each route being activated at this
+     * level.
+     * In other words, if you're activating `a` and `b` below, `path` will contain the
+     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
+     * return
+     * `true` so checks continue to run.
+     */
+    private fireActivationStart(snapshot);
+    /**
      * This should fire off `ChildActivationStart` events for each route being activated at this
      * level.
      * In other words, if you're activating `a` and `b` below, `path` will contain the
@@ -53,7 +62,7 @@ export declare class PreActivation {
     private runCanActivateChild(path);
     private extractCanActivateChild(p);
     private runCanDeactivate(component, curr);
-    private runResolve(future);
+    private runResolve(future, paramsInheritanceStrategy);
     private resolveNode(resolve, future);
     private getResolver(injectionToken, future);
     private getToken(token, snapshot);
