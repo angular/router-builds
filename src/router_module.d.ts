@@ -218,14 +218,19 @@ export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<a
 export declare function provideRouterInitializer(): (typeof RouterInitializer | {
     provide: InjectionToken<(() => void)[]>;
     multi: boolean;
-    useFactory: (r: RouterInitializer) => any;
+    useFactory: typeof getAppInitializer;
     deps: (typeof RouterInitializer)[];
+    useExisting?: undefined;
 } | {
     provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: (r: RouterInitializer) => any;
+    useFactory: typeof getBootstrapListener;
     deps: (typeof RouterInitializer)[];
+    multi?: undefined;
+    useExisting?: undefined;
 } | {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
+    useFactory?: undefined;
+    deps?: undefined;
 })[];
