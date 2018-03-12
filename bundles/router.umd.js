@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-40315be
+ * @license Angular v6.0.0-beta.7-aa7dba2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.7-40315be
+ * @license Angular v6.0.0-beta.7-aa7dba2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1262,7 +1262,7 @@ var DefaultUrlSerializer = /** @class */ (function () {
     function (tree) {
         var /** @type {?} */ segment = "/" + serializeSegment(tree.root, true);
         var /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        var /** @type {?} */ fragment = typeof tree.fragment === "string" ? "#" + encodeUriQuery((/** @type {?} */ ((tree.fragment)))) : '';
+        var /** @type {?} */ fragment = typeof tree.fragment === "string" ? "#" + encodeUriFragment((/** @type {?} */ ((tree.fragment)))) : '';
         return "" + segment + query + fragment;
     };
     return DefaultUrlSerializer;
@@ -1310,13 +1310,7 @@ function serializeSegment(segment, root) {
  * Encodes a URI string with the default encoding. This function will only ever be called from
  * `encodeUriQuery` or `encodeUriSegment` as it's the base set of encodings to be used. We need
  * a custom encoding because encodeURIComponent is too aggressive and encodes stuff that doesn't
- * have to be encoded per http://tools.ietf.org/html/rfc3986:
- *    query         = *( pchar / "/" / "?" )
- *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "\@"
- *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
- *    pct-encoded   = "%" HEXDIG HEXDIG
- *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
- *                     / "*" / "+" / "," / ";" / "="
+ * have to be encoded per https://url.spec.whatwg.org.
  * @param {?} s
  * @return {?}
  */
@@ -1328,8 +1322,8 @@ function encodeUriString(s) {
         .replace(/%2C/gi, ',');
 }
 /**
- * This function should be used to encode both keys and values in a query string key/value or the
- * URL fragment. In the following URL, you need to call encodeUriQuery on "k", "v" and "f":
+ * This function should be used to encode both keys and values in a query string key/value. In
+ * the following URL, you need to call encodeUriQuery on "k" and "v":
  *
  * http://www.site.org/html;mk=mv?k=v#f
  * @param {?} s
@@ -1337,6 +1331,17 @@ function encodeUriString(s) {
  */
 function encodeUriQuery(s) {
     return encodeUriString(s).replace(/%3B/gi, ';');
+}
+/**
+ * This function should be used to encode a URL fragment. In the following URL, you need to call
+ * encodeUriFragment on "f":
+ *
+ * http://www.site.org/html;mk=mv?k=v#f
+ * @param {?} s
+ * @return {?}
+ */
+function encodeUriFragment(s) {
+    return encodeURI(s);
 }
 /**
  * This function should be run on any URI segment as well as the key and value in a key/value
@@ -7525,7 +7530,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('6.0.0-beta.7-40315be');
+var VERSION = new _angular_core.Version('6.0.0-beta.7-aa7dba2');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;
