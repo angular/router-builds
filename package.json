@@ -1,0 +1,32 @@
+{
+  "name": "@angular/router",
+  "version": "5.2.9-5298b2b",
+  "description": "Angular - the routing library",
+  "main": "./bundles/router.umd.js",
+  "module": "./esm5/router.js",
+  "es2015": "./esm2015/router.js",
+  "typings": "./router.d.ts",
+  "keywords": [
+    "angular",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git"
+  },
+  "author": "angular",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
+  "dependencies": {
+    "tslib": "^1.7.1"
+  },
+  "peerDependencies": {
+    "@angular/core": "5.2.9-5298b2b",
+    "@angular/common": "5.2.9-5298b2b",
+    "@angular/platform-browser": "5.2.9-5298b2b",
+    "rxjs": "^5.5.0"
+  }
+}
