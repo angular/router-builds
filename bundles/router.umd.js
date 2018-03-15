@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-88b3198
+ * @license Angular v6.0.0-beta.7-a011654
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.7-88b3198
+ * @license Angular v6.0.0-beta.7-a011654
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2430,6 +2430,9 @@ function getOutlet(route) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * @template T
+ */
 var Tree = /** @class */ (function () {
     function Tree(root) {
         this._root = root;
@@ -2565,6 +2568,9 @@ function findPath(value, node) {
     }
     return [];
 }
+/**
+ * @template T
+ */
 var TreeNode = /** @class */ (function () {
     function TreeNode(value, children) {
         this.value = value;
@@ -7530,7 +7536,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('6.0.0-beta.7-88b3198');
+var VERSION = new _angular_core.Version('6.0.0-beta.7-a011654');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

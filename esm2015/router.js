@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-88b3198
+ * @license Angular v6.0.0-beta.7-a011654
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2143,6 +2143,9 @@ function getOutlet(route) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * @template T
+ */
 class Tree {
     /**
      * @param {?} root
@@ -2232,6 +2235,9 @@ function findPath(value, node) {
     }
     return [];
 }
+/**
+ * @template T
+ */
 class TreeNode {
     /**
      * @param {?} value
@@ -6323,7 +6329,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-beta.7-88b3198');
+const VERSION = new Version('6.0.0-beta.7-a011654');
 
 /**
  * @fileoverview added by tsickle
