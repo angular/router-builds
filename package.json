@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "6.0.0-beta.7-bafdad9",
+  "version": "6.0.0-beta.7-688096b",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./esm5/router.js",
@@ -24,13 +24,13 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@angular/core": "6.0.0-beta.7-bafdad9",
-    "@angular/common": "6.0.0-beta.7-bafdad9",
-    "@angular/platform-browser": "6.0.0-beta.7-bafdad9",
+    "@angular/core": "6.0.0-beta.7-688096b",
+    "@angular/common": "6.0.0-beta.7-688096b",
+    "@angular/platform-browser": "6.0.0-beta.7-688096b",
     "rxjs": "^5.5.0"
   },
   "ng-update": {
-    "packageGroup": ["@angular/core", "@angular/compiler", "@angular/common", "@angular/animations", "@angular/platform-browser", "@angular/platform-browser-dynamic", "@angular/forms", "@angular/http", "@angular/platform-server", "@angular/platform-webworker", "@angular/platform-webworker-dynamic", "@angular/upgrade", "@angular/router", "@angular/compiler-cli", "@angular/language-service", "@angular/benchpress", "@angular/service-worker"]
+    "packageGroup": ["@angular/core", "@angular/compiler", "@angular/common", "@angular/animations", "@angular/platform-browser", "@angular/platform-browser-dynamic", "@angular/forms", "@angular/http", "@angular/platform-server", "@angular/platform-webworker", "@angular/platform-webworker-dynamic", "@angular/upgrade", "@angular/router", "@angular/compiler-cli", "@angular/language-service", "@angular/benchpress", "@angular/service-worker", "@angular/elements"]
   },
   "sideEffects": false
 }
