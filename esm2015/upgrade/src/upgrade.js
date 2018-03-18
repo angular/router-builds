@@ -1,13 +1,4 @@
 /**
- * @license Angular v6.0.0-beta.7-f258ec6
- * (c) 2010-2018 Google, Inc. https://angular.io/
- * License: MIT
- */
-import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { Router } from '@angular/router';
-import { UpgradeModule } from '@angular/upgrade/static';
-
-/**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
@@ -18,6 +9,9 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+import { Router } from '@angular/router';
+import { UpgradeModule } from '@angular/upgrade/static';
 /**
  * \@whatItDoes Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
@@ -41,7 +35,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * \@experimental
  */
-const RouterUpgradeInitializer = {
+export const /** @type {?} */ RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: locationSyncBootstrapListener,
@@ -52,7 +46,7 @@ const RouterUpgradeInitializer = {
  * @param {?} ngUpgrade
  * @return {?}
  */
-function locationSyncBootstrapListener(ngUpgrade) {
+export function locationSyncBootstrapListener(ngUpgrade) {
     return () => { setUpLocationSync(ngUpgrade); };
 }
 /**
@@ -65,7 +59,7 @@ function locationSyncBootstrapListener(ngUpgrade) {
  * @param {?} ngUpgrade
  * @return {?}
  */
-function setUpLocationSync(ngUpgrade) {
+export function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
         throw new Error(`
         RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.
@@ -80,33 +74,4 @@ function setUpLocationSync(ngUpgrade) {
         router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
-// This file only reexports content of the `src` folder. Keep it that way.
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
- */
-
-export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
 //# sourceMappingURL=upgrade.js.map
