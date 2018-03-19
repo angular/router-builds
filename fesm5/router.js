@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-fc50c77
+ * @license Angular v6.0.0-beta.7-5c387a7
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -7514,7 +7514,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('6.0.0-beta.7-fc50c77');
+var VERSION = new Version('6.0.0-beta.7-5c387a7');
 
 /**
  * @fileoverview added by tsickle
