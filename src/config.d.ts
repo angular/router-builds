@@ -275,11 +275,11 @@ export declare type UrlMatchResult = {
  * For instance, the following matcher matches html files.
  *
  * ```
- * function htmlFiles(url: UrlSegment[]) {
- *  return url.length === 1 && url[0].path.endsWith('.html') ? ({consumed: url}) : null;
+ * export function htmlFiles(url: UrlSegment[]) {
+ *   return url.length === 1 && url[0].path.endsWith('.html') ? ({consumed: url}) : null;
  * }
  *
- * const routes = [{ matcher: htmlFiles, component: HtmlCmp }];
+ * export const routes = [{ matcher: htmlFiles, component: AnyComponent }];
  * ```
  *
  * @experimental
@@ -352,3 +352,4 @@ export declare class LoadedRouterConfig {
     constructor(routes: Route[], module: NgModuleRef<any>);
 }
 export declare function validateConfig(config: Routes, parentPath?: string): void;
+export declare function copyConfig(r: Route): Route;
