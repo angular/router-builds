@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-7d095b9
+ * @license Angular v6.0.0-beta.7-e6c731f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-beta.7-7d095b9
+ * @license Angular v6.0.0-beta.7-e6c731f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -850,7 +850,8 @@ function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    return rxjs.of.apply(void 0, waitHead.concat(waitTail)).pipe(rxjs_operators.concatAll(), rxjs_operators.last(), rxjs_operators.map(function () { return res; }));
+    // Closure compiler has problem with using spread operator here. So just using Array.concat.
+    return rxjs.of.apply(null, waitHead.concat(waitTail)).pipe(rxjs_operators.concatAll(), rxjs_operators.last(), rxjs_operators.map(function () { return res; }));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all
@@ -7543,7 +7544,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new _angular_core.Version('6.0.0-beta.7-7d095b9');
+var VERSION = new _angular_core.Version('6.0.0-beta.7-e6c731f');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

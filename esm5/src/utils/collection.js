@@ -108,7 +108,8 @@ export function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    return of.apply(void 0, waitHead.concat(waitTail)).pipe(concatAll(), lastValue(), map(function () { return res; }));
+    // Closure compiler has problem with using spread operator here. So just using Array.concat.
+    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), lastValue(), map(function () { return res; }));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all

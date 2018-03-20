@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-7d095b9
+ * @license Angular v6.0.0-beta.7-e6c731f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -788,7 +788,8 @@ function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    return of(...waitHead, ...waitTail).pipe(concatAll(), last(), map(() => res));
+    // Closure compiler has problem with using spread operator here. So just using Array.concat.
+    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map(() => res));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all
@@ -6326,7 +6327,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-beta.7-7d095b9');
+const VERSION = new Version('6.0.0-beta.7-e6c731f');
 
 /**
  * @fileoverview added by tsickle
