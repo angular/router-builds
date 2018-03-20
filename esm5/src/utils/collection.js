@@ -10,13 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ɵisObservable as isObservable, ɵisPromise as isPromise } from '@angular/core';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { of } from 'rxjs/observable/of';
-import { concatAll } from 'rxjs/operator/concatAll';
-import { every } from 'rxjs/operator/every';
-import * as l from 'rxjs/operator/last';
-import { map } from 'rxjs/operator/map';
-import { mergeAll } from 'rxjs/operator/mergeAll';
+import { from, of } from 'rxjs';
+import { concatAll, every, last as lastValue, map, mergeAll } from 'rxjs/operators';
 import { PRIMARY_OUTLET } from '../shared';
 /**
  * @param {?} a
@@ -105,7 +100,7 @@ export function waitForMap(obj, fn) {
     var /** @type {?} */ waitTail = [];
     var /** @type {?} */ res = {};
     forEach(obj, function (a, k) {
-        var /** @type {?} */ mapped = map.call(fn(k, a), function (r) { return res[k] = r; });
+        var /** @type {?} */ mapped = fn(k, a).pipe(map(function (r) { return res[k] = r; }));
         if (k === PRIMARY_OUTLET) {
             waitHead.push(mapped);
         }
@@ -113,9 +108,7 @@ export function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    var /** @type {?} */ concat$ = concatAll.call(of.apply(void 0, waitHead.concat(waitTail)));
-    var /** @type {?} */ last$ = l.last.call(concat$);
-    return map.call(last$, function () { return res; });
+    return of.apply(void 0, waitHead.concat(waitTail)).pipe(concatAll(), lastValue(), map(function () { return res; }));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all
@@ -124,8 +117,7 @@ export function waitForMap(obj, fn) {
  * @return {?}
  */
 export function andObservables(observables) {
-    var /** @type {?} */ merged$ = mergeAll.call(observables);
-    return every.call(merged$, function (result) { return result === true; });
+    return observables.pipe(mergeAll(), every(function (result) { return result === true; }));
 }
 /**
  * @template T
@@ -140,7 +132,7 @@ export function wrapIntoObservable(value) {
         // Use `Promise.resolve()` to wrap promise-like instances.
         // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
         // change detection.
-        return fromPromise(Promise.resolve(value));
+        return from(Promise.resolve(value));
     }
     return of(/** @type {?} */ (value));
 }

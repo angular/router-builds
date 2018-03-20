@@ -7,7 +7,7 @@
  */
 import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { QueryParamsHandling, Routes } from './config';
 import { Event } from './events';
 import { RouteReuseStrategy } from './route_reuse_strategy';

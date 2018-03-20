@@ -10,15 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgModuleRef } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
-import { _catch } from 'rxjs/operator/catch';
-import { concatAll } from 'rxjs/operator/concatAll';
-import { first } from 'rxjs/operator/first';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
-import { EmptyError } from 'rxjs/util/EmptyError';
+import { EmptyError, Observable, from, of } from 'rxjs';
+import { catchError, concatAll, first, map, mergeMap } from 'rxjs/operators';
 import { LoadedRouterConfig } from './config';
 import { PRIMARY_OUTLET, defaultUrlMatcher, navigationCancelingError } from './shared';
 import { UrlSegmentGroup, UrlTree } from './url_tree';
@@ -108,8 +101,8 @@ class ApplyRedirects {
      */
     apply() {
         const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ urlTrees$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment))));
-        return _catch.call(urlTrees$, (e) => {
+        const /** @type {?} */ urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment)))));
+        return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
                 this.allowRedirects = false;
@@ -120,7 +113,7 @@ class ApplyRedirects {
                 throw this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} tree
@@ -128,13 +121,13 @@ class ApplyRedirects {
      */
     match(tree) {
         const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ mapped$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment))));
-        return _catch.call(mapped$, (e) => {
+        const /** @type {?} */ mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)))));
+        return mapped$.pipe(catchError((e) => {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} e
@@ -164,7 +157,8 @@ class ApplyRedirects {
      */
     expandSegmentGroup(ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(ngModule, routes, segmentGroup), (children) => new UrlSegmentGroup([], children));
+            return this.expandChildren(ngModule, routes, segmentGroup)
+                .pipe(map((children) => new UrlSegmentGroup([], children)));
         }
         return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     }
@@ -187,19 +181,17 @@ class ApplyRedirects {
      * @return {?}
      */
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        const /** @type {?} */ routes$ = of(...routes);
-        const /** @type {?} */ processedRoutes$ = map.call(routes$, (r) => {
+        return of(...routes).pipe(map((r) => {
             const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return _catch.call(expanded$, (e) => {
+            return expanded$.pipe(catchError((e) => {
                 if (e instanceof NoMatch) {
-                    return of(null);
+                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
+                    // talk to Jason
+                    return /** @type {?} */ (of(null));
                 }
                 throw e;
-            });
-        });
-        const /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
-        const /** @type {?} */ first$ = first.call(concattedProcessedRoutes$, (s) => !!s);
-        return _catch.call(first$, (e, _) => {
+            }));
+        }), concatAll(), first((s) => !!s), catchError((e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -207,7 +199,7 @@ class ApplyRedirects {
                 throw new NoMatch(segmentGroup);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} segmentGroup
@@ -267,10 +259,10 @@ class ApplyRedirects {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
             const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
             return this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
-        });
+        }));
     }
     /**
      * @param {?} ngModule
@@ -289,9 +281,9 @@ class ApplyRedirects {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
             return this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-        });
+        }));
     }
     /**
      * @param {?} ngModule
@@ -303,10 +295,11 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
+                return this.configLoader.load(ngModule.injector, route)
+                    .pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                });
+                }));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -315,20 +308,20 @@ class ApplyRedirects {
             return noMatch(rawSegmentGroup);
         const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
         const /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
-        return mergeMap.call(childConfig$, (routerConfig) => {
+        return childConfig$.pipe(mergeMap((routerConfig) => {
             const /** @type {?} */ childModule = routerConfig.module;
             const /** @type {?} */ childConfig = routerConfig.routes;
             const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 const /** @type {?} */ expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
-                return map.call(expanded$, (children) => new UrlSegmentGroup(consumedSegments, children));
+                return expanded$.pipe(map((children) => new UrlSegmentGroup(consumedSegments, children)));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
             const /** @type {?} */ expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return map.call(expanded$, (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
-        });
+            return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
+        }));
     }
     /**
      * @param {?} ngModule
@@ -345,15 +338,16 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), (shouldLoad) => {
+            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap((shouldLoad) => {
                 if (shouldLoad) {
-                    return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
+                    return this.configLoader.load(ngModule.injector, route)
+                        .pipe(map((cfg) => {
                         route._loadedConfig = cfg;
                         return cfg;
-                    });
+                    }));
                 }
                 return canLoadFails(route);
-            });
+            }));
         }
         return of(new LoadedRouterConfig([], ngModule));
     }
@@ -493,10 +487,10 @@ function runCanLoadGuard(moduleInjector, route) {
     const /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    const /** @type {?} */ obs = map.call(from(canLoad), (injectionToken) => {
+    const /** @type {?} */ obs = from(canLoad).pipe(map((injectionToken) => {
         const /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
-    });
+    }));
     return andObservables(obs);
 }
 /**

@@ -10,13 +10,8 @@
 *found in the LICENSE file at https://angular.io/license
 */
 import { Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef } from '@angular/core';
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
-import { _catch } from 'rxjs/operator/catch';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { filter } from 'rxjs/operator/filter';
-import { mergeAll } from 'rxjs/operator/mergeAll';
-import { mergeMap } from 'rxjs/operator/mergeMap';
+import { from, of } from 'rxjs';
+import { catchError, concatMap, filter, map, mergeAll, mergeMap } from 'rxjs/operators';
 import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart } from './events';
 import { Router } from './router';
 import { RouterConfigLoader } from './router_config_loader';
@@ -55,7 +50,7 @@ export class PreloadAllModules {
      * @return {?}
      */
     preload(route, fn) {
-        return _catch.call(fn(), () => of(null));
+        return fn().pipe(catchError(() => of(null)));
     }
 }
 /**
@@ -107,8 +102,10 @@ export class RouterPreloader {
      * @return {?}
      */
     setUpPreloading() {
-        const /** @type {?} */ navigations$ = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
-        this.subscription = concatMap.call(navigations$, () => this.preload()).subscribe(() => { });
+        this.subscription =
+            this.router.events
+                .pipe(filter((e) => e instanceof NavigationEnd), concatMap(() => this.preload()))
+                .subscribe(() => { });
     }
     /**
      * @return {?}
@@ -143,7 +140,7 @@ export class RouterPreloader {
                 res.push(this.processRoutes(ngModule, route.children));
             }
         }
-        return mergeAll.call(from(res));
+        return from(res).pipe(mergeAll(), map((_) => void 0));
     }
     /**
      * @param {?} ngModule
@@ -153,10 +150,10 @@ export class RouterPreloader {
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
             const /** @type {?} */ loaded$ = this.loader.load(ngModule.injector, route);
-            return mergeMap.call(loaded$, (config) => {
+            return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
-            });
+            }));
         });
     }
 }

@@ -10,10 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, NgModuleFactory } from '@angular/core';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { of } from 'rxjs/observable/of';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
+import { from, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { LoadedRouterConfig, copyConfig } from './config';
 import { flatten, wrapIntoObservable } from './utils/collection';
 /**
@@ -44,13 +42,13 @@ var RouterConfigLoader = /** @class */ (function () {
             this.onLoadStartListener(route);
         }
         var /** @type {?} */ moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
-        return map.call(moduleFactory$, function (factory) {
+        return moduleFactory$.pipe(map(function (factory) {
             if (_this.onLoadEndListener) {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
-        });
+        }));
     };
     /**
      * @param {?} loadChildren
@@ -63,17 +61,17 @@ var RouterConfigLoader = /** @class */ (function () {
     function (loadChildren) {
         var _this = this;
         if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
+            return from(this.loader.load(loadChildren));
         }
         else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
+            return wrapIntoObservable(loadChildren()).pipe(mergeMap(function (t) {
                 if (t instanceof NgModuleFactory) {
                     return of(t);
                 }
                 else {
-                    return fromPromise(_this.compiler.compileModuleAsync(t));
+                    return from(_this.compiler.compileModuleAsync(t));
                 }
-            });
+            }));
         }
     };
     return RouterConfigLoader;

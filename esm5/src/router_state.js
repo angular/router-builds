@@ -10,8 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import * as tslib_1 from "tslib";
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { map } from 'rxjs/operator/map';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PRIMARY_OUTLET, convertToParamMap } from './shared';
 import { UrlSegment, equalSegments } from './url_tree';
 import { shallowEqual, shallowEqualArrays } from './utils/collection';
@@ -269,7 +269,7 @@ ActivatedRoute = /** @class */ (function () {
          */
         function () {
             if (!this._paramMap) {
-                this._paramMap = map.call(this.params, function (p) { return convertToParamMap(p); });
+                this._paramMap = this.params.pipe(map(function (p) { return convertToParamMap(p); }));
             }
             return this._paramMap;
         },
@@ -283,7 +283,7 @@ ActivatedRoute = /** @class */ (function () {
         function () {
             if (!this._queryParamMap) {
                 this._queryParamMap =
-                    map.call(this.queryParams, function (p) { return convertToParamMap(p); });
+                    this.queryParams.pipe(map(function (p) { return convertToParamMap(p); }));
             }
             return this._queryParamMap;
         },

@@ -10,13 +10,8 @@
 *found in the LICENSE file at https://angular.io/license
 */
 import { Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef } from '@angular/core';
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
-import { _catch } from 'rxjs/operator/catch';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { filter } from 'rxjs/operator/filter';
-import { mergeAll } from 'rxjs/operator/mergeAll';
-import { mergeMap } from 'rxjs/operator/mergeMap';
+import { from, of } from 'rxjs';
+import { catchError, concatMap, filter, map, mergeAll, mergeMap } from 'rxjs/operators';
 import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart } from './events';
 import { Router } from './router';
 import { RouterConfigLoader } from './router_config_loader';
@@ -89,7 +84,7 @@ PreloadAllModules = /** @class */ (function () {
      * @return {?}
      */
     function (route, fn) {
-        return _catch.call(fn(), function () { return of(null); });
+        return fn().pipe(catchError(function () { return of(null); }));
     };
     return PreloadAllModules;
 }());
@@ -178,8 +173,10 @@ var RouterPreloader = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ navigations$ = filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
-        this.subscription = concatMap.call(navigations$, function () { return _this.preload(); }).subscribe(function () { });
+        this.subscription =
+            this.router.events
+                .pipe(filter(function (e) { return e instanceof NavigationEnd; }), concatMap(function () { return _this.preload(); }))
+                .subscribe(function () { });
     };
     /**
      * @return {?}
@@ -229,7 +226,7 @@ var RouterPreloader = /** @class */ (function () {
                 res.push(this.processRoutes(ngModule, route.children));
             }
         }
-        return mergeAll.call(from(res));
+        return from(res).pipe(mergeAll(), map(function (_) { return void 0; }));
     };
     /**
      * @param {?} ngModule
@@ -245,10 +242,10 @@ var RouterPreloader = /** @class */ (function () {
         var _this = this;
         return this.preloadingStrategy.preload(route, function () {
             var /** @type {?} */ loaded$ = _this.loader.load(ngModule.injector, route);
-            return mergeMap.call(loaded$, function (config) {
+            return loaded$.pipe(mergeMap(function (config) {
                 route._loadedConfig = config;
                 return _this.processRoutes(config.module, config.routes);
-            });
+            }));
         });
     };
     RouterPreloader.decorators = [

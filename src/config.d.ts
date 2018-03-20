@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgModuleFactory, NgModuleRef, Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
  * @whatItDoes Represents router configuration.

@@ -9,8 +9,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { map } from 'rxjs/operator/map';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PRIMARY_OUTLET, convertToParamMap } from './shared';
 import { UrlSegment, equalSegments } from './url_tree';
 import { shallowEqual, shallowEqualArrays } from './utils/collection';
@@ -171,7 +171,7 @@ export class ActivatedRoute {
      */
     get paramMap() {
         if (!this._paramMap) {
-            this._paramMap = map.call(this.params, (p) => convertToParamMap(p));
+            this._paramMap = this.params.pipe(map((p) => convertToParamMap(p)));
         }
         return this._paramMap;
     }
@@ -181,7 +181,7 @@ export class ActivatedRoute {
     get queryParamMap() {
         if (!this._queryParamMap) {
             this._queryParamMap =
-                map.call(this.queryParams, (p) => convertToParamMap(p));
+                this.queryParams.pipe(map((p) => convertToParamMap(p)));
         }
         return this._queryParamMap;
     }

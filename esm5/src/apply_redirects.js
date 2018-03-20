@@ -11,15 +11,8 @@
  */
 import * as tslib_1 from "tslib";
 import { NgModuleRef } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
-import { _catch } from 'rxjs/operator/catch';
-import { concatAll } from 'rxjs/operator/concatAll';
-import { first } from 'rxjs/operator/first';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
-import { EmptyError } from 'rxjs/util/EmptyError';
+import { EmptyError, Observable, from, of } from 'rxjs';
+import { catchError, concatAll, first, map, mergeMap } from 'rxjs/operators';
 import { LoadedRouterConfig } from './config';
 import { PRIMARY_OUTLET, defaultUrlMatcher, navigationCancelingError } from './shared';
 import { UrlSegmentGroup, UrlTree } from './url_tree';
@@ -108,10 +101,10 @@ var ApplyRedirects = /** @class */ (function () {
     function () {
         var _this = this;
         var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        var /** @type {?} */ urlTrees$ = map.call(expanded$, function (rootSegmentGroup) {
+        var /** @type {?} */ urlTrees$ = expanded$.pipe(map(function (rootSegmentGroup) {
             return _this.createUrlTree(rootSegmentGroup, _this.urlTree.queryParams, /** @type {?} */ ((_this.urlTree.fragment)));
-        });
-        return _catch.call(urlTrees$, function (e) {
+        }));
+        return urlTrees$.pipe(catchError(function (e) {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
                 // after an absolute redirect we do not apply any more redirects!
@@ -123,7 +116,7 @@ var ApplyRedirects = /** @class */ (function () {
                 throw _this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} tree
@@ -136,15 +129,15 @@ var ApplyRedirects = /** @class */ (function () {
     function (tree) {
         var _this = this;
         var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        var /** @type {?} */ mapped$ = map.call(expanded$, function (rootSegmentGroup) {
+        var /** @type {?} */ mapped$ = expanded$.pipe(map(function (rootSegmentGroup) {
             return _this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)));
-        });
-        return _catch.call(mapped$, function (e) {
+        }));
+        return mapped$.pipe(catchError(function (e) {
             if (e instanceof NoMatch) {
                 throw _this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} e
@@ -192,7 +185,8 @@ var ApplyRedirects = /** @class */ (function () {
      */
     function (ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(ngModule, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
+            return this.expandChildren(ngModule, routes, segmentGroup)
+                .pipe(map(function (children) { return new UrlSegmentGroup([], children); }));
         }
         return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     };
@@ -232,19 +226,17 @@ var ApplyRedirects = /** @class */ (function () {
      */
     function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
         var _this = this;
-        var /** @type {?} */ routes$ = of.apply(void 0, routes);
-        var /** @type {?} */ processedRoutes$ = map.call(routes$, function (r) {
+        return of.apply(void 0, routes).pipe(map(function (r) {
             var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return _catch.call(expanded$, function (e) {
+            return expanded$.pipe(catchError(function (e) {
                 if (e instanceof NoMatch) {
-                    return of(null);
+                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
+                    // talk to Jason
+                    return /** @type {?} */ (of(null));
                 }
                 throw e;
-            });
-        });
-        var /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
-        var /** @type {?} */ first$ = first.call(concattedProcessedRoutes$, function (s) { return !!s; });
-        return _catch.call(first$, function (e, _) {
+            }));
+        }), concatAll(), first(function (s) { return !!s; }), catchError(function (e, _) {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -252,7 +244,7 @@ var ApplyRedirects = /** @class */ (function () {
                 throw new NoMatch(segmentGroup);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} segmentGroup
@@ -345,10 +337,10 @@ var ApplyRedirects = /** @class */ (function () {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap(function (newSegments) {
             var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
             return _this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
-        });
+        }));
     };
     /**
      * @param {?} ngModule
@@ -377,9 +369,9 @@ var ApplyRedirects = /** @class */ (function () {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap(function (newSegments) {
             return _this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-        });
+        }));
     };
     /**
      * @param {?} ngModule
@@ -399,10 +391,11 @@ var ApplyRedirects = /** @class */ (function () {
         var _this = this;
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(ngModule.injector, route), function (cfg) {
+                return this.configLoader.load(ngModule.injector, route)
+                    .pipe(map(function (cfg) {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                });
+                }));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -411,22 +404,22 @@ var ApplyRedirects = /** @class */ (function () {
             return noMatch(rawSegmentGroup);
         var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
         var /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
-        return mergeMap.call(childConfig$, function (routerConfig) {
+        return childConfig$.pipe(mergeMap(function (routerConfig) {
             var /** @type {?} */ childModule = routerConfig.module;
             var /** @type {?} */ childConfig = routerConfig.routes;
             var _a = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 var /** @type {?} */ expanded$_1 = _this.expandChildren(childModule, childConfig, segmentGroup);
-                return map.call(expanded$_1, function (children) { return new UrlSegmentGroup(consumedSegments, children); });
+                return expanded$_1.pipe(map(function (children) { return new UrlSegmentGroup(consumedSegments, children); }));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
             var /** @type {?} */ expanded$ = _this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return map.call(expanded$, function (cs) {
+            return expanded$.pipe(map(function (cs) {
                 return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children);
-            });
-        });
+            }));
+        }));
     };
     /**
      * @param {?} ngModule
@@ -449,15 +442,16 @@ var ApplyRedirects = /** @class */ (function () {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
+            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap(function (shouldLoad) {
                 if (shouldLoad) {
-                    return map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
+                    return _this.configLoader.load(ngModule.injector, route)
+                        .pipe(map(function (cfg) {
                         route._loadedConfig = cfg;
                         return cfg;
-                    });
+                    }));
                 }
                 return canLoadFails(route);
-            });
+            }));
         }
         return of(new LoadedRouterConfig([], ngModule));
     };
@@ -651,10 +645,10 @@ function runCanLoadGuard(moduleInjector, route) {
     var /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    var /** @type {?} */ obs = map.call(from(canLoad), function (injectionToken) {
+    var /** @type {?} */ obs = from(canLoad).pipe(map(function (injectionToken) {
         var /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
-    });
+    }));
     return andObservables(obs);
 }
 /**

@@ -9,7 +9,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, RouterState } from './router_state';
 import { TreeNode } from './utils/tree';
 /**

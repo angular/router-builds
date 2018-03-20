@@ -10,12 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgModuleRef, isDevMode } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
+import { BehaviorSubject, Subject, of } from 'rxjs';
+import { concatMap, map, mergeMap } from 'rxjs/operators';
 import { applyRedirects } from './apply_redirects';
 import { copyConfig, validateConfig } from './config';
 import { createRouterState } from './create_router_state';
@@ -503,8 +499,8 @@ export class Router {
      * @return {?}
      */
     processNavigations() {
-        concatMap
-            .call(this.navigations, (nav) => {
+        this.navigations
+            .pipe(concatMap((nav) => {
             if (nav) {
                 this.executeScheduledNavigation(nav);
                 // a failed navigation should not stop the router from processing
@@ -514,7 +510,7 @@ export class Router {
             else {
                 return /** @type {?} */ (of(null));
             }
-        })
+        }))
             .subscribe(() => { });
     }
     /**
@@ -611,57 +607,69 @@ export class Router {
             if (!precreatedState) {
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 const /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
-                urlAndSnapshot$ = mergeMap.call(redirectsApplied$, (appliedUrl) => {
-                    return map.call(recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy), (snapshot) => {
+                urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap((appliedUrl) => {
+                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy)
+                        .pipe(map((snapshot) => {
                         (/** @type {?} */ (this.events))
                             .next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
                         return { appliedUrl, snapshot };
-                    });
-                });
+                    }));
+                }));
             }
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            const /** @type {?} */ beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, (p) => {
-                return map.call(this.hooks.beforePreactivation(p.snapshot), () => p);
-            });
+            const /** @type {?} */ beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean')
+                    return of(p);
+                return this.hooks.beforePreactivation(p.snapshot).pipe(map(() => p));
+            }));
             // run preactivation: guards and data resolvers
             let /** @type {?} */ preActivation;
-            const /** @type {?} */ preactivationSetup$ = map.call(beforePreactivationDone$, ({ appliedUrl, snapshot }) => {
+            const /** @type {?} */ preactivationSetup$ = beforePreactivationDone$.pipe(map((p) => {
+                if (typeof p === 'boolean')
+                    return p;
+                const { appliedUrl, snapshot } = p;
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, this.routerState.snapshot, moduleInjector, (evt) => this.triggerEvent(evt));
                 preActivation.initialize(this.rootContexts);
                 return { appliedUrl, snapshot };
-            });
-            const /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationSetup$, ({ appliedUrl, snapshot }) => {
-                if (this.navigationId !== id)
+            }));
+            const /** @type {?} */ preactivationCheckGuards$ = preactivationSetup$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
-                this.triggerEvent(new GuardsCheckStart(id, this.serializeUrl(url), appliedUrl, snapshot));
-                return map.call(preActivation.checkGuards(), (shouldActivate) => {
-                    this.triggerEvent(new GuardsCheckEnd(id, this.serializeUrl(url), appliedUrl, snapshot, shouldActivate));
+                const { appliedUrl, snapshot } = p;
+                this.triggerEvent(new GuardsCheckStart(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
+                return preActivation.checkGuards().pipe(map((shouldActivate) => {
+                    this.triggerEvent(new GuardsCheckEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot, shouldActivate));
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
-                });
-            });
-            const /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, (p) => {
-                if (this.navigationId !== id)
+                }));
+            }));
+            const /** @type {?} */ preactivationResolveData$ = preactivationCheckGuards$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
-                    this.triggerEvent(new ResolveStart(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
-                    return map.call(preActivation.resolveData(this.paramsInheritanceStrategy), () => {
-                        this.triggerEvent(new ResolveEnd(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
+                    this.triggerEvent(new ResolveStart(id, this.serializeUrl(url), this.serializeUrl(p.appliedUrl), p.snapshot));
+                    return preActivation.resolveData(this.paramsInheritanceStrategy).pipe(map(() => {
+                        this.triggerEvent(new ResolveEnd(id, this.serializeUrl(url), this.serializeUrl(p.appliedUrl), p.snapshot));
                         return p;
-                    });
+                    }));
                 }
                 else {
                     return of(p);
                 }
-            });
-            const /** @type {?} */ preactivationDone$ = mergeMap.call(preactivationResolveData$, (p) => {
-                return map.call(this.hooks.afterPreactivation(p.snapshot), () => p);
-            });
+            }));
+            const /** @type {?} */ preactivationDone$ = preactivationResolveData$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
+                    return of(false);
+                return this.hooks.afterPreactivation(p.snapshot).pipe(map(() => p));
+            }));
             // create router state
             // this operation has side effects => route state is being affected
-            const /** @type {?} */ routerState$ = map.call(preactivationDone$, ({ appliedUrl, snapshot, shouldActivate }) => {
+            const /** @type {?} */ routerState$ = preactivationDone$.pipe(map((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
+                    return false;
+                const { appliedUrl, snapshot, shouldActivate } = p;
                 if (shouldActivate) {
                     const /** @type {?} */ state = createRouterState(this.routeReuseStrategy, snapshot, this.routerState);
                     return { appliedUrl, state, shouldActivate };
@@ -669,7 +677,7 @@ export class Router {
                 else {
                     return { appliedUrl, state: null, shouldActivate };
                 }
-            });
+            }));
             this.activateRoutes(routerState$, this.routerState, this.currentUrlTree, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
         });
     }
@@ -693,11 +701,12 @@ export class Router {
         // this operation has side effects
         let /** @type {?} */ navigationIsSuccessful;
         state
-            .forEach(({ appliedUrl, state, shouldActivate }) => {
-            if (!shouldActivate || id !== this.navigationId) {
+            .forEach((p) => {
+            if (typeof p === 'boolean' || !p.shouldActivate || id !== this.navigationId || !p.state) {
                 navigationIsSuccessful = false;
                 return;
             }
+            const { appliedUrl, state } = p;
             this.currentUrlTree = appliedUrl;
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
             (/** @type {?} */ (this)).routerState = state;

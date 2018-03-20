@@ -10,15 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import * as tslib_1 from "tslib";
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { every } from 'rxjs/operator/every';
-import { first } from 'rxjs/operator/first';
-import { last } from 'rxjs/operator/last';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
-import { reduce } from 'rxjs/operator/reduce';
+import { from, of } from 'rxjs';
+import { concatMap, every, first, last, map, mergeMap, reduce } from 'rxjs/operators';
 import { ActivationStart, ChildActivationStart } from './events';
 import { equalParamsAndUrlSegments, inheritedParamsDataResolve } from './router_state';
 import { andObservables, forEach, shallowEqual, wrapIntoObservable } from './utils/collection';
@@ -89,7 +82,7 @@ PreActivation = /** @class */ (function () {
             return of(true);
         }
         var /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
-        return mergeMap.call(canDeactivate$, function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : of(false); });
+        return canDeactivate$.pipe(mergeMap(function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : of(false); }));
     };
     /**
      * @param {?} paramsInheritanceStrategy
@@ -103,9 +96,8 @@ PreActivation = /** @class */ (function () {
         var _this = this;
         if (!this.isActivating())
             return of(null);
-        var /** @type {?} */ checks$ = from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); });
-        return reduce.call(runningChecks$, function (_, __) { return _; });
+        return from(this.canActivateChecks)
+            .pipe(concatMap(function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); }), reduce(function (_, __) { return _; }));
     };
     /**
      * @return {?}
@@ -280,9 +272,8 @@ PreActivation = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ checks$ = from(this.canDeactivateChecks);
-        var /** @type {?} */ runningChecks$ = mergeMap.call(checks$, function (check) { return _this.runCanDeactivate(check.component, check.route); });
-        return every.call(runningChecks$, function (result) { return result === true; });
+        return from(this.canDeactivateChecks)
+            .pipe(mergeMap(function (check) { return _this.runCanDeactivate(check.component, check.route); }), every(function (result) { return result === true; }));
     };
     /**
      * @return {?}
@@ -292,14 +283,14 @@ PreActivation = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ checks$ = from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) {
+        return from(this.canActivateChecks)
+            .pipe(concatMap(function (check) {
             return andObservables(from([
-                _this.fireChildActivationStart(check.route.parent), _this.fireActivationStart(check.route),
-                _this.runCanActivateChild(check.path), _this.runCanActivate(check.route)
+                _this.fireChildActivationStart(check.route.parent),
+                _this.fireActivationStart(check.route), _this.runCanActivateChild(check.path),
+                _this.runCanActivate(check.route)
             ]));
-        });
-        return every.call(runningChecks$, function (result) { return result === true; });
+        }), every(function (result) { return result === true; }));
         // this.fireChildActivationStart(check.path),
     };
     /**
@@ -367,7 +358,7 @@ PreActivation = /** @class */ (function () {
         var /** @type {?} */ canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return of(true);
-        var /** @type {?} */ obs = map.call(from(canActivate), function (c) {
+        var /** @type {?} */ obs = from(canActivate).pipe(map(function (c) {
             var /** @type {?} */ guard = _this.getToken(c, future);
             var /** @type {?} */ observable;
             if (guard.canActivate) {
@@ -376,8 +367,8 @@ PreActivation = /** @class */ (function () {
             else {
                 observable = wrapIntoObservable(guard(future, _this.future));
             }
-            return first.call(observable);
-        });
+            return observable.pipe(first());
+        }));
         return andObservables(obs);
     };
     /**
@@ -395,8 +386,8 @@ PreActivation = /** @class */ (function () {
             .reverse()
             .map(function (p) { return _this.extractCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(map.call(from(canActivateChildGuards), function (d) {
-            var /** @type {?} */ obs = map.call(from(d.guards), function (c) {
+        return andObservables(from(canActivateChildGuards).pipe(map(function (d) {
+            var /** @type {?} */ obs = from(d.guards).pipe(map(function (c) {
                 var /** @type {?} */ guard = _this.getToken(c, d.node);
                 var /** @type {?} */ observable;
                 if (guard.canActivateChild) {
@@ -405,10 +396,10 @@ PreActivation = /** @class */ (function () {
                 else {
                     observable = wrapIntoObservable(guard(future, _this.future));
                 }
-                return first.call(observable);
-            });
+                return observable.pipe(first());
+            }));
             return andObservables(obs);
-        }));
+        })));
     };
     /**
      * @param {?} p
@@ -439,7 +430,7 @@ PreActivation = /** @class */ (function () {
         var /** @type {?} */ canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        var /** @type {?} */ canDeactivate$ = mergeMap.call(from(canDeactivate), function (c) {
+        var /** @type {?} */ canDeactivate$ = from(canDeactivate).pipe(mergeMap(function (c) {
             var /** @type {?} */ guard = _this.getToken(c, curr);
             var /** @type {?} */ observable;
             if (guard.canDeactivate) {
@@ -449,9 +440,9 @@ PreActivation = /** @class */ (function () {
             else {
                 observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
             }
-            return first.call(observable);
-        });
-        return every.call(canDeactivate$, function (result) { return result === true; });
+            return observable.pipe(first());
+        }));
+        return canDeactivate$.pipe(every(function (result) { return result === true; }));
     };
     /**
      * @param {?} future
@@ -465,11 +456,11 @@ PreActivation = /** @class */ (function () {
      */
     function (future, paramsInheritanceStrategy) {
         var /** @type {?} */ resolve = future._resolve;
-        return map.call(this.resolveNode(resolve, future), function (resolvedData) {
+        return this.resolveNode(resolve, future).pipe(map(function (resolvedData) {
             future._resolvedData = resolvedData;
             future.data = tslib_1.__assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
             return null;
-        });
+        }));
     };
     /**
      * @param {?} resolve
@@ -489,19 +480,19 @@ PreActivation = /** @class */ (function () {
         }
         if (keys.length === 1) {
             var /** @type {?} */ key_1 = keys[0];
-            return map.call(this.getResolver(resolve[key_1], future), function (value) {
+            return this.getResolver(resolve[key_1], future).pipe(map(function (value) {
                 return _a = {}, _a[key_1] = value, _a;
                 var _a;
-            });
+            }));
         }
         var /** @type {?} */ data = {};
-        var /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), function (key) {
-            return map.call(_this.getResolver(resolve[key], future), function (value) {
+        var /** @type {?} */ runningResolvers$ = from(keys).pipe(mergeMap(function (key) {
+            return _this.getResolver(resolve[key], future).pipe(map(function (value) {
                 data[key] = value;
                 return value;
-            });
-        });
-        return map.call(last.call(runningResolvers$), function () { return data; });
+            }));
+        }));
+        return runningResolvers$.pipe(last(), map(function () { return data; }));
     };
     /**
      * @param {?} injectionToken

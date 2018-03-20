@@ -1,29 +1,13 @@
 /**
- * @license Angular v6.0.0-beta.7-2b3de63
+ * @license Angular v6.0.0-beta.7-4648597
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { _catch } from 'rxjs/operator/catch';
-import { concatAll } from 'rxjs/operator/concatAll';
-import { first } from 'rxjs/operator/first';
-import { EmptyError } from 'rxjs/util/EmptyError';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { every } from 'rxjs/operator/every';
-import { last } from 'rxjs/operator/last';
-import { mergeAll } from 'rxjs/operator/mergeAll';
-import { reduce } from 'rxjs/operator/reduce';
+import { BehaviorSubject, EmptyError, Observable, Subject, from, of } from 'rxjs';
+import { catchError, concatAll, concatMap, every, filter, first, last, map, mergeAll, mergeMap, reduce } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
-import { filter } from 'rxjs/operator/filter';
 
 /**
  * @fileoverview added by tsickle
@@ -796,7 +780,7 @@ function waitForMap(obj, fn) {
     const /** @type {?} */ waitTail = [];
     const /** @type {?} */ res = {};
     forEach(obj, (a, k) => {
-        const /** @type {?} */ mapped = map.call(fn(k, a), (r) => res[k] = r);
+        const /** @type {?} */ mapped = fn(k, a).pipe(map((r) => res[k] = r));
         if (k === PRIMARY_OUTLET) {
             waitHead.push(mapped);
         }
@@ -804,9 +788,7 @@ function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    const /** @type {?} */ concat$ = concatAll.call(of(...waitHead, ...waitTail));
-    const /** @type {?} */ last$ = last.call(concat$);
-    return map.call(last$, () => res);
+    return of(...waitHead, ...waitTail).pipe(concatAll(), last(), map(() => res));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all
@@ -815,8 +797,7 @@ function waitForMap(obj, fn) {
  * @return {?}
  */
 function andObservables(observables) {
-    const /** @type {?} */ merged$ = mergeAll.call(observables);
-    return every.call(merged$, (result) => result === true);
+    return observables.pipe(mergeAll(), every((result) => result === true));
 }
 /**
  * @template T
@@ -831,7 +812,7 @@ function wrapIntoObservable(value) {
         // Use `Promise.resolve()` to wrap promise-like instances.
         // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
         // change detection.
-        return fromPromise(Promise.resolve(value));
+        return from(Promise.resolve(value));
     }
     return of(/** @type {?} */ (value));
 }
@@ -1625,8 +1606,8 @@ class ApplyRedirects {
      */
     apply() {
         const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ urlTrees$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment))));
-        return _catch.call(urlTrees$, (e) => {
+        const /** @type {?} */ urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment)))));
+        return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
                 this.allowRedirects = false;
@@ -1637,7 +1618,7 @@ class ApplyRedirects {
                 throw this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} tree
@@ -1645,13 +1626,13 @@ class ApplyRedirects {
      */
     match(tree) {
         const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ mapped$ = map.call(expanded$, (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment))));
-        return _catch.call(mapped$, (e) => {
+        const /** @type {?} */ mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)))));
+        return mapped$.pipe(catchError((e) => {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} e
@@ -1681,7 +1662,8 @@ class ApplyRedirects {
      */
     expandSegmentGroup(ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(ngModule, routes, segmentGroup), (children) => new UrlSegmentGroup([], children));
+            return this.expandChildren(ngModule, routes, segmentGroup)
+                .pipe(map((children) => new UrlSegmentGroup([], children)));
         }
         return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     }
@@ -1704,19 +1686,17 @@ class ApplyRedirects {
      * @return {?}
      */
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        const /** @type {?} */ routes$ = of(...routes);
-        const /** @type {?} */ processedRoutes$ = map.call(routes$, (r) => {
+        return of(...routes).pipe(map((r) => {
             const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return _catch.call(expanded$, (e) => {
+            return expanded$.pipe(catchError((e) => {
                 if (e instanceof NoMatch) {
-                    return of(null);
+                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
+                    // talk to Jason
+                    return /** @type {?} */ (of(null));
                 }
                 throw e;
-            });
-        });
-        const /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
-        const /** @type {?} */ first$ = first.call(concattedProcessedRoutes$, (s) => !!s);
-        return _catch.call(first$, (e, _) => {
+            }));
+        }), concatAll(), first((s) => !!s), catchError((e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -1724,7 +1704,7 @@ class ApplyRedirects {
                 throw new NoMatch(segmentGroup);
             }
             throw e;
-        });
+        }));
     }
     /**
      * @param {?} segmentGroup
@@ -1784,10 +1764,10 @@ class ApplyRedirects {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
             const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
             return this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
-        });
+        }));
     }
     /**
      * @param {?} ngModule
@@ -1806,9 +1786,9 @@ class ApplyRedirects {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), (newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
             return this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-        });
+        }));
     }
     /**
      * @param {?} ngModule
@@ -1820,10 +1800,11 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
+                return this.configLoader.load(ngModule.injector, route)
+                    .pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                });
+                }));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -1832,20 +1813,20 @@ class ApplyRedirects {
             return noMatch(rawSegmentGroup);
         const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
         const /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
-        return mergeMap.call(childConfig$, (routerConfig) => {
+        return childConfig$.pipe(mergeMap((routerConfig) => {
             const /** @type {?} */ childModule = routerConfig.module;
             const /** @type {?} */ childConfig = routerConfig.routes;
             const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 const /** @type {?} */ expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
-                return map.call(expanded$, (children) => new UrlSegmentGroup(consumedSegments, children));
+                return expanded$.pipe(map((children) => new UrlSegmentGroup(consumedSegments, children)));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
             const /** @type {?} */ expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return map.call(expanded$, (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children));
-        });
+            return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
+        }));
     }
     /**
      * @param {?} ngModule
@@ -1862,15 +1843,16 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), (shouldLoad) => {
+            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap((shouldLoad) => {
                 if (shouldLoad) {
-                    return map.call(this.configLoader.load(ngModule.injector, route), (cfg) => {
+                    return this.configLoader.load(ngModule.injector, route)
+                        .pipe(map((cfg) => {
                         route._loadedConfig = cfg;
                         return cfg;
-                    });
+                    }));
                 }
                 return canLoadFails(route);
-            });
+            }));
         }
         return of(new LoadedRouterConfig([], ngModule));
     }
@@ -1996,10 +1978,10 @@ function runCanLoadGuard(moduleInjector, route) {
     const /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    const /** @type {?} */ obs = map.call(from(canLoad), (injectionToken) => {
+    const /** @type {?} */ obs = from(canLoad).pipe(map((injectionToken) => {
         const /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
-    });
+    }));
     return andObservables(obs);
 }
 /**
@@ -2425,7 +2407,7 @@ class ActivatedRoute {
      */
     get paramMap() {
         if (!this._paramMap) {
-            this._paramMap = map.call(this.params, (p) => convertToParamMap(p));
+            this._paramMap = this.params.pipe(map((p) => convertToParamMap(p)));
         }
         return this._paramMap;
     }
@@ -2435,7 +2417,7 @@ class ActivatedRoute {
     get queryParamMap() {
         if (!this._queryParamMap) {
             this._queryParamMap =
-                map.call(this.queryParams, (p) => convertToParamMap(p));
+                this.queryParams.pipe(map((p) => convertToParamMap(p)));
         }
         return this._queryParamMap;
     }
@@ -3230,7 +3212,7 @@ class PreActivation {
             return of(true);
         }
         const /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
-        return mergeMap.call(canDeactivate$, (canDeactivate) => canDeactivate ? this.runCanActivateChecks() : of(false));
+        return canDeactivate$.pipe(mergeMap((canDeactivate) => canDeactivate ? this.runCanActivateChecks() : of(false)));
     }
     /**
      * @param {?} paramsInheritanceStrategy
@@ -3239,9 +3221,8 @@ class PreActivation {
     resolveData(paramsInheritanceStrategy) {
         if (!this.isActivating())
             return of(null);
-        const /** @type {?} */ checks$ = from(this.canActivateChecks);
-        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => this.runResolve(check.route, paramsInheritanceStrategy));
-        return reduce.call(runningChecks$, (_, __) => _);
+        return from(this.canActivateChecks)
+            .pipe(concatMap((check) => this.runResolve(check.route, paramsInheritanceStrategy)), reduce((_, __) => _));
     }
     /**
      * @return {?}
@@ -3373,20 +3354,19 @@ class PreActivation {
      * @return {?}
      */
     runCanDeactivateChecks() {
-        const /** @type {?} */ checks$ = from(this.canDeactivateChecks);
-        const /** @type {?} */ runningChecks$ = mergeMap.call(checks$, (check) => this.runCanDeactivate(check.component, check.route));
-        return every.call(runningChecks$, (result) => result === true);
+        return from(this.canDeactivateChecks)
+            .pipe(mergeMap((check) => this.runCanDeactivate(check.component, check.route)), every((result) => result === true));
     }
     /**
      * @return {?}
      */
     runCanActivateChecks() {
-        const /** @type {?} */ checks$ = from(this.canActivateChecks);
-        const /** @type {?} */ runningChecks$ = concatMap.call(checks$, (check) => andObservables(from([
-            this.fireChildActivationStart(check.route.parent), this.fireActivationStart(check.route),
-            this.runCanActivateChild(check.path), this.runCanActivate(check.route)
-        ])));
-        return every.call(runningChecks$, (result) => result === true);
+        return from(this.canActivateChecks)
+            .pipe(concatMap((check) => andObservables(from([
+            this.fireChildActivationStart(check.route.parent),
+            this.fireActivationStart(check.route), this.runCanActivateChild(check.path),
+            this.runCanActivate(check.route)
+        ]))), every((result) => result === true));
         // this.fireChildActivationStart(check.path),
     }
     /**
@@ -3429,7 +3409,7 @@ class PreActivation {
         const /** @type {?} */ canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return of(true);
-        const /** @type {?} */ obs = map.call(from(canActivate), (c) => {
+        const /** @type {?} */ obs = from(canActivate).pipe(map((c) => {
             const /** @type {?} */ guard = this.getToken(c, future);
             let /** @type {?} */ observable;
             if (guard.canActivate) {
@@ -3438,8 +3418,8 @@ class PreActivation {
             else {
                 observable = wrapIntoObservable(guard(future, this.future));
             }
-            return first.call(observable);
-        });
+            return observable.pipe(first());
+        }));
         return andObservables(obs);
     }
     /**
@@ -3452,8 +3432,8 @@ class PreActivation {
             .reverse()
             .map(p => this.extractCanActivateChild(p))
             .filter(_ => _ !== null);
-        return andObservables(map.call(from(canActivateChildGuards), (d) => {
-            const /** @type {?} */ obs = map.call(from(d.guards), (c) => {
+        return andObservables(from(canActivateChildGuards).pipe(map((d) => {
+            const /** @type {?} */ obs = from(d.guards).pipe(map((c) => {
                 const /** @type {?} */ guard = this.getToken(c, d.node);
                 let /** @type {?} */ observable;
                 if (guard.canActivateChild) {
@@ -3462,10 +3442,10 @@ class PreActivation {
                 else {
                     observable = wrapIntoObservable(guard(future, this.future));
                 }
-                return first.call(observable);
-            });
+                return observable.pipe(first());
+            }));
             return andObservables(obs);
-        }));
+        })));
     }
     /**
      * @param {?} p
@@ -3486,7 +3466,7 @@ class PreActivation {
         const /** @type {?} */ canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        const /** @type {?} */ canDeactivate$ = mergeMap.call(from(canDeactivate), (c) => {
+        const /** @type {?} */ canDeactivate$ = from(canDeactivate).pipe(mergeMap((c) => {
             const /** @type {?} */ guard = this.getToken(c, curr);
             let /** @type {?} */ observable;
             if (guard.canDeactivate) {
@@ -3496,9 +3476,9 @@ class PreActivation {
             else {
                 observable = wrapIntoObservable(guard(component, curr, this.curr, this.future));
             }
-            return first.call(observable);
-        });
-        return every.call(canDeactivate$, (result) => result === true);
+            return observable.pipe(first());
+        }));
+        return canDeactivate$.pipe(every((result) => result === true));
     }
     /**
      * @param {?} future
@@ -3507,11 +3487,11 @@ class PreActivation {
      */
     runResolve(future, paramsInheritanceStrategy) {
         const /** @type {?} */ resolve = future._resolve;
-        return map.call(this.resolveNode(resolve, future), (resolvedData) => {
+        return this.resolveNode(resolve, future).pipe(map((resolvedData) => {
             future._resolvedData = resolvedData;
             future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
             return null;
-        });
+        }));
     }
     /**
      * @param {?} resolve
@@ -3525,16 +3505,18 @@ class PreActivation {
         }
         if (keys.length === 1) {
             const /** @type {?} */ key = keys[0];
-            return map.call(this.getResolver(resolve[key], future), (value) => { return { [key]: value }; });
+            return this.getResolver(resolve[key], future).pipe(map((value) => {
+                return { [key]: value };
+            }));
         }
         const /** @type {?} */ data = {};
-        const /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), (key) => {
-            return map.call(this.getResolver(resolve[key], future), (value) => {
+        const /** @type {?} */ runningResolvers$ = from(keys).pipe(mergeMap((key) => {
+            return this.getResolver(resolve[key], future).pipe(map((value) => {
                 data[key] = value;
                 return value;
-            });
-        });
-        return map.call(last.call(runningResolvers$), () => data);
+            }));
+        }));
+        return runningResolvers$.pipe(last(), map(() => data));
     }
     /**
      * @param {?} injectionToken
@@ -4034,13 +4016,13 @@ class RouterConfigLoader {
             this.onLoadStartListener(route);
         }
         const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
-        return map.call(moduleFactory$, (factory) => {
+        return moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             const /** @type {?} */ module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
-        });
+        }));
     }
     /**
      * @param {?} loadChildren
@@ -4048,17 +4030,17 @@ class RouterConfigLoader {
      */
     loadModuleFactory(loadChildren) {
         if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
+            return from(this.loader.load(loadChildren));
         }
         else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), (t) => {
+            return wrapIntoObservable(loadChildren()).pipe(mergeMap((t) => {
                 if (t instanceof NgModuleFactory) {
                     return of(t);
                 }
                 else {
-                    return fromPromise(this.compiler.compileModuleAsync(t));
+                    return from(this.compiler.compileModuleAsync(t));
                 }
-            });
+            }));
         }
     }
 }
@@ -4477,8 +4459,8 @@ class Router {
      * @return {?}
      */
     processNavigations() {
-        concatMap
-            .call(this.navigations, (nav) => {
+        this.navigations
+            .pipe(concatMap((nav) => {
             if (nav) {
                 this.executeScheduledNavigation(nav);
                 // a failed navigation should not stop the router from processing
@@ -4488,7 +4470,7 @@ class Router {
             else {
                 return /** @type {?} */ (of(null));
             }
-        })
+        }))
             .subscribe(() => { });
     }
     /**
@@ -4585,57 +4567,69 @@ class Router {
             if (!precreatedState) {
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 const /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
-                urlAndSnapshot$ = mergeMap.call(redirectsApplied$, (appliedUrl) => {
-                    return map.call(recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy), (snapshot) => {
+                urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap((appliedUrl) => {
+                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy)
+                        .pipe(map((snapshot) => {
                         (/** @type {?} */ (this.events))
                             .next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
                         return { appliedUrl, snapshot };
-                    });
-                });
+                    }));
+                }));
             }
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            const /** @type {?} */ beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, (p) => {
-                return map.call(this.hooks.beforePreactivation(p.snapshot), () => p);
-            });
+            const /** @type {?} */ beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean')
+                    return of(p);
+                return this.hooks.beforePreactivation(p.snapshot).pipe(map(() => p));
+            }));
             // run preactivation: guards and data resolvers
             let /** @type {?} */ preActivation;
-            const /** @type {?} */ preactivationSetup$ = map.call(beforePreactivationDone$, ({ appliedUrl, snapshot }) => {
+            const /** @type {?} */ preactivationSetup$ = beforePreactivationDone$.pipe(map((p) => {
+                if (typeof p === 'boolean')
+                    return p;
+                const { appliedUrl, snapshot } = p;
                 const /** @type {?} */ moduleInjector = this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, this.routerState.snapshot, moduleInjector, (evt) => this.triggerEvent(evt));
                 preActivation.initialize(this.rootContexts);
                 return { appliedUrl, snapshot };
-            });
-            const /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationSetup$, ({ appliedUrl, snapshot }) => {
-                if (this.navigationId !== id)
+            }));
+            const /** @type {?} */ preactivationCheckGuards$ = preactivationSetup$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
-                this.triggerEvent(new GuardsCheckStart(id, this.serializeUrl(url), appliedUrl, snapshot));
-                return map.call(preActivation.checkGuards(), (shouldActivate) => {
-                    this.triggerEvent(new GuardsCheckEnd(id, this.serializeUrl(url), appliedUrl, snapshot, shouldActivate));
+                const { appliedUrl, snapshot } = p;
+                this.triggerEvent(new GuardsCheckStart(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
+                return preActivation.checkGuards().pipe(map((shouldActivate) => {
+                    this.triggerEvent(new GuardsCheckEnd(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot, shouldActivate));
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
-                });
-            });
-            const /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, (p) => {
-                if (this.navigationId !== id)
+                }));
+            }));
+            const /** @type {?} */ preactivationResolveData$ = preactivationCheckGuards$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
-                    this.triggerEvent(new ResolveStart(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
-                    return map.call(preActivation.resolveData(this.paramsInheritanceStrategy), () => {
-                        this.triggerEvent(new ResolveEnd(id, this.serializeUrl(url), p.appliedUrl, p.snapshot));
+                    this.triggerEvent(new ResolveStart(id, this.serializeUrl(url), this.serializeUrl(p.appliedUrl), p.snapshot));
+                    return preActivation.resolveData(this.paramsInheritanceStrategy).pipe(map(() => {
+                        this.triggerEvent(new ResolveEnd(id, this.serializeUrl(url), this.serializeUrl(p.appliedUrl), p.snapshot));
                         return p;
-                    });
+                    }));
                 }
                 else {
                     return of(p);
                 }
-            });
-            const /** @type {?} */ preactivationDone$ = mergeMap.call(preactivationResolveData$, (p) => {
-                return map.call(this.hooks.afterPreactivation(p.snapshot), () => p);
-            });
+            }));
+            const /** @type {?} */ preactivationDone$ = preactivationResolveData$.pipe(mergeMap((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
+                    return of(false);
+                return this.hooks.afterPreactivation(p.snapshot).pipe(map(() => p));
+            }));
             // create router state
             // this operation has side effects => route state is being affected
-            const /** @type {?} */ routerState$ = map.call(preactivationDone$, ({ appliedUrl, snapshot, shouldActivate }) => {
+            const /** @type {?} */ routerState$ = preactivationDone$.pipe(map((p) => {
+                if (typeof p === 'boolean' || this.navigationId !== id)
+                    return false;
+                const { appliedUrl, snapshot, shouldActivate } = p;
                 if (shouldActivate) {
                     const /** @type {?} */ state = createRouterState(this.routeReuseStrategy, snapshot, this.routerState);
                     return { appliedUrl, state, shouldActivate };
@@ -4643,7 +4637,7 @@ class Router {
                 else {
                     return { appliedUrl, state: null, shouldActivate };
                 }
-            });
+            }));
             this.activateRoutes(routerState$, this.routerState, this.currentUrlTree, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
         });
     }
@@ -4667,11 +4661,12 @@ class Router {
         // this operation has side effects
         let /** @type {?} */ navigationIsSuccessful;
         state
-            .forEach(({ appliedUrl, state, shouldActivate }) => {
-            if (!shouldActivate || id !== this.navigationId) {
+            .forEach((p) => {
+            if (typeof p === 'boolean' || !p.shouldActivate || id !== this.navigationId || !p.state) {
                 navigationIsSuccessful = false;
                 return;
             }
+            const { appliedUrl, state } = p;
             this.currentUrlTree = appliedUrl;
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
             (/** @type {?} */ (this)).routerState = state;
@@ -5166,7 +5161,7 @@ class RouterLinkWithHref {
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
-        this.subscription = router.events.subscribe(s => {
+        this.subscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.updateTargetUrlAndHref();
             }
@@ -5362,7 +5357,7 @@ class RouterLinkActive {
         this.classes = [];
         this.isActive = false;
         this.routerLinkActiveOptions = { exact: false };
-        this.subscription = router.events.subscribe(s => {
+        this.subscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.update();
             }
@@ -5787,7 +5782,7 @@ class PreloadAllModules {
      * @return {?}
      */
     preload(route, fn) {
-        return _catch.call(fn(), () => of(null));
+        return fn().pipe(catchError(() => of(null)));
     }
 }
 /**
@@ -5839,8 +5834,10 @@ class RouterPreloader {
      * @return {?}
      */
     setUpPreloading() {
-        const /** @type {?} */ navigations$ = filter.call(this.router.events, (e) => e instanceof NavigationEnd);
-        this.subscription = concatMap.call(navigations$, () => this.preload()).subscribe(() => { });
+        this.subscription =
+            this.router.events
+                .pipe(filter((e) => e instanceof NavigationEnd), concatMap(() => this.preload()))
+                .subscribe(() => { });
     }
     /**
      * @return {?}
@@ -5875,7 +5872,7 @@ class RouterPreloader {
                 res.push(this.processRoutes(ngModule, route.children));
             }
         }
-        return mergeAll.call(from(res));
+        return from(res).pipe(mergeAll(), map((_) => void 0));
     }
     /**
      * @param {?} ngModule
@@ -5885,10 +5882,10 @@ class RouterPreloader {
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
             const /** @type {?} */ loaded$ = this.loader.load(ngModule.injector, route);
-            return mergeMap.call(loaded$, (config) => {
+            return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
-            });
+            }));
         });
     }
 }
@@ -6152,7 +6149,7 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     }
     if (opts.enableTracing) {
         const /** @type {?} */ dom = ɵgetDOM();
-        router.events.subscribe(e => {
+        router.events.subscribe((e) => {
             dom.logGroup(`Router Event: ${((/** @type {?} */ (e.constructor))).name}`);
             dom.log(e.toString());
             dom.log(e);
@@ -6329,7 +6326,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-beta.7-2b3de63');
+const VERSION = new Version('6.0.0-beta.7-4648597');
 
 /**
  * @fileoverview added by tsickle

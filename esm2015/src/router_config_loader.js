@@ -10,10 +10,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, NgModuleFactory } from '@angular/core';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { of } from 'rxjs/observable/of';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
+import { from, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { LoadedRouterConfig, copyConfig } from './config';
 import { flatten, wrapIntoObservable } from './utils/collection';
 /**
@@ -44,13 +42,13 @@ export class RouterConfigLoader {
             this.onLoadStartListener(route);
         }
         const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
-        return map.call(moduleFactory$, (factory) => {
+        return moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             const /** @type {?} */ module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
-        });
+        }));
     }
     /**
      * @param {?} loadChildren
@@ -58,17 +56,17 @@ export class RouterConfigLoader {
      */
     loadModuleFactory(loadChildren) {
         if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
+            return from(this.loader.load(loadChildren));
         }
         else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), (t) => {
+            return wrapIntoObservable(loadChildren()).pipe(mergeMap((t) => {
                 if (t instanceof NgModuleFactory) {
                     return of(t);
                 }
                 else {
-                    return fromPromise(this.compiler.compileModuleAsync(t));
+                    return from(this.compiler.compileModuleAsync(t));
                 }
-            });
+            }));
         }
     }
 }

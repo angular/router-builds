@@ -1,30 +1,14 @@
 /**
- * @license Angular v6.0.0-beta.7-2b3de63
+ * @license Angular v6.0.0-beta.7-4648597
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { __assign, __extends } from 'tslib';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
-import { concatMap } from 'rxjs/operator/concatMap';
-import { map } from 'rxjs/operator/map';
-import { mergeMap } from 'rxjs/operator/mergeMap';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { _catch } from 'rxjs/operator/catch';
-import { concatAll } from 'rxjs/operator/concatAll';
-import { first } from 'rxjs/operator/first';
-import { EmptyError } from 'rxjs/util/EmptyError';
-import { fromPromise } from 'rxjs/observable/fromPromise';
-import { every } from 'rxjs/operator/every';
-import { last } from 'rxjs/operator/last';
-import { mergeAll } from 'rxjs/operator/mergeAll';
-import { reduce } from 'rxjs/operator/reduce';
+import { BehaviorSubject, EmptyError, Observable, Subject, from, of } from 'rxjs';
+import { catchError, concatAll, concatMap, every, filter, first, last, map, mergeAll, mergeMap, reduce } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
-import { filter } from 'rxjs/operator/filter';
 
 /**
  * @fileoverview added by tsickle
@@ -820,7 +804,7 @@ function waitForMap(obj, fn) {
     var /** @type {?} */ waitTail = [];
     var /** @type {?} */ res = {};
     forEach(obj, function (a, k) {
-        var /** @type {?} */ mapped = map.call(fn(k, a), function (r) { return res[k] = r; });
+        var /** @type {?} */ mapped = fn(k, a).pipe(map(function (r) { return res[k] = r; }));
         if (k === PRIMARY_OUTLET) {
             waitHead.push(mapped);
         }
@@ -828,9 +812,7 @@ function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    var /** @type {?} */ concat$ = concatAll.call(of.apply(void 0, waitHead.concat(waitTail)));
-    var /** @type {?} */ last$ = last.call(concat$);
-    return map.call(last$, function () { return res; });
+    return of.apply(void 0, waitHead.concat(waitTail)).pipe(concatAll(), last(), map(function () { return res; }));
 }
 /**
  * ANDs Observables by merging all input observables, reducing to an Observable verifying all
@@ -839,8 +821,7 @@ function waitForMap(obj, fn) {
  * @return {?}
  */
 function andObservables(observables) {
-    var /** @type {?} */ merged$ = mergeAll.call(observables);
-    return every.call(merged$, function (result) { return result === true; });
+    return observables.pipe(mergeAll(), every(function (result) { return result === true; }));
 }
 /**
  * @template T
@@ -855,7 +836,7 @@ function wrapIntoObservable(value) {
         // Use `Promise.resolve()` to wrap promise-like instances.
         // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
         // change detection.
-        return fromPromise(Promise.resolve(value));
+        return from(Promise.resolve(value));
     }
     return of(/** @type {?} */ (value));
 }
@@ -1730,10 +1711,10 @@ var ApplyRedirects = /** @class */ (function () {
     function () {
         var _this = this;
         var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        var /** @type {?} */ urlTrees$ = map.call(expanded$, function (rootSegmentGroup) {
+        var /** @type {?} */ urlTrees$ = expanded$.pipe(map(function (rootSegmentGroup) {
             return _this.createUrlTree(rootSegmentGroup, _this.urlTree.queryParams, /** @type {?} */ ((_this.urlTree.fragment)));
-        });
-        return _catch.call(urlTrees$, function (e) {
+        }));
+        return urlTrees$.pipe(catchError(function (e) {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
                 // after an absolute redirect we do not apply any more redirects!
@@ -1745,7 +1726,7 @@ var ApplyRedirects = /** @class */ (function () {
                 throw _this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} tree
@@ -1758,15 +1739,15 @@ var ApplyRedirects = /** @class */ (function () {
     function (tree) {
         var _this = this;
         var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        var /** @type {?} */ mapped$ = map.call(expanded$, function (rootSegmentGroup) {
+        var /** @type {?} */ mapped$ = expanded$.pipe(map(function (rootSegmentGroup) {
             return _this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)));
-        });
-        return _catch.call(mapped$, function (e) {
+        }));
+        return mapped$.pipe(catchError(function (e) {
             if (e instanceof NoMatch) {
                 throw _this.noMatchError(e);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} e
@@ -1814,7 +1795,8 @@ var ApplyRedirects = /** @class */ (function () {
      */
     function (ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-            return map.call(this.expandChildren(ngModule, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
+            return this.expandChildren(ngModule, routes, segmentGroup)
+                .pipe(map(function (children) { return new UrlSegmentGroup([], children); }));
         }
         return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     };
@@ -1854,19 +1836,17 @@ var ApplyRedirects = /** @class */ (function () {
      */
     function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
         var _this = this;
-        var /** @type {?} */ routes$ = of.apply(void 0, routes);
-        var /** @type {?} */ processedRoutes$ = map.call(routes$, function (r) {
+        return of.apply(void 0, routes).pipe(map(function (r) {
             var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return _catch.call(expanded$, function (e) {
+            return expanded$.pipe(catchError(function (e) {
                 if (e instanceof NoMatch) {
-                    return of(null);
+                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
+                    // talk to Jason
+                    return /** @type {?} */ (of(null));
                 }
                 throw e;
-            });
-        });
-        var /** @type {?} */ concattedProcessedRoutes$ = concatAll.call(processedRoutes$);
-        var /** @type {?} */ first$ = first.call(concattedProcessedRoutes$, function (s) { return !!s; });
-        return _catch.call(first$, function (e, _) {
+            }));
+        }), concatAll(), first(function (s) { return !!s; }), catchError(function (e, _) {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -1874,7 +1854,7 @@ var ApplyRedirects = /** @class */ (function () {
                 throw new NoMatch(segmentGroup);
             }
             throw e;
-        });
+        }));
     };
     /**
      * @param {?} segmentGroup
@@ -1967,10 +1947,10 @@ var ApplyRedirects = /** @class */ (function () {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap(function (newSegments) {
             var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
             return _this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
-        });
+        }));
     };
     /**
      * @param {?} ngModule
@@ -1999,9 +1979,9 @@ var ApplyRedirects = /** @class */ (function () {
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap(function (newSegments) {
             return _this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-        });
+        }));
     };
     /**
      * @param {?} ngModule
@@ -2021,10 +2001,11 @@ var ApplyRedirects = /** @class */ (function () {
         var _this = this;
         if (route.path === '**') {
             if (route.loadChildren) {
-                return map.call(this.configLoader.load(ngModule.injector, route), function (cfg) {
+                return this.configLoader.load(ngModule.injector, route)
+                    .pipe(map(function (cfg) {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                });
+                }));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -2033,22 +2014,22 @@ var ApplyRedirects = /** @class */ (function () {
             return noMatch(rawSegmentGroup);
         var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
         var /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
-        return mergeMap.call(childConfig$, function (routerConfig) {
+        return childConfig$.pipe(mergeMap(function (routerConfig) {
             var /** @type {?} */ childModule = routerConfig.module;
             var /** @type {?} */ childConfig = routerConfig.routes;
             var _a = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 var /** @type {?} */ expanded$_1 = _this.expandChildren(childModule, childConfig, segmentGroup);
-                return map.call(expanded$_1, function (children) { return new UrlSegmentGroup(consumedSegments, children); });
+                return expanded$_1.pipe(map(function (children) { return new UrlSegmentGroup(consumedSegments, children); }));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
             var /** @type {?} */ expanded$ = _this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return map.call(expanded$, function (cs) {
+            return expanded$.pipe(map(function (cs) {
                 return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children);
-            });
-        });
+            }));
+        }));
     };
     /**
      * @param {?} ngModule
@@ -2071,15 +2052,16 @@ var ApplyRedirects = /** @class */ (function () {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return mergeMap.call(runCanLoadGuard(ngModule.injector, route), function (shouldLoad) {
+            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap(function (shouldLoad) {
                 if (shouldLoad) {
-                    return map.call(_this.configLoader.load(ngModule.injector, route), function (cfg) {
+                    return _this.configLoader.load(ngModule.injector, route)
+                        .pipe(map(function (cfg) {
                         route._loadedConfig = cfg;
                         return cfg;
-                    });
+                    }));
                 }
                 return canLoadFails(route);
-            });
+            }));
         }
         return of(new LoadedRouterConfig([], ngModule));
     };
@@ -2259,10 +2241,10 @@ function runCanLoadGuard(moduleInjector, route) {
     var /** @type {?} */ canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    var /** @type {?} */ obs = map.call(from(canLoad), function (injectionToken) {
+    var /** @type {?} */ obs = from(canLoad).pipe(map(function (injectionToken) {
         var /** @type {?} */ guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
-    });
+    }));
     return andObservables(obs);
 }
 /**
@@ -2759,7 +2741,7 @@ var ActivatedRoute = /** @class */ (function () {
          */
         function () {
             if (!this._paramMap) {
-                this._paramMap = map.call(this.params, function (p) { return convertToParamMap(p); });
+                this._paramMap = this.params.pipe(map(function (p) { return convertToParamMap(p); }));
             }
             return this._paramMap;
         },
@@ -2773,7 +2755,7 @@ var ActivatedRoute = /** @class */ (function () {
         function () {
             if (!this._queryParamMap) {
                 this._queryParamMap =
-                    map.call(this.queryParams, function (p) { return convertToParamMap(p); });
+                    this.queryParams.pipe(map(function (p) { return convertToParamMap(p); }));
             }
             return this._queryParamMap;
         },
@@ -3596,7 +3578,7 @@ var PreActivation = /** @class */ (function () {
             return of(true);
         }
         var /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
-        return mergeMap.call(canDeactivate$, function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : of(false); });
+        return canDeactivate$.pipe(mergeMap(function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : of(false); }));
     };
     /**
      * @param {?} paramsInheritanceStrategy
@@ -3610,9 +3592,8 @@ var PreActivation = /** @class */ (function () {
         var _this = this;
         if (!this.isActivating())
             return of(null);
-        var /** @type {?} */ checks$ = from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); });
-        return reduce.call(runningChecks$, function (_, __) { return _; });
+        return from(this.canActivateChecks)
+            .pipe(concatMap(function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); }), reduce(function (_, __) { return _; }));
     };
     /**
      * @return {?}
@@ -3787,9 +3768,8 @@ var PreActivation = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ checks$ = from(this.canDeactivateChecks);
-        var /** @type {?} */ runningChecks$ = mergeMap.call(checks$, function (check) { return _this.runCanDeactivate(check.component, check.route); });
-        return every.call(runningChecks$, function (result) { return result === true; });
+        return from(this.canDeactivateChecks)
+            .pipe(mergeMap(function (check) { return _this.runCanDeactivate(check.component, check.route); }), every(function (result) { return result === true; }));
     };
     /**
      * @return {?}
@@ -3799,14 +3779,14 @@ var PreActivation = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ checks$ = from(this.canActivateChecks);
-        var /** @type {?} */ runningChecks$ = concatMap.call(checks$, function (check) {
+        return from(this.canActivateChecks)
+            .pipe(concatMap(function (check) {
             return andObservables(from([
-                _this.fireChildActivationStart(check.route.parent), _this.fireActivationStart(check.route),
-                _this.runCanActivateChild(check.path), _this.runCanActivate(check.route)
+                _this.fireChildActivationStart(check.route.parent),
+                _this.fireActivationStart(check.route), _this.runCanActivateChild(check.path),
+                _this.runCanActivate(check.route)
             ]));
-        });
-        return every.call(runningChecks$, function (result) { return result === true; });
+        }), every(function (result) { return result === true; }));
         // this.fireChildActivationStart(check.path),
     };
     /**
@@ -3874,7 +3854,7 @@ var PreActivation = /** @class */ (function () {
         var /** @type {?} */ canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return of(true);
-        var /** @type {?} */ obs = map.call(from(canActivate), function (c) {
+        var /** @type {?} */ obs = from(canActivate).pipe(map(function (c) {
             var /** @type {?} */ guard = _this.getToken(c, future);
             var /** @type {?} */ observable;
             if (guard.canActivate) {
@@ -3883,8 +3863,8 @@ var PreActivation = /** @class */ (function () {
             else {
                 observable = wrapIntoObservable(guard(future, _this.future));
             }
-            return first.call(observable);
-        });
+            return observable.pipe(first());
+        }));
         return andObservables(obs);
     };
     /**
@@ -3902,8 +3882,8 @@ var PreActivation = /** @class */ (function () {
             .reverse()
             .map(function (p) { return _this.extractCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(map.call(from(canActivateChildGuards), function (d) {
-            var /** @type {?} */ obs = map.call(from(d.guards), function (c) {
+        return andObservables(from(canActivateChildGuards).pipe(map(function (d) {
+            var /** @type {?} */ obs = from(d.guards).pipe(map(function (c) {
                 var /** @type {?} */ guard = _this.getToken(c, d.node);
                 var /** @type {?} */ observable;
                 if (guard.canActivateChild) {
@@ -3912,10 +3892,10 @@ var PreActivation = /** @class */ (function () {
                 else {
                     observable = wrapIntoObservable(guard(future, _this.future));
                 }
-                return first.call(observable);
-            });
+                return observable.pipe(first());
+            }));
             return andObservables(obs);
-        }));
+        })));
     };
     /**
      * @param {?} p
@@ -3946,7 +3926,7 @@ var PreActivation = /** @class */ (function () {
         var /** @type {?} */ canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        var /** @type {?} */ canDeactivate$ = mergeMap.call(from(canDeactivate), function (c) {
+        var /** @type {?} */ canDeactivate$ = from(canDeactivate).pipe(mergeMap(function (c) {
             var /** @type {?} */ guard = _this.getToken(c, curr);
             var /** @type {?} */ observable;
             if (guard.canDeactivate) {
@@ -3956,9 +3936,9 @@ var PreActivation = /** @class */ (function () {
             else {
                 observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
             }
-            return first.call(observable);
-        });
-        return every.call(canDeactivate$, function (result) { return result === true; });
+            return observable.pipe(first());
+        }));
+        return canDeactivate$.pipe(every(function (result) { return result === true; }));
     };
     /**
      * @param {?} future
@@ -3972,11 +3952,11 @@ var PreActivation = /** @class */ (function () {
      */
     function (future, paramsInheritanceStrategy) {
         var /** @type {?} */ resolve = future._resolve;
-        return map.call(this.resolveNode(resolve, future), function (resolvedData) {
+        return this.resolveNode(resolve, future).pipe(map(function (resolvedData) {
             future._resolvedData = resolvedData;
             future.data = __assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
             return null;
-        });
+        }));
     };
     /**
      * @param {?} resolve
@@ -3996,19 +3976,19 @@ var PreActivation = /** @class */ (function () {
         }
         if (keys.length === 1) {
             var /** @type {?} */ key_1 = keys[0];
-            return map.call(this.getResolver(resolve[key_1], future), function (value) {
+            return this.getResolver(resolve[key_1], future).pipe(map(function (value) {
                 return _a = {}, _a[key_1] = value, _a;
                 var _a;
-            });
+            }));
         }
         var /** @type {?} */ data = {};
-        var /** @type {?} */ runningResolvers$ = mergeMap.call(from(keys), function (key) {
-            return map.call(_this.getResolver(resolve[key], future), function (value) {
+        var /** @type {?} */ runningResolvers$ = from(keys).pipe(mergeMap(function (key) {
+            return _this.getResolver(resolve[key], future).pipe(map(function (value) {
                 data[key] = value;
                 return value;
-            });
-        });
-        return map.call(last.call(runningResolvers$), function () { return data; });
+            }));
+        }));
+        return runningResolvers$.pipe(last(), map(function () { return data; }));
     };
     /**
      * @param {?} injectionToken
@@ -4588,13 +4568,13 @@ var RouterConfigLoader = /** @class */ (function () {
             this.onLoadStartListener(route);
         }
         var /** @type {?} */ moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
-        return map.call(moduleFactory$, function (factory) {
+        return moduleFactory$.pipe(map(function (factory) {
             if (_this.onLoadEndListener) {
                 _this.onLoadEndListener(route);
             }
             var /** @type {?} */ module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
-        });
+        }));
     };
     /**
      * @param {?} loadChildren
@@ -4607,17 +4587,17 @@ var RouterConfigLoader = /** @class */ (function () {
     function (loadChildren) {
         var _this = this;
         if (typeof loadChildren === 'string') {
-            return fromPromise(this.loader.load(loadChildren));
+            return from(this.loader.load(loadChildren));
         }
         else {
-            return mergeMap.call(wrapIntoObservable(loadChildren()), function (t) {
+            return wrapIntoObservable(loadChildren()).pipe(mergeMap(function (t) {
                 if (t instanceof NgModuleFactory) {
                     return of(t);
                 }
                 else {
-                    return fromPromise(_this.compiler.compileModuleAsync(t));
+                    return from(_this.compiler.compileModuleAsync(t));
                 }
-            });
+            }));
         }
     };
     return RouterConfigLoader;
@@ -5329,8 +5309,8 @@ var Router = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        concatMap
-            .call(this.navigations, function (nav) {
+        this.navigations
+            .pipe(concatMap(function (nav) {
             if (nav) {
                 _this.executeScheduledNavigation(nav);
                 // a failed navigation should not stop the router from processing
@@ -5340,7 +5320,7 @@ var Router = /** @class */ (function () {
             else {
                 return /** @type {?} */ (of(null));
             }
-        })
+        }))
             .subscribe(function () { });
     };
     /**
@@ -5464,60 +5444,69 @@ var Router = /** @class */ (function () {
             if (!precreatedState) {
                 var /** @type {?} */ moduleInjector = _this.ngModule.injector;
                 var /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, _this.configLoader, _this.urlSerializer, url, _this.config);
-                urlAndSnapshot$ = mergeMap.call(redirectsApplied$, function (appliedUrl) {
-                    return map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl), _this.paramsInheritanceStrategy), function (snapshot) {
+                urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap(function (appliedUrl) {
+                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl), _this.paramsInheritanceStrategy)
+                        .pipe(map(function (snapshot) {
                         (/** @type {?} */ (_this.events))
                             .next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
                         return { appliedUrl: appliedUrl, snapshot: snapshot };
-                    });
-                });
+                    }));
+                }));
             }
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            var /** @type {?} */ beforePreactivationDone$ = mergeMap.call(urlAndSnapshot$, function (p) {
-                return map.call(_this.hooks.beforePreactivation(p.snapshot), function () { return p; });
-            });
+            var /** @type {?} */ beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap(function (p) {
+                if (typeof p === 'boolean')
+                    return of(p);
+                return _this.hooks.beforePreactivation(p.snapshot).pipe(map(function () { return p; }));
+            }));
             // run preactivation: guards and data resolvers
             var /** @type {?} */ preActivation;
-            var /** @type {?} */ preactivationSetup$ = map.call(beforePreactivationDone$, function (_a) {
-                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
+            var /** @type {?} */ preactivationSetup$ = beforePreactivationDone$.pipe(map(function (p) {
+                if (typeof p === 'boolean')
+                    return p;
+                var appliedUrl = p.appliedUrl, snapshot = p.snapshot;
                 var /** @type {?} */ moduleInjector = _this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, _this.routerState.snapshot, moduleInjector, function (evt) { return _this.triggerEvent(evt); });
                 preActivation.initialize(_this.rootContexts);
                 return { appliedUrl: appliedUrl, snapshot: snapshot };
-            });
-            var /** @type {?} */ preactivationCheckGuards$ = mergeMap.call(preactivationSetup$, function (_a) {
-                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
-                if (_this.navigationId !== id)
+            }));
+            var /** @type {?} */ preactivationCheckGuards$ = preactivationSetup$.pipe(mergeMap(function (p) {
+                if (typeof p === 'boolean' || _this.navigationId !== id)
                     return of(false);
-                _this.triggerEvent(new GuardsCheckStart(id, _this.serializeUrl(url), appliedUrl, snapshot));
-                return map.call(preActivation.checkGuards(), function (shouldActivate) {
-                    _this.triggerEvent(new GuardsCheckEnd(id, _this.serializeUrl(url), appliedUrl, snapshot, shouldActivate));
+                var appliedUrl = p.appliedUrl, snapshot = p.snapshot;
+                _this.triggerEvent(new GuardsCheckStart(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
+                return preActivation.checkGuards().pipe(map(function (shouldActivate) {
+                    _this.triggerEvent(new GuardsCheckEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot, shouldActivate));
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
-                });
-            });
-            var /** @type {?} */ preactivationResolveData$ = mergeMap.call(preactivationCheckGuards$, function (p) {
-                if (_this.navigationId !== id)
+                }));
+            }));
+            var /** @type {?} */ preactivationResolveData$ = preactivationCheckGuards$.pipe(mergeMap(function (p) {
+                if (typeof p === 'boolean' || _this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
-                    _this.triggerEvent(new ResolveStart(id, _this.serializeUrl(url), p.appliedUrl, p.snapshot));
-                    return map.call(preActivation.resolveData(_this.paramsInheritanceStrategy), function () {
-                        _this.triggerEvent(new ResolveEnd(id, _this.serializeUrl(url), p.appliedUrl, p.snapshot));
+                    _this.triggerEvent(new ResolveStart(id, _this.serializeUrl(url), _this.serializeUrl(p.appliedUrl), p.snapshot));
+                    return preActivation.resolveData(_this.paramsInheritanceStrategy).pipe(map(function () {
+                        _this.triggerEvent(new ResolveEnd(id, _this.serializeUrl(url), _this.serializeUrl(p.appliedUrl), p.snapshot));
                         return p;
-                    });
+                    }));
                 }
                 else {
                     return of(p);
                 }
-            });
-            var /** @type {?} */ preactivationDone$ = mergeMap.call(preactivationResolveData$, function (p) {
-                return map.call(_this.hooks.afterPreactivation(p.snapshot), function () { return p; });
-            });
+            }));
+            var /** @type {?} */ preactivationDone$ = preactivationResolveData$.pipe(mergeMap(function (p) {
+                if (typeof p === 'boolean' || _this.navigationId !== id)
+                    return of(false);
+                return _this.hooks.afterPreactivation(p.snapshot).pipe(map(function () { return p; }));
+            }));
             // create router state
             // this operation has side effects => route state is being affected
-            var /** @type {?} */ routerState$ = map.call(preactivationDone$, function (_a) {
-                var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
+            var /** @type {?} */ routerState$ = preactivationDone$.pipe(map(function (p) {
+                if (typeof p === 'boolean' || _this.navigationId !== id)
+                    return false;
+                var appliedUrl = p.appliedUrl, snapshot = p.snapshot, shouldActivate = p.shouldActivate;
                 if (shouldActivate) {
                     var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.routerState);
                     return { appliedUrl: appliedUrl, state: state, shouldActivate: shouldActivate };
@@ -5525,7 +5514,7 @@ var Router = /** @class */ (function () {
                 else {
                     return { appliedUrl: appliedUrl, state: null, shouldActivate: shouldActivate };
                 }
-            });
+            }));
             _this.activateRoutes(routerState$, _this.routerState, _this.currentUrlTree, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
         });
     };
@@ -5565,12 +5554,12 @@ var Router = /** @class */ (function () {
         // this operation has side effects
         var /** @type {?} */ navigationIsSuccessful;
         state
-            .forEach(function (_a) {
-            var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
-            if (!shouldActivate || id !== _this.navigationId) {
+            .forEach(function (p) {
+            if (typeof p === 'boolean' || !p.shouldActivate || id !== _this.navigationId || !p.state) {
                 navigationIsSuccessful = false;
                 return;
             }
+            var appliedUrl = p.appliedUrl, state = p.state;
             _this.currentUrlTree = appliedUrl;
             _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
             (/** @type {?} */ (_this)).routerState = state;
@@ -6890,7 +6879,7 @@ var PreloadAllModules = /** @class */ (function () {
      * @return {?}
      */
     function (route, fn) {
-        return _catch.call(fn(), function () { return of(null); });
+        return fn().pipe(catchError(function () { return of(null); }));
     };
     return PreloadAllModules;
 }());
@@ -6948,8 +6937,10 @@ var RouterPreloader = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ navigations$ = filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
-        this.subscription = concatMap.call(navigations$, function () { return _this.preload(); }).subscribe(function () { });
+        this.subscription =
+            this.router.events
+                .pipe(filter(function (e) { return e instanceof NavigationEnd; }), concatMap(function () { return _this.preload(); }))
+                .subscribe(function () { });
     };
     /**
      * @return {?}
@@ -6999,7 +6990,7 @@ var RouterPreloader = /** @class */ (function () {
                 res.push(this.processRoutes(ngModule, route.children));
             }
         }
-        return mergeAll.call(from(res));
+        return from(res).pipe(mergeAll(), map(function (_) { return void 0; }));
     };
     /**
      * @param {?} ngModule
@@ -7015,10 +7006,10 @@ var RouterPreloader = /** @class */ (function () {
         var _this = this;
         return this.preloadingStrategy.preload(route, function () {
             var /** @type {?} */ loaded$ = _this.loader.load(ngModule.injector, route);
-            return mergeMap.call(loaded$, function (config) {
+            return loaded$.pipe(mergeMap(function (config) {
                 route._loadedConfig = config;
                 return _this.processRoutes(config.module, config.routes);
-            });
+            }));
         });
     };
     RouterPreloader.decorators = [
@@ -7514,7 +7505,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new Version('6.0.0-beta.7-2b3de63');
+var VERSION = new Version('6.0.0-beta.7-4648597');
 
 /**
  * @fileoverview added by tsickle

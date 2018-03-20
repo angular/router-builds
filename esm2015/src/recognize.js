@@ -9,8 +9,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, inheritedParamsDataResolve } from './router_state';
 import { PRIMARY_OUTLET, defaultUrlMatcher } from './shared';
 import { UrlSegmentGroup, mapChildrenIntoArray } from './url_tree';
