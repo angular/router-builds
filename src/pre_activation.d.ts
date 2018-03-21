@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Event } from './events';
 import { ChildrenOutletContexts } from './router_outlet_context';
 import { RouterStateSnapshot } from './router_state';

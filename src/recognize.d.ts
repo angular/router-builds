@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Routes } from './config';
 import { ParamsInheritanceStrategy, RouterStateSnapshot } from './router_state';
 import { UrlTree } from './url_tree';

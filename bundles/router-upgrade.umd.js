@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-63cad11
+ * @license Angular v6.0.0-rc.0-0f31b2d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@
 }(this, (function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
 /**
- * @license Angular v6.0.0-beta.7-63cad11
+ * @license Angular v6.0.0-rc.0-0f31b2d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -51,7 +51,7 @@
 var RouterUpgradeInitializer = {
     provide: _angular_core.APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [_angular_upgrade_static.UpgradeModule]
 };
 /**

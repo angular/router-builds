@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-beta.7-63cad11
+ * @license Angular v6.0.0-rc.0-0f31b2d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [UpgradeModule]
 };
 /**
