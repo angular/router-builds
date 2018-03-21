@@ -1,0 +1,36 @@
+{
+  "name": "@angular/router",
+  "version": "6.0.0-beta.7-f258ec6",
+  "description": "Angular - the routing library",
+  "main": "./bundles/router.umd.js",
+  "module": "./esm5/router.js",
+  "es2015": "./esm2015/router.js",
+  "typings": "./router.d.ts",
+  "keywords": [
+    "angular",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git"
+  },
+  "author": "angular",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "6.0.0-beta.7-f258ec6",
+    "@angular/common": "6.0.0-beta.7-f258ec6",
+    "@angular/platform-browser": "6.0.0-beta.7-f258ec6",
+    "rxjs": "^5.5.0"
+  },
+  "ng-update": {
+    "packageGroup": ["@angular/core", "@angular/compiler", "@angular/common", "@angular/animations", "@angular/platform-browser", "@angular/platform-browser-dynamic", "@angular/forms", "@angular/http", "@angular/platform-server", "@angular/platform-webworker", "@angular/platform-webworker-dynamic", "@angular/upgrade", "@angular/router", "@angular/compiler-cli", "@angular/language-service", "@angular/benchpress", "@angular/service-worker", "@angular/elements"]
+  },
+  "sideEffects": false
+}
