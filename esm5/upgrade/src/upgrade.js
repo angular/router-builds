@@ -38,7 +38,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 export var /** @type {?} */ RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [UpgradeModule]
 };
 /**
