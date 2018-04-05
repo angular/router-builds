@@ -10,10 +10,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
- * activated.
+ * \@description
  *
- * \@howToUse
+ * Interface that a class can implement to be a guard deciding if a route can be activated.
  *
  * ```
  * class UserToken {}
@@ -82,10 +81,9 @@ function CanActivate_tsickle_Closure_declarations() {
     CanActivate.prototype.canActivate;
 }
 /**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a child route can be
- * activated.
+ * \@description
  *
- * \@howToUse
+ * Interface that a class can implement to be a guard deciding if a child route can be activated.
  *
  * ```
  * class UserToken {}
@@ -164,10 +162,9 @@ function CanActivateChild_tsickle_Closure_declarations() {
     CanActivateChild.prototype.canActivateChild;
 }
 /**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a route can be
- * deactivated.
+ * \@description
  *
- * \@howToUse
+ * Interface that a class can implement to be a guard deciding if a route can be deactivated.
  *
  * ```
  * class UserToken {}
@@ -240,9 +237,9 @@ function CanDeactivate_tsickle_Closure_declarations() {
     CanDeactivate.prototype.canDeactivate;
 }
 /**
- * \@whatItDoes Interface that class can implement to be a data provider.
+ * \@description
  *
- * \@howToUse
+ * Interface that class can implement to be a data provider.
  *
  * ```
  * class Backend {
@@ -314,10 +311,9 @@ function Resolve_tsickle_Closure_declarations() {
     Resolve.prototype.resolve;
 }
 /**
- * \@whatItDoes Interface that a class can implement to be a guard deciding if a children can be
- * loaded.
+ * \@description
  *
- * \@howToUse
+ * Interface that a class can implement to be a guard deciding if a children can be loaded.
  *
  * ```
  * class UserToken {}

@@ -111,9 +111,15 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     }
 }
 /**
- * \@whatItDoes Represents the parsed URL.
+ * \@description
  *
- * \@howToUse
+ * Represents the parsed URL.
+ *
+ * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+ * serialized tree.
+ * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -130,12 +136,6 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *   }
  * }
  * ```
- *
- * \@description
- *
- * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
- * serialized tree.
- * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
  *
  * \@stable
  */
@@ -189,9 +189,11 @@ function UrlTree_tsickle_Closure_declarations() {
     UrlTree.prototype.fragment;
 }
 /**
- * \@whatItDoes Represents the parsed URL segment group.
+ * \@description
  *
- * See {\@link UrlTree} for more information.
+ * Represents the parsed URL segment group.
+ *
+ * See `UrlTree` for more information.
  *
  * \@stable
  */
@@ -242,7 +244,7 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
      */
     UrlSegmentGroup.prototype.parent;
     /**
-     * The URL segments of this group. See {\@link UrlSegment} for more information
+     * The URL segments of this group. See `UrlSegment` for more information
      * @type {?}
      */
     UrlSegmentGroup.prototype.segments;
@@ -253,9 +255,14 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
     UrlSegmentGroup.prototype.children;
 }
 /**
- * \@whatItDoes Represents a single URL segment.
+ * \@description
  *
- * \@howToUse
+ * Represents a single URL segment.
+ *
+ * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+ * parameters associated with the segment.
+ *
+ *  ## Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -269,11 +276,6 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
  *   }
  * }
  * ```
- *
- * \@description
- *
- * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
- * parameters associated with the segment.
  *
  * \@stable
  */
@@ -357,12 +359,14 @@ export function mapChildrenIntoArray(segment, fn) {
     return res;
 }
 /**
- * \@whatItDoes Serializes and deserializes a URL string into a URL tree.
+ * \@description
  *
- * \@description The url serialization strategy is customizable. You can
+ * Serializes and deserializes a URL string into a URL tree.
+ *
+ * The url serialization strategy is customizable. You can
  * make all URLs case insensitive by providing a custom UrlSerializer.
  *
- * See {\@link DefaultUrlSerializer} for an example of a URL serializer.
+ * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
  * \@stable
  * @abstract
@@ -371,14 +375,14 @@ export class UrlSerializer {
 }
 function UrlSerializer_tsickle_Closure_declarations() {
     /**
-     * Parse a url into a {\@link UrlTree}
+     * Parse a url into a `UrlTree`
      * @abstract
      * @param {?} url
      * @return {?}
      */
     UrlSerializer.prototype.parse = function (url) { };
     /**
-     * Converts a {\@link UrlTree} into a url
+     * Converts a `UrlTree` into a url
      * @abstract
      * @param {?} tree
      * @return {?}
@@ -386,9 +390,9 @@ function UrlSerializer_tsickle_Closure_declarations() {
     UrlSerializer.prototype.serialize = function (tree) { };
 }
 /**
- * \@whatItDoes A default implementation of the {\@link UrlSerializer}.
- *
  * \@description
+ *
+ * A default implementation of the `UrlSerializer`.
  *
  * Example URLs:
  *
@@ -405,7 +409,7 @@ function UrlSerializer_tsickle_Closure_declarations() {
  */
 export class DefaultUrlSerializer {
     /**
-     * Parses a url into a {\@link UrlTree}
+     * Parses a url into a `UrlTree`
      * @param {?} url
      * @return {?}
      */
@@ -414,7 +418,7 @@ export class DefaultUrlSerializer {
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
     }
     /**
-     * Converts a {\@link UrlTree} into a url
+     * Converts a `UrlTree` into a url
      * @param {?} tree
      * @return {?}
      */

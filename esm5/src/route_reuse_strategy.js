@@ -10,13 +10,17 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a way to customize when activated routes get reused.
+ * \@description
+ *
+ * Provides a way to customize when activated routes get reused.
  *
  * \@experimental
  * @abstract
  */
 var /**
- * \@whatItDoes Provides a way to customize when activated routes get reused.
+ * \@description
+ *
+ * Provides a way to customize when activated routes get reused.
  *
  * \@experimental
  * @abstract
@@ -27,7 +31,9 @@ RouteReuseStrategy = /** @class */ (function () {
     return RouteReuseStrategy;
 }());
 /**
- * \@whatItDoes Provides a way to customize when activated routes get reused.
+ * \@description
+ *
+ * Provides a way to customize when activated routes get reused.
  *
  * \@experimental
  * @abstract

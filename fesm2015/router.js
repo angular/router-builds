@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.1-92821e3
+ * @license Angular v6.0.0-rc.1-9141424
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -21,7 +21,9 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * \@description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -49,7 +51,9 @@ class RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation starts.
+ * \@description
+ *
+ * Represents an event triggered when a navigation starts.
  *
  * \@stable
  */
@@ -80,7 +84,9 @@ class NavigationStart extends RouterEvent {
     toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation ends successfully.
+ * \@description
+ *
+ * Represents an event triggered when a navigation ends successfully.
  *
  * \@stable
  */
@@ -107,7 +113,9 @@ class NavigationEnd extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation is canceled.
+ * \@description
+ *
+ * Represents an event triggered when a navigation is canceled.
  *
  * \@stable
  */
@@ -132,7 +140,9 @@ class NavigationCancel extends RouterEvent {
     toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * \@description
+ *
+ * Represents an event triggered when a navigation fails due to an unexpected error.
  *
  * \@stable
  */
@@ -159,7 +169,9 @@ class NavigationError extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents an event triggered when routes are recognized.
+ * \@description
+ *
+ * Represents an event triggered when routes are recognized.
  *
  * \@stable
  */
@@ -188,7 +200,9 @@ class RoutesRecognized extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents the start of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -216,7 +230,9 @@ class GuardsCheckStart extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents the end of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -246,7 +262,9 @@ class GuardsCheckEnd extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * \@description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -277,8 +295,10 @@ class ResolveStart extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {\@link ResolveStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -306,7 +326,9 @@ class ResolveEnd extends RouterEvent {
     }
 }
 /**
- * \@whatItDoes Represents an event triggered before lazy loading a route config.
+ * \@description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * \@experimental
  */
@@ -323,7 +345,9 @@ class RouteConfigLoadStart {
     toString() { return `RouteConfigLoadStart(path: ${this.route.path})`; }
 }
 /**
- * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * \@description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * \@experimental
  */
@@ -340,8 +364,10 @@ class RouteConfigLoadEnd {
     toString() { return `RouteConfigLoadEnd(path: ${this.route.path})`; }
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -361,8 +387,10 @@ class ChildActivationStart {
     }
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -382,8 +410,10 @@ class ChildActivationEnd {
     }
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -403,8 +433,10 @@ class ActivationStart {
     }
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -436,7 +468,9 @@ class ActivationEnd {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Name of the primary outlet.
+ * \@description
+ *
+ * Name of the primary outlet.
  *
  * \@stable
  */
@@ -493,7 +527,7 @@ class ParamsAsMap {
     get keys() { return Object.keys(this.params); }
 }
 /**
- * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ * Convert a `Params` instance to a `ParamMap`.
  *
  * \@stable
  * @param {?} params
@@ -565,7 +599,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * See {\@link Routes} for more details.
+ * See `Routes` for more details.
  * \@stable
  * @record
  */
@@ -929,9 +963,15 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     }
 }
 /**
- * \@whatItDoes Represents the parsed URL.
+ * \@description
  *
- * \@howToUse
+ * Represents the parsed URL.
+ *
+ * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+ * serialized tree.
+ * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -948,12 +988,6 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  *   }
  * }
  * ```
- *
- * \@description
- *
- * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
- * serialized tree.
- * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
  *
  * \@stable
  */
@@ -985,9 +1019,11 @@ class UrlTree {
     toString() { return DEFAULT_SERIALIZER.serialize(this); }
 }
 /**
- * \@whatItDoes Represents the parsed URL segment group.
+ * \@description
  *
- * See {\@link UrlTree} for more information.
+ * Represents the parsed URL segment group.
+ *
+ * See `UrlTree` for more information.
  *
  * \@stable
  */
@@ -1022,9 +1058,14 @@ class UrlSegmentGroup {
     toString() { return serializePaths(this); }
 }
 /**
- * \@whatItDoes Represents a single URL segment.
+ * \@description
  *
- * \@howToUse
+ * Represents a single URL segment.
+ *
+ * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+ * parameters associated with the segment.
+ *
+ *  ## Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -1038,11 +1079,6 @@ class UrlSegmentGroup {
  *   }
  * }
  * ```
- *
- * \@description
- *
- * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
- * parameters associated with the segment.
  *
  * \@stable
  */
@@ -1109,12 +1145,14 @@ function mapChildrenIntoArray(segment, fn) {
     return res;
 }
 /**
- * \@whatItDoes Serializes and deserializes a URL string into a URL tree.
+ * \@description
  *
- * \@description The url serialization strategy is customizable. You can
+ * Serializes and deserializes a URL string into a URL tree.
+ *
+ * The url serialization strategy is customizable. You can
  * make all URLs case insensitive by providing a custom UrlSerializer.
  *
- * See {\@link DefaultUrlSerializer} for an example of a URL serializer.
+ * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
  * \@stable
  * @abstract
@@ -1122,9 +1160,9 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
 }
 /**
- * \@whatItDoes A default implementation of the {\@link UrlSerializer}.
- *
  * \@description
+ *
+ * A default implementation of the `UrlSerializer`.
  *
  * Example URLs:
  *
@@ -1141,7 +1179,7 @@ class UrlSerializer {
  */
 class DefaultUrlSerializer {
     /**
-     * Parses a url into a {\@link UrlTree}
+     * Parses a url into a `UrlTree`
      * @param {?} url
      * @return {?}
      */
@@ -1150,7 +1188,7 @@ class DefaultUrlSerializer {
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
     }
     /**
-     * Converts a {\@link UrlTree} into a url
+     * Converts a `UrlTree` into a url
      * @param {?} tree
      * @return {?}
      */
@@ -2260,9 +2298,14 @@ function nodeChildrenAsMap(node) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Represents the state of the router.
+ * \@description
  *
- * \@howToUse
+ * Represents the state of the router.
+ *
+ * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+ * segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -2277,11 +2320,7 @@ function nodeChildrenAsMap(node) {
  * }
  * ```
  *
- * \@description
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
- *
- * See {\@link ActivatedRoute} for more information.
+ * See `ActivatedRoute` for more information.
  *
  * \@stable
  */
@@ -2331,11 +2370,10 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
     return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 /**
- * \@whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet.
- * An `ActivatedRoute` can also be used to traverse the router state tree.
+ * \@description
  *
- * \@howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
  * ```
  * \@Component({...})
@@ -2474,12 +2512,11 @@ function flattenInherited(pathFromRoot) {
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
 /**
- * \@whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet
- * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
- * state tree.
+ * \@description
  *
- * \@howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
+ * traverse the router state tree.
  *
  * ```
  * \@Component({templateUrl:'./my-component.html'})
@@ -2575,9 +2612,14 @@ class ActivatedRouteSnapshot {
     }
 }
 /**
- * \@whatItDoes Represents the state of the router at a moment in time.
+ * \@description
  *
- * \@howToUse
+ * Represents the state of the router at a moment in time.
+ *
+ * This is a tree of activated route snapshots. Every node in this tree knows about
+ * the "consumed" URL segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -2592,10 +2634,6 @@ class ActivatedRouteSnapshot {
  *   }
  * }
  * ```
- *
- * \@description
- * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
- * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
  * \@stable
  */
@@ -3936,7 +3974,9 @@ function getResolve(route) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a way to customize when activated routes get reused.
+ * \@description
+ *
+ * Provides a way to customize when activated routes get reused.
  *
  * \@experimental
  * @abstract
@@ -4058,7 +4098,9 @@ class RouterConfigLoader {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
+ * \@description
+ *
+ * Provides a way to migrate AngularJS applications to Angular.
  *
  * \@experimental
  * @abstract
@@ -4099,7 +4141,9 @@ class DefaultUrlHandlingStrategy {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Represents the extra options used during navigation.
+ * \@description
+ *
+ * Represents the extra options used during navigation.
  *
  * \@stable
  * @record
@@ -4121,9 +4165,11 @@ function defaultRouterHook(snapshot) {
     return /** @type {?} */ (of(null));
 }
 /**
- * \@whatItDoes Provides the navigation and url manipulation capabilities.
+ * \@description
  *
- * See {\@link Routes} for more details and examples.
+ * Provides the navigation and url manipulation capabilities.
+ *
+ * See `Routes` for more details and examples.
  *
  * \@ngModule RouterModule
  *
@@ -4153,7 +4199,7 @@ class Router {
         /**
          * Error handler that is invoked when a navigation errors.
          *
-         * See {\@link ErrorHandler} for more information.
+         * See `ErrorHandler` for more information.
          */
         this.errorHandler = defaultErrorHandler;
         /**
@@ -4419,13 +4465,13 @@ class Router {
         return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
     }
     /**
-     * Serializes a {\@link UrlTree} into a string
+     * Serializes a `UrlTree` into a string
      * @param {?} url
      * @return {?}
      */
     serializeUrl(url) { return this.urlSerializer.serialize(url); }
     /**
-     * Parses a string into a {\@link UrlTree}
+     * Parses a string into a `UrlTree`
      * @param {?} url
      * @return {?}
      */
@@ -4978,21 +5024,15 @@ function validateCommands(commands) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Lets you link to specific parts of your app.
- *
- * \@howToUse
- *
- * Consider the following route configuration:
- * `[{ path: 'user/:name', component: UserCmp }]`
- *
- * When linking to this `user/:name` route, you can write:
- * `<a routerLink='/user/bob'>link to user component</a>`
- *
  * \@description
  *
- * The RouterLink directives let you link to specific parts of your app.
+ * Lets you link to specific routes in your app.
  *
- * When the link is static, you can use the directive as follows:
+ * Consider the following route configuration:
+ * `[{ path: 'user/:name', component: UserCmp }]`.
+ * When linking to this `user/:name` route, you use the `RouterLink` directive.
+ *
+ * If the link is static, you can use the directive as follows:
  * `<a routerLink="/user/bob">link to user component</a>`
  *
  * If you use dynamic values to generate the link, you can pass an array of path
@@ -5143,9 +5183,11 @@ RouterLink.propDecorators = {
     "onClick": [{ type: HostListener, args: ['click',] },],
 };
 /**
- * \@whatItDoes Lets you link to specific parts of your app.
+ * \@description
  *
- * See {\@link RouterLink} for more information.
+ * Lets you link to specific routes in your app.
+ *
+ * See `RouterLink` for more information.
  *
  * \@ngModule RouterModule
  *
@@ -5282,17 +5324,12 @@ function attrBoolValue(s) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
- *
- * \@howToUse
- *
- * ```
- * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
- * ```
  *
  * \@description
  *
- * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
+ * Lets you add a CSS class to an element when the link's route becomes active.
+ *
+ * This directive lets you add a CSS class to an element when the link's route
  * becomes active.
  *
  * Consider the following example:
@@ -5457,7 +5494,7 @@ RouterLinkActive.propDecorators = {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Store contextual information about a {\@link RouterOutlet}
+ * Store contextual information about a `RouterOutlet`
  *
  * \@stable
  */
@@ -5471,7 +5508,7 @@ class OutletContext {
     }
 }
 /**
- * Store contextual information about the children (= nested) {\@link RouterOutlet}
+ * Store contextual information about the children (= nested) `RouterOutlet`
  *
  * \@stable
  */
@@ -5549,10 +5586,9 @@ class ChildrenOutletContexts {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
- * state.
+ * \@description
  *
- * \@howToUse
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * ```
  * <router-outlet></router-outlet>
@@ -5758,7 +5794,9 @@ class OutletInjector {
 *found in the LICENSE file at https://angular.io/license
 */
 /**
- * \@whatItDoes Provides a preloading strategy.
+ * \@description
+ *
+ * Provides a preloading strategy.
  *
  * \@experimental
  * @abstract
@@ -5766,9 +5804,9 @@ class OutletInjector {
 class PreloadingStrategy {
 }
 /**
- * \@whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
+ * \@description
  *
- * \@howToUse
+ * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
@@ -5787,9 +5825,9 @@ class PreloadAllModules {
     }
 }
 /**
- * \@whatItDoes Provides a preloading strategy that does not preload any modules.
- *
  * \@description
+ *
+ * Provides a preloading strategy that does not preload any modules.
  *
  * This strategy is enabled by default.
  *
@@ -5914,12 +5952,18 @@ RouterPreloader.ctorParameters = () => [
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Contains a list of directives
+ * \@description
+ *
+ * Contains a list of directives
+ *
  * \@stable
  */
 const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
- * \@whatItDoes Is used in DI to configure the router.
+ * \@description
+ *
+ * Is used in DI to configure the router.
+ *
  * \@stable
  */
 const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
@@ -5954,9 +5998,7 @@ function routerNgProbeToken() {
     return new NgProbeToken('Router', Router);
 }
 /**
- * \@whatItDoes Adds router directives and providers.
- *
- * \@howToUse
+ * \@usageNotes
  *
  * RouterModule can be imported multiple times: once per lazily-loaded bundle.
  * Since the router deals with a global shared resource--location, we cannot have
@@ -5990,6 +6032,8 @@ function routerNgProbeToken() {
  *
  * \@description
  *
+ * Adds router directives and providers.
+ *
  * Managing state transitions is one of the hardest parts of building applications. This is
  * especially true on the web, where you also need to ensure that the state is reflected in the URL.
  * In addition, we often want to split applications into multiple bundles and load them on demand.
@@ -6014,15 +6058,15 @@ class RouterModule {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options (see {\@link ExtraOptions}):
+     * Options (see `ExtraOptions`):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
-     * * `preloadingStrategy` configures a preloading strategy (see {\@link PreloadAllModules}).
+     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
-     * {\@link ExtraOptions} for more details.
+     * `ExtraOptions` for more details.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -6094,9 +6138,11 @@ function provideForRootGuard(router) {
     return 'guarded';
 }
 /**
- * \@whatItDoes Registers routes.
+ * \@description
  *
- * \@howToUse
+ * Registers routes.
+ *
+ * ### Example
  *
  * ```
  * \@NgModule({
@@ -6117,7 +6163,9 @@ function provideRoutes(routes) {
     ];
 }
 /**
- * \@whatItDoes Represents options to configure the router.
+ * \@description
+ *
+ * Represents options to configure the router.
  *
  * \@stable
  * @record
@@ -6327,7 +6375,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-const VERSION = new Version('6.0.0-rc.1-92821e3');
+const VERSION = new Version('6.0.0-rc.1-9141424');
 
 /**
  * @fileoverview added by tsickle

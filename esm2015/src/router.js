@@ -28,7 +28,9 @@ import { UrlTree, containsTree, createEmptyUrlTree } from './url_tree';
 import { forEach } from './utils/collection';
 import { nodeChildrenAsMap } from './utils/tree';
 /**
- * \@whatItDoes Represents the extra options used during navigation.
+ * \@description
+ *
+ * Represents the extra options used during navigation.
  *
  * \@stable
  * @record
@@ -160,9 +162,11 @@ function defaultRouterHook(snapshot) {
     return /** @type {?} */ (of(null));
 }
 /**
- * \@whatItDoes Provides the navigation and url manipulation capabilities.
+ * \@description
  *
- * See {\@link Routes} for more details and examples.
+ * Provides the navigation and url manipulation capabilities.
+ *
+ * See `Routes` for more details and examples.
  *
  * \@ngModule RouterModule
  *
@@ -192,7 +196,7 @@ export class Router {
         /**
          * Error handler that is invoked when a navigation errors.
          *
-         * See {\@link ErrorHandler} for more information.
+         * See `ErrorHandler` for more information.
          */
         this.errorHandler = defaultErrorHandler;
         /**
@@ -458,13 +462,13 @@ export class Router {
         return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
     }
     /**
-     * Serializes a {\@link UrlTree} into a string
+     * Serializes a `UrlTree` into a string
      * @param {?} url
      * @return {?}
      */
     serializeUrl(url) { return this.urlSerializer.serialize(url); }
     /**
-     * Parses a string into a {\@link UrlTree}
+     * Parses a string into a `UrlTree`
      * @param {?} url
      * @return {?}
      */
@@ -799,7 +803,7 @@ function Router_tsickle_Closure_declarations() {
     /**
      * Error handler that is invoked when a navigation errors.
      *
-     * See {\@link ErrorHandler} for more information.
+     * See `ErrorHandler` for more information.
      * @type {?}
      */
     Router.prototype.errorHandler;

@@ -10,12 +10,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Store contextual information about a {\@link RouterOutlet}
+ * Store contextual information about a `RouterOutlet`
  *
  * \@stable
  */
 var /**
- * Store contextual information about a {\@link RouterOutlet}
+ * Store contextual information about a `RouterOutlet`
  *
  * \@stable
  */
@@ -30,7 +30,7 @@ OutletContext = /** @class */ (function () {
     return OutletContext;
 }());
 /**
- * Store contextual information about a {\@link RouterOutlet}
+ * Store contextual information about a `RouterOutlet`
  *
  * \@stable
  */
@@ -48,12 +48,12 @@ function OutletContext_tsickle_Closure_declarations() {
     OutletContext.prototype.attachRef;
 }
 /**
- * Store contextual information about the children (= nested) {\@link RouterOutlet}
+ * Store contextual information about the children (= nested) `RouterOutlet`
  *
  * \@stable
  */
 var /**
- * Store contextual information about the children (= nested) {\@link RouterOutlet}
+ * Store contextual information about the children (= nested) `RouterOutlet`
  *
  * \@stable
  */
@@ -160,7 +160,7 @@ ChildrenOutletContexts = /** @class */ (function () {
     return ChildrenOutletContexts;
 }());
 /**
- * Store contextual information about the children (= nested) {\@link RouterOutlet}
+ * Store contextual information about the children (= nested) `RouterOutlet`
  *
  * \@stable
  */

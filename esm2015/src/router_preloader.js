@@ -16,7 +16,9 @@ import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart } from './event
 import { Router } from './router';
 import { RouterConfigLoader } from './router_config_loader';
 /**
- * \@whatItDoes Provides a preloading strategy.
+ * \@description
+ *
+ * Provides a preloading strategy.
  *
  * \@experimental
  * @abstract
@@ -33,9 +35,9 @@ function PreloadingStrategy_tsickle_Closure_declarations() {
     PreloadingStrategy.prototype.preload = function (route, fn) { };
 }
 /**
- * \@whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
+ * \@description
  *
- * \@howToUse
+ * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
@@ -54,9 +56,9 @@ export class PreloadAllModules {
     }
 }
 /**
- * \@whatItDoes Provides a preloading strategy that does not preload any modules.
- *
  * \@description
+ *
+ * Provides a preloading strategy that does not preload any modules.
  *
  * This strategy is enabled by default.
  *

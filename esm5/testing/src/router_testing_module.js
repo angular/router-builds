@@ -14,9 +14,9 @@ import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
 import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS as ROUTER_PROVIDERS, ɵflatten as flatten } from '@angular/router';
 /**
- * \@whatItDoes Allows to simulate the loading of ng modules in tests.
+ * \@description
  *
- * \@howToUse
+ * Allows to simulate the loading of ng modules in tests.
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
@@ -161,9 +161,15 @@ export function setupTestingRouter(urlSerializer, contexts, location, loader, co
     return router;
 }
 /**
- * \@whatItDoes Sets up the router to be used for testing.
+ * \@description
  *
- * \@howToUse
+ * Sets up the router to be used for testing.
+ *
+ * The modules sets up the router to be used for testing.
+ * It provides spy implementations of `Location`, `LocationStrategy`, and {\@link
+ * NgModuleFactoryLoader}.
+ *
+ * ### Example
  *
  * ```
  * beforeEach(() => {
@@ -176,12 +182,6 @@ export function setupTestingRouter(urlSerializer, contexts, location, loader, co
  *   });
  * });
  * ```
- *
- * \@description
- *
- * The modules sets up the router to be used for testing.
- * It provides spy implementations of {\@link Location}, {\@link LocationStrategy}, and {\@link
- * NgModuleFactoryLoader}.
  *
  * \@stable
  */

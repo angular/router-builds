@@ -12,9 +12,14 @@ import { ParamMap, Params } from './shared';
 import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
- * @whatItDoes Represents the state of the router.
+ * @description
  *
- * @howToUse
+ * Represents the state of the router.
+ *
+ * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+ * segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -29,11 +34,7 @@ import { Tree } from './utils/tree';
  * }
  * ```
  *
- * @description
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
- *
- * See {@link ActivatedRoute} for more information.
+ * See `ActivatedRoute` for more information.
  *
  * @stable
  */
@@ -45,11 +46,10 @@ export declare class RouterState extends Tree<ActivatedRoute> {
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any> | null): RouterState;
 export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any> | null): RouterStateSnapshot;
 /**
- * @whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet.
- * An `ActivatedRoute` can also be used to traverse the router state tree.
+ * @description
  *
- * @howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
  * ```
  * @Component({...})
@@ -100,12 +100,11 @@ export declare class ActivatedRoute {
 }
 export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
 /**
- * @whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet
- * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
- * state tree.
+ * @description
  *
- * @howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
+ * traverse the router state tree.
  *
  * ```
  * @Component({templateUrl:'./my-component.html'})
@@ -152,9 +151,14 @@ export declare class ActivatedRouteSnapshot {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the state of the router at a moment in time.
+ * @description
  *
- * @howToUse
+ * Represents the state of the router at a moment in time.
+ *
+ * This is a tree of activated route snapshots. Every node in this tree knows about
+ * the "consumed" URL segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -169,10 +173,6 @@ export declare class ActivatedRouteSnapshot {
  *   }
  * }
  * ```
- *
- * @description
- * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
- * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
  * @stable
  */

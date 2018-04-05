@@ -11,7 +11,9 @@
  */
 import * as tslib_1 from "tslib";
 /**
- * \@whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * \@description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -29,7 +31,9 @@ import * as tslib_1 from "tslib";
  * \@experimental
  */
 var /**
- * \@whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * \@description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -54,7 +58,9 @@ RouterEvent = /** @class */ (function () {
     return RouterEvent;
 }());
 /**
- * \@whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * \@description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -85,12 +91,16 @@ function RouterEvent_tsickle_Closure_declarations() {
     RouterEvent.prototype.url;
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation starts.
+ * \@description
+ *
+ * Represents an event triggered when a navigation starts.
  *
  * \@stable
  */
 var /**
- * \@whatItDoes Represents an event triggered when a navigation starts.
+ * \@description
+ *
+ * Represents an event triggered when a navigation starts.
  *
  * \@stable
  */
@@ -127,7 +137,9 @@ NavigationStart = /** @class */ (function (_super) {
     return NavigationStart;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents an event triggered when a navigation starts.
+ * \@description
+ *
+ * Represents an event triggered when a navigation starts.
  *
  * \@stable
  */
@@ -158,12 +170,16 @@ function NavigationStart_tsickle_Closure_declarations() {
     NavigationStart.prototype.restoredState;
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation ends successfully.
+ * \@description
+ *
+ * Represents an event triggered when a navigation ends successfully.
  *
  * \@stable
  */
 var /**
- * \@whatItDoes Represents an event triggered when a navigation ends successfully.
+ * \@description
+ *
+ * Represents an event triggered when a navigation ends successfully.
  *
  * \@stable
  */
@@ -193,7 +209,9 @@ NavigationEnd = /** @class */ (function (_super) {
     return NavigationEnd;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents an event triggered when a navigation ends successfully.
+ * \@description
+ *
+ * Represents an event triggered when a navigation ends successfully.
  *
  * \@stable
  */
@@ -206,12 +224,16 @@ function NavigationEnd_tsickle_Closure_declarations() {
     NavigationEnd.prototype.urlAfterRedirects;
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation is canceled.
+ * \@description
+ *
+ * Represents an event triggered when a navigation is canceled.
  *
  * \@stable
  */
 var /**
- * \@whatItDoes Represents an event triggered when a navigation is canceled.
+ * \@description
+ *
+ * Represents an event triggered when a navigation is canceled.
  *
  * \@stable
  */
@@ -239,7 +261,9 @@ NavigationCancel = /** @class */ (function (_super) {
     return NavigationCancel;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents an event triggered when a navigation is canceled.
+ * \@description
+ *
+ * Represents an event triggered when a navigation is canceled.
  *
  * \@stable
  */
@@ -252,12 +276,16 @@ function NavigationCancel_tsickle_Closure_declarations() {
     NavigationCancel.prototype.reason;
 }
 /**
- * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * \@description
+ *
+ * Represents an event triggered when a navigation fails due to an unexpected error.
  *
  * \@stable
  */
 var /**
- * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * \@description
+ *
+ * Represents an event triggered when a navigation fails due to an unexpected error.
  *
  * \@stable
  */
@@ -287,7 +315,9 @@ NavigationError = /** @class */ (function (_super) {
     return NavigationError;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * \@description
+ *
+ * Represents an event triggered when a navigation fails due to an unexpected error.
  *
  * \@stable
  */
@@ -300,12 +330,16 @@ function NavigationError_tsickle_Closure_declarations() {
     NavigationError.prototype.error;
 }
 /**
- * \@whatItDoes Represents an event triggered when routes are recognized.
+ * \@description
+ *
+ * Represents an event triggered when routes are recognized.
  *
  * \@stable
  */
 var /**
- * \@whatItDoes Represents an event triggered when routes are recognized.
+ * \@description
+ *
+ * Represents an event triggered when routes are recognized.
  *
  * \@stable
  */
@@ -336,7 +370,9 @@ RoutesRecognized = /** @class */ (function (_super) {
     return RoutesRecognized;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents an event triggered when routes are recognized.
+ * \@description
+ *
+ * Represents an event triggered when routes are recognized.
  *
  * \@stable
  */
@@ -354,12 +390,16 @@ function RoutesRecognized_tsickle_Closure_declarations() {
     RoutesRecognized.prototype.state;
 }
 /**
- * \@whatItDoes Represents the start of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -387,7 +427,9 @@ GuardsCheckStart = /** @class */ (function (_super) {
     return GuardsCheckStart;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents the start of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -405,12 +447,16 @@ function GuardsCheckStart_tsickle_Closure_declarations() {
     GuardsCheckStart.prototype.state;
 }
 /**
- * \@whatItDoes Represents the end of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the end of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -439,7 +485,9 @@ GuardsCheckEnd = /** @class */ (function (_super) {
     return GuardsCheckEnd;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents the end of the Guard phase of routing.
+ * \@description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * \@experimental
  */
@@ -462,7 +510,9 @@ function GuardsCheckEnd_tsickle_Closure_declarations() {
     GuardsCheckEnd.prototype.shouldActivate;
 }
 /**
- * \@whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * \@description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -470,7 +520,9 @@ function GuardsCheckEnd_tsickle_Closure_declarations() {
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * \@description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -501,7 +553,9 @@ ResolveStart = /** @class */ (function (_super) {
     return ResolveStart;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * \@description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -522,14 +576,18 @@ function ResolveStart_tsickle_Closure_declarations() {
     ResolveStart.prototype.state;
 }
 /**
- * \@whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {\@link ResolveStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {\@link ResolveStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -557,8 +615,10 @@ ResolveEnd = /** @class */ (function (_super) {
     return ResolveEnd;
 }(RouterEvent));
 /**
- * \@whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {\@link ResolveStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -576,12 +636,16 @@ function ResolveEnd_tsickle_Closure_declarations() {
     ResolveEnd.prototype.state;
 }
 /**
- * \@whatItDoes Represents an event triggered before lazy loading a route config.
+ * \@description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents an event triggered before lazy loading a route config.
+ * \@description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * \@experimental
  */
@@ -599,7 +663,9 @@ RouteConfigLoadStart = /** @class */ (function () {
     return RouteConfigLoadStart;
 }());
 /**
- * \@whatItDoes Represents an event triggered before lazy loading a route config.
+ * \@description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * \@experimental
  */
@@ -612,12 +678,16 @@ function RouteConfigLoadStart_tsickle_Closure_declarations() {
     RouteConfigLoadStart.prototype.route;
 }
 /**
- * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * \@description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * \@description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * \@experimental
  */
@@ -635,7 +705,9 @@ RouteConfigLoadEnd = /** @class */ (function () {
     return RouteConfigLoadEnd;
 }());
 /**
- * \@whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * \@description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * \@experimental
  */
@@ -648,14 +720,18 @@ function RouteConfigLoadEnd_tsickle_Closure_declarations() {
     RouteConfigLoadEnd.prototype.route;
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -676,8 +752,10 @@ ChildActivationStart = /** @class */ (function () {
     return ChildActivationStart;
 }());
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -690,14 +768,18 @@ function ChildActivationStart_tsickle_Closure_declarations() {
     ChildActivationStart.prototype.snapshot;
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -718,8 +800,10 @@ ChildActivationEnd = /** @class */ (function () {
     return ChildActivationEnd;
 }());
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ChildActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -732,14 +816,18 @@ function ChildActivationEnd_tsickle_Closure_declarations() {
     ChildActivationEnd.prototype.snapshot;
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -760,8 +848,10 @@ ActivationStart = /** @class */ (function () {
     return ActivationStart;
 }());
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationEnd} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * \@experimental
  */
@@ -774,14 +864,18 @@ function ActivationStart_tsickle_Closure_declarations() {
     ActivationStart.prototype.snapshot;
 }
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
 var /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * \@experimental
  */
@@ -802,8 +896,10 @@ ActivationEnd = /** @class */ (function () {
     return ActivationEnd;
 }());
 /**
- * \@whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {\@link ActivationStart} for use of this experimental API.
+ * \@description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * \@experimental
  */

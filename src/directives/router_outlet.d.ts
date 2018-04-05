@@ -9,10 +9,9 @@ import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter
 import { ChildrenOutletContexts } from '../router_outlet_context';
 import { ActivatedRoute } from '../router_state';
 /**
- * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
- * state.
+ * @description
  *
- * @howToUse
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * ```
  * <router-outlet></router-outlet>

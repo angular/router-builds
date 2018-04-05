@@ -26,12 +26,18 @@ import { UrlHandlingStrategy } from './url_handling_strategy';
 import { DefaultUrlSerializer, UrlSerializer } from './url_tree';
 import { flatten } from './utils/collection';
 /**
- * \@whatItDoes Contains a list of directives
+ * \@description
+ *
+ * Contains a list of directives
+ *
  * \@stable
  */
 var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
- * \@whatItDoes Is used in DI to configure the router.
+ * \@description
+ *
+ * Is used in DI to configure the router.
+ *
  * \@stable
  */
 export var /** @type {?} */ ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
@@ -66,9 +72,7 @@ export function routerNgProbeToken() {
     return new NgProbeToken('Router', Router);
 }
 /**
- * \@whatItDoes Adds router directives and providers.
- *
- * \@howToUse
+ * \@usageNotes
  *
  * RouterModule can be imported multiple times: once per lazily-loaded bundle.
  * Since the router deals with a global shared resource--location, we cannot have
@@ -102,6 +106,8 @@ export function routerNgProbeToken() {
  *
  * \@description
  *
+ * Adds router directives and providers.
+ *
  * Managing state transitions is one of the hardest parts of building applications. This is
  * especially true on the web, where you also need to ensure that the state is reflected in the URL.
  * In addition, we often want to split applications into multiple bundles and load them on demand.
@@ -124,29 +130,29 @@ var RouterModule = /** @class */ (function () {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options (see {@link ExtraOptions}):
+     * Options (see `ExtraOptions`):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
-     * * `preloadingStrategy` configures a preloading strategy (see {@link PreloadAllModules}).
+     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
-     * {@link ExtraOptions} for more details.
+     * `ExtraOptions` for more details.
      */
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options (see {\@link ExtraOptions}):
+     * Options (see `ExtraOptions`):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
-     * * `preloadingStrategy` configures a preloading strategy (see {\@link PreloadAllModules}).
+     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
-     * {\@link ExtraOptions} for more details.
+     * `ExtraOptions` for more details.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -155,15 +161,15 @@ var RouterModule = /** @class */ (function () {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options (see {\@link ExtraOptions}):
+     * Options (see `ExtraOptions`):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
-     * * `preloadingStrategy` configures a preloading strategy (see {\@link PreloadAllModules}).
+     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
-     * {\@link ExtraOptions} for more details.
+     * `ExtraOptions` for more details.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -255,9 +261,11 @@ export function provideForRootGuard(router) {
     return 'guarded';
 }
 /**
- * \@whatItDoes Registers routes.
+ * \@description
  *
- * \@howToUse
+ * Registers routes.
+ *
+ * ### Example
  *
  * ```
  * \@NgModule({
@@ -278,7 +286,9 @@ export function provideRoutes(routes) {
     ];
 }
 /**
- * \@whatItDoes Represents options to configure the router.
+ * \@description
+ *
+ * Represents options to configure the router.
  *
  * \@stable
  * @record
@@ -306,7 +316,7 @@ function ExtraOptions_tsickle_Closure_declarations() {
      */
     ExtraOptions.prototype.errorHandler;
     /**
-     * Configures a preloading strategy. See {\@link PreloadAllModules}.
+     * Configures a preloading strategy. See `PreloadAllModules`.
      * @type {?|undefined}
      */
     ExtraOptions.prototype.preloadingStrategy;

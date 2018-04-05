@@ -8,7 +8,9 @@
 import { Route } from './config';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
 /**
- * @whatItDoes Identifies the trigger of the navigation.
+ * @description
+ *
+ * Identifies the trigger of the navigation.
  *
  * * 'imperative'--triggered by `router.navigateByUrl` or `router.navigate`.
  * * 'popstate'--triggered by a popstate event
@@ -18,7 +20,9 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  */
 export declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
 /**
- * @whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * @description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -47,7 +51,9 @@ export declare class RouterEvent {
         url: string);
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation starts.
+ * @description
+ *
+ * Represents an event triggered when a navigation starts.
  *
  * @stable
  */
@@ -90,7 +96,9 @@ export declare class NavigationStart extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation ends successfully.
+ * @description
+ *
+ * Represents an event triggered when a navigation ends successfully.
  *
  * @stable
  */
@@ -108,7 +116,9 @@ export declare class NavigationEnd extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation is canceled.
+ * @description
+ *
+ * Represents an event triggered when a navigation is canceled.
  *
  * @stable
  */
@@ -126,7 +136,9 @@ export declare class NavigationCancel extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * @description
+ *
+ * Represents an event triggered when a navigation fails due to an unexpected error.
  *
  * @stable
  */
@@ -144,7 +156,9 @@ export declare class NavigationError extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when routes are recognized.
+ * @description
+ *
+ * Represents an event triggered when routes are recognized.
  *
  * @stable
  */
@@ -166,7 +180,9 @@ export declare class RoutesRecognized extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of the Guard phase of routing.
+ * @description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * @experimental
  */
@@ -187,7 +203,9 @@ export declare class GuardsCheckStart extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the end of the Guard phase of routing.
+ * @description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * @experimental
  */
@@ -212,7 +230,9 @@ export declare class GuardsCheckEnd extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * @description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -236,8 +256,10 @@ export declare class ResolveStart extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {@link ResolveStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -258,7 +280,9 @@ export declare class ResolveEnd extends RouterEvent {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered before lazy loading a route config.
+ * @description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * @experimental
  */
@@ -271,7 +295,9 @@ export declare class RouteConfigLoadStart {
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * @description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * @experimental
  */
@@ -284,8 +310,10 @@ export declare class RouteConfigLoadEnd {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ChildActivationEnd} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * @experimental
  */
@@ -298,8 +326,10 @@ export declare class ChildActivationStart {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ChildActivationStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -312,8 +342,10 @@ export declare class ChildActivationEnd {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ActivationEnd} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * @experimental
  */
@@ -326,8 +358,10 @@ export declare class ActivationStart {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ActivationStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -340,25 +374,27 @@ export declare class ActivationEnd {
     toString(): string;
 }
 /**
- * @whatItDoes Represents a router event, allowing you to track the lifecycle of the router.
+ * @description
+ *
+ * Represents a router event, allowing you to track the lifecycle of the router.
  *
  * The sequence of router events is:
  *
- * - {@link NavigationStart},
- * - {@link RouteConfigLoadStart},
- * - {@link RouteConfigLoadEnd},
- * - {@link RoutesRecognized},
- * - {@link GuardsCheckStart},
- * - {@link ChildActivationStart},
- * - {@link ActivationStart},
- * - {@link GuardsCheckEnd},
- * - {@link ResolveStart},
- * - {@link ResolveEnd},
- * - {@link ActivationEnd}
- * - {@link ChildActivationEnd}
- * - {@link NavigationEnd},
- * - {@link NavigationCancel},
- * - {@link NavigationError}
+ * - `NavigationStart`,
+ * - `RouteConfigLoadStart`,
+ * - `RouteConfigLoadEnd`,
+ * - `RoutesRecognized`,
+ * - `GuardsCheckStart`,
+ * - `ChildActivationStart`,
+ * - `ActivationStart`,
+ * - `GuardsCheckEnd`,
+ * - `ResolveStart`,
+ * - `ResolveEnd`,
+ * - `ActivationEnd`
+ * - `ChildActivationEnd`
+ * - `NavigationEnd`,
+ * - `NavigationCancel`,
+ * - `NavigationError`
  *
  * @stable
  */

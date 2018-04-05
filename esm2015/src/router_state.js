@@ -16,9 +16,14 @@ import { UrlSegment, equalSegments } from './url_tree';
 import { shallowEqual, shallowEqualArrays } from './utils/collection';
 import { Tree, TreeNode } from './utils/tree';
 /**
- * \@whatItDoes Represents the state of the router.
+ * \@description
  *
- * \@howToUse
+ * Represents the state of the router.
+ *
+ * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+ * segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -33,11 +38,7 @@ import { Tree, TreeNode } from './utils/tree';
  * }
  * ```
  *
- * \@description
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
- *
- * See {\@link ActivatedRoute} for more information.
+ * See `ActivatedRoute` for more information.
  *
  * \@stable
  */
@@ -94,11 +95,10 @@ export function createEmptyStateSnapshot(urlTree, rootComponent) {
     return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 /**
- * \@whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet.
- * An `ActivatedRoute` can also be used to traverse the router state tree.
+ * \@description
  *
- * \@howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
  * ```
  * \@Component({...})
@@ -299,12 +299,11 @@ function flattenInherited(pathFromRoot) {
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
 /**
- * \@whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet
- * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
- * state tree.
+ * \@description
  *
- * \@howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
+ * traverse the router state tree.
  *
  * ```
  * \@Component({templateUrl:'./my-component.html'})
@@ -477,9 +476,14 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
     ActivatedRouteSnapshot.prototype.component;
 }
 /**
- * \@whatItDoes Represents the state of the router at a moment in time.
+ * \@description
  *
- * \@howToUse
+ * Represents the state of the router at a moment in time.
+ *
+ * This is a tree of activated route snapshots. Every node in this tree knows about
+ * the "consumed" URL segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -494,10 +498,6 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
  *   }
  * }
  * ```
- *
- * \@description
- * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
- * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
  * \@stable
  */

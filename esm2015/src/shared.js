@@ -10,7 +10,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Name of the primary outlet.
+ * \@description
+ *
+ * Name of the primary outlet.
  *
  * \@stable
  */
@@ -95,7 +97,7 @@ function ParamsAsMap_tsickle_Closure_declarations() {
     ParamsAsMap.prototype.params;
 }
 /**
- * Convert a {\@link Params} instance to a {\@link ParamMap}.
+ * Convert a `Params` instance to a `ParamMap`.
  *
  * \@stable
  * @param {?} params

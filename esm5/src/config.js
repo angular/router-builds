@@ -12,7 +12,7 @@
 import * as tslib_1 from "tslib";
 import { PRIMARY_OUTLET } from './shared';
 /**
- * See {\@link Routes} for more details.
+ * See `Routes` for more details.
  * \@stable
  * @record
  */

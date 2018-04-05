@@ -17,7 +17,9 @@ import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
 /**
- * @whatItDoes Represents the extra options used during navigation.
+ * @description
+ *
+ * Represents the extra options used during navigation.
  *
  * @stable
  */
@@ -124,9 +126,10 @@ export interface NavigationExtras {
     replaceUrl?: boolean;
 }
 /**
- * @whatItDoes Error handler that is invoked when a navigation errors.
- *
  * @description
+ *
+ * Error handler that is invoked when a navigation errors.
+ *
  * If the handler returns a value, the navigation promise will be resolved with this value.
  * If the handler throws an exception, the navigation promise will be rejected with
  * the exception.
@@ -135,9 +138,11 @@ export interface NavigationExtras {
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
- * @whatItDoes Provides the navigation and url manipulation capabilities.
+ * @description
  *
- * See {@link Routes} for more details and examples.
+ * Provides the navigation and url manipulation capabilities.
+ *
+ * See `Routes` for more details and examples.
  *
  * @ngModule RouterModule
  *
@@ -161,7 +166,7 @@ export declare class Router {
     /**
      * Error handler that is invoked when a navigation errors.
      *
-     * See {@link ErrorHandler} for more information.
+     * See `ErrorHandler` for more information.
      */
     errorHandler: ErrorHandler;
     /**
@@ -308,9 +313,9 @@ export declare class Router {
      * URL.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
-    /** Serializes a {@link UrlTree} into a string */
+    /** Serializes a `UrlTree` into a string */
     serializeUrl(url: UrlTree): string;
-    /** Parses a string into a {@link UrlTree} */
+    /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
     /** Returns whether the url is activated */
     isActive(url: string | UrlTree, exact: boolean): boolean;

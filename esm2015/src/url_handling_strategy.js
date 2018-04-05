@@ -10,7 +10,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a way to migrate AngularJS applications to Angular.
+ * \@description
+ *
+ * Provides a way to migrate AngularJS applications to Angular.
  *
  * \@experimental
  * @abstract

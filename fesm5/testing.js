@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.1-92821e3
+ * @license Angular v6.0.0-rc.1-9141424
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -20,9 +20,9 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Allows to simulate the loading of ng modules in tests.
+ * \@description
  *
- * \@howToUse
+ * Allows to simulate the loading of ng modules in tests.
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
@@ -150,9 +150,15 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
     return router;
 }
 /**
- * \@whatItDoes Sets up the router to be used for testing.
+ * \@description
  *
- * \@howToUse
+ * Sets up the router to be used for testing.
+ *
+ * The modules sets up the router to be used for testing.
+ * It provides spy implementations of `Location`, `LocationStrategy`, and {\@link
+ * NgModuleFactoryLoader}.
+ *
+ * ### Example
  *
  * ```
  * beforeEach(() => {
@@ -165,12 +171,6 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *   });
  * });
  * ```
- *
- * \@description
- *
- * The modules sets up the router to be used for testing.
- * It provides spy implementations of {\@link Location}, {\@link LocationStrategy}, and {\@link
- * NgModuleFactoryLoader}.
  *
  * \@stable
  */

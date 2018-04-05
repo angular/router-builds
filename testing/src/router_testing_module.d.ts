@@ -9,9 +9,9 @@ import { Location } from '@angular/common';
 import { Compiler, Injector, ModuleWithProviders, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
 import { ChildrenOutletContexts, ExtraOptions, Route, Router, Routes, UrlHandlingStrategy, UrlSerializer } from '@angular/router';
 /**
- * @whatItDoes Allows to simulate the loading of ng modules in tests.
+ * @description
  *
- * @howToUse
+ * Allows to simulate the loading of ng modules in tests.
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
@@ -69,9 +69,15 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  */
 export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
 /**
- * @whatItDoes Sets up the router to be used for testing.
+ * @description
  *
- * @howToUse
+ * Sets up the router to be used for testing.
+ *
+ * The modules sets up the router to be used for testing.
+ * It provides spy implementations of `Location`, `LocationStrategy`, and {@link
+ * NgModuleFactoryLoader}.
+ *
+ * ### Example
  *
  * ```
  * beforeEach(() => {
@@ -84,12 +90,6 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  *   });
  * });
  * ```
- *
- * @description
- *
- * The modules sets up the router to be used for testing.
- * It provides spy implementations of {@link Location}, {@link LocationStrategy}, and {@link
- * NgModuleFactoryLoader}.
  *
  * @stable
  */
