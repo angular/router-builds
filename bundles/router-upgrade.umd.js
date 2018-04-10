@@ -1,6 +1,6 @@
 /**
- * @license Angular v5.1.0-5a0076f
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-rc.3-5992fe6
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 (function (global, factory) {
@@ -10,8 +10,8 @@
 }(this, (function (exports,_angular_core,_angular_router,_angular_upgrade_static) { 'use strict';
 
 /**
- * @license Angular v5.1.0-5a0076f
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-rc.3-5992fe6
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 /**
@@ -26,10 +26,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Creates an initializer that in addition to setting up the Angular
- * router sets up the ngRoute integration.
+ * \@description
  *
- * \@howToUse
+ * Creates an initializer that in addition to setting up the Angular
+ * router sets up the ngRoute integration.
  *
  * ```
  * \@NgModule({
@@ -51,7 +51,7 @@
 var RouterUpgradeInitializer = {
     provide: _angular_core.APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [_angular_upgrade_static.UpgradeModule]
 };
 /**
@@ -63,7 +63,9 @@ function locationSyncBootstrapListener(ngUpgrade) {
     return function () { setUpLocationSync(ngUpgrade); };
 }
 /**
- * \@whatItDoes Sets up a location synchronization.
+ * \@description
+ *
+ * Sets up a location synchronization.
  *
  * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener
