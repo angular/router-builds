@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.3-ee14579
+ * @license Angular v6.0.0-rc.3-0cb4f12
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -44,7 +44,7 @@ var __assign = Object.assign || function __assign(t) {
 };
 
 /**
- * @license Angular v6.0.0-rc.3-ee14579
+ * @license Angular v6.0.0-rc.3-0cb4f12
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -91,7 +91,7 @@ var RouterEvent = /** @class */ (function () {
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 var NavigationStart = /** @class */ (function (_super) {
     __extends(NavigationStart, _super);
@@ -130,7 +130,7 @@ var NavigationStart = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 var NavigationEnd = /** @class */ (function (_super) {
     __extends(NavigationEnd, _super);
@@ -162,7 +162,7 @@ var NavigationEnd = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 var NavigationCancel = /** @class */ (function (_super) {
     __extends(NavigationCancel, _super);
@@ -192,7 +192,7 @@ var NavigationCancel = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 var NavigationError = /** @class */ (function (_super) {
     __extends(NavigationError, _super);
@@ -224,7 +224,7 @@ var NavigationError = /** @class */ (function (_super) {
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 var RoutesRecognized = /** @class */ (function (_super) {
     __extends(RoutesRecognized, _super);
@@ -530,7 +530,7 @@ var ActivationEnd = /** @class */ (function () {
  *
  * Name of the primary outlet.
  *
- * \@stable
+ *
  */
 var PRIMARY_OUTLET = 'primary';
 /**
@@ -543,7 +543,7 @@ var PRIMARY_OUTLET = 'primary';
  * The API is inspired by the URLSearchParams interface.
  * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
  *
- * \@stable
+ *
  * @record
  */
 
@@ -603,7 +603,7 @@ var ParamsAsMap = /** @class */ (function () {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- * \@stable
+ *
  * @param {?} params
  * @return {?}
  */
@@ -674,7 +674,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  */
 /**
  * See `Routes` for more details.
- * \@stable
+ *
  * @record
  */
 
@@ -1051,7 +1051,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var UrlTree = /** @class */ (function () {
     /** @internal */
@@ -1092,7 +1092,7 @@ var UrlTree = /** @class */ (function () {
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 var UrlSegmentGroup = /** @class */ (function () {
     function UrlSegmentGroup(segments, children) {
@@ -1160,7 +1160,7 @@ var UrlSegmentGroup = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var UrlSegment = /** @class */ (function () {
     function UrlSegment(path, parameters) {
@@ -1240,7 +1240,7 @@ function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 var UrlSerializer = /** @class */ (function () {
@@ -1264,7 +1264,7 @@ var UrlSerializer = /** @class */ (function () {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 var DefaultUrlSerializer = /** @class */ (function () {
     function DefaultUrlSerializer() {
@@ -2671,7 +2671,7 @@ function nodeChildrenAsMap(node) {
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 var RouterState = /** @class */ (function (_super) {
     __extends(RouterState, _super);
@@ -2738,7 +2738,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var ActivatedRoute = /** @class */ (function () {
     /** @internal */
@@ -2913,7 +2913,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var ActivatedRouteSnapshot = /** @class */ (function () {
     /** @internal */
@@ -3043,7 +3043,7 @@ var ActivatedRouteSnapshot = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var RouterStateSnapshot = /** @class */ (function (_super) {
     __extends(RouterStateSnapshot, _super);
@@ -4760,7 +4760,7 @@ var DefaultUrlHandlingStrategy = /** @class */ (function () {
  *
  * Represents the extra options used during navigation.
  *
- * \@stable
+ *
  * @record
  */
 
@@ -4788,7 +4788,7 @@ function defaultRouterHook(snapshot) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var Router = /** @class */ (function () {
     /**
@@ -6076,7 +6076,7 @@ function validateCommands(commands) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLink = /** @class */ (function () {
     function RouterLink(router, route, tabIndex, renderer, el) {
@@ -6182,7 +6182,7 @@ var RouterLink = /** @class */ (function () {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLinkWithHref = /** @class */ (function () {
     function RouterLinkWithHref(router, route, locationStrategy) {
@@ -6395,7 +6395,7 @@ function attrBoolValue(s) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLinkActive = /** @class */ (function () {
     function RouterLinkActive(router, element, renderer, cdr) {
@@ -6538,7 +6538,7 @@ var RouterLinkActive = /** @class */ (function () {
 /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 var OutletContext = /** @class */ (function () {
     function OutletContext() {
@@ -6553,7 +6553,7 @@ var OutletContext = /** @class */ (function () {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 var ChildrenOutletContexts = /** @class */ (function () {
     function ChildrenOutletContexts() {
@@ -6690,7 +6690,7 @@ var ChildrenOutletContexts = /** @class */ (function () {
  * ```
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterOutlet = /** @class */ (function () {
     function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {
@@ -6995,7 +6995,7 @@ var NoPreloading = /** @class */ (function () {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * \@stable
+ *
  */
 var RouterPreloader = /** @class */ (function () {
     function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
@@ -7119,7 +7119,7 @@ var RouterPreloader = /** @class */ (function () {
  *
  * Contains a list of directives
  *
- * \@stable
+ *
  */
 var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
@@ -7127,7 +7127,7 @@ var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLin
  *
  * Is used in DI to configure the router.
  *
- * \@stable
+ *
  */
 var ROUTER_CONFIGURATION = new _angular_core.InjectionToken('ROUTER_CONFIGURATION');
 /**
@@ -7209,7 +7209,7 @@ function routerNgProbeToken() {
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- * \@stable
+ *
  */
 var RouterModule = /** @class */ (function () {
     // Note: We are injecting the Router so it gets created eagerly...
@@ -7354,7 +7354,7 @@ function provideForRootGuard(router) {
  * class MyNgModule {}
  * ```
  *
- * \@stable
+ *
  * @param {?} routes
  * @return {?}
  */
@@ -7369,7 +7369,7 @@ function provideRoutes(routes) {
  *
  * Represents options to configure the router.
  *
- * \@stable
+ *
  * @record
  */
 
@@ -7590,9 +7590,9 @@ function provideRouterInitializer() {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@stable
+ *
  */
-var VERSION = new _angular_core.Version('6.0.0-rc.3-ee14579');
+var VERSION = new _angular_core.Version('6.0.0-rc.3-0cb4f12');
 
 exports.RouterLink = RouterLink;
 exports.RouterLinkWithHref = RouterLinkWithHref;

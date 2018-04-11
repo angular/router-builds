@@ -32,7 +32,7 @@ import { nodeChildrenAsMap } from './utils/tree';
  *
  * Represents the extra options used during navigation.
  *
- * \@stable
+ *
  * @record
  */
 export function NavigationExtras() { }
@@ -170,7 +170,7 @@ function defaultRouterHook(snapshot) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 export class Router {
     /**

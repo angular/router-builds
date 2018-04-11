@@ -12,7 +12,7 @@
 /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 export class OutletContext {
     constructor() {
@@ -38,7 +38,7 @@ function OutletContext_tsickle_Closure_declarations() {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 export class ChildrenOutletContexts {
     constructor() {

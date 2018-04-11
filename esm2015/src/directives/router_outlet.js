@@ -34,7 +34,7 @@ import { PRIMARY_OUTLET } from '../shared';
  * ```
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 export class RouterOutlet {
     /**

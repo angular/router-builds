@@ -160,7 +160,7 @@ export { NoPreloading };
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * \@stable
+ *
  */
 var RouterPreloader = /** @class */ (function () {
     function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {

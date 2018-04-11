@@ -35,7 +35,7 @@ import { ChildrenOutletContexts, ExtraOptions, Route, Router, Routes, UrlHandlin
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- * @stable
+ *
  */
 export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     private compiler;
@@ -58,7 +58,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
 /**
  * Router setup factory function used for testing.
  *
- * @stable
+ *
  */
 export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
 /**
@@ -91,7 +91,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  * });
  * ```
  *
- * @stable
+ *
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders;

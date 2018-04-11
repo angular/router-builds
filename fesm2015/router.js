@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.3-ee14579
+ * @license Angular v6.0.0-rc.3-0cb4f12
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -55,7 +55,7 @@ class RouterEvent {
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 class NavigationStart extends RouterEvent {
     /**
@@ -88,7 +88,7 @@ class NavigationStart extends RouterEvent {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 class NavigationEnd extends RouterEvent {
     /**
@@ -117,7 +117,7 @@ class NavigationEnd extends RouterEvent {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 class NavigationCancel extends RouterEvent {
     /**
@@ -144,7 +144,7 @@ class NavigationCancel extends RouterEvent {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 class NavigationError extends RouterEvent {
     /**
@@ -173,7 +173,7 @@ class NavigationError extends RouterEvent {
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 class RoutesRecognized extends RouterEvent {
     /**
@@ -472,7 +472,7 @@ class ActivationEnd {
  *
  * Name of the primary outlet.
  *
- * \@stable
+ *
  */
 const PRIMARY_OUTLET = 'primary';
 /**
@@ -485,7 +485,7 @@ const PRIMARY_OUTLET = 'primary';
  * The API is inspired by the URLSearchParams interface.
  * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
  *
- * \@stable
+ *
  * @record
  */
 
@@ -529,7 +529,7 @@ class ParamsAsMap {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- * \@stable
+ *
  * @param {?} params
  * @return {?}
  */
@@ -600,7 +600,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  */
 /**
  * See `Routes` for more details.
- * \@stable
+ *
  * @record
  */
 
@@ -989,7 +989,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 class UrlTree {
     /**
@@ -1025,7 +1025,7 @@ class UrlTree {
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 class UrlSegmentGroup {
     /**
@@ -1080,7 +1080,7 @@ class UrlSegmentGroup {
  * }
  * ```
  *
- * \@stable
+ *
  */
 class UrlSegment {
     /**
@@ -1154,7 +1154,7 @@ function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 class UrlSerializer {
@@ -1175,7 +1175,7 @@ class UrlSerializer {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 class DefaultUrlSerializer {
     /**
@@ -2322,7 +2322,7 @@ function nodeChildrenAsMap(node) {
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 class RouterState extends Tree {
     /**
@@ -2387,7 +2387,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 class ActivatedRoute {
     /**
@@ -2529,7 +2529,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 class ActivatedRouteSnapshot {
     /**
@@ -2635,7 +2635,7 @@ class ActivatedRouteSnapshot {
  * }
  * ```
  *
- * \@stable
+ *
  */
 class RouterStateSnapshot extends Tree {
     /**
@@ -4145,7 +4145,7 @@ class DefaultUrlHandlingStrategy {
  *
  * Represents the extra options used during navigation.
  *
- * \@stable
+ *
  * @record
  */
 
@@ -4173,7 +4173,7 @@ function defaultRouterHook(snapshot) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 class Router {
     /**
@@ -5094,7 +5094,7 @@ function validateCommands(commands) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 class RouterLink {
     /**
@@ -5191,7 +5191,7 @@ RouterLink.propDecorators = {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 class RouterLinkWithHref {
     /**
@@ -5378,7 +5378,7 @@ function attrBoolValue(s) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 class RouterLinkActive {
     /**
@@ -5496,7 +5496,7 @@ RouterLinkActive.propDecorators = {
 /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 class OutletContext {
     constructor() {
@@ -5510,7 +5510,7 @@ class OutletContext {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 class ChildrenOutletContexts {
     constructor() {
@@ -5606,7 +5606,7 @@ class ChildrenOutletContexts {
  * ```
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 class RouterOutlet {
     /**
@@ -5851,7 +5851,7 @@ class NoPreloading {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * \@stable
+ *
  */
 class RouterPreloader {
     /**
@@ -5956,7 +5956,7 @@ RouterPreloader.ctorParameters = () => [
  *
  * Contains a list of directives
  *
- * \@stable
+ *
  */
 const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
 /**
@@ -5964,7 +5964,7 @@ const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterL
  *
  * Is used in DI to configure the router.
  *
- * \@stable
+ *
  */
 const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /**
@@ -6046,7 +6046,7 @@ function routerNgProbeToken() {
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- * \@stable
+ *
  */
 class RouterModule {
     /**
@@ -6152,7 +6152,7 @@ function provideForRootGuard(router) {
  * class MyNgModule {}
  * ```
  *
- * \@stable
+ *
  * @param {?} routes
  * @return {?}
  */
@@ -6167,7 +6167,7 @@ function provideRoutes(routes) {
  *
  * Represents options to configure the router.
  *
- * \@stable
+ *
  * @record
  */
 
@@ -6373,9 +6373,9 @@ function provideRouterInitializer() {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@stable
+ *
  */
-const VERSION = new Version('6.0.0-rc.3-ee14579');
+const VERSION = new Version('6.0.0-rc.3-0cb4f12');
 
 /**
  * @fileoverview added by tsickle

@@ -137,7 +137,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export class UrlTree {
     /**
@@ -195,7 +195,7 @@ function UrlTree_tsickle_Closure_declarations() {
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 export class UrlSegmentGroup {
     /**
@@ -277,7 +277,7 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export class UrlSegment {
     /**
@@ -368,7 +368,7 @@ export function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 export class UrlSerializer {
@@ -405,7 +405,7 @@ function UrlSerializer_tsickle_Closure_declarations() {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 export class DefaultUrlSerializer {
     /**

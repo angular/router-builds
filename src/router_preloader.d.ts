@@ -55,7 +55,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * @stable
+ *
  */
 export declare class RouterPreloader implements OnDestroy {
     private router;

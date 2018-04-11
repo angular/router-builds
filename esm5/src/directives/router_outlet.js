@@ -34,7 +34,7 @@ import { PRIMARY_OUTLET } from '../shared';
  * ```
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterOutlet = /** @class */ (function () {
     function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {

@@ -21,7 +21,7 @@ import { UrlSerializer, UrlTree } from './url_tree';
  *
  * Represents the extra options used during navigation.
  *
- * @stable
+ *
  */
 export interface NavigationExtras {
     /**
@@ -134,7 +134,7 @@ export interface NavigationExtras {
  * If the handler throws an exception, the navigation promise will be rejected with
  * the exception.
  *
- * @stable
+ *
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
@@ -146,7 +146,7 @@ export declare type ErrorHandler = (error: any) => any;
  *
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class Router {
     private rootComponentType;
