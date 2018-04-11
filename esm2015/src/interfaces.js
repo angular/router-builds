@@ -72,7 +72,7 @@
  * class AppModule {}
  * ```
  *
- * \@stable
+ *
  * @record
  */
 export function CanActivate() { }
@@ -153,7 +153,7 @@ function CanActivate_tsickle_Closure_declarations() {
  * class AppModule {}
  * ```
  *
- * \@stable
+ *
  * @record
  */
 export function CanActivateChild() { }
@@ -227,7 +227,7 @@ function CanActivateChild_tsickle_Closure_declarations() {
  * class AppModule {}
  * ```
  *
- * \@stable
+ *
  * @record
  * @template T
  */
@@ -301,7 +301,7 @@ function CanDeactivate_tsickle_Closure_declarations() {
  * })
  * class AppModule {}
  * ```
- * \@stable
+ *
  * @record
  * @template T
  */
@@ -372,7 +372,7 @@ function Resolve_tsickle_Closure_declarations() {
  * class AppModule {}
  * ```
  *
- * \@stable
+ *
  * @record
  */
 export function CanLoad() { }

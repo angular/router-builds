@@ -12,12 +12,12 @@
 /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 var /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 OutletContext = /** @class */ (function () {
     function OutletContext() {
@@ -32,7 +32,7 @@ OutletContext = /** @class */ (function () {
 /**
  * Store contextual information about a `RouterOutlet`
  *
- * \@stable
+ *
  */
 export { OutletContext };
 function OutletContext_tsickle_Closure_declarations() {
@@ -50,12 +50,12 @@ function OutletContext_tsickle_Closure_declarations() {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 var /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 ChildrenOutletContexts = /** @class */ (function () {
     function ChildrenOutletContexts() {
@@ -162,7 +162,7 @@ ChildrenOutletContexts = /** @class */ (function () {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * \@stable
+ *
  */
 export { ChildrenOutletContexts };
 function ChildrenOutletContexts_tsickle_Closure_declarations() {

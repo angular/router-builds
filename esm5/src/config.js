@@ -13,7 +13,7 @@ import * as tslib_1 from "tslib";
 import { PRIMARY_OUTLET } from './shared';
 /**
  * See `Routes` for more details.
- * \@stable
+ *
  * @record
  */
 export function Route() { }

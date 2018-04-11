@@ -85,7 +85,7 @@ import { ActivatedRoute } from '../router_state';
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLink = /** @class */ (function () {
     function RouterLink(router, route, tabIndex, renderer, el) {
@@ -223,7 +223,7 @@ function RouterLink_tsickle_Closure_declarations() {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLinkWithHref = /** @class */ (function () {
     function RouterLinkWithHref(router, route, locationStrategy) {

@@ -82,7 +82,7 @@ export class NoPreloading {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * \@stable
+ *
  */
 export class RouterPreloader {
     /**

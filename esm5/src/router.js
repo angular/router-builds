@@ -33,7 +33,7 @@ import { nodeChildrenAsMap } from './utils/tree';
  *
  * Represents the extra options used during navigation.
  *
- * \@stable
+ *
  * @record
  */
 export function NavigationExtras() { }
@@ -171,7 +171,7 @@ function defaultRouterHook(snapshot) {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -182,7 +182,7 @@ var /**
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 Router = /** @class */ (function () {
     /**
@@ -1128,7 +1128,7 @@ Router = /** @class */ (function () {
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 export { Router };
 function Router_tsickle_Closure_declarations() {

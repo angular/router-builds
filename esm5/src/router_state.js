@@ -41,7 +41,7 @@ import { Tree, TreeNode } from './utils/tree';
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -68,7 +68,7 @@ var /**
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 RouterState = /** @class */ (function (_super) {
     tslib_1.__extends(RouterState, _super);
@@ -113,7 +113,7 @@ RouterState = /** @class */ (function (_super) {
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 export { RouterState };
 function RouterState_tsickle_Closure_declarations() {
@@ -170,7 +170,7 @@ export function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -190,7 +190,7 @@ var /**
  * }
  * ```
  *
- * \@stable
+ *
  */
 ActivatedRoute = /** @class */ (function () {
     /** @internal */
@@ -320,7 +320,7 @@ ActivatedRoute = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export { ActivatedRoute };
 function ActivatedRoute_tsickle_Closure_declarations() {
@@ -448,7 +448,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -468,7 +468,7 @@ var /**
  * }
  * ```
  *
- * \@stable
+ *
  */
 ActivatedRouteSnapshot = /** @class */ (function () {
     /** @internal */
@@ -592,7 +592,7 @@ ActivatedRouteSnapshot = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export { ActivatedRouteSnapshot };
 function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
@@ -696,7 +696,7 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -722,7 +722,7 @@ var /**
  * }
  * ```
  *
- * \@stable
+ *
  */
 RouterStateSnapshot = /** @class */ (function (_super) {
     tslib_1.__extends(RouterStateSnapshot, _super);
@@ -766,7 +766,7 @@ RouterStateSnapshot = /** @class */ (function (_super) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export { RouterStateSnapshot };
 function RouterStateSnapshot_tsickle_Closure_declarations() {

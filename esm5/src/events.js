@@ -95,14 +95,14 @@ function RouterEvent_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 NavigationStart = /** @class */ (function (_super) {
     tslib_1.__extends(NavigationStart, _super);
@@ -141,7 +141,7 @@ NavigationStart = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 export { NavigationStart };
 function NavigationStart_tsickle_Closure_declarations() {
@@ -174,14 +174,14 @@ function NavigationStart_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 NavigationEnd = /** @class */ (function (_super) {
     tslib_1.__extends(NavigationEnd, _super);
@@ -213,7 +213,7 @@ NavigationEnd = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 export { NavigationEnd };
 function NavigationEnd_tsickle_Closure_declarations() {
@@ -228,14 +228,14 @@ function NavigationEnd_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 NavigationCancel = /** @class */ (function (_super) {
     tslib_1.__extends(NavigationCancel, _super);
@@ -265,7 +265,7 @@ NavigationCancel = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 export { NavigationCancel };
 function NavigationCancel_tsickle_Closure_declarations() {
@@ -280,14 +280,14 @@ function NavigationCancel_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 NavigationError = /** @class */ (function (_super) {
     tslib_1.__extends(NavigationError, _super);
@@ -319,7 +319,7 @@ NavigationError = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 export { NavigationError };
 function NavigationError_tsickle_Closure_declarations() {
@@ -334,14 +334,14 @@ function NavigationError_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 RoutesRecognized = /** @class */ (function (_super) {
     tslib_1.__extends(RoutesRecognized, _super);
@@ -374,7 +374,7 @@ RoutesRecognized = /** @class */ (function (_super) {
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 export { RoutesRecognized };
 function RoutesRecognized_tsickle_Closure_declarations() {

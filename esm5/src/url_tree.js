@@ -137,7 +137,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -166,7 +166,7 @@ var /**
  * }
  * ```
  *
- * \@stable
+ *
  */
 UrlTree = /** @class */ (function () {
     /** @internal */
@@ -227,7 +227,7 @@ UrlTree = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export { UrlTree };
 function UrlTree_tsickle_Closure_declarations() {
@@ -259,7 +259,7 @@ function UrlTree_tsickle_Closure_declarations() {
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -268,7 +268,7 @@ var /**
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 UrlSegmentGroup = /** @class */ (function () {
     function UrlSegmentGroup(segments, children) {
@@ -320,7 +320,7 @@ UrlSegmentGroup = /** @class */ (function () {
  *
  * See `UrlTree` for more information.
  *
- * \@stable
+ *
  */
 export { UrlSegmentGroup };
 function UrlSegmentGroup_tsickle_Closure_declarations() {
@@ -373,7 +373,7 @@ function UrlSegmentGroup_tsickle_Closure_declarations() {
  * }
  * ```
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -398,7 +398,7 @@ var /**
  * }
  * ```
  *
- * \@stable
+ *
  */
 UrlSegment = /** @class */ (function () {
     function UrlSegment(path, parameters) {
@@ -453,7 +453,7 @@ UrlSegment = /** @class */ (function () {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export { UrlSegment };
 function UrlSegment_tsickle_Closure_declarations() {
@@ -521,7 +521,7 @@ export function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 var /**
@@ -534,7 +534,7 @@ var /**
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 UrlSerializer = /** @class */ (function () {
@@ -552,7 +552,7 @@ UrlSerializer = /** @class */ (function () {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * \@stable
+ *
  * @abstract
  */
 export { UrlSerializer };
@@ -588,7 +588,7 @@ function UrlSerializer_tsickle_Closure_declarations() {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 var /**
  * \@description
@@ -606,7 +606,7 @@ var /**
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 DefaultUrlSerializer = /** @class */ (function () {
     function DefaultUrlSerializer() {
@@ -661,7 +661,7 @@ DefaultUrlSerializer = /** @class */ (function () {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * \@stable
+ *
  */
 export { DefaultUrlSerializer };
 var /** @type {?} */ DEFAULT_SERIALIZER = new DefaultUrlSerializer();

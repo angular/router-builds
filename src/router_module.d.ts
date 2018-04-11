@@ -19,7 +19,7 @@ import { UrlSerializer } from './url_tree';
  *
  * Is used in DI to configure the router.
  *
- * @stable
+ *
  */
 export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 /**
@@ -77,7 +77,7 @@ export declare function routerNgProbeToken(): NgProbeToken;
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- * @stable
+ *
  */
 export declare class RouterModule {
     constructor(guard: any, router: Router);
@@ -118,7 +118,7 @@ export declare function provideForRootGuard(router: Router): any;
  * class MyNgModule {}
  * ```
  *
- * @stable
+ *
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
@@ -152,7 +152,7 @@ export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 
  *
  * Represents options to configure the router.
  *
- * @stable
+ *
  */
 export interface ExtraOptions {
     /**

@@ -40,7 +40,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- * \@stable
+ *
  */
 export class SpyNgModuleFactoryLoader {
     /**
@@ -118,7 +118,7 @@ function isUrlHandlingStrategy(opts) {
 /**
  * Router setup factory function used for testing.
  *
- * \@stable
+ *
  * @param {?} urlSerializer
  * @param {?} contexts
  * @param {?} location
@@ -169,7 +169,7 @@ export function setupTestingRouter(urlSerializer, contexts, location, loader, co
  * });
  * ```
  *
- * \@stable
+ *
  */
 export class RouterTestingModule {
     /**

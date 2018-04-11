@@ -40,7 +40,7 @@ import { Tree, TreeNode } from './utils/tree';
  *
  * See `ActivatedRoute` for more information.
  *
- * \@stable
+ *
  */
 export class RouterState extends Tree {
     /**
@@ -112,7 +112,7 @@ export function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export class ActivatedRoute {
     /**
@@ -316,7 +316,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export class ActivatedRouteSnapshot {
     /**
@@ -499,7 +499,7 @@ function ActivatedRouteSnapshot_tsickle_Closure_declarations() {
  * }
  * ```
  *
- * \@stable
+ *
  */
 export class RouterStateSnapshot extends Tree {
     /**

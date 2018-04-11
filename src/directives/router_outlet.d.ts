@@ -29,7 +29,7 @@ import { ActivatedRoute } from '../router_state';
  * ```
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class RouterOutlet implements OnDestroy, OnInit {
     private parentContexts;

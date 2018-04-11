@@ -14,7 +14,7 @@
  *
  * Name of the primary outlet.
  *
- * \@stable
+ *
  */
 export var /** @type {?} */ PRIMARY_OUTLET = 'primary';
 /**
@@ -27,7 +27,7 @@ export var /** @type {?} */ PRIMARY_OUTLET = 'primary';
  * The API is inspired by the URLSearchParams interface.
  * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
  *
- * \@stable
+ *
  * @record
  */
 export function ParamMap() { }
@@ -115,7 +115,7 @@ function ParamsAsMap_tsickle_Closure_declarations() {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- * \@stable
+ *
  * @param {?} params
  * @return {?}
  */

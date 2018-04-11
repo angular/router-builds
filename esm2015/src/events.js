@@ -56,7 +56,7 @@ function RouterEvent_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation starts.
  *
- * \@stable
+ *
  */
 export class NavigationStart extends RouterEvent {
     /**
@@ -114,7 +114,7 @@ function NavigationStart_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- * \@stable
+ *
  */
 export class NavigationEnd extends RouterEvent {
     /**
@@ -150,7 +150,7 @@ function NavigationEnd_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- * \@stable
+ *
  */
 export class NavigationCancel extends RouterEvent {
     /**
@@ -184,7 +184,7 @@ function NavigationCancel_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- * \@stable
+ *
  */
 export class NavigationError extends RouterEvent {
     /**
@@ -220,7 +220,7 @@ function NavigationError_tsickle_Closure_declarations() {
  *
  * Represents an event triggered when routes are recognized.
  *
- * \@stable
+ *
  */
 export class RoutesRecognized extends RouterEvent {
     /**

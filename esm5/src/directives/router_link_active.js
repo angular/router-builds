@@ -68,7 +68,7 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  *
  * \@ngModule RouterModule
  *
- * \@stable
+ *
  */
 var RouterLinkActive = /** @class */ (function () {
     function RouterLinkActive(router, element, renderer, cdr) {
