@@ -1,0 +1,40 @@
+{
+  "name": "@angular/router",
+  "version": "6.0.0-rc.5-8f690c9",
+  "description": "Angular - the routing library",
+  "main": "./bundles/router.umd.js",
+  "module": "./fesm5/router.js",
+  "es2015": "./fesm2015/router.js",
+  "esm5": "./esm5/router.js",
+  "esm2015": "./esm2015/router.js",
+  "fesm5": "./fesm5/router.js",
+  "fesm2015": "./fesm2015/router.js",
+  "typings": "./router.d.ts",
+  "keywords": [
+    "angular",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git"
+  },
+  "author": "angular",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "6.0.0-rc.5-8f690c9",
+    "@angular/common": "6.0.0-rc.5-8f690c9",
+    "@angular/platform-browser": "6.0.0-rc.5-8f690c9",
+    "rxjs": "^6.0.0-rc.0"
+  },
+  "ng-update": {
+    "packageGroup": ["@angular/core", "@angular/compiler", "@angular/common", "@angular/animations", "@angular/platform-browser", "@angular/platform-browser-dynamic", "@angular/forms", "@angular/http", "@angular/platform-server", "@angular/platform-webworker", "@angular/platform-webworker-dynamic", "@angular/upgrade", "@angular/router", "@angular/compiler-cli", "@angular/language-service", "@angular/benchpress", "@angular/service-worker", "@angular/elements"]
+  },
+  "sideEffects": false
+}
