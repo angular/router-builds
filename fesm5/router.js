@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5-999ab0a
+ * @license Angular v6.0.0-rc.5-4cfa571
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3125,15 +3125,18 @@ function createNode(routeReuseStrategy, curr, prevState) {
         return new TreeNode(value, children);
         // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
-    else if (routeReuseStrategy.retrieve(curr.value)) {
-        var /** @type {?} */ tree = (/** @type {?} */ (routeReuseStrategy.retrieve(curr.value))).route;
-        setFutureSnapshotsOfActivatedRoutes(curr, tree);
-        return tree;
-    }
     else {
-        var /** @type {?} */ value = createActivatedRoute(curr.value);
-        var /** @type {?} */ children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
-        return new TreeNode(value, children);
+        var /** @type {?} */ detachedRouteHandle = /** @type {?} */ (routeReuseStrategy.retrieve(curr.value));
+        if (detachedRouteHandle) {
+            var /** @type {?} */ tree = detachedRouteHandle.route;
+            setFutureSnapshotsOfActivatedRoutes(curr, tree);
+            return tree;
+        }
+        else {
+            var /** @type {?} */ value = createActivatedRoute(curr.value);
+            var /** @type {?} */ children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+            return new TreeNode(value, children);
+        }
     }
 }
 /**
@@ -7554,7 +7557,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-var VERSION = new Version('6.0.0-rc.5-999ab0a');
+var VERSION = new Version('6.0.0-rc.5-4cfa571');
 
 /**
  * @fileoverview added by tsickle

@@ -37,15 +37,18 @@ function createNode(routeReuseStrategy, curr, prevState) {
         return new TreeNode(value, children);
         // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
-    else if (routeReuseStrategy.retrieve(curr.value)) {
-        const /** @type {?} */ tree = (/** @type {?} */ (routeReuseStrategy.retrieve(curr.value))).route;
-        setFutureSnapshotsOfActivatedRoutes(curr, tree);
-        return tree;
-    }
     else {
-        const /** @type {?} */ value = createActivatedRoute(curr.value);
-        const /** @type {?} */ children = curr.children.map(c => createNode(routeReuseStrategy, c));
-        return new TreeNode(value, children);
+        const /** @type {?} */ detachedRouteHandle = /** @type {?} */ (routeReuseStrategy.retrieve(curr.value));
+        if (detachedRouteHandle) {
+            const /** @type {?} */ tree = detachedRouteHandle.route;
+            setFutureSnapshotsOfActivatedRoutes(curr, tree);
+            return tree;
+        }
+        else {
+            const /** @type {?} */ value = createActivatedRoute(curr.value);
+            const /** @type {?} */ children = curr.children.map(c => createNode(routeReuseStrategy, c));
+            return new TreeNode(value, children);
+        }
     }
 }
 /**
