@@ -1,8 +1,9 @@
 /**
- * @license Angular v6.0.0-rc.5-60e5507
+ * @license Angular v6.0.0-rc.5+73.sha-ace6440
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
+
 import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
 import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { BehaviorSubject, EmptyError, Observable, Subject, from, of } from 'rxjs';
@@ -5164,7 +5165,7 @@ class RouterLink {
     }
 }
 RouterLink.decorators = [
-    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] }
 ];
 /** @nocollapse */
 RouterLink.ctorParameters = () => [
@@ -5286,7 +5287,7 @@ class RouterLinkWithHref {
     }
 }
 RouterLinkWithHref.decorators = [
-    { type: Directive, args: [{ selector: 'a[routerLink]' },] },
+    { type: Directive, args: [{ selector: 'a[routerLink]' },] }
 ];
 /** @nocollapse */
 RouterLinkWithHref.ctorParameters = () => [
@@ -5469,7 +5470,7 @@ RouterLinkActive.decorators = [
     { type: Directive, args: [{
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
-            },] },
+            },] }
 ];
 /** @nocollapse */
 RouterLinkActive.ctorParameters = () => [
@@ -5744,7 +5745,7 @@ class RouterOutlet {
     }
 }
 RouterOutlet.decorators = [
-    { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] },
+    { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
 ];
 /** @nocollapse */
 RouterOutlet.ctorParameters = () => [
@@ -5932,7 +5933,7 @@ class RouterPreloader {
     }
 }
 RouterPreloader.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 RouterPreloader.ctorParameters = () => [
@@ -6113,7 +6114,7 @@ class RouterModule {
     }
 }
 RouterModule.decorators = [
-    { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+    { type: NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] }
 ];
 /** @nocollapse */
 RouterModule.ctorParameters = () => [
@@ -6321,7 +6322,7 @@ class RouterInitializer {
     }
 }
 RouterInitializer.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 RouterInitializer.ctorParameters = () => [
@@ -6378,7 +6379,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-const VERSION = new Version('6.0.0-rc.5-60e5507');
+const VERSION = new Version('6.0.0-rc.5+73.sha-ace6440');
 
 /**
  * @fileoverview added by tsickle
@@ -6428,8 +6429,20 @@ const VERSION = new Version('6.0.0-rc.5-60e5507');
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+// This file is not used to build this module. It is only used during editing
+// by the TypeScript language service and during build for verification. `ngc`
+// replaces this file with production index.ts when it rewrites private symbol
+// names.
+
+/**
  * Generated bundle index. Do not edit.
  */
 
-export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten, ROUTER_FORROOT_GUARD as ɵa, RouterInitializer as ɵg, getAppInitializer as ɵh, getBootstrapListener as ɵi, provideForRootGuard as ɵd, provideLocationStrategy as ɵc, provideRouterInitializer as ɵj, rootRoute as ɵf, routerNgProbeToken as ɵb, setupRouter as ɵe, Tree as ɵk, TreeNode as ɵl };
+export { ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, RouterInitializer as ɵangular_packages_router_router_g, getAppInitializer as ɵangular_packages_router_router_h, getBootstrapListener as ɵangular_packages_router_router_i, provideForRootGuard as ɵangular_packages_router_router_d, provideLocationStrategy as ɵangular_packages_router_router_c, provideRouterInitializer as ɵangular_packages_router_router_j, rootRoute as ɵangular_packages_router_router_f, routerNgProbeToken as ɵangular_packages_router_router_b, setupRouter as ɵangular_packages_router_router_e, Tree as ɵangular_packages_router_router_k, TreeNode as ɵangular_packages_router_router_l, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map
