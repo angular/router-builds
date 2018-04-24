@@ -7,29 +7,30 @@
  */
 import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { QueryParamsHandling, Routes } from './config';
 import { Event } from './events';
-import { DetachedRouteHandle, RouteReuseStrategy } from './route_reuse_strategy';
-import { RouterOutletMap } from './router_outlet_map';
-import { ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot } from './router_state';
+import { RouteReuseStrategy } from './route_reuse_strategy';
+import { ChildrenOutletContexts } from './router_outlet_context';
+import { ActivatedRoute, RouterState } from './router_state';
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
-import { TreeNode } from './utils/tree';
 /**
- * @whatItDoes Represents the extra options used during navigation.
+ * @description
  *
- * @stable
+ * Represents the extra options used during navigation.
+ *
+ *
  */
 export interface NavigationExtras {
     /**
-    * Enables relative navigation from the current ActivatedRoute.
-    *
-    * Configuration:
-    *
-    * ```
-    * [{
+     * Enables relative navigation from the current ActivatedRoute.
+     *
+     * Configuration:
+     *
+     * ```
+     * [{
     *   path: 'parent',
     *   component: ParentComponent,
     *   children: [{
@@ -40,154 +41,164 @@ export interface NavigationExtras {
     *     component: ChildComponent
     *   }]
     * }]
-    * ```
-    *
-    * Navigate to list route from child route:
-    *
-    * ```
-    *  @Component({...})
-    *  class ChildComponent {
+     * ```
+     *
+     * Navigate to list route from child route:
+     *
+     * ```
+     *  @Component({...})
+     *  class ChildComponent {
     *    constructor(private router: Router, private route: ActivatedRoute) {}
     *
     *    go() {
     *      this.router.navigate(['../list'], { relativeTo: this.route });
     *    }
     *  }
-    * ```
-    */
-    relativeTo?: ActivatedRoute;
+     * ```
+     */
+    relativeTo?: ActivatedRoute | null;
     /**
-    * Sets query parameters to the URL.
-    *
-    * ```
-    * // Navigate to /results?page=1
-    * this.router.navigate(['/results'], { queryParams: { page: 1 } });
-    * ```
-    */
-    queryParams?: Params;
+     * Sets query parameters to the URL.
+     *
+     * ```
+     * // Navigate to /results?page=1
+     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     */
+    queryParams?: Params | null;
     /**
-    * Sets the hash fragment for the URL.
-    *
-    * ```
-    * // Navigate to /results#top
-    * this.router.navigate(['/results'], { fragment: 'top' });
-    * ```
-    */
+     * Sets the hash fragment for the URL.
+     *
+     * ```
+     * // Navigate to /results#top
+     * this.router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     */
     fragment?: string;
     /**
-    * Preserves the query parameters for the next navigation.
-    *
-    * deprecated, use `queryParamsHandling` instead
-    *
-    * ```
-    * // Preserve query params from /results?page=1 to /view?page=1
-    * this.router.navigate(['/view'], { preserveQueryParams: true });
-    * ```
-    *
-    * @deprecated since v4
-    */
+     * Preserves the query parameters for the next navigation.
+     *
+     * deprecated, use `queryParamsHandling` instead
+     *
+     * ```
+     * // Preserve query params from /results?page=1 to /view?page=1
+     * this.router.navigate(['/view'], { preserveQueryParams: true });
+     * ```
+     *
+     * @deprecated since v4
+     */
     preserveQueryParams?: boolean;
     /**
-    *  config strategy to handle the query parameters for the next navigation.
-    *
-    * ```
-    * // from /results?page=1 to /view?page=1&page=2
-    * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
-    * ```
-    */
-    queryParamsHandling?: QueryParamsHandling;
+     *  config strategy to handle the query parameters for the next navigation.
+     *
+     * ```
+     * // from /results?page=1 to /view?page=1&page=2
+     * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
+     * ```
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
     /**
-    * Preserves the fragment for the next navigation
-    *
-    * ```
-    * // Preserve fragment from /results#top to /view#top
-    * this.router.navigate(['/view'], { preserveFragment: true });
-    * ```
-    */
+     * Preserves the fragment for the next navigation
+     *
+     * ```
+     * // Preserve fragment from /results#top to /view#top
+     * this.router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     */
     preserveFragment?: boolean;
     /**
-    * Navigates without pushing a new state into history.
-    *
-    * ```
-    * // Navigate silently to /view
-    * this.router.navigate(['/view'], { skipLocationChange: true });
-    * ```
-    */
+     * Navigates without pushing a new state into history.
+     *
+     * ```
+     * // Navigate silently to /view
+     * this.router.navigate(['/view'], { skipLocationChange: true });
+     * ```
+     */
     skipLocationChange?: boolean;
     /**
-    * Navigates while replacing the current state in history.
-    *
-    * ```
-    * // Navigate to /view
-    * this.router.navigate(['/view'], { replaceUrl: true });
-    * ```
-    */
+     * Navigates while replacing the current state in history.
+     *
+     * ```
+     * // Navigate to /view
+     * this.router.navigate(['/view'], { replaceUrl: true });
+     * ```
+     */
     replaceUrl?: boolean;
 }
 /**
- * @whatItDoes Error handler that is invoked when a navigation errors.
- *
  * @description
+ *
+ * Error handler that is invoked when a navigation errors.
+ *
  * If the handler returns a value, the navigation promise will be resolved with this value.
  * If the handler throws an exception, the navigation promise will be rejected with
  * the exception.
  *
- * @stable
+ *
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
- * Does not detach any subtrees. Reuses routes as long as their route config is the same.
- */
-export declare class DefaultRouteReuseStrategy implements RouteReuseStrategy {
-    shouldDetach(route: ActivatedRouteSnapshot): boolean;
-    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
-    shouldAttach(route: ActivatedRouteSnapshot): boolean;
-    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle;
-    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
-}
-/**
- * @whatItDoes Provides the navigation and url manipulation capabilities.
+ * @description
  *
- * See {@link Routes} for more details and examples.
+ * Provides the navigation and url manipulation capabilities.
+ *
+ * See `Routes` for more details and examples.
  *
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class Router {
     private rootComponentType;
     private urlSerializer;
-    private outletMap;
+    private rootContexts;
     private location;
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
     private navigations;
-    private routerEvents;
-    private currentRouterState;
     private locationSubscription;
     private navigationId;
     private configLoader;
     private ngModule;
+    readonly events: Observable<Event>;
+    readonly routerState: RouterState;
     /**
      * Error handler that is invoked when a navigation errors.
      *
-     * See {@link ErrorHandler} for more information.
+     * See `ErrorHandler` for more information.
      */
     errorHandler: ErrorHandler;
     /**
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
+    private lastSuccessfulId;
     /**
      * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      */
     urlHandlingStrategy: UrlHandlingStrategy;
     routeReuseStrategy: RouteReuseStrategy;
     /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * By default, the router will ignore this navigation. However, this prevents features such
+     * as a "refresh" button. Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     */
+    onSameUrlNavigation: 'reload' | 'ignore';
+    /**
+     * Defines how the router merges params, data and resolved data from parent to child
+     * routes. Available options are:
+     *
+     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+     *   routes.
+     * - `'always'`, enables unconditional inheritance of parent params.
+     */
+    paramsInheritanceStrategy: 'emptyOnly' | 'always';
+    /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any>, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
@@ -196,12 +207,8 @@ export declare class Router {
      * Sets up the location change listener.
      */
     setUpLocationChangeListener(): void;
-    /** The current route state */
-    readonly routerState: RouterState;
     /** The current url */
     readonly url: string;
-    /** An observable of router events */
-    readonly events: Observable<Event>;
     /**
      * Resets the configuration used for navigation and generating links.
      *
@@ -262,7 +269,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], {relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment}?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
     /**
      * Navigate based on the provided url. This navigation is always absolute.
      *
@@ -306,37 +313,22 @@ export declare class Router {
      * URL.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
-    /** Serializes a {@link UrlTree} into a string */
+    /** Serializes a `UrlTree` into a string */
     serializeUrl(url: UrlTree): string;
-    /** Parses a string into a {@link UrlTree} */
+    /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
     /** Returns whether the url is activated */
     isActive(url: string | UrlTree, exact: boolean): boolean;
     private removeEmptyProps(params);
     private processNavigations();
-    private scheduleNavigation(rawUrl, source, extras);
-    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject});
-    private runNavigate(url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState);
+    private scheduleNavigation(rawUrl, source, state, extras);
+    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject, source, state});
+    private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
+    /**
+     * Performs the logic of activating routes. This is a synchronous process by default. While this
+     * is a private method, it could be overridden to make activation asynchronous.
+     */
+    private activateRoutes(state, storedState, storedUrl, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
+    private resetStateAndUrl(storedState, storedUrl, rawUrl);
     private resetUrlToCurrentUrlTree();
-}
-export declare class PreActivation {
-    private future;
-    private curr;
-    private moduleInjector;
-    private checks;
-    constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector);
-    traverse(parentOutletMap: RouterOutletMap): void;
-    checkGuards(): Observable<boolean>;
-    resolveData(): Observable<any>;
-    private traverseChildRoutes(futureNode, currNode, outletMap, futurePath);
-    traverseRoutes(futureNode: TreeNode<ActivatedRouteSnapshot>, currNode: TreeNode<ActivatedRouteSnapshot>, parentOutletMap: RouterOutletMap, futurePath: ActivatedRouteSnapshot[]): void;
-    private shouldRunGuardsAndResolvers(curr, future, mode);
-    private deactiveRouteAndItsChildren(route, outlet);
-    private runCanActivate(future);
-    private runCanActivateChild(path);
-    private extractCanActivateChild(p);
-    private runCanDeactivate(component, curr);
-    private runResolve(future);
-    private resolveNode(resolve, future);
-    private getToken(token, snapshot);
 }

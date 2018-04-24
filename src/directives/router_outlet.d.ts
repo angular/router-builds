@@ -5,14 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ComponentRef, EventEmitter, Injector, OnDestroy, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
-import { RouterOutletMap } from '../router_outlet_map';
+import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChildrenOutletContexts } from '../router_outlet_context';
 import { ActivatedRoute } from '../router_state';
 /**
- * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
- * state.
+ * @description
  *
- * @howToUse
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * ```
  * <router-outlet></router-outlet>
@@ -30,31 +29,35 @@ import { ActivatedRoute } from '../router_state';
  * ```
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
-export declare class RouterOutlet implements OnDestroy {
-    private parentOutletMap;
+export declare class RouterOutlet implements OnDestroy, OnInit {
+    private parentContexts;
     private location;
     private resolver;
-    private name;
+    private changeDetector;
     private activated;
     private _activatedRoute;
-    outletMap: RouterOutletMap;
+    private name;
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
-    constructor(parentOutletMap: RouterOutletMap, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string);
+    constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
     ngOnDestroy(): void;
-    /** @deprecated since v4 **/
-    readonly locationInjector: Injector;
-    /** @deprecated since v4 **/
-    readonly locationFactoryResolver: ComponentFactoryResolver;
+    ngOnInit(): void;
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
+    readonly activatedRouteData: {
+        [name: string]: any;
+    };
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree
+     */
     detach(): ComponentRef<any>;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
+     */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
-    /** @deprecated since v4, use {@link activateWith} */
-    activate(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver, injector: Injector, providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void;
-    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null, outletMap: RouterOutletMap): void;
+    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
 }

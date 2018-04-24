@@ -10,13 +10,16 @@ import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, Modul
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
-import { RouterOutletMap } from './router_outlet_map';
+import { ChildrenOutletContexts } from './router_outlet_context';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
 /**
- * @whatItDoes Is used in DI to configure the router.
- * @stable
+ * @description
+ *
+ * Is used in DI to configure the router.
+ *
+ *
  */
 export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 /**
@@ -26,9 +29,7 @@ export declare const ROUTER_FORROOT_GUARD: InjectionToken<void>;
 export declare const ROUTER_PROVIDERS: Provider[];
 export declare function routerNgProbeToken(): NgProbeToken;
 /**
- * @whatItDoes Adds router directives and providers.
- *
- * @howToUse
+ * @usageNotes
  *
  * RouterModule can be imported multiple times: once per lazily-loaded bundle.
  * Since the router deals with a global shared resource--location, we cannot have
@@ -62,6 +63,8 @@ export declare function routerNgProbeToken(): NgProbeToken;
  *
  * @description
  *
+ * Adds router directives and providers.
+ *
  * Managing state transitions is one of the hardest parts of building applications. This is
  * especially true on the web, where you also need to ensure that the state is reflected in the URL.
  * In addition, we often want to split applications into multiple bundles and load them on demand.
@@ -74,7 +77,7 @@ export declare function routerNgProbeToken(): NgProbeToken;
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- * @stable
+ *
  */
 export declare class RouterModule {
     constructor(guard: any, router: Router);
@@ -82,12 +85,15 @@ export declare class RouterModule {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options:
+     * Options (see `ExtraOptions`):
      * * `enableTracing` makes the router log all its internal events to the console.
      * * `useHash` enables the location strategy that uses the URL fragment instead of the history
      * API.
      * * `initialNavigation` disables the initial navigation.
      * * `errorHandler` provides a custom error handler.
+     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
+     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
+     * `ExtraOptions` for more details.
      */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     /**
@@ -98,9 +104,11 @@ export declare class RouterModule {
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
 export declare function provideForRootGuard(router: Router): any;
 /**
- * @whatItDoes Registers routes.
+ * @description
  *
- * @howToUse
+ * Registers routes.
+ *
+ * ### Example
  *
  * ```
  * @NgModule({
@@ -110,13 +118,14 @@ export declare function provideForRootGuard(router: Router): any;
  * class MyNgModule {}
  * ```
  *
- * @stable
+ *
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
- * @whatItDoes Represents an option to configure when the initial navigation is performed.
- *
  * @description
+ *
+ * Represents an option to configure when the initial navigation is performed.
+ *
  * * 'enabled' - the initial navigation starts before the root component is created.
  * The bootstrap is blocked until the initial navigation is complete.
  * * 'disabled' - the initial navigation is not performed. The location listener is set up before
@@ -139,9 +148,11 @@ export declare function provideRoutes(routes: Routes): any;
  */
 export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
 /**
- * @whatItDoes Represents options to configure the router.
+ * @description
  *
- * @stable
+ * Represents options to configure the router.
+ *
+ *
  */
 export interface ExtraOptions {
     /**
@@ -161,11 +172,27 @@ export interface ExtraOptions {
      */
     errorHandler?: ErrorHandler;
     /**
-     * Configures a preloading strategy. See {@link PreloadAllModules}.
+     * Configures a preloading strategy. See `PreloadAllModules`.
      */
     preloadingStrategy?: any;
+    /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * By default, the router will ignore this navigation. However, this prevents features such
+     * as a "refresh" button. Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     */
+    onSameUrlNavigation?: 'reload' | 'ignore';
+    /**
+     * Defines how the router merges params, data and resolved data from parent to child
+     * routes. Available options are:
+     *
+     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
+     *   routes.
+     * - `'always'`, enables unconditional inheritance of parent params.
+     */
+    paramsInheritanceStrategy?: 'emptyOnly' | 'always';
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 /**
  * To initialize the router properly we need to do in two steps:
@@ -199,14 +226,19 @@ export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<a
 export declare function provideRouterInitializer(): (typeof RouterInitializer | {
     provide: InjectionToken<(() => void)[]>;
     multi: boolean;
-    useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    useFactory: typeof getAppInitializer;
+    deps: (typeof RouterInitializer)[];
+    useExisting?: undefined;
 } | {
     provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: (r: RouterInitializer) => any;
-    deps: typeof RouterInitializer[];
+    useFactory: typeof getBootstrapListener;
+    deps: (typeof RouterInitializer)[];
+    multi?: undefined;
+    useExisting?: undefined;
 } | {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
+    useFactory?: undefined;
+    deps?: undefined;
 })[];
