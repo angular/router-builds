@@ -1,8 +1,9 @@
 /**
- * @license Angular v6.0.0-373a47d
+ * @license Angular v6.0.0+23.sha-5eb9c01
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
+
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
@@ -90,7 +91,7 @@ class SpyNgModuleFactoryLoader {
     }
 }
 SpyNgModuleFactoryLoader.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 SpyNgModuleFactoryLoader.ctorParameters = () => [
@@ -121,20 +122,20 @@ function isUrlHandlingStrategy(opts) {
  * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    const /** @type {?} */ router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    const /** @type {?} */ router$$1 = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     // Handle deprecated argument ordering.
     if (opts) {
         if (isUrlHandlingStrategy(opts)) {
-            router.urlHandlingStrategy = opts;
+            router$$1.urlHandlingStrategy = opts;
         }
         else if (opts.paramsInheritanceStrategy) {
-            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
         }
     }
     if (urlHandlingStrategy) {
-        router.urlHandlingStrategy = urlHandlingStrategy;
+        router$$1.urlHandlingStrategy = urlHandlingStrategy;
     }
-    return router;
+    return router$$1;
 }
 /**
  * \@description
@@ -193,7 +194,7 @@ RouterTestingModule.decorators = [
                     },
                     { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
                 ]
-            },] },
+            },] }
 ];
 /** @nocollapse */
 RouterTestingModule.ctorParameters = () => [];
@@ -238,6 +239,18 @@ RouterTestingModule.ctorParameters = () => [];
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+// This file is not used to build this module. It is only used during editing
+// by the TypeScript language service and during build for verification. `ngc`
+// replaces this file with production index.ts when it rewrites private symbol
+// names.
+
 /**
  * Generated bundle index. Do not edit.
  */
