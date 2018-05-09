@@ -12,6 +12,6 @@
  */
 import { Version } from '@angular/core';
 /**
- * @stable
+ *
  */
 export declare const VERSION: Version;

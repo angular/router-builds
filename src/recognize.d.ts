@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Routes } from './config';
-import { RouterStateSnapshot } from './router_state';
+import { ParamsInheritanceStrategy, RouterStateSnapshot } from './router_state';
 import { UrlTree } from './url_tree';
-export declare function recognize(rootComponentType: Type<any> | null, config: Routes, urlTree: UrlTree, url: string): Observable<RouterStateSnapshot>;
+export declare function recognize(rootComponentType: Type<any> | null, config: Routes, urlTree: UrlTree, url: string, paramsInheritanceStrategy?: ParamsInheritanceStrategy): Observable<RouterStateSnapshot>;

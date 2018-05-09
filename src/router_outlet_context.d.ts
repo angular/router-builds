@@ -9,9 +9,9 @@ import { ComponentFactoryResolver, ComponentRef } from '@angular/core';
 import { RouterOutlet } from './directives/router_outlet';
 import { ActivatedRoute } from './router_state';
 /**
- * Store contextual information about a {@link RouterOutlet}
+ * Store contextual information about a `RouterOutlet`
  *
- * @stable
+ *
  */
 export declare class OutletContext {
     outlet: RouterOutlet | null;
@@ -21,9 +21,9 @@ export declare class OutletContext {
     attachRef: ComponentRef<any> | null;
 }
 /**
- * Store contextual information about the children (= nested) {@link RouterOutlet}
+ * Store contextual information about the children (= nested) `RouterOutlet`
  *
- * @stable
+ *
  */
 export declare class ChildrenOutletContexts {
     private contexts;

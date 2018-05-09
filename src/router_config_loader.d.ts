@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Compiler, InjectionToken, Injector, NgModuleFactoryLoader } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { LoadedRouterConfig, Route } from './config';
 /**
  * @docsNotRequired
