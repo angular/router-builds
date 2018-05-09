@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0+38.sha-2b31b6d
+ * @license Angular v6.0.0+37.sha-2254ac2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5617,7 +5617,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-var VERSION = new core.Version('6.0.0+38.sha-2b31b6d');
+var VERSION = new core.Version('6.0.0+37.sha-2254ac2');
 
 /**
  * @license
