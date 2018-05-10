@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0+40.sha-f109791
+ * @license Angular v6.0.0+41.sha-8733843
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1331,7 +1331,7 @@ function serializeQueryParams(params) {
     });
     return strParams.length ? `?${strParams.join("&")}` : '';
 }
-const SEGMENT_RE = /^[^\/()?;=&#]+/;
+const SEGMENT_RE = /^[^\/()?;=#]+/;
 /**
  * @param {?} str
  * @return {?}
@@ -6379,7 +6379,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-const VERSION = new Version('6.0.0+40.sha-f109791');
+const VERSION = new Version('6.0.0+41.sha-8733843');
 
 /**
  * @fileoverview added by tsickle
