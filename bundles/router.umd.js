@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+157.sha-553a680
+ * @license Angular v6.0.0-rc.5+156.sha-858e48a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1141,7 +1141,7 @@ function serializeQueryParams(params) {
     });
     return strParams.length ? "?" + strParams.join("&") : '';
 }
-var SEGMENT_RE = /^[^\/()?;=#]+/;
+var SEGMENT_RE = /^[^\/()?;=&#]+/;
 function matchSegments(str) {
     var match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
@@ -5617,7 +5617,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-var VERSION = new core.Version('6.0.0-rc.5+157.sha-553a680');
+var VERSION = new core.Version('6.0.0-rc.5+156.sha-858e48a');
 
 /**
  * @license
