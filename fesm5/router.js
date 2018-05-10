@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0+41.sha-8733843
+ * @license Angular v6.0.0+42.sha-3d8799b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2974,7 +2974,7 @@ var Recognizer = /** @class */ (function () {
         try {
             var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
             var children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
-            var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(this.urlTree.queryParams), (this.urlTree.fragment), {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
+            var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(__assign({}, this.urlTree.queryParams)), (this.urlTree.fragment), {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
             var rootNode = new TreeNode(root, children);
             var routeState = new RouterStateSnapshot(this.url, rootNode);
             this.inheritParamsAndData(routeState._root);
@@ -3044,13 +3044,13 @@ var Recognizer = /** @class */ (function () {
         var rawSlicedSegments = [];
         if (route.path === '**') {
             var params = segments.length > 0 ? last$1(segments).parameters : {};
-            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), (this.urlTree.fragment), getData(route), outlet, (route.component), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
+            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(__assign({}, this.urlTree.queryParams)), (this.urlTree.fragment), getData(route), outlet, (route.component), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
         else {
             var result = match$1(rawSegment, route, segments);
             consumedSegments = result.consumedSegments;
             rawSlicedSegments = segments.slice(result.lastChild);
-            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(this.urlTree.queryParams), (this.urlTree.fragment), getData(route), outlet, (route.component), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(__assign({}, this.urlTree.queryParams)), (this.urlTree.fragment), getData(route), outlet, (route.component), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         }
         var childConfig = getChildConfig(route);
         var _a = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
@@ -5536,7 +5536,7 @@ function provideRouterInitializer() {
 /**
  *
  */
-var VERSION = new Version('6.0.0+41.sha-8733843');
+var VERSION = new Version('6.0.0+42.sha-3d8799b');
 
 /**
  * @license
