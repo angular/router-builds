@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+184.sha-e5e5c24
+ * @license Angular v6.0.0-rc.5+185.sha-5cf82f8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -146,10 +146,12 @@ var NavigationStart = /** @class */ (function (_super) {
     navigationTrigger, /** @docsNotRequired */
     /** @docsNotRequired */
     restoredState) {
+        if (navigationTrigger === void 0) { 
         /** @docsNotRequired */
-        if (navigationTrigger === void 0) { navigationTrigger = 'imperative'; }
+        navigationTrigger = 'imperative'; }
+        if (restoredState === void 0) { 
         /** @docsNotRequired */
-        if (restoredState === void 0) { restoredState = null; }
+        restoredState = null; }
         var _this = _super.call(this, id, url) || this;
         _this.navigationTrigger = navigationTrigger;
         _this.restoredState = restoredState;
@@ -2474,11 +2476,11 @@ function computeNavigation(commands) {
                 if (partIndex == 0 && urlPart === '.') {
                     // skip './a'
                 }
-                else if (partIndex == 0 && urlPart === '') {
+                else if (partIndex == 0 && urlPart === '') { //  '/a'
                     //  '/a'
                     isAbsolute = true;
                 }
-                else if (urlPart === '..') {
+                else if (urlPart === '..') { //  '../a'
                     //  '../a'
                     numberOfDoubleDots++;
                 }
@@ -5614,7 +5616,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new core.Version('6.0.0-rc.5+184.sha-e5e5c24');
+var VERSION = new core.Version('6.0.0-rc.5+185.sha-5cf82f8');
 
 /**
  * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+184.sha-e5e5c24
+ * @license Angular v6.0.0-rc.5+185.sha-5cf82f8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2944,11 +2944,11 @@ function computeNavigation(commands) {
                 if (partIndex == 0 && urlPart === '.') {
                     // skip './a'
                 }
-                else if (partIndex == 0 && urlPart === '') {
+                else if (partIndex == 0 && urlPart === '') { //  '/a'
                     //  '/a'
                     isAbsolute = true;
                 }
-                else if (urlPart === '..') {
+                else if (urlPart === '..') { //  '../a'
                     //  '../a'
                     numberOfDoubleDots++;
                 }
@@ -6376,7 +6376,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.0.0-rc.5+184.sha-e5e5c24');
+const VERSION = new Version('6.0.0-rc.5+185.sha-5cf82f8');
 
 /**
  * @fileoverview added by tsickle
