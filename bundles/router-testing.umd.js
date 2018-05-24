@@ -1,23 +1,60 @@
 /**
- * @license Angular v5.1.0-beta.0-9a69a7c
- * (c) 2010-2017 Google, Inc. https://angular.io/
+ * @license Angular v6.0.0-rc.5+217.sha-5dafa1a
+ * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
+
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
 	typeof define === 'function' && define.amd ? define('@angular/router/testing', ['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
-}(this, (function (exports,_angular_common,_angular_common_testing,_angular_core,_angular_router) { 'use strict';
+}(this, (function (exports,common,testing,core,router) { 'use strict';
 
-/**
- * @license Angular v5.1.0-beta.0-9a69a7c
- * (c) 2010-2017 Google, Inc. https://angular.io/
- * License: MIT
- */
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function __values(o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
+
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -26,16 +63,16 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Allows to simulate the loading of ng modules in tests.
+ * @description
  *
- * \@howToUse
+ * Allows to simulate the loading of ng modules in tests.
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
  *
- * \@Component({template: 'lazy-loaded'})
+ * @Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}
- * \@NgModule({
+ * @NgModule({
  *   declarations: [LazyLoadedComponent],
  *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
  * })
@@ -52,14 +89,14 @@
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- * \@stable
+ *
  */
-var SpyNgModuleFactoryLoader = (function () {
+var SpyNgModuleFactoryLoader = /** @class */ (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
-         * \@docsNotRequired
-         */
+           * @docsNotRequired
+           */
         this._stubbedModules = {};
     }
     Object.defineProperty(SpyNgModuleFactoryLoader.prototype, "stubbedModules", {
@@ -67,136 +104,166 @@ var SpyNgModuleFactoryLoader = (function () {
          * @docsNotRequired
          */
         get: /**
-         * \@docsNotRequired
-         * @return {?}
-         */
+           * @docsNotRequired
+           */
         function () { return this._stubbedModules; },
         /**
          * @docsNotRequired
          */
         set: /**
-         * \@docsNotRequired
-         * @param {?} modules
-         * @return {?}
-         */
+           * @docsNotRequired
+           */
         function (modules) {
-            var /** @type {?} */ res = {};
-            for (var _i = 0, _a = Object.keys(modules); _i < _a.length; _i++) {
-                var t = _a[_i];
-                res[t] = this.compiler.compileModuleAsync(modules[t]);
+            var res = {};
+            try {
+                for (var _a = __values(Object.keys(modules)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                    var t = _b.value;
+                    res[t] = this.compiler.compileModuleAsync(modules[t]);
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
             }
             this._stubbedModules = res;
+            var e_1, _c;
         },
         enumerable: true,
         configurable: true
     });
-    /**
-     * @param {?} path
-     * @return {?}
-     */
-    SpyNgModuleFactoryLoader.prototype.load = /**
-     * @param {?} path
-     * @return {?}
-     */
-    function (path) {
+    SpyNgModuleFactoryLoader.prototype.load = function (path) {
         if (this._stubbedModules[path]) {
             return this._stubbedModules[path];
         }
         else {
-            return /** @type {?} */ (Promise.reject(new Error("Cannot find module " + path)));
+            return Promise.reject(new Error("Cannot find module " + path));
         }
     };
     SpyNgModuleFactoryLoader.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable }
     ];
     /** @nocollapse */
     SpyNgModuleFactoryLoader.ctorParameters = function () { return [
-        { type: _angular_core.Compiler, },
+        { type: core.Compiler, },
     ]; };
     return SpyNgModuleFactoryLoader;
 }());
+function isUrlHandlingStrategy(opts) {
+    // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
+    // runtime.
+    return 'shouldProcessUrl' in opts;
+}
 /**
  * Router setup factory function used for testing.
  *
- * \@stable
- * @param {?} urlSerializer
- * @param {?} contexts
- * @param {?} location
- * @param {?} loader
- * @param {?} compiler
- * @param {?} injector
- * @param {?} routes
- * @param {?=} urlHandlingStrategy
- * @return {?}
+ *
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, urlHandlingStrategy) {
-    var /** @type {?} */ router = new _angular_router.Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, _angular_router.ɵflatten(routes));
-    if (urlHandlingStrategy) {
-        router.urlHandlingStrategy = urlHandlingStrategy;
+function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
+    var router$$1 = new router.Router((null), urlSerializer, contexts, location, injector, loader, compiler, router.ɵflatten(routes));
+    // Handle deprecated argument ordering.
+    if (opts) {
+        if (isUrlHandlingStrategy(opts)) {
+            router$$1.urlHandlingStrategy = opts;
+        }
+        else if (opts.paramsInheritanceStrategy) {
+            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+        }
     }
-    return router;
+    if (urlHandlingStrategy) {
+        router$$1.urlHandlingStrategy = urlHandlingStrategy;
+    }
+    return router$$1;
 }
 /**
- * \@whatItDoes Sets up the router to be used for testing.
+ * @description
  *
- * \@howToUse
+ * Sets up the router to be used for testing.
+ *
+ * The modules sets up the router to be used for testing.
+ * It provides spy implementations of `Location`, `LocationStrategy`, and {@link
+ * NgModuleFactoryLoader}.
+ *
+ * ### Example
  *
  * ```
  * beforeEach(() => {
  *   TestBed.configureTestModule({
  *     imports: [
  *       RouterTestingModule.withRoutes(
- *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}])]
+ *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
  *       )
  *     ]
  *   });
  * });
  * ```
  *
- * \@description
  *
- * The modules sets up the router to be used for testing.
- * It provides spy implementations of {\@link Location}, {\@link LocationStrategy}, and {\@link
- * NgModuleFactoryLoader}.
- *
- * \@stable
  */
-var RouterTestingModule = (function () {
+var RouterTestingModule = /** @class */ (function () {
     function RouterTestingModule() {
     }
-    /**
-     * @param {?} routes
-     * @return {?}
-     */
-    RouterTestingModule.withRoutes = /**
-     * @param {?} routes
-     * @return {?}
-     */
-    function (routes) {
-        return { ngModule: RouterTestingModule, providers: [_angular_router.provideRoutes(routes)] };
+    RouterTestingModule.withRoutes = function (routes, config) {
+        return {
+            ngModule: RouterTestingModule,
+            providers: [
+                router.provideRoutes(routes),
+                { provide: router.ROUTER_CONFIGURATION, useValue: config ? config : {} },
+            ]
+        };
     };
     RouterTestingModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    exports: [_angular_router.RouterModule],
+        { type: core.NgModule, args: [{
+                    exports: [router.RouterModule],
                     providers: [
-                        _angular_router.ɵROUTER_PROVIDERS, { provide: _angular_common.Location, useClass: _angular_common_testing.SpyLocation },
-                        { provide: _angular_common.LocationStrategy, useClass: _angular_common_testing.MockLocationStrategy },
-                        { provide: _angular_core.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                            provide: _angular_router.Router,
+                        router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
+                        { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
+                        { provide: core.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: router.Router,
                             useFactory: setupTestingRouter,
                             deps: [
-                                _angular_router.UrlSerializer, _angular_router.ChildrenOutletContexts, _angular_common.Location, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, _angular_core.Injector,
-                                _angular_router.ROUTES, [_angular_router.UrlHandlingStrategy, new _angular_core.Optional()]
+                                router.UrlSerializer, router.ChildrenOutletContexts, common.Location, core.NgModuleFactoryLoader, core.Compiler, core.Injector,
+                                router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new core.Optional()]
                             ]
                         },
-                        { provide: _angular_router.PreloadingStrategy, useExisting: _angular_router.NoPreloading }, _angular_router.provideRoutes([])
+                        { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
                     ]
-                },] },
+                },] }
     ];
-    /** @nocollapse */
-    RouterTestingModule.ctorParameters = function () { return []; };
     return RouterTestingModule;
 }());
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+// This file only reexports content of the `src` folder. Keep it that way.
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * Generated bundle index. Do not edit.
+ */
 
 exports.SpyNgModuleFactoryLoader = SpyNgModuleFactoryLoader;
 exports.setupTestingRouter = setupTestingRouter;

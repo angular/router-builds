@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Event } from './events';
 import { ChildrenOutletContexts } from './router_outlet_context';
 import { RouterStateSnapshot } from './router_state';
@@ -23,7 +23,7 @@ export declare class PreActivation {
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
     initialize(parentContexts: ChildrenOutletContexts): void;
     checkGuards(): Observable<boolean>;
-    resolveData(): Observable<any>;
+    resolveData(paramsInheritanceStrategy: 'emptyOnly' | 'always'): Observable<any>;
     isDeactivating(): boolean;
     isActivating(): boolean;
     /**
@@ -62,7 +62,7 @@ export declare class PreActivation {
     private runCanActivateChild(path);
     private extractCanActivateChild(p);
     private runCanDeactivate(component, curr);
-    private runResolve(future);
+    private runResolve(future, paramsInheritanceStrategy);
     private resolveNode(resolve, future);
     private getResolver(injectionToken, future);
     private getToken(token, snapshot);

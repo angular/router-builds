@@ -8,10 +8,10 @@
 import { ComponentRef, InjectionToken } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 /**
- * @whatItDoes Creates an initializer that in addition to setting up the Angular
- * router sets up the ngRoute integration.
+ * @description
  *
- * @howToUse
+ * Creates an initializer that in addition to setting up the Angular
+ * router sets up the ngRoute integration.
  *
  * ```
  * @NgModule({
@@ -34,10 +34,12 @@ export declare const RouterUpgradeInitializer: {
     provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useFactory: (ngUpgrade: UpgradeModule) => () => void;
-    deps: typeof UpgradeModule[];
+    deps: (typeof UpgradeModule)[];
 };
 /**
- * @whatItDoes Sets up a location synchronization.
+ * @description
+ *
+ * Sets up a location synchronization.
  *
  * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener

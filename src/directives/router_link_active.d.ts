@@ -9,17 +9,12 @@ import { AfterContentInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, 
 import { Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 /**
- * @whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
- *
- * @howToUse
- *
- * ```
- * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
- * ```
  *
  * @description
  *
- * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
+ * Lets you add a CSS class to an element when the link's route becomes active.
+ *
+ * This directive lets you add a CSS class to an element when the link's route
  * becomes active.
  *
  * Consider the following example:
@@ -68,7 +63,7 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  *
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit {
     private router;
