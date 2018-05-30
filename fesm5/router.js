@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+273.sha-27d811a
+ * @license Angular v6.0.0-rc.5+274.sha-b99ef2b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5535,7 +5535,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.0.0-rc.5+273.sha-27d811a');
+var VERSION = new Version('6.0.0-rc.5+274.sha-b99ef2b');
 
 /**
  * @license
