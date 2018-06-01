@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.3+49.sha-2991b1b
+ * @license Angular v6.0.3+50.sha-d69ba73
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -95,7 +95,7 @@ SpyNgModuleFactoryLoader.decorators = [
 ];
 /** @nocollapse */
 SpyNgModuleFactoryLoader.ctorParameters = () => [
-    { type: Compiler, },
+    { type: Compiler }
 ];
 /**
  * @param {?} opts
@@ -196,8 +196,6 @@ RouterTestingModule.decorators = [
                 ]
             },] }
 ];
-/** @nocollapse */
-RouterTestingModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

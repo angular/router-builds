@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.3+49.sha-2991b1b
+ * @license Angular v6.0.3+50.sha-d69ba73
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5169,22 +5169,22 @@ RouterLink.decorators = [
 ];
 /** @nocollapse */
 RouterLink.ctorParameters = () => [
-    { type: Router, },
-    { type: ActivatedRoute, },
-    { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] },] },
-    { type: Renderer2, },
-    { type: ElementRef, },
+    { type: Router },
+    { type: ActivatedRoute },
+    { type: String, decorators: [{ type: Attribute, args: ['tabindex',] }] },
+    { type: Renderer2 },
+    { type: ElementRef }
 ];
 RouterLink.propDecorators = {
-    "queryParams": [{ type: Input },],
-    "fragment": [{ type: Input },],
-    "queryParamsHandling": [{ type: Input },],
-    "preserveFragment": [{ type: Input },],
-    "skipLocationChange": [{ type: Input },],
-    "replaceUrl": [{ type: Input },],
-    "routerLink": [{ type: Input },],
-    "preserveQueryParams": [{ type: Input },],
-    "onClick": [{ type: HostListener, args: ['click',] },],
+    queryParams: [{ type: Input }],
+    fragment: [{ type: Input }],
+    queryParamsHandling: [{ type: Input }],
+    preserveFragment: [{ type: Input }],
+    skipLocationChange: [{ type: Input }],
+    replaceUrl: [{ type: Input }],
+    routerLink: [{ type: Input }],
+    preserveQueryParams: [{ type: Input }],
+    onClick: [{ type: HostListener, args: ['click',] }]
 };
 /**
  * \@description
@@ -5291,22 +5291,22 @@ RouterLinkWithHref.decorators = [
 ];
 /** @nocollapse */
 RouterLinkWithHref.ctorParameters = () => [
-    { type: Router, },
-    { type: ActivatedRoute, },
-    { type: LocationStrategy, },
+    { type: Router },
+    { type: ActivatedRoute },
+    { type: LocationStrategy }
 ];
 RouterLinkWithHref.propDecorators = {
-    "target": [{ type: HostBinding, args: ['attr.target',] }, { type: Input },],
-    "queryParams": [{ type: Input },],
-    "fragment": [{ type: Input },],
-    "queryParamsHandling": [{ type: Input },],
-    "preserveFragment": [{ type: Input },],
-    "skipLocationChange": [{ type: Input },],
-    "replaceUrl": [{ type: Input },],
-    "href": [{ type: HostBinding },],
-    "routerLink": [{ type: Input },],
-    "preserveQueryParams": [{ type: Input },],
-    "onClick": [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] },],
+    target: [{ type: HostBinding, args: ['attr.target',] }, { type: Input }],
+    queryParams: [{ type: Input }],
+    fragment: [{ type: Input }],
+    queryParamsHandling: [{ type: Input }],
+    preserveFragment: [{ type: Input }],
+    skipLocationChange: [{ type: Input }],
+    replaceUrl: [{ type: Input }],
+    href: [{ type: HostBinding }],
+    routerLink: [{ type: Input }],
+    preserveQueryParams: [{ type: Input }],
+    onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
 };
 /**
  * @param {?} s
@@ -5474,16 +5474,16 @@ RouterLinkActive.decorators = [
 ];
 /** @nocollapse */
 RouterLinkActive.ctorParameters = () => [
-    { type: Router, },
-    { type: ElementRef, },
-    { type: Renderer2, },
-    { type: ChangeDetectorRef, },
+    { type: Router },
+    { type: ElementRef },
+    { type: Renderer2 },
+    { type: ChangeDetectorRef }
 ];
 RouterLinkActive.propDecorators = {
-    "links": [{ type: ContentChildren, args: [RouterLink, { descendants: true },] },],
-    "linksWithHrefs": [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
-    "routerLinkActiveOptions": [{ type: Input },],
-    "routerLinkActive": [{ type: Input },],
+    links: [{ type: ContentChildren, args: [RouterLink, { descendants: true },] }],
+    linksWithHrefs: [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
+    routerLinkActiveOptions: [{ type: Input }],
+    routerLinkActive: [{ type: Input }]
 };
 
 /**
@@ -5749,15 +5749,15 @@ RouterOutlet.decorators = [
 ];
 /** @nocollapse */
 RouterOutlet.ctorParameters = () => [
-    { type: ChildrenOutletContexts, },
-    { type: ViewContainerRef, },
-    { type: ComponentFactoryResolver, },
-    { type: undefined, decorators: [{ type: Attribute, args: ['name',] },] },
-    { type: ChangeDetectorRef, },
+    { type: ChildrenOutletContexts },
+    { type: ViewContainerRef },
+    { type: ComponentFactoryResolver },
+    { type: String, decorators: [{ type: Attribute, args: ['name',] }] },
+    { type: ChangeDetectorRef }
 ];
 RouterOutlet.propDecorators = {
-    "activateEvents": [{ type: Output, args: ['activate',] },],
-    "deactivateEvents": [{ type: Output, args: ['deactivate',] },],
+    activateEvents: [{ type: Output, args: ['activate',] }],
+    deactivateEvents: [{ type: Output, args: ['deactivate',] }]
 };
 class OutletInjector {
     /**
@@ -5937,11 +5937,11 @@ RouterPreloader.decorators = [
 ];
 /** @nocollapse */
 RouterPreloader.ctorParameters = () => [
-    { type: Router, },
-    { type: NgModuleFactoryLoader, },
-    { type: Compiler, },
-    { type: Injector, },
-    { type: PreloadingStrategy, },
+    { type: Router },
+    { type: NgModuleFactoryLoader },
+    { type: Compiler },
+    { type: Injector },
+    { type: PreloadingStrategy }
 ];
 
 /**
@@ -6118,8 +6118,8 @@ RouterModule.decorators = [
 ];
 /** @nocollapse */
 RouterModule.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] },] },
-    { type: Router, decorators: [{ type: Optional },] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
+    { type: Router, decorators: [{ type: Optional }] }
 ];
 /**
  * @param {?} platformLocationStrategy
@@ -6326,7 +6326,7 @@ RouterInitializer.decorators = [
 ];
 /** @nocollapse */
 RouterInitializer.ctorParameters = () => [
-    { type: Injector, },
+    { type: Injector }
 ];
 /**
  * @param {?} r
@@ -6376,7 +6376,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.0.3+49.sha-2991b1b');
+const VERSION = new Version('6.0.3+50.sha-d69ba73');
 
 /**
  * @fileoverview added by tsickle

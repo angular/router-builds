@@ -59,7 +59,7 @@ function NavigationExtras_tsickle_Closure_declarations() {
      * Navigate to list route from child route:
      *
      * ```
-     *  \@Component({...})
+     * \@Component({...})
      *  class ChildComponent {
      *    constructor(private router: Router, private route: ActivatedRoute) {}
      *
