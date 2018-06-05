@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+317.sha-57eacf4
+ * @license Angular v6.0.0-rc.5+318.sha-20c463e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3256,7 +3256,7 @@ function defaultErrorHandler(error) {
 /**
  * @internal
  */
-function defaultRouterHook(snapshot) {
+function defaultRouterHook(snapshot, runExtras) {
     return of(null);
 }
 /**
@@ -3662,7 +3662,13 @@ var Router = /** @class */ (function () {
             var beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap(function (p) {
                 if (typeof p === 'boolean')
                     return of(p);
-                return _this.hooks.beforePreactivation(p.snapshot).pipe(map(function () { return p; }));
+                return _this.hooks
+                    .beforePreactivation(p.snapshot, {
+                    navigationId: id,
+                    appliedUrlTree: url,
+                    rawUrlTree: rawUrl, skipLocationChange: skipLocationChange, replaceUrl: replaceUrl,
+                })
+                    .pipe(map(function () { return p; }));
             }));
             // run preactivation: guards and data resolvers
             var preActivation;
@@ -3702,7 +3708,13 @@ var Router = /** @class */ (function () {
             var preactivationDone$ = preactivationResolveData$.pipe(mergeMap(function (p) {
                 if (typeof p === 'boolean' || _this.navigationId !== id)
                     return of(false);
-                return _this.hooks.afterPreactivation(p.snapshot).pipe(map(function () { return p; }));
+                return _this.hooks
+                    .afterPreactivation(p.snapshot, {
+                    navigationId: id,
+                    appliedUrlTree: url,
+                    rawUrlTree: rawUrl, skipLocationChange: skipLocationChange, replaceUrl: replaceUrl,
+                })
+                    .pipe(map(function () { return p; }));
             }));
             // create router state
             // this operation has side effects => route state is being affected
@@ -5130,7 +5142,7 @@ function provideRouterInitializer() {
  * @description
  * Entry point for all public APIs of the common package.
  */
-var VERSION = new Version('6.0.0-rc.5+317.sha-57eacf4');
+var VERSION = new Version('6.0.0-rc.5+318.sha-20c463e');
 
 /**
  * @license
