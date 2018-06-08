@@ -5,12 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
 import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
 import { ChildrenOutletContexts } from './router_outlet_context';
+import { RouterScroller } from './router_scroller';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer } from './url_tree';
@@ -101,6 +102,7 @@ export declare class RouterModule {
      */
     static forChild(routes: Routes): ModuleWithProviders;
 }
+export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
 export declare function provideForRootGuard(router: Router): any;
 /**
@@ -182,6 +184,74 @@ export interface ExtraOptions {
      * current URL. Default is 'ignore'.
      */
     onSameUrlNavigation?: 'reload' | 'ignore';
+    /**
+     * Configures if the scroll position needs to be restored when navigating back.
+     *
+     * * 'disabled'--does nothing (default).
+     * * 'top'--set the scroll position to 0,0..
+     * * 'enabled'--set the scroll position to the stored position. This option will be the default in
+     * the future.
+     *
+     * When enabled, the router store store scroll positions when navigating forward, and will
+     * restore the stored positions whe navigating back (popstate). When navigating forward,
+     * the scroll position will be set to [0, 0], or to the anchor if one is provided.
+     *
+     * You can implement custom scroll restoration behavior as follows.
+     * ```typescript
+     * class AppModule {
+     *  constructor(router: Router, viewportScroller: ViewportScroller, store: Store<AppState>) {
+     *    router.events.pipe(filter(e => e instanceof Scroll), switchMap(e => {
+     *      return store.pipe(first(), timeout(200), map(() => e));
+     *    }).subscribe(e => {
+     *      if (e.position) {
+     *        viewportScroller.scrollToPosition(e.position);
+     *      } else if (e.anchor) {
+     *        viewportScroller.scrollToAnchor(e.anchor);
+     *      } else {
+     *        viewportScroller.scrollToPosition([0, 0]);
+     *      }
+     *    });
+     *  }
+     * }
+     * ```
+     *
+     * You can also implement component-specific scrolling like this:
+     *
+     * ```typescript
+     * class ListComponent {
+     *   list: any[];
+     *   constructor(router: Router, viewportScroller: ViewportScroller, fetcher: ListFetcher) {
+     *     const scrollEvents = router.events.filter(e => e instanceof Scroll);
+     *     listFetcher.fetch().pipe(withLatestFrom(scrollEvents)).subscribe(([list, e]) => {
+     *       this.list = list;
+     *       if (e.position) {
+     *         viewportScroller.scrollToPosition(e.position);
+     *       } else {
+     *         viewportScroller.scrollToPosition([0, 0]);
+     *       }
+     *     });
+     *   }
+     * }
+     */
+    scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
+    /**
+     * Configures if the router should scroll to the element when the url has a fragment.
+     *
+     * * 'disabled'--does nothing (default).
+     * * 'enabled'--scrolls to the element. This option will be the default in the future.
+     *
+     * Anchor scrolling does not happen on 'popstate'. Instead, we restore the position
+     * that we stored or scroll to the top.
+     */
+    anchorScrolling?: 'disabled' | 'enabled';
+    /**
+     * Configures the scroll offset the router will use when scrolling to an element.
+     *
+     * When given a tuple with two numbers, the router will always use the numbers.
+     * When given a function, the router will invoke the function every time it restores scroll
+     * position.
+     */
+    scrollOffset?: [number, number] | (() => [number, number]);
     /**
      * Defines how the router merges params, data and resolved data from parent to child
      * routes. Available options are:
