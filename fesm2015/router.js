@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-beta.0+23.sha-1135563
+ * @license Angular v6.1.0-beta.0+27.sha-49c5234
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
 import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
 import { BehaviorSubject, EmptyError, Observable, Subject, from, of } from 'rxjs';
 import { catchError, concatAll, concatMap, every, filter, first, last, map, mergeAll, mergeMap, reduce } from 'rxjs/operators';
@@ -454,6 +454,33 @@ class ActivationEnd {
     toString() {
         const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ActivationEnd(path: '${path}')`;
+    }
+}
+/**
+ * \@description
+ *
+ * Represents a scrolling event.
+ */
+class Scroll {
+    /**
+     * @param {?} routerEvent
+     * @param {?} position
+     * @param {?} anchor
+     */
+    constructor(/** @docsNotRequired */
+    routerEvent, /** @docsNotRequired */
+    position, /** @docsNotRequired */
+    anchor) {
+        this.routerEvent = routerEvent;
+        this.position = position;
+        this.anchor = anchor;
+    }
+    /**
+     * @return {?}
+     */
+    toString() {
+        const /** @type {?} */ pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
+        return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
     }
 }
 
@@ -5968,6 +5995,110 @@ RouterPreloader.ctorParameters = () => [
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+class RouterScroller {
+    /**
+     * @param {?} router
+     * @param {?} viewportScroller
+     * @param {?=} options
+     */
+    constructor(router, viewportScroller, options = {}) {
+        this.router = router;
+        this.viewportScroller = viewportScroller;
+        this.options = options;
+        this.lastId = 0;
+        this.lastSource = 'imperative';
+        this.restoredId = 0;
+        this.store = {};
+    }
+    /**
+     * @return {?}
+     */
+    init() {
+        // we want to disable the automatic scrolling because having two places
+        // responsible for scrolling results race conditions, especially given
+        // that browser don't implement this behavior consistently
+        if (this.options.scrollPositionRestoration !== 'disabled') {
+            this.viewportScroller.setHistoryScrollRestoration('manual');
+        }
+        this.routerEventsSubscription = this.createScrollEvents();
+        this.scrollEventsSubscription = this.consumeScrollEvents();
+    }
+    /**
+     * @return {?}
+     */
+    createScrollEvents() {
+        return this.router.events.subscribe(e => {
+            if (e instanceof NavigationStart) {
+                // store the scroll position of the current stable navigations.
+                this.store[this.lastId] = this.viewportScroller.getScrollPosition();
+                this.lastSource = e.navigationTrigger;
+                this.restoredId = e.restoredState ? e.restoredState.navigationId : 0;
+            }
+            else if (e instanceof NavigationEnd) {
+                this.lastId = e.id;
+                this.scheduleScrollEvent(e, this.router.parseUrl(e.urlAfterRedirects).fragment);
+            }
+        });
+    }
+    /**
+     * @return {?}
+     */
+    consumeScrollEvents() {
+        return this.router.events.subscribe(e => {
+            if (!(e instanceof Scroll))
+                return;
+            // a popstate event. The pop state event will always ignore anchor scrolling.
+            if (e.position) {
+                if (this.options.scrollPositionRestoration === 'top') {
+                    this.viewportScroller.scrollToPosition([0, 0]);
+                }
+                else if (this.options.scrollPositionRestoration === 'enabled') {
+                    this.viewportScroller.scrollToPosition(e.position);
+                }
+                // imperative navigation "forward"
+            }
+            else {
+                if (e.anchor && this.options.anchorScrolling === 'enabled') {
+                    this.viewportScroller.scrollToAnchor(e.anchor);
+                }
+                else if (this.options.scrollPositionRestoration !== 'disabled') {
+                    this.viewportScroller.scrollToPosition([0, 0]);
+                }
+            }
+        });
+    }
+    /**
+     * @param {?} routerEvent
+     * @param {?} anchor
+     * @return {?}
+     */
+    scheduleScrollEvent(routerEvent, anchor) {
+        this.router.triggerEvent(new Scroll(routerEvent, this.lastSource === 'popstate' ? this.store[this.restoredId] : null, anchor));
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        if (this.routerEventsSubscription) {
+            this.routerEventsSubscription.unsubscribe();
+        }
+        if (this.scrollEventsSubscription) {
+            this.scrollEventsSubscription.unsubscribe();
+        }
+    }
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * \@description
  *
@@ -6108,6 +6239,11 @@ class RouterModule {
                     ]
                 },
                 {
+                    provide: RouterScroller,
+                    useFactory: createRouterScroller,
+                    deps: [Router, ViewportScroller, ROUTER_CONFIGURATION]
+                },
+                {
                     provide: PreloadingStrategy,
                     useExisting: config && config.preloadingStrategy ? config.preloadingStrategy :
                         NoPreloading
@@ -6134,6 +6270,18 @@ RouterModule.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
     { type: Router, decorators: [{ type: Optional }] }
 ];
+/**
+ * @param {?} router
+ * @param {?} viewportScroller
+ * @param {?} config
+ * @return {?}
+ */
+function createRouterScroller(router, viewportScroller, config) {
+    if (config.scrollOffset) {
+        viewportScroller.setOffset(config.scrollOffset);
+    }
+    return new RouterScroller(router, viewportScroller, config);
+}
 /**
  * @param {?} platformLocationStrategy
  * @param {?} baseHref
@@ -6302,6 +6450,7 @@ class RouterInitializer {
     bootstrapListener(bootstrappedComponentRef) {
         const /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
         const /** @type {?} */ preloader = this.injector.get(RouterPreloader);
+        const /** @type {?} */ routerScroller = this.injector.get(RouterScroller);
         const /** @type {?} */ router = this.injector.get(Router);
         const /** @type {?} */ ref = this.injector.get(ApplicationRef);
         if (bootstrappedComponentRef !== ref.components[0]) {
@@ -6314,6 +6463,7 @@ class RouterInitializer {
             router.setUpLocationChangeListener();
         }
         preloader.setUpPreloading();
+        routerScroller.init();
         router.resetRootComponentType(ref.componentTypes[0]);
         this.resultOfPreactivationDone.next(/** @type {?} */ ((null)));
         this.resultOfPreactivationDone.complete();
@@ -6389,7 +6539,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-beta.0+23.sha-1135563');
+const VERSION = new Version('6.1.0-beta.0+27.sha-49c5234');
 
 /**
  * @fileoverview added by tsickle
@@ -6454,5 +6604,5 @@ const VERSION = new Version('6.1.0-beta.0+23.sha-1135563');
  * Generated bundle index. Do not edit.
  */
 
-export { ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, RouterInitializer as ɵangular_packages_router_router_g, getAppInitializer as ɵangular_packages_router_router_h, getBootstrapListener as ɵangular_packages_router_router_i, provideForRootGuard as ɵangular_packages_router_router_d, provideLocationStrategy as ɵangular_packages_router_router_c, provideRouterInitializer as ɵangular_packages_router_router_j, rootRoute as ɵangular_packages_router_router_f, routerNgProbeToken as ɵangular_packages_router_router_b, setupRouter as ɵangular_packages_router_router_e, Tree as ɵangular_packages_router_router_k, TreeNode as ɵangular_packages_router_router_l, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
+export { ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, RouterInitializer as ɵangular_packages_router_router_h, createRouterScroller as ɵangular_packages_router_router_c, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideForRootGuard as ɵangular_packages_router_router_e, provideLocationStrategy as ɵangular_packages_router_router_d, provideRouterInitializer as ɵangular_packages_router_router_k, rootRoute as ɵangular_packages_router_router_g, routerNgProbeToken as ɵangular_packages_router_router_b, setupRouter as ɵangular_packages_router_router_f, RouterScroller as ɵangular_packages_router_router_n, Tree as ɵangular_packages_router_router_l, TreeNode as ɵangular_packages_router_router_m, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, Scroll, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map
