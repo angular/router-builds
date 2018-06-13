@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.4+15.sha-451d996
+ * @license Angular v6.0.4+22.sha-9a9a7de
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -506,6 +506,31 @@ var ActivationEnd = /** @class */ (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
+ * This component is used internally within the router to be a placeholder when an empty
+ * router-outlet is needed. For example, with a config such as:
+ *
+ * `{path: 'parent', outlet: 'nav', children: [...]}`
+ *
+ * In order to render, there needs to be a component on this config, which will default
+ * to this `EmptyOutletComponent`.
+ */
+var EmptyOutletComponent = /** @class */ (function () {
+    function EmptyOutletComponent() {
+    }
+    EmptyOutletComponent.decorators = [
+        { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" }] }
+    ];
+    return EmptyOutletComponent;
+}());
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * @description
  *
  * Name of the primary outlet.
@@ -615,8 +640,9 @@ function validateNode(route, fullPath) {
     if (Array.isArray(route)) {
         throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
     }
-    if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route cannot have a named outlet set");
+    if (!route.component && !route.children && !route.loadChildren &&
+        (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
     }
     if (route.redirectTo && route.children) {
         throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
@@ -670,9 +696,16 @@ function getFullPath(parentPath, currentRoute) {
         return parentPath + "/" + currentRoute.path;
     }
 }
-function copyConfig(r) {
-    var children = r.children && r.children.map(copyConfig);
-    return children ? __assign({}, r, { children: children }) : __assign({}, r);
+/**
+ * Makes a copy of the config and adds any default required properties.
+ */
+function standardizeConfig(r) {
+    var children = r.children && r.children.map(standardizeConfig);
+    var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
+    if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
+        c.component = EmptyOutletComponent;
+    }
+    return c;
 }
 
 /**
@@ -3269,7 +3302,7 @@ var RouterConfigLoader = /** @class */ (function () {
                 _this.onLoadEndListener(route);
             }
             var module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(copyConfig), module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
         }));
     };
     RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
@@ -3477,7 +3510,7 @@ var Router = /** @class */ (function () {
      */
     Router.prototype.resetConfig = function (config) {
         validateConfig(config);
-        this.config = config.map(copyConfig);
+        this.config = config.map(standardizeConfig);
         this.navigated = false;
         this.lastSuccessfulId = -1;
     };
@@ -4867,7 +4900,7 @@ var RouterPreloader = /** @class */ (function () {
  *
  *
  */
-var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent];
 /**
  * @description
  *
@@ -5008,7 +5041,11 @@ var RouterModule = /** @class */ (function () {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     };
     RouterModule.decorators = [
-        { type: core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] }
+        { type: core.NgModule, args: [{
+                    declarations: ROUTER_DIRECTIVES,
+                    exports: ROUTER_DIRECTIVES,
+                    entryComponents: [EmptyOutletComponent]
+                },] }
     ];
     /** @nocollapse */
     RouterModule.ctorParameters = function () { return [
@@ -5209,7 +5246,7 @@ function provideRouterInitializer() {
  * @description
  * Entry point for all public APIs of the common package.
  */
-var VERSION = new core.Version('6.0.4+15.sha-451d996');
+var VERSION = new core.Version('6.0.4+22.sha-9a9a7de');
 
 /**
  * @license
@@ -5316,6 +5353,7 @@ exports.UrlSegmentGroup = UrlSegmentGroup;
 exports.UrlSerializer = UrlSerializer;
 exports.UrlTree = UrlTree;
 exports.VERSION = VERSION;
+exports.ɵEmptyOutletComponent = EmptyOutletComponent;
 exports.ɵROUTER_PROVIDERS = ROUTER_PROVIDERS;
 exports.ɵflatten = flatten;
 
