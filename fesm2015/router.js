@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.2+23.sha-f841e36
+ * @license Angular v6.1.0-beta.2+26.sha-d244523
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4933,7 +4933,7 @@ var RouterModule_1;
  * @description
  * Entry point for all public APIs of the common package.
  */
-const VERSION = new Version('6.1.0-beta.2+23.sha-f841e36');
+const VERSION = new Version('6.1.0-beta.2+26.sha-d244523');
 
 /**
  * @license
