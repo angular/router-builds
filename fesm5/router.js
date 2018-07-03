@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+28.sha-0922228
+ * @license Angular v6.1.0-beta.3+30.sha-e3064d5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1384,11 +1384,11 @@ var ApplyRedirects = /** @class */ (function () {
         return new Error("Cannot match any routes. URL Segment: '" + e.segmentGroup + "'");
     };
     ApplyRedirects.prototype.createUrlTree = function (rootCandidate, queryParams, fragment) {
+        var _a;
         var root = rootCandidate.segments.length > 0 ?
             new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = rootCandidate, _a)) :
             rootCandidate;
         return new UrlTree(root, queryParams, fragment);
-        var _a;
     };
     ApplyRedirects.prototype.expandSegmentGroup = function (ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
@@ -1583,6 +1583,7 @@ var ApplyRedirects = /** @class */ (function () {
         return pos;
     };
     ApplyRedirects.prototype.findOrReturn = function (redirectToUrlSegment, actualSegments) {
+        var e_1, _a;
         var idx = 0;
         try {
             for (var actualSegments_1 = __values(actualSegments), actualSegments_1_1 = actualSegments_1.next(); !actualSegments_1_1.done; actualSegments_1_1 = actualSegments_1.next()) {
@@ -1602,7 +1603,6 @@ var ApplyRedirects = /** @class */ (function () {
             finally { if (e_1) throw e_1.error; }
         }
         return redirectToUrlSegment;
-        var e_1, _a;
     };
     return ApplyRedirects;
 }());
@@ -1661,6 +1661,7 @@ function mergeTrivialChildren(s) {
     return s;
 }
 function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var e_2, _a;
     var res = {};
     try {
         for (var routes_1 = __values(routes), routes_1_1 = routes_1.next(); !routes_1_1.done; routes_1_1 = routes_1.next()) {
@@ -1678,9 +1679,9 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
         finally { if (e_2) throw e_2.error; }
     }
     return __assign({}, children, res);
-    var e_2, _a;
 }
 function createChildrenForEmptySegments(routes, primarySegmentGroup) {
+    var e_3, _a;
     var res = {};
     res[PRIMARY_OUTLET] = primarySegmentGroup;
     try {
@@ -1699,7 +1700,6 @@ function createChildrenForEmptySegments(routes, primarySegmentGroup) {
         finally { if (e_3) throw e_3.error; }
     }
     return res;
-    var e_3, _a;
 }
 function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, routes) {
     return routes.some(function (r) { return isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet(r) !== PRIMARY_OUTLET; });
@@ -1772,11 +1772,12 @@ var Tree = /** @class */ (function () {
 }());
 // DFS for the node matching the value
 function findNode(value, node) {
+    var e_1, _a;
     if (value === node.value)
         return node;
     try {
-        for (var _a = __values(node.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-            var child = _b.value;
+        for (var _b = __values(node.children), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var child = _c.value;
             var node_1 = findNode(value, child);
             if (node_1)
                 return node_1;
@@ -1785,20 +1786,20 @@ function findNode(value, node) {
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
     finally {
         try {
-            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
         }
         finally { if (e_1) throw e_1.error; }
     }
     return null;
-    var e_1, _c;
 }
 // Return the path to the node with the given value using DFS
 function findPath(value, node) {
+    var e_2, _a;
     if (value === node.value)
         return [node];
     try {
-        for (var _a = __values(node.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-            var child = _b.value;
+        for (var _b = __values(node.children), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var child = _c.value;
             var path = findPath(value, child);
             if (path.length) {
                 path.unshift(node);
@@ -1809,12 +1810,11 @@ function findPath(value, node) {
     catch (e_2_1) { e_2 = { error: e_2_1 }; }
     finally {
         try {
-            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
         }
         finally { if (e_2) throw e_2.error; }
     }
     return [];
-    var e_2, _c;
 }
 var TreeNode = /** @class */ (function () {
     function TreeNode(value, children) {
@@ -2288,9 +2288,10 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
 }
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return curr.children.map(function (child) {
+        var e_1, _a;
         try {
-            for (var _a = __values(prevState.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-                var p = _b.value;
+            for (var _b = __values(prevState.children), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var p = _c.value;
                 if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
                     return createNode(routeReuseStrategy, child, p);
                 }
@@ -2299,12 +2300,11 @@ function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
             finally { if (e_1) throw e_1.error; }
         }
         return createNode(routeReuseStrategy, child);
-        var e_1, _c;
     });
 }
 function createActivatedRoute(c) {
@@ -2461,12 +2461,12 @@ function getPath(command) {
     return "" + command;
 }
 function getOutlets(commands) {
+    var _a, _b;
     if (!(typeof commands[0] === 'object'))
         return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
     if (commands[0].outlets === undefined)
         return _b = {}, _b[PRIMARY_OUTLET] = commands, _b;
     return commands[0].outlets;
-    var _a, _b;
 }
 function updateSegmentGroup(segmentGroup, startIndex, commands) {
     if (!segmentGroup) {
@@ -2869,8 +2869,8 @@ var PreActivation = /** @class */ (function () {
         if (keys.length === 1) {
             var key_1 = keys[0];
             return this.getResolver(resolve[key_1], future).pipe(map(function (value) {
-                return _a = {}, _a[key_1] = value, _a;
                 var _a;
+                return _a = {}, _a[key_1] = value, _a;
             }));
         }
         var data = {};
@@ -2966,6 +2966,7 @@ var Recognizer = /** @class */ (function () {
         return children;
     };
     Recognizer.prototype.processSegment = function (config, segmentGroup, segments, outlet) {
+        var e_1, _a;
         try {
             for (var config_1 = __values(config), config_1_1 = config_1.next(); !config_1_1.done; config_1_1 = config_1.next()) {
                 var r = config_1_1.value;
@@ -2989,7 +2990,6 @@ var Recognizer = /** @class */ (function () {
             return [];
         }
         throw new NoMatch$1();
-        var e_1, _a;
     };
     Recognizer.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
         return segments.length === 0 && !segmentGroup.children[outlet];
@@ -3110,6 +3110,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     return { segmentGroup: s, slicedSegments: slicedSegments };
 }
 function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var e_2, _a;
     var res = {};
     try {
         for (var routes_1 = __values(routes), routes_1_1 = routes_1.next(); !routes_1_1.done; routes_1_1 = routes_1.next()) {
@@ -3130,9 +3131,9 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
         finally { if (e_2) throw e_2.error; }
     }
     return __assign({}, children, res);
-    var e_2, _a;
 }
 function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
+    var e_3, _a;
     var res = {};
     res[PRIMARY_OUTLET] = primarySegment;
     primarySegment._sourceSegment = segmentGroup;
@@ -3156,7 +3157,6 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
         finally { if (e_3) throw e_3.error; }
     }
     return res;
-    var e_3, _a;
 }
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
     return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET; });
@@ -4789,6 +4789,7 @@ var RouterPreloader = /** @class */ (function () {
     // should be refactored.
     RouterPreloader.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
     RouterPreloader.prototype.processRoutes = function (ngModule, routes) {
+        var e_1, _a;
         var res = [];
         try {
             for (var routes_1 = __values(routes), routes_1_1 = routes_1.next(); !routes_1_1.done; routes_1_1 = routes_1.next()) {
@@ -4816,7 +4817,6 @@ var RouterPreloader = /** @class */ (function () {
             finally { if (e_1) throw e_1.error; }
         }
         return from(res).pipe(mergeAll(), map(function (_) { return void 0; }));
-        var e_1, _a;
     };
     RouterPreloader.prototype.preloadConfig = function (ngModule, route) {
         var _this = this;
@@ -5298,7 +5298,7 @@ function provideRouterInitializer() {
  * @description
  * Entry point for all public APIs of the common package.
  */
-var VERSION = new Version('6.1.0-beta.3+28.sha-0922228');
+var VERSION = new Version('6.1.0-beta.3+30.sha-e3064d5');
 
 /**
  * @license
