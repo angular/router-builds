@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+28.sha-0922228
+ * @license Angular v6.1.0-beta.3+30.sha-e3064d5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var RouterTestingModule_1;
 /**
  * @description
  *
@@ -161,7 +162,6 @@ RouterTestingModule = RouterTestingModule_1 = __decorate([
         ]
     })
 ], RouterTestingModule);
-var RouterTestingModule_1;
 
 /**
  * @license

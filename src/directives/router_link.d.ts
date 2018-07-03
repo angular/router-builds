@@ -140,6 +140,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
-    private updateTargetUrlAndHref();
+    private updateTargetUrlAndHref;
     readonly urlTree: UrlTree;
 }

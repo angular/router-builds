@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+28.sha-0922228
+ * @license Angular v6.1.0-beta.3+30.sha-e3064d5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4578,6 +4578,7 @@ class RouterScroller {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var RouterModule_1;
 /**
  * @description
  *
@@ -4919,7 +4920,6 @@ function provideRouterInitializer() {
         { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
     ];
 }
-var RouterModule_1;
 
 /**
  * @license
@@ -4933,7 +4933,7 @@ var RouterModule_1;
  * @description
  * Entry point for all public APIs of the common package.
  */
-const VERSION = new Version('6.1.0-beta.3+28.sha-0922228');
+const VERSION = new Version('6.1.0-beta.3+30.sha-e3064d5');
 
 /**
  * @license
