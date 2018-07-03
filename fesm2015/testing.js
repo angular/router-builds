@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+30.sha-e3064d5
+ * @license Angular v6.1.0-beta.3+29.sha-0c3738a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -11,7 +11,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -66,9 +66,8 @@ class SpyNgModuleFactoryLoader {
      * @return {?}
      */
     set stubbedModules(modules) {
-        /** @type {?} */
-        const res = {};
-        for (const t of Object.keys(modules)) {
+        const /** @type {?} */ res = {};
+        for (const /** @type {?} */ t of Object.keys(modules)) {
             res[t] = this.compiler.compileModuleAsync(modules[t]);
         }
         this._stubbedModules = res;
@@ -123,8 +122,7 @@ function isUrlHandlingStrategy(opts) {
  * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    /** @type {?} */
-    const router$$1 = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    const /** @type {?} */ router$$1 = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     // Handle deprecated argument ordering.
     if (opts) {
         if (isUrlHandlingStrategy(opts)) {
@@ -201,7 +199,7 @@ RouterTestingModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -218,7 +216,7 @@ RouterTestingModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -237,7 +235,7 @@ RouterTestingModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -255,5 +253,5 @@ RouterTestingModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { setupTestingRouter, SpyNgModuleFactoryLoader, RouterTestingModule };
+export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
 //# sourceMappingURL=testing.js.map

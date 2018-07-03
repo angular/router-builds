@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -19,7 +19,7 @@
  */
 export class UrlHandlingStrategy {
 }
-if (false) {
+function UrlHandlingStrategy_tsickle_Closure_declarations() {
     /**
      * Tells the router if this URL should be processed.
      *

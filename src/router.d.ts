@@ -319,16 +319,16 @@ export declare class Router {
     parseUrl(url: string): UrlTree;
     /** Returns whether the url is activated */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private removeEmptyProps;
-    private processNavigations;
-    private scheduleNavigation;
-    private executeScheduledNavigation;
-    private runNavigate;
+    private removeEmptyProps(params);
+    private processNavigations();
+    private scheduleNavigation(rawUrl, source, state, extras);
+    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject, source, state});
+    private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
     /**
      * Performs the logic of activating routes. This is a synchronous process by default. While this
      * is a private method, it could be overridden to make activation asynchronous.
      */
-    private activateRoutes;
-    private resetStateAndUrl;
-    private resetUrlToCurrentUrlTree;
+    private activateRoutes(state, storedState, storedUrl, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
+    private resetStateAndUrl(storedState, storedUrl, rawUrl);
+    private resetUrlToCurrentUrlTree();
 }

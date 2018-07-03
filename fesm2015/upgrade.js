@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+30.sha-e3064d5
+ * @license Angular v6.1.0-beta.3+29.sha-0c3738a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,7 +10,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -19,7 +19,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** *
+/**
  * \@description
  *
  * Creates an initializer that in addition to setting up the Angular
@@ -41,7 +41,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * ```
  *
  * \@experimental
-  @type {?} */
+ */
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
@@ -75,10 +75,8 @@ function setUpLocationSync(ngUpgrade) {
         Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
       `);
     }
-    /** @type {?} */
-    const router$$1 = ngUpgrade.injector.get(Router);
-    /** @type {?} */
-    const url = document.createElement('a');
+    const /** @type {?} */ router$$1 = ngUpgrade.injector.get(Router);
+    const /** @type {?} */ url = document.createElement('a');
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', (_, next, __) => {
         url.href = next;
@@ -88,7 +86,7 @@ function setUpLocationSync(ngUpgrade) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -107,7 +105,7 @@ function setUpLocationSync(ngUpgrade) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -125,5 +123,5 @@ function setUpLocationSync(ngUpgrade) {
  * Generated bundle index. Do not edit.
  */
 
-export { locationSyncBootstrapListener, setUpLocationSync, RouterUpgradeInitializer };
+export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
 //# sourceMappingURL=upgrade.js.map

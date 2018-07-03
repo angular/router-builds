@@ -69,10 +69,10 @@ export declare class UrlSegmentGroup {
     /** The parent node in the url tree */
     parent: UrlSegmentGroup | null;
     constructor(
-    /** The URL segments of this group. See `UrlSegment` for more information */
-    segments: UrlSegment[], 
-    /** The list of children of this group */
-    children: {
+        /** The URL segments of this group. See `UrlSegment` for more information */
+        segments: UrlSegment[], 
+        /** The list of children of this group */
+        children: {
         [key: string]: UrlSegmentGroup;
     });
     /** Whether the segment has child segments */
@@ -115,10 +115,10 @@ export declare class UrlSegment {
         [name: string]: string;
     };
     constructor(
-    /** The path part of a URL segment */
-    path: string, 
-    /** The matrix parameters associated with a segment */
-    parameters: {
+        /** The path part of a URL segment */
+        path: string, 
+        /** The matrix parameters associated with a segment */
+        parameters: {
         [name: string]: string;
     });
     readonly parameterMap: ParamMap;

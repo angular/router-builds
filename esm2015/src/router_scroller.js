@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes} checked by tsc
  */
 /**
  * @license
@@ -102,7 +102,7 @@ export class RouterScroller {
         }
     }
 }
-if (false) {
+function RouterScroller_tsickle_Closure_declarations() {
     /** @type {?} */
     RouterScroller.prototype.routerEventsSubscription;
     /** @type {?} */
