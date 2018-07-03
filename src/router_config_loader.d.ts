@@ -16,9 +16,9 @@ export declare const ROUTES: InjectionToken<Route[][]>;
 export declare class RouterConfigLoader {
     private loader;
     private compiler;
-    private onLoadStartListener;
-    private onLoadEndListener;
+    private onLoadStartListener?;
+    private onLoadEndListener?;
     constructor(loader: NgModuleFactoryLoader, compiler: Compiler, onLoadStartListener?: ((r: Route) => void) | undefined, onLoadEndListener?: ((r: Route) => void) | undefined);
     load(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
-    private loadModuleFactory(loadChildren);
+    private loadModuleFactory;
 }

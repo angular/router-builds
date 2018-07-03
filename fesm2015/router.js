@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+29.sha-0c3738a
+ * @license Angular v6.1.0-beta.3+35.sha-b6af870
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,7 +12,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -21,6 +21,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** @typedef {?} */
 /**
  * \@description
  *
@@ -383,7 +384,8 @@ class ChildActivationStart {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        /** @type {?} */
+        const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ChildActivationStart(path: '${path}')`;
     }
 }
@@ -406,7 +408,8 @@ class ChildActivationEnd {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        /** @type {?} */
+        const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ChildActivationEnd(path: '${path}')`;
     }
 }
@@ -429,7 +432,8 @@ class ActivationStart {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        /** @type {?} */
+        const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ActivationStart(path: '${path}')`;
     }
 }
@@ -452,7 +456,8 @@ class ActivationEnd {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+        /** @type {?} */
+        const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ActivationEnd(path: '${path}')`;
     }
 }
@@ -479,14 +484,15 @@ class Scroll {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
+        /** @type {?} */
+        const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
         return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -512,7 +518,7 @@ EmptyOutletComponent.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -521,13 +527,13 @@ EmptyOutletComponent.decorators = [
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
+/** *
  * \@description
  *
  * Name of the primary outlet.
  *
  *
- */
+  @type {?} */
 const PRIMARY_OUTLET = 'primary';
 /**
  * Matrix and Query parameters.
@@ -559,7 +565,8 @@ class ParamsAsMap {
      */
     get(name) {
         if (this.has(name)) {
-            const /** @type {?} */ v = this.params[name];
+            /** @type {?} */
+            const v = this.params[name];
             return Array.isArray(v) ? v[0] : v;
         }
         return null;
@@ -570,7 +577,8 @@ class ParamsAsMap {
      */
     getAll(name) {
         if (this.has(name)) {
-            const /** @type {?} */ v = this.params[name];
+            /** @type {?} */
+            const v = this.params[name];
             return Array.isArray(v) ? v : [v];
         }
         return [];
@@ -590,13 +598,15 @@ class ParamsAsMap {
 function convertToParamMap(params) {
     return new ParamsAsMap(params);
 }
+/** @type {?} */
 const NAVIGATION_CANCELING_ERROR = 'ngNavigationCancelingError';
 /**
  * @param {?} message
  * @return {?}
  */
 function navigationCancelingError(message) {
-    const /** @type {?} */ error = Error('NavigationCancelingError: ' + message);
+    /** @type {?} */
+    const error = Error('NavigationCancelingError: ' + message);
     (/** @type {?} */ (error))[NAVIGATION_CANCELING_ERROR] = true;
     return error;
 }
@@ -614,7 +624,8 @@ function isNavigationCancelingError(error) {
  * @return {?}
  */
 function defaultUrlMatcher(segments, segmentGroup, route) {
-    const /** @type {?} */ parts = /** @type {?} */ ((route.path)).split('/');
+    /** @type {?} */
+    const parts = /** @type {?} */ ((route.path)).split('/');
     if (parts.length > segments.length) {
         // The actual URL is shorter than the config, no match
         return null;
@@ -624,12 +635,16 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
         // The config is longer than the actual URL but we are looking for a full match, return null
         return null;
     }
-    const /** @type {?} */ posParams = {};
+    /** @type {?} */
+    const posParams = {};
     // Check each config part against the actual URL
-    for (let /** @type {?} */ index = 0; index < parts.length; index++) {
-        const /** @type {?} */ part = parts[index];
-        const /** @type {?} */ segment = segments[index];
-        const /** @type {?} */ isParameter = part.startsWith(':');
+    for (let index = 0; index < parts.length; index++) {
+        /** @type {?} */
+        const part = parts[index];
+        /** @type {?} */
+        const segment = segments[index];
+        /** @type {?} */
+        const isParameter = part.startsWith(':');
         if (isParameter) {
             posParams[part.substring(1)] = segment;
         }
@@ -643,7 +658,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -675,9 +690,11 @@ class LoadedRouterConfig {
  */
 function validateConfig(config, parentPath = '') {
     // forEach doesn't iterate undefined values
-    for (let /** @type {?} */ i = 0; i < config.length; i++) {
-        const /** @type {?} */ route = config[i];
-        const /** @type {?} */ fullPath = getFullPath(parentPath, route);
+    for (let i = 0; i < config.length; i++) {
+        /** @type {?} */
+        const route = config[i];
+        /** @type {?} */
+        const fullPath = getFullPath(parentPath, route);
         validateNode(route, fullPath);
     }
 }
@@ -732,7 +749,8 @@ function validateNode(route, fullPath) {
         throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
     }
     if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        const /** @type {?} */ exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
+        /** @type {?} */
+        const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
         throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
     }
     if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
@@ -770,8 +788,10 @@ function getFullPath(parentPath, currentRoute) {
  * @return {?}
  */
 function standardizeConfig(r) {
-    const /** @type {?} */ children = r.children && r.children.map(standardizeConfig);
-    const /** @type {?} */ c = children ? Object.assign({}, r, { children }) : Object.assign({}, r);
+    /** @type {?} */
+    const children = r.children && r.children.map(standardizeConfig);
+    /** @type {?} */
+    const c = children ? Object.assign({}, r, { children }) : Object.assign({}, r);
     if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
         c.component = EmptyOutletComponent;
     }
@@ -780,7 +800,7 @@ function standardizeConfig(r) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -797,7 +817,7 @@ function standardizeConfig(r) {
 function shallowEqualArrays(a, b) {
     if (a.length !== b.length)
         return false;
-    for (let /** @type {?} */ i = 0; i < a.length; ++i) {
+    for (let i = 0; i < a.length; ++i) {
         if (!shallowEqual(a[i], b[i]))
             return false;
     }
@@ -809,13 +829,16 @@ function shallowEqualArrays(a, b) {
  * @return {?}
  */
 function shallowEqual(a, b) {
-    const /** @type {?} */ k1 = Object.keys(a);
-    const /** @type {?} */ k2 = Object.keys(b);
+    /** @type {?} */
+    const k1 = Object.keys(a);
+    /** @type {?} */
+    const k2 = Object.keys(b);
     if (k1.length != k2.length) {
         return false;
     }
-    let /** @type {?} */ key;
-    for (let /** @type {?} */ i = 0; i < k1.length; i++) {
+    /** @type {?} */
+    let key;
+    for (let i = 0; i < k1.length; i++) {
         key = k1[i];
         if (a[key] !== b[key]) {
             return false;
@@ -854,7 +877,7 @@ function last$1(a) {
  * @return {?}
  */
 function forEach(map$$1, callback) {
-    for (const /** @type {?} */ prop in map$$1) {
+    for (const prop in map$$1) {
         if (map$$1.hasOwnProperty(prop)) {
             callback(map$$1[prop], prop);
         }
@@ -870,11 +893,15 @@ function waitForMap(obj, fn) {
     if (Object.keys(obj).length === 0) {
         return of({});
     }
-    const /** @type {?} */ waitHead = [];
-    const /** @type {?} */ waitTail = [];
-    const /** @type {?} */ res = {};
+    /** @type {?} */
+    const waitHead = [];
+    /** @type {?} */
+    const waitTail = [];
+    /** @type {?} */
+    const res = {};
     forEach(obj, (a, k) => {
-        const /** @type {?} */ mapped = fn(k, a).pipe(map((r) => res[k] = r));
+        /** @type {?} */
+        const mapped = fn(k, a).pipe(map((r) => res[k] = r));
         if (k === PRIMARY_OUTLET) {
             waitHead.push(mapped);
         }
@@ -914,7 +941,7 @@ function wrapIntoObservable(value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -961,7 +988,7 @@ function equalSegmentGroups(container, containee) {
         return false;
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
-    for (const /** @type {?} */ c in containee.children) {
+    for (const c in containee.children) {
         if (!container.children[c])
             return false;
         if (!equalSegmentGroups(container.children[c], containee.children[c]))
@@ -994,7 +1021,8 @@ function containsSegmentGroup(container, containee) {
  */
 function containsSegmentGroupHelper(container, containee, containeePaths) {
     if (container.segments.length > containeePaths.length) {
-        const /** @type {?} */ current = container.segments.slice(0, containeePaths.length);
+        /** @type {?} */
+        const current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
@@ -1004,7 +1032,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
-        for (const /** @type {?} */ c in containee.children) {
+        for (const c in containee.children) {
             if (!container.children[c])
                 return false;
             if (!containsSegmentGroup(container.children[c], containee.children[c]))
@@ -1013,8 +1041,10 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         return true;
     }
     else {
-        const /** @type {?} */ current = containeePaths.slice(0, container.segments.length);
-        const /** @type {?} */ next = containeePaths.slice(container.segments.length);
+        /** @type {?} */
+        const current = containeePaths.slice(0, container.segments.length);
+        /** @type {?} */
+        const next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
         if (!container.children[PRIMARY_OUTLET])
@@ -1191,7 +1221,8 @@ function equalPath(as, bs) {
  * @return {?}
  */
 function mapChildrenIntoArray(segment, fn) {
-    let /** @type {?} */ res = [];
+    /** @type {?} */
+    let res = [];
     forEach(segment.children, (child, childOutlet) => {
         if (childOutlet === PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
@@ -1244,7 +1275,8 @@ class DefaultUrlSerializer {
      * @return {?}
      */
     parse(url) {
-        const /** @type {?} */ p = new UrlParser(url);
+        /** @type {?} */
+        const p = new UrlParser(url);
         return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
     }
     /**
@@ -1253,12 +1285,16 @@ class DefaultUrlSerializer {
      * @return {?}
      */
     serialize(tree) {
-        const /** @type {?} */ segment = `/${serializeSegment(tree.root, true)}`;
-        const /** @type {?} */ query = serializeQueryParams(tree.queryParams);
-        const /** @type {?} */ fragment = typeof tree.fragment === `string` ? `#${encodeUriFragment((/** @type {?} */ ((tree.fragment))))}` : '';
+        /** @type {?} */
+        const segment = `/${serializeSegment(tree.root, true)}`;
+        /** @type {?} */
+        const query = serializeQueryParams(tree.queryParams);
+        /** @type {?} */
+        const fragment = typeof tree.fragment === `string` ? `#${encodeUriFragment((/** @type {?} */ ((tree.fragment))))}` : '';
         return `${segment}${query}${fragment}`;
     }
 }
+/** @type {?} */
 const DEFAULT_SERIALIZER = new DefaultUrlSerializer();
 /**
  * @param {?} segment
@@ -1277,10 +1313,12 @@ function serializeSegment(segment, root) {
         return serializePaths(segment);
     }
     if (root) {
-        const /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
+        /** @type {?} */
+        const primary = segment.children[PRIMARY_OUTLET] ?
             serializeSegment(segment.children[PRIMARY_OUTLET], false) :
             '';
-        const /** @type {?} */ children = [];
+        /** @type {?} */
+        const children = [];
         forEach(segment.children, (v, k) => {
             if (k !== PRIMARY_OUTLET) {
                 children.push(`${k}:${serializeSegment(v, false)}`);
@@ -1289,7 +1327,8 @@ function serializeSegment(segment, root) {
         return children.length > 0 ? `${primary}(${children.join('//')})` : primary;
     }
     else {
-        const /** @type {?} */ children = mapChildrenIntoArray(segment, (v, k) => {
+        /** @type {?} */
+        const children = mapChildrenIntoArray(segment, (v, k) => {
             if (k === PRIMARY_OUTLET) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
@@ -1382,39 +1421,47 @@ function serializeMatrixParams(params) {
  * @return {?}
  */
 function serializeQueryParams(params) {
-    const /** @type {?} */ strParams = Object.keys(params).map((name) => {
-        const /** @type {?} */ value = params[name];
+    /** @type {?} */
+    const strParams = Object.keys(params).map((name) => {
+        /** @type {?} */
+        const value = params[name];
         return Array.isArray(value) ?
             value.map(v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join('&') :
             `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
     });
     return strParams.length ? `?${strParams.join("&")}` : '';
 }
+/** @type {?} */
 const SEGMENT_RE = /^[^\/()?;=#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchSegments(str) {
-    const /** @type {?} */ match = str.match(SEGMENT_RE);
+    /** @type {?} */
+    const match = str.match(SEGMENT_RE);
     return match ? match[0] : '';
 }
+/** @type {?} */
 const QUERY_PARAM_RE = /^[^=?&#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchQueryParams(str) {
-    const /** @type {?} */ match = str.match(QUERY_PARAM_RE);
+    /** @type {?} */
+    const match = str.match(QUERY_PARAM_RE);
     return match ? match[0] : '';
 }
+/** @type {?} */
 const QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
 /**
  * @param {?} str
  * @return {?}
  */
 function matchUrlQueryParamValue(str) {
-    const /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
+    /** @type {?} */
+    const match = str.match(QUERY_PARAM_VALUE_RE);
     return match ? match[0] : '';
 }
 class UrlParser {
@@ -1440,7 +1487,8 @@ class UrlParser {
      * @return {?}
      */
     parseQueryParams() {
-        const /** @type {?} */ params = {};
+        /** @type {?} */
+        const params = {};
         if (this.consumeOptional('?')) {
             do {
                 this.parseQueryParam(params);
@@ -1462,7 +1510,8 @@ class UrlParser {
             return {};
         }
         this.consumeOptional('/');
-        const /** @type {?} */ segments = [];
+        /** @type {?} */
+        const segments = [];
         if (!this.peekStartsWith('(')) {
             segments.push(this.parseSegment());
         }
@@ -1470,12 +1519,14 @@ class UrlParser {
             this.capture('/');
             segments.push(this.parseSegment());
         }
-        let /** @type {?} */ children = {};
+        /** @type {?} */
+        let children = {};
         if (this.peekStartsWith('/(')) {
             this.capture('/');
             children = this.parseParens(true);
         }
-        let /** @type {?} */ res = {};
+        /** @type {?} */
+        let res = {};
         if (this.peekStartsWith('(')) {
             res = this.parseParens(false);
         }
@@ -1488,7 +1539,8 @@ class UrlParser {
      * @return {?}
      */
     parseSegment() {
-        const /** @type {?} */ path = matchSegments(this.remaining);
+        /** @type {?} */
+        const path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
             throw new Error(`Empty path url segment cannot have parameters: '${this.remaining}'.`);
         }
@@ -1499,7 +1551,8 @@ class UrlParser {
      * @return {?}
      */
     parseMatrixParams() {
-        const /** @type {?} */ params = {};
+        /** @type {?} */
+        const params = {};
         while (this.consumeOptional(';')) {
             this.parseParam(params);
         }
@@ -1510,14 +1563,17 @@ class UrlParser {
      * @return {?}
      */
     parseParam(params) {
-        const /** @type {?} */ key = matchSegments(this.remaining);
+        /** @type {?} */
+        const key = matchSegments(this.remaining);
         if (!key) {
             return;
         }
         this.capture(key);
-        let /** @type {?} */ value = '';
+        /** @type {?} */
+        let value = '';
         if (this.consumeOptional('=')) {
-            const /** @type {?} */ valueMatch = matchSegments(this.remaining);
+            /** @type {?} */
+            const valueMatch = matchSegments(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
                 this.capture(value);
@@ -1530,24 +1586,29 @@ class UrlParser {
      * @return {?}
      */
     parseQueryParam(params) {
-        const /** @type {?} */ key = matchQueryParams(this.remaining);
+        /** @type {?} */
+        const key = matchQueryParams(this.remaining);
         if (!key) {
             return;
         }
         this.capture(key);
-        let /** @type {?} */ value = '';
+        /** @type {?} */
+        let value = '';
         if (this.consumeOptional('=')) {
-            const /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
+            /** @type {?} */
+            const valueMatch = matchUrlQueryParamValue(this.remaining);
             if (valueMatch) {
                 value = valueMatch;
                 this.capture(value);
             }
         }
-        const /** @type {?} */ decodedKey = decodeQuery(key);
-        const /** @type {?} */ decodedVal = decodeQuery(value);
+        /** @type {?} */
+        const decodedKey = decodeQuery(key);
+        /** @type {?} */
+        const decodedVal = decodeQuery(value);
         if (params.hasOwnProperty(decodedKey)) {
-            // Append to existing values
-            let /** @type {?} */ currentVal = params[decodedKey];
+            /** @type {?} */
+            let currentVal = params[decodedKey];
             if (!Array.isArray(currentVal)) {
                 currentVal = [currentVal];
                 params[decodedKey] = currentVal;
@@ -1564,17 +1625,21 @@ class UrlParser {
      * @return {?}
      */
     parseParens(allowPrimary) {
-        const /** @type {?} */ segments = {};
+        /** @type {?} */
+        const segments = {};
         this.capture('(');
         while (!this.consumeOptional(')') && this.remaining.length > 0) {
-            const /** @type {?} */ path = matchSegments(this.remaining);
-            const /** @type {?} */ next = this.remaining[path.length];
+            /** @type {?} */
+            const path = matchSegments(this.remaining);
+            /** @type {?} */
+            const next = this.remaining[path.length];
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
             if (next !== '/' && next !== ')' && next !== ';') {
                 throw new Error(`Cannot parse url '${this.url}'`);
             }
-            let /** @type {?} */ outletName = /** @type {?} */ ((undefined));
+            /** @type {?} */
+            let outletName = /** @type {?} */ ((undefined));
             if (path.indexOf(':') > -1) {
                 outletName = path.substr(0, path.indexOf(':'));
                 this.capture(outletName);
@@ -1583,7 +1648,8 @@ class UrlParser {
             else if (allowPrimary) {
                 outletName = PRIMARY_OUTLET;
             }
-            const /** @type {?} */ children = this.parseChildren();
+            /** @type {?} */
+            const children = this.parseChildren();
             segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
                 new UrlSegmentGroup([], children);
             this.consumeOptional('//');
@@ -1619,7 +1685,7 @@ class UrlParser {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -1704,8 +1770,10 @@ class ApplyRedirects {
      * @return {?}
      */
     apply() {
-        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment)))));
+        /** @type {?} */
+        const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
+        /** @type {?} */
+        const urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, /** @type {?} */ ((this.urlTree.fragment)))));
         return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
@@ -1724,8 +1792,10 @@ class ApplyRedirects {
      * @return {?}
      */
     match(tree) {
-        const /** @type {?} */ expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        const /** @type {?} */ mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)))));
+        /** @type {?} */
+        const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
+        /** @type {?} */
+        const mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, /** @type {?} */ ((tree.fragment)))));
         return mapped$.pipe(catchError((e) => {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
@@ -1747,7 +1817,8 @@ class ApplyRedirects {
      * @return {?}
      */
     createUrlTree(rootCandidate, queryParams, fragment) {
-        const /** @type {?} */ root = rootCandidate.segments.length > 0 ?
+        /** @type {?} */
+        const root = rootCandidate.segments.length > 0 ?
             new UrlSegmentGroup([], { [PRIMARY_OUTLET]: rootCandidate }) :
             rootCandidate;
         return new UrlTree(root, queryParams, fragment);
@@ -1786,7 +1857,8 @@ class ApplyRedirects {
      */
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
         return of(...routes).pipe(map((r) => {
-            const /** @type {?} */ expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
+            /** @type {?} */
+            const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return expanded$.pipe(catchError((e) => {
                 if (e instanceof NoMatch) {
                     // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
@@ -1859,12 +1931,14 @@ class ApplyRedirects {
      * @return {?}
      */
     expandWildCardWithParamsAgainstRouteUsingRedirect(ngModule, routes, route, outlet) {
-        const /** @type {?} */ newTree = this.applyRedirectCommands([], /** @type {?} */ ((route.redirectTo)), {});
+        /** @type {?} */
+        const newTree = this.applyRedirectCommands([], /** @type {?} */ ((route.redirectTo)), {});
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
         return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
-            const /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
+            /** @type {?} */
+            const group = new UrlSegmentGroup(newSegments, {});
             return this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
         }));
     }
@@ -1881,7 +1955,8 @@ class ApplyRedirects {
         const { matched, consumedSegments, lastChild, positionalParamSegments } = match(segmentGroup, route, segments);
         if (!matched)
             return noMatch(segmentGroup);
-        const /** @type {?} */ newTree = this.applyRedirectCommands(consumedSegments, /** @type {?} */ ((route.redirectTo)), /** @type {?} */ (positionalParamSegments));
+        /** @type {?} */
+        const newTree = this.applyRedirectCommands(consumedSegments, /** @type {?} */ ((route.redirectTo)), /** @type {?} */ (positionalParamSegments));
         if (/** @type {?} */ ((route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
@@ -1910,20 +1985,26 @@ class ApplyRedirects {
         const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
         if (!matched)
             return noMatch(rawSegmentGroup);
-        const /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
-        const /** @type {?} */ childConfig$ = this.getChildConfig(ngModule, route);
+        /** @type {?} */
+        const rawSlicedSegments = segments.slice(lastChild);
+        /** @type {?} */
+        const childConfig$ = this.getChildConfig(ngModule, route);
         return childConfig$.pipe(mergeMap((routerConfig) => {
-            const /** @type {?} */ childModule = routerConfig.module;
-            const /** @type {?} */ childConfig = routerConfig.routes;
+            /** @type {?} */
+            const childModule = routerConfig.module;
+            /** @type {?} */
+            const childConfig = routerConfig.routes;
             const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-                const /** @type {?} */ expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
+                /** @type {?} */
+                const expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
                 return expanded$.pipe(map((children) => new UrlSegmentGroup(consumedSegments, children)));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
-            const /** @type {?} */ expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            /** @type {?} */
+            const expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
             return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
         }));
     }
@@ -1961,8 +2042,10 @@ class ApplyRedirects {
      * @return {?}
      */
     lineralizeSegments(route, urlTree) {
-        let /** @type {?} */ res = [];
-        let /** @type {?} */ c = urlTree.root;
+        /** @type {?} */
+        let res = [];
+        /** @type {?} */
+        let c = urlTree.root;
         while (true) {
             res = res.concat(c.segments);
             if (c.numberOfChildren === 0) {
@@ -1991,7 +2074,8 @@ class ApplyRedirects {
      * @return {?}
      */
     applyRedirectCreatreUrlTree(redirectTo, urlTree, segments, posParams) {
-        const /** @type {?} */ newRoot = this.createSegmentGroup(redirectTo, urlTree.root, segments, posParams);
+        /** @type {?} */
+        const newRoot = this.createSegmentGroup(redirectTo, urlTree.root, segments, posParams);
         return new UrlTree(newRoot, this.createQueryParams(urlTree.queryParams, this.urlTree.queryParams), urlTree.fragment);
     }
     /**
@@ -2000,11 +2084,14 @@ class ApplyRedirects {
      * @return {?}
      */
     createQueryParams(redirectToParams, actualParams) {
-        const /** @type {?} */ res = {};
+        /** @type {?} */
+        const res = {};
         forEach(redirectToParams, (v, k) => {
-            const /** @type {?} */ copySourceValue = typeof v === 'string' && v.startsWith(':');
+            /** @type {?} */
+            const copySourceValue = typeof v === 'string' && v.startsWith(':');
             if (copySourceValue) {
-                const /** @type {?} */ sourceName = v.substring(1);
+                /** @type {?} */
+                const sourceName = v.substring(1);
                 res[k] = actualParams[sourceName];
             }
             else {
@@ -2021,8 +2108,10 @@ class ApplyRedirects {
      * @return {?}
      */
     createSegmentGroup(redirectTo, group, segments, posParams) {
-        const /** @type {?} */ updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
-        let /** @type {?} */ children = {};
+        /** @type {?} */
+        const updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
+        /** @type {?} */
+        let children = {};
         forEach(group.children, (child, name) => {
             children[name] = this.createSegmentGroup(redirectTo, child, segments, posParams);
         });
@@ -2046,7 +2135,8 @@ class ApplyRedirects {
      * @return {?}
      */
     findPosParam(redirectTo, redirectToUrlSegment, posParams) {
-        const /** @type {?} */ pos = posParams[redirectToUrlSegment.path.substring(1)];
+        /** @type {?} */
+        const pos = posParams[redirectToUrlSegment.path.substring(1)];
         if (!pos)
             throw new Error(`Cannot redirect to '${redirectTo}'. Cannot find '${redirectToUrlSegment.path}'.`);
         return pos;
@@ -2057,8 +2147,9 @@ class ApplyRedirects {
      * @return {?}
      */
     findOrReturn(redirectToUrlSegment, actualSegments) {
-        let /** @type {?} */ idx = 0;
-        for (const /** @type {?} */ s of actualSegments) {
+        /** @type {?} */
+        let idx = 0;
+        for (const s of actualSegments) {
             if (s.path === redirectToUrlSegment.path) {
                 actualSegments.splice(idx);
                 return s;
@@ -2074,11 +2165,14 @@ class ApplyRedirects {
  * @return {?}
  */
 function runCanLoadGuard(moduleInjector, route) {
-    const /** @type {?} */ canLoad = route.canLoad;
+    /** @type {?} */
+    const canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
-    const /** @type {?} */ obs = from(canLoad).pipe(map((injectionToken) => {
-        const /** @type {?} */ guard = moduleInjector.get(injectionToken);
+    /** @type {?} */
+    const obs = from(canLoad).pipe(map((injectionToken) => {
+        /** @type {?} */
+        const guard = moduleInjector.get(injectionToken);
         return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
     }));
     return andObservables(obs);
@@ -2096,8 +2190,10 @@ function match(segmentGroup, route, segments) {
         }
         return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
     }
-    const /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
-    const /** @type {?} */ res = matcher(segments, segmentGroup, route);
+    /** @type {?} */
+    const matcher = route.matcher || defaultUrlMatcher;
+    /** @type {?} */
+    const res = matcher(segments, segmentGroup, route);
     if (!res) {
         return {
             matched: false,
@@ -2123,12 +2219,14 @@ function match(segmentGroup, route, segments) {
 function split(segmentGroup, consumedSegments, slicedSegments, config) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-        const /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+        /** @type {?} */
+        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
         return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
     }
     if (slicedSegments.length === 0 &&
         containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
-        const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        /** @type {?} */
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
         return { segmentGroup: mergeTrivialChildren(s), slicedSegments };
     }
     return { segmentGroup, slicedSegments };
@@ -2139,7 +2237,8 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
  */
 function mergeTrivialChildren(s) {
     if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
-        const /** @type {?} */ c = s.children[PRIMARY_OUTLET];
+        /** @type {?} */
+        const c = s.children[PRIMARY_OUTLET];
         return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
     }
     return s;
@@ -2152,8 +2251,9 @@ function mergeTrivialChildren(s) {
  * @return {?}
  */
 function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-    const /** @type {?} */ res = {};
-    for (const /** @type {?} */ r of routes) {
+    /** @type {?} */
+    const res = {};
+    for (const r of routes) {
         if (isEmptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
             res[getOutlet(r)] = new UrlSegmentGroup([], {});
         }
@@ -2166,9 +2266,10 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
  * @return {?}
  */
 function createChildrenForEmptySegments(routes, primarySegmentGroup) {
-    const /** @type {?} */ res = {};
+    /** @type {?} */
+    const res = {};
     res[PRIMARY_OUTLET] = primarySegmentGroup;
-    for (const /** @type {?} */ r of routes) {
+    for (const r of routes) {
         if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
             res[getOutlet(r)] = new UrlSegmentGroup([], {});
         }
@@ -2215,7 +2316,7 @@ function getOutlet(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2242,7 +2343,8 @@ class Tree {
      * @return {?}
      */
     parent(t) {
-        const /** @type {?} */ p = this.pathFromRoot(t);
+        /** @type {?} */
+        const p = this.pathFromRoot(t);
         return p.length > 1 ? p[p.length - 2] : null;
     }
     /**
@@ -2251,7 +2353,8 @@ class Tree {
      * @return {?}
      */
     children(t) {
-        const /** @type {?} */ n = findNode(t, this._root);
+        /** @type {?} */
+        const n = findNode(t, this._root);
         return n ? n.children.map(t => t.value) : [];
     }
     /**
@@ -2260,7 +2363,8 @@ class Tree {
      * @return {?}
      */
     firstChild(t) {
-        const /** @type {?} */ n = findNode(t, this._root);
+        /** @type {?} */
+        const n = findNode(t, this._root);
         return n && n.children.length > 0 ? n.children[0].value : null;
     }
     /**
@@ -2269,10 +2373,12 @@ class Tree {
      * @return {?}
      */
     siblings(t) {
-        const /** @type {?} */ p = findPath(t, this._root);
+        /** @type {?} */
+        const p = findPath(t, this._root);
         if (p.length < 2)
             return [];
-        const /** @type {?} */ c = p[p.length - 2].children.map(c => c.value);
+        /** @type {?} */
+        const c = p[p.length - 2].children.map(c => c.value);
         return c.filter(cc => cc !== t);
     }
     /**
@@ -2291,8 +2397,9 @@ class Tree {
 function findNode(value, node) {
     if (value === node.value)
         return node;
-    for (const /** @type {?} */ child of node.children) {
-        const /** @type {?} */ node = findNode(value, child);
+    for (const child of node.children) {
+        /** @type {?} */
+        const node = findNode(value, child);
         if (node)
             return node;
     }
@@ -2307,8 +2414,9 @@ function findNode(value, node) {
 function findPath(value, node) {
     if (value === node.value)
         return [node];
-    for (const /** @type {?} */ child of node.children) {
-        const /** @type {?} */ path = findPath(value, child);
+    for (const child of node.children) {
+        /** @type {?} */
+        const path = findPath(value, child);
         if (path.length) {
             path.unshift(node);
             return path;
@@ -2339,7 +2447,8 @@ class TreeNode {
  * @return {?}
  */
 function nodeChildrenAsMap(node) {
-    const /** @type {?} */ map$$1 = {};
+    /** @type {?} */
+    const map$$1 = {};
     if (node) {
         node.children.forEach(child => map$$1[child.value.outlet] = child);
     }
@@ -2348,7 +2457,7 @@ function nodeChildrenAsMap(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2406,13 +2515,20 @@ class RouterState extends Tree {
  * @return {?}
  */
 function createEmptyState(urlTree, rootComponent) {
-    const /** @type {?} */ snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    const /** @type {?} */ emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
-    const /** @type {?} */ emptyParams = new BehaviorSubject({});
-    const /** @type {?} */ emptyData = new BehaviorSubject({});
-    const /** @type {?} */ emptyQueryParams = new BehaviorSubject({});
-    const /** @type {?} */ fragment = new BehaviorSubject('');
-    const /** @type {?} */ activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
+    /** @type {?} */
+    const snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+    /** @type {?} */
+    const emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
+    /** @type {?} */
+    const emptyParams = new BehaviorSubject({});
+    /** @type {?} */
+    const emptyData = new BehaviorSubject({});
+    /** @type {?} */
+    const emptyQueryParams = new BehaviorSubject({});
+    /** @type {?} */
+    const fragment = new BehaviorSubject('');
+    /** @type {?} */
+    const activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
     activated.snapshot = snapshot.root;
     return new RouterState(new TreeNode(activated, []), snapshot);
 }
@@ -2422,11 +2538,16 @@ function createEmptyState(urlTree, rootComponent) {
  * @return {?}
  */
 function createEmptyStateSnapshot(urlTree, rootComponent) {
-    const /** @type {?} */ emptyParams = {};
-    const /** @type {?} */ emptyData = {};
-    const /** @type {?} */ emptyQueryParams = {};
-    const /** @type {?} */ fragment = '';
-    const /** @type {?} */ activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, {});
+    /** @type {?} */
+    const emptyParams = {};
+    /** @type {?} */
+    const emptyData = {};
+    /** @type {?} */
+    const emptyQueryParams = {};
+    /** @type {?} */
+    const fragment = '';
+    /** @type {?} */
+    const activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, {});
     return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 /**
@@ -2536,13 +2657,17 @@ class ActivatedRoute {
  * @return {?}
  */
 function inheritedParamsDataResolve(route, paramsInheritanceStrategy = 'emptyOnly') {
-    const /** @type {?} */ pathFromRoot = route.pathFromRoot;
-    let /** @type {?} */ inheritingStartingFrom = 0;
+    /** @type {?} */
+    const pathFromRoot = route.pathFromRoot;
+    /** @type {?} */
+    let inheritingStartingFrom = 0;
     if (paramsInheritanceStrategy !== 'always') {
         inheritingStartingFrom = pathFromRoot.length - 1;
         while (inheritingStartingFrom >= 1) {
-            const /** @type {?} */ current = pathFromRoot[inheritingStartingFrom];
-            const /** @type {?} */ parent = pathFromRoot[inheritingStartingFrom - 1];
+            /** @type {?} */
+            const current = pathFromRoot[inheritingStartingFrom];
+            /** @type {?} */
+            const parent = pathFromRoot[inheritingStartingFrom - 1];
             // current route is an empty path => inherits its parent's params and data
             if (current.routeConfig && current.routeConfig.path === '') {
                 inheritingStartingFrom--;
@@ -2565,9 +2690,12 @@ function inheritedParamsDataResolve(route, paramsInheritanceStrategy = 'emptyOnl
  */
 function flattenInherited(pathFromRoot) {
     return pathFromRoot.reduce((res, curr) => {
-        const /** @type {?} */ params = Object.assign({}, res.params, curr.params);
-        const /** @type {?} */ data = Object.assign({}, res.data, curr.data);
-        const /** @type {?} */ resolve = Object.assign({}, res.resolve, curr._resolvedData);
+        /** @type {?} */
+        const params = Object.assign({}, res.params, curr.params);
+        /** @type {?} */
+        const data = Object.assign({}, res.data, curr.data);
+        /** @type {?} */
+        const resolve = Object.assign({}, res.resolve, curr._resolvedData);
         return { params, data, resolve };
     }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
 }
@@ -2666,8 +2794,10 @@ class ActivatedRouteSnapshot {
      * @return {?}
      */
     toString() {
-        const /** @type {?} */ url = this.url.map(segment => segment.toString()).join('/');
-        const /** @type {?} */ matched = this.routeConfig ? this.routeConfig.path : '';
+        /** @type {?} */
+        const url = this.url.map(segment => segment.toString()).join('/');
+        /** @type {?} */
+        const matched = this.routeConfig ? this.routeConfig.path : '';
         return `Route(url:'${url}', path:'${matched}')`;
     }
 }
@@ -2728,7 +2858,8 @@ function setRouterState(state, node) {
  * @return {?}
  */
 function serializeNode(node) {
-    const /** @type {?} */ c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(', ')} } ` : '';
+    /** @type {?} */
+    const c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(', ')} } ` : '';
     return `${node.value}${c}`;
 }
 /**
@@ -2740,8 +2871,10 @@ function serializeNode(node) {
  */
 function advanceActivatedRoute(route) {
     if (route.snapshot) {
-        const /** @type {?} */ currentSnapshot = route.snapshot;
-        const /** @type {?} */ nextSnapshot = route._futureSnapshot;
+        /** @type {?} */
+        const currentSnapshot = route.snapshot;
+        /** @type {?} */
+        const nextSnapshot = route._futureSnapshot;
         route.snapshot = nextSnapshot;
         if (!shallowEqual(currentSnapshot.queryParams, nextSnapshot.queryParams)) {
             (/** @type {?} */ (route.queryParams)).next(nextSnapshot.queryParams);
@@ -2771,15 +2904,17 @@ function advanceActivatedRoute(route) {
  * @return {?}
  */
 function equalParamsAndUrlSegments(a, b) {
-    const /** @type {?} */ equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
-    const /** @type {?} */ parentsMismatch = !a.parent !== !b.parent;
+    /** @type {?} */
+    const equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+    /** @type {?} */
+    const parentsMismatch = !a.parent !== !b.parent;
     return equalUrlParams && !parentsMismatch &&
         (!a.parent || equalParamsAndUrlSegments(a.parent, /** @type {?} */ ((b.parent))));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2795,7 +2930,8 @@ function equalParamsAndUrlSegments(a, b) {
  * @return {?}
  */
 function createRouterState(routeReuseStrategy, curr, prevState) {
-    const /** @type {?} */ root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
+    /** @type {?} */
+    const root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
     return new RouterState(root, curr);
 }
 /**
@@ -2807,22 +2943,28 @@ function createRouterState(routeReuseStrategy, curr, prevState) {
 function createNode(routeReuseStrategy, curr, prevState) {
     // reuse an activated route that is currently displayed on the screen
     if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
-        const /** @type {?} */ value = prevState.value;
+        /** @type {?} */
+        const value = prevState.value;
         value._futureSnapshot = curr.value;
-        const /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
+        /** @type {?} */
+        const children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
         return new TreeNode(value, children);
         // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
     else {
-        const /** @type {?} */ detachedRouteHandle = /** @type {?} */ (routeReuseStrategy.retrieve(curr.value));
+        /** @type {?} */
+        const detachedRouteHandle = /** @type {?} */ (routeReuseStrategy.retrieve(curr.value));
         if (detachedRouteHandle) {
-            const /** @type {?} */ tree = detachedRouteHandle.route;
+            /** @type {?} */
+            const tree = detachedRouteHandle.route;
             setFutureSnapshotsOfActivatedRoutes(curr, tree);
             return tree;
         }
         else {
-            const /** @type {?} */ value = createActivatedRoute(curr.value);
-            const /** @type {?} */ children = curr.children.map(c => createNode(routeReuseStrategy, c));
+            /** @type {?} */
+            const value = createActivatedRoute(curr.value);
+            /** @type {?} */
+            const children = curr.children.map(c => createNode(routeReuseStrategy, c));
             return new TreeNode(value, children);
         }
     }
@@ -2840,7 +2982,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
         throw new Error('Cannot reattach ActivatedRouteSnapshot with a different number of children');
     }
     result.value._futureSnapshot = curr.value;
-    for (let /** @type {?} */ i = 0; i < curr.children.length; ++i) {
+    for (let i = 0; i < curr.children.length; ++i) {
         setFutureSnapshotsOfActivatedRoutes(curr.children[i], result.children[i]);
     }
 }
@@ -2852,7 +2994,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
  */
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return curr.children.map(child => {
-        for (const /** @type {?} */ p of prevState.children) {
+        for (const p of prevState.children) {
             if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
                 return createNode(routeReuseStrategy, child, p);
             }
@@ -2870,7 +3012,7 @@ function createActivatedRoute(c) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -2891,12 +3033,15 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     if (commands.length === 0) {
         return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
     }
-    const /** @type {?} */ nav = computeNavigation(commands);
+    /** @type {?} */
+    const nav = computeNavigation(commands);
     if (nav.toRoot()) {
         return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
     }
-    const /** @type {?} */ startingPosition = findStartingPosition(nav, urlTree, route);
-    const /** @type {?} */ segmentGroup = startingPosition.processChildren ?
+    /** @type {?} */
+    const startingPosition = findStartingPosition(nav, urlTree, route);
+    /** @type {?} */
+    const segmentGroup = startingPosition.processChildren ?
         updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, nav.commands) :
         updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
     return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
@@ -2917,7 +3062,8 @@ function isMatrixParams(command) {
  * @return {?}
  */
 function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
-    let /** @type {?} */ qp = {};
+    /** @type {?} */
+    let qp = {};
     if (queryParams) {
         forEach(queryParams, (value, name) => {
             qp[name] = Array.isArray(value) ? value.map((v) => `${v}`) : `${value}`;
@@ -2935,7 +3081,8 @@ function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) 
  * @return {?}
  */
 function replaceSegment(current, oldSegment, newSegment) {
-    const /** @type {?} */ children = {};
+    /** @type {?} */
+    const children = {};
     forEach(current.children, (c, outletName) => {
         if (c === oldSegment) {
             children[outletName] = newSegment;
@@ -2959,7 +3106,8 @@ class Navigation {
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
             throw new Error('Root segment cannot have matrix parameters');
         }
-        const /** @type {?} */ cmdWithOutlet = commands.find(c => typeof c === 'object' && c != null && c.outlets);
+        /** @type {?} */
+        const cmdWithOutlet = commands.find(c => typeof c === 'object' && c != null && c.outlets);
         if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
@@ -2980,12 +3128,16 @@ function computeNavigation(commands) {
     if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] === '/') {
         return new Navigation(true, 0, commands);
     }
-    let /** @type {?} */ numberOfDoubleDots = 0;
-    let /** @type {?} */ isAbsolute = false;
-    const /** @type {?} */ res = commands.reduce((res, cmd, cmdIdx) => {
+    /** @type {?} */
+    let numberOfDoubleDots = 0;
+    /** @type {?} */
+    let isAbsolute = false;
+    /** @type {?} */
+    const res = commands.reduce((res, cmd, cmdIdx) => {
         if (typeof cmd === 'object' && cmd != null) {
             if (cmd.outlets) {
-                const /** @type {?} */ outlets = {};
+                /** @type {?} */
+                const outlets = {};
                 forEach(cmd.outlets, (commands, name) => {
                     outlets[name] = typeof commands === 'string' ? commands.split('/') : commands;
                 });
@@ -3046,8 +3198,10 @@ function findStartingPosition(nav, tree, route) {
     if (route.snapshot._lastPathIndex === -1) {
         return new Position(route.snapshot._urlSegment, true, 0);
     }
-    const /** @type {?} */ modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
-    const /** @type {?} */ index = route.snapshot._lastPathIndex + modifier;
+    /** @type {?} */
+    const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
+    /** @type {?} */
+    const index = route.snapshot._lastPathIndex + modifier;
     return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
 }
 /**
@@ -3057,9 +3211,12 @@ function findStartingPosition(nav, tree, route) {
  * @return {?}
  */
 function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
-    let /** @type {?} */ g = group;
-    let /** @type {?} */ ci = index;
-    let /** @type {?} */ dd = numberOfDoubleDots;
+    /** @type {?} */
+    let g = group;
+    /** @type {?} */
+    let ci = index;
+    /** @type {?} */
+    let dd = numberOfDoubleDots;
     while (dd > ci) {
         dd -= ci;
         g = /** @type {?} */ ((g.parent));
@@ -3104,10 +3261,13 @@ function updateSegmentGroup(segmentGroup, startIndex, commands) {
     if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
         return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
     }
-    const /** @type {?} */ m = prefixedWith(segmentGroup, startIndex, commands);
-    const /** @type {?} */ slicedCommands = commands.slice(m.commandIndex);
+    /** @type {?} */
+    const m = prefixedWith(segmentGroup, startIndex, commands);
+    /** @type {?} */
+    const slicedCommands = commands.slice(m.commandIndex);
     if (m.match && m.pathIndex < segmentGroup.segments.length) {
-        const /** @type {?} */ g = new UrlSegmentGroup(segmentGroup.segments.slice(0, m.pathIndex), {});
+        /** @type {?} */
+        const g = new UrlSegmentGroup(segmentGroup.segments.slice(0, m.pathIndex), {});
         g.children[PRIMARY_OUTLET] =
             new UrlSegmentGroup(segmentGroup.segments.slice(m.pathIndex), segmentGroup.children);
         return updateSegmentGroupChildren(g, 0, slicedCommands);
@@ -3136,8 +3296,10 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
         return new UrlSegmentGroup(segmentGroup.segments, {});
     }
     else {
-        const /** @type {?} */ outlets = getOutlets(commands);
-        const /** @type {?} */ children = {};
+        /** @type {?} */
+        const outlets = getOutlets(commands);
+        /** @type {?} */
+        const children = {};
         forEach(outlets, (commands, outlet) => {
             if (commands !== null) {
                 children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
@@ -3158,15 +3320,21 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function prefixedWith(segmentGroup, startIndex, commands) {
-    let /** @type {?} */ currentCommandIndex = 0;
-    let /** @type {?} */ currentPathIndex = startIndex;
-    const /** @type {?} */ noMatch = { match: false, pathIndex: 0, commandIndex: 0 };
+    /** @type {?} */
+    let currentCommandIndex = 0;
+    /** @type {?} */
+    let currentPathIndex = startIndex;
+    /** @type {?} */
+    const noMatch = { match: false, pathIndex: 0, commandIndex: 0 };
     while (currentPathIndex < segmentGroup.segments.length) {
         if (currentCommandIndex >= commands.length)
             return noMatch;
-        const /** @type {?} */ path = segmentGroup.segments[currentPathIndex];
-        const /** @type {?} */ curr = getPath(commands[currentCommandIndex]);
-        const /** @type {?} */ next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
+        /** @type {?} */
+        const path = segmentGroup.segments[currentPathIndex];
+        /** @type {?} */
+        const curr = getPath(commands[currentCommandIndex]);
+        /** @type {?} */
+        const next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
         if (currentPathIndex > 0 && curr === undefined)
             break;
         if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
@@ -3190,22 +3358,28 @@ function prefixedWith(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function createNewSegmentGroup(segmentGroup, startIndex, commands) {
-    const /** @type {?} */ paths = segmentGroup.segments.slice(0, startIndex);
-    let /** @type {?} */ i = 0;
+    /** @type {?} */
+    const paths = segmentGroup.segments.slice(0, startIndex);
+    /** @type {?} */
+    let i = 0;
     while (i < commands.length) {
         if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
-            const /** @type {?} */ children = createNewSegmentChildren(commands[i].outlets);
+            /** @type {?} */
+            const children = createNewSegmentChildren(commands[i].outlets);
             return new UrlSegmentGroup(paths, children);
         }
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && isMatrixParams(commands[0])) {
-            const /** @type {?} */ p = segmentGroup.segments[startIndex];
+            /** @type {?} */
+            const p = segmentGroup.segments[startIndex];
             paths.push(new UrlSegment(p.path, commands[0]));
             i++;
             continue;
         }
-        const /** @type {?} */ curr = getPath(commands[i]);
-        const /** @type {?} */ next = (i < commands.length - 1) ? commands[i + 1] : null;
+        /** @type {?} */
+        const curr = getPath(commands[i]);
+        /** @type {?} */
+        const next = (i < commands.length - 1) ? commands[i + 1] : null;
         if (curr && next && isMatrixParams(next)) {
             paths.push(new UrlSegment(curr, stringify(next)));
             i += 2;
@@ -3222,7 +3396,8 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
  * @return {?}
  */
 function createNewSegmentChildren(outlets) {
-    const /** @type {?} */ children = {};
+    /** @type {?} */
+    const children = {};
     forEach(outlets, (commands, outlet) => {
         if (commands !== null) {
             children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
@@ -3235,7 +3410,8 @@ function createNewSegmentChildren(outlets) {
  * @return {?}
  */
 function stringify(params) {
-    const /** @type {?} */ res = {};
+    /** @type {?} */
+    const res = {};
     forEach(params, (v, k) => res[k] = `${v}`);
     return res;
 }
@@ -3251,7 +3427,7 @@ function compare(path, params, segment) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -3302,8 +3478,10 @@ class PreActivation {
      * @return {?}
      */
     initialize(parentContexts) {
-        const /** @type {?} */ futureRoot = this.future._root;
-        const /** @type {?} */ currRoot = this.curr ? this.curr._root : null;
+        /** @type {?} */
+        const futureRoot = this.future._root;
+        /** @type {?} */
+        const currRoot = this.curr ? this.curr._root : null;
         this.setupChildRouteGuards(futureRoot, currRoot, parentContexts, [futureRoot.value]);
     }
     /**
@@ -3313,7 +3491,8 @@ class PreActivation {
         if (!this.isDeactivating() && !this.isActivating()) {
             return of(true);
         }
-        const /** @type {?} */ canDeactivate$ = this.runCanDeactivateChecks();
+        /** @type {?} */
+        const canDeactivate$ = this.runCanDeactivateChecks();
         return canDeactivate$.pipe(mergeMap((canDeactivate) => canDeactivate ? this.runCanActivateChecks() : of(false)));
     }
     /**
@@ -3344,7 +3523,8 @@ class PreActivation {
      * @return {?}
      */
     setupChildRouteGuards(futureNode, currNode, contexts, futurePath) {
-        const /** @type {?} */ prevChildren = nodeChildrenAsMap(currNode);
+        /** @type {?} */
+        const prevChildren = nodeChildrenAsMap(currNode);
         // Process the children of the future route
         futureNode.children.forEach(c => {
             this.setupRouteGuards(c, prevChildren[c.value.outlet], contexts, futurePath.concat([c.value]));
@@ -3363,12 +3543,16 @@ class PreActivation {
      * @return {?}
      */
     setupRouteGuards(futureNode, currNode, parentContexts, futurePath) {
-        const /** @type {?} */ future = futureNode.value;
-        const /** @type {?} */ curr = currNode ? currNode.value : null;
-        const /** @type {?} */ context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
+        /** @type {?} */
+        const future = futureNode.value;
+        /** @type {?} */
+        const curr = currNode ? currNode.value : null;
+        /** @type {?} */
+        const context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
         // reusing the node
         if (curr && future.routeConfig === curr.routeConfig) {
-            const /** @type {?} */ shouldRunGuardsAndResolvers = this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future.routeConfig)).runGuardsAndResolvers);
+            /** @type {?} */
+            const shouldRunGuardsAndResolvers = this.shouldRunGuardsAndResolvers(curr, future, /** @type {?} */ ((future.routeConfig)).runGuardsAndResolvers);
             if (shouldRunGuardsAndResolvers) {
                 this.canActivateChecks.push(new CanActivate(futurePath));
             }
@@ -3386,7 +3570,8 @@ class PreActivation {
                 this.setupChildRouteGuards(futureNode, currNode, parentContexts, futurePath);
             }
             if (shouldRunGuardsAndResolvers) {
-                const /** @type {?} */ outlet = /** @type {?} */ ((/** @type {?} */ ((context)).outlet));
+                /** @type {?} */
+                const outlet = /** @type {?} */ ((/** @type {?} */ ((context)).outlet));
                 this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
             }
         }
@@ -3429,8 +3614,10 @@ class PreActivation {
      * @return {?}
      */
     deactivateRouteAndItsChildren(route, context) {
-        const /** @type {?} */ children = nodeChildrenAsMap(route);
-        const /** @type {?} */ r = route.value;
+        /** @type {?} */
+        const children = nodeChildrenAsMap(route);
+        /** @type {?} */
+        const r = route.value;
         forEach(children, (node, childName) => {
             if (!r.component) {
                 this.deactivateRouteAndItsChildren(node, context);
@@ -3508,12 +3695,16 @@ class PreActivation {
      * @return {?}
      */
     runCanActivate(future) {
-        const /** @type {?} */ canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
+        /** @type {?} */
+        const canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return of(true);
-        const /** @type {?} */ obs = from(canActivate).pipe(map((c) => {
-            const /** @type {?} */ guard = this.getToken(c, future);
-            let /** @type {?} */ observable;
+        /** @type {?} */
+        const obs = from(canActivate).pipe(map((c) => {
+            /** @type {?} */
+            const guard = this.getToken(c, future);
+            /** @type {?} */
+            let observable;
             if (guard.canActivate) {
                 observable = wrapIntoObservable(guard.canActivate(future, this.future));
             }
@@ -3529,15 +3720,20 @@ class PreActivation {
      * @return {?}
      */
     runCanActivateChild(path) {
-        const /** @type {?} */ future = path[path.length - 1];
-        const /** @type {?} */ canActivateChildGuards = path.slice(0, path.length - 1)
+        /** @type {?} */
+        const future = path[path.length - 1];
+        /** @type {?} */
+        const canActivateChildGuards = path.slice(0, path.length - 1)
             .reverse()
             .map(p => this.extractCanActivateChild(p))
             .filter(_ => _ !== null);
         return andObservables(from(canActivateChildGuards).pipe(map((d) => {
-            const /** @type {?} */ obs = from(d.guards).pipe(map((c) => {
-                const /** @type {?} */ guard = this.getToken(c, d.node);
-                let /** @type {?} */ observable;
+            /** @type {?} */
+            const obs = from(d.guards).pipe(map((c) => {
+                /** @type {?} */
+                const guard = this.getToken(c, d.node);
+                /** @type {?} */
+                let observable;
                 if (guard.canActivateChild) {
                     observable = wrapIntoObservable(guard.canActivateChild(future, this.future));
                 }
@@ -3554,7 +3750,8 @@ class PreActivation {
      * @return {?}
      */
     extractCanActivateChild(p) {
-        const /** @type {?} */ canActivateChild = p.routeConfig ? p.routeConfig.canActivateChild : null;
+        /** @type {?} */
+        const canActivateChild = p.routeConfig ? p.routeConfig.canActivateChild : null;
         if (!canActivateChild || canActivateChild.length === 0)
             return null;
         return { node: p, guards: canActivateChild };
@@ -3565,12 +3762,16 @@ class PreActivation {
      * @return {?}
      */
     runCanDeactivate(component, curr) {
-        const /** @type {?} */ canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
+        /** @type {?} */
+        const canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return of(true);
-        const /** @type {?} */ canDeactivate$ = from(canDeactivate).pipe(mergeMap((c) => {
-            const /** @type {?} */ guard = this.getToken(c, curr);
-            let /** @type {?} */ observable;
+        /** @type {?} */
+        const canDeactivate$ = from(canDeactivate).pipe(mergeMap((c) => {
+            /** @type {?} */
+            const guard = this.getToken(c, curr);
+            /** @type {?} */
+            let observable;
             if (guard.canDeactivate) {
                 observable =
                     wrapIntoObservable(guard.canDeactivate(component, curr, this.curr, this.future));
@@ -3588,7 +3789,8 @@ class PreActivation {
      * @return {?}
      */
     runResolve(future, paramsInheritanceStrategy) {
-        const /** @type {?} */ resolve = future._resolve;
+        /** @type {?} */
+        const resolve = future._resolve;
         return this.resolveNode(resolve, future).pipe(map((resolvedData) => {
             future._resolvedData = resolvedData;
             future.data = Object.assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
@@ -3601,18 +3803,22 @@ class PreActivation {
      * @return {?}
      */
     resolveNode(resolve, future) {
-        const /** @type {?} */ keys = Object.keys(resolve);
+        /** @type {?} */
+        const keys = Object.keys(resolve);
         if (keys.length === 0) {
             return of({});
         }
         if (keys.length === 1) {
-            const /** @type {?} */ key = keys[0];
+            /** @type {?} */
+            const key = keys[0];
             return this.getResolver(resolve[key], future).pipe(map((value) => {
                 return { [key]: value };
             }));
         }
-        const /** @type {?} */ data = {};
-        const /** @type {?} */ runningResolvers$ = from(keys).pipe(mergeMap((key) => {
+        /** @type {?} */
+        const data = {};
+        /** @type {?} */
+        const runningResolvers$ = from(keys).pipe(mergeMap((key) => {
             return this.getResolver(resolve[key], future).pipe(map((value) => {
                 data[key] = value;
                 return value;
@@ -3626,7 +3832,8 @@ class PreActivation {
      * @return {?}
      */
     getResolver(injectionToken, future) {
-        const /** @type {?} */ resolver = this.getToken(injectionToken, future);
+        /** @type {?} */
+        const resolver = this.getToken(injectionToken, future);
         return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
             wrapIntoObservable(resolver(future, this.future));
     }
@@ -3636,8 +3843,10 @@ class PreActivation {
      * @return {?}
      */
     getToken(token, snapshot) {
-        const /** @type {?} */ config = closestLoadedConfig(snapshot);
-        const /** @type {?} */ injector = config ? config.module.injector : this.moduleInjector;
+        /** @type {?} */
+        const config = closestLoadedConfig(snapshot);
+        /** @type {?} */
+        const injector = config ? config.module.injector : this.moduleInjector;
         return injector.get(token);
     }
 }
@@ -3648,8 +3857,9 @@ class PreActivation {
 function closestLoadedConfig(snapshot) {
     if (!snapshot)
         return null;
-    for (let /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
-        const /** @type {?} */ route = s.routeConfig;
+    for (let s = snapshot.parent; s; s = s.parent) {
+        /** @type {?} */
+        const route = s.routeConfig;
         if (route && route._loadedConfig)
             return route._loadedConfig;
     }
@@ -3658,7 +3868,7 @@ function closestLoadedConfig(snapshot) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -3701,15 +3911,20 @@ class Recognizer {
      */
     recognize() {
         try {
-            const /** @type {?} */ rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
-            const /** @type {?} */ children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
-            const /** @type {?} */ root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), /** @type {?} */ ((this.urlTree.fragment)), {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
-            const /** @type {?} */ rootNode = new TreeNode(root, children);
-            const /** @type {?} */ routeState = new RouterStateSnapshot(this.url, rootNode);
+            /** @type {?} */
+            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+            /** @type {?} */
+            const children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
+            /** @type {?} */
+            const root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), /** @type {?} */ ((this.urlTree.fragment)), {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
+            /** @type {?} */
+            const rootNode = new TreeNode(root, children);
+            /** @type {?} */
+            const routeState = new RouterStateSnapshot(this.url, rootNode);
             this.inheritParamsAndData(routeState._root);
             return of(routeState);
         }
-        catch (/** @type {?} */ e) {
+        catch (e) {
             return new Observable((obs) => obs.error(e));
         }
     }
@@ -3718,8 +3933,10 @@ class Recognizer {
      * @return {?}
      */
     inheritParamsAndData(routeNode) {
-        const /** @type {?} */ route = routeNode.value;
-        const /** @type {?} */ i = inheritedParamsDataResolve(route, this.paramsInheritanceStrategy);
+        /** @type {?} */
+        const route = routeNode.value;
+        /** @type {?} */
+        const i = inheritedParamsDataResolve(route, this.paramsInheritanceStrategy);
         route.params = Object.freeze(i.params);
         route.data = Object.freeze(i.data);
         routeNode.children.forEach(n => this.inheritParamsAndData(n));
@@ -3742,7 +3959,8 @@ class Recognizer {
      * @return {?}
      */
     processChildren(config, segmentGroup) {
-        const /** @type {?} */ children = mapChildrenIntoArray(segmentGroup, (child, childOutlet) => this.processSegmentGroup(config, child, childOutlet));
+        /** @type {?} */
+        const children = mapChildrenIntoArray(segmentGroup, (child, childOutlet) => this.processSegmentGroup(config, child, childOutlet));
         checkOutletNameUniqueness(children);
         sortActivatedRouteSnapshots(children);
         return children;
@@ -3755,11 +3973,11 @@ class Recognizer {
      * @return {?}
      */
     processSegment(config, segmentGroup, segments, outlet) {
-        for (const /** @type {?} */ r of config) {
+        for (const r of config) {
             try {
                 return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
             }
-            catch (/** @type {?} */ e) {
+            catch (e) {
                 if (!(e instanceof NoMatch$1))
                     throw e;
             }
@@ -3790,29 +4008,37 @@ class Recognizer {
             throw new NoMatch$1();
         if ((route.outlet || PRIMARY_OUTLET) !== outlet)
             throw new NoMatch$1();
-        let /** @type {?} */ snapshot;
-        let /** @type {?} */ consumedSegments = [];
-        let /** @type {?} */ rawSlicedSegments = [];
+        /** @type {?} */
+        let snapshot;
+        /** @type {?} */
+        let consumedSegments = [];
+        /** @type {?} */
+        let rawSlicedSegments = [];
         if (route.path === '**') {
-            const /** @type {?} */ params = segments.length > 0 ? /** @type {?} */ ((last$1(segments))).parameters : {};
+            /** @type {?} */
+            const params = segments.length > 0 ? /** @type {?} */ ((last$1(segments))).parameters : {};
             snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
         else {
-            const /** @type {?} */ result = match$1(rawSegment, route, segments);
+            /** @type {?} */
+            const result = match$1(rawSegment, route, segments);
             consumedSegments = result.consumedSegments;
             rawSlicedSegments = segments.slice(result.lastChild);
             snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), /** @type {?} */ ((this.urlTree.fragment)), getData(route), outlet, /** @type {?} */ ((route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         }
-        const /** @type {?} */ childConfig = getChildConfig(route);
+        /** @type {?} */
+        const childConfig = getChildConfig(route);
         const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig);
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-            const /** @type {?} */ children = this.processChildren(childConfig, segmentGroup);
+            /** @type {?} */
+            const children = this.processChildren(childConfig, segmentGroup);
             return [new TreeNode(snapshot, children)];
         }
         if (childConfig.length === 0 && slicedSegments.length === 0) {
             return [new TreeNode(snapshot, [])];
         }
-        const /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
+        /** @type {?} */
+        const children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
         return [new TreeNode(snapshot, children)];
     }
 }
@@ -3855,13 +4081,17 @@ function match$1(segmentGroup, route, segments) {
         }
         return { consumedSegments: [], lastChild: 0, parameters: {} };
     }
-    const /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
-    const /** @type {?} */ res = matcher(segments, segmentGroup, route);
+    /** @type {?} */
+    const matcher = route.matcher || defaultUrlMatcher;
+    /** @type {?} */
+    const res = matcher(segments, segmentGroup, route);
     if (!res)
         throw new NoMatch$1();
-    const /** @type {?} */ posParams = {};
+    /** @type {?} */
+    const posParams = {};
     forEach(/** @type {?} */ ((res.posParams)), (v, k) => { posParams[k] = v.path; });
-    const /** @type {?} */ parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
+    /** @type {?} */
+    const parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
         posParams;
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters };
 }
@@ -3870,12 +4100,16 @@ function match$1(segmentGroup, route, segments) {
  * @return {?}
  */
 function checkOutletNameUniqueness(nodes) {
-    const /** @type {?} */ names = {};
+    /** @type {?} */
+    const names = {};
     nodes.forEach(n => {
-        const /** @type {?} */ routeWithSameOutletName = names[n.value.outlet];
+        /** @type {?} */
+        const routeWithSameOutletName = names[n.value.outlet];
         if (routeWithSameOutletName) {
-            const /** @type {?} */ p = routeWithSameOutletName.url.map(s => s.toString()).join('/');
-            const /** @type {?} */ c = n.value.url.map(s => s.toString()).join('/');
+            /** @type {?} */
+            const p = routeWithSameOutletName.url.map(s => s.toString()).join('/');
+            /** @type {?} */
+            const c = n.value.url.map(s => s.toString()).join('/');
             throw new Error(`Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
         }
         names[n.value.outlet] = n.value;
@@ -3886,7 +4120,8 @@ function checkOutletNameUniqueness(nodes) {
  * @return {?}
  */
 function getSourceSegmentGroup(segmentGroup) {
-    let /** @type {?} */ s = segmentGroup;
+    /** @type {?} */
+    let s = segmentGroup;
     while (s._sourceSegment) {
         s = s._sourceSegment;
     }
@@ -3897,8 +4132,10 @@ function getSourceSegmentGroup(segmentGroup) {
  * @return {?}
  */
 function getPathIndexShift(segmentGroup) {
-    let /** @type {?} */ s = segmentGroup;
-    let /** @type {?} */ res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    /** @type {?} */
+    let s = segmentGroup;
+    /** @type {?} */
+    let res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
     while (s._sourceSegment) {
         s = s._sourceSegment;
         res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
@@ -3915,19 +4152,22 @@ function getPathIndexShift(segmentGroup) {
 function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-        const /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+        /** @type {?} */
+        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
         s._sourceSegment = segmentGroup;
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments: [] };
     }
     if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-        const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        /** @type {?} */
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
         s._sourceSegment = segmentGroup;
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments };
     }
-    const /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+    /** @type {?} */
+    const s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
     s._sourceSegment = segmentGroup;
     s._segmentIndexShift = consumedSegments.length;
     return { segmentGroup: s, slicedSegments };
@@ -3940,10 +4180,12 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
  * @return {?}
  */
 function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-    const /** @type {?} */ res = {};
-    for (const /** @type {?} */ r of routes) {
+    /** @type {?} */
+    const res = {};
+    for (const r of routes) {
         if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
-            const /** @type {?} */ s = new UrlSegmentGroup([], {});
+            /** @type {?} */
+            const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
             s._segmentIndexShift = segmentGroup.segments.length;
             res[getOutlet$1(r)] = s;
@@ -3959,13 +4201,15 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
  * @return {?}
  */
 function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
-    const /** @type {?} */ res = {};
+    /** @type {?} */
+    const res = {};
     res[PRIMARY_OUTLET] = primarySegment;
     primarySegment._sourceSegment = segmentGroup;
     primarySegment._segmentIndexShift = consumedSegments.length;
-    for (const /** @type {?} */ r of routes) {
+    for (const r of routes) {
         if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
-            const /** @type {?} */ s = new UrlSegmentGroup([], {});
+            /** @type {?} */
+            const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
             s._segmentIndexShift = consumedSegments.length;
             res[getOutlet$1(r)] = s;
@@ -4027,7 +4271,7 @@ function getResolve(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4036,6 +4280,7 @@ function getResolve(route) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** @typedef {?} */
 /**
  * \@description
  *
@@ -4083,7 +4328,7 @@ class DefaultRouteReuseStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4092,10 +4337,10 @@ class DefaultRouteReuseStrategy {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
+/** *
  * \@docsNotRequired
  * \@experimental
- */
+  @type {?} */
 const ROUTES = new InjectionToken('ROUTES');
 class RouterConfigLoader {
     /**
@@ -4119,12 +4364,14 @@ class RouterConfigLoader {
         if (this.onLoadStartListener) {
             this.onLoadStartListener(route);
         }
-        const /** @type {?} */ moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
+        /** @type {?} */
+        const moduleFactory$ = this.loadModuleFactory(/** @type {?} */ ((route.loadChildren)));
         return moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
-            const /** @type {?} */ module = factory.create(parentInjector);
+            /** @type {?} */
+            const module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
         }));
     }
@@ -4151,7 +4398,7 @@ class RouterConfigLoader {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4194,7 +4441,7 @@ class DefaultUrlHandlingStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4301,8 +4548,10 @@ class Router {
          * - `'always'`, enables unconditional inheritance of parent params.
          */
         this.paramsInheritanceStrategy = 'emptyOnly';
-        const /** @type {?} */ onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
-        const /** @type {?} */ onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
+        /** @type {?} */
+        const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
+        /** @type {?} */
+        const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
@@ -4343,9 +4592,12 @@ class Router {
         // run into ngZone
         if (!this.locationSubscription) {
             this.locationSubscription = /** @type {?} */ (this.location.subscribe((change) => {
-                const /** @type {?} */ rawUrlTree = this.urlSerializer.parse(change['url']);
-                const /** @type {?} */ source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
-                const /** @type {?} */ state = change.state && change.state.navigationId ?
+                /** @type {?} */
+                const rawUrlTree = this.urlSerializer.parse(change['url']);
+                /** @type {?} */
+                const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
+                /** @type {?} */
+                const state = change.state && change.state.navigationId ?
                     { navigationId: change.state.navigationId } :
                     null;
                 setTimeout(() => { this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }, 0);
@@ -4449,9 +4701,12 @@ class Router {
         if (isDevMode() && preserveQueryParams && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
             console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
         }
-        const /** @type {?} */ a = relativeTo || this.routerState.root;
-        const /** @type {?} */ f = preserveFragment ? this.currentUrlTree.fragment : fragment;
-        let /** @type {?} */ q = null;
+        /** @type {?} */
+        const a = relativeTo || this.routerState.root;
+        /** @type {?} */
+        const f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+        /** @type {?} */
+        let q = null;
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
@@ -4496,8 +4751,10 @@ class Router {
      * @return {?}
      */
     navigateByUrl(url, extras = { skipLocationChange: false }) {
-        const /** @type {?} */ urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
-        const /** @type {?} */ mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
+        /** @type {?} */
+        const urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
+        /** @type {?} */
+        const mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
     }
     /**
@@ -4550,7 +4807,8 @@ class Router {
         if (url instanceof UrlTree) {
             return containsTree(this.currentUrlTree, url, exact);
         }
-        const /** @type {?} */ urlTree = this.urlSerializer.parse(url);
+        /** @type {?} */
+        const urlTree = this.urlSerializer.parse(url);
         return containsTree(this.currentUrlTree, urlTree, exact);
     }
     /**
@@ -4559,7 +4817,8 @@ class Router {
      */
     removeEmptyProps(params) {
         return Object.keys(params).reduce((result, key) => {
-            const /** @type {?} */ value = params[key];
+            /** @type {?} */
+            const value = params[key];
             if (value !== null && value !== undefined) {
                 result[key] = value;
             }
@@ -4592,7 +4851,8 @@ class Router {
      * @return {?}
      */
     scheduleNavigation(rawUrl, source, state, extras) {
-        const /** @type {?} */ lastNavigation = this.navigations.value;
+        /** @type {?} */
+        const lastNavigation = this.navigations.value;
         // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
         // and that navigation results in 'replaceState' that leads to the same URL,
         // we should skip those.
@@ -4614,13 +4874,17 @@ class Router {
             lastNavigation.rawUrl.toString() === rawUrl.toString()) {
             return Promise.resolve(true); // return value is not used
         }
-        let /** @type {?} */ resolve = null;
-        let /** @type {?} */ reject = null;
-        const /** @type {?} */ promise = new Promise((res, rej) => {
+        /** @type {?} */
+        let resolve = null;
+        /** @type {?} */
+        let reject = null;
+        /** @type {?} */
+        const promise = new Promise((res, rej) => {
             resolve = res;
             reject = rej;
         });
-        const /** @type {?} */ id = ++this.navigationId;
+        /** @type {?} */
+        const id = ++this.navigationId;
         this.navigations.next({ id, source, state, rawUrl, extras, resolve, reject, promise });
         // Make sure that the error is propagated even though `processNavigations` catch
         // handler does not rethrow
@@ -4631,8 +4895,10 @@ class Router {
      * @return {?}
      */
     executeScheduledNavigation({ id, rawUrl, extras, resolve, reject, source, state }) {
-        const /** @type {?} */ url = this.urlHandlingStrategy.extract(rawUrl);
-        const /** @type {?} */ urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
+        /** @type {?} */
+        const url = this.urlHandlingStrategy.extract(rawUrl);
+        /** @type {?} */
+        const urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
         if ((this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
             this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
             (/** @type {?} */ (this.events))
@@ -4672,12 +4938,13 @@ class Router {
             return Promise.resolve(false);
         }
         return new Promise((resolvePromise, rejectPromise) => {
-            // create an observable of the url and route state snapshot
-            // this operation do not result in any side effects
-            let /** @type {?} */ urlAndSnapshot$;
+            /** @type {?} */
+            let urlAndSnapshot$;
             if (!precreatedState) {
-                const /** @type {?} */ moduleInjector = this.ngModule.injector;
-                const /** @type {?} */ redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
+                /** @type {?} */
+                const moduleInjector = this.ngModule.injector;
+                /** @type {?} */
+                const redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
                 urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap((appliedUrl) => {
                     return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy)
                         .pipe(map((snapshot) => {
@@ -4690,7 +4957,8 @@ class Router {
             else {
                 urlAndSnapshot$ = of({ appliedUrl: url, snapshot: precreatedState });
             }
-            const /** @type {?} */ beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap((p) => {
+            /** @type {?} */
+            const beforePreactivationDone$ = urlAndSnapshot$.pipe(mergeMap((p) => {
                 if (typeof p === 'boolean')
                     return of(p);
                 return this.hooks
@@ -4701,18 +4969,21 @@ class Router {
                 })
                     .pipe(map(() => p));
             }));
-            // run preactivation: guards and data resolvers
-            let /** @type {?} */ preActivation;
-            const /** @type {?} */ preactivationSetup$ = beforePreactivationDone$.pipe(map((p) => {
+            /** @type {?} */
+            let preActivation;
+            /** @type {?} */
+            const preactivationSetup$ = beforePreactivationDone$.pipe(map((p) => {
                 if (typeof p === 'boolean')
                     return p;
                 const { appliedUrl, snapshot } = p;
-                const /** @type {?} */ moduleInjector = this.ngModule.injector;
+                /** @type {?} */
+                const moduleInjector = this.ngModule.injector;
                 preActivation = new PreActivation(snapshot, this.routerState.snapshot, moduleInjector, (evt) => this.triggerEvent(evt));
                 preActivation.initialize(this.rootContexts);
                 return { appliedUrl, snapshot };
             }));
-            const /** @type {?} */ preactivationCheckGuards$ = preactivationSetup$.pipe(mergeMap((p) => {
+            /** @type {?} */
+            const preactivationCheckGuards$ = preactivationSetup$.pipe(mergeMap((p) => {
                 if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
                 const { appliedUrl, snapshot } = p;
@@ -4722,7 +4993,8 @@ class Router {
                     return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
                 }));
             }));
-            const /** @type {?} */ preactivationResolveData$ = preactivationCheckGuards$.pipe(mergeMap((p) => {
+            /** @type {?} */
+            const preactivationResolveData$ = preactivationCheckGuards$.pipe(mergeMap((p) => {
                 if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
                 if (p.shouldActivate && preActivation.isActivating()) {
@@ -4736,7 +5008,8 @@ class Router {
                     return of(p);
                 }
             }));
-            const /** @type {?} */ preactivationDone$ = preactivationResolveData$.pipe(mergeMap((p) => {
+            /** @type {?} */
+            const preactivationDone$ = preactivationResolveData$.pipe(mergeMap((p) => {
                 if (typeof p === 'boolean' || this.navigationId !== id)
                     return of(false);
                 return this.hooks
@@ -4747,14 +5020,14 @@ class Router {
                 })
                     .pipe(map(() => p));
             }));
-            // create router state
-            // this operation has side effects => route state is being affected
-            const /** @type {?} */ routerState$ = preactivationDone$.pipe(map((p) => {
+            /** @type {?} */
+            const routerState$ = preactivationDone$.pipe(map((p) => {
                 if (typeof p === 'boolean' || this.navigationId !== id)
                     return false;
                 const { appliedUrl, snapshot, shouldActivate } = p;
                 if (shouldActivate) {
-                    const /** @type {?} */ state = createRouterState(this.routeReuseStrategy, snapshot, this.routerState);
+                    /** @type {?} */
+                    const state = createRouterState(this.routeReuseStrategy, snapshot, this.routerState);
                     return { appliedUrl, state, shouldActivate };
                 }
                 else {
@@ -4780,9 +5053,8 @@ class Router {
      * @return {?}
      */
     activateRoutes(state, storedState, storedUrl, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise) {
-        // applied the new router state
-        // this operation has side effects
-        let /** @type {?} */ navigationIsSuccessful;
+        /** @type {?} */
+        let navigationIsSuccessful;
         state
             .forEach((p) => {
             if (typeof p === 'boolean' || !p.shouldActivate || id !== this.navigationId || !p.state) {
@@ -4794,7 +5066,8 @@ class Router {
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
             (/** @type {?} */ (this)).routerState = state;
             if (!skipLocationChange) {
-                const /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
+                /** @type {?} */
+                const path = this.urlSerializer.serialize(this.rawUrlTree);
                 if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
                     this.location.replaceState(path, '', { navigationId: id });
                 }
@@ -4835,7 +5108,7 @@ class Router {
                 try {
                     resolvePromise(this.errorHandler(e));
                 }
-                catch (/** @type {?} */ ee) {
+                catch (ee) {
                     rejectPromise(ee);
                 }
             }
@@ -4878,8 +5151,10 @@ class ActivateRoutes {
      * @return {?}
      */
     activate(parentContexts) {
-        const /** @type {?} */ futureRoot = this.futureState._root;
-        const /** @type {?} */ currRoot = this.currState ? this.currState._root : null;
+        /** @type {?} */
+        const futureRoot = this.futureState._root;
+        /** @type {?} */
+        const currRoot = this.currState ? this.currState._root : null;
         this.deactivateChildRoutes(futureRoot, currRoot, parentContexts);
         advanceActivatedRoute(this.futureState.root);
         this.activateChildRoutes(futureRoot, currRoot, parentContexts);
@@ -4891,10 +5166,12 @@ class ActivateRoutes {
      * @return {?}
      */
     deactivateChildRoutes(futureNode, currNode, contexts) {
-        const /** @type {?} */ children = nodeChildrenAsMap(currNode);
+        /** @type {?} */
+        const children = nodeChildrenAsMap(currNode);
         // Recurse on the routes active in the future state to de-activate deeper children
         futureNode.children.forEach(futureChild => {
-            const /** @type {?} */ childOutletName = futureChild.value.outlet;
+            /** @type {?} */
+            const childOutletName = futureChild.value.outlet;
             this.deactivateRoutes(futureChild, children[childOutletName], contexts);
             delete children[childOutletName];
         });
@@ -4910,13 +5187,15 @@ class ActivateRoutes {
      * @return {?}
      */
     deactivateRoutes(futureNode, currNode, parentContext) {
-        const /** @type {?} */ future = futureNode.value;
-        const /** @type {?} */ curr = currNode ? currNode.value : null;
+        /** @type {?} */
+        const future = futureNode.value;
+        /** @type {?} */
+        const curr = currNode ? currNode.value : null;
         if (future === curr) {
             // Reusing the node, check to see if the children need to be de-activated
             if (future.component) {
-                // If we have a normal route, we need to go through an outlet.
-                const /** @type {?} */ context = parentContext.getContext(future.outlet);
+                /** @type {?} */
+                const context = parentContext.getContext(future.outlet);
                 if (context) {
                     this.deactivateChildRoutes(futureNode, currNode, context.children);
                 }
@@ -4952,10 +5231,13 @@ class ActivateRoutes {
      * @return {?}
      */
     detachAndStoreRouteSubtree(route, parentContexts) {
-        const /** @type {?} */ context = parentContexts.getContext(route.value.outlet);
+        /** @type {?} */
+        const context = parentContexts.getContext(route.value.outlet);
         if (context && context.outlet) {
-            const /** @type {?} */ componentRef = context.outlet.detach();
-            const /** @type {?} */ contexts = context.children.onOutletDeactivated();
+            /** @type {?} */
+            const componentRef = context.outlet.detach();
+            /** @type {?} */
+            const contexts = context.children.onOutletDeactivated();
             this.routeReuseStrategy.store(route.value.snapshot, { componentRef, route, contexts });
         }
     }
@@ -4965,10 +5247,13 @@ class ActivateRoutes {
      * @return {?}
      */
     deactivateRouteAndOutlet(route, parentContexts) {
-        const /** @type {?} */ context = parentContexts.getContext(route.value.outlet);
+        /** @type {?} */
+        const context = parentContexts.getContext(route.value.outlet);
         if (context) {
-            const /** @type {?} */ children = nodeChildrenAsMap(route);
-            const /** @type {?} */ contexts = route.value.component ? context.children : parentContexts;
+            /** @type {?} */
+            const children = nodeChildrenAsMap(route);
+            /** @type {?} */
+            const contexts = route.value.component ? context.children : parentContexts;
             forEach(children, (v, k) => this.deactivateRouteAndItsChildren(v, contexts));
             if (context.outlet) {
                 // Destroy the component
@@ -4985,7 +5270,8 @@ class ActivateRoutes {
      * @return {?}
      */
     activateChildRoutes(futureNode, currNode, contexts) {
-        const /** @type {?} */ children = nodeChildrenAsMap(currNode);
+        /** @type {?} */
+        const children = nodeChildrenAsMap(currNode);
         futureNode.children.forEach(c => {
             this.activateRoutes(c, children[c.value.outlet], contexts);
             this.forwardEvent(new ActivationEnd(c.value.snapshot));
@@ -5001,14 +5287,16 @@ class ActivateRoutes {
      * @return {?}
      */
     activateRoutes(futureNode, currNode, parentContexts) {
-        const /** @type {?} */ future = futureNode.value;
-        const /** @type {?} */ curr = currNode ? currNode.value : null;
+        /** @type {?} */
+        const future = futureNode.value;
+        /** @type {?} */
+        const curr = currNode ? currNode.value : null;
         advanceActivatedRoute(future);
         // reusing the node
         if (future === curr) {
             if (future.component) {
-                // If we have a normal route, we need to go through an outlet.
-                const /** @type {?} */ context = parentContexts.getOrCreateContext(future.outlet);
+                /** @type {?} */
+                const context = parentContexts.getOrCreateContext(future.outlet);
                 this.activateChildRoutes(futureNode, currNode, context.children);
             }
             else {
@@ -5018,10 +5306,11 @@ class ActivateRoutes {
         }
         else {
             if (future.component) {
-                // if we have a normal route, we need to place the component into the outlet and recurse.
-                const /** @type {?} */ context = parentContexts.getOrCreateContext(future.outlet);
+                /** @type {?} */
+                const context = parentContexts.getOrCreateContext(future.outlet);
                 if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
-                    const /** @type {?} */ stored = (/** @type {?} */ (this.routeReuseStrategy.retrieve(future.snapshot)));
+                    /** @type {?} */
+                    const stored = (/** @type {?} */ (this.routeReuseStrategy.retrieve(future.snapshot)));
                     this.routeReuseStrategy.store(future.snapshot, null);
                     context.children.onOutletReAttached(stored.contexts);
                     context.attachRef = stored.componentRef;
@@ -5034,8 +5323,10 @@ class ActivateRoutes {
                     advanceActivatedRouteNodeAndItsChildren(stored.route);
                 }
                 else {
-                    const /** @type {?} */ config = parentLoadedConfig(future.snapshot);
-                    const /** @type {?} */ cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    /** @type {?} */
+                    const config = parentLoadedConfig(future.snapshot);
+                    /** @type {?} */
+                    const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -5066,8 +5357,9 @@ function advanceActivatedRouteNodeAndItsChildren(node) {
  * @return {?}
  */
 function parentLoadedConfig(snapshot) {
-    for (let /** @type {?} */ s = snapshot.parent; s; s = s.parent) {
-        const /** @type {?} */ route = s.routeConfig;
+    for (let s = snapshot.parent; s; s = s.parent) {
+        /** @type {?} */
+        const route = s.routeConfig;
         if (route && route._loadedConfig)
             return route._loadedConfig;
         if (route && route.component)
@@ -5080,8 +5372,9 @@ function parentLoadedConfig(snapshot) {
  * @return {?}
  */
 function validateCommands(commands) {
-    for (let /** @type {?} */ i = 0; i < commands.length; i++) {
-        const /** @type {?} */ cmd = commands[i];
+    for (let i = 0; i < commands.length; i++) {
+        /** @type {?} */
+        const cmd = commands[i];
         if (cmd == null) {
             throw new Error(`The requested path contains ${cmd} segment at index ${i}`);
         }
@@ -5090,7 +5383,7 @@ function validateCommands(commands) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5215,7 +5508,8 @@ class RouterLink {
      * @return {?}
      */
     onClick() {
-        const /** @type {?} */ extras = {
+        /** @type {?} */
+        const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
         };
@@ -5331,7 +5625,8 @@ class RouterLinkWithHref {
         if (typeof this.target === 'string' && this.target != '_self') {
             return true;
         }
-        const /** @type {?} */ extras = {
+        /** @type {?} */
+        const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
         };
@@ -5390,7 +5685,7 @@ function attrBoolValue(s) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5490,7 +5785,8 @@ class RouterLinkActive {
      * @return {?}
      */
     set routerLinkActive(data) {
-        const /** @type {?} */ classes = Array.isArray(data) ? data : data.split(' ');
+        /** @type {?} */
+        const classes = Array.isArray(data) ? data : data.split(' ');
         this.classes = classes.filter(c => !!c);
     }
     /**
@@ -5509,7 +5805,8 @@ class RouterLinkActive {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
         Promise.resolve().then(() => {
-            const /** @type {?} */ hasActiveLinks = this.hasActiveLinks();
+            /** @type {?} */
+            const hasActiveLinks = this.hasActiveLinks();
             if (this.isActive !== hasActiveLinks) {
                 (/** @type {?} */ (this)).isActive = hasActiveLinks;
                 this.classes.forEach((c) => {
@@ -5560,7 +5857,7 @@ RouterLinkActive.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5599,7 +5896,8 @@ class ChildrenOutletContexts {
      * @return {?}
      */
     onChildOutletCreated(childName, outlet) {
-        const /** @type {?} */ context = this.getOrCreateContext(childName);
+        /** @type {?} */
+        const context = this.getOrCreateContext(childName);
         context.outlet = outlet;
         this.contexts.set(childName, context);
     }
@@ -5611,7 +5909,8 @@ class ChildrenOutletContexts {
      * @return {?}
      */
     onChildOutletDestroyed(childName) {
-        const /** @type {?} */ context = this.getContext(childName);
+        /** @type {?} */
+        const context = this.getContext(childName);
         if (context) {
             context.outlet = null;
         }
@@ -5622,7 +5921,8 @@ class ChildrenOutletContexts {
      * @return {?}
      */
     onOutletDeactivated() {
-        const /** @type {?} */ contexts = this.contexts;
+        /** @type {?} */
+        const contexts = this.contexts;
         this.contexts = new Map();
         return contexts;
     }
@@ -5636,7 +5936,8 @@ class ChildrenOutletContexts {
      * @return {?}
      */
     getOrCreateContext(childName) {
-        let /** @type {?} */ context = this.getContext(childName);
+        /** @type {?} */
+        let context = this.getContext(childName);
         if (!context) {
             context = new OutletContext();
             this.contexts.set(childName, context);
@@ -5652,7 +5953,7 @@ class ChildrenOutletContexts {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -5713,9 +6014,8 @@ class RouterOutlet {
      */
     ngOnInit() {
         if (!this.activated) {
-            // If the outlet was not instantiated at the time the route got activated we need to populate
-            // the outlet when it is initialized (ie inside a NgIf)
-            const /** @type {?} */ context = this.parentContexts.getContext(this.name);
+            /** @type {?} */
+            const context = this.parentContexts.getContext(this.name);
             if (context && context.route) {
                 if (context.attachRef) {
                     // `attachRef` is populated when there is an existing component to mount
@@ -5765,7 +6065,8 @@ class RouterOutlet {
         if (!this.activated)
             throw new Error('Outlet is not activated');
         this.location.detach();
-        const /** @type {?} */ cmp = this.activated;
+        /** @type {?} */
+        const cmp = this.activated;
         this.activated = null;
         this._activatedRoute = null;
         return cmp;
@@ -5786,7 +6087,8 @@ class RouterOutlet {
      */
     deactivate() {
         if (this.activated) {
-            const /** @type {?} */ c = this.component;
+            /** @type {?} */
+            const c = this.component;
             this.activated.destroy();
             this.activated = null;
             this._activatedRoute = null;
@@ -5803,12 +6105,17 @@ class RouterOutlet {
             throw new Error('Cannot activate an already activated outlet');
         }
         this._activatedRoute = activatedRoute;
-        const /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
-        const /** @type {?} */ component = /** @type {?} */ (/** @type {?} */ ((snapshot.routeConfig)).component);
+        /** @type {?} */
+        const snapshot = activatedRoute._futureSnapshot;
+        /** @type {?} */
+        const component = /** @type {?} */ (/** @type {?} */ ((snapshot.routeConfig)).component);
         resolver = resolver || this.resolver;
-        const /** @type {?} */ factory = resolver.resolveComponentFactory(component);
-        const /** @type {?} */ childContexts = this.parentContexts.getOrCreateContext(this.name).children;
-        const /** @type {?} */ injector = new OutletInjector(activatedRoute, childContexts, this.location.injector);
+        /** @type {?} */
+        const factory = resolver.resolveComponentFactory(component);
+        /** @type {?} */
+        const childContexts = this.parentContexts.getOrCreateContext(this.name).children;
+        /** @type {?} */
+        const injector = new OutletInjector(activatedRoute, childContexts, this.location.injector);
         this.activated = this.location.createComponent(factory, this.location.length, injector);
         // Calling `markForCheck` to make sure we will run the change detection when the
         // `RouterOutlet` is inside a `ChangeDetectionStrategy.OnPush` component.
@@ -5860,7 +6167,7 @@ class OutletInjector {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
 *@license
@@ -5941,8 +6248,10 @@ class RouterPreloader {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
-        const /** @type {?} */ onStartLoad = (r) => router.triggerEvent(new RouteConfigLoadStart(r));
-        const /** @type {?} */ onEndLoad = (r) => router.triggerEvent(new RouteConfigLoadEnd(r));
+        /** @type {?} */
+        const onStartLoad = (r) => router.triggerEvent(new RouteConfigLoadStart(r));
+        /** @type {?} */
+        const onEndLoad = (r) => router.triggerEvent(new RouteConfigLoadEnd(r));
         this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
     }
     /**
@@ -5958,7 +6267,8 @@ class RouterPreloader {
      * @return {?}
      */
     preload() {
-        const /** @type {?} */ ngModule = this.injector.get(NgModuleRef);
+        /** @type {?} */
+        const ngModule = this.injector.get(NgModuleRef);
         return this.processRoutes(ngModule, this.router.config);
     }
     /**
@@ -5971,11 +6281,13 @@ class RouterPreloader {
      * @return {?}
      */
     processRoutes(ngModule, routes) {
-        const /** @type {?} */ res = [];
-        for (const /** @type {?} */ route of routes) {
+        /** @type {?} */
+        const res = [];
+        for (const route of routes) {
             // we already have the config loaded, just recurse
             if (route.loadChildren && !route.canLoad && route._loadedConfig) {
-                const /** @type {?} */ childConfig = route._loadedConfig;
+                /** @type {?} */
+                const childConfig = route._loadedConfig;
                 res.push(this.processRoutes(childConfig.module, childConfig.routes));
                 // no config loaded, fetch the config
             }
@@ -5996,7 +6308,8 @@ class RouterPreloader {
      */
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const /** @type {?} */ loaded$ = this.loader.load(ngModule.injector, route);
+            /** @type {?} */
+            const loaded$ = this.loader.load(ngModule.injector, route);
             return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
@@ -6018,7 +6331,7 @@ RouterPreloader.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6122,7 +6435,7 @@ class RouterScroller {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6131,26 +6444,27 @@ class RouterScroller {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
+/** *
  * \@description
  *
  * Contains a list of directives
  *
  *
- */
+  @type {?} */
 const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent];
-/**
+/** *
  * \@description
  *
  * Is used in DI to configure the router.
  *
  *
- */
+  @type {?} */
 const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
-/**
+/** *
  * \@docsNotRequired
- */
+  @type {?} */
 const ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
+/** @type {?} */
 const ROUTER_PROVIDERS = [
     Location,
     { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -6387,7 +6701,8 @@ function provideRoutes(routes) {
  * @return {?}
  */
 function setupRouter(ref, urlSerializer, contexts, location, injector, loader, compiler, config, opts = {}, urlHandlingStrategy, routeReuseStrategy) {
-    const /** @type {?} */ router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
+    /** @type {?} */
+    const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -6398,7 +6713,8 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
         router.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
-        const /** @type {?} */ dom = ɵgetDOM();
+        /** @type {?} */
+        const dom = ɵgetDOM();
         router.events.subscribe((e) => {
             dom.logGroup(`Router Event: ${((/** @type {?} */ (e.constructor))).name}`);
             dom.log(e.toString());
@@ -6445,12 +6761,17 @@ class RouterInitializer {
      * @return {?}
      */
     appInitializer() {
-        const /** @type {?} */ p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+        /** @type {?} */
+        const p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
         return p.then(() => {
-            let /** @type {?} */ resolve = /** @type {?} */ ((null));
-            const /** @type {?} */ res = new Promise(r => resolve = r);
-            const /** @type {?} */ router = this.injector.get(Router);
-            const /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
+            /** @type {?} */
+            let resolve = /** @type {?} */ ((null));
+            /** @type {?} */
+            const res = new Promise(r => resolve = r);
+            /** @type {?} */
+            const router = this.injector.get(Router);
+            /** @type {?} */
+            const opts = this.injector.get(ROUTER_CONFIGURATION);
             if (this.isLegacyDisabled(opts) || this.isLegacyEnabled(opts)) {
                 resolve(true);
             }
@@ -6484,11 +6805,16 @@ class RouterInitializer {
      * @return {?}
      */
     bootstrapListener(bootstrappedComponentRef) {
-        const /** @type {?} */ opts = this.injector.get(ROUTER_CONFIGURATION);
-        const /** @type {?} */ preloader = this.injector.get(RouterPreloader);
-        const /** @type {?} */ routerScroller = this.injector.get(RouterScroller);
-        const /** @type {?} */ router = this.injector.get(Router);
-        const /** @type {?} */ ref = this.injector.get(ApplicationRef);
+        /** @type {?} */
+        const opts = this.injector.get(ROUTER_CONFIGURATION);
+        /** @type {?} */
+        const preloader = this.injector.get(RouterPreloader);
+        /** @type {?} */
+        const routerScroller = this.injector.get(RouterScroller);
+        /** @type {?} */
+        const router = this.injector.get(Router);
+        /** @type {?} */
+        const ref = this.injector.get(ApplicationRef);
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
@@ -6541,11 +6867,11 @@ function getAppInitializer(r) {
 function getBootstrapListener(r) {
     return r.bootstrapListener.bind(r);
 }
-/**
+/** *
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
  * \@experimental
- */
+  @type {?} */
 const ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 /**
  * @return {?}
@@ -6566,7 +6892,7 @@ function provideRouterInitializer() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6575,23 +6901,12 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-beta.3+29.sha-0c3738a');
+/** @type {?} */
+const VERSION = new Version('6.1.0-beta.3+35.sha-b6af870');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6603,7 +6918,19 @@ const VERSION = new Version('6.1.0-beta.3+29.sha-0c3738a');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6622,7 +6949,7 @@ const VERSION = new Version('6.1.0-beta.3+29.sha-0c3738a');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /**
  * @license
