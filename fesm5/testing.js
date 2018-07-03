@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+30.sha-e3064d5
+ * @license Angular v6.1.0-beta.3+29.sha-0c3738a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -63,22 +63,22 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
          * @docsNotRequired
          */
         set: function (modules) {
-            var e_1, _a;
             var res = {};
             try {
-                for (var _b = __values(Object.keys(modules)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var t = _c.value;
+                for (var _a = __values(Object.keys(modules)), _b = _a.next(); !_b.done; _b = _a.next()) {
+                    var t = _b.value;
                     res[t] = this.compiler.compileModuleAsync(modules[t]);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             this._stubbedModules = res;
+            var e_1, _c;
         },
         enumerable: true,
         configurable: true
@@ -161,7 +161,6 @@ var RouterTestingModule = /** @class */ (function () {
             ]
         };
     };
-    var RouterTestingModule_1;
     RouterTestingModule = RouterTestingModule_1 = __decorate([
         NgModule({
             exports: [RouterModule],
@@ -181,6 +180,7 @@ var RouterTestingModule = /** @class */ (function () {
         })
     ], RouterTestingModule);
     return RouterTestingModule;
+    var RouterTestingModule_1;
 }());
 
 /**
