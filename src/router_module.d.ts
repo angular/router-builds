@@ -282,8 +282,8 @@ export declare class RouterInitializer {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    private isLegacyEnabled(opts);
-    private isLegacyDisabled(opts);
+    private isLegacyEnabled;
+    private isLegacyDisabled;
 }
 export declare function getAppInitializer(r: RouterInitializer): any;
 export declare function getBootstrapListener(r: RouterInitializer): any;
