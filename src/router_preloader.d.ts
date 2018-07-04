@@ -67,6 +67,6 @@ export declare class RouterPreloader implements OnDestroy {
     setUpPreloading(): void;
     preload(): Observable<any>;
     ngOnDestroy(): void;
-    private processRoutes(ngModule, routes);
-    private preloadConfig(ngModule, route);
+    private processRoutes;
+    private preloadConfig;
 }

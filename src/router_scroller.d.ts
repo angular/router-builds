@@ -19,13 +19,13 @@ export declare class RouterScroller implements OnDestroy {
     private restoredId;
     private store;
     constructor(router: Router, 
-        /** @docsNotRequired */ viewportScroller: ViewportScroller, options?: {
+    /** @docsNotRequired */ viewportScroller: ViewportScroller, options?: {
         scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
         anchorScrolling?: 'disabled' | 'enabled';
     });
     init(): void;
-    private createScrollEvents();
-    private consumeScrollEvents();
-    private scheduleScrollEvent(routerEvent, anchor);
+    private createScrollEvents;
+    private consumeScrollEvents;
+    private scheduleScrollEvent;
     ngOnDestroy(): void;
 }
