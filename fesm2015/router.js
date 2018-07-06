@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+36.sha-8fe8b8f
+ * @license Angular v6.1.0-beta.3+37.sha-b72dbc8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4689,6 +4689,8 @@ let RouterModule = RouterModule_1 = class RouterModule {
      * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
      * `ExtraOptions` for more details.
+     * * `paramsInheritanceStrategy` defines how the router merges params, data and resolved data
+     * from parent to child routes.
      */
     static forRoot(routes, config) {
         return {
@@ -4933,7 +4935,7 @@ function provideRouterInitializer() {
  * @description
  * Entry point for all public APIs of the common package.
  */
-const VERSION = new Version('6.1.0-beta.3+36.sha-8fe8b8f');
+const VERSION = new Version('6.1.0-beta.3+37.sha-b72dbc8');
 
 /**
  * @license
