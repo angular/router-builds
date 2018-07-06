@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+47.sha-1e74ea9
+ * @license Angular v6.1.0-beta.3+56.sha-f936b8c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -842,6 +842,7 @@
             containsSegmentGroup(container.root, containee.root);
     }
     function equalQueryParams(container, containee) {
+        // TODO: This does not handle array params correctly.
         return shallowEqual(container, containee);
     }
     function equalSegmentGroups(container, containee) {
@@ -858,6 +859,7 @@
         return true;
     }
     function containsQueryParams(container, containee) {
+        // TODO: This does not handle array params correctly.
         return Object.keys(containee).length <= Object.keys(container).length &&
             Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
     }
@@ -5419,7 +5421,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('6.1.0-beta.3+47.sha-1e74ea9');
+    var VERSION = new core.Version('6.1.0-beta.3+56.sha-f936b8c');
 
     /**
      * @license

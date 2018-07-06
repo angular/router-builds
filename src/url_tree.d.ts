@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ParamMap } from './shared';
+import { ParamMap, Params } from './shared';
 export declare function createEmptyUrlTree(): UrlTree;
 export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
 /**
@@ -41,9 +41,7 @@ export declare class UrlTree {
     /** The root segment group of the URL tree */
     root: UrlSegmentGroup;
     /** The query params of the URL */
-    queryParams: {
-        [key: string]: string;
-    };
+    queryParams: Params;
     /** The fragment of the URL */
     fragment: string | null;
     readonly queryParamMap: ParamMap;
