@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.7+15.sha-ada486a
+ * @license Angular v6.0.7+17.sha-69c8226
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6103,6 +6103,8 @@ class RouterModule {
      * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
      * `ExtraOptions` for more details.
+     * * `paramsInheritanceStrategy` defines how the router merges params, data and resolved data
+     * from parent to child routes.
      * @param {?} routes
      * @param {?=} config
      * @return {?}
@@ -6412,7 +6414,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.0.7+15.sha-ada486a');
+const VERSION = new Version('6.0.7+17.sha-69c8226');
 
 /**
  * @fileoverview added by tsickle
