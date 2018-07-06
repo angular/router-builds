@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+46.sha-f62876b
+ * @license Angular v6.1.0-beta.3+61.sha-3980640
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,13 +12,6 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
  */
 /**
  * \@description
@@ -124,20 +117,20 @@ function isUrlHandlingStrategy(opts) {
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     /** @type {?} */
-    const router$$1 = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    const router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     // Handle deprecated argument ordering.
     if (opts) {
         if (isUrlHandlingStrategy(opts)) {
-            router$$1.urlHandlingStrategy = opts;
+            router.urlHandlingStrategy = opts;
         }
         else if (opts.paramsInheritanceStrategy) {
-            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
         }
     }
     if (urlHandlingStrategy) {
-        router$$1.urlHandlingStrategy = urlHandlingStrategy;
+        router.urlHandlingStrategy = urlHandlingStrategy;
     }
-    return router$$1;
+    return router;
 }
 /**
  * \@description
@@ -203,53 +196,17 @@ RouterTestingModule.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the router/testing package.
- */
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.

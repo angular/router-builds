@@ -1,14 +1,14 @@
 /**
- * @license Angular v6.1.0-beta.3+46.sha-f62876b
+ * @license Angular v6.1.0-beta.3+61.sha-3980640
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, LocationStrategy, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
-import { ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Attribute, ChangeDetectorRef, Compiler, Component, ComponentFactoryResolver, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgModuleFactory, NgModuleFactoryLoader, NgModuleRef, NgProbeToken, Optional, Output, Renderer2, SkipSelf, SystemJsNgModuleLoader, Version, ViewContainerRef, isDevMode, ɵisObservable, ɵisPromise } from '@angular/core';
-import { __assign, __extends, __spread, __values } from 'tslib';
-import { BehaviorSubject, EmptyError, Observable, Subject, from, of } from 'rxjs';
-import { catchError, concatAll, concatMap, every, filter, first, last, map, mergeAll, mergeMap, reduce } from 'rxjs/operators';
+import { __values, __extends, __assign, __spread } from 'tslib';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
+import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
+import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
+import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
 import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
@@ -695,10 +695,6 @@ function flatten(arr) {
 function last$1(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
-/**
- * Verifys all booleans in an array are `true`.
- */
-
 function forEach(map$$1, callback) {
     for (var prop in map$$1) {
         if (map$$1.hasOwnProperty(prop)) {
@@ -764,6 +760,7 @@ function containsTree(container, containee, exact) {
         containsSegmentGroup(container.root, containee.root);
 }
 function equalQueryParams(container, containee) {
+    // TODO: This does not handle array params correctly.
     return shallowEqual(container, containee);
 }
 function equalSegmentGroups(container, containee) {
@@ -780,6 +777,7 @@ function equalSegmentGroups(container, containee) {
     return true;
 }
 function containsQueryParams(container, containee) {
+    // TODO: This does not handle array params correctly.
     return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
 }
@@ -2402,9 +2400,7 @@ function computeNavigation(commands) {
         }
         if (cmdIdx === 0) {
             cmd.split('/').forEach(function (urlPart, partIndex) {
-                if (partIndex == 0 && urlPart === '.') {
-                    // skip './a'
-                }
+                if (partIndex == 0 && urlPart === '.') ;
                 else if (partIndex == 0 && urlPart === '') { //  '/a'
                     isAbsolute = true;
                 }
@@ -3222,7 +3218,6 @@ var DefaultRouteReuseStrategy = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// TODO(i): switch to fromPromise once it's expored in rxjs
 /**
  * @docsNotRequired
  * @experimental
@@ -5295,12 +5290,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the common package.
- */
-var VERSION = new Version('6.1.0-beta.3+46.sha-f62876b');
+var VERSION = new Version('6.1.0-beta.3+61.sha-3980640');
 
 /**
  * @license
@@ -5325,12 +5315,6 @@ var VERSION = new Version('6.1.0-beta.3+46.sha-f62876b');
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
@@ -5340,10 +5324,6 @@ var VERSION = new Version('6.1.0-beta.3+46.sha-f62876b');
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.

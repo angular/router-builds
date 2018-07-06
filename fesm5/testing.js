@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+46.sha-f62876b
+ * @license Angular v6.1.0-beta.3+61.sha-3980640
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -111,20 +111,20 @@ function isUrlHandlingStrategy(opts) {
  *
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    var router$$1 = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     // Handle deprecated argument ordering.
     if (opts) {
         if (isUrlHandlingStrategy(opts)) {
-            router$$1.urlHandlingStrategy = opts;
+            router.urlHandlingStrategy = opts;
         }
         else if (opts.paramsInheritanceStrategy) {
-            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
         }
     }
     if (urlHandlingStrategy) {
-        router$$1.urlHandlingStrategy = urlHandlingStrategy;
+        router.urlHandlingStrategy = urlHandlingStrategy;
     }
-    return router$$1;
+    return router;
 }
 /**
  * @description
@@ -191,11 +191,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the router/testing package.
- */
 
 /**
  * @license
@@ -204,12 +199,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
@@ -219,10 +208,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.
