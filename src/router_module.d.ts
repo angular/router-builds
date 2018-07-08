@@ -95,6 +95,8 @@ export declare class RouterModule {
      * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
      * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
      * `ExtraOptions` for more details.
+     * * `paramsInheritanceStrategy` defines how the router merges params, data and resolved data
+     * from parent to child routes.
      */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
     /**
@@ -282,8 +284,8 @@ export declare class RouterInitializer {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    private isLegacyEnabled(opts);
-    private isLegacyDisabled(opts);
+    private isLegacyEnabled;
+    private isLegacyDisabled;
 }
 export declare function getAppInitializer(r: RouterInitializer): any;
 export declare function getBootstrapListener(r: RouterInitializer): any;

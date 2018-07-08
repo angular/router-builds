@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.1+46.sha-a5799e6
+ * @license Angular v6.1.0-beta.3+80.sha-6c604bd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -64,12 +64,12 @@ function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
         throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
     }
-    var router$$1 = ngUpgrade.injector.get(Router);
+    var router = ngUpgrade.injector.get(Router);
     var url = document.createElement('a');
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', function (_, next, __) {
         url.href = next;
-        router$$1.navigateByUrl(url.pathname + url.search + url.hash);
+        router.navigateByUrl(url.pathname + url.search + url.hash);
     });
 }
 
@@ -80,12 +80,6 @@ function setUpLocationSync(ngUpgrade) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
@@ -95,10 +89,6 @@ function setUpLocationSync(ngUpgrade) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 /**
  * Generated bundle index. Do not edit.

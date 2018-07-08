@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ParamMap } from './shared';
+import { ParamMap, Params } from './shared';
 export declare function createEmptyUrlTree(): UrlTree;
 export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
 /**
@@ -41,9 +41,7 @@ export declare class UrlTree {
     /** The root segment group of the URL tree */
     root: UrlSegmentGroup;
     /** The query params of the URL */
-    queryParams: {
-        [key: string]: string;
-    };
+    queryParams: Params;
     /** The fragment of the URL */
     fragment: string | null;
     readonly queryParamMap: ParamMap;
@@ -69,10 +67,10 @@ export declare class UrlSegmentGroup {
     /** The parent node in the url tree */
     parent: UrlSegmentGroup | null;
     constructor(
-        /** The URL segments of this group. See `UrlSegment` for more information */
-        segments: UrlSegment[], 
-        /** The list of children of this group */
-        children: {
+    /** The URL segments of this group. See `UrlSegment` for more information */
+    segments: UrlSegment[], 
+    /** The list of children of this group */
+    children: {
         [key: string]: UrlSegmentGroup;
     });
     /** Whether the segment has child segments */
@@ -115,10 +113,10 @@ export declare class UrlSegment {
         [name: string]: string;
     };
     constructor(
-        /** The path part of a URL segment */
-        path: string, 
-        /** The matrix parameters associated with a segment */
-        parameters: {
+    /** The path part of a URL segment */
+    path: string, 
+    /** The matrix parameters associated with a segment */
+    parameters: {
         [name: string]: string;
     });
     readonly parameterMap: ParamMap;
