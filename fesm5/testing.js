@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-beta.1+46.sha-a5799e6
+ * @license Angular v6.1.0-beta.3+80.sha-6c604bd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __values } from 'tslib';
+import { __values, __decorate, __metadata } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
 import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
@@ -63,22 +63,22 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
          * @docsNotRequired
          */
         set: function (modules) {
+            var e_1, _a;
             var res = {};
             try {
-                for (var _a = __values(Object.keys(modules)), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    var t = _b.value;
+                for (var _b = __values(Object.keys(modules)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var t = _c.value;
                     res[t] = this.compiler.compileModuleAsync(modules[t]);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             this._stubbedModules = res;
-            var e_1, _c;
         },
         enumerable: true,
         configurable: true
@@ -108,20 +108,20 @@ function isUrlHandlingStrategy(opts) {
  *
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    var router$$1 = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     // Handle deprecated argument ordering.
     if (opts) {
         if (isUrlHandlingStrategy(opts)) {
-            router$$1.urlHandlingStrategy = opts;
+            router.urlHandlingStrategy = opts;
         }
         else if (opts.paramsInheritanceStrategy) {
-            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
         }
     }
     if (urlHandlingStrategy) {
-        router$$1.urlHandlingStrategy = urlHandlingStrategy;
+        router.urlHandlingStrategy = urlHandlingStrategy;
     }
-    return router$$1;
+    return router;
 }
 /**
  * @description
@@ -161,6 +161,7 @@ var RouterTestingModule = /** @class */ (function () {
             ]
         };
     };
+    var RouterTestingModule_1;
     RouterTestingModule = RouterTestingModule_1 = __decorate([
         NgModule({
             exports: [RouterModule],
@@ -180,7 +181,6 @@ var RouterTestingModule = /** @class */ (function () {
         })
     ], RouterTestingModule);
     return RouterTestingModule;
-    var RouterTestingModule_1;
 }());
 
 /**
@@ -190,11 +190,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of the router/testing package.
- */
 
 /**
  * @license
@@ -203,12 +198,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
@@ -218,10 +207,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// This file is not used to build this module. It is only used during editing
-// by the TypeScript language service and during build for verification. `ngc`
-// replaces this file with production index.ts when it rewrites private symbol
-// names.
 
 export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
 //# sourceMappingURL=testing.js.map
