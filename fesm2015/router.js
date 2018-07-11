@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+75.sha-3a19f70
+ * @license Angular v6.1.0-beta.3+87.sha-05e3e4d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4332,6 +4332,15 @@ function defaultErrorHandler(error) {
     throw error;
 }
 /**
+ * @param {?} error
+ * @param {?} urlSerializer
+ * @param {?} url
+ * @return {?}
+ */
+function defaultMalformedUriErrorHandler(error, urlSerializer, url) {
+    return urlSerializer.parse('/');
+}
+/**
  * \@internal
  * @param {?} snapshot
  * @param {?} runExtras
@@ -4378,6 +4387,12 @@ class Router {
          * See `ErrorHandler` for more information.
          */
         this.errorHandler = defaultErrorHandler;
+        /**
+         * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+         * error due to containing an invalid character. The most common case would be a `%` sign
+         * that's not encoded and is not part of a percent encoded sequence.
+         */
+        this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
         /**
          * Indicates if at least one navigation happened.
          */
@@ -4458,7 +4473,7 @@ class Router {
         if (!this.locationSubscription) {
             this.locationSubscription = /** @type {?} */ (this.location.subscribe((change) => {
                 /** @type {?} */
-                const rawUrlTree = this.urlSerializer.parse(change['url']);
+                let rawUrlTree = this.parseUrl(change['url']);
                 /** @type {?} */
                 const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 /** @type {?} */
@@ -4661,7 +4676,17 @@ class Router {
      * @param {?} url
      * @return {?}
      */
-    parseUrl(url) { return this.urlSerializer.parse(url); }
+    parseUrl(url) {
+        /** @type {?} */
+        let urlTree;
+        try {
+            urlTree = this.urlSerializer.parse(url);
+        }
+        catch (e) {
+            urlTree = this.malformedUriErrorHandler(e, this.urlSerializer, url);
+        }
+        return urlTree;
+    }
     /**
      * Returns whether the url is activated
      * @param {?} url
@@ -4673,7 +4698,7 @@ class Router {
             return containsTree(this.currentUrlTree, url, exact);
         }
         /** @type {?} */
-        const urlTree = this.urlSerializer.parse(url);
+        const urlTree = this.parseUrl(url);
         return containsTree(this.currentUrlTree, urlTree, exact);
     }
     /**
@@ -6528,6 +6553,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.errorHandler) {
         router.errorHandler = opts.errorHandler;
     }
+    if (opts.malformedUriErrorHandler) {
+        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+    }
     if (opts.enableTracing) {
         /** @type {?} */
         const dom = ɵgetDOM();
@@ -6711,7 +6739,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('6.1.0-beta.3+75.sha-3a19f70');
+const VERSION = new Version('6.1.0-beta.3+87.sha-05e3e4d');
 
 /**
  * @fileoverview added by tsickle
