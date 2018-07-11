@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+81.sha-505b54b
+ * @license Angular v6.1.0-beta.3+82.sha-86d254d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -118,13 +118,19 @@ function isUrlHandlingStrategy(opts) {
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     /** @type {?} */
     const router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
-    // Handle deprecated argument ordering.
     if (opts) {
+        // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
             router.urlHandlingStrategy = opts;
         }
-        else if (opts.paramsInheritanceStrategy) {
-            router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+        else {
+            // Handle ExtraOptions
+            if (opts.malformedUriErrorHandler) {
+                router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+            }
+            if (opts.paramsInheritanceStrategy) {
+                router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            }
         }
     }
     if (urlHandlingStrategy) {

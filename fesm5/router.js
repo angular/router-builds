@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+81.sha-505b54b
+ * @license Angular v6.1.0-beta.3+82.sha-86d254d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3304,6 +3304,9 @@ var DefaultUrlHandlingStrategy = /** @class */ (function () {
 function defaultErrorHandler(error) {
     throw error;
 }
+function defaultMalformedUriErrorHandler(error, urlSerializer, url) {
+    return urlSerializer.parse('/');
+}
 /**
  * @internal
  */
@@ -3342,6 +3345,12 @@ var Router = /** @class */ (function () {
          * See `ErrorHandler` for more information.
          */
         this.errorHandler = defaultErrorHandler;
+        /**
+         * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+         * error due to containing an invalid character. The most common case would be a `%` sign
+         * that's not encoded and is not part of a percent encoded sequence.
+         */
+        this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
         /**
          * Indicates if at least one navigation happened.
          */
@@ -3416,7 +3425,7 @@ var Router = /** @class */ (function () {
         // run into ngZone
         if (!this.locationSubscription) {
             this.locationSubscription = this.location.subscribe(function (change) {
-                var rawUrlTree = _this.urlSerializer.parse(change['url']);
+                var rawUrlTree = _this.parseUrl(change['url']);
                 var source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 var state = change.state && change.state.navigationId ?
                     { navigationId: change.state.navigationId } :
@@ -3587,13 +3596,22 @@ var Router = /** @class */ (function () {
     /** Serializes a `UrlTree` into a string */
     Router.prototype.serializeUrl = function (url) { return this.urlSerializer.serialize(url); };
     /** Parses a string into a `UrlTree` */
-    Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
+    Router.prototype.parseUrl = function (url) {
+        var urlTree;
+        try {
+            urlTree = this.urlSerializer.parse(url);
+        }
+        catch (e) {
+            urlTree = this.malformedUriErrorHandler(e, this.urlSerializer, url);
+        }
+        return urlTree;
+    };
     /** Returns whether the url is activated */
     Router.prototype.isActive = function (url, exact) {
         if (url instanceof UrlTree) {
             return containsTree(this.currentUrlTree, url, exact);
         }
-        var urlTree = this.urlSerializer.parse(url);
+        var urlTree = this.parseUrl(url);
         return containsTree(this.currentUrlTree, urlTree, exact);
     };
     Router.prototype.removeEmptyProps = function (params) {
@@ -5147,6 +5165,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.errorHandler) {
         router.errorHandler = opts.errorHandler;
     }
+    if (opts.malformedUriErrorHandler) {
+        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+    }
     if (opts.enableTracing) {
         var dom_1 = ɵgetDOM();
         router.events.subscribe(function (e) {
@@ -5290,7 +5311,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.0-beta.3+81.sha-505b54b');
+var VERSION = new Version('6.1.0-beta.3+82.sha-86d254d');
 
 /**
  * @license
