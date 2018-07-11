@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-beta.3+75.sha-3a19f70
+ * @license Angular v6.1.0-beta.3+87.sha-05e3e4d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __param } from 'tslib';
+import { __decorate, __param, __metadata } from 'tslib';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
@@ -3001,6 +3001,9 @@ class DefaultUrlHandlingStrategy {
 function defaultErrorHandler(error) {
     throw error;
 }
+function defaultMalformedUriErrorHandler(error, urlSerializer, url) {
+    return urlSerializer.parse('/');
+}
 /**
  * @internal
  */
@@ -3038,6 +3041,12 @@ class Router {
          * See `ErrorHandler` for more information.
          */
         this.errorHandler = defaultErrorHandler;
+        /**
+         * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+         * error due to containing an invalid character. The most common case would be a `%` sign
+         * that's not encoded and is not part of a percent encoded sequence.
+         */
+        this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
         /**
          * Indicates if at least one navigation happened.
          */
@@ -3111,7 +3120,7 @@ class Router {
         // run into ngZone
         if (!this.locationSubscription) {
             this.locationSubscription = this.location.subscribe((change) => {
-                const rawUrlTree = this.urlSerializer.parse(change['url']);
+                let rawUrlTree = this.parseUrl(change['url']);
                 const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 const state = change.state && change.state.navigationId ?
                     { navigationId: change.state.navigationId } :
@@ -3275,13 +3284,22 @@ class Router {
     /** Serializes a `UrlTree` into a string */
     serializeUrl(url) { return this.urlSerializer.serialize(url); }
     /** Parses a string into a `UrlTree` */
-    parseUrl(url) { return this.urlSerializer.parse(url); }
+    parseUrl(url) {
+        let urlTree;
+        try {
+            urlTree = this.urlSerializer.parse(url);
+        }
+        catch (e) {
+            urlTree = this.malformedUriErrorHandler(e, this.urlSerializer, url);
+        }
+        return urlTree;
+    }
     /** Returns whether the url is activated */
     isActive(url, exact) {
         if (url instanceof UrlTree) {
             return containsTree(this.currentUrlTree, url, exact);
         }
-        const urlTree = this.urlSerializer.parse(url);
+        const urlTree = this.parseUrl(url);
         return containsTree(this.currentUrlTree, urlTree, exact);
     }
     removeEmptyProps(params) {
@@ -4787,6 +4805,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.errorHandler) {
         router.errorHandler = opts.errorHandler;
     }
+    if (opts.malformedUriErrorHandler) {
+        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+    }
     if (opts.enableTracing) {
         const dom = ɵgetDOM();
         router.events.subscribe((e) => {
@@ -4925,7 +4946,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-beta.3+75.sha-3a19f70');
+const VERSION = new Version('6.1.0-beta.3+87.sha-05e3e4d');
 
 /**
  * @license
