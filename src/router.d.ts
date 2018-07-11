@@ -170,6 +170,12 @@ export declare class Router {
      */
     errorHandler: ErrorHandler;
     /**
+     * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+     * error due to containing an invalid character. The most common case would be a `%` sign
+     * that's not encoded and is not part of a percent encoded sequence.
+     */
+    malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
+    /**
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
