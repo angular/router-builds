@@ -273,6 +273,17 @@ export interface ExtraOptions {
      * - `'url'` -  The malformed URL that caused the URIError
      * */
     malformedUriErrorHandler?: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
+    /**
+     * Defines when the router updates the browser URL. The default behavior is to update after
+     * successful navigation. However, some applications may prefer a mode where the URL gets
+     * updated at the beginning of navigation. The most common use case would be updating the
+     * URL early so if navigation fails, you can show an error message with the URL that failed.
+     * Available options are:
+     *
+     * - `'deferred'`, the default, updates the browser URL after navigation has finished.
+     * - `'eager'`, updates browser URL at the beginning of navigation.
+     */
+    urlUpdateStrategy?: 'deferred' | 'eager';
 }
 export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
