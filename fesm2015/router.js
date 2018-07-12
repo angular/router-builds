@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+94.sha-328971f
+ * @license Angular v6.1.0-beta.3+93.sha-4d8b8ad
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3082,17 +3082,6 @@ class Router {
          * - `'always'`, enables unconditional inheritance of parent params.
          */
         this.paramsInheritanceStrategy = 'emptyOnly';
-        /**
-         * Defines when the router updates the browser URL. The default behavior is to update after
-         * successful navigation. However, some applications may prefer a mode where the URL gets
-         * updated at the beginning of navigation. The most common use case would be updating the
-         * URL early so if navigation fails, you can show an error message with the URL that failed.
-         * Available options are:
-         *
-         * - `'deferred'`, the default, updates the browser URL after navigation has finished.
-         * - `'eager'`, updates browser URL at the beginning of navigation.
-         */
-        this.urlUpdateStrategy = 'deferred';
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
@@ -3377,9 +3366,6 @@ class Router {
         const urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
         if ((this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
             this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
-            if (this.urlUpdateStrategy === 'eager' && !extras.skipLocationChange) {
-                this.setBrowserUrl(rawUrl, !!extras.replaceUrl, id);
-            }
             this.events
                 .next(new NavigationStart(id, this.serializeUrl(url), source, state));
             Promise.resolve()
@@ -3518,8 +3504,14 @@ class Router {
             this.currentUrlTree = appliedUrl;
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
             this.routerState = state;
-            if (this.urlUpdateStrategy === 'deferred' && !skipLocationChange) {
-                this.setBrowserUrl(this.rawUrlTree, replaceUrl, id);
+            if (!skipLocationChange) {
+                const path = this.urlSerializer.serialize(this.rawUrlTree);
+                if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
+                    this.location.replaceState(path, '', { navigationId: id });
+                }
+                else {
+                    this.location.go(path, '', { navigationId: id });
+                }
             }
             new ActivateRoutes(this.routeReuseStrategy, state, storedState, (evt) => this.triggerEvent(evt))
                 .activate(this.rootContexts);
@@ -3559,15 +3551,6 @@ class Router {
                 }
             }
         });
-    }
-    setBrowserUrl(url, replaceUrl, id) {
-        const path = this.urlSerializer.serialize(url);
-        if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
-            this.location.replaceState(path, '', { navigationId: id });
-        }
-        else {
-            this.location.go(path, '', { navigationId: id });
-        }
     }
     resetStateAndUrl(storedState, storedUrl, rawUrl) {
         this.routerState = storedState;
@@ -4840,9 +4823,6 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.paramsInheritanceStrategy) {
         router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
     }
-    if (opts.urlUpdateStrategy) {
-        router.urlUpdateStrategy = opts.urlUpdateStrategy;
-    }
     return router;
 }
 function rootRoute(router) {
@@ -4966,7 +4946,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-beta.3+94.sha-328971f');
+const VERSION = new Version('6.1.0-beta.3+93.sha-4d8b8ad');
 
 /**
  * @license

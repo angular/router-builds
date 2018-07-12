@@ -202,17 +202,6 @@ export declare class Router {
      */
     paramsInheritanceStrategy: 'emptyOnly' | 'always';
     /**
-     * Defines when the router updates the browser URL. The default behavior is to update after
-     * successful navigation. However, some applications may prefer a mode where the URL gets
-     * updated at the beginning of navigation. The most common use case would be updating the
-     * URL early so if navigation fails, you can show an error message with the URL that failed.
-     * Available options are:
-     *
-     * - `'deferred'`, the default, updates the browser URL after navigation has finished.
-     * - `'eager'`, updates browser URL at the beginning of navigation.
-     */
-    urlUpdateStrategy: 'deferred' | 'eager';
-    /**
      * Creates the router service.
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
@@ -346,7 +335,6 @@ export declare class Router {
      * is a private method, it could be overridden to make activation asynchronous.
      */
     private activateRoutes;
-    private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
 }
