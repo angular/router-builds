@@ -170,6 +170,12 @@ export declare class Router {
      */
     errorHandler: ErrorHandler;
     /**
+     * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+     * error due to containing an invalid character. The most common case would be a `%` sign
+     * that's not encoded and is not part of a percent encoded sequence.
+     */
+    malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
+    /**
      * Indicates if at least one navigation happened.
      */
     navigated: boolean;
@@ -195,6 +201,17 @@ export declare class Router {
      * - `'always'`, enables unconditional inheritance of parent params.
      */
     paramsInheritanceStrategy: 'emptyOnly' | 'always';
+    /**
+     * Defines when the router updates the browser URL. The default behavior is to update after
+     * successful navigation. However, some applications may prefer a mode where the URL gets
+     * updated at the beginning of navigation. The most common use case would be updating the
+     * URL early so if navigation fails, you can show an error message with the URL that failed.
+     * Available options are:
+     *
+     * - `'deferred'`, the default, updates the browser URL after navigation has finished.
+     * - `'eager'`, updates browser URL at the beginning of navigation.
+     */
+    urlUpdateStrategy: 'deferred' | 'eager';
     /**
      * Creates the router service.
      */
@@ -329,6 +346,7 @@ export declare class Router {
      * is a private method, it could be overridden to make activation asynchronous.
      */
     private activateRoutes;
+    private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
 }
