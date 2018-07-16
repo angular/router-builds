@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-beta.3+86.sha-6b3f5dd
+ * @license Angular v6.1.0-beta.3+129.sha-acdb672
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4332,6 +4332,15 @@ function defaultErrorHandler(error) {
     throw error;
 }
 /**
+ * @param {?} error
+ * @param {?} urlSerializer
+ * @param {?} url
+ * @return {?}
+ */
+function defaultMalformedUriErrorHandler(error, urlSerializer, url) {
+    return urlSerializer.parse('/');
+}
+/**
  * \@internal
  * @param {?} snapshot
  * @param {?} runExtras
@@ -4379,6 +4388,12 @@ class Router {
          */
         this.errorHandler = defaultErrorHandler;
         /**
+         * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+         * error due to containing an invalid character. The most common case would be a `%` sign
+         * that's not encoded and is not part of a percent encoded sequence.
+         */
+        this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
+        /**
          * Indicates if at least one navigation happened.
          */
         this.navigated = false;
@@ -4413,6 +4428,17 @@ class Router {
          * - `'always'`, enables unconditional inheritance of parent params.
          */
         this.paramsInheritanceStrategy = 'emptyOnly';
+        /**
+         * Defines when the router updates the browser URL. The default behavior is to update after
+         * successful navigation. However, some applications may prefer a mode where the URL gets
+         * updated at the beginning of navigation. The most common use case would be updating the
+         * URL early so if navigation fails, you can show an error message with the URL that failed.
+         * Available options are:
+         *
+         * - `'deferred'`, the default, updates the browser URL after navigation has finished.
+         * - `'eager'`, updates browser URL at the beginning of navigation.
+         */
+        this.urlUpdateStrategy = 'deferred';
         /** @type {?} */
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         /** @type {?} */
@@ -4458,7 +4484,7 @@ class Router {
         if (!this.locationSubscription) {
             this.locationSubscription = /** @type {?} */ (this.location.subscribe((change) => {
                 /** @type {?} */
-                const rawUrlTree = this.urlSerializer.parse(change['url']);
+                let rawUrlTree = this.parseUrl(change['url']);
                 /** @type {?} */
                 const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 /** @type {?} */
@@ -4661,7 +4687,17 @@ class Router {
      * @param {?} url
      * @return {?}
      */
-    parseUrl(url) { return this.urlSerializer.parse(url); }
+    parseUrl(url) {
+        /** @type {?} */
+        let urlTree;
+        try {
+            urlTree = this.urlSerializer.parse(url);
+        }
+        catch (e) {
+            urlTree = this.malformedUriErrorHandler(e, this.urlSerializer, url);
+        }
+        return urlTree;
+    }
     /**
      * Returns whether the url is activated
      * @param {?} url
@@ -4673,7 +4709,7 @@ class Router {
             return containsTree(this.currentUrlTree, url, exact);
         }
         /** @type {?} */
-        const urlTree = this.urlSerializer.parse(url);
+        const urlTree = this.parseUrl(url);
         return containsTree(this.currentUrlTree, urlTree, exact);
     }
     /**
@@ -4766,6 +4802,9 @@ class Router {
         const urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
         if ((this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
             this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+            if (this.urlUpdateStrategy === 'eager' && !extras.skipLocationChange) {
+                this.setBrowserUrl(rawUrl, !!extras.replaceUrl, id);
+            }
             (/** @type {?} */ (this.events))
                 .next(new NavigationStart(id, this.serializeUrl(url), source, state));
             Promise.resolve()
@@ -4930,15 +4969,8 @@ class Router {
             this.currentUrlTree = appliedUrl;
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, rawUrl);
             (/** @type {?} */ (this)).routerState = state;
-            if (!skipLocationChange) {
-                /** @type {?} */
-                const path = this.urlSerializer.serialize(this.rawUrlTree);
-                if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
-                    this.location.replaceState(path, '', { navigationId: id });
-                }
-                else {
-                    this.location.go(path, '', { navigationId: id });
-                }
+            if (this.urlUpdateStrategy === 'deferred' && !skipLocationChange) {
+                this.setBrowserUrl(this.rawUrlTree, replaceUrl, id);
             }
             new ActivateRoutes(this.routeReuseStrategy, state, storedState, (evt) => this.triggerEvent(evt))
                 .activate(this.rootContexts);
@@ -4978,6 +5010,22 @@ class Router {
                 }
             }
         });
+    }
+    /**
+     * @param {?} url
+     * @param {?} replaceUrl
+     * @param {?} id
+     * @return {?}
+     */
+    setBrowserUrl(url, replaceUrl, id) {
+        /** @type {?} */
+        const path = this.urlSerializer.serialize(url);
+        if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
+            this.location.replaceState(path, '', { navigationId: id });
+        }
+        else {
+            this.location.go(path, '', { navigationId: id });
+        }
     }
     /**
      * @param {?} storedState
@@ -6528,6 +6576,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.errorHandler) {
         router.errorHandler = opts.errorHandler;
     }
+    if (opts.malformedUriErrorHandler) {
+        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+    }
     if (opts.enableTracing) {
         /** @type {?} */
         const dom = ɵgetDOM();
@@ -6543,6 +6594,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     }
     if (opts.paramsInheritanceStrategy) {
         router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+    }
+    if (opts.urlUpdateStrategy) {
+        router.urlUpdateStrategy = opts.urlUpdateStrategy;
     }
     return router;
 }
@@ -6711,7 +6765,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('6.1.0-beta.3+86.sha-6b3f5dd');
+const VERSION = new Version('6.1.0-beta.3+129.sha-acdb672');
 
 /**
  * @fileoverview added by tsickle
