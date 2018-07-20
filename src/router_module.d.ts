@@ -98,11 +98,11 @@ export declare class RouterModule {
      * * `paramsInheritanceStrategy` defines how the router merges params, data and resolved data
      * from parent to child routes.
      */
-    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
+    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterModule>;
     /**
      * Creates a module with all the router directives and a provider registering routes.
      */
-    static forChild(routes: Routes): ModuleWithProviders;
+    static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
 }
 export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
