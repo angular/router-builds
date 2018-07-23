@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.0-rc.3+51.sha-edef58f
+ * @license Angular v6.1.0-rc.3+53.sha-169e9dd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, NgModuleRef, isDevMode, InjectionToken, NgModuleFactory, Compiler, Injector, NgModuleFactoryLoader, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQ, ɵqR, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Compiler, Injector, NgModuleFactoryLoader, NgModuleRef, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵNgOnChangesFeature, ɵinjectAttribute, ɵL, ɵp, ɵb, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4244,7 +4244,7 @@ class RouterLinkActive {
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     }
 }
-RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return [new RouterLinkActive(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵdirectiveInject(Renderer2), ɵinjectChangeDetectorRef()), ɵQ(null, RouterLink, true), ɵQ(null, RouterLinkWithHref, true)]; }, hostBindings: function RouterLinkActive_HostBindings(dirIndex, elIndex) { var _t; (ɵqR((_t = ɵd(dirIndex)[1])) && (ɵd(dirIndex)[0].links = _t)); (ɵqR((_t = ɵd(dirIndex)[2])) && (ɵd(dirIndex)[0].linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵNgOnChangesFeature] });
+RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return new RouterLinkActive(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵdirectiveInject(Renderer2), ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵQr(ɵQ(null, RouterLink, true)); ɵQr(ɵQ(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { const instance = ɵd(dirIndex); var _t; (ɵqR((_t = ɵql(queryStartIndex))) && (instance.links = _t)); (ɵqR((_t = ɵql((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵNgOnChangesFeature] });
 
 /**
  * @description
@@ -4775,7 +4775,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-rc.3+51.sha-edef58f');
+const VERSION = new Version('6.1.0-rc.3+53.sha-169e9dd');
 
 /**
  * @license

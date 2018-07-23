@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+51.sha-edef58f
+ * @license Angular v6.1.0-rc.3+53.sha-169e9dd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4690,7 +4690,7 @@
             return this.links.some(this.isLinkActive(this.router)) ||
                 this.linksWithHrefs.some(this.isLinkActive(this.router));
         };
-        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return [new RouterLinkActive(i0.ɵdirectiveInject(Router), i0.ɵinjectElementRef(), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵinjectChangeDetectorRef()), i0.ɵQ(null, RouterLink, true), i0.ɵQ(null, RouterLinkWithHref, true)]; }, hostBindings: function RouterLinkActive_HostBindings(dirIndex, elIndex) { var _t; (i0.ɵqR((_t = i0.ɵd(dirIndex)[1])) && (i0.ɵd(dirIndex)[0].links = _t)); (i0.ɵqR((_t = i0.ɵd(dirIndex)[2])) && (i0.ɵd(dirIndex)[0].linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [i0.ɵNgOnChangesFeature] });
+        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return new RouterLinkActive(i0.ɵdirectiveInject(Router), i0.ɵinjectElementRef(), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { i0.ɵQr(i0.ɵQ(null, RouterLink, true)); i0.ɵQr(i0.ɵQ(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = i0.ɵd(dirIndex); var _t; (i0.ɵqR((_t = i0.ɵql(queryStartIndex))) && (instance.links = _t)); (i0.ɵqR((_t = i0.ɵql((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [i0.ɵNgOnChangesFeature] });
         return RouterLinkActive;
     }());
 
@@ -5256,7 +5256,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new i0.Version('6.1.0-rc.3+51.sha-edef58f');
+    var VERSION = new i0.Version('6.1.0-rc.3+53.sha-169e9dd');
 
     /**
      * @license
