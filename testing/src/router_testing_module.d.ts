@@ -94,5 +94,5 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  *
  */
 export declare class RouterTestingModule {
-    static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders;
+    static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
 }
