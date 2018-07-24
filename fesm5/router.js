@@ -1,11 +1,11 @@
 /**
- * @license Angular v6.1.0-rc.3+44.sha-6b859da
+ * @license Angular v6.1.0-rc.3+54.sha-be3cca4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __values, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, Renderer2, InjectionToken, NgModuleFactory, ComponentFactoryResolver, EventEmitter, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQ, ɵqR, ɵd, ɵNgOnChangesFeature, isDevMode, ɵinjectAttribute, ɵL, ɵp, ɵb, ɵinjectViewContainerRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModuleRef, ɵdefineComponent, ɵEe } from '@angular/core';
+import { __values, __extends, __assign, __spread } from 'tslib';
+import { ɵisObservable, ɵisPromise, Renderer2, InjectionToken, NgModuleFactory, Version, ComponentFactoryResolver, EventEmitter, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵqR, ɵql, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModuleRef, ɵinjectViewContainerRef, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4623,7 +4623,7 @@ var RouterLinkActive = /** @class */ (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return [new RouterLinkActive(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵdirectiveInject(Renderer2), ɵinjectChangeDetectorRef()), ɵQ(null, RouterLink, true), ɵQ(null, RouterLinkWithHref, true)]; }, hostBindings: function RouterLinkActive_HostBindings(dirIndex, elIndex) { var _t; (ɵqR((_t = ɵd(dirIndex)[1])) && (ɵd(dirIndex)[0].links = _t)); (ɵqR((_t = ɵd(dirIndex)[2])) && (ɵd(dirIndex)[0].linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵNgOnChangesFeature] });
+    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory() { return new RouterLinkActive(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵdirectiveInject(Renderer2), ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵQr(ɵQ(null, RouterLink, true)); ɵQr(ɵQ(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵd(dirIndex); var _t; (ɵqR((_t = ɵql(queryStartIndex))) && (instance.links = _t)); (ɵqR((_t = ɵql((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵNgOnChangesFeature] });
     return RouterLinkActive;
 }());
 
@@ -5189,7 +5189,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.0-rc.3+44.sha-6b859da');
+var VERSION = new Version('6.1.0-rc.3+54.sha-be3cca4');
 
 /**
  * @license
