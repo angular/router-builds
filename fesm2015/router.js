@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+64.sha-1ceddb6
+ * @license Angular v6.1.0-rc.3+75.sha-e1c6fd5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2662,21 +2662,22 @@ function closestLoadedConfig(snapshot) {
  */
 class NoMatch$1 {
 }
-function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly') {
-    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy)
+function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly', relativeLinkResolution = 'legacy') {
+    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution)
         .recognize();
 }
 class Recognizer {
-    constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
+    constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution) {
         this.rootComponentType = rootComponentType;
         this.config = config;
         this.urlTree = urlTree;
         this.url = url;
         this.paramsInheritanceStrategy = paramsInheritanceStrategy;
+        this.relativeLinkResolution = relativeLinkResolution;
     }
     recognize() {
         try {
-            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config, this.relativeLinkResolution).segmentGroup;
             const children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
             const root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
             const rootNode = new TreeNode(root, children);
@@ -2744,7 +2745,7 @@ class Recognizer {
             snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         }
         const childConfig = getChildConfig(route);
-        const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig);
+        const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig, this.relativeLinkResolution);
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
             const children = this.processChildren(childConfig, segmentGroup);
             return [new TreeNode(snapshot, children)];
@@ -2819,7 +2820,7 @@ function getPathIndexShift(segmentGroup) {
     }
     return res - 1;
 }
-function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
+function split$1(segmentGroup, consumedSegments, slicedSegments, config, relativeLinkResolution) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
         const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
@@ -2829,7 +2830,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     }
     if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children, relativeLinkResolution));
         s._sourceSegment = segmentGroup;
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments };
@@ -2839,13 +2840,18 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     s._segmentIndexShift = consumedSegments.length;
     return { segmentGroup: s, slicedSegments };
 }
-function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
     const res = {};
     for (const r of routes) {
         if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
             const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
-            s._segmentIndexShift = segmentGroup.segments.length;
+            if (relativeLinkResolution === 'legacy') {
+                s._segmentIndexShift = segmentGroup.segments.length;
+            }
+            else {
+                s._segmentIndexShift = consumedSegments.length;
+            }
             res[getOutlet$1(r)] = s;
         }
     }
@@ -3093,6 +3099,10 @@ class Router {
          * - `'eager'`, updates browser URL at the beginning of navigation.
          */
         this.urlUpdateStrategy = 'deferred';
+        /**
+         * See {@link RouterModule} for more information.
+         */
+        this.relativeLinkResolution = 'legacy';
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
@@ -3415,7 +3425,7 @@ class Router {
                 const moduleInjector = this.ngModule.injector;
                 const redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
                 urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap((appliedUrl) => {
-                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy)
+                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy, this.relativeLinkResolution)
                         .pipe(map((snapshot) => {
                         this.events
                             .next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
@@ -4843,6 +4853,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.urlUpdateStrategy) {
         router.urlUpdateStrategy = opts.urlUpdateStrategy;
     }
+    if (opts.relativeLinkResolution) {
+        router.relativeLinkResolution = opts.relativeLinkResolution;
+    }
     return router;
 }
 function rootRoute(router) {
@@ -4966,7 +4979,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0-rc.3+64.sha-1ceddb6');
+const VERSION = new Version('6.1.0-rc.3+75.sha-e1c6fd5');
 
 /**
  * @license
