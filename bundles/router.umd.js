@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+64.sha-1ceddb6
+ * @license Angular v6.1.0-rc.3+66.sha-d0c066a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5256,7 +5256,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new i0.Version('6.1.0-rc.3+64.sha-1ceddb6');
+    var VERSION = new i0.Version('6.1.0-rc.3+66.sha-d0c066a');
 
     /**
      * @license
