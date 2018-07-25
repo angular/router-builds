@@ -213,6 +213,10 @@ export declare class Router {
      */
     urlUpdateStrategy: 'deferred' | 'eager';
     /**
+     * See {@link RouterModule} for more information.
+     */
+    relativeLinkResolution: 'legacy' | 'corrected';
+    /**
      * Creates the router service.
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);

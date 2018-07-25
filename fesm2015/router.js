@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+73.sha-1e28495
+ * @license Angular v6.1.0-rc.3+74.sha-968f153
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3781,10 +3781,11 @@ class NoMatch$1 {
  * @param {?} urlTree
  * @param {?} url
  * @param {?=} paramsInheritanceStrategy
+ * @param {?=} relativeLinkResolution
  * @return {?}
  */
-function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly') {
-    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy)
+function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly', relativeLinkResolution = 'legacy') {
+    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution)
         .recognize();
 }
 class Recognizer {
@@ -3794,13 +3795,15 @@ class Recognizer {
      * @param {?} urlTree
      * @param {?} url
      * @param {?} paramsInheritanceStrategy
+     * @param {?} relativeLinkResolution
      */
-    constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
+    constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution) {
         this.rootComponentType = rootComponentType;
         this.config = config;
         this.urlTree = urlTree;
         this.url = url;
         this.paramsInheritanceStrategy = paramsInheritanceStrategy;
+        this.relativeLinkResolution = relativeLinkResolution;
     }
     /**
      * @return {?}
@@ -3808,7 +3811,7 @@ class Recognizer {
     recognize() {
         try {
             /** @type {?} */
-            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config, this.relativeLinkResolution).segmentGroup;
             /** @type {?} */
             const children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
             /** @type {?} */
@@ -3924,7 +3927,7 @@ class Recognizer {
         }
         /** @type {?} */
         const childConfig = getChildConfig(route);
-        const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig);
+        const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig, this.relativeLinkResolution);
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
             /** @type {?} */
             const children = this.processChildren(childConfig, segmentGroup);
@@ -4043,9 +4046,10 @@ function getPathIndexShift(segmentGroup) {
  * @param {?} consumedSegments
  * @param {?} slicedSegments
  * @param {?} config
+ * @param {?} relativeLinkResolution
  * @return {?}
  */
-function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
+function split$1(segmentGroup, consumedSegments, slicedSegments, config, relativeLinkResolution) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
         /** @type {?} */
@@ -4057,7 +4061,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
         /** @type {?} */
-        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children, relativeLinkResolution));
         s._sourceSegment = segmentGroup;
         s._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s, slicedSegments };
@@ -4070,12 +4074,14 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
 }
 /**
  * @param {?} segmentGroup
+ * @param {?} consumedSegments
  * @param {?} slicedSegments
  * @param {?} routes
  * @param {?} children
+ * @param {?} relativeLinkResolution
  * @return {?}
  */
-function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
     /** @type {?} */
     const res = {};
     for (const r of routes) {
@@ -4083,7 +4089,12 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
             /** @type {?} */
             const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
-            s._segmentIndexShift = segmentGroup.segments.length;
+            if (relativeLinkResolution === 'legacy') {
+                s._segmentIndexShift = segmentGroup.segments.length;
+            }
+            else {
+                s._segmentIndexShift = consumedSegments.length;
+            }
             res[getOutlet$1(r)] = s;
         }
     }
@@ -4439,6 +4450,10 @@ class Router {
          * - `'eager'`, updates browser URL at the beginning of navigation.
          */
         this.urlUpdateStrategy = 'deferred';
+        /**
+         * See {\@link RouterModule} for more information.
+         */
+        this.relativeLinkResolution = 'legacy';
         /** @type {?} */
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         /** @type {?} */
@@ -4850,7 +4865,7 @@ class Router {
                 /** @type {?} */
                 const redirectsApplied$ = applyRedirects(moduleInjector, this.configLoader, this.urlSerializer, url, this.config);
                 urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap((appliedUrl) => {
-                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy)
+                    return recognize(this.rootComponentType, this.config, appliedUrl, this.serializeUrl(appliedUrl), this.paramsInheritanceStrategy, this.relativeLinkResolution)
                         .pipe(map((snapshot) => {
                         (/** @type {?} */ (this.events))
                             .next(new RoutesRecognized(id, this.serializeUrl(url), this.serializeUrl(appliedUrl), snapshot));
@@ -6598,6 +6613,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.urlUpdateStrategy) {
         router.urlUpdateStrategy = opts.urlUpdateStrategy;
     }
+    if (opts.relativeLinkResolution) {
+        router.relativeLinkResolution = opts.relativeLinkResolution;
+    }
     return router;
 }
 /**
@@ -6765,7 +6783,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('6.1.0-rc.3+73.sha-1e28495');
+const VERSION = new Version('6.1.0-rc.3+74.sha-968f153');
 
 /**
  * @fileoverview added by tsickle
