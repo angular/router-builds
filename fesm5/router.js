@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0-rc.3+85.sha-70668f7
+ * @license Angular v6.1.0+15.sha-70174d1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2913,22 +2913,24 @@ var NoMatch$1 = /** @class */ (function () {
     }
     return NoMatch;
 }());
-function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
+function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution) {
     if (paramsInheritanceStrategy === void 0) { paramsInheritanceStrategy = 'emptyOnly'; }
-    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy)
+    if (relativeLinkResolution === void 0) { relativeLinkResolution = 'legacy'; }
+    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution)
         .recognize();
 }
 var Recognizer = /** @class */ (function () {
-    function Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy) {
+    function Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution) {
         this.rootComponentType = rootComponentType;
         this.config = config;
         this.urlTree = urlTree;
         this.url = url;
         this.paramsInheritanceStrategy = paramsInheritanceStrategy;
+        this.relativeLinkResolution = relativeLinkResolution;
     }
     Recognizer.prototype.recognize = function () {
         try {
-            var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+            var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config, this.relativeLinkResolution).segmentGroup;
             var children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
             var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
             var rootNode = new TreeNode(root, children);
@@ -3009,7 +3011,7 @@ var Recognizer = /** @class */ (function () {
             snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         }
         var childConfig = getChildConfig(route);
-        var _a = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
+        var _a = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig, this.relativeLinkResolution), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
             var children_1 = this.processChildren(childConfig, segmentGroup);
             return [new TreeNode(snapshot, children_1)];
@@ -3085,7 +3087,7 @@ function getPathIndexShift(segmentGroup) {
     }
     return res - 1;
 }
-function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
+function split$1(segmentGroup, consumedSegments, slicedSegments, config, relativeLinkResolution) {
     if (slicedSegments.length > 0 &&
         containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
         var s_1 = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
@@ -3095,7 +3097,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     }
     if (slicedSegments.length === 0 &&
         containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-        var s_2 = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        var s_2 = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children, relativeLinkResolution));
         s_2._sourceSegment = segmentGroup;
         s_2._segmentIndexShift = consumedSegments.length;
         return { segmentGroup: s_2, slicedSegments: slicedSegments };
@@ -3105,7 +3107,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
     s._segmentIndexShift = consumedSegments.length;
     return { segmentGroup: s, slicedSegments: slicedSegments };
 }
-function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
     var e_2, _a;
     var res = {};
     try {
@@ -3114,7 +3116,12 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
             if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
                 var s = new UrlSegmentGroup([], {});
                 s._sourceSegment = segmentGroup;
-                s._segmentIndexShift = segmentGroup.segments.length;
+                if (relativeLinkResolution === 'legacy') {
+                    s._segmentIndexShift = segmentGroup.segments.length;
+                }
+                else {
+                    s._segmentIndexShift = consumedSegments.length;
+                }
                 res[getOutlet$1(r)] = s;
             }
         }
@@ -3397,6 +3404,10 @@ var Router = /** @class */ (function () {
          * - `'eager'`, updates browser URL at the beginning of navigation.
          */
         this.urlUpdateStrategy = 'deferred';
+        /**
+         * See {@link RouterModule} for more information.
+         */
+        this.relativeLinkResolution = 'legacy';
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(NgModuleRef);
@@ -3731,7 +3742,7 @@ var Router = /** @class */ (function () {
                 var moduleInjector = _this.ngModule.injector;
                 var redirectsApplied$ = applyRedirects(moduleInjector, _this.configLoader, _this.urlSerializer, url, _this.config);
                 urlAndSnapshot$ = redirectsApplied$.pipe(mergeMap(function (appliedUrl) {
-                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl), _this.paramsInheritanceStrategy)
+                    return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl), _this.paramsInheritanceStrategy, _this.relativeLinkResolution)
                         .pipe(map(function (snapshot) {
                         _this.events
                             .next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
@@ -5255,6 +5266,9 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.urlUpdateStrategy) {
         router.urlUpdateStrategy = opts.urlUpdateStrategy;
     }
+    if (opts.relativeLinkResolution) {
+        router.relativeLinkResolution = opts.relativeLinkResolution;
+    }
     return router;
 }
 function rootRoute(router) {
@@ -5380,7 +5394,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.0-rc.3+85.sha-70668f7');
+var VERSION = new Version('6.1.0+15.sha-70174d1');
 
 /**
  * @license
