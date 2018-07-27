@@ -1,4 +1,8 @@
 import * as i0 from '@angular/core';
+import * as i1 from './directives/router_outlet';
+import * as i2 from './directives/router_link';
+import * as i3 from './directives/router_link_active';
+import * as i4 from './components/empty_outlet';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -104,7 +108,7 @@ export declare class RouterModule {
      * Creates a module with all the router directives and a provider registering routes.
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ngModuleDef: i0.ɵNgModuleDef<RouterModule, [typeof RouterOutlet,typeof RouterLink,typeof RouterLinkWithHref,typeof RouterLinkActive,typeof EmptyOutletComponent], never, [typeof RouterOutlet,typeof RouterLink,typeof RouterLinkWithHref,typeof RouterLinkActive,typeof EmptyOutletComponent]>;
+    static ngModuleDef: i0.ɵNgModuleDef<RouterModule, [typeof i1.RouterOutlet,typeof i2.RouterLink,typeof i2.RouterLinkWithHref,typeof i3.RouterLinkActive,typeof i4.EmptyOutletComponent], never, [typeof i1.RouterOutlet,typeof i2.RouterLink,typeof i2.RouterLinkWithHref,typeof i3.RouterLinkActive,typeof i4.EmptyOutletComponent]>;
     static ngInjectorDef: i0.ɵInjectorDef<RouterModule>;
 }
 export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;
