@@ -1,4 +1,5 @@
 import * as i0 from '@angular/core';
+import * as i1 from '@angular/router';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -97,6 +98,6 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
-    static ngModuleDef: i0.ɵNgModuleDef<RouterTestingModule, never, never, [typeof RouterModule]>;
+    static ngModuleDef: i0.ɵNgModuleDef<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
     static ngInjectorDef: i0.ɵInjectorDef<RouterTestingModule>;
 }
