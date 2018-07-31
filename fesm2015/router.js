@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.0+17.sha-74964bd
+ * @license Angular v6.1.0+18.sha-875efa8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4979,7 +4979,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.0+17.sha-74964bd');
+const VERSION = new Version('6.1.0+18.sha-875efa8');
 
 /**
  * @license
