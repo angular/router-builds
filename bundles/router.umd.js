@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.0+1.sha-4f741e7
+ * @license Angular v7.0.0-beta.0+3.sha-c2c12e5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5418,7 +5418,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('7.0.0-beta.0+1.sha-4f741e7');
+    var VERSION = new core.Version('7.0.0-beta.0+3.sha-c2c12e5');
 
     /**
      * @license
