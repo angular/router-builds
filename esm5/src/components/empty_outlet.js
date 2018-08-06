@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
 var EmptyOutletComponent = /** @class */ (function () {
     function EmptyOutletComponent() {
     }
-    EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory() { return new EmptyOutletComponent(); }, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory() { return new EmptyOutletComponent(); }, features: [i0.ɵPublicFeature], template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             i0.ɵEe(0, "router-outlet");
         } }, directives: [i1.RouterOutlet] });
     return EmptyOutletComponent;
