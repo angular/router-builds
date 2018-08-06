@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.0+23.sha-ba1e25f
+ * @license Angular v7.0.0-beta.0+24.sha-4eb8ac6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, NgModuleRef, isDevMode, InjectionToken, NgModuleFactory, Compiler, Injector, NgModuleFactoryLoader, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectAttribute, ɵL, ɵp, ɵb, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injector, NgModuleFactoryLoader, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectViewContainerRef, ɵinjectAttribute, ɵinjectChangeDetectorRef, ɵPublicFeature, ɵinjectElementRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵNgOnChangesFeature, ɵL, ɵp, ɵb, defineInjectable, inject, INJECTOR, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4788,7 +4788,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('7.0.0-beta.0+23.sha-ba1e25f');
+const VERSION = new Version('7.0.0-beta.0+24.sha-4eb8ac6');
 
 /**
  * @license
