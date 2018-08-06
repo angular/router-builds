@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Event } from './events';
 import { ChildrenOutletContexts } from './router_outlet_context';
 import { RouterStateSnapshot } from './router_state';
@@ -17,7 +17,7 @@ export declare class PreActivation {
     private future;
     private curr;
     private moduleInjector;
-    private forwardEvent;
+    private forwardEvent?;
     private canActivateChecks;
     private canDeactivateChecks;
     constructor(future: RouterStateSnapshot, curr: RouterStateSnapshot, moduleInjector: Injector, forwardEvent?: ((evt: Event) => void) | undefined);
@@ -30,16 +30,16 @@ export declare class PreActivation {
      * Iterates over child routes and calls recursive `setupRouteGuards` to get `this` instance in
      * proper state to run `checkGuards()` method.
      */
-    private setupChildRouteGuards(futureNode, currNode, contexts, futurePath);
+    private setupChildRouteGuards;
     /**
      * Iterates over child routes and calls recursive `setupRouteGuards` to get `this` instance in
      * proper state to run `checkGuards()` method.
      */
-    private setupRouteGuards(futureNode, currNode, parentContexts, futurePath);
-    private shouldRunGuardsAndResolvers(curr, future, mode);
-    private deactivateRouteAndItsChildren(route, context);
-    private runCanDeactivateChecks();
-    private runCanActivateChecks();
+    private setupRouteGuards;
+    private shouldRunGuardsAndResolvers;
+    private deactivateRouteAndItsChildren;
+    private runCanDeactivateChecks;
+    private runCanActivateChecks;
     /**
      * This should fire off `ActivationStart` events for each route being activated at this
      * level.
@@ -48,7 +48,7 @@ export declare class PreActivation {
      * return
      * `true` so checks continue to run.
      */
-    private fireActivationStart(snapshot);
+    private fireActivationStart;
     /**
      * This should fire off `ChildActivationStart` events for each route being activated at this
      * level.
@@ -57,13 +57,13 @@ export declare class PreActivation {
      * return
      * `true` so checks continue to run.
      */
-    private fireChildActivationStart(snapshot);
-    private runCanActivate(future);
-    private runCanActivateChild(path);
-    private extractCanActivateChild(p);
-    private runCanDeactivate(component, curr);
-    private runResolve(future, paramsInheritanceStrategy);
-    private resolveNode(resolve, future);
-    private getResolver(injectionToken, future);
-    private getToken(token, snapshot);
+    private fireChildActivationStart;
+    private runCanActivate;
+    private runCanActivateChild;
+    private extractCanActivateChild;
+    private runCanDeactivate;
+    private runResolve;
+    private resolveNode;
+    private getResolver;
+    private getToken;
 }

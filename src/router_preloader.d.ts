@@ -6,11 +6,13 @@
 *found in the LICENSE file at https://angular.io/license
 */
 import { Compiler, Injector, NgModuleFactoryLoader, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Route } from './config';
 import { Router } from './router';
 /**
- * @whatItDoes Provides a preloading strategy.
+ * @description
+ *
+ * Provides a preloading strategy.
  *
  * @experimental
  */
@@ -18,9 +20,9 @@ export declare abstract class PreloadingStrategy {
     abstract preload(route: Route, fn: () => Observable<any>): Observable<any>;
 }
 /**
- * @whatItDoes Provides a preloading strategy that preloads all modules as quickly as possible.
+ * @description
  *
- * @howToUse
+ * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
@@ -32,9 +34,9 @@ export declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
 }
 /**
- * @whatItDoes Provides a preloading strategy that does not preload any modules.
- *
  * @description
+ *
+ * Provides a preloading strategy that does not preload any modules.
  *
  * This strategy is enabled by default.
  *
@@ -53,7 +55,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- * @stable
+ *
  */
 export declare class RouterPreloader implements OnDestroy {
     private router;
@@ -65,6 +67,6 @@ export declare class RouterPreloader implements OnDestroy {
     setUpPreloading(): void;
     preload(): Observable<any>;
     ngOnDestroy(): void;
-    private processRoutes(ngModule, routes);
-    private preloadConfig(ngModule, route);
+    private processRoutes;
+    private preloadConfig;
 }

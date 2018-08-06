@@ -11,7 +11,4 @@
  * Entry point for all public APIs of the common package.
  */
 import { Version } from '@angular/core';
-/**
- * @stable
- */
 export declare const VERSION: Version;

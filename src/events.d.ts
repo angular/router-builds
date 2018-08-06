@@ -8,7 +8,9 @@
 import { Route } from './config';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
 /**
- * @whatItDoes Identifies the trigger of the navigation.
+ * @description
+ *
+ * Identifies the trigger of the navigation.
  *
  * * 'imperative'--triggered by `router.navigateByUrl` or `router.navigate`.
  * * 'popstate'--triggered by a popstate event
@@ -18,7 +20,9 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  */
 export declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
 /**
- * @whatItDoes Base for events the Router goes through, as opposed to events tied to a specific
+ * @description
+ *
+ * Base for events the Router goes through, as opposed to events tied to a specific
  * Route. `RouterEvent`s will only be fired one time for any given navigation.
  *
  * Example:
@@ -41,15 +45,17 @@ export declare class RouterEvent {
     /** @docsNotRequired */
     url: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string);
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation starts.
+ * @description
  *
- * @stable
+ * Represents an event triggered when a navigation starts.
+ *
+ *
  */
 export declare class NavigationStart extends RouterEvent {
     /**
@@ -76,77 +82,85 @@ export declare class NavigationStart extends RouterEvent {
         navigationId: number;
     } | null;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
-        /** @docsNotRequired */
-        restoredState?: {
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
+    /** @docsNotRequired */
+    restoredState?: {
         navigationId: number;
     } | null);
     /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation ends successfully.
+ * @description
  *
- * @stable
+ * Represents an event triggered when a navigation ends successfully.
+ *
+ *
  */
 export declare class NavigationEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string);
     /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation is canceled.
+ * @description
  *
- * @stable
+ * Represents an event triggered when a navigation is canceled.
+ *
+ *
  */
 export declare class NavigationCancel extends RouterEvent {
     /** @docsNotRequired */
     reason: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        reason: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    reason: string);
     /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ * @description
  *
- * @stable
+ * Represents an event triggered when a navigation fails due to an unexpected error.
+ *
+ *
  */
 export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        error: any);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    error: any);
     /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when routes are recognized.
+ * @description
  *
- * @stable
+ * Represents an event triggered when routes are recognized.
+ *
+ *
  */
 export declare class RoutesRecognized extends RouterEvent {
     /** @docsNotRequired */
@@ -154,19 +168,21 @@ export declare class RoutesRecognized extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     /** @docsNotRequired */
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of the Guard phase of routing.
+ * @description
+ *
+ * Represents the start of the Guard phase of routing.
  *
  * @experimental
  */
@@ -176,18 +192,20 @@ export declare class GuardsCheckStart extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the end of the Guard phase of routing.
+ * @description
+ *
+ * Represents the end of the Guard phase of routing.
  *
  * @experimental
  */
@@ -199,20 +217,22 @@ export declare class GuardsCheckEnd extends RouterEvent {
     /** @docsNotRequired */
     shouldActivate: boolean;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot, 
-        /** @docsNotRequired */
-        shouldActivate: boolean);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot, 
+    /** @docsNotRequired */
+    shouldActivate: boolean);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of the Resolve phase of routing. The timing of this
+ * @description
+ *
+ * Represents the start of the Resolve phase of routing. The timing of this
  * event may change, thus it's experimental. In the current iteration it will run
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
@@ -225,19 +245,21 @@ export declare class ResolveStart extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the end of the Resolve phase of routing. See note on
- * {@link ResolveStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the end of the Resolve phase of routing. See note on
+ * `ResolveStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -247,18 +269,20 @@ export declare class ResolveEnd extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered before lazy loading a route config.
+ * @description
+ *
+ * Represents an event triggered before lazy loading a route config.
  *
  * @experimental
  */
@@ -266,12 +290,14 @@ export declare class RouteConfigLoadStart {
     /** @docsNotRequired */
     route: Route;
     constructor(
-        /** @docsNotRequired */
-        route: Route);
+    /** @docsNotRequired */
+    route: Route);
     toString(): string;
 }
 /**
- * @whatItDoes Represents an event triggered when a route has been lazy loaded.
+ * @description
+ *
+ * Represents an event triggered when a route has been lazy loaded.
  *
  * @experimental
  */
@@ -279,13 +305,15 @@ export declare class RouteConfigLoadEnd {
     /** @docsNotRequired */
     route: Route;
     constructor(
-        /** @docsNotRequired */
-        route: Route);
+    /** @docsNotRequired */
+    route: Route);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ChildActivationEnd} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationEnd` for use of this experimental API.
  *
  * @experimental
  */
@@ -293,13 +321,15 @@ export declare class ChildActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ChildActivationStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ChildActivationStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -307,13 +337,15 @@ export declare class ChildActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ActivationEnd} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationEnd` for use of this experimental API.
  *
  * @experimental
  */
@@ -321,13 +353,15 @@ export declare class ActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents the start of end of the Resolve phase of routing. See note on
- * {@link ActivationStart} for use of this experimental API.
+ * @description
+ *
+ * Represents the start of end of the Resolve phase of routing. See note on
+ * `ActivationStart` for use of this experimental API.
  *
  * @experimental
  */
@@ -335,31 +369,55 @@ export declare class ActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
- * @whatItDoes Represents a router event, allowing you to track the lifecycle of the router.
+ * @description
+ *
+ * Represents a scrolling event.
+ */
+export declare class Scroll {
+    /** @docsNotRequired */
+    readonly routerEvent: NavigationEnd;
+    /** @docsNotRequired */
+    readonly position: [number, number] | null;
+    /** @docsNotRequired */
+    readonly anchor: string | null;
+    constructor(
+    /** @docsNotRequired */
+    routerEvent: NavigationEnd, 
+    /** @docsNotRequired */
+    position: [number, number] | null, 
+    /** @docsNotRequired */
+    anchor: string | null);
+    toString(): string;
+}
+/**
+ * @description
+ *
+ * Represents a router event, allowing you to track the lifecycle of the router.
  *
  * The sequence of router events is:
  *
- * - {@link NavigationStart},
- * - {@link RouteConfigLoadStart},
- * - {@link RouteConfigLoadEnd},
- * - {@link RoutesRecognized},
- * - {@link GuardsCheckStart},
- * - {@link ChildActivationStart},
- * - {@link ActivationStart},
- * - {@link GuardsCheckEnd},
- * - {@link ResolveStart},
- * - {@link ResolveEnd},
- * - {@link ActivationEnd}
- * - {@link ChildActivationEnd}
- * - {@link NavigationEnd},
- * - {@link NavigationCancel},
- * - {@link NavigationError}
+ * - `NavigationStart`,
+ * - `RouteConfigLoadStart`,
+ * - `RouteConfigLoadEnd`,
+ * - `RoutesRecognized`,
+ * - `GuardsCheckStart`,
+ * - `ChildActivationStart`,
+ * - `ActivationStart`,
+ * - `GuardsCheckEnd`,
+ * - `ResolveStart`,
+ * - `ResolveEnd`,
+ * - `ActivationEnd`
+ * - `ChildActivationEnd`
+ * - `NavigationEnd`,
+ * - `NavigationCancel`,
+ * - `NavigationError`
+ * - `Scroll`
  *
- * @stable
+ *
  */
-export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd;
+export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;

@@ -8,15 +8,17 @@
 import { Route, UrlMatchResult } from './config';
 import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
- * @whatItDoes Name of the primary outlet.
+ * @description
  *
- * @stable
+ * Name of the primary outlet.
+ *
+ *
  */
 export declare const PRIMARY_OUTLET = "primary";
 /**
  * A collection of parameters.
  *
- * @stable
+ *
  */
 export declare type Params = {
     [key: string]: any;
@@ -31,7 +33,7 @@ export declare type Params = {
  * The API is inspired by the URLSearchParams interface.
  * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
  *
- * @stable
+ *
  */
 export interface ParamMap {
     has(name: string): boolean;
@@ -52,9 +54,9 @@ export interface ParamMap {
     readonly keys: string[];
 }
 /**
- * Convert a {@link Params} instance to a {@link ParamMap}.
+ * Convert a `Params` instance to a `ParamMap`.
  *
- * @stable
+ *
  */
 export declare function convertToParamMap(params: Params): ParamMap;
 export declare function navigationCancelingError(message: string): Error;

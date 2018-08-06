@@ -1,6 +1,15 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { ActivatedRouteSnapshot } from './router_state';
 /**
- * @whatItDoes Represents the detached route tree.
+ * @description
+ *
+ * Represents the detached route tree.
  *
  * This is an opaque value the router will give to a custom route reuse strategy
  * to store and retrieve later on.
@@ -9,7 +18,9 @@ import { ActivatedRouteSnapshot } from './router_state';
  */
 export declare type DetachedRouteHandle = {};
 /**
- * @whatItDoes Provides a way to customize when activated routes get reused.
+ * @description
+ *
+ * Provides a way to customize when activated routes get reused.
  *
  * @experimental
  */

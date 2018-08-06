@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Data } from '../config';
 import { ChildrenOutletContexts } from '../router_outlet_context';
 import { ActivatedRoute } from '../router_state';
 /**
- * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
- * state.
+ * @description
  *
- * @howToUse
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * ```
  * <router-outlet></router-outlet>
@@ -30,7 +30,7 @@ import { ActivatedRoute } from '../router_state';
  * ```
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class RouterOutlet implements OnDestroy, OnInit {
     private parentContexts;
@@ -48,9 +48,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     readonly isActivated: boolean;
     readonly component: Object;
     readonly activatedRoute: ActivatedRoute;
-    readonly activatedRouteData: {
-        [name: string]: any;
-    };
+    readonly activatedRouteData: Data;
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      */

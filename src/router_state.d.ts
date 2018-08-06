@@ -6,15 +6,20 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Data, Route } from './config';
 import { ParamMap, Params } from './shared';
 import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
- * @whatItDoes Represents the state of the router.
+ * @description
  *
- * @howToUse
+ * Represents the state of the router.
+ *
+ * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+ * segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -29,13 +34,9 @@ import { Tree } from './utils/tree';
  * }
  * ```
  *
- * @description
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
+ * See `ActivatedRoute` for more information.
  *
- * See {@link ActivatedRoute} for more information.
  *
- * @stable
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
     /** The current snapshot of the router state */
@@ -45,11 +46,10 @@ export declare class RouterState extends Tree<ActivatedRoute> {
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any> | null): RouterState;
 export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any> | null): RouterStateSnapshot;
 /**
- * @whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet.
- * An `ActivatedRoute` can also be used to traverse the router state tree.
+ * @description
  *
- * @howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
  * ```
  * @Component({...})
@@ -63,7 +63,7 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * }
  * ```
  *
- * @stable
+ *
  */
 export declare class ActivatedRoute {
     /** An observable of the URL segments matched by this route */
@@ -100,12 +100,11 @@ export declare class ActivatedRoute {
 }
 export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
 /**
- * @whatItDoes Contains the information about a route associated with a component loaded in an
- * outlet
- * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
- * state tree.
+ * @description
  *
- * @howToUse
+ * Contains the information about a route associated with a component loaded in an
+ * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
+ * traverse the router state tree.
  *
  * ```
  * @Component({templateUrl:'./my-component.html'})
@@ -118,7 +117,7 @@ export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
  * }
  * ```
  *
- * @stable
+ *
  */
 export declare class ActivatedRouteSnapshot {
     /** The URL segments matched by this route */
@@ -152,9 +151,14 @@ export declare class ActivatedRouteSnapshot {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the state of the router at a moment in time.
+ * @description
  *
- * @howToUse
+ * Represents the state of the router at a moment in time.
+ *
+ * This is a tree of activated route snapshots. Every node in this tree knows about
+ * the "consumed" URL segments, the extracted parameters, and the resolved data.
+ *
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -170,11 +174,7 @@ export declare class ActivatedRouteSnapshot {
  * }
  * ```
  *
- * @description
- * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
- * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
- * @stable
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     /** The url from which this snapshot was created */

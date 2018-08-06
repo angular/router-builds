@@ -7,7 +7,7 @@
  */
 import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { QueryParamsHandling, Routes } from './config';
 import { Event } from './events';
 import { RouteReuseStrategy } from './route_reuse_strategy';
@@ -17,9 +17,11 @@ import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
 /**
- * @whatItDoes Represents the extra options used during navigation.
+ * @description
  *
- * @stable
+ * Represents the extra options used during navigation.
+ *
+ *
  */
 export interface NavigationExtras {
     /**
@@ -124,24 +126,27 @@ export interface NavigationExtras {
     replaceUrl?: boolean;
 }
 /**
- * @whatItDoes Error handler that is invoked when a navigation errors.
- *
  * @description
+ *
+ * Error handler that is invoked when a navigation errors.
+ *
  * If the handler returns a value, the navigation promise will be resolved with this value.
  * If the handler throws an exception, the navigation promise will be rejected with
  * the exception.
  *
- * @stable
+ *
  */
 export declare type ErrorHandler = (error: any) => any;
 /**
- * @whatItDoes Provides the navigation and url manipulation capabilities.
+ * @description
  *
- * See {@link Routes} for more details and examples.
+ * Provides the navigation and url manipulation capabilities.
+ *
+ * See `Routes` for more details and examples.
  *
  * @ngModule RouterModule
  *
- * @stable
+ *
  */
 export declare class Router {
     private rootComponentType;
@@ -161,9 +166,15 @@ export declare class Router {
     /**
      * Error handler that is invoked when a navigation errors.
      *
-     * See {@link ErrorHandler} for more information.
+     * See `ErrorHandler` for more information.
      */
     errorHandler: ErrorHandler;
+    /**
+     * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
+     * error due to containing an invalid character. The most common case would be a `%` sign
+     * that's not encoded and is not part of a percent encoded sequence.
+     */
+    malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
     /**
      * Indicates if at least one navigation happened.
      */
@@ -190,6 +201,21 @@ export declare class Router {
      * - `'always'`, enables unconditional inheritance of parent params.
      */
     paramsInheritanceStrategy: 'emptyOnly' | 'always';
+    /**
+     * Defines when the router updates the browser URL. The default behavior is to update after
+     * successful navigation. However, some applications may prefer a mode where the URL gets
+     * updated at the beginning of navigation. The most common use case would be updating the
+     * URL early so if navigation fails, you can show an error message with the URL that failed.
+     * Available options are:
+     *
+     * - `'deferred'`, the default, updates the browser URL after navigation has finished.
+     * - `'eager'`, updates browser URL at the beginning of navigation.
+     */
+    urlUpdateStrategy: 'deferred' | 'eager';
+    /**
+     * See {@link RouterModule} for more information.
+     */
+    relativeLinkResolution: 'legacy' | 'corrected';
     /**
      * Creates the router service.
      */
@@ -308,22 +334,23 @@ export declare class Router {
      * URL.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
-    /** Serializes a {@link UrlTree} into a string */
+    /** Serializes a `UrlTree` into a string */
     serializeUrl(url: UrlTree): string;
-    /** Parses a string into a {@link UrlTree} */
+    /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
     /** Returns whether the url is activated */
     isActive(url: string | UrlTree, exact: boolean): boolean;
-    private removeEmptyProps(params);
-    private processNavigations();
-    private scheduleNavigation(rawUrl, source, state, extras);
-    private executeScheduledNavigation({id, rawUrl, extras, resolve, reject, source, state});
-    private runNavigate(url, rawUrl, skipLocationChange, replaceUrl, id, precreatedState);
+    private removeEmptyProps;
+    private processNavigations;
+    private scheduleNavigation;
+    private executeScheduledNavigation;
+    private runNavigate;
     /**
      * Performs the logic of activating routes. This is a synchronous process by default. While this
      * is a private method, it could be overridden to make activation asynchronous.
      */
-    private activateRoutes(state, storedState, storedUrl, id, url, rawUrl, skipLocationChange, replaceUrl, resolvePromise, rejectPromise);
-    private resetStateAndUrl(storedState, storedUrl, rawUrl);
-    private resetUrlToCurrentUrlTree();
+    private activateRoutes;
+    private setBrowserUrl;
+    private resetStateAndUrl;
+    private resetUrlToCurrentUrlTree;
 }

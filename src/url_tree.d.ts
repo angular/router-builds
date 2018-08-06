@@ -5,13 +5,19 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ParamMap } from './shared';
+import { ParamMap, Params } from './shared';
 export declare function createEmptyUrlTree(): UrlTree;
 export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
 /**
- * @whatItDoes Represents the parsed URL.
+ * @description
  *
- * @howToUse
+ * Represents the parsed URL.
+ *
+ * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+ * serialized tree.
+ * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
+ *
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -29,21 +35,13 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
  * }
  * ```
  *
- * @description
  *
- * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
- * serialized tree.
- * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
- *
- * @stable
  */
 export declare class UrlTree {
     /** The root segment group of the URL tree */
     root: UrlSegmentGroup;
     /** The query params of the URL */
-    queryParams: {
-        [key: string]: string;
-    };
+    queryParams: Params;
     /** The fragment of the URL */
     fragment: string | null;
     readonly queryParamMap: ParamMap;
@@ -51,14 +49,16 @@ export declare class UrlTree {
     toString(): string;
 }
 /**
- * @whatItDoes Represents the parsed URL segment group.
+ * @description
  *
- * See {@link UrlTree} for more information.
+ * Represents the parsed URL segment group.
  *
- * @stable
+ * See `UrlTree` for more information.
+ *
+ *
  */
 export declare class UrlSegmentGroup {
-    /** The URL segments of this group. See {@link UrlSegment} for more information */
+    /** The URL segments of this group. See `UrlSegment` for more information */
     segments: UrlSegment[];
     /** The list of children of this group */
     children: {
@@ -67,10 +67,10 @@ export declare class UrlSegmentGroup {
     /** The parent node in the url tree */
     parent: UrlSegmentGroup | null;
     constructor(
-        /** The URL segments of this group. See {@link UrlSegment} for more information */
-        segments: UrlSegment[], 
-        /** The list of children of this group */
-        children: {
+    /** The URL segments of this group. See `UrlSegment` for more information */
+    segments: UrlSegment[], 
+    /** The list of children of this group */
+    children: {
         [key: string]: UrlSegmentGroup;
     });
     /** Whether the segment has child segments */
@@ -81,9 +81,14 @@ export declare class UrlSegmentGroup {
     toString(): string;
 }
 /**
- * @whatItDoes Represents a single URL segment.
+ * @description
  *
- * @howToUse
+ * Represents a single URL segment.
+ *
+ * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+ * parameters associated with the segment.
+ *
+ * ## Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -98,12 +103,7 @@ export declare class UrlSegmentGroup {
  * }
  * ```
  *
- * @description
  *
- * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
- * parameters associated with the segment.
- *
- * @stable
  */
 export declare class UrlSegment {
     /** The path part of a URL segment */
@@ -113,10 +113,10 @@ export declare class UrlSegment {
         [name: string]: string;
     };
     constructor(
-        /** The path part of a URL segment */
-        path: string, 
-        /** The matrix parameters associated with a segment */
-        parameters: {
+    /** The path part of a URL segment */
+    path: string, 
+    /** The matrix parameters associated with a segment */
+    parameters: {
         [name: string]: string;
     });
     readonly parameterMap: ParamMap;
@@ -127,25 +127,27 @@ export declare function equalSegments(as: UrlSegment[], bs: UrlSegment[]): boole
 export declare function equalPath(as: UrlSegment[], bs: UrlSegment[]): boolean;
 export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v: UrlSegmentGroup, k: string) => T[]): T[];
 /**
- * @whatItDoes Serializes and deserializes a URL string into a URL tree.
+ * @description
  *
- * @description The url serialization strategy is customizable. You can
+ * Serializes and deserializes a URL string into a URL tree.
+ *
+ * The url serialization strategy is customizable. You can
  * make all URLs case insensitive by providing a custom UrlSerializer.
  *
- * See {@link DefaultUrlSerializer} for an example of a URL serializer.
+ * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- * @stable
+ *
  */
 export declare abstract class UrlSerializer {
-    /** Parse a url into a {@link UrlTree} */
+    /** Parse a url into a `UrlTree` */
     abstract parse(url: string): UrlTree;
-    /** Converts a {@link UrlTree} into a url */
+    /** Converts a `UrlTree` into a url */
     abstract serialize(tree: UrlTree): string;
 }
 /**
- * @whatItDoes A default implementation of the {@link UrlSerializer}.
- *
  * @description
+ *
+ * A default implementation of the `UrlSerializer`.
  *
  * Example URLs:
  *
@@ -158,22 +160,29 @@ export declare abstract class UrlSerializer {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- * @stable
+ *
  */
 export declare class DefaultUrlSerializer implements UrlSerializer {
-    /** Parses a url into a {@link UrlTree} */
+    /** Parses a url into a `UrlTree` */
     parse(url: string): UrlTree;
-    /** Converts a {@link UrlTree} into a url */
+    /** Converts a `UrlTree` into a url */
     serialize(tree: UrlTree): string;
 }
 export declare function serializePaths(segment: UrlSegmentGroup): string;
 /**
- * This function should be used to encode both keys and values in a query string key/value or the
- * URL fragment. In the following URL, you need to call encodeUriQuery on "k", "v" and "f":
+ * This function should be used to encode both keys and values in a query string key/value. In
+ * the following URL, you need to call encodeUriQuery on "k" and "v":
  *
  * http://www.site.org/html;mk=mv?k=v#f
  */
 export declare function encodeUriQuery(s: string): string;
+/**
+ * This function should be used to encode a URL fragment. In the following URL, you need to call
+ * encodeUriFragment on "f":
+ *
+ * http://www.site.org/html;mk=mv?k=v#f
+ */
+export declare function encodeUriFragment(s: string): string;
 /**
  * This function should be run on any URI segment as well as the key and value in a key/value
  * pair for matrix params. In the following URL, you need to call encodeUriSegment on "html",
