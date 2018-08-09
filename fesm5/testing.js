@@ -1,13 +1,13 @@
 /**
- * @license Angular v7.0.0-beta.1+12.sha-9c92a6f
+ * @license Angular v7.0.0-beta.1+18.sha-7058072
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values } from 'tslib';
-import { defineInjectable, inject, Compiler, ɵdefineNgModule, defineInjector, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
+import { Compiler, Injector, NgModuleFactoryLoader, Optional, defineInjectable, inject, ɵdefineNgModule, defineInjector } from '@angular/core';
 import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
 
 /**
@@ -84,7 +84,7 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
             return Promise.reject(new Error("Cannot find module " + path));
         }
     };
-    SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory() { return new SpyNgModuleFactoryLoader(inject(Compiler)); }, providedIn: null });
+    SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
     return SpyNgModuleFactoryLoader;
 }());
 function isUrlHandlingStrategy(opts) {
@@ -157,7 +157,7 @@ var RouterTestingModule = /** @class */ (function () {
         };
     };
     RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
-    RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory() { return new RouterTestingModule(); }, providers: [
+    RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
             ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
             { provide: LocationStrategy, useClass: MockLocationStrategy },
             { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {

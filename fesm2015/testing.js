@@ -1,25 +1,36 @@
 /**
- * @license Angular v7.0.0-beta.1+12.sha-9c92a6f
+ * @license Angular v7.0.0-beta.1+18.sha-7058072
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { defineInjectable, inject, Compiler, ɵdefineNgModule, defineInjector, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
+import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional, defineInjectable, inject, ɵdefineNgModule, defineInjector } from '@angular/core';
 import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
 
 /**
- * @description
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * \@description
  *
  * Allows to simulate the loading of ng modules in tests.
  *
  * ```
  * const loader = TestBed.get(NgModuleFactoryLoader);
  *
- * @Component({template: 'lazy-loaded'})
+ * \@Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}
- * @NgModule({
+ * \@NgModule({
  *   declarations: [LazyLoadedComponent],
  *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
  * })
@@ -39,17 +50,23 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
  *
  */
 class SpyNgModuleFactoryLoader {
+    /**
+     * @param {?} compiler
+     */
     constructor(compiler) {
         this.compiler = compiler;
         /**
-         * @docsNotRequired
+         * \@docsNotRequired
          */
         this._stubbedModules = {};
     }
     /**
-     * @docsNotRequired
+     * \@docsNotRequired
+     * @param {?} modules
+     * @return {?}
      */
     set stubbedModules(modules) {
+        /** @type {?} */
         const res = {};
         for (const t of Object.keys(modules)) {
             res[t] = this.compiler.compileModuleAsync(modules[t]);
@@ -57,19 +74,35 @@ class SpyNgModuleFactoryLoader {
         this._stubbedModules = res;
     }
     /**
-     * @docsNotRequired
+     * \@docsNotRequired
+     * @return {?}
      */
     get stubbedModules() { return this._stubbedModules; }
+    /**
+     * @param {?} path
+     * @return {?}
+     */
     load(path) {
         if (this._stubbedModules[path]) {
             return this._stubbedModules[path];
         }
         else {
-            return Promise.reject(new Error(`Cannot find module ${path}`));
+            return /** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`)));
         }
     }
 }
-SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory() { return new SpyNgModuleFactoryLoader(inject(Compiler)); }, providedIn: null });
+SpyNgModuleFactoryLoader.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+SpyNgModuleFactoryLoader.ctorParameters = () => [
+    { type: Compiler }
+];
+SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
+/**
+ * @param {?} opts
+ * @return {?}
+ */
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
@@ -79,9 +112,20 @@ function isUrlHandlingStrategy(opts) {
  * Router setup factory function used for testing.
  *
  *
+ * @param {?} urlSerializer
+ * @param {?} contexts
+ * @param {?} location
+ * @param {?} loader
+ * @param {?} compiler
+ * @param {?} injector
+ * @param {?} routes
+ * @param {?=} opts
+ * @param {?=} urlHandlingStrategy
+ * @return {?}
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    /** @type {?} */
+    const router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (opts) {
         // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
@@ -103,12 +147,12 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
     return router;
 }
 /**
- * @description
+ * \@description
  *
  * Sets up the router to be used for testing.
  *
  * The modules sets up the router to be used for testing.
- * It provides spy implementations of `Location`, `LocationStrategy`, and {@link
+ * It provides spy implementations of `Location`, `LocationStrategy`, and {\@link
  * NgModuleFactoryLoader}.
  *
  * ### Example
@@ -128,6 +172,11 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  */
 class RouterTestingModule {
+    /**
+     * @param {?} routes
+     * @param {?=} config
+     * @return {?}
+     */
     static withRoutes(routes, config) {
         return {
             ngModule: RouterTestingModule,
@@ -138,8 +187,26 @@ class RouterTestingModule {
         };
     }
 }
+RouterTestingModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [RouterModule],
+                providers: [
+                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                    { provide: LocationStrategy, useClass: MockLocationStrategy },
+                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                        provide: Router,
+                        useFactory: setupTestingRouter,
+                        deps: [
+                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                        ]
+                    },
+                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                ]
+            },] },
+];
 RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
-RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory() { return new RouterTestingModule(); }, providers: [
+RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
         { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
@@ -154,29 +221,20 @@ RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTes
     ], imports: [[RouterModule]] });
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { SpyNgModuleFactoryLoader, setupTestingRouter, RouterTestingModule };
+export { setupTestingRouter, SpyNgModuleFactoryLoader, RouterTestingModule };
 //# sourceMappingURL=testing.js.map

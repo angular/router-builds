@@ -1,14 +1,14 @@
 /**
- * @license Angular v7.0.0-beta.1+12.sha-9c92a6f
+ * @license Angular v7.0.0-beta.1+18.sha-7058072
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/common/testing'), require('@angular/router')) :
-    typeof define === 'function' && define.amd ? define('@angular/router/testing', ['exports', '@angular/core', '@angular/common', '@angular/common/testing', '@angular/router'], factory) :
-    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.core,global.ng.common,global.ng.common.testing,global.ng.router));
-}(this, (function (exports,i0,common,testing,router) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/common/testing'), require('@angular/core'), require('@angular/router')) :
+    typeof define === 'function' && define.amd ? define('@angular/router/testing', ['exports', '@angular/common', '@angular/common/testing', '@angular/core', '@angular/router'], factory) :
+    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.testing = {}),global.ng.common,global.ng.common.testing,global.ng.core,global.ng.router));
+}(this, (function (exports,common,testing,i0,router) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -110,7 +110,7 @@
                 return Promise.reject(new Error("Cannot find module " + path));
             }
         };
-        SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory() { return new SpyNgModuleFactoryLoader(i0.inject(i0.Compiler)); }, providedIn: null });
+        SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(i0.Compiler)); }, providedIn: null });
         return SpyNgModuleFactoryLoader;
     }());
     function isUrlHandlingStrategy(opts) {
@@ -183,7 +183,7 @@
             };
         };
         RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [router.RouterModule] });
-        RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory() { return new RouterTestingModule(); }, providers: [
+        RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
                 router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
                 { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
                 { provide: i0.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
