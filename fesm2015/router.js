@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.1+18.sha-7058072
+ * @license Angular v7.0.0-beta.1+19.sha-2d75992
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, NgModuleRef, isDevMode, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, HostListener, ɵL, HostBinding, ɵp, ɵb, ɵdefineComponent, ɵEe } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, NgModuleRef, isDevMode, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵPublicFeature, ɵNgOnChangesFeature, HostListener, ɵinjectAttribute, ɵL, HostBinding, ɵp, ɵb, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -6836,7 +6836,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.1+18.sha-7058072');
+const VERSION = new Version('7.0.0-beta.1+19.sha-2d75992');
 
 /**
  * @fileoverview added by tsickle
