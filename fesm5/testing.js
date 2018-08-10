@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.0.0-rc.5+145.sha-741fa9e
+ * @license Angular v7.0.0-beta.1+25.sha-ca8c683
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -50,41 +50,35 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     function SpyNgModuleFactoryLoader(compiler) {
         this.compiler = compiler;
         /**
-           * @docsNotRequired
-           */
+         * @docsNotRequired
+         */
         this._stubbedModules = {};
     }
     Object.defineProperty(SpyNgModuleFactoryLoader.prototype, "stubbedModules", {
         /**
          * @docsNotRequired
          */
-        get: /**
-           * @docsNotRequired
-           */
-        function () { return this._stubbedModules; },
+        get: function () { return this._stubbedModules; },
         /**
          * @docsNotRequired
          */
-        set: /**
-           * @docsNotRequired
-           */
-        function (modules) {
+        set: function (modules) {
+            var e_1, _a;
             var res = {};
             try {
-                for (var _a = __values(Object.keys(modules)), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    var t = _b.value;
+                for (var _b = __values(Object.keys(modules)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var t = _c.value;
                     res[t] = this.compiler.compileModuleAsync(modules[t]);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             this._stubbedModules = res;
-            var e_1, _c;
         },
         enumerable: true,
         configurable: true
@@ -102,7 +96,7 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     ];
     /** @nocollapse */
     SpyNgModuleFactoryLoader.ctorParameters = function () { return [
-        { type: Compiler, },
+        { type: Compiler }
     ]; };
     return SpyNgModuleFactoryLoader;
 }());
@@ -117,20 +111,26 @@ function isUrlHandlingStrategy(opts) {
  *
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-    var router$$1 = new Router((null), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
-    // Handle deprecated argument ordering.
+    var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (opts) {
+        // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
-            router$$1.urlHandlingStrategy = opts;
+            router.urlHandlingStrategy = opts;
         }
-        else if (opts.paramsInheritanceStrategy) {
-            router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+        else {
+            // Handle ExtraOptions
+            if (opts.malformedUriErrorHandler) {
+                router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+            }
+            if (opts.paramsInheritanceStrategy) {
+                router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+            }
         }
     }
     if (urlHandlingStrategy) {
-        router$$1.urlHandlingStrategy = urlHandlingStrategy;
+        router.urlHandlingStrategy = urlHandlingStrategy;
     }
-    return router$$1;
+    return router;
 }
 /**
  * @description
@@ -187,8 +187,6 @@ var RouterTestingModule = /** @class */ (function () {
                     ]
                 },] }
     ];
-    /** @nocollapse */
-    RouterTestingModule.ctorParameters = function () { return []; };
     return RouterTestingModule;
 }());
 
@@ -207,7 +205,6 @@ var RouterTestingModule = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**

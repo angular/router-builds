@@ -45,10 +45,10 @@ export declare class RouterEvent {
     /** @docsNotRequired */
     url: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string);
 }
 /**
  * @description
@@ -82,14 +82,14 @@ export declare class NavigationStart extends RouterEvent {
         navigationId: number;
     } | null;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
-        /** @docsNotRequired */
-        restoredState?: {
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
+    /** @docsNotRequired */
+    restoredState?: {
         navigationId: number;
     } | null);
     /** @docsNotRequired */
@@ -106,12 +106,12 @@ export declare class NavigationEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -126,12 +126,12 @@ export declare class NavigationCancel extends RouterEvent {
     /** @docsNotRequired */
     reason: string;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        reason: string);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    reason: string);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -146,12 +146,12 @@ export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        error: any);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    error: any);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -168,14 +168,14 @@ export declare class RoutesRecognized extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -192,14 +192,14 @@ export declare class GuardsCheckStart extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
@@ -217,16 +217,16 @@ export declare class GuardsCheckEnd extends RouterEvent {
     /** @docsNotRequired */
     shouldActivate: boolean;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot, 
-        /** @docsNotRequired */
-        shouldActivate: boolean);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot, 
+    /** @docsNotRequired */
+    shouldActivate: boolean);
     toString(): string;
 }
 /**
@@ -245,14 +245,14 @@ export declare class ResolveStart extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
@@ -269,14 +269,14 @@ export declare class ResolveEnd extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot;
     constructor(
-        /** @docsNotRequired */
-        id: number, 
-        /** @docsNotRequired */
-        url: string, 
-        /** @docsNotRequired */
-        urlAfterRedirects: string, 
-        /** @docsNotRequired */
-        state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
     toString(): string;
 }
 /**
@@ -290,8 +290,8 @@ export declare class RouteConfigLoadStart {
     /** @docsNotRequired */
     route: Route;
     constructor(
-        /** @docsNotRequired */
-        route: Route);
+    /** @docsNotRequired */
+    route: Route);
     toString(): string;
 }
 /**
@@ -305,8 +305,8 @@ export declare class RouteConfigLoadEnd {
     /** @docsNotRequired */
     route: Route;
     constructor(
-        /** @docsNotRequired */
-        route: Route);
+    /** @docsNotRequired */
+    route: Route);
     toString(): string;
 }
 /**
@@ -321,8 +321,8 @@ export declare class ChildActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
@@ -337,8 +337,8 @@ export declare class ChildActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
@@ -353,8 +353,8 @@ export declare class ActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
     toString(): string;
 }
 /**
@@ -369,8 +369,29 @@ export declare class ActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
     constructor(
-        /** @docsNotRequired */
-        snapshot: ActivatedRouteSnapshot);
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * @description
+ *
+ * Represents a scrolling event.
+ */
+export declare class Scroll {
+    /** @docsNotRequired */
+    readonly routerEvent: NavigationEnd;
+    /** @docsNotRequired */
+    readonly position: [number, number] | null;
+    /** @docsNotRequired */
+    readonly anchor: string | null;
+    constructor(
+    /** @docsNotRequired */
+    routerEvent: NavigationEnd, 
+    /** @docsNotRequired */
+    position: [number, number] | null, 
+    /** @docsNotRequired */
+    anchor: string | null);
     toString(): string;
 }
 /**
@@ -395,7 +416,8 @@ export declare class ActivationEnd {
  * - `NavigationEnd`,
  * - `NavigationCancel`,
  * - `NavigationError`
+ * - `Scroll`
  *
  *
  */
-export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd;
+export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;
