@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.1+10.sha-b64fed1
+ * @license Angular v7.0.0-beta.1+52.sha-1f11039
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -10,20 +10,17 @@ import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
- * @description
+/** *
+ * \@description
  *
  * Creates an initializer that in addition to setting up the Angular
  * router sets up the ngRoute integration.
  *
  * ```
- * @NgModule({
+ * \@NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
  *   UpgradeModule
@@ -37,29 +34,33 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * }
  * ```
  *
- * @experimental
- */
+ * \@experimental
+  @type {?} */
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [UpgradeModule]
 };
 /**
- * @internal
+ * \@internal
+ * @param {?} ngUpgrade
+ * @return {?}
  */
 function locationSyncBootstrapListener(ngUpgrade) {
     return () => { setUpLocationSync(ngUpgrade); };
 }
 /**
- * @description
+ * \@description
  *
  * Sets up a location synchronization.
  *
  * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener
  *
- * @experimental
+ * \@experimental
+ * @param {?} ngUpgrade
+ * @return {?}
  */
 function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
@@ -68,16 +69,20 @@ function setUpLocationSync(ngUpgrade) {
         Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
       `);
     }
+    /** @type {?} */
     const router = ngUpgrade.injector.get(Router);
+    /** @type {?} */
     const location = ngUpgrade.injector.get(Location);
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', (_, next, __) => {
+        /** @type {?} */
         const url = resolveUrl(next);
+        /** @type {?} */
         const path = location.normalize(url.pathname);
         router.navigateByUrl(path + url.search + url.hash);
     });
 }
-/**
+/** *
  * Normalize and parse a URL.
  *
  * - Normalizing means that a relative URL will be resolved into an absolute URL in the context of
@@ -94,8 +99,12 @@ function setUpLocationSync(ngUpgrade) {
  * See
  * https://github.com/angular/angular.js/blob/2c7400e7d07b0f6cec1817dab40b9250ce8ebce6/src/ng/urlUtils.js#L26-L33
  * for more info.
- */
+  @type {?} */
 let anchor;
+/**
+ * @param {?} url
+ * @return {?}
+ */
 function resolveUrl(url) {
     if (!anchor) {
         anchor = document.createElement('a');
@@ -111,21 +120,15 @@ function resolveUrl(url) {
 }
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 // This file only reexports content of the `src` folder. Keep it that way.
 
 /**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
+export { locationSyncBootstrapListener, setUpLocationSync, RouterUpgradeInitializer };
 //# sourceMappingURL=upgrade.js.map
