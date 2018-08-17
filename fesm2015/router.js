@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+19.sha-116946f
+ * @license Angular v7.0.0-beta.2+20.sha-07d8d39
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2833,7 +2833,7 @@ class ApplyRedirects {
         /** @type {?} */
         const rawSlicedSegments = segments.slice(lastChild);
         /** @type {?} */
-        const childConfig$ = this.getChildConfig(ngModule, route);
+        const childConfig$ = this.getChildConfig(ngModule, route, segments);
         return childConfig$.pipe(mergeMap((routerConfig) => {
             /** @type {?} */
             const childModule = routerConfig.module;
@@ -2856,9 +2856,10 @@ class ApplyRedirects {
     /**
      * @param {?} ngModule
      * @param {?} route
+     * @param {?} segments
      * @return {?}
      */
-    getChildConfig(ngModule, route) {
+    getChildConfig(ngModule, route, segments) {
         if (route.children) {
             // The children belong to the same module
             return of(new LoadedRouterConfig(route.children, ngModule));
@@ -2868,7 +2869,8 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap((shouldLoad) => {
+            return runCanLoadGuard(ngModule.injector, route, segments)
+                .pipe(mergeMap((shouldLoad) => {
                 if (shouldLoad) {
                     return this.configLoader.load(ngModule.injector, route)
                         .pipe(map((cfg) => {
@@ -3007,9 +3009,10 @@ class ApplyRedirects {
 /**
  * @param {?} moduleInjector
  * @param {?} route
+ * @param {?} segments
  * @return {?}
  */
-function runCanLoadGuard(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route, segments) {
     /** @type {?} */
     const canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
@@ -3018,7 +3021,7 @@ function runCanLoadGuard(moduleInjector, route) {
     const obs = from(canLoad).pipe(map((injectionToken) => {
         /** @type {?} */
         const guard = moduleInjector.get(injectionToken);
-        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
+        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
     }));
     return andObservables(obs);
 }
@@ -6836,7 +6839,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.2+19.sha-116946f');
+const VERSION = new Version('7.0.0-beta.2+20.sha-07d8d39');
 
 /**
  * @fileoverview added by tsickle
