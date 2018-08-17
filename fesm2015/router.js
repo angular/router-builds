@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+19.sha-116946f
+ * @license Angular v7.0.0-beta.2+20.sha-07d8d39
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1403,7 +1403,7 @@ class ApplyRedirects {
         if (!matched)
             return noMatch(rawSegmentGroup);
         const rawSlicedSegments = segments.slice(lastChild);
-        const childConfig$ = this.getChildConfig(ngModule, route);
+        const childConfig$ = this.getChildConfig(ngModule, route, segments);
         return childConfig$.pipe(mergeMap((routerConfig) => {
             const childModule = routerConfig.module;
             const childConfig = routerConfig.routes;
@@ -1419,7 +1419,7 @@ class ApplyRedirects {
             return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
         }));
     }
-    getChildConfig(ngModule, route) {
+    getChildConfig(ngModule, route, segments) {
         if (route.children) {
             // The children belong to the same module
             return of(new LoadedRouterConfig(route.children, ngModule));
@@ -1429,7 +1429,8 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap((shouldLoad) => {
+            return runCanLoadGuard(ngModule.injector, route, segments)
+                .pipe(mergeMap((shouldLoad) => {
                 if (shouldLoad) {
                     return this.configLoader.load(ngModule.injector, route)
                         .pipe(map((cfg) => {
@@ -1507,13 +1508,13 @@ class ApplyRedirects {
         return redirectToUrlSegment;
     }
 }
-function runCanLoadGuard(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route, segments) {
     const canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
     const obs = from(canLoad).pipe(map((injectionToken) => {
         const guard = moduleInjector.get(injectionToken);
-        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
+        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
     }));
     return andObservables(obs);
 }
@@ -4979,7 +4980,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('7.0.0-beta.2+19.sha-116946f');
+const VERSION = new Version('7.0.0-beta.2+20.sha-07d8d39');
 
 /**
  * @license
