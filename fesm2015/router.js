@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.2+19.sha-116946f
+ * @license Angular v7.0.0-beta.2+20.sha-07d8d39
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectViewContainerRef, ɵinjectAttribute, ɵinjectChangeDetectorRef, ɵPublicFeature, HostListener, ɵinjectElementRef, ɵlistener, ɵloadDirective, HostBinding, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, HostListener, ɵinjectAttribute, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -2833,7 +2833,7 @@ class ApplyRedirects {
         /** @type {?} */
         const rawSlicedSegments = segments.slice(lastChild);
         /** @type {?} */
-        const childConfig$ = this.getChildConfig(ngModule, route);
+        const childConfig$ = this.getChildConfig(ngModule, route, segments);
         return childConfig$.pipe(mergeMap((routerConfig) => {
             /** @type {?} */
             const childModule = routerConfig.module;
@@ -2856,9 +2856,10 @@ class ApplyRedirects {
     /**
      * @param {?} ngModule
      * @param {?} route
+     * @param {?} segments
      * @return {?}
      */
-    getChildConfig(ngModule, route) {
+    getChildConfig(ngModule, route, segments) {
         if (route.children) {
             // The children belong to the same module
             return of(new LoadedRouterConfig(route.children, ngModule));
@@ -2868,7 +2869,8 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap((shouldLoad) => {
+            return runCanLoadGuard(ngModule.injector, route, segments)
+                .pipe(mergeMap((shouldLoad) => {
                 if (shouldLoad) {
                     return this.configLoader.load(ngModule.injector, route)
                         .pipe(map((cfg) => {
@@ -3007,9 +3009,10 @@ class ApplyRedirects {
 /**
  * @param {?} moduleInjector
  * @param {?} route
+ * @param {?} segments
  * @return {?}
  */
-function runCanLoadGuard(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route, segments) {
     /** @type {?} */
     const canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
@@ -3018,7 +3021,7 @@ function runCanLoadGuard(moduleInjector, route) {
     const obs = from(canLoad).pipe(map((injectionToken) => {
         /** @type {?} */
         const guard = moduleInjector.get(injectionToken);
-        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
+        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
     }));
     return andObservables(obs);
 }
@@ -6836,7 +6839,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.2+19.sha-116946f');
+const VERSION = new Version('7.0.0-beta.2+20.sha-07d8d39');
 
 /**
  * @fileoverview added by tsickle
