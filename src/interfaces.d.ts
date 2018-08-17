@@ -8,6 +8,7 @@
 import { Observable } from 'rxjs';
 import { Route } from './config';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
+import { UrlSegment } from './url_tree';
 /**
  * @description
  *
@@ -303,7 +304,7 @@ export interface Resolve<T> {
  * ```
  * class UserToken {}
  * class Permissions {
- *   canLoadChildren(user: UserToken, id: string): boolean {
+ *   canLoadChildren(user: UserToken, id: string, segments: UrlSegment[]): boolean {
  *     return true;
  *   }
  * }
@@ -312,8 +313,8 @@ export interface Resolve<T> {
  * class CanLoadTeamSection implements CanLoad {
  *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
  *
- *   canLoad(route: Route): Observable<boolean>|Promise<boolean>|boolean {
- *     return this.permissions.canLoadChildren(this.currentUser, route);
+ *   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canLoadChildren(this.currentUser, route, segments);
  *   }
  * }
  *
@@ -350,7 +351,7 @@ export interface Resolve<T> {
  *   providers: [
  *     {
  *       provide: 'canLoadTeamSection',
- *       useValue: (route: Route) => true
+ *       useValue: (route: Route, segments: UrlSegment[]) => true
  *     }
  *   ]
  * })
@@ -360,5 +361,5 @@ export interface Resolve<T> {
  *
  */
 export interface CanLoad {
-    canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean;
+    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean;
 }
