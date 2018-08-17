@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+24.sha-21d22ce
+ * @license Angular v7.0.0-beta.2+27.sha-d2be3d5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2402,7 +2402,7 @@ class EmptyOutletComponent {
 EmptyOutletComponent.decorators = [
     { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] },
 ];
-EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [ɵPublicFeature], template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [ɵPublicFeature], consts: 1, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
         ɵelement(0, "router-outlet");
     } }, directives: [RouterOutlet] });
 
@@ -6839,7 +6839,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.2+24.sha-21d22ce');
+const VERSION = new Version('7.0.0-beta.2+27.sha-d2be3d5');
 
 /**
  * @fileoverview added by tsickle

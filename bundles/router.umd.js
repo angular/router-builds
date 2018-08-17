@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+24.sha-21d22ce
+ * @license Angular v7.0.0-beta.2+27.sha-d2be3d5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2024,7 +2024,7 @@
     var EmptyOutletComponent = /** @class */ (function () {
         function EmptyOutletComponent() {
         }
-        EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [i0.ɵPublicFeature], template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+        EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [i0.ɵPublicFeature], consts: 1, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
                 i0.ɵelement(0, "router-outlet");
             } }, directives: [RouterOutlet] });
         return EmptyOutletComponent;
@@ -5312,7 +5312,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new i0.Version('7.0.0-beta.2+24.sha-21d22ce');
+    var VERSION = new i0.Version('7.0.0-beta.2+27.sha-d2be3d5');
 
     /**
      * @license
