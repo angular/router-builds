@@ -20,7 +20,7 @@ import * as i1 from "../directives/router_outlet";
 var EmptyOutletComponent = /** @class */ (function () {
     function EmptyOutletComponent() {
     }
-    EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [i0.ɵPublicFeature], template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [i0.ɵPublicFeature], consts: 1, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             i0.ɵelement(0, "router-outlet");
         } }, directives: [i1.RouterOutlet] });
     return EmptyOutletComponent;

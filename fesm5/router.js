@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.2+22.sha-f053a3f
+ * @license Angular v7.0.0-beta.2+26.sha-f2aa9c6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __extends, __assign, __values, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModuleRef, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵlistener, ɵloadDirective, ɵPublicFeature, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, ɵinjectViewContainerRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModuleRef, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -1951,7 +1951,7 @@ var OutletInjector = /** @class */ (function () {
 var EmptyOutletComponent = /** @class */ (function () {
     function EmptyOutletComponent() {
     }
-    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [ɵPublicFeature], template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, features: [ɵPublicFeature], consts: 1, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             ɵelement(0, "router-outlet");
         } }, directives: [RouterOutlet] });
     return EmptyOutletComponent;
@@ -5239,7 +5239,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+22.sha-f053a3f');
+var VERSION = new Version('7.0.0-beta.2+26.sha-f2aa9c6');
 
 /**
  * @license
