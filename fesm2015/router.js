@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.2+30.sha-b05d4a5
+ * @license Angular v7.0.0-beta.2+38.sha-6176974
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, isDevMode, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, HostListener, ɵinjectAttribute, ɵlistener, HostBinding, ɵelementProperty, ɵbind, defineInjectable, inject, INJECTOR, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵinjectViewContainerRef, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, HostListener, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵlistener, ɵloadDirective, ɵPublicFeature, HostBinding, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -6293,6 +6293,9 @@ class RouterScroller {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     /**
      * @return {?}
@@ -6839,7 +6842,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.2+30.sha-b05d4a5');
+const VERSION = new Version('7.0.0-beta.2+38.sha-6176974');
 
 /**
  * @fileoverview added by tsickle

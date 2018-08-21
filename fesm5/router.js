@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.2+30.sha-b05d4a5
+ * @license Angular v7.0.0-beta.2+38.sha-6176974
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __values, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵlistener, ɵloadDirective, ɵPublicFeature, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { __extends, __assign, __values, __spread } from 'tslib';
+import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, isDevMode, ɵinjectAttribute, ɵlistener, ɵelementProperty, ɵbind, ɵinjectViewContainerRef, NgModuleRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4811,6 +4811,9 @@ var RouterScroller = /** @class */ (function () {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     RouterScroller.prototype.init = function () {
         // we want to disable the automatic scrolling because having two places
@@ -5239,7 +5242,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+30.sha-b05d4a5');
+var VERSION = new Version('7.0.0-beta.2+38.sha-6176974');
 
 /**
  * @license
