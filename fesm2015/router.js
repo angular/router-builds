@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.3+20.sha-46b0ce9
+ * @license Angular v6.1.3+21.sha-7e61645
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6247,6 +6247,9 @@ class RouterScroller {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     /**
      * @return {?}
@@ -6783,7 +6786,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('6.1.3+20.sha-46b0ce9');
+const VERSION = new Version('6.1.3+21.sha-7e61645');
 
 /**
  * @fileoverview added by tsickle
