@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.3+20.sha-46b0ce9
+ * @license Angular v6.1.3+21.sha-7e61645
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injector, NgModuleFactoryLoader, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵqR, ɵql, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Compiler, Injector, NgModuleFactoryLoader, NgModuleRef, isDevMode, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵqR, ɵql, ɵinjectViewContainerRef, defineInjectable, inject, INJECTOR, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4376,6 +4376,9 @@ class RouterScroller {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     init() {
         // we want to disable the automatic scrolling because having two places
@@ -4788,7 +4791,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('6.1.3+20.sha-46b0ce9');
+const VERSION = new Version('6.1.3+21.sha-7e61645');
 
 /**
  * @license
