@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.2+30.sha-b05d4a5
+ * @license Angular v7.0.0-beta.2+38.sha-6176974
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __extends, __assign, __param, __values, __spread } from 'tslib';
+import { __decorate, __metadata, __param, __extends, __assign, __values, __spread } from 'tslib';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
@@ -4955,6 +4955,9 @@ var RouterScroller = /** @class */ (function () {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     RouterScroller.prototype.init = function () {
         // we want to disable the automatic scrolling because having two places
@@ -5395,7 +5398,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+30.sha-b05d4a5');
+var VERSION = new Version('7.0.0-beta.2+38.sha-6176974');
 
 /**
  * @license
