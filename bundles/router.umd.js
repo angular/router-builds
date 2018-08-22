@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+33.sha-73146c1
+ * @license Angular v7.0.0-beta.2+63.sha-950639c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1556,7 +1556,7 @@
             if (!matched)
                 return noMatch(rawSegmentGroup);
             var rawSlicedSegments = segments.slice(lastChild);
-            var childConfig$ = this.getChildConfig(ngModule, route);
+            var childConfig$ = this.getChildConfig(ngModule, route, segments);
             return childConfig$.pipe(operators.mergeMap(function (routerConfig) {
                 var childModule = routerConfig.module;
                 var childConfig = routerConfig.routes;
@@ -1574,7 +1574,7 @@
                 }));
             }));
         };
-        ApplyRedirects.prototype.getChildConfig = function (ngModule, route) {
+        ApplyRedirects.prototype.getChildConfig = function (ngModule, route, segments) {
             var _this = this;
             if (route.children) {
                 // The children belong to the same module
@@ -1585,7 +1585,8 @@
                 if (route._loadedConfig !== undefined) {
                     return rxjs.of(route._loadedConfig);
                 }
-                return runCanLoadGuard(ngModule.injector, route).pipe(operators.mergeMap(function (shouldLoad) {
+                return runCanLoadGuard(ngModule.injector, route, segments)
+                    .pipe(operators.mergeMap(function (shouldLoad) {
                     if (shouldLoad) {
                         return _this.configLoader.load(ngModule.injector, route)
                             .pipe(operators.map(function (cfg) {
@@ -1677,13 +1678,13 @@
         };
         return ApplyRedirects;
     }());
-    function runCanLoadGuard(moduleInjector, route) {
+    function runCanLoadGuard(moduleInjector, route, segments) {
         var canLoad = route.canLoad;
         if (!canLoad || canLoad.length === 0)
             return rxjs.of(true);
         var obs = rxjs.from(canLoad).pipe(operators.map(function (injectionToken) {
             var guard = moduleInjector.get(injectionToken);
-            return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
+            return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
         }));
         return andObservables(obs);
     }
@@ -4974,6 +4975,9 @@
             this.lastSource = 'imperative';
             this.restoredId = 0;
             this.store = {};
+            // Default both options to 'disabled'
+            options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+            options.anchorScrolling = options.anchorScrolling || 'disabled';
         }
         RouterScroller.prototype.init = function () {
             // we want to disable the automatic scrolling because having two places
@@ -5418,7 +5422,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('7.0.0-beta.2+33.sha-73146c1');
+    var VERSION = new core.Version('7.0.0-beta.2+63.sha-950639c');
 
     /**
      * @license
