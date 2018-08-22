@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.2+33.sha-73146c1
+ * @license Angular v7.0.0-beta.2+63.sha-950639c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __param, __extends, __values, __assign, __spread } from 'tslib';
+import { __decorate, __metadata, __param, __extends, __assign, __values, __spread } from 'tslib';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
@@ -1483,7 +1483,7 @@ var ApplyRedirects = /** @class */ (function () {
         if (!matched)
             return noMatch(rawSegmentGroup);
         var rawSlicedSegments = segments.slice(lastChild);
-        var childConfig$ = this.getChildConfig(ngModule, route);
+        var childConfig$ = this.getChildConfig(ngModule, route, segments);
         return childConfig$.pipe(mergeMap(function (routerConfig) {
             var childModule = routerConfig.module;
             var childConfig = routerConfig.routes;
@@ -1501,7 +1501,7 @@ var ApplyRedirects = /** @class */ (function () {
             }));
         }));
     };
-    ApplyRedirects.prototype.getChildConfig = function (ngModule, route) {
+    ApplyRedirects.prototype.getChildConfig = function (ngModule, route, segments) {
         var _this = this;
         if (route.children) {
             // The children belong to the same module
@@ -1512,7 +1512,8 @@ var ApplyRedirects = /** @class */ (function () {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route).pipe(mergeMap(function (shouldLoad) {
+            return runCanLoadGuard(ngModule.injector, route, segments)
+                .pipe(mergeMap(function (shouldLoad) {
                 if (shouldLoad) {
                     return _this.configLoader.load(ngModule.injector, route)
                         .pipe(map(function (cfg) {
@@ -1604,13 +1605,13 @@ var ApplyRedirects = /** @class */ (function () {
     };
     return ApplyRedirects;
 }());
-function runCanLoadGuard(moduleInjector, route) {
+function runCanLoadGuard(moduleInjector, route, segments) {
     var canLoad = route.canLoad;
     if (!canLoad || canLoad.length === 0)
         return of(true);
     var obs = from(canLoad).pipe(map(function (injectionToken) {
         var guard = moduleInjector.get(injectionToken);
-        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route) : guard(route));
+        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
     }));
     return andObservables(obs);
 }
@@ -4954,6 +4955,9 @@ var RouterScroller = /** @class */ (function () {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     RouterScroller.prototype.init = function () {
         // we want to disable the automatic scrolling because having two places
@@ -5394,7 +5398,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+33.sha-73146c1');
+var VERSION = new Version('7.0.0-beta.2+63.sha-950639c');
 
 /**
  * @license
