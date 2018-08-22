@@ -1,11 +1,11 @@
 /**
- * @license Angular v6.1.3+22.sha-1fa9790
+ * @license Angular v6.1.3+23.sha-ace4e4f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __assign, __extends, __values, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectViewContainerRef, ɵinjectAttribute, ɵinjectChangeDetectorRef, ɵinjectElementRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵNgOnChangesFeature, NgModuleRef, isDevMode, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵL, ɵp, ɵb, ɵdefineComponent, ɵEe } from '@angular/core';
+import { __extends, __assign, __values, __spread } from 'tslib';
+import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵqR, ɵql, ɵinjectViewContainerRef, NgModuleRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -5206,7 +5206,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.3+22.sha-1fa9790');
+var VERSION = new Version('6.1.3+23.sha-ace4e4f');
 
 /**
  * @license
