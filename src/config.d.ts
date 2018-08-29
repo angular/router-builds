@@ -248,7 +248,6 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * Then it will extract the set of routes defined in that NgModule, and will transparently add
  * those routes to the main configuration.
  *
- *  use Routes
  */
 export declare type Routes = Route[];
 /**
@@ -371,4 +370,7 @@ export declare class LoadedRouterConfig {
     constructor(routes: Route[], module: NgModuleRef<any>);
 }
 export declare function validateConfig(config: Routes, parentPath?: string): void;
-export declare function copyConfig(r: Route): Route;
+/**
+ * Makes a copy of the config and adds any default required properties.
+ */
+export declare function standardizeConfig(r: Route): Route;
