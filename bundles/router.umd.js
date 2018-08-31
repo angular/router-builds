@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.4+20.sha-00f1311
+ * @license Angular v7.0.0-beta.4+21.sha-b424b31
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4604,7 +4604,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { i0.ɵelementProperty(elIndex, "attr.target", i0.ɵbind(i0.ɵloadDirective(dirIndex).target)); i0.ɵelementProperty(elIndex, "href", i0.ɵbind(i0.ɵloadDirective(dirIndex).href)); i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (i0.ɵloadDirective(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵPublicFeature, i0.ɵNgOnChangesFeature] });
+        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { i0.ɵelementProperty(elIndex, "attr.target", i0.ɵbind(i0.ɵloadDirective(dirIndex).target)); i0.ɵelementProperty(elIndex, "href", i0.ɵbind(i0.ɵloadDirective(dirIndex).href)); i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (i0.ɵloadDirective(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵPublicFeature, i0.ɵNgOnChangesFeature] });
         return RouterLinkWithHref;
     }());
     function attrBoolValue(s) {
@@ -5315,7 +5315,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new i0.Version('7.0.0-beta.4+20.sha-00f1311');
+    var VERSION = new i0.Version('7.0.0-beta.4+21.sha-b424b31');
 
     /**
      * @license
