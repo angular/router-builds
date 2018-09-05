@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.6+16.sha-27f0817
+ * @license Angular v6.1.6+20.sha-8f8c390
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3433,6 +3433,7 @@
             this.config = config;
             this.navigations = new rxjs.BehaviorSubject(null);
             this.navigationId = 0;
+            this.isNgZoneEnabled = false;
             this.events = new rxjs.Subject();
             /**
              * Error handler that is invoked when a navigation errors.
@@ -3499,6 +3500,9 @@
             var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
             var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
             this.ngModule = injector.get(core.NgModuleRef);
+            this.console = injector.get(core.ɵConsole);
+            var ngZone = injector.get(core.NgZone);
+            this.isNgZoneEnabled = ngZone instanceof core.NgZone;
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
@@ -3673,6 +3677,9 @@
          */
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
+            if (core.isDevMode() && this.isNgZoneEnabled && !core.NgZone.isInAngularZone()) {
+                this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+            }
             var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
             var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
             return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -5485,7 +5492,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('6.1.6+16.sha-27f0817');
+    var VERSION = new core.Version('6.1.6+20.sha-8f8c390');
 
     /**
      * @license
