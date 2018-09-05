@@ -1,11 +1,11 @@
 /**
- * @license Angular v6.1.6+13.sha-d752a89
+ * @license Angular v6.1.6+19.sha-23a96dc
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __decorate, __metadata, __param, __assign, __values, __spread } from 'tslib';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
+import { __decorate, __metadata, __param, __extends, __assign, __values, __spread } from 'tslib';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, NgZone, isDevMode, ɵConsole, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -3345,6 +3345,7 @@ var Router = /** @class */ (function () {
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.navigationId = 0;
+        this.isNgZoneEnabled = false;
         this.events = new Subject();
         /**
          * Error handler that is invoked when a navigation errors.
@@ -3411,6 +3412,9 @@ var Router = /** @class */ (function () {
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(NgModuleRef);
+        this.console = injector.get(ɵConsole);
+        var ngZone = injector.get(NgZone);
+        this.isNgZoneEnabled = ngZone instanceof NgZone;
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3585,6 +3589,9 @@ var Router = /** @class */ (function () {
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
+        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+            this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+        }
         var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
         var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -5397,7 +5404,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.6+13.sha-d752a89');
+var VERSION = new Version('6.1.6+19.sha-23a96dc');
 
 /**
  * @license
