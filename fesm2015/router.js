@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.4+46.sha-a417b2b
+ * @license Angular v7.0.0-beta.4+48.sha-234661b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6789,7 +6789,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.4+46.sha-a417b2b');
+const VERSION = new Version('7.0.0-beta.4+48.sha-234661b');
 
 /**
  * @fileoverview added by tsickle
