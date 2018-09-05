@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.4+48.sha-234661b
+ * @license Angular v7.0.0-beta.4+52.sha-51c26b8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __extends, __assign, __values, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectRenderer2, ɵinjectElementRef, ɵlistener, ɵloadDirective, ɵPublicFeature, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, ɵinjectViewContainerRef, NgModuleRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, isDevMode, ɵinjectAttribute, ɵlistener, ɵelementProperty, ɵbind, ɵinjectViewContainerRef, NgModuleRef, ɵConsole, NgZone, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -3578,6 +3578,7 @@ var Router = /** @class */ (function () {
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.navigationId = 0;
+        this.isNgZoneEnabled = false;
         this.events = new Subject();
         /**
          * Error handler that is invoked when a navigation errors.
@@ -3644,6 +3645,9 @@ var Router = /** @class */ (function () {
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(NgModuleRef);
+        this.console = injector.get(ɵConsole);
+        var ngZone = injector.get(NgZone);
+        this.isNgZoneEnabled = ngZone instanceof NgZone;
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3818,6 +3822,9 @@ var Router = /** @class */ (function () {
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
+        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+            this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+        }
         var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
         var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -5242,7 +5249,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.4+48.sha-234661b');
+var VERSION = new Version('7.0.0-beta.4+52.sha-51c26b8');
 
 /**
  * @license

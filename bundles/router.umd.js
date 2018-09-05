@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.4+48.sha-234661b
+ * @license Angular v7.0.0-beta.4+52.sha-51c26b8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3651,6 +3651,7 @@
             this.config = config;
             this.navigations = new rxjs.BehaviorSubject(null);
             this.navigationId = 0;
+            this.isNgZoneEnabled = false;
             this.events = new rxjs.Subject();
             /**
              * Error handler that is invoked when a navigation errors.
@@ -3717,6 +3718,9 @@
             var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
             var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
             this.ngModule = injector.get(i0.NgModuleRef);
+            this.console = injector.get(i0.ɵConsole);
+            var ngZone = injector.get(i0.NgZone);
+            this.isNgZoneEnabled = ngZone instanceof i0.NgZone;
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
@@ -3891,6 +3895,9 @@
          */
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
+            if (i0.isDevMode() && this.isNgZoneEnabled && !i0.NgZone.isInAngularZone()) {
+                this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+            }
             var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
             var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
             return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -5315,7 +5322,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new i0.Version('7.0.0-beta.4+48.sha-234661b');
+    var VERSION = new i0.Version('7.0.0-beta.4+52.sha-51c26b8');
 
     /**
      * @license

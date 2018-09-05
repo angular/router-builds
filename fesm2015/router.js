@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.4+48.sha-234661b
+ * @license Angular v7.0.0-beta.4+52.sha-51c26b8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, InjectionToken, NgModuleFactory, NgModuleRef, isDevMode, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, HostListener, ɵinjectAttribute, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵinjectViewContainerRef, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, ContentChildren, ElementRef, Input, Renderer2, NgModuleRef, NgZone, isDevMode, ɵConsole, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, Version, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4715,6 +4715,7 @@ class Router {
         this.config = config;
         this.navigations = new BehaviorSubject(/** @type {?} */ ((null)));
         this.navigationId = 0;
+        this.isNgZoneEnabled = false;
         this.events = new Subject();
         /**
          * Error handler that is invoked when a navigation errors.
@@ -4783,6 +4784,10 @@ class Router {
         /** @type {?} */
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
+        this.console = injector.get(ɵConsole);
+        /** @type {?} */
+        const ngZone = injector.get(NgZone);
+        this.isNgZoneEnabled = ngZone instanceof NgZone;
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -4981,6 +4986,9 @@ class Router {
      * @return {?}
      */
     navigateByUrl(url, extras = { skipLocationChange: false }) {
+        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+            this.console.warn(`Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?`);
+        }
         /** @type {?} */
         const urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
         /** @type {?} */
@@ -6842,7 +6850,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.4+48.sha-234661b');
+const VERSION = new Version('7.0.0-beta.4+52.sha-51c26b8');
 
 /**
  * @fileoverview added by tsickle
