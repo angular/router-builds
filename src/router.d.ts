@@ -161,8 +161,6 @@ export declare class Router {
     private navigationId;
     private configLoader;
     private ngModule;
-    private console;
-    private isNgZoneEnabled;
     readonly events: Observable<Event>;
     readonly routerState: RouterState;
     /**
