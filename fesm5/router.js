@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.6+24.sha-e72f741
+ * @license Angular v6.1.6+25.sha-2c1f550
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __assign, __extends, __values, __spread } from 'tslib';
+import { __extends, __assign, __values, __spread } from 'tslib';
 import { ɵisObservable, ɵisPromise, Renderer2, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵL, ɵd, ɵp, ɵb, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵqR, ɵql, ɵinjectViewContainerRef, NgModuleRef, ɵConsole, NgZone, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
@@ -5213,7 +5213,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.6+24.sha-e72f741');
+var VERSION = new Version('6.1.6+25.sha-2c1f550');
 
 /**
  * @license
