@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.5+29.sha-8dc2b11
+ * @license Angular v7.0.0-beta.5+27.sha-00d3666
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3274,10 +3274,8 @@ class Router {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
-     * it will not apply any delta to the current URL and ignores any properties
-     * in the second parameter (the `NavigationExtras`) that would change the
-     * provided URL.
+     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
+     * and does not apply any delta to the current one.
      */
     navigateByUrl(url, extras = { skipLocationChange: false }) {
         if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
@@ -3305,9 +3303,8 @@ class Router {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * The first parameter of `navigate()` is a delta to be applied to the current URL
-     * or the one provided in the `relativeTo` property of the second parameter (the
-     * `NavigationExtras`).
+     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
+     * URL.
      */
     navigate(commands, extras = { skipLocationChange: false }) {
         validateCommands(commands);
@@ -3728,7 +3725,6 @@ class ActivateRoutes {
                 else {
                     const config = parentLoadedConfig(future.snapshot);
                     const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
-                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -4994,7 +4990,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('7.0.0-beta.5+29.sha-8dc2b11');
+const VERSION = new Version('7.0.0-beta.5+27.sha-00d3666');
 
 /**
  * @license
