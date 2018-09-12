@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.5+28.sha-f2ba55f
+ * @license Angular v7.0.0-beta.5+29.sha-8dc2b11
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5590,6 +5590,7 @@ class ActivateRoutes {
                     const config = parentLoadedConfig(future.snapshot);
                     /** @type {?} */
                     const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -6853,7 +6854,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.5+28.sha-f2ba55f');
+const VERSION = new Version('7.0.0-beta.5+29.sha-8dc2b11');
 
 /**
  * @fileoverview added by tsickle
