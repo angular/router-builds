@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.5+28.sha-f2ba55f
+ * @license Angular v7.0.0-beta.5+29.sha-8dc2b11
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4050,6 +4050,7 @@ var ActivateRoutes = /** @class */ (function () {
                 else {
                     var config = parentLoadedConfig(future.snapshot);
                     var cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -5408,7 +5409,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.5+28.sha-f2ba55f');
+var VERSION = new Version('7.0.0-beta.5+29.sha-8dc2b11');
 
 /**
  * @license
