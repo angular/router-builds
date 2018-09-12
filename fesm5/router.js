@@ -1,11 +1,11 @@
 /**
- * @license Angular v6.1.7+11.sha-55a1ce7
+ * @license Angular v6.1.7+13.sha-8d7fbb6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __extends, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, InjectionToken, NgModuleFactory, Version, Renderer2, ComponentFactoryResolver, EventEmitter, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵL, ɵp, ɵb, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe, ɵConsole, NgZone } from '@angular/core';
+import { ɵisObservable, ɵisPromise, InjectionToken, NgModuleFactory, Renderer2, Version, ComponentFactoryResolver, EventEmitter, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectChangeDetectorRef, ɵQr, ɵQ, ɵd, ɵqR, ɵql, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵL, ɵp, ɵb, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵEe, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -3802,8 +3802,10 @@ var Router = /** @class */ (function () {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
+     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+     * it will not apply any delta to the current URL and ignores any properties
+     * in the second parameter (the `NavigationExtras`) that would change the
+     * provided URL.
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -3832,8 +3834,9 @@ var Router = /** @class */ (function () {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-     * URL.
+     * The first parameter of `navigate()` is a delta to be applied to the current URL
+     * or the one provided in the `relativeTo` property of the second parameter (the
+     * `NavigationExtras`).
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -5213,7 +5216,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.7+11.sha-55a1ce7');
+var VERSION = new Version('6.1.7+13.sha-8d7fbb6');
 
 /**
  * @license
