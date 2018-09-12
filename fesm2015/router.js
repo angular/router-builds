@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.5+26.sha-21009b0
+ * @license Angular v7.0.0-beta.5+30.sha-10a656f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4979,8 +4979,10 @@ class Router {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
+     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+     * it will not apply any delta to the current URL and ignores any properties
+     * in the second parameter (the `NavigationExtras`) that would change the
+     * provided URL.
      * @param {?} url
      * @param {?=} extras
      * @return {?}
@@ -5013,8 +5015,9 @@ class Router {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-     * URL.
+     * The first parameter of `navigate()` is a delta to be applied to the current URL
+     * or the one provided in the `relativeTo` property of the second parameter (the
+     * `NavigationExtras`).
      * @param {?} commands
      * @param {?=} extras
      * @return {?}
@@ -5587,6 +5590,7 @@ class ActivateRoutes {
                     const config = parentLoadedConfig(future.snapshot);
                     /** @type {?} */
                     const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -6850,7 +6854,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.5+26.sha-21009b0');
+const VERSION = new Version('7.0.0-beta.5+30.sha-10a656f');
 
 /**
  * @fileoverview added by tsickle
