@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.7+12.sha-a31cfc5
+ * @license Angular v6.1.7+15.sha-076374b
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3802,8 +3802,10 @@ var Router = /** @class */ (function () {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
+     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+     * it will not apply any delta to the current URL and ignores any properties
+     * in the second parameter (the `NavigationExtras`) that would change the
+     * provided URL.
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -3832,8 +3834,9 @@ var Router = /** @class */ (function () {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-     * URL.
+     * The first parameter of `navigate()` is a delta to be applied to the current URL
+     * or the one provided in the `relativeTo` property of the second parameter (the
+     * `NavigationExtras`).
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -4264,6 +4267,7 @@ var ActivateRoutes = /** @class */ (function () {
                 else {
                     var config = parentLoadedConfig(future.snapshot);
                     var cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -5213,7 +5217,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.7+12.sha-a31cfc5');
+var VERSION = new Version('6.1.7+15.sha-076374b');
 
 /**
  * @license
