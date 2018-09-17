@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.2+28.sha-21a1440
+ * @license Angular v7.0.0-beta.5+32.sha-47f4412
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __assign, __values, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, Renderer2, InjectionToken, NgModuleFactory, Version, isDevMode, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵinjectElementRef, ɵlistener, ɵloadDirective, ɵPublicFeature, ɵelementProperty, ɵbind, ɵNgOnChangesFeature, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵqueryRefresh, ɵloadQueryList, NgModuleRef, ApplicationRef, Injector, NgModuleFactoryLoader, Compiler, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, inject, ANALYZE_FOR_ENTRY_COMPONENTS, defineInjectable, INJECTOR, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵinjectViewContainerRef, ɵdefineComponent, ɵelement } from '@angular/core';
+import { __values, __extends, __assign, __spread } from 'tslib';
+import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -3578,6 +3578,7 @@ var Router = /** @class */ (function () {
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.navigationId = 0;
+        this.isNgZoneEnabled = false;
         this.events = new Subject();
         /**
          * Error handler that is invoked when a navigation errors.
@@ -3644,6 +3645,9 @@ var Router = /** @class */ (function () {
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(NgModuleRef);
+        this.console = injector.get(ɵConsole);
+        var ngZone = injector.get(NgZone);
+        this.isNgZoneEnabled = ngZone instanceof NgZone;
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3813,11 +3817,16 @@ var Router = /** @class */ (function () {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
+     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+     * it will not apply any delta to the current URL and ignores any properties
+     * in the second parameter (the `NavigationExtras`) that would change the
+     * provided URL.
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
+        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+            this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+        }
         var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
         var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -3840,8 +3849,9 @@ var Router = /** @class */ (function () {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-     * URL.
+     * The first parameter of `navigate()` is a delta to be applied to the current URL
+     * or the one provided in the `relativeTo` property of the second parameter (the
+     * `NavigationExtras`).
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -4272,6 +4282,7 @@ var ActivateRoutes = /** @class */ (function () {
                 else {
                     var config = parentLoadedConfig(future.snapshot);
                     var cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -4449,7 +4460,7 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵinjectElementRef()); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature] });
+    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵinjectRenderer2(), ɵinjectElementRef()); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature] });
     return RouterLink;
 }());
 /**
@@ -4531,7 +4542,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementProperty(elIndex, "attr.target", ɵbind(ɵloadDirective(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵloadDirective(dirIndex).href)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature, ɵNgOnChangesFeature] });
+    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementProperty(elIndex, "attr.target", ɵbind(ɵloadDirective(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵloadDirective(dirIndex).href)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature, ɵNgOnChangesFeature] });
     return RouterLinkWithHref;
 }());
 function attrBoolValue(s) {
@@ -4663,7 +4674,7 @@ var RouterLinkActive = /** @class */ (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵdirectiveInject(Renderer2), ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵregisterContentQuery(ɵquery(null, RouterLink, true)); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵloadDirective(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵPublicFeature, ɵNgOnChangesFeature], exportAs: "routerLinkActive" });
+    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵinjectRenderer2(), ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵregisterContentQuery(ɵquery(null, RouterLink, true)); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵloadDirective(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵPublicFeature, ɵNgOnChangesFeature], exportAs: "routerLinkActive" });
     return RouterLinkActive;
 }());
 
@@ -4811,6 +4822,9 @@ var RouterScroller = /** @class */ (function () {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     RouterScroller.prototype.init = function () {
         // we want to disable the automatic scrolling because having two places
@@ -5239,7 +5253,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+28.sha-21a1440');
+var VERSION = new Version('7.0.0-beta.5+32.sha-47f4412');
 
 /**
  * @license
