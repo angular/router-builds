@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.2+28.sha-21a1440
+ * @license Angular v7.0.0-beta.5+32.sha-47f4412
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3434,6 +3434,7 @@
             this.config = config;
             this.navigations = new rxjs.BehaviorSubject(null);
             this.navigationId = 0;
+            this.isNgZoneEnabled = false;
             this.events = new rxjs.Subject();
             /**
              * Error handler that is invoked when a navigation errors.
@@ -3500,6 +3501,9 @@
             var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
             var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
             this.ngModule = injector.get(core.NgModuleRef);
+            this.console = injector.get(core.ɵConsole);
+            var ngZone = injector.get(core.NgZone);
+            this.isNgZoneEnabled = ngZone instanceof core.NgZone;
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
@@ -3669,11 +3673,16 @@
          * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
          * ```
          *
-         * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-         * and does not apply any delta to the current one.
+         * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+         * it will not apply any delta to the current URL and ignores any properties
+         * in the second parameter (the `NavigationExtras`) that would change the
+         * provided URL.
          */
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
+            if (core.isDevMode() && this.isNgZoneEnabled && !core.NgZone.isInAngularZone()) {
+                this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+            }
             var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
             var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
             return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -3696,8 +3705,9 @@
          * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
          * ```
          *
-         * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-         * URL.
+         * The first parameter of `navigate()` is a delta to be applied to the current URL
+         * or the one provided in the `relativeTo` property of the second parameter (the
+         * `NavigationExtras`).
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -4128,6 +4138,7 @@
                     else {
                         var config = parentLoadedConfig(future.snapshot);
                         var cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                        context.attachRef = null;
                         context.route = future;
                         context.resolver = cmpFactoryResolver;
                         if (context.outlet) {
@@ -5043,6 +5054,9 @@
             this.lastSource = 'imperative';
             this.restoredId = 0;
             this.store = {};
+            // Default both options to 'disabled'
+            options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+            options.anchorScrolling = options.anchorScrolling || 'disabled';
         }
         RouterScroller.prototype.init = function () {
             // we want to disable the automatic scrolling because having two places
@@ -5483,7 +5497,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('7.0.0-beta.2+28.sha-21a1440');
+    var VERSION = new core.Version('7.0.0-beta.5+32.sha-47f4412');
 
     /**
      * @license
