@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.2+28.sha-21a1440
+ * @license Angular v7.0.0-beta.5+32.sha-47f4412
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __values, __assign, __extends, __spread } from 'tslib';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
+import { __values, __decorate, __param, __metadata, __extends, __assign, __spread } from 'tslib';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, NgZone, isDevMode, ɵConsole, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -461,9 +461,9 @@ var Scroll = /** @class */ (function () {
 var EmptyOutletComponent = /** @class */ (function () {
     function EmptyOutletComponent() {
     }
-    EmptyOutletComponent.decorators = [
-        { type: Component, args: [{ template: "<router-outlet></router-outlet>" }] }
-    ];
+    EmptyOutletComponent = __decorate([
+        Component({ template: "<router-outlet></router-outlet>" })
+    ], EmptyOutletComponent);
     return EmptyOutletComponent;
 }());
 
@@ -3346,6 +3346,7 @@ var Router = /** @class */ (function () {
         this.config = config;
         this.navigations = new BehaviorSubject(null);
         this.navigationId = 0;
+        this.isNgZoneEnabled = false;
         this.events = new Subject();
         /**
          * Error handler that is invoked when a navigation errors.
@@ -3412,6 +3413,9 @@ var Router = /** @class */ (function () {
         var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
         var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
         this.ngModule = injector.get(NgModuleRef);
+        this.console = injector.get(ɵConsole);
+        var ngZone = injector.get(NgZone);
+        this.isNgZoneEnabled = ngZone instanceof NgZone;
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3581,11 +3585,16 @@ var Router = /** @class */ (function () {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
-     * and does not apply any delta to the current one.
+     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
+     * it will not apply any delta to the current URL and ignores any properties
+     * in the second parameter (the `NavigationExtras`) that would change the
+     * provided URL.
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
+        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+            this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
+        }
         var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
         var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -3608,8 +3617,9 @@ var Router = /** @class */ (function () {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
-     * URL.
+     * The first parameter of `navigate()` is a delta to be applied to the current URL
+     * or the one provided in the `relativeTo` property of the second parameter (the
+     * `NavigationExtras`).
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -4040,6 +4050,7 @@ var ActivateRoutes = /** @class */ (function () {
                 else {
                     var config = parentLoadedConfig(future.snapshot);
                     var cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
                     context.route = future;
                     context.resolver = cmpFactoryResolver;
                     if (context.outlet) {
@@ -4217,28 +4228,51 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.decorators = [
-        { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] }
-    ];
-    /** @nocollapse */
-    RouterLink.ctorParameters = function () { return [
-        { type: Router },
-        { type: ActivatedRoute },
-        { type: String, decorators: [{ type: Attribute, args: ['tabindex',] }] },
-        { type: Renderer2 },
-        { type: ElementRef }
-    ]; };
-    RouterLink.propDecorators = {
-        queryParams: [{ type: Input }],
-        fragment: [{ type: Input }],
-        queryParamsHandling: [{ type: Input }],
-        preserveFragment: [{ type: Input }],
-        skipLocationChange: [{ type: Input }],
-        replaceUrl: [{ type: Input }],
-        routerLink: [{ type: Input }],
-        preserveQueryParams: [{ type: Input }],
-        onClick: [{ type: HostListener, args: ['click',] }]
-    };
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], RouterLink.prototype, "queryParams", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], RouterLink.prototype, "fragment", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], RouterLink.prototype, "queryParamsHandling", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLink.prototype, "preserveFragment", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLink.prototype, "skipLocationChange", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLink.prototype, "replaceUrl", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], RouterLink.prototype, "routerLink", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], RouterLink.prototype, "preserveQueryParams", null);
+    __decorate([
+        HostListener('click'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Boolean)
+    ], RouterLink.prototype, "onClick", null);
+    RouterLink = __decorate([
+        Directive({ selector: ':not(a)[routerLink]' }),
+        __param(2, Attribute('tabindex')),
+        __metadata("design:paramtypes", [Router, ActivatedRoute, String, Renderer2, ElementRef])
+    ], RouterLink);
     return RouterLink;
 }());
 /**
@@ -4320,28 +4354,59 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.decorators = [
-        { type: Directive, args: [{ selector: 'a[routerLink]' },] }
-    ];
-    /** @nocollapse */
-    RouterLinkWithHref.ctorParameters = function () { return [
-        { type: Router },
-        { type: ActivatedRoute },
-        { type: LocationStrategy }
-    ]; };
-    RouterLinkWithHref.propDecorators = {
-        target: [{ type: HostBinding, args: ['attr.target',] }, { type: Input }],
-        queryParams: [{ type: Input }],
-        fragment: [{ type: Input }],
-        queryParamsHandling: [{ type: Input }],
-        preserveFragment: [{ type: Input }],
-        skipLocationChange: [{ type: Input }],
-        replaceUrl: [{ type: Input }],
-        href: [{ type: HostBinding }],
-        routerLink: [{ type: Input }],
-        preserveQueryParams: [{ type: Input }],
-        onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
-    };
+    __decorate([
+        HostBinding('attr.target'), Input(),
+        __metadata("design:type", String)
+    ], RouterLinkWithHref.prototype, "target", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], RouterLinkWithHref.prototype, "queryParams", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], RouterLinkWithHref.prototype, "fragment", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], RouterLinkWithHref.prototype, "queryParamsHandling", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLinkWithHref.prototype, "preserveFragment", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLinkWithHref.prototype, "skipLocationChange", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], RouterLinkWithHref.prototype, "replaceUrl", void 0);
+    __decorate([
+        HostBinding(),
+        __metadata("design:type", String)
+    ], RouterLinkWithHref.prototype, "href", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], RouterLinkWithHref.prototype, "routerLink", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], RouterLinkWithHref.prototype, "preserveQueryParams", null);
+    __decorate([
+        HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number, Boolean, Boolean, Boolean]),
+        __metadata("design:returntype", Boolean)
+    ], RouterLinkWithHref.prototype, "onClick", null);
+    RouterLinkWithHref = __decorate([
+        Directive({ selector: 'a[routerLink]' }),
+        __metadata("design:paramtypes", [Router, ActivatedRoute,
+            LocationStrategy])
+    ], RouterLinkWithHref);
     return RouterLinkWithHref;
 }());
 function attrBoolValue(s) {
@@ -4473,25 +4538,31 @@ var RouterLinkActive = /** @class */ (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.decorators = [
-        { type: Directive, args: [{
-                    selector: '[routerLinkActive]',
-                    exportAs: 'routerLinkActive',
-                },] }
-    ];
-    /** @nocollapse */
-    RouterLinkActive.ctorParameters = function () { return [
-        { type: Router },
-        { type: ElementRef },
-        { type: Renderer2 },
-        { type: ChangeDetectorRef }
-    ]; };
-    RouterLinkActive.propDecorators = {
-        links: [{ type: ContentChildren, args: [RouterLink, { descendants: true },] }],
-        linksWithHrefs: [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
-        routerLinkActiveOptions: [{ type: Input }],
-        routerLinkActive: [{ type: Input }]
-    };
+    __decorate([
+        ContentChildren(RouterLink, { descendants: true }),
+        __metadata("design:type", QueryList)
+    ], RouterLinkActive.prototype, "links", void 0);
+    __decorate([
+        ContentChildren(RouterLinkWithHref, { descendants: true }),
+        __metadata("design:type", QueryList)
+    ], RouterLinkActive.prototype, "linksWithHrefs", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], RouterLinkActive.prototype, "routerLinkActiveOptions", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], RouterLinkActive.prototype, "routerLinkActive", null);
+    RouterLinkActive = __decorate([
+        Directive({
+            selector: '[routerLinkActive]',
+            exportAs: 'routerLinkActive',
+        }),
+        __metadata("design:paramtypes", [Router, ElementRef, Renderer2,
+            ChangeDetectorRef])
+    ], RouterLinkActive);
     return RouterLinkActive;
 }());
 
@@ -4706,21 +4777,20 @@ var RouterOutlet = /** @class */ (function () {
         this.changeDetector.markForCheck();
         this.activateEvents.emit(this.activated.instance);
     };
-    RouterOutlet.decorators = [
-        { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
-    ];
-    /** @nocollapse */
-    RouterOutlet.ctorParameters = function () { return [
-        { type: ChildrenOutletContexts },
-        { type: ViewContainerRef },
-        { type: ComponentFactoryResolver },
-        { type: String, decorators: [{ type: Attribute, args: ['name',] }] },
-        { type: ChangeDetectorRef }
-    ]; };
-    RouterOutlet.propDecorators = {
-        activateEvents: [{ type: Output, args: ['activate',] }],
-        deactivateEvents: [{ type: Output, args: ['deactivate',] }]
-    };
+    __decorate([
+        Output('activate'),
+        __metadata("design:type", Object)
+    ], RouterOutlet.prototype, "activateEvents", void 0);
+    __decorate([
+        Output('deactivate'),
+        __metadata("design:type", Object)
+    ], RouterOutlet.prototype, "deactivateEvents", void 0);
+    RouterOutlet = __decorate([
+        Directive({ selector: 'router-outlet', exportAs: 'outlet' }),
+        __param(3, Attribute('name')),
+        __metadata("design:paramtypes", [ChildrenOutletContexts, ViewContainerRef,
+            ComponentFactoryResolver, String, ChangeDetectorRef])
+    ], RouterOutlet);
     return RouterOutlet;
 }());
 var OutletInjector = /** @class */ (function () {
@@ -4870,17 +4940,11 @@ var RouterPreloader = /** @class */ (function () {
             }));
         });
     };
-    RouterPreloader.decorators = [
-        { type: Injectable }
-    ];
-    /** @nocollapse */
-    RouterPreloader.ctorParameters = function () { return [
-        { type: Router },
-        { type: NgModuleFactoryLoader },
-        { type: Compiler },
-        { type: Injector },
-        { type: PreloadingStrategy }
-    ]; };
+    RouterPreloader = __decorate([
+        Injectable(),
+        __metadata("design:paramtypes", [Router, NgModuleFactoryLoader, Compiler,
+            Injector, PreloadingStrategy])
+    ], RouterPreloader);
     return RouterPreloader;
 }());
 
@@ -4902,6 +4966,9 @@ var RouterScroller = /** @class */ (function () {
         this.lastSource = 'imperative';
         this.restoredId = 0;
         this.store = {};
+        // Default both options to 'disabled'
+        options.scrollPositionRestoration = options.scrollPositionRestoration || 'disabled';
+        options.anchorScrolling = options.anchorScrolling || 'disabled';
     }
     RouterScroller.prototype.init = function () {
         // we want to disable the automatic scrolling because having two places
@@ -5072,6 +5139,7 @@ var RouterModule = /** @class */ (function () {
     // Note: We are injecting the Router so it gets created eagerly...
     function RouterModule(guard, router) {
     }
+    RouterModule_1 = RouterModule;
     /**
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
@@ -5090,7 +5158,7 @@ var RouterModule = /** @class */ (function () {
      */
     RouterModule.forRoot = function (routes, config) {
         return {
-            ngModule: RouterModule,
+            ngModule: RouterModule_1,
             providers: [
                 ROUTER_PROVIDERS,
                 provideRoutes(routes),
@@ -5126,20 +5194,18 @@ var RouterModule = /** @class */ (function () {
      * Creates a module with all the router directives and a provider registering routes.
      */
     RouterModule.forChild = function (routes) {
-        return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
+        return { ngModule: RouterModule_1, providers: [provideRoutes(routes)] };
     };
-    RouterModule.decorators = [
-        { type: NgModule, args: [{
-                    declarations: ROUTER_DIRECTIVES,
-                    exports: ROUTER_DIRECTIVES,
-                    entryComponents: [EmptyOutletComponent]
-                },] }
-    ];
-    /** @nocollapse */
-    RouterModule.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
-        { type: Router, decorators: [{ type: Optional }] }
-    ]; };
+    var RouterModule_1;
+    RouterModule = RouterModule_1 = __decorate([
+        NgModule({
+            declarations: ROUTER_DIRECTIVES,
+            exports: ROUTER_DIRECTIVES,
+            entryComponents: [EmptyOutletComponent]
+        }),
+        __param(0, Optional()), __param(0, Inject(ROUTER_FORROOT_GUARD)), __param(1, Optional()),
+        __metadata("design:paramtypes", [Object, Router])
+    ], RouterModule);
     return RouterModule;
 }());
 function createRouterScroller(router, viewportScroller, config) {
@@ -5304,13 +5370,10 @@ var RouterInitializer = /** @class */ (function () {
     RouterInitializer.prototype.isLegacyDisabled = function (opts) {
         return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     };
-    RouterInitializer.decorators = [
-        { type: Injectable }
-    ];
-    /** @nocollapse */
-    RouterInitializer.ctorParameters = function () { return [
-        { type: Injector }
-    ]; };
+    RouterInitializer = __decorate([
+        Injectable(),
+        __metadata("design:paramtypes", [Injector])
+    ], RouterInitializer);
     return RouterInitializer;
 }());
 function getAppInitializer(r) {
@@ -5346,7 +5409,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.2+28.sha-21a1440');
+var VERSION = new Version('7.0.0-beta.5+32.sha-47f4412');
 
 /**
  * @license
