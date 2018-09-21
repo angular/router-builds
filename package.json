@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "6.1.8+11.sha-f1cb460",
+  "version": "6.1.8+13.sha-a135f48",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./fesm5/router.js",
@@ -28,9 +28,9 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@angular/core": "6.1.8+11.sha-f1cb460",
-    "@angular/common": "6.1.8+11.sha-f1cb460",
-    "@angular/platform-browser": "6.1.8+11.sha-f1cb460",
+    "@angular/core": "6.1.8+13.sha-a135f48",
+    "@angular/common": "6.1.8+13.sha-a135f48",
+    "@angular/platform-browser": "6.1.8+13.sha-a135f48",
     "rxjs": "^6.0.0"
   },
   "ng-update": {
