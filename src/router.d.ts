@@ -9,10 +9,11 @@ import { Location } from '@angular/common';
 import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { QueryParamsHandling, Routes } from './config';
-import { Event } from './events';
+import { Event, NavigationTrigger } from './events';
+import { PreActivation } from './pre_activation';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ChildrenOutletContexts } from './router_outlet_context';
-import { ActivatedRoute, RouterState } from './router_state';
+import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
@@ -137,6 +138,28 @@ export interface NavigationExtras {
  *
  */
 export declare type ErrorHandler = (error: any) => any;
+export declare type NavigationTransition = {
+    id: number;
+    currentUrlTree: UrlTree;
+    currentRawUrl: UrlTree;
+    extractedUrl: UrlTree;
+    urlAfterRedirects: UrlTree;
+    rawUrl: UrlTree;
+    extras: NavigationExtras;
+    resolve: any;
+    reject: any;
+    promise: Promise<boolean>;
+    source: NavigationTrigger;
+    state: {
+        navigationId: number;
+    } | null;
+    currentSnapshot: RouterStateSnapshot;
+    targetSnapshot: RouterStateSnapshot | null;
+    currentRouterState: RouterState;
+    targetRouterState: RouterState | null;
+    guardsResult: boolean | null;
+    preActivation: PreActivation | null;
+};
 /**
  * @description
  *
@@ -156,6 +179,7 @@ export declare class Router {
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
+    private readonly transitions;
     private navigations;
     private locationSubscription;
     private navigationId;
@@ -222,6 +246,9 @@ export declare class Router {
      * Creates the router service.
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    private setupNavigations;
+    private getTransition;
+    private setTransition;
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
@@ -348,13 +375,6 @@ export declare class Router {
     private removeEmptyProps;
     private processNavigations;
     private scheduleNavigation;
-    private executeScheduledNavigation;
-    private runNavigate;
-    /**
-     * Performs the logic of activating routes. This is a synchronous process by default. While this
-     * is a private method, it could be overridden to make activation asynchronous.
-     */
-    private activateRoutes;
     private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
