@@ -1,5 +1,5 @@
 /**
- * @license Angular v6.1.8+20.sha-37f3b92
+ * @license Angular v6.1.8+37.sha-cea7fbe
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -823,6 +823,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * serialized tree.
  * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
  *
+ * @usageNotes
  * ### Example
  *
  * ```
@@ -912,7 +913,8 @@ var UrlSegmentGroup = /** @class */ (function () {
  * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
  * parameters associated with the segment.
  *
- * ## Example
+ * @usageNotes
+ * ### Example
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -1846,6 +1848,7 @@ function nodeChildrenAsMap(node) {
  * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
  * segments, the extracted parameters, and the resolved data.
  *
+ * @usageNotes
  * ### Example
  *
  * ```
@@ -2159,6 +2162,7 @@ var ActivatedRouteSnapshot = /** @class */ (function () {
  * This is a tree of activated route snapshots. Every node in this tree knows about
  * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
+ * @usageNotes
  * ### Example
  *
  * ```
@@ -3467,11 +3471,13 @@ var Router = /** @class */ (function () {
         configurable: true
     });
     /** @internal */
-    Router.prototype.triggerEvent = function (e) { this.events.next(e); };
+    Router.prototype.triggerEvent = function (event) { this.events.next(event); };
     /**
      * Resets the configuration used for navigation and generating links.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.resetConfig([
@@ -3503,7 +3509,9 @@ var Router = /** @class */ (function () {
      * When given an activate route, applies the given commands starting from the route.
      * When not given a route, applies the given command starting from the root.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * // create /team/33/user/11
@@ -3575,7 +3583,9 @@ var Router = /** @class */ (function () {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
@@ -3607,7 +3617,9 @@ var Router = /** @class */ (function () {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
@@ -5229,6 +5241,7 @@ function provideForRootGuard(router) {
  *
  * Registers routes.
  *
+ * @usageNotes
  * ### Example
  *
  * ```
@@ -5408,7 +5421,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.8+20.sha-37f3b92');
+var VERSION = new Version('6.1.8+37.sha-cea7fbe');
 
 /**
  * @license
