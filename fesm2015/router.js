@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.6+35.sha-82a14dc
+ * @license Angular v7.0.0-beta.6+58.sha-0c34471
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, INJECTOR, ɵdefineDirective, ɵdirectiveInject, ɵinjectViewContainerRef, ɵinjectAttribute, ɵinjectChangeDetectorRef, ɵPublicFeature, ɵinjectElementRef, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, INJECTOR, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -949,6 +949,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * serialized tree.
  * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
  *
+ * \@usageNotes
  * ### Example
  *
  * ```
@@ -1043,7 +1044,8 @@ class UrlSegmentGroup {
  * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
  * parameters associated with the segment.
  *
- *  ## Example
+ * \@usageNotes
+ *  ### Example
  *
  * ```
  * \@Component({templateUrl:'template.html'})
@@ -1724,6 +1726,7 @@ function nodeChildrenAsMap(node) {
  * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
  * segments, the extracted parameters, and the resolved data.
  *
+ * \@usageNotes
  * ### Example
  *
  * ```
@@ -2059,6 +2062,7 @@ class ActivatedRouteSnapshot {
  * This is a tree of activated route snapshots. Every node in this tree knows about
  * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
+ * \@usageNotes
  * ### Example
  *
  * ```
@@ -4846,14 +4850,16 @@ class Router {
     get url() { return this.serializeUrl(this.currentUrlTree); }
     /**
      * \@internal
-     * @param {?} e
+     * @param {?} event
      * @return {?}
      */
-    triggerEvent(e) { (/** @type {?} */ (this.events)).next(e); }
+    triggerEvent(event) { (/** @type {?} */ (this.events)).next(event); }
     /**
      * Resets the configuration used for navigation and generating links.
      *
-     * ### Usage
+     * \@usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.resetConfig([
@@ -4893,7 +4899,9 @@ class Router {
      * When given an activate route, applies the given commands starting from the route.
      * When not given a route, applies the given command starting from the root.
      *
-     * ### Usage
+     * \@usageNotes
+     *
+     * ### Example
      *
      * ```
      * // create /team/33/user/11
@@ -4970,7 +4978,9 @@ class Router {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * \@usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
@@ -5006,7 +5016,9 @@ class Router {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * \@usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
@@ -6615,6 +6627,7 @@ function provideForRootGuard(router) {
  *
  * Registers routes.
  *
+ * \@usageNotes
  * ### Example
  *
  * ```
@@ -6854,7 +6867,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.6+35.sha-82a14dc');
+const VERSION = new Version('7.0.0-beta.6+58.sha-0c34471');
 
 /**
  * @fileoverview added by tsickle

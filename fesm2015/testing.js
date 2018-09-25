@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.6+35.sha-82a14dc
+ * @license Angular v7.0.0-beta.6+58.sha-0c34471
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -155,6 +155,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * It provides spy implementations of `Location`, `LocationStrategy`, and {\@link
  * NgModuleFactoryLoader}.
  *
+ * \@usageNotes
  * ### Example
  *
  * ```

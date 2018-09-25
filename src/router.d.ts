@@ -235,7 +235,9 @@ export declare class Router {
     /**
      * Resets the configuration used for navigation and generating links.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.resetConfig([
@@ -257,7 +259,9 @@ export declare class Router {
      * When given an activate route, applies the given commands starting from the route.
      * When not given a route, applies the given command starting from the root.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * // create /team/33/user/11
@@ -301,7 +305,9 @@ export declare class Router {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
@@ -325,7 +331,9 @@ export declare class Router {
      * - resolves to 'false' when navigation fails,
      * - is rejected when an error happens.
      *
-     * ### Usage
+     * @usageNotes
+     *
+     * ### Example
      *
      * ```
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
