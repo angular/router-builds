@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.6+59.sha-482e12c
+ * @license Angular v7.0.0-beta.6+60.sha-6a62ed2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __extends, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ComponentFactoryResolver, EventEmitter, InjectionToken, NgModuleFactory, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectElementRef, ɵinjectRenderer2, ɵinjectChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectViewContainerRef, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement, ɵConsole, NgZone } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ChangeDetectorRef, ComponentFactoryResolver, EventEmitter, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ElementRef, ɵdefineDirective, ɵdirectiveInject, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -1915,7 +1915,7 @@ var RouterOutlet = /** @class */ (function () {
         this.changeDetector.markForCheck();
         this.activateEvents.emit(this.activated.instance);
     };
-    RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵinjectViewContainerRef(), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵinjectChangeDetectorRef()); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, features: [ɵPublicFeature], exportAs: "outlet" });
+    RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵdirectiveInject(ViewContainerRef), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, features: [ɵPublicFeature], exportAs: "outlet" });
     return RouterOutlet;
 }());
 var OutletInjector = /** @class */ (function () {
@@ -4472,7 +4472,7 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵinjectRenderer2(), ɵinjectElementRef()); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature] });
+    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵinjectRenderer2(), ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (ɵloadDirective(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵPublicFeature] });
     return RouterLink;
 }());
 /**
@@ -4686,7 +4686,7 @@ var RouterLinkActive = /** @class */ (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵinjectElementRef(), ɵinjectRenderer2(), ɵinjectChangeDetectorRef()); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵregisterContentQuery(ɵquery(null, RouterLink, true)); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵloadDirective(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵPublicFeature, ɵNgOnChangesFeature], exportAs: "routerLinkActive" });
+    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵinjectRenderer2(), ɵdirectiveInject(ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries() { ɵregisterContentQuery(ɵquery(null, RouterLink, true)); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true)); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵloadDirective(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, features: [ɵPublicFeature, ɵNgOnChangesFeature], exportAs: "routerLinkActive" });
     return RouterLinkActive;
 }());
 
@@ -5266,7 +5266,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.6+59.sha-482e12c');
+var VERSION = new Version('7.0.0-beta.6+60.sha-6a62ed2');
 
 /**
  * @license
