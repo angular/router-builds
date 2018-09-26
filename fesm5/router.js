@@ -1,10 +1,10 @@
 /**
- * @license Angular v6.1.8+65.sha-159e8b4
+ * @license Angular v6.1.9
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __param, __metadata, __values, __extends, __assign, __spread } from 'tslib';
+import { __values, __decorate, __param, __metadata, __extends, __assign, __spread } from 'tslib';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, NgZone, isDevMode, ɵConsole, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, EmptyError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, concatMap, reduce, filter } from 'rxjs/operators';
@@ -5421,7 +5421,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.8+65.sha-159e8b4');
+var VERSION = new Version('6.1.9');
 
 /**
  * @license
