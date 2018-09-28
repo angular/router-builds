@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.7+48.sha-f455518
+ * @license Angular v7.0.0-beta.7+52.sha-794c359
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -59,13 +59,9 @@ class NavigationStart extends RouterEvent {
      * @param {?=} restoredState
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, /** @docsNotRequired */
-    /** @docsNotRequired */
     navigationTrigger = 'imperative', /** @docsNotRequired */
-    /** @docsNotRequired */
     restoredState = null) {
         super(id, url);
         this.navigationTrigger = navigationTrigger;
@@ -91,9 +87,7 @@ class NavigationEnd extends RouterEvent {
      * @param {?} urlAfterRedirects
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -120,9 +114,7 @@ class NavigationCancel extends RouterEvent {
      * @param {?} reason
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, reason) {
         super(id, url);
         this.reason = reason;
@@ -147,9 +139,7 @@ class NavigationError extends RouterEvent {
      * @param {?} error
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, error) {
         super(id, url);
         this.error = error;
@@ -177,9 +167,7 @@ class RoutesRecognized extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -208,9 +196,7 @@ class GuardsCheckStart extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -239,9 +225,7 @@ class GuardsCheckEnd extends RouterEvent {
      * @param {?} shouldActivate
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state, shouldActivate) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -273,9 +257,7 @@ class ResolveStart extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -304,9 +286,7 @@ class ResolveEnd extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -6951,7 +6931,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.7+48.sha-f455518');
+const VERSION = new Version('7.0.0-beta.7+52.sha-794c359');
 
 /**
  * @fileoverview added by tsickle
