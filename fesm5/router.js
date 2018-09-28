@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.0.0-beta.7+48.sha-f455518
+ * @license Angular v7.0.0-beta.7+52.sha-794c359
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __extends, __assign, __values, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ChangeDetectorRef, ComponentFactoryResolver, EventEmitter, ViewContainerRef, InjectionToken, NgModuleFactory, ElementRef, Version, ɵdefineDirective, ɵdirectiveInject, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, isDevMode, ɵinjectAttribute, ɵlistener, ɵelementProperty, ɵbind, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, ɵdefineComponent, ɵelement, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
+import { __values, __extends, __assign, __spread } from 'tslib';
+import { ɵisObservable, ɵisPromise, ChangeDetectorRef, ComponentFactoryResolver, EventEmitter, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ElementRef, ɵdefineDirective, ɵdirectiveInject, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, INJECTOR, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Injector, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -67,12 +67,8 @@ var NavigationStart = /** @class */ (function (_super) {
     navigationTrigger, 
     /** @docsNotRequired */
     restoredState) {
-        if (navigationTrigger === void 0) { 
-        /** @docsNotRequired */
-        navigationTrigger = 'imperative'; }
-        if (restoredState === void 0) { 
-        /** @docsNotRequired */
-        restoredState = null; }
+        if (navigationTrigger === void 0) { navigationTrigger = 'imperative'; }
+        if (restoredState === void 0) { restoredState = null; }
         var _this = _super.call(this, id, url) || this;
         _this.navigationTrigger = navigationTrigger;
         _this.restoredState = restoredState;
@@ -5387,7 +5383,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-beta.7+48.sha-f455518');
+var VERSION = new Version('7.0.0-beta.7+52.sha-794c359');
 
 /**
  * @license
