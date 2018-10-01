@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-beta.7+46.sha-9523991
+ * @license Angular v7.0.0-rc.0+5.sha-ab379ab
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -155,12 +155,8 @@
         navigationTrigger, 
         /** @docsNotRequired */
         restoredState) {
-            if (navigationTrigger === void 0) { 
-            /** @docsNotRequired */
-            navigationTrigger = 'imperative'; }
-            if (restoredState === void 0) { 
-            /** @docsNotRequired */
-            restoredState = null; }
+            if (navigationTrigger === void 0) { navigationTrigger = 'imperative'; }
+            if (restoredState === void 0) { restoredState = null; }
             var _this = _super.call(this, id, url) || this;
             _this.navigationTrigger = navigationTrigger;
             _this.restoredState = restoredState;
@@ -5631,7 +5627,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('7.0.0-beta.7+46.sha-9523991');
+    var VERSION = new core.Version('7.0.0-rc.0+5.sha-ab379ab');
 
     /**
      * @license
