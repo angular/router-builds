@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-beta.7+46.sha-9523991
+ * @license Angular v7.0.0-rc.0+5.sha-ab379ab
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Version, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, INJECTOR, ɵdefineDirective, ɵdirectiveInject, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectAttribute, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, INJECTOR, ɵdefineDirective, ɵdirectiveInject, ɵinjectRenderer2, ɵregisterContentQuery, ɵquery, ɵloadDirective, ɵqueryRefresh, ɵloadQueryList, ɵPublicFeature, ɵNgOnChangesFeature, ɵinjectAttribute, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -59,13 +59,9 @@ class NavigationStart extends RouterEvent {
      * @param {?=} restoredState
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, /** @docsNotRequired */
-    /** @docsNotRequired */
     navigationTrigger = 'imperative', /** @docsNotRequired */
-    /** @docsNotRequired */
     restoredState = null) {
         super(id, url);
         this.navigationTrigger = navigationTrigger;
@@ -91,9 +87,7 @@ class NavigationEnd extends RouterEvent {
      * @param {?} urlAfterRedirects
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -120,9 +114,7 @@ class NavigationCancel extends RouterEvent {
      * @param {?} reason
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, reason) {
         super(id, url);
         this.reason = reason;
@@ -147,9 +139,7 @@ class NavigationError extends RouterEvent {
      * @param {?} error
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, error) {
         super(id, url);
         this.error = error;
@@ -177,9 +167,7 @@ class RoutesRecognized extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -208,9 +196,7 @@ class GuardsCheckStart extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -239,9 +225,7 @@ class GuardsCheckEnd extends RouterEvent {
      * @param {?} shouldActivate
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state, shouldActivate) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -273,9 +257,7 @@ class ResolveStart extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -304,9 +286,7 @@ class ResolveEnd extends RouterEvent {
      * @param {?} state
      */
     constructor(/** @docsNotRequired */
-    /** @docsNotRequired */
     id, /** @docsNotRequired */
-    /** @docsNotRequired */
     url, urlAfterRedirects, state) {
         super(id, url);
         this.urlAfterRedirects = urlAfterRedirects;
@@ -7004,7 +6984,7 @@ function provideRouterInitializer() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** @type {?} */
-const VERSION = new Version('7.0.0-beta.7+46.sha-9523991');
+const VERSION = new Version('7.0.0-rc.0+5.sha-ab379ab');
 
 /**
  * @fileoverview added by tsickle
