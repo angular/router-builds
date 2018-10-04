@@ -16,5 +16,5 @@ import * as i0 from '@angular/core';
  * to this `EmptyOutletComponent`.
  */
 export declare class EmptyOutletComponent {
-    static ngComponentDef: i0.ɵComponentDef<EmptyOutletComponent, ''>;
+    static ngComponentDef: i0.ɵComponentDefWithMeta<EmptyOutletComponent, '', never, {}, {}, never>;
 }
