@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.0+27.sha-aaaa340
+ * @license Angular v7.0.0-rc.0+46.sha-fdaf573
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2785,15 +2785,266 @@ function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-function checkGuards() {
+var CanActivate = /** @class */ (function () {
+    function CanActivate(path) {
+        this.path = path;
+        this.route = this.path[this.path.length - 1];
+    }
+    return CanActivate;
+}());
+var CanDeactivate = /** @class */ (function () {
+    function CanDeactivate(component, route) {
+        this.component = component;
+        this.route = route;
+    }
+    return CanDeactivate;
+}());
+function getAllRouteGuards(future, curr, parentContexts) {
+    var futureRoot = future._root;
+    var currRoot = curr ? curr._root : null;
+    return getChildRouteGuards(futureRoot, currRoot, parentContexts, [futureRoot.value]);
+}
+function getCanActivateChild(p) {
+    var canActivateChild = p.routeConfig ? p.routeConfig.canActivateChild : null;
+    if (!canActivateChild || canActivateChild.length === 0)
+        return null;
+    return { node: p, guards: canActivateChild };
+}
+function getToken(token, snapshot, moduleInjector) {
+    var config = getClosestLoadedConfig(snapshot);
+    var injector = config ? config.module.injector : moduleInjector;
+    return injector.get(token);
+}
+function getClosestLoadedConfig(snapshot) {
+    if (!snapshot)
+        return null;
+    for (var s = snapshot.parent; s; s = s.parent) {
+        var route = s.routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
+    }
+    return null;
+}
+function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks) {
+    if (checks === void 0) { checks = {
+        canDeactivateChecks: [],
+        canActivateChecks: []
+    }; }
+    var prevChildren = nodeChildrenAsMap(currNode);
+    // Process the children of the future route
+    futureNode.children.forEach(function (c) {
+        getRouteGuards(c, prevChildren[c.value.outlet], contexts, futurePath.concat([c.value]), checks);
+        delete prevChildren[c.value.outlet];
+    });
+    // Process any children left from the current route (not active for the future route)
+    forEach(prevChildren, function (v, k) {
+        return deactivateRouteAndItsChildren(v, contexts.getContext(k), checks);
+    });
+    return checks;
+}
+function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks) {
+    if (checks === void 0) { checks = {
+        canDeactivateChecks: [],
+        canActivateChecks: []
+    }; }
+    var future = futureNode.value;
+    var curr = currNode ? currNode.value : null;
+    var context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
+    // reusing the node
+    if (curr && future.routeConfig === curr.routeConfig) {
+        var shouldRun = shouldRunGuardsAndResolvers(curr, future, future.routeConfig.runGuardsAndResolvers);
+        if (shouldRun) {
+            checks.canActivateChecks.push(new CanActivate(futurePath));
+        }
+        else {
+            // we need to set the data
+            future.data = curr.data;
+            future._resolvedData = curr._resolvedData;
+        }
+        // If we have a component, we need to go through an outlet.
+        if (future.component) {
+            getChildRouteGuards(futureNode, currNode, context ? context.children : null, futurePath, checks);
+            // if we have a componentless route, we recurse but keep the same outlet map.
+        }
+        else {
+            getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
+        }
+        if (shouldRun) {
+            var outlet = context.outlet;
+            checks.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
+        }
+    }
+    else {
+        if (curr) {
+            deactivateRouteAndItsChildren(currNode, context, checks);
+        }
+        checks.canActivateChecks.push(new CanActivate(futurePath));
+        // If we have a component, we need to go through an outlet.
+        if (future.component) {
+            getChildRouteGuards(futureNode, null, context ? context.children : null, futurePath, checks);
+            // if we have a componentless route, we recurse but keep the same outlet map.
+        }
+        else {
+            getChildRouteGuards(futureNode, null, parentContexts, futurePath, checks);
+        }
+    }
+    return checks;
+}
+function shouldRunGuardsAndResolvers(curr, future, mode) {
+    switch (mode) {
+        case 'always':
+            return true;
+        case 'paramsOrQueryParamsChange':
+            return !equalParamsAndUrlSegments(curr, future) ||
+                !shallowEqual(curr.queryParams, future.queryParams);
+        case 'paramsChange':
+        default:
+            return !equalParamsAndUrlSegments(curr, future);
+    }
+}
+function deactivateRouteAndItsChildren(route, context, checks) {
+    var children = nodeChildrenAsMap(route);
+    var r = route.value;
+    forEach(children, function (node, childName) {
+        if (!r.component) {
+            deactivateRouteAndItsChildren(node, context, checks);
+        }
+        else if (context) {
+            deactivateRouteAndItsChildren(node, context.children.getContext(childName), checks);
+        }
+        else {
+            deactivateRouteAndItsChildren(node, null, checks);
+        }
+    });
+    if (!r.component) {
+        checks.canDeactivateChecks.push(new CanDeactivate(null, r));
+    }
+    else if (context && context.outlet && context.outlet.isActivated) {
+        checks.canDeactivateChecks.push(new CanDeactivate(context.outlet.component, r));
+    }
+    else {
+        checks.canDeactivateChecks.push(new CanDeactivate(null, r));
+    }
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+function checkGuards(moduleInjector, forwardEvent) {
     return function (source) {
         return source.pipe(mergeMap(function (t) {
-            if (!t.preActivation) {
-                throw new Error('PreActivation required to check guards');
+            var targetSnapshot = t.targetSnapshot, currentSnapshot = t.currentSnapshot, _a = t.guards, canActivateChecks = _a.canActivateChecks, canDeactivateChecks = _a.canDeactivateChecks;
+            if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
+                return of(__assign({}, t, { guardsResult: true }));
             }
-            return t.preActivation.checkGuards().pipe(map(function (guardsResult) { return (__assign({}, t, { guardsResult: guardsResult })); }));
+            return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
+                .pipe(mergeMap(function (canDeactivate) {
+                return canDeactivate ?
+                    runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
+                    of(false);
+            }), map(function (guardsResult) { return (__assign({}, t, { guardsResult: guardsResult })); }));
         }));
     };
+}
+function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
+    return from(checks).pipe(mergeMap(function (check) {
+        return runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector);
+    }), every(function (result) { return result === true; }));
+}
+function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
+    return from(checks).pipe(concatMap(function (check) { return andObservables(from([
+        fireChildActivationStart(check.route.parent, forwardEvent),
+        fireActivationStart(check.route, forwardEvent),
+        runCanActivateChild(futureSnapshot, check.path, moduleInjector),
+        runCanActivate(futureSnapshot, check.route, moduleInjector)
+    ])); }), every(function (result) { return result === true; }));
+}
+/**
+   * This should fire off `ActivationStart` events for each route being activated at this
+   * level.
+   * In other words, if you're activating `a` and `b` below, `path` will contain the
+   * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
+   * return
+   * `true` so checks continue to run.
+   */
+function fireActivationStart(snapshot, forwardEvent) {
+    if (snapshot !== null && forwardEvent) {
+        forwardEvent(new ActivationStart(snapshot));
+    }
+    return of(true);
+}
+/**
+   * This should fire off `ChildActivationStart` events for each route being activated at this
+   * level.
+   * In other words, if you're activating `a` and `b` below, `path` will contain the
+   * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
+   * return
+   * `true` so checks continue to run.
+   */
+function fireChildActivationStart(snapshot, forwardEvent) {
+    if (snapshot !== null && forwardEvent) {
+        forwardEvent(new ChildActivationStart(snapshot));
+    }
+    return of(true);
+}
+function runCanActivate(futureRSS, futureARS, moduleInjector) {
+    var canActivate = futureARS.routeConfig ? futureARS.routeConfig.canActivate : null;
+    if (!canActivate || canActivate.length === 0)
+        return of(true);
+    var obs = from(canActivate).pipe(map(function (c) {
+        var guard = getToken(c, futureARS, moduleInjector);
+        var observable;
+        if (guard.canActivate) {
+            observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
+        }
+        else {
+            observable = wrapIntoObservable(guard(futureARS, futureRSS));
+        }
+        return observable.pipe(first());
+    }));
+    return andObservables(obs);
+}
+function runCanActivateChild(futureRSS, path, moduleInjector) {
+    var futureARS = path[path.length - 1];
+    var canActivateChildGuards = path.slice(0, path.length - 1)
+        .reverse()
+        .map(function (p) { return getCanActivateChild(p); })
+        .filter(function (_) { return _ !== null; });
+    return andObservables(from(canActivateChildGuards).pipe(map(function (d) {
+        var obs = from(d.guards).pipe(map(function (c) {
+            var guard = getToken(c, d.node, moduleInjector);
+            var observable;
+            if (guard.canActivateChild) {
+                observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
+            }
+            else {
+                observable = wrapIntoObservable(guard(futureARS, futureRSS));
+            }
+            return observable.pipe(first());
+        }));
+        return andObservables(obs);
+    })));
+}
+function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector) {
+    var canDeactivate = currARS && currARS.routeConfig ? currARS.routeConfig.canDeactivate : null;
+    if (!canDeactivate || canDeactivate.length === 0)
+        return of(true);
+    var canDeactivate$ = from(canDeactivate).pipe(mergeMap(function (c) {
+        var guard = getToken(c, currARS, moduleInjector);
+        var observable;
+        if (guard.canDeactivate) {
+            observable = wrapIntoObservable(guard.canDeactivate(component, currARS, currRSS, futureRSS));
+        }
+        else {
+            observable = wrapIntoObservable(guard(component, currARS, currRSS, futureRSS));
+        }
+        return observable.pipe(first());
+    }));
+    return canDeactivate$.pipe(every(function (result) { return result === true; }));
 }
 
 /**
@@ -3099,6 +3350,63 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+function resolveData(paramsInheritanceStrategy, moduleInjector) {
+    return function (source) {
+        return source.pipe(mergeMap(function (t) {
+            var targetSnapshot = t.targetSnapshot, canActivateChecks = t.guards.canActivateChecks;
+            if (!canActivateChecks.length) {
+                return of(t);
+            }
+            return from(canActivateChecks)
+                .pipe(concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), reduce(function (_, __) { return _; }), map(function (_) { return t; }));
+        }));
+    };
+}
+function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjector) {
+    var resolve = futureARS._resolve;
+    return resolveNode(resolve, futureARS, futureRSS, moduleInjector)
+        .pipe(map(function (resolvedData) {
+        futureARS._resolvedData = resolvedData;
+        futureARS.data = __assign({}, futureARS.data, inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
+        return null;
+    }));
+}
+function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
+    var keys = Object.keys(resolve);
+    if (keys.length === 0) {
+        return of({});
+    }
+    if (keys.length === 1) {
+        var key_1 = keys[0];
+        return getResolver(resolve[key_1], futureARS, futureRSS, moduleInjector)
+            .pipe(map(function (value) {
+            var _a;
+            return _a = {}, _a[key_1] = value, _a;
+        }));
+    }
+    var data = {};
+    var runningResolvers$ = from(keys).pipe(mergeMap(function (key) {
+        return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
+            .pipe(map(function (value) {
+            data[key] = value;
+            return value;
+        }));
+    }));
+    return runningResolvers$.pipe(last(), map(function () { return data; }));
+}
+function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
+    var resolver = getToken(injectionToken, futureARS, moduleInjector);
+    return resolver.resolve ? wrapIntoObservable(resolver.resolve(futureARS, futureRSS)) :
+        wrapIntoObservable(resolver(futureARS, futureRSS));
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * Perform a side effect through a switchMap for every emission on the source Observable,
  * but return an Observable that is identical to the source. It's essentially the same as
@@ -3115,341 +3423,6 @@ function switchTap(next) {
             return from([v]);
         }));
     };
-}
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-function resolveData(paramsInheritanceStrategy) {
-    return function (source) {
-        return source.pipe(switchTap(function (t) {
-            if (!t.preActivation) {
-                throw new Error('PreActivation required to resolve data');
-            }
-            return t.preActivation.resolveData(paramsInheritanceStrategy);
-        }));
-    };
-}
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var CanActivate = /** @class */ (function () {
-    function CanActivate(path) {
-        this.path = path;
-        this.route = this.path[this.path.length - 1];
-    }
-    return CanActivate;
-}());
-var CanDeactivate = /** @class */ (function () {
-    function CanDeactivate(component, route) {
-        this.component = component;
-        this.route = route;
-    }
-    return CanDeactivate;
-}());
-/**
- * This class bundles the actions involved in preactivation of a route.
- */
-var PreActivation = /** @class */ (function () {
-    function PreActivation(future, curr, moduleInjector, forwardEvent) {
-        this.future = future;
-        this.curr = curr;
-        this.moduleInjector = moduleInjector;
-        this.forwardEvent = forwardEvent;
-        this.canActivateChecks = [];
-        this.canDeactivateChecks = [];
-    }
-    PreActivation.prototype.initialize = function (parentContexts) {
-        var futureRoot = this.future._root;
-        var currRoot = this.curr ? this.curr._root : null;
-        this.setupChildRouteGuards(futureRoot, currRoot, parentContexts, [futureRoot.value]);
-    };
-    PreActivation.prototype.checkGuards = function () {
-        var _this = this;
-        if (!this.isDeactivating() && !this.isActivating()) {
-            return of(true);
-        }
-        var canDeactivate$ = this.runCanDeactivateChecks();
-        return canDeactivate$.pipe(mergeMap(function (canDeactivate) { return canDeactivate ? _this.runCanActivateChecks() : of(false); }));
-    };
-    PreActivation.prototype.resolveData = function (paramsInheritanceStrategy) {
-        var _this = this;
-        if (!this.isActivating())
-            return of(null);
-        return from(this.canActivateChecks)
-            .pipe(concatMap(function (check) { return _this.runResolve(check.route, paramsInheritanceStrategy); }), reduce(function (_, __) { return _; }));
-    };
-    PreActivation.prototype.isDeactivating = function () { return this.canDeactivateChecks.length !== 0; };
-    PreActivation.prototype.isActivating = function () { return this.canActivateChecks.length !== 0; };
-    /**
-     * Iterates over child routes and calls recursive `setupRouteGuards` to get `this` instance in
-     * proper state to run `checkGuards()` method.
-     */
-    PreActivation.prototype.setupChildRouteGuards = function (futureNode, currNode, contexts, futurePath) {
-        var _this = this;
-        var prevChildren = nodeChildrenAsMap(currNode);
-        // Process the children of the future route
-        futureNode.children.forEach(function (c) {
-            _this.setupRouteGuards(c, prevChildren[c.value.outlet], contexts, futurePath.concat([c.value]));
-            delete prevChildren[c.value.outlet];
-        });
-        // Process any children left from the current route (not active for the future route)
-        forEach(prevChildren, function (v, k) {
-            return _this.deactivateRouteAndItsChildren(v, contexts.getContext(k));
-        });
-    };
-    /**
-     * Iterates over child routes and calls recursive `setupRouteGuards` to get `this` instance in
-     * proper state to run `checkGuards()` method.
-     */
-    PreActivation.prototype.setupRouteGuards = function (futureNode, currNode, parentContexts, futurePath) {
-        var future = futureNode.value;
-        var curr = currNode ? currNode.value : null;
-        var context = parentContexts ? parentContexts.getContext(futureNode.value.outlet) : null;
-        // reusing the node
-        if (curr && future.routeConfig === curr.routeConfig) {
-            var shouldRunGuardsAndResolvers = this.shouldRunGuardsAndResolvers(curr, future, future.routeConfig.runGuardsAndResolvers);
-            if (shouldRunGuardsAndResolvers) {
-                this.canActivateChecks.push(new CanActivate(futurePath));
-            }
-            else {
-                // we need to set the data
-                future.data = curr.data;
-                future._resolvedData = curr._resolvedData;
-            }
-            // If we have a component, we need to go through an outlet.
-            if (future.component) {
-                this.setupChildRouteGuards(futureNode, currNode, context ? context.children : null, futurePath);
-                // if we have a componentless route, we recurse but keep the same outlet map.
-            }
-            else {
-                this.setupChildRouteGuards(futureNode, currNode, parentContexts, futurePath);
-            }
-            if (shouldRunGuardsAndResolvers) {
-                var outlet = context.outlet;
-                this.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
-            }
-        }
-        else {
-            if (curr) {
-                this.deactivateRouteAndItsChildren(currNode, context);
-            }
-            this.canActivateChecks.push(new CanActivate(futurePath));
-            // If we have a component, we need to go through an outlet.
-            if (future.component) {
-                this.setupChildRouteGuards(futureNode, null, context ? context.children : null, futurePath);
-                // if we have a componentless route, we recurse but keep the same outlet map.
-            }
-            else {
-                this.setupChildRouteGuards(futureNode, null, parentContexts, futurePath);
-            }
-        }
-    };
-    PreActivation.prototype.shouldRunGuardsAndResolvers = function (curr, future, mode) {
-        switch (mode) {
-            case 'always':
-                return true;
-            case 'paramsOrQueryParamsChange':
-                return !equalParamsAndUrlSegments(curr, future) ||
-                    !shallowEqual(curr.queryParams, future.queryParams);
-            case 'paramsChange':
-            default:
-                return !equalParamsAndUrlSegments(curr, future);
-        }
-    };
-    PreActivation.prototype.deactivateRouteAndItsChildren = function (route, context) {
-        var _this = this;
-        var children = nodeChildrenAsMap(route);
-        var r = route.value;
-        forEach(children, function (node, childName) {
-            if (!r.component) {
-                _this.deactivateRouteAndItsChildren(node, context);
-            }
-            else if (context) {
-                _this.deactivateRouteAndItsChildren(node, context.children.getContext(childName));
-            }
-            else {
-                _this.deactivateRouteAndItsChildren(node, null);
-            }
-        });
-        if (!r.component) {
-            this.canDeactivateChecks.push(new CanDeactivate(null, r));
-        }
-        else if (context && context.outlet && context.outlet.isActivated) {
-            this.canDeactivateChecks.push(new CanDeactivate(context.outlet.component, r));
-        }
-        else {
-            this.canDeactivateChecks.push(new CanDeactivate(null, r));
-        }
-    };
-    PreActivation.prototype.runCanDeactivateChecks = function () {
-        var _this = this;
-        return from(this.canDeactivateChecks)
-            .pipe(mergeMap(function (check) { return _this.runCanDeactivate(check.component, check.route); }), every(function (result) { return result === true; }));
-    };
-    PreActivation.prototype.runCanActivateChecks = function () {
-        var _this = this;
-        return from(this.canActivateChecks)
-            .pipe(concatMap(function (check) { return andObservables(from([
-            _this.fireChildActivationStart(check.route.parent),
-            _this.fireActivationStart(check.route), _this.runCanActivateChild(check.path),
-            _this.runCanActivate(check.route)
-        ])); }), every(function (result) { return result === true; }));
-        // this.fireChildActivationStart(check.path),
-    };
-    /**
-     * This should fire off `ActivationStart` events for each route being activated at this
-     * level.
-     * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ActivationStart` for both. Always
-     * return
-     * `true` so checks continue to run.
-     */
-    PreActivation.prototype.fireActivationStart = function (snapshot) {
-        if (snapshot !== null && this.forwardEvent) {
-            this.forwardEvent(new ActivationStart(snapshot));
-        }
-        return of(true);
-    };
-    /**
-     * This should fire off `ChildActivationStart` events for each route being activated at this
-     * level.
-     * In other words, if you're activating `a` and `b` below, `path` will contain the
-     * `ActivatedRouteSnapshot`s for both and we will fire `ChildActivationStart` for both. Always
-     * return
-     * `true` so checks continue to run.
-     */
-    PreActivation.prototype.fireChildActivationStart = function (snapshot) {
-        if (snapshot !== null && this.forwardEvent) {
-            this.forwardEvent(new ChildActivationStart(snapshot));
-        }
-        return of(true);
-    };
-    PreActivation.prototype.runCanActivate = function (future) {
-        var _this = this;
-        var canActivate = future.routeConfig ? future.routeConfig.canActivate : null;
-        if (!canActivate || canActivate.length === 0)
-            return of(true);
-        var obs = from(canActivate).pipe(map(function (c) {
-            var guard = _this.getToken(c, future);
-            var observable;
-            if (guard.canActivate) {
-                observable = wrapIntoObservable(guard.canActivate(future, _this.future));
-            }
-            else {
-                observable = wrapIntoObservable(guard(future, _this.future));
-            }
-            return observable.pipe(first());
-        }));
-        return andObservables(obs);
-    };
-    PreActivation.prototype.runCanActivateChild = function (path) {
-        var _this = this;
-        var future = path[path.length - 1];
-        var canActivateChildGuards = path.slice(0, path.length - 1)
-            .reverse()
-            .map(function (p) { return _this.extractCanActivateChild(p); })
-            .filter(function (_) { return _ !== null; });
-        return andObservables(from(canActivateChildGuards).pipe(map(function (d) {
-            var obs = from(d.guards).pipe(map(function (c) {
-                var guard = _this.getToken(c, d.node);
-                var observable;
-                if (guard.canActivateChild) {
-                    observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
-                }
-                else {
-                    observable = wrapIntoObservable(guard(future, _this.future));
-                }
-                return observable.pipe(first());
-            }));
-            return andObservables(obs);
-        })));
-    };
-    PreActivation.prototype.extractCanActivateChild = function (p) {
-        var canActivateChild = p.routeConfig ? p.routeConfig.canActivateChild : null;
-        if (!canActivateChild || canActivateChild.length === 0)
-            return null;
-        return { node: p, guards: canActivateChild };
-    };
-    PreActivation.prototype.runCanDeactivate = function (component, curr) {
-        var _this = this;
-        var canDeactivate = curr && curr.routeConfig ? curr.routeConfig.canDeactivate : null;
-        if (!canDeactivate || canDeactivate.length === 0)
-            return of(true);
-        var canDeactivate$ = from(canDeactivate).pipe(mergeMap(function (c) {
-            var guard = _this.getToken(c, curr);
-            var observable;
-            if (guard.canDeactivate) {
-                observable =
-                    wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr, _this.future));
-            }
-            else {
-                observable = wrapIntoObservable(guard(component, curr, _this.curr, _this.future));
-            }
-            return observable.pipe(first());
-        }));
-        return canDeactivate$.pipe(every(function (result) { return result === true; }));
-    };
-    PreActivation.prototype.runResolve = function (future, paramsInheritanceStrategy) {
-        var resolve = future._resolve;
-        return this.resolveNode(resolve, future).pipe(map(function (resolvedData) {
-            future._resolvedData = resolvedData;
-            future.data = __assign({}, future.data, inheritedParamsDataResolve(future, paramsInheritanceStrategy).resolve);
-            return null;
-        }));
-    };
-    PreActivation.prototype.resolveNode = function (resolve, future) {
-        var _this = this;
-        var keys = Object.keys(resolve);
-        if (keys.length === 0) {
-            return of({});
-        }
-        if (keys.length === 1) {
-            var key_1 = keys[0];
-            return this.getResolver(resolve[key_1], future).pipe(map(function (value) {
-                var _a;
-                return _a = {}, _a[key_1] = value, _a;
-            }));
-        }
-        var data = {};
-        var runningResolvers$ = from(keys).pipe(mergeMap(function (key) {
-            return _this.getResolver(resolve[key], future).pipe(map(function (value) {
-                data[key] = value;
-                return value;
-            }));
-        }));
-        return runningResolvers$.pipe(last(), map(function () { return data; }));
-    };
-    PreActivation.prototype.getResolver = function (injectionToken, future) {
-        var resolver = this.getToken(injectionToken, future);
-        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, this.future)) :
-            wrapIntoObservable(resolver(future, this.future));
-    };
-    PreActivation.prototype.getToken = function (token, snapshot) {
-        var config = closestLoadedConfig(snapshot);
-        var injector = config ? config.module.injector : this.moduleInjector;
-        return injector.get(token);
-    };
-    return PreActivation;
-}());
-function closestLoadedConfig(snapshot) {
-    if (!snapshot)
-        return null;
-    for (var s = snapshot.parent; s; s = s.parent) {
-        var route = s.routeConfig;
-        if (route && route._loadedConfig)
-            return route._loadedConfig;
-    }
-    return null;
 }
 
 /**
@@ -3705,8 +3678,8 @@ var Router = /** @class */ (function () {
             targetSnapshot: null,
             currentRouterState: this.routerState,
             targetRouterState: null,
+            guards: { canActivateChecks: [], canDeactivateChecks: [] },
             guardsResult: null,
-            preActivation: null
         });
         this.navigations = this.setupNavigations(this.transitions);
         this.processNavigations();
@@ -3791,11 +3764,7 @@ var Router = /** @class */ (function () {
             tap(function (t) {
                 var guardsStart = new GuardsCheckStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                 _this.triggerEvent(guardsStart);
-            }), map(function (t) {
-                var preActivation = new PreActivation(t.targetSnapshot, t.currentSnapshot, _this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); });
-                preActivation.initialize(_this.rootContexts);
-                return __assign({}, t, { preActivation: preActivation });
-            }), checkGuards(), tap(function (t) {
+            }), map(function (t) { return (__assign({}, t, { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), tap(function (t) {
                 var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
                 _this.triggerEvent(guardsEnd);
             }), filter(function (t) {
@@ -3810,11 +3779,11 @@ var Router = /** @class */ (function () {
             }), 
             // --- RESOLVE ---
             switchTap(function (t) {
-                if (t.preActivation.isActivating()) {
+                if (t.guards.canActivateChecks.length) {
                     return of(t).pipe(tap(function (t) {
                         var resolveStart = new ResolveStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                         _this.triggerEvent(resolveStart);
-                    }), resolveData(_this.paramsInheritanceStrategy), //
+                    }), resolveData(_this.paramsInheritanceStrategy, _this.ngModule.injector), //
                     tap(function (t) {
                         var resolveEnd = new ResolveEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                         _this.triggerEvent(resolveEnd);
@@ -5539,7 +5508,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-rc.0+27.sha-aaaa340');
+var VERSION = new Version('7.0.0-rc.0+46.sha-fdaf573');
 
 /**
  * @license
