@@ -10,13 +10,13 @@ import { Compiler, Injector, NgModuleFactoryLoader, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { QueryParamsHandling, Routes } from './config';
 import { Event, NavigationTrigger } from './events';
-import { PreActivation } from './pre_activation';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ChildrenOutletContexts } from './router_outlet_context';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
+import { Checks } from './utils/preactivation';
 /**
  * @description
  *
@@ -157,8 +157,8 @@ export declare type NavigationTransition = {
     targetSnapshot: RouterStateSnapshot | null;
     currentRouterState: RouterState;
     targetRouterState: RouterState | null;
+    guards: Checks;
     guardsResult: boolean | null;
-    preActivation: PreActivation | null;
 };
 /**
  * @description
