@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+43.sha-e76a570
+ * @license Angular v7.0.0-rc.1+55.sha-2326b9c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3541,6 +3541,7 @@ class Router {
                     this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), e.message);
                     eventsSubject.next(navCancel);
+                    t.resolve(false);
                     /* All other errors should reset to the router's internal URL reference to the
                      * pre-error state. */
                 }
@@ -5103,7 +5104,7 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VERSION = new Version('7.0.0-rc.1+43.sha-e76a570');
+const VERSION = new Version('7.0.0-rc.1+55.sha-2326b9c');
 
 /**
  * @license

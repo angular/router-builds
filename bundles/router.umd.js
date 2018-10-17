@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+43.sha-e76a570
+ * @license Angular v7.0.0-rc.1+55.sha-2326b9c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3932,6 +3932,7 @@
                         _this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
                         var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), e.message);
                         eventsSubject.next(navCancel);
+                        t.resolve(false);
                         /* All other errors should reset to the router's internal URL reference to the
                          * pre-error state. */
                     }
@@ -5596,7 +5597,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var VERSION = new core.Version('7.0.0-rc.1+43.sha-e76a570');
+    var VERSION = new core.Version('7.0.0-rc.1+55.sha-2326b9c');
 
     /**
      * @license
