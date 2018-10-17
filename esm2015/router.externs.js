@@ -8,3 +8,7 @@
 
 /** @typedef {?} */
 var Checks;
+// externs from packages/router/src/operators/prioritized_guard_value.closure.js:
+
+/** @typedef {?} */
+var INTERIM_VALUES;
