@@ -22,7 +22,7 @@ import { Checks } from './utils/preactivation';
  *
  * Represents the extra options used during navigation.
  *
- *
+ * @publicApi
  */
 export interface NavigationExtras {
     /**
@@ -135,7 +135,7 @@ export interface NavigationExtras {
  * If the handler throws an exception, the navigation promise will be rejected with
  * the exception.
  *
- *
+ * @publicApi
  */
 export declare type ErrorHandler = (error: any) => any;
 export declare type NavigationTransition = {
@@ -169,7 +169,7 @@ export declare type NavigationTransition = {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 export declare class Router {
     private rootComponentType;

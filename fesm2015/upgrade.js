@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -34,7 +34,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * }
  * ```
  *
- * \@experimental
+ * \@publicApi
   @type {?} */
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
@@ -58,7 +58,7 @@ function locationSyncBootstrapListener(ngUpgrade) {
  * History.pushState does not fire onPopState, so the Angular location
  * doesn't detect it. The workaround is to attach a location change listener
  *
- * \@experimental
+ * \@publicApi
  * @param {?} ngUpgrade
  * @return {?}
  */
