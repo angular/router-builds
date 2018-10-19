@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __param, __values, __extends, __assign, __spread } from 'tslib';
+import { __values, __decorate, __metadata, __extends, __param, __assign, __spread } from 'tslib';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, NgZone, isDevMode, ɵConsole, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, QueryList, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
@@ -36,7 +36,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * }
  * ```
  *
- * @experimental
+ * @publicApi
  */
 var RouterEvent = /** @class */ (function () {
     function RouterEvent(
@@ -54,7 +54,7 @@ var RouterEvent = /** @class */ (function () {
  *
  * Represents an event triggered when a navigation starts.
  *
- *
+ * @publicApi
  */
 var NavigationStart = /** @class */ (function (_super) {
     __extends(NavigationStart, _super);
@@ -83,7 +83,7 @@ var NavigationStart = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- *
+ * @publicApi
  */
 var NavigationEnd = /** @class */ (function (_super) {
     __extends(NavigationEnd, _super);
@@ -109,7 +109,7 @@ var NavigationEnd = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- *
+ * @publicApi
  */
 var NavigationCancel = /** @class */ (function (_super) {
     __extends(NavigationCancel, _super);
@@ -133,7 +133,7 @@ var NavigationCancel = /** @class */ (function (_super) {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- *
+ * @publicApi
  */
 var NavigationError = /** @class */ (function (_super) {
     __extends(NavigationError, _super);
@@ -159,7 +159,7 @@ var NavigationError = /** @class */ (function (_super) {
  *
  * Represents an event triggered when routes are recognized.
  *
- *
+ * @publicApi
  */
 var RoutesRecognized = /** @class */ (function (_super) {
     __extends(RoutesRecognized, _super);
@@ -188,7 +188,7 @@ var RoutesRecognized = /** @class */ (function (_super) {
  *
  * Represents the start of the Guard phase of routing.
  *
- * @experimental
+ * @publicApi
  */
 var GuardsCheckStart = /** @class */ (function (_super) {
     __extends(GuardsCheckStart, _super);
@@ -216,7 +216,7 @@ var GuardsCheckStart = /** @class */ (function (_super) {
  *
  * Represents the end of the Guard phase of routing.
  *
- * @experimental
+ * @publicApi
  */
 var GuardsCheckEnd = /** @class */ (function (_super) {
     __extends(GuardsCheckEnd, _super);
@@ -250,7 +250,7 @@ var GuardsCheckEnd = /** @class */ (function (_super) {
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
  *
- * @experimental
+ * @publicApi
  */
 var ResolveStart = /** @class */ (function (_super) {
     __extends(ResolveStart, _super);
@@ -279,7 +279,7 @@ var ResolveStart = /** @class */ (function (_super) {
  * Represents the end of the Resolve phase of routing. See note on
  * `ResolveStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 var ResolveEnd = /** @class */ (function (_super) {
     __extends(ResolveEnd, _super);
@@ -307,7 +307,7 @@ var ResolveEnd = /** @class */ (function (_super) {
  *
  * Represents an event triggered before lazy loading a route config.
  *
- * @experimental
+ * @publicApi
  */
 var RouteConfigLoadStart = /** @class */ (function () {
     function RouteConfigLoadStart(
@@ -323,7 +323,7 @@ var RouteConfigLoadStart = /** @class */ (function () {
  *
  * Represents an event triggered when a route has been lazy loaded.
  *
- * @experimental
+ * @publicApi
  */
 var RouteConfigLoadEnd = /** @class */ (function () {
     function RouteConfigLoadEnd(
@@ -340,7 +340,7 @@ var RouteConfigLoadEnd = /** @class */ (function () {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationEnd` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 var ChildActivationStart = /** @class */ (function () {
     function ChildActivationStart(
@@ -360,7 +360,7 @@ var ChildActivationStart = /** @class */ (function () {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 var ChildActivationEnd = /** @class */ (function () {
     function ChildActivationEnd(
@@ -380,7 +380,7 @@ var ChildActivationEnd = /** @class */ (function () {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationEnd` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 var ActivationStart = /** @class */ (function () {
     function ActivationStart(
@@ -400,7 +400,7 @@ var ActivationStart = /** @class */ (function () {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 var ActivationEnd = /** @class */ (function () {
     function ActivationEnd(
@@ -418,6 +418,8 @@ var ActivationEnd = /** @class */ (function () {
  * @description
  *
  * Represents a scrolling event.
+ *
+ * @publicApi
  */
 var Scroll = /** @class */ (function () {
     function Scroll(
@@ -475,7 +477,7 @@ var EmptyOutletComponent = /** @class */ (function () {
  *
  * Name of the primary outlet.
  *
- *
+ * @publicApi
  */
 var PRIMARY_OUTLET = 'primary';
 var ParamsAsMap = /** @class */ (function () {
@@ -507,7 +509,7 @@ var ParamsAsMap = /** @class */ (function () {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- *
+ * @publicApi
  */
 function convertToParamMap(params) {
     return new ParamsAsMap(params);
@@ -838,7 +840,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 var UrlTree = /** @class */ (function () {
     /** @internal */
@@ -874,7 +876,7 @@ var UrlTree = /** @class */ (function () {
  *
  * See `UrlTree` for more information.
  *
- *
+ * @publicApi
  */
 var UrlSegmentGroup = /** @class */ (function () {
     function UrlSegmentGroup(
@@ -925,7 +927,7 @@ var UrlSegmentGroup = /** @class */ (function () {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 var UrlSegment = /** @class */ (function () {
     function UrlSegment(
@@ -982,7 +984,7 @@ function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- *
+ * @publicApi
  */
 var UrlSerializer = /** @class */ (function () {
     function UrlSerializer() {
@@ -1005,7 +1007,7 @@ var UrlSerializer = /** @class */ (function () {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- *
+ * @publicApi
  */
 var DefaultUrlSerializer = /** @class */ (function () {
     function DefaultUrlSerializer() {
@@ -1447,7 +1449,7 @@ function nodeChildrenAsMap(node) {
  *
  * See `ActivatedRoute` for more information.
  *
- *
+ * @publicApi
  */
 var RouterState = /** @class */ (function (_super) {
     __extends(RouterState, _super);
@@ -1500,7 +1502,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 var ActivatedRoute = /** @class */ (function () {
     /** @internal */
@@ -1647,7 +1649,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 var ActivatedRouteSnapshot = /** @class */ (function () {
     /** @internal */
@@ -1760,7 +1762,7 @@ var ActivatedRouteSnapshot = /** @class */ (function () {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 var RouterStateSnapshot = /** @class */ (function (_super) {
     __extends(RouterStateSnapshot, _super);
@@ -3437,7 +3439,7 @@ function switchTap(next) {
  *
  * Provides a way to customize when activated routes get reused.
  *
- * @experimental
+ * @publicApi
  */
 var RouteReuseStrategy = /** @class */ (function () {
     function RouteReuseStrategy() {
@@ -3469,7 +3471,7 @@ var DefaultRouteReuseStrategy = /** @class */ (function () {
  */
 /**
  * @docsNotRequired
- * @experimental
+ * @publicApi
  */
 var ROUTES = new InjectionToken('ROUTES');
 var RouterConfigLoader = /** @class */ (function () {
@@ -3524,7 +3526,7 @@ var RouterConfigLoader = /** @class */ (function () {
  *
  * Provides a way to migrate AngularJS applications to Angular.
  *
- * @experimental
+ * @publicApi
  */
 var UrlHandlingStrategy = /** @class */ (function () {
     function UrlHandlingStrategy() {
@@ -3532,7 +3534,7 @@ var UrlHandlingStrategy = /** @class */ (function () {
     return UrlHandlingStrategy;
 }());
 /**
- * @experimental
+ * @publicApi
  */
 var DefaultUrlHandlingStrategy = /** @class */ (function () {
     function DefaultUrlHandlingStrategy() {
@@ -3571,7 +3573,7 @@ function defaultRouterHook(snapshot, runExtras) {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 var Router = /** @class */ (function () {
     /**
@@ -4269,7 +4271,7 @@ function validateCommands(commands) {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 var RouterLink = /** @class */ (function () {
     function RouterLink(router, route, tabIndex, renderer, el) {
@@ -4383,7 +4385,7 @@ var RouterLink = /** @class */ (function () {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 var RouterLinkWithHref = /** @class */ (function () {
     function RouterLinkWithHref(router, route, locationStrategy) {
@@ -4574,7 +4576,7 @@ function attrBoolValue(s) {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 var RouterLinkActive = /** @class */ (function () {
     function RouterLinkActive(router, element, renderer, cdr) {
@@ -4675,7 +4677,7 @@ var RouterLinkActive = /** @class */ (function () {
 /**
  * Store contextual information about a `RouterOutlet`
  *
- *
+ * @publicApi
  */
 var OutletContext = /** @class */ (function () {
     function OutletContext() {
@@ -4690,7 +4692,7 @@ var OutletContext = /** @class */ (function () {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- *
+ * @publicApi
  */
 var ChildrenOutletContexts = /** @class */ (function () {
     function ChildrenOutletContexts() {
@@ -4764,7 +4766,7 @@ var ChildrenOutletContexts = /** @class */ (function () {
  * ```
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 var RouterOutlet = /** @class */ (function () {
     function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {
@@ -4922,7 +4924,7 @@ var OutletInjector = /** @class */ (function () {
  *
  * Provides a preloading strategy.
  *
- * @experimental
+ * @publicApi
  */
 var PreloadingStrategy = /** @class */ (function () {
     function PreloadingStrategy() {
@@ -4938,7 +4940,7 @@ var PreloadingStrategy = /** @class */ (function () {
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
- * @experimental
+ * @publicApi
  */
 var PreloadAllModules = /** @class */ (function () {
     function PreloadAllModules() {
@@ -4955,7 +4957,7 @@ var PreloadAllModules = /** @class */ (function () {
  *
  * This strategy is enabled by default.
  *
- * @experimental
+ * @publicApi
  */
 var NoPreloading = /** @class */ (function () {
     function NoPreloading() {
@@ -4973,7 +4975,7 @@ var NoPreloading = /** @class */ (function () {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- *
+ * @publicApi
  */
 var RouterPreloader = /** @class */ (function () {
     function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
@@ -5153,7 +5155,7 @@ var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLin
  *
  * Is used in DI to configure the router.
  *
- *
+ * @publicApi
  */
 var ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /**
@@ -5232,7 +5234,7 @@ function routerNgProbeToken() {
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- *
+ * @publicApi
  */
 var RouterModule = /** @class */ (function () {
     // Note: We are injecting the Router so it gets created eagerly...
@@ -5340,7 +5342,7 @@ function provideForRootGuard(router) {
  * class MyNgModule {}
  * ```
  *
- *
+ * @publicApi
  */
 function provideRoutes(routes) {
     return [
@@ -5485,7 +5487,7 @@ function getBootstrapListener(r) {
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
- * @experimental
+ * @publicApi
  */
 var ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 function provideRouterInitializer() {
@@ -5509,7 +5511,10 @@ function provideRouterInitializer() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('7.0.0-rc.1+118.sha-31022cb');
+/**
+ * @publicApi
+ */
+var VERSION = new Version('7.0.0-rc.1+137.sha-4c2ce4e');
 
 /**
  * @license

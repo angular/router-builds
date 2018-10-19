@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+118.sha-31022cb
+ * @license Angular v7.0.0-rc.1+137.sha-4c2ce4e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -45,7 +45,7 @@ var RouterTestingModule_1;
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- *
+ * @publicApi
  */
 let SpyNgModuleFactoryLoader = class SpyNgModuleFactoryLoader {
     constructor(compiler) {
@@ -90,7 +90,7 @@ function isUrlHandlingStrategy(opts) {
 /**
  * Router setup factory function used for testing.
  *
- *
+ * @publicApi
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
@@ -138,7 +138,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * });
  * ```
  *
- *
+ * @publicApi
  */
 let RouterTestingModule = RouterTestingModule_1 = class RouterTestingModule {
     static withRoutes(routes, config) {

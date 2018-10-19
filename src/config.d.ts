@@ -249,6 +249,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  * Then it will extract the set of routes defined in that NgModule, and will transparently add
  * those routes to the main configuration.
  *
+ * @publicApi
  */
 export declare type Routes = Route[];
 /**
@@ -257,7 +258,7 @@ export declare type Routes = Route[];
  * * `consumed` is an array of the consumed URL segments.
  * * `posParams` is a map of positional parameters.
  *
- * @experimental
+ * @publicApi
  */
 export declare type UrlMatchResult = {
     consumed: UrlSegment[];
@@ -283,7 +284,7 @@ export declare type UrlMatchResult = {
  * export const routes = [{ matcher: htmlFiles, component: AnyComponent }];
  * ```
  *
- * @experimental
+ * @publicApi
  */
 export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult;
 /**
@@ -293,6 +294,7 @@ export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup
  *
  * See `Routes` for more details.
  *
+ * @publicApi
  */
 export declare type Data = {
     [name: string]: any;
@@ -304,6 +306,7 @@ export declare type Data = {
  *
  * See `Routes` for more details.
  *
+ * @publicApi
  */
 export declare type ResolveData = {
     [name: string]: any;
@@ -315,6 +318,7 @@ export declare type ResolveData = {
  *
  * See `Routes` for more details.
  *
+ * @publicApi
  */
 export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<Type<any>> | Observable<Type<any>>;
 /**
@@ -324,6 +328,7 @@ export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any
  *
  * See `Routes` for more details.
  *
+ * @publicApi
  */
 export declare type LoadChildren = string | LoadChildrenCallback;
 /**
@@ -341,12 +346,13 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * The type of `runGuardsAndResolvers`.
  *
  * See `Routes` for more details.
- * @experimental
+ * @publicApi
  */
 export declare type RunGuardsAndResolvers = 'paramsChange' | 'paramsOrQueryParamsChange' | 'always';
 /**
  * See `Routes` for more details.
  *
+ * @publicApi
  */
 export interface Route {
     path?: string;

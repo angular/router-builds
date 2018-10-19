@@ -63,7 +63,7 @@ import { RouterLink, RouterLinkWithHref } from './router_link';
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit {
     private router;

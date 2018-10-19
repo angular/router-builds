@@ -12,13 +12,13 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *
  * Name of the primary outlet.
  *
- *
+ * @publicApi
  */
 export declare const PRIMARY_OUTLET = "primary";
 /**
  * A collection of parameters.
  *
- *
+ * @publicApi
  */
 export declare type Params = {
     [key: string]: any;
@@ -33,7 +33,7 @@ export declare type Params = {
  * The API is inspired by the URLSearchParams interface.
  * see https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
  *
- *
+ * @publicApi
  */
 export interface ParamMap {
     has(name: string): boolean;
@@ -56,7 +56,7 @@ export interface ParamMap {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- *
+ * @publicApi
  */
 export declare function convertToParamMap(params: Params): ParamMap;
 export declare function navigationCancelingError(message: string): Error;
