@@ -25,7 +25,7 @@ import { UrlSerializer, UrlTree } from './url_tree';
  *
  * Is used in DI to configure the router.
  *
- *
+ * @publicApi
  */
 export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 /**
@@ -83,7 +83,7 @@ export declare function routerNgProbeToken(): NgProbeToken;
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- *
+ * @publicApi
  */
 export declare class RouterModule {
     constructor(guard: any, router: Router);
@@ -130,7 +130,7 @@ export declare function provideForRootGuard(router: Router): any;
  * class MyNgModule {}
  * ```
  *
- *
+ * @publicApi
  */
 export declare function provideRoutes(routes: Routes): any;
 /**
@@ -156,7 +156,7 @@ export declare function provideRoutes(routes: Routes): any;
  *
  * The 'legacy_enabled' and 'legacy_disabled' should not be used for new applications.
  *
- * @experimental
+ * @publicApi
  */
 export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
 /**
@@ -164,7 +164,7 @@ export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 
  *
  * Represents options to configure the router.
  *
- *
+ * @publicApi
  */
 export interface ExtraOptions {
     /**
@@ -351,7 +351,7 @@ export declare function getBootstrapListener(r: RouterInitializer): any;
 /**
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
- * @experimental
+ * @publicApi
  */
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 export declare function provideRouterInitializer(): (typeof RouterInitializer | {

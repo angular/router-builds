@@ -36,7 +36,7 @@ export declare function containsTree(container: UrlTree, containee: UrlTree, exa
  * }
  * ```
  *
- *
+ * @publicApi
  */
 export declare class UrlTree {
     /** The root segment group of the URL tree */
@@ -56,7 +56,7 @@ export declare class UrlTree {
  *
  * See `UrlTree` for more information.
  *
- *
+ * @publicApi
  */
 export declare class UrlSegmentGroup {
     /** The URL segments of this group. See `UrlSegment` for more information */
@@ -105,7 +105,7 @@ export declare class UrlSegmentGroup {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 export declare class UrlSegment {
     /** The path part of a URL segment */
@@ -138,7 +138,7 @@ export declare function mapChildrenIntoArray<T>(segment: UrlSegmentGroup, fn: (v
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- *
+ * @publicApi
  */
 export declare abstract class UrlSerializer {
     /** Parse a url into a `UrlTree` */
@@ -162,7 +162,7 @@ export declare abstract class UrlSerializer {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- *
+ * @publicApi
  */
 export declare class DefaultUrlSerializer implements UrlSerializer {
     /** Parses a url into a `UrlTree` */

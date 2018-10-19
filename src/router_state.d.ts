@@ -37,7 +37,7 @@ import { Tree } from './utils/tree';
  *
  * See `ActivatedRoute` for more information.
  *
- *
+ * @publicApi
  */
 export declare class RouterState extends Tree<ActivatedRoute> {
     /** The current snapshot of the router state */
@@ -64,7 +64,7 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * }
  * ```
  *
- *
+ * @publicApi
  */
 export declare class ActivatedRoute {
     /** An observable of the URL segments matched by this route */
@@ -118,7 +118,7 @@ export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
  * }
  * ```
  *
- *
+ * @publicApi
  */
 export declare class ActivatedRouteSnapshot {
     /** The URL segments matched by this route */
@@ -176,7 +176,7 @@ export declare class ActivatedRouteSnapshot {
  * }
  * ```
  *
- *
+ * @publicApi
  */
 export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     /** The url from which this snapshot was created */
