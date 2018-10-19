@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0+32.sha-3f94759
+ * @license Angular v7.0.0+52.sha-778e1c2
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -40,7 +40,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
  * router.navigateByUrl('/lazy/loaded');
  * ```
  *
- *
+ * \@publicApi
  */
 class SpyNgModuleFactoryLoader {
     /**
@@ -103,7 +103,7 @@ function isUrlHandlingStrategy(opts) {
 /**
  * Router setup factory function used for testing.
  *
- *
+ * \@publicApi
  * @param {?} urlSerializer
  * @param {?} contexts
  * @param {?} location
@@ -162,7 +162,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * });
  * ```
  *
- *
+ * \@publicApi
  */
 class RouterTestingModule {
     /**

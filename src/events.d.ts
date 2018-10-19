@@ -16,7 +16,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from './router_state';
  * * 'popstate'--triggered by a popstate event
  * * 'hashchange'--triggered by a hashchange event
  *
- * @experimental
+ * @publicApi
  */
 export declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
 /**
@@ -37,7 +37,7 @@ export declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange'
  * }
  * ```
  *
- * @experimental
+ * @publicApi
  */
 export declare class RouterEvent {
     /** @docsNotRequired */
@@ -55,7 +55,7 @@ export declare class RouterEvent {
  *
  * Represents an event triggered when a navigation starts.
  *
- *
+ * @publicApi
  */
 export declare class NavigationStart extends RouterEvent {
     /**
@@ -100,7 +100,7 @@ export declare class NavigationStart extends RouterEvent {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- *
+ * @publicApi
  */
 export declare class NavigationEnd extends RouterEvent {
     /** @docsNotRequired */
@@ -120,7 +120,7 @@ export declare class NavigationEnd extends RouterEvent {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- *
+ * @publicApi
  */
 export declare class NavigationCancel extends RouterEvent {
     /** @docsNotRequired */
@@ -140,7 +140,7 @@ export declare class NavigationCancel extends RouterEvent {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- *
+ * @publicApi
  */
 export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
@@ -160,7 +160,7 @@ export declare class NavigationError extends RouterEvent {
  *
  * Represents an event triggered when routes are recognized.
  *
- *
+ * @publicApi
  */
 export declare class RoutesRecognized extends RouterEvent {
     /** @docsNotRequired */
@@ -184,7 +184,7 @@ export declare class RoutesRecognized extends RouterEvent {
  *
  * Represents the start of the Guard phase of routing.
  *
- * @experimental
+ * @publicApi
  */
 export declare class GuardsCheckStart extends RouterEvent {
     /** @docsNotRequired */
@@ -207,7 +207,7 @@ export declare class GuardsCheckStart extends RouterEvent {
  *
  * Represents the end of the Guard phase of routing.
  *
- * @experimental
+ * @publicApi
  */
 export declare class GuardsCheckEnd extends RouterEvent {
     /** @docsNotRequired */
@@ -237,7 +237,7 @@ export declare class GuardsCheckEnd extends RouterEvent {
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ResolveStart extends RouterEvent {
     /** @docsNotRequired */
@@ -261,7 +261,7 @@ export declare class ResolveStart extends RouterEvent {
  * Represents the end of the Resolve phase of routing. See note on
  * `ResolveStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ResolveEnd extends RouterEvent {
     /** @docsNotRequired */
@@ -284,7 +284,7 @@ export declare class ResolveEnd extends RouterEvent {
  *
  * Represents an event triggered before lazy loading a route config.
  *
- * @experimental
+ * @publicApi
  */
 export declare class RouteConfigLoadStart {
     /** @docsNotRequired */
@@ -299,7 +299,7 @@ export declare class RouteConfigLoadStart {
  *
  * Represents an event triggered when a route has been lazy loaded.
  *
- * @experimental
+ * @publicApi
  */
 export declare class RouteConfigLoadEnd {
     /** @docsNotRequired */
@@ -315,7 +315,7 @@ export declare class RouteConfigLoadEnd {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationEnd` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ChildActivationStart {
     /** @docsNotRequired */
@@ -331,7 +331,7 @@ export declare class ChildActivationStart {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ChildActivationEnd {
     /** @docsNotRequired */
@@ -347,7 +347,7 @@ export declare class ChildActivationEnd {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationEnd` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ActivationStart {
     /** @docsNotRequired */
@@ -363,7 +363,7 @@ export declare class ActivationStart {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationStart` for use of this experimental API.
  *
- * @experimental
+ * @publicApi
  */
 export declare class ActivationEnd {
     /** @docsNotRequired */
@@ -377,6 +377,8 @@ export declare class ActivationEnd {
  * @description
  *
  * Represents a scrolling event.
+ *
+ * @publicApi
  */
 export declare class Scroll {
     /** @docsNotRequired */
@@ -418,6 +420,6 @@ export declare class Scroll {
  * - `NavigationError`
  * - `Scroll`
  *
- *
+ * @publicApi
  */
 export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;
