@@ -83,7 +83,7 @@ import { UrlTree } from '../url_tree';
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 export declare class RouterLink {
     private router;
@@ -117,7 +117,7 @@ export declare class RouterLink {
  *
  * @ngModule RouterModule
  *
- *
+ * @publicApi
  */
 export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private router;
