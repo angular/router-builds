@@ -14,7 +14,7 @@ import { Router } from './router';
  *
  * Provides a preloading strategy.
  *
- * @experimental
+ * @publicApi
  */
 export declare abstract class PreloadingStrategy {
     abstract preload(route: Route, fn: () => Observable<any>): Observable<any>;
@@ -28,7 +28,7 @@ export declare abstract class PreloadingStrategy {
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
- * @experimental
+ * @publicApi
  */
 export declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
@@ -40,7 +40,7 @@ export declare class PreloadAllModules implements PreloadingStrategy {
  *
  * This strategy is enabled by default.
  *
- * @experimental
+ * @publicApi
  */
 export declare class NoPreloading implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
@@ -55,7 +55,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- *
+ * @publicApi
  */
 export declare class RouterPreloader implements OnDestroy {
     private router;

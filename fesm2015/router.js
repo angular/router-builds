@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.0-rc.1+111.sha-5b4cf38
+ * @license Angular v7.0.0-rc.1+178.sha-ee0b857.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -32,7 +32,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * }
  * ```
  *
- * \@experimental
+ * \@publicApi
  */
 class RouterEvent {
     /**
@@ -49,7 +49,7 @@ class RouterEvent {
  *
  * Represents an event triggered when a navigation starts.
  *
- *
+ * \@publicApi
  */
 class NavigationStart extends RouterEvent {
     /**
@@ -78,7 +78,7 @@ class NavigationStart extends RouterEvent {
  *
  * Represents an event triggered when a navigation ends successfully.
  *
- *
+ * \@publicApi
  */
 class NavigationEnd extends RouterEvent {
     /**
@@ -105,7 +105,7 @@ class NavigationEnd extends RouterEvent {
  *
  * Represents an event triggered when a navigation is canceled.
  *
- *
+ * \@publicApi
  */
 class NavigationCancel extends RouterEvent {
     /**
@@ -130,7 +130,7 @@ class NavigationCancel extends RouterEvent {
  *
  * Represents an event triggered when a navigation fails due to an unexpected error.
  *
- *
+ * \@publicApi
  */
 class NavigationError extends RouterEvent {
     /**
@@ -157,7 +157,7 @@ class NavigationError extends RouterEvent {
  *
  * Represents an event triggered when routes are recognized.
  *
- *
+ * \@publicApi
  */
 class RoutesRecognized extends RouterEvent {
     /**
@@ -186,7 +186,7 @@ class RoutesRecognized extends RouterEvent {
  *
  * Represents the start of the Guard phase of routing.
  *
- * \@experimental
+ * \@publicApi
  */
 class GuardsCheckStart extends RouterEvent {
     /**
@@ -214,7 +214,7 @@ class GuardsCheckStart extends RouterEvent {
  *
  * Represents the end of the Guard phase of routing.
  *
- * \@experimental
+ * \@publicApi
  */
 class GuardsCheckEnd extends RouterEvent {
     /**
@@ -247,7 +247,7 @@ class GuardsCheckEnd extends RouterEvent {
  * in the "resolve" phase whether there's things to resolve or not. In the future this
  * behavior may change to only run when there are things to be resolved.
  *
- * \@experimental
+ * \@publicApi
  */
 class ResolveStart extends RouterEvent {
     /**
@@ -276,7 +276,7 @@ class ResolveStart extends RouterEvent {
  * Represents the end of the Resolve phase of routing. See note on
  * `ResolveStart` for use of this experimental API.
  *
- * \@experimental
+ * \@publicApi
  */
 class ResolveEnd extends RouterEvent {
     /**
@@ -304,7 +304,7 @@ class ResolveEnd extends RouterEvent {
  *
  * Represents an event triggered before lazy loading a route config.
  *
- * \@experimental
+ * \@publicApi
  */
 class RouteConfigLoadStart {
     /**
@@ -323,7 +323,7 @@ class RouteConfigLoadStart {
  *
  * Represents an event triggered when a route has been lazy loaded.
  *
- * \@experimental
+ * \@publicApi
  */
 class RouteConfigLoadEnd {
     /**
@@ -343,7 +343,7 @@ class RouteConfigLoadEnd {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationEnd` for use of this experimental API.
  *
- * \@experimental
+ * \@publicApi
  */
 class ChildActivationStart {
     /**
@@ -367,7 +367,7 @@ class ChildActivationStart {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ChildActivationStart` for use of this experimental API.
  *
- * \@experimental
+ * \@publicApi
  */
 class ChildActivationEnd {
     /**
@@ -391,7 +391,7 @@ class ChildActivationEnd {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationEnd` for use of this experimental API.
  *
- * \@experimental
+ * \@publicApi
  */
 class ActivationStart {
     /**
@@ -415,7 +415,7 @@ class ActivationStart {
  * Represents the start of end of the Resolve phase of routing. See note on
  * `ActivationStart` for use of this experimental API.
  *
- * \@experimental
+ * \@publicApi
  */
 class ActivationEnd {
     /**
@@ -437,6 +437,8 @@ class ActivationEnd {
  * \@description
  *
  * Represents a scrolling event.
+ *
+ * \@publicApi
  */
 class Scroll {
     /**
@@ -497,7 +499,7 @@ EmptyOutletComponent.decorators = [
  *
  * Name of the primary outlet.
  *
- *
+ * \@publicApi
   @type {?} */
 const PRIMARY_OUTLET = 'primary';
 class ParamsAsMap {
@@ -542,7 +544,7 @@ class ParamsAsMap {
 /**
  * Convert a `Params` instance to a `ParamMap`.
  *
- *
+ * \@publicApi
  * @param {?} params
  * @return {?}
  */
@@ -1000,7 +1002,7 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
  * }
  * ```
  *
- *
+ * \@publicApi
  */
 class UrlTree {
     /**
@@ -1036,7 +1038,7 @@ class UrlTree {
  *
  * See `UrlTree` for more information.
  *
- *
+ * \@publicApi
  */
 class UrlSegmentGroup {
     /**
@@ -1092,7 +1094,7 @@ class UrlSegmentGroup {
  * }
  * ```
  *
- *
+ * \@publicApi
  */
 class UrlSegment {
     /**
@@ -1167,7 +1169,7 @@ function mapChildrenIntoArray(segment, fn) {
  *
  * See `DefaultUrlSerializer` for an example of a URL serializer.
  *
- *
+ * \@publicApi
  * @abstract
  */
 class UrlSerializer {
@@ -1188,7 +1190,7 @@ class UrlSerializer {
  * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
  * specify route specific parameters.
  *
- *
+ * \@publicApi
  */
 class DefaultUrlSerializer {
     /**
@@ -1776,7 +1778,7 @@ function nodeChildrenAsMap(node) {
  *
  * See `ActivatedRoute` for more information.
  *
- *
+ * \@publicApi
  */
 class RouterState extends Tree {
     /**
@@ -1853,7 +1855,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * }
  * ```
  *
- *
+ * \@publicApi
  */
 class ActivatedRoute {
     /**
@@ -2002,7 +2004,7 @@ function flattenInherited(pathFromRoot) {
  * }
  * ```
  *
- *
+ * \@publicApi
  */
 class ActivatedRouteSnapshot {
     /**
@@ -2111,7 +2113,7 @@ class ActivatedRouteSnapshot {
  * }
  * ```
  *
- *
+ * \@publicApi
  */
 class RouterStateSnapshot extends Tree {
     /**
@@ -4511,7 +4513,7 @@ function switchTap(next) {
  *
  * Provides a way to customize when activated routes get reused.
  *
- * \@experimental
+ * \@publicApi
  * @abstract
  */
 class RouteReuseStrategy {
@@ -4557,7 +4559,7 @@ class DefaultRouteReuseStrategy {
  */
 /** *
  * \@docsNotRequired
- * \@experimental
+ * \@publicApi
   @type {?} */
 const ROUTES = new InjectionToken('ROUTES');
 class RouterConfigLoader {
@@ -4630,13 +4632,13 @@ class RouterConfigLoader {
  *
  * Provides a way to migrate AngularJS applications to Angular.
  *
- * \@experimental
+ * \@publicApi
  * @abstract
  */
 class UrlHandlingStrategy {
 }
 /**
- * \@experimental
+ * \@publicApi
  */
 class DefaultUrlHandlingStrategy {
     /**
@@ -4695,7 +4697,7 @@ function defaultRouterHook(snapshot, runExtras) {
  *
  * \@ngModule RouterModule
  *
- *
+ * \@publicApi
  */
 class Router {
     /**
@@ -5518,7 +5520,7 @@ function validateCommands(commands) {
  *
  * \@ngModule RouterModule
  *
- *
+ * \@publicApi
  */
 class RouterLink {
     /**
@@ -5616,7 +5618,7 @@ RouterLink.propDecorators = {
  *
  * \@ngModule RouterModule
  *
- *
+ * \@publicApi
  */
 class RouterLinkWithHref {
     /**
@@ -5797,7 +5799,7 @@ function attrBoolValue(s) {
  *
  * \@ngModule RouterModule
  *
- *
+ * \@publicApi
  */
 class RouterLinkActive {
     /**
@@ -5917,7 +5919,7 @@ RouterLinkActive.propDecorators = {
 /**
  * Store contextual information about a `RouterOutlet`
  *
- *
+ * \@publicApi
  */
 class OutletContext {
     constructor() {
@@ -5931,7 +5933,7 @@ class OutletContext {
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
  *
- *
+ * \@publicApi
  */
 class ChildrenOutletContexts {
     constructor() {
@@ -6024,7 +6026,7 @@ class ChildrenOutletContexts {
  * ```
  * \@ngModule RouterModule
  *
- *
+ * \@publicApi
  */
 class RouterOutlet {
     /**
@@ -6215,7 +6217,7 @@ class OutletInjector {
  *
  * Provides a preloading strategy.
  *
- * \@experimental
+ * \@publicApi
  * @abstract
  */
 class PreloadingStrategy {
@@ -6229,7 +6231,7 @@ class PreloadingStrategy {
  * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
- * \@experimental
+ * \@publicApi
  */
 class PreloadAllModules {
     /**
@@ -6248,7 +6250,7 @@ class PreloadAllModules {
  *
  * This strategy is enabled by default.
  *
- * \@experimental
+ * \@publicApi
  */
 class NoPreloading {
     /**
@@ -6268,7 +6270,7 @@ class NoPreloading {
  *
  * If a route is protected by `canLoad` guards, the preloaded will not load it.
  *
- *
+ * \@publicApi
  */
 class RouterPreloader {
     /**
@@ -6480,7 +6482,7 @@ const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterL
  *
  * Is used in DI to configure the router.
  *
- *
+ * \@publicApi
   @type {?} */
 const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
 /** *
@@ -6563,7 +6565,7 @@ function routerNgProbeToken() {
  * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
  * overview of how the router should be used.
  *
- *
+ * \@publicApi
  */
 class RouterModule {
     /**
@@ -6693,7 +6695,7 @@ function provideForRootGuard(router) {
  * class MyNgModule {}
  * ```
  *
- *
+ * \@publicApi
  * @param {?} routes
  * @return {?}
  */
@@ -6896,7 +6898,7 @@ function getBootstrapListener(r) {
 /** *
  * A token for the router initializer that will be called after the app is bootstrapped.
  *
- * \@experimental
+ * \@publicApi
   @type {?} */
 const ROUTER_INITIALIZER = new InjectionToken('Router Initializer');
 /**
@@ -6920,8 +6922,10 @@ function provideRouterInitializer() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/** @type {?} */
-const VERSION = new Version('7.0.0-rc.1+111.sha-5b4cf38');
+/** *
+ * \@publicApi
+  @type {?} */
+const VERSION = new Version('7.0.0-rc.1+178.sha-ee0b857.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
