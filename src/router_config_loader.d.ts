@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { LoadedRouterConfig, Route } from './config';
 /**
  * @docsNotRequired
- * @experimental
+ * @publicApi
  */
 export declare const ROUTES: InjectionToken<Route[][]>;
 export declare class RouterConfigLoader {
