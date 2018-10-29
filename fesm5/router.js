@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.0+55.sha-c0bf222
+ * @license Angular v7.1.0-beta.0+56.sha-2a86927
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4561,7 +4561,7 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (ɵload(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
+    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { var f = new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ElementRef)); ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return f.onClick(); }); return f; }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
     return RouterLink;
 }());
 /**
@@ -4643,7 +4643,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementProperty(elIndex, "attr.target", ɵbind(ɵload(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵload(dirIndex).href)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (ɵload(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
+    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { var f = new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return f.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); }); return f; }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementProperty(elIndex, "attr.target", ɵbind(ɵload(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵload(dirIndex).href)); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
     return RouterLinkWithHref;
 }());
 function attrBoolValue(s) {
@@ -5358,7 +5358,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-beta.0+55.sha-c0bf222');
+var VERSION = new Version('7.1.0-beta.0+56.sha-2a86927');
 
 /**
  * @license

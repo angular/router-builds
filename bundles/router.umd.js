@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.0+55.sha-c0bf222
+ * @license Angular v7.1.0-beta.0+56.sha-2a86927
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4634,7 +4634,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵinjectAttribute('tabindex'), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i0.ElementRef)); }, hostBindings: function RouterLink_HostBindings(dirIndex, elIndex) { i0.ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { var pd_b = (i0.ɵload(dirIndex).onClick() !== false); return pd_b; }); }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
+        RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { var f = new (t || RouterLink)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵinjectAttribute('tabindex'), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i0.ElementRef)); i0.ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return f.onClick(); }); return f; }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
         return RouterLink;
     }());
     /**
@@ -4716,7 +4716,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { i0.ɵelementProperty(elIndex, "attr.target", i0.ɵbind(i0.ɵload(dirIndex).target)); i0.ɵelementProperty(elIndex, "href", i0.ɵbind(i0.ɵload(dirIndex).href)); i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { var pd_b = (i0.ɵload(dirIndex).onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey) !== false); return pd_b; }); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
+        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { var f = new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return f.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); }); return f; }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { i0.ɵelementProperty(elIndex, "attr.target", i0.ɵbind(i0.ɵload(dirIndex).target)); i0.ɵelementProperty(elIndex, "href", i0.ɵbind(i0.ɵload(dirIndex).href)); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
         return RouterLinkWithHref;
     }());
     function attrBoolValue(s) {
@@ -5431,7 +5431,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.1.0-beta.0+55.sha-c0bf222');
+    var VERSION = new i0.Version('7.1.0-beta.0+56.sha-2a86927');
 
     /**
      * @license
