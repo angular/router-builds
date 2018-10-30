@@ -1,10 +1,10 @@
 /**
- * @license Angular v7.1.0-beta.0+69.sha-8fc4ae5
+ * @license Angular v7.1.0-beta.0+70.sha-87a7f2d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Version, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, ContentChildren, ElementRef, Input, Renderer2, Component, NgZone, isDevMode, ɵConsole, defineInjectable, inject, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, HostListener, ɵlistener, HostBinding, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -6978,7 +6978,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-beta.0+69.sha-8fc4ae5');
+const VERSION = new Version('7.1.0-beta.0+70.sha-87a7f2d');
 
 /**
  * @fileoverview added by tsickle
