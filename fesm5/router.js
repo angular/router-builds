@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.1.0-beta.0+62.sha-23648b0
+ * @license Angular v7.1.0-beta.0+64.sha-9ad54d7
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __extends, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, ChangeDetectorRef, ComponentFactoryResolver, EventEmitter, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ElementRef, Renderer2, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵdefineComponent, ɵelement, ɵConsole, NgZone } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ChangeDetectorRef, ComponentFactoryResolver, EventEmitter, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ElementRef, Renderer2, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, isDevMode, ɵlistener, ɵelementProperty, ɵbind, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
 import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -5358,7 +5358,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-beta.0+62.sha-23648b0');
+var VERSION = new Version('7.1.0-beta.0+64.sha-9ad54d7');
 
 /**
  * @license
