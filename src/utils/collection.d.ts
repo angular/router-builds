@@ -33,9 +33,4 @@ export declare function waitForMap<A, B>(obj: {
 }, fn: (k: string, a: A) => Observable<B>): Observable<{
     [k: string]: B;
 }>;
-/**
- * ANDs Observables by merging all input observables, reducing to an Observable verifying all
- * input Observables return `true`.
- */
-export declare function andObservables(observables: Observable<Observable<any>>): Observable<boolean>;
-export declare function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>): Observable<T>;
+export declare function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>): Observable<T | NgModuleFactory<T>>;
