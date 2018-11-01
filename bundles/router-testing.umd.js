@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.1+6.sha-4e9f2e5
+ * @license Angular v7.1.0-beta.1+14.sha-2e7b5c5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -113,6 +113,11 @@
         SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(i0.Compiler)); }, providedIn: null });
         return SpyNgModuleFactoryLoader;
     }());
+    /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+            type: i0.Injectable
+        }], [{
+            type: i0.Compiler
+        }], null);
     function isUrlHandlingStrategy(opts) {
         // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
         // runtime.
@@ -199,6 +204,25 @@
             ], imports: [[router.RouterModule]] });
         return RouterTestingModule;
     }());
+    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterTestingModule, [{
+            type: i0.NgModule,
+            args: [{
+                    exports: [router.RouterModule],
+                    providers: [
+                        router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
+                        { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
+                        { provide: i0.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: router.Router,
+                            useFactory: setupTestingRouter,
+                            deps: [
+                                router.UrlSerializer, router.ChildrenOutletContexts, common.Location, i0.NgModuleFactoryLoader, i0.Compiler, i0.Injector,
+                                router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new i0.Optional()]
+                            ]
+                        },
+                        { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
+                    ]
+                }]
+        }], null, null);
 
     /**
      * @license

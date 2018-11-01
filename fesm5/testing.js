@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.1+6.sha-4e9f2e5
+ * @license Angular v7.1.0-beta.1+14.sha-2e7b5c5
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { __values } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
 import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
-import { Compiler, Injector, NgModuleFactoryLoader, Optional, defineInjectable, inject, ɵdefineNgModule, defineInjector } from '@angular/core';
+import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional, defineInjectable, inject, ɵsetClassMetadata, ɵdefineNgModule, defineInjector } from '@angular/core';
 import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
 
 /**
@@ -87,6 +87,11 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
     return SpyNgModuleFactoryLoader;
 }());
+/*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+        type: Injectable
+    }], [{
+        type: Compiler
+    }], null);
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
@@ -173,6 +178,25 @@ var RouterTestingModule = /** @class */ (function () {
         ], imports: [[RouterModule]] });
     return RouterTestingModule;
 }());
+/*@__PURE__*/ ɵsetClassMetadata(RouterTestingModule, [{
+        type: NgModule,
+        args: [{
+                exports: [RouterModule],
+                providers: [
+                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                    { provide: LocationStrategy, useClass: MockLocationStrategy },
+                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                        provide: Router,
+                        useFactory: setupTestingRouter,
+                        deps: [
+                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                        ]
+                    },
+                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                ]
+            }]
+    }], null, null);
 
 /**
  * @license
