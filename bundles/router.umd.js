@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.2+7.sha-5eb540c
+ * @license Angular v7.0.2+9.sha-dc05385
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2960,8 +2960,8 @@
                 getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
             }
             if (shouldRun) {
-                var outlet = context.outlet;
-                checks.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
+                var component = context && context.outlet && context.outlet.component || null;
+                checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
             }
         }
         else {
@@ -5602,7 +5602,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.0.2+7.sha-5eb540c');
+    var VERSION = new core.Version('7.0.2+9.sha-dc05385');
 
     /**
      * @license
