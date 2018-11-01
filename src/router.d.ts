@@ -158,7 +158,7 @@ export declare type NavigationTransition = {
     currentRouterState: RouterState;
     targetRouterState: RouterState | null;
     guards: Checks;
-    guardsResult: boolean | null;
+    guardsResult: boolean | UrlTree | null;
 };
 /**
  * @description
