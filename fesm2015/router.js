@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.1+51.sha-e9e804f
+ * @license Angular v7.1.0-beta.1+52.sha-496372d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3795,8 +3795,8 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
         }
         if (shouldRun) {
             /** @type {?} */
-            const outlet = /** @type {?} */ ((/** @type {?} */ ((context)).outlet));
-            checks.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
+            const component = context && context.outlet && context.outlet.component || null;
+            checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
         }
     }
     else {
@@ -7071,7 +7071,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-beta.1+51.sha-e9e804f');
+const VERSION = new Version('7.1.0-beta.1+52.sha-496372d');
 
 /**
  * @fileoverview added by tsickle
