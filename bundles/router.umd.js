@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.0+58.sha-96770e5
+ * @license Angular v7.1.0-beta.1+52.sha-496372d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -806,13 +806,6 @@
         });
         // Closure compiler has problem with using spread operator here. So just using Array.concat.
         return rxjs.of.apply(null, waitHead.concat(waitTail)).pipe(operators.concatAll(), operators.last(), operators.map(function () { return res; }));
-    }
-    /**
-     * ANDs Observables by merging all input observables, reducing to an Observable verifying all
-     * input Observables return `true`.
-     */
-    function andObservables(observables) {
-        return observables.pipe(operators.mergeAll(), operators.every(function (result) { return result === true; }));
     }
     function wrapIntoObservable(value) {
         if (core.ɵisObservable(value)) {
@@ -2445,6 +2438,48 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * Simple function check, but generic so type inference will flow. Example:
+     *
+     * function product(a: number, b: number) {
+     *   return a * b;
+     * }
+     *
+     * if (isFunction<product>(fn)) {
+     *   return fn(1, 2);
+     * } else {
+     *   throw "Must provide the `product` function";
+     * }
+     */
+    function isFunction(v) {
+        return typeof v === 'function';
+    }
+    function isBoolean(v) {
+        return typeof v === 'boolean';
+    }
+    function isUrlTree(v) {
+        return v instanceof UrlTree;
+    }
+    function isCanLoad(guard) {
+        return guard && isFunction(guard.canLoad);
+    }
+    function isCanActivate(guard) {
+        return guard && isFunction(guard.canActivate);
+    }
+    function isCanActivateChild(guard) {
+        return guard && isFunction(guard.canActivateChild);
+    }
+    function isCanDeactivate(guard) {
+        return guard && isFunction(guard.canDeactivate);
+    }
+
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var NoMatch = /** @class */ (function () {
         function NoMatch(segmentGroup) {
             this.segmentGroup = segmentGroup || null;
@@ -2749,9 +2784,19 @@
             return rxjs.of(true);
         var obs = rxjs.from(canLoad).pipe(operators.map(function (injectionToken) {
             var guard = moduleInjector.get(injectionToken);
-            return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
+            var guardVal;
+            if (isCanLoad(guard)) {
+                guardVal = guard.canLoad(route, segments);
+            }
+            else if (isFunction(guard)) {
+                guardVal = guard(route, segments);
+            }
+            else {
+                throw new Error('Invalid CanLoad guard');
+            }
+            return wrapIntoObservable(guardVal);
         }));
-        return andObservables(obs);
+        return obs.pipe(operators.concatAll(), operators.every(function (result) { return result === true; }));
     }
     function match(segmentGroup, route, segments) {
         if (route.path === '') {
@@ -2960,8 +3005,8 @@
                 getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
             }
             if (shouldRun) {
-                var outlet = context.outlet;
-                checks.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
+                var component = context && context.outlet && context.outlet.component || null;
+                checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
             }
         }
         else {
@@ -3024,6 +3069,44 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var INITIAL_VALUE = Symbol('INITIAL_VALUE');
+    function prioritizedGuardValue() {
+        return operators.switchMap(function (obs) {
+            return rxjs.combineLatest.apply(void 0, __spread(obs.map(function (o) { return o.pipe(operators.take(1), operators.startWith(INITIAL_VALUE)); }))).pipe(operators.scan(function (acc, list) {
+                var isPending = false;
+                return list.reduce(function (innerAcc, val, i) {
+                    if (innerAcc !== INITIAL_VALUE)
+                        return innerAcc;
+                    // Toggle pending flag if any values haven't been set yet
+                    if (val === INITIAL_VALUE)
+                        isPending = true;
+                    // Any other return values are only valid if we haven't yet hit a pending call.
+                    // This guarantees that in the case of a guard at the bottom of the tree that
+                    // returns a redirect, we will wait for the higher priority guard at the top to
+                    // finish before performing the redirect.
+                    if (!isPending) {
+                        // Early return when we hit a `false` value as that should always cancel
+                        // navigation
+                        if (val === false)
+                            return val;
+                        if (i === list.length - 1 || isUrlTree(val)) {
+                            return val;
+                        }
+                    }
+                    return innerAcc;
+                }, acc);
+            }, INITIAL_VALUE), operators.filter(function (item) { return item !== INITIAL_VALUE; }), operators.map(function (item) { return isUrlTree(item) ? item : item === true; }), //
+            operators.take(1));
+        });
+    }
+
+    /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     function checkGuards(moduleInjector, forwardEvent) {
         return function (source) {
             return source.pipe(operators.mergeMap(function (t) {
@@ -3033,9 +3116,9 @@
                 }
                 return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
                     .pipe(operators.mergeMap(function (canDeactivate) {
-                    return canDeactivate ?
+                    return canDeactivate && isBoolean(canDeactivate) ?
                         runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
-                        rxjs.of(false);
+                        rxjs.of(canDeactivate);
                 }), operators.map(function (guardsResult) { return (__assign({}, t, { guardsResult: guardsResult })); }));
             }));
         };
@@ -3043,15 +3126,20 @@
     function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
         return rxjs.from(checks).pipe(operators.mergeMap(function (check) {
             return runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector);
-        }), operators.every(function (result) { return result === true; }));
+        }), operators.first(function (result) { return result !== true; }, true));
     }
     function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
-        return rxjs.from(checks).pipe(operators.concatMap(function (check) { return andObservables(rxjs.from([
-            fireChildActivationStart(check.route.parent, forwardEvent),
-            fireActivationStart(check.route, forwardEvent),
-            runCanActivateChild(futureSnapshot, check.path, moduleInjector),
-            runCanActivate(futureSnapshot, check.route, moduleInjector)
-        ])); }), operators.every(function (result) { return result === true; }));
+        return rxjs.from(checks).pipe(operators.concatMap(function (check) {
+            return rxjs.from([
+                fireChildActivationStart(check.route.parent, forwardEvent),
+                fireActivationStart(check.route, forwardEvent),
+                runCanActivateChild(futureSnapshot, check.path, moduleInjector),
+                runCanActivate(futureSnapshot, check.route, moduleInjector)
+            ])
+                .pipe(operators.concatAll(), operators.first(function (result) {
+                return result !== true;
+            }, true));
+        }), operators.first(function (result) { return result !== true; }, true));
     }
     /**
        * This should fire off `ActivationStart` events for each route being activated at this
@@ -3085,18 +3173,23 @@
         var canActivate = futureARS.routeConfig ? futureARS.routeConfig.canActivate : null;
         if (!canActivate || canActivate.length === 0)
             return rxjs.of(true);
-        var obs = rxjs.from(canActivate).pipe(operators.map(function (c) {
-            var guard = getToken(c, futureARS, moduleInjector);
-            var observable;
-            if (guard.canActivate) {
-                observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
-            }
-            else {
-                observable = wrapIntoObservable(guard(futureARS, futureRSS));
-            }
-            return observable.pipe(operators.first());
-        }));
-        return andObservables(obs);
+        var canActivateObservables = canActivate.map(function (c) {
+            return rxjs.defer(function () {
+                var guard = getToken(c, futureARS, moduleInjector);
+                var observable;
+                if (isCanActivate(guard)) {
+                    observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
+                }
+                else if (isFunction(guard)) {
+                    observable = wrapIntoObservable(guard(futureARS, futureRSS));
+                }
+                else {
+                    throw new Error('Invalid CanActivate guard');
+                }
+                return observable.pipe(operators.first());
+            });
+        });
+        return rxjs.of(canActivateObservables).pipe(prioritizedGuardValue());
     }
     function runCanActivateChild(futureRSS, path, moduleInjector) {
         var futureARS = path[path.length - 1];
@@ -3104,37 +3197,47 @@
             .reverse()
             .map(function (p) { return getCanActivateChild(p); })
             .filter(function (_) { return _ !== null; });
-        return andObservables(rxjs.from(canActivateChildGuards).pipe(operators.map(function (d) {
-            var obs = rxjs.from(d.guards).pipe(operators.map(function (c) {
-                var guard = getToken(c, d.node, moduleInjector);
-                var observable;
-                if (guard.canActivateChild) {
-                    observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
-                }
-                else {
-                    observable = wrapIntoObservable(guard(futureARS, futureRSS));
-                }
-                return observable.pipe(operators.first());
-            }));
-            return andObservables(obs);
-        })));
+        var canActivateChildGuardsMapped = canActivateChildGuards.map(function (d) {
+            return rxjs.defer(function () {
+                var guardsMapped = d.guards.map(function (c) {
+                    var guard = getToken(c, d.node, moduleInjector);
+                    var observable;
+                    if (isCanActivateChild(guard)) {
+                        observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
+                    }
+                    else if (isFunction(guard)) {
+                        observable = wrapIntoObservable(guard(futureARS, futureRSS));
+                    }
+                    else {
+                        throw new Error('Invalid CanActivateChild guard');
+                    }
+                    return observable.pipe(operators.first());
+                });
+                return rxjs.of(guardsMapped).pipe(prioritizedGuardValue());
+            });
+        });
+        return rxjs.of(canActivateChildGuardsMapped).pipe(prioritizedGuardValue());
     }
     function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector) {
         var canDeactivate = currARS && currARS.routeConfig ? currARS.routeConfig.canDeactivate : null;
         if (!canDeactivate || canDeactivate.length === 0)
             return rxjs.of(true);
-        var canDeactivate$ = rxjs.from(canDeactivate).pipe(operators.mergeMap(function (c) {
+        var canDeactivateObservables = canDeactivate.map(function (c) {
             var guard = getToken(c, currARS, moduleInjector);
             var observable;
-            if (guard.canDeactivate) {
-                observable = wrapIntoObservable(guard.canDeactivate(component, currARS, currRSS, futureRSS));
+            if (isCanDeactivate(guard)) {
+                observable =
+                    wrapIntoObservable(guard.canDeactivate(component, currARS, currRSS, futureRSS));
             }
-            else {
+            else if (isFunction(guard)) {
                 observable = wrapIntoObservable(guard(component, currARS, currRSS, futureRSS));
             }
+            else {
+                throw new Error('Invalid CanDeactivate guard');
+            }
             return observable.pipe(operators.first());
-        }));
-        return canDeactivate$.pipe(operators.every(function (result) { return result === true; }));
+        });
+        return rxjs.of(canDeactivateObservables).pipe(prioritizedGuardValue());
     }
 
     /**
@@ -3855,6 +3958,12 @@
                     var guardsStart = new GuardsCheckStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                     _this.triggerEvent(guardsStart);
                 }), operators.map(function (t) { return (__assign({}, t, { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), operators.tap(function (t) {
+                    if (isUrlTree(t.guardsResult)) {
+                        var error = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
+                        error.url = t.guardsResult;
+                        throw error;
+                    }
+                }), operators.tap(function (t) {
                     var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
                     _this.triggerEvent(guardsEnd);
                 }), operators.filter(function (t) {
@@ -3931,10 +4040,16 @@
                      * rather than an error. */
                     if (isNavigationCancelingError(e)) {
                         _this.navigated = true;
-                        _this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
+                        var redirecting = isUrlTree(e.url);
+                        if (!redirecting) {
+                            _this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
+                        }
                         var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), e.message);
                         eventsSubject.next(navCancel);
                         t.resolve(false);
+                        if (redirecting) {
+                            _this.navigateByUrl(e.url);
+                        }
                         /* All other errors should reset to the router's internal URL reference to the
                          * pre-error state. */
                     }
@@ -4136,7 +4251,7 @@
             if (core.isDevMode() && this.isNgZoneEnabled && !core.NgZone.isInAngularZone()) {
                 this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
             }
-            var urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
+            var urlTree = isUrlTree(url) ? url : this.parseUrl(url);
             var mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
             return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
         };
@@ -4184,7 +4299,7 @@
         };
         /** Returns whether the url is activated */
         Router.prototype.isActive = function (url, exact) {
-            if (url instanceof UrlTree) {
+            if (isUrlTree(url)) {
                 return containsTree(this.currentUrlTree, url, exact);
             }
             var urlTree = this.parseUrl(url);
@@ -5602,7 +5717,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.1.0-beta.0+58.sha-96770e5');
+    var VERSION = new core.Version('7.1.0-beta.1+52.sha-496372d');
 
     /**
      * @license

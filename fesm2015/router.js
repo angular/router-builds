@@ -1,12 +1,12 @@
 /**
- * @license Angular v7.1.0-beta.0+58.sha-96770e5
+ * @license Angular v7.1.0-beta.1+52.sha-496372d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, NgZone, isDevMode, ɵConsole, Attribute, Directive, ElementRef, HostBinding, HostListener, Input, Renderer2, ChangeDetectorRef, ContentChildren, ComponentFactoryResolver, EventEmitter, Output, ViewContainerRef, Compiler, Injectable, Injector, NgModuleFactoryLoader, ANALYZE_FOR_ENTRY_COMPONENTS, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ApplicationRef, Inject, NgModule, NgProbeToken, Optional, SkipSelf, SystemJsNgModuleLoader, Version } from '@angular/core';
-import { from, of, BehaviorSubject, EmptyError, Observable, EMPTY, Subject } from 'rxjs';
-import { concatAll, every, last, map, mergeAll, catchError, first, mergeMap, switchMap, concatMap, reduce, filter, finalize, tap } from 'rxjs/operators';
+import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
+import { concatAll, last, map, catchError, every, first, mergeMap, switchMap, filter, scan, startWith, take, concatMap, reduce, finalize, tap, mergeAll } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
 import { ɵgetDOM } from '@angular/platform-browser';
 
@@ -840,15 +840,6 @@ function waitForMap(obj, fn) {
     return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map(() => res));
 }
 /**
- * ANDs Observables by merging all input observables, reducing to an Observable verifying all
- * input Observables return `true`.
- * @param {?} observables
- * @return {?}
- */
-function andObservables(observables) {
-    return observables.pipe(mergeAll(), every((result) => result === true));
-}
-/**
  * @template T
  * @param {?} value
  * @return {?}
@@ -863,7 +854,7 @@ function wrapIntoObservable(value) {
         // change detection.
         return from(Promise.resolve(value));
     }
-    return of(/** @type {?} */ (value));
+    return of(value);
 }
 
 /**
@@ -2947,6 +2938,73 @@ function parentLoadedConfig(snapshot) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/**
+ * Simple function check, but generic so type inference will flow. Example:
+ *
+ * function product(a: number, b: number) {
+ *   return a * b;
+ * }
+ *
+ * if (isFunction<product>(fn)) {
+ *   return fn(1, 2);
+ * } else {
+ *   throw "Must provide the `product` function";
+ * }
+ * @template T
+ * @param {?} v
+ * @return {?}
+ */
+function isFunction(v) {
+    return typeof v === 'function';
+}
+/**
+ * @param {?} v
+ * @return {?}
+ */
+function isBoolean(v) {
+    return typeof v === 'boolean';
+}
+/**
+ * @param {?} v
+ * @return {?}
+ */
+function isUrlTree(v) {
+    return v instanceof UrlTree;
+}
+/**
+ * @param {?} guard
+ * @return {?}
+ */
+function isCanLoad(guard) {
+    return guard && isFunction(guard.canLoad);
+}
+/**
+ * @param {?} guard
+ * @return {?}
+ */
+function isCanActivate(guard) {
+    return guard && isFunction(guard.canActivate);
+}
+/**
+ * @param {?} guard
+ * @return {?}
+ */
+function isCanActivateChild(guard) {
+    return guard && isFunction(guard.canActivateChild);
+}
+/**
+ * @template T
+ * @param {?} guard
+ * @return {?}
+ */
+function isCanDeactivate(guard) {
+    return guard && isFunction(guard.canDeactivate);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 class NoMatch {
     /**
      * @param {?=} segmentGroup
@@ -3429,9 +3487,20 @@ function runCanLoadGuard(moduleInjector, route, segments) {
     const obs = from(canLoad).pipe(map((injectionToken) => {
         /** @type {?} */
         const guard = moduleInjector.get(injectionToken);
-        return wrapIntoObservable(guard.canLoad ? guard.canLoad(route, segments) : guard(route, segments));
+        /** @type {?} */
+        let guardVal;
+        if (isCanLoad(guard)) {
+            guardVal = guard.canLoad(route, segments);
+        }
+        else if (isFunction(guard)) {
+            guardVal = guard(route, segments);
+        }
+        else {
+            throw new Error('Invalid CanLoad guard');
+        }
+        return wrapIntoObservable(guardVal);
     }));
-    return andObservables(obs);
+    return obs.pipe(concatAll(), every(result => result === true));
 }
 /**
  * @param {?} segmentGroup
@@ -3726,8 +3795,8 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
         }
         if (shouldRun) {
             /** @type {?} */
-            const outlet = /** @type {?} */ ((/** @type {?} */ ((context)).outlet));
-            checks.canDeactivateChecks.push(new CanDeactivate(outlet.component, curr));
+            const component = context && context.outlet && context.outlet.component || null;
+            checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
         }
     }
     else {
@@ -3801,6 +3870,48 @@ function deactivateRouteAndItsChildren(route, context, checks) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** @type {?} */
+const INITIAL_VALUE = Symbol('INITIAL_VALUE');
+/**
+ * @return {?}
+ */
+function prioritizedGuardValue() {
+    return switchMap(obs => {
+        return /** @type {?} */ (combineLatest(...obs.map(o => o.pipe(take(1), startWith(/** @type {?} */ (INITIAL_VALUE)))))
+            .pipe(scan((acc, list) => {
+            /** @type {?} */
+            let isPending = false;
+            return list.reduce((innerAcc, val, i) => {
+                if (innerAcc !== INITIAL_VALUE)
+                    return innerAcc;
+                // Toggle pending flag if any values haven't been set yet
+                if (val === INITIAL_VALUE)
+                    isPending = true;
+                // Any other return values are only valid if we haven't yet hit a pending call.
+                // This guarantees that in the case of a guard at the bottom of the tree that
+                // returns a redirect, we will wait for the higher priority guard at the top to
+                // finish before performing the redirect.
+                if (!isPending) {
+                    // Early return when we hit a `false` value as that should always cancel
+                    // navigation
+                    if (val === false)
+                        return val;
+                    if (i === list.length - 1 || isUrlTree(val)) {
+                        return val;
+                    }
+                }
+                return innerAcc;
+            }, acc);
+        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
+        //
+        take(1)));
+    });
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /**
  * @param {?} moduleInjector
  * @param {?=} forwardEvent
@@ -3814,10 +3925,10 @@ function checkGuards(moduleInjector, forwardEvent) {
                 return of(Object.assign({}, t, { guardsResult: true }));
             }
             return runCanDeactivateChecks(canDeactivateChecks, /** @type {?} */ ((targetSnapshot)), currentSnapshot, moduleInjector)
-                .pipe(mergeMap((canDeactivate) => {
-                return canDeactivate ?
+                .pipe(mergeMap(canDeactivate => {
+                return canDeactivate && isBoolean(canDeactivate) ?
                     runCanActivateChecks(/** @type {?} */ ((targetSnapshot)), canActivateChecks, moduleInjector, forwardEvent) :
-                    of(false);
+                    of(canDeactivate);
             }), map(guardsResult => (Object.assign({}, t, { guardsResult }))));
         }));
     };
@@ -3830,7 +3941,7 @@ function checkGuards(moduleInjector, forwardEvent) {
  * @return {?}
  */
 function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
-    return from(checks).pipe(mergeMap((check) => runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector)), every((result) => result === true));
+    return from(checks).pipe(mergeMap(check => runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector)), first(result => { return result !== true; }, /** @type {?} */ (true)));
 }
 /**
  * @param {?} futureSnapshot
@@ -3840,12 +3951,17 @@ function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
  * @return {?}
  */
 function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
-    return from(checks).pipe(concatMap((check) => andObservables(from([
-        fireChildActivationStart(check.route.parent, forwardEvent),
-        fireActivationStart(check.route, forwardEvent),
-        runCanActivateChild(futureSnapshot, check.path, moduleInjector),
-        runCanActivate(futureSnapshot, check.route, moduleInjector)
-    ]))), every((result) => result === true));
+    return from(checks).pipe(concatMap((check) => {
+        return from([
+            fireChildActivationStart(check.route.parent, forwardEvent),
+            fireActivationStart(check.route, forwardEvent),
+            runCanActivateChild(futureSnapshot, check.path, moduleInjector),
+            runCanActivate(futureSnapshot, check.route, moduleInjector)
+        ])
+            .pipe(concatAll(), first(result => {
+            return result !== true;
+        }, /** @type {?} */ (true)));
+    }), first(result => { return result !== true; }, /** @type {?} */ (true)));
 }
 /**
  * This should fire off `ActivationStart` events for each route being activated at this
@@ -3893,20 +4009,25 @@ function runCanActivate(futureRSS, futureARS, moduleInjector) {
     if (!canActivate || canActivate.length === 0)
         return of(true);
     /** @type {?} */
-    const obs = from(canActivate).pipe(map((c) => {
-        /** @type {?} */
-        const guard = getToken(c, futureARS, moduleInjector);
-        /** @type {?} */
-        let observable;
-        if (guard.canActivate) {
-            observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
-        }
-        else {
-            observable = wrapIntoObservable(guard(futureARS, futureRSS));
-        }
-        return observable.pipe(first());
-    }));
-    return andObservables(obs);
+    const canActivateObservables = canActivate.map((c) => {
+        return defer(() => {
+            /** @type {?} */
+            const guard = getToken(c, futureARS, moduleInjector);
+            /** @type {?} */
+            let observable;
+            if (isCanActivate(guard)) {
+                observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
+            }
+            else if (isFunction(guard)) {
+                observable = wrapIntoObservable(guard(futureARS, futureRSS));
+            }
+            else {
+                throw new Error('Invalid CanActivate guard');
+            }
+            return observable.pipe(first());
+        });
+    });
+    return of(canActivateObservables).pipe(prioritizedGuardValue());
 }
 /**
  * @param {?} futureRSS
@@ -3922,23 +4043,30 @@ function runCanActivateChild(futureRSS, path, moduleInjector) {
         .reverse()
         .map(p => getCanActivateChild(p))
         .filter(_ => _ !== null);
-    return andObservables(from(canActivateChildGuards).pipe(map((d) => {
-        /** @type {?} */
-        const obs = from(d.guards).pipe(map((c) => {
+    /** @type {?} */
+    const canActivateChildGuardsMapped = canActivateChildGuards.map((d) => {
+        return defer(() => {
             /** @type {?} */
-            const guard = getToken(c, d.node, moduleInjector);
-            /** @type {?} */
-            let observable;
-            if (guard.canActivateChild) {
-                observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
-            }
-            else {
-                observable = wrapIntoObservable(guard(futureARS, futureRSS));
-            }
-            return observable.pipe(first());
-        }));
-        return andObservables(obs);
-    })));
+            const guardsMapped = d.guards.map((c) => {
+                /** @type {?} */
+                const guard = getToken(c, d.node, moduleInjector);
+                /** @type {?} */
+                let observable;
+                if (isCanActivateChild(guard)) {
+                    observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
+                }
+                else if (isFunction(guard)) {
+                    observable = wrapIntoObservable(guard(futureARS, futureRSS));
+                }
+                else {
+                    throw new Error('Invalid CanActivateChild guard');
+                }
+                return observable.pipe(first());
+            });
+            return of(guardsMapped).pipe(prioritizedGuardValue());
+        });
+    });
+    return of(canActivateChildGuardsMapped).pipe(prioritizedGuardValue());
 }
 /**
  * @param {?} component
@@ -3954,20 +4082,24 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
     if (!canDeactivate || canDeactivate.length === 0)
         return of(true);
     /** @type {?} */
-    const canDeactivate$ = from(canDeactivate).pipe(mergeMap((c) => {
+    const canDeactivateObservables = canDeactivate.map((c) => {
         /** @type {?} */
         const guard = getToken(c, currARS, moduleInjector);
         /** @type {?} */
         let observable;
-        if (guard.canDeactivate) {
-            observable = wrapIntoObservable(guard.canDeactivate(component, currARS, currRSS, futureRSS));
+        if (isCanDeactivate(guard)) {
+            observable =
+                wrapIntoObservable(guard.canDeactivate(/** @type {?} */ ((component)), currARS, currRSS, futureRSS));
         }
-        else {
+        else if (isFunction(guard)) {
             observable = wrapIntoObservable(guard(component, currARS, currRSS, futureRSS));
         }
+        else {
+            throw new Error('Invalid CanDeactivate guard');
+        }
         return observable.pipe(first());
-    }));
-    return canDeactivate$.pipe(every((result) => result === true));
+    });
+    return of(canDeactivateObservables).pipe(prioritizedGuardValue());
 }
 
 /**
@@ -4914,6 +5046,13 @@ class Router {
                 const guardsStart = new GuardsCheckStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), /** @type {?} */ ((t.targetSnapshot)));
                 this.triggerEvent(guardsStart);
             }), map(t => (Object.assign({}, t, { guards: getAllRouteGuards(/** @type {?} */ ((t.targetSnapshot)), t.currentSnapshot, this.rootContexts) }))), checkGuards(this.ngModule.injector, (evt) => this.triggerEvent(evt)), tap(t => {
+                if (isUrlTree(t.guardsResult)) {
+                    /** @type {?} */
+                    const error = navigationCancelingError(`Redirecting to "${this.serializeUrl(t.guardsResult)}"`);
+                    error.url = t.guardsResult;
+                    throw error;
+                }
+            }), tap(t => {
                 /** @type {?} */
                 const guardsEnd = new GuardsCheckEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), /** @type {?} */ ((t.targetSnapshot)), !!t.guardsResult);
                 this.triggerEvent(guardsEnd);
@@ -5004,11 +5143,18 @@ class Router {
                                  * rather than an error. */
                 if (isNavigationCancelingError(e)) {
                     this.navigated = true;
-                    this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
+                    /** @type {?} */
+                    const redirecting = isUrlTree(e.url);
+                    if (!redirecting) {
+                        this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
+                    }
                     /** @type {?} */
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), e.message);
                     eventsSubject.next(navCancel);
                     t.resolve(false);
+                    if (redirecting) {
+                        this.navigateByUrl(e.url);
+                    }
                     /* All other errors should reset to the router's internal URL reference to the
                                        * pre-error state. */
                 }
@@ -5243,7 +5389,7 @@ class Router {
             this.console.warn(`Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?`);
         }
         /** @type {?} */
-        const urlTree = url instanceof UrlTree ? url : this.parseUrl(url);
+        const urlTree = isUrlTree(url) ? url : this.parseUrl(url);
         /** @type {?} */
         const mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
         return this.scheduleNavigation(mergedTree, 'imperative', null, extras);
@@ -5308,7 +5454,7 @@ class Router {
      * @return {?}
      */
     isActive(url, exact) {
-        if (url instanceof UrlTree) {
+        if (isUrlTree(url)) {
             return containsTree(this.currentUrlTree, url, exact);
         }
         /** @type {?} */
@@ -6925,7 +7071,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-beta.0+58.sha-96770e5');
+const VERSION = new Version('7.1.0-beta.1+52.sha-496372d');
 
 /**
  * @fileoverview added by tsickle
