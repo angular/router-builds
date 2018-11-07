@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.1.0-beta.1+84.sha-a4398aa
+ * @license Angular v7.1.0-beta.1+85.sha-9e26216
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __extends, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ContentChildren, ElementRef, Input, Renderer2, Component, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵsetClassMetadata, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, isDevMode, ɵlistener, HostListener, ɵelementProperty, ɵbind, HostBinding, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ContentChildren, ElementRef, Input, Renderer2, Component, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵsetClassMetadata, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, isDevMode, ɵlistener, HostListener, ɵelementAttribute, ɵbind, ɵelementProperty, HostBinding, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { concatAll, last, map, catchError, every, first, mergeMap, switchMap, filter, scan, startWith, take, concatMap, reduce, finalize, tap, mergeAll } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4823,7 +4823,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { var f = new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return f.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); }); return f; }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementProperty(elIndex, "attr.target", ɵbind(ɵload(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵload(dirIndex).href)); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
+    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { var f = new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return f.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); }); return f; }, hostBindings: function RouterLinkWithHref_HostBindings(dirIndex, elIndex) { ɵelementAttribute(elIndex, "target", ɵbind(ɵload(dirIndex).target)); ɵelementProperty(elIndex, "href", ɵbind(ɵload(dirIndex).href)); }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
     return RouterLinkWithHref;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
@@ -5638,7 +5638,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-beta.1+84.sha-a4398aa');
+var VERSION = new Version('7.1.0-beta.1+85.sha-9e26216');
 
 /**
  * @license
