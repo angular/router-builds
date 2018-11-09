@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.1+85.sha-9e26216
+ * @license Angular v7.1.0-beta.2+19.sha-78b6f88
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -117,7 +117,9 @@
      * ```
      * class MyService {
      *   constructor(public router: Router, logger: Logger) {
-     *     router.events.filter(e => e instanceof RouterEvent).subscribe(e => {
+     *     router.events.pipe(
+     *       filter(e => e instanceof RouterEvent)
+     *     ).subscribe(e => {
      *       logger.log(e.id, e.url);
      *     });
      *   }
@@ -5717,7 +5719,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.1.0-beta.1+85.sha-9e26216');
+    var VERSION = new core.Version('7.1.0-beta.2+19.sha-78b6f88');
 
     /**
      * @license
