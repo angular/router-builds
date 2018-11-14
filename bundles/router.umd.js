@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.0.3+23.sha-4348c47
+ * @license Angular v7.0.3+25.sha-9c7428e
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3428,9 +3428,9 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy) {
+    function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
         return function (source) {
-            return source.pipe(operators.mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy)
+            return source.pipe(operators.mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
                 .pipe(operators.map(function (targetSnapshot) { return (__assign({}, t, { targetSnapshot: targetSnapshot })); })); }));
         };
     }
@@ -3810,7 +3810,7 @@
                         // ApplyRedirects
                         applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                         // Recognize
-                        recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy), 
+                        recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
                         // Fire RoutesRecognized
                         operators.tap(function (t) {
                             var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -5604,7 +5604,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.0.3+23.sha-4348c47');
+    var VERSION = new core.Version('7.0.3+25.sha-9c7428e');
 
     /**
      * @license
