@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.2+43.sha-a63fd2d
+ * @license Angular v7.1.0-beta.2+45.sha-a752971
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3443,9 +3443,9 @@ function getResolve(route) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy) {
+function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
     return function (source) {
-        return source.pipe(mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy)
+        return source.pipe(mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
             .pipe(map(function (targetSnapshot) { return (__assign({}, t, { targetSnapshot: targetSnapshot })); })); }));
     };
 }
@@ -3825,7 +3825,7 @@ var Router = /** @class */ (function () {
                     // ApplyRedirects
                     applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                     // Recognize
-                    recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy), 
+                    recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
                     // Fire RoutesRecognized
                     tap(function (t) {
                         var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -5631,7 +5631,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-beta.2+43.sha-a63fd2d');
+var VERSION = new Version('7.1.0-beta.2+45.sha-a752971');
 
 /**
  * @license
