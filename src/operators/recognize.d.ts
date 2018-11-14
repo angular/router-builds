@@ -10,4 +10,4 @@ import { MonoTypeOperatorFunction } from 'rxjs';
 import { Route } from '../config';
 import { NavigationTransition } from '../router';
 import { UrlTree } from '../url_tree';
-export declare function recognize(rootComponentType: Type<any> | null, config: Route[], serializer: (url: UrlTree) => string, paramsInheritanceStrategy: 'emptyOnly' | 'always'): MonoTypeOperatorFunction<NavigationTransition>;
+export declare function recognize(rootComponentType: Type<any> | null, config: Route[], serializer: (url: UrlTree) => string, paramsInheritanceStrategy: 'emptyOnly' | 'always', relativeLinkResolution: 'legacy' | 'corrected'): MonoTypeOperatorFunction<NavigationTransition>;

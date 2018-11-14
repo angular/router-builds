@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.2+43.sha-a63fd2d
+ * @license Angular v7.1.0-beta.2+45.sha-a752971
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4869,11 +4869,12 @@ function getResolve(route) {
  * @param {?} config
  * @param {?} serializer
  * @param {?} paramsInheritanceStrategy
+ * @param {?} relativeLinkResolution
  * @return {?}
  */
-function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy) {
+function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
     return function (source) {
-        return source.pipe(mergeMap(t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy)
+        return source.pipe(mergeMap(t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
             .pipe(map(targetSnapshot => (Object.assign({}, t, { targetSnapshot }))))));
     };
 }
@@ -5345,7 +5346,7 @@ class Router {
                     // ApplyRedirects
                     applyRedirects$1(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
                     // Recognize
-                    recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy), 
+                    recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Fire RoutesRecognized
                     tap(t => {
                         /** @type {?} */
@@ -7291,7 +7292,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-beta.2+43.sha-a63fd2d');
+const VERSION = new Version('7.1.0-beta.2+45.sha-a752971');
 
 /**
  * @fileoverview added by tsickle
