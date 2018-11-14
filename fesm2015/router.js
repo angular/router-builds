@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-beta.2+47.sha-3da8233
+ * @license Angular v7.1.0-beta.2+51.sha-ce52424
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4174,6 +4174,8 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
  */
 function shouldRunGuardsAndResolvers(curr, future, mode) {
     switch (mode) {
+        case 'pathParamsChange':
+            return !equalPath(curr.url, future.url);
         case 'always':
             return true;
         case 'paramsOrQueryParamsChange':
@@ -7292,7 +7294,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-beta.2+47.sha-3da8233');
+const VERSION = new Version('7.1.0-beta.2+51.sha-ce52424');
 
 /**
  * @fileoverview added by tsickle
