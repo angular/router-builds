@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-rc.0+19.sha-20729b3.with-local-changes
+ * @license Angular v7.1.0-rc.0+23.sha-bf3beb5.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1974,7 +1974,7 @@ var EmptyOutletComponent = /** @class */ (function () {
     }
     EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             ɵelement(0, "router-outlet");
-        } }, directives: [RouterOutlet] });
+        } }, directives: [RouterOutlet], encapsulation: 2 });
     return EmptyOutletComponent;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(EmptyOutletComponent, [{
@@ -5642,7 +5642,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-rc.0+19.sha-20729b3.with-local-changes');
+var VERSION = new Version('7.1.0-rc.0+23.sha-bf3beb5.with-local-changes');
 
 /**
  * @license
