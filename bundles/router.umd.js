@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-rc.0+20.sha-a43998c.with-local-changes
+ * @license Angular v7.1.0-rc.0+25.sha-2a7210e.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2047,7 +2047,7 @@
         }
         EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
                 i0.ɵelement(0, "router-outlet");
-            } }, directives: [RouterOutlet] });
+            } }, directives: [RouterOutlet], encapsulation: 2 });
         return EmptyOutletComponent;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(EmptyOutletComponent, [{
@@ -5715,7 +5715,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.1.0-rc.0+20.sha-a43998c.with-local-changes');
+    var VERSION = new i0.Version('7.1.0-rc.0+25.sha-2a7210e.with-local-changes');
 
     /**
      * @license
