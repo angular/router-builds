@@ -22,7 +22,7 @@ var EmptyOutletComponent = /** @class */ (function () {
     }
     EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             i0.ɵelement(0, "router-outlet");
-        } }, directives: [i1.RouterOutlet], encapsulation: 2 });
+        } }, directives: [i1.RouterOutlet] });
     return EmptyOutletComponent;
 }());
 export { EmptyOutletComponent };
