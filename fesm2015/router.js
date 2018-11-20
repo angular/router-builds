@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-rc.0+21.sha-859da3a.with-local-changes
+ * @license Angular v7.1.0-rc.0+24.sha-391767f.with-local-changes
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2407,7 +2407,7 @@ EmptyOutletComponent.decorators = [
 ];
 EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
         ɵelement(0, "router-outlet");
-    } }, directives: [RouterOutlet] });
+    } }, directives: [RouterOutlet], encapsulation: 2 });
 /*@__PURE__*/ ɵsetClassMetadata(EmptyOutletComponent, [{
         type: Component,
         args: [{ template: `<router-outlet></router-outlet>` }]
@@ -7294,7 +7294,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0-rc.0+21.sha-859da3a.with-local-changes');
+const VERSION = new Version('7.1.0-rc.0+24.sha-391767f.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
