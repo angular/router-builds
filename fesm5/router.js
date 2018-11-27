@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+13.sha-d767e0b
+ * @license Angular v7.1.0+14.sha-c2f3054
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1972,7 +1972,7 @@ var OutletInjector = /** @class */ (function () {
 var EmptyOutletComponent = /** @class */ (function () {
     function EmptyOutletComponent() {
     }
-    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [[""]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [["ng-component"]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             ɵelement(0, "router-outlet");
         } }, directives: [RouterOutlet], encapsulation: 2 });
     return EmptyOutletComponent;
@@ -5649,7 +5649,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0+13.sha-d767e0b');
+var VERSION = new Version('7.1.0+14.sha-c2f3054');
 
 /**
  * @license
