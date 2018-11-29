@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+44.sha-57dae16
+ * @license Angular v7.1.0+45.sha-11a8bd8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4980,9 +4980,6 @@ class Router {
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                 if (processCurrentUrl) {
                     return of(t).pipe(
-                    // Update URL if in `eager` update mode
-                    tap(t => this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                        this.setBrowserUrl(t.rawUrl, !!t.extras.replaceUrl, t.id)), 
                     // Fire NavigationStart event
                     switchMap(t => {
                         /** @type {?} */
@@ -5000,6 +4997,9 @@ class Router {
                     applyRedirects$1(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
                     // Recognize
                     recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
+                    // Update URL if in `eager` update mode
+                    tap(t => this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                        this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id)), 
                     // Fire RoutesRecognized
                     tap(t => {
                         /** @type {?} */
@@ -7076,7 +7076,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0+44.sha-57dae16');
+const VERSION = new Version('7.1.0+45.sha-11a8bd8');
 
 /**
  * @fileoverview added by tsickle
