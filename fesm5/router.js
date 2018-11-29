@@ -1,11 +1,11 @@
 /**
- * @license Angular v7.1.0+44.sha-57dae16
+ * @license Angular v7.1.0+45.sha-11a8bd8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __extends, __assign, __spread } from 'tslib';
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ContentChildren, ElementRef, Input, Renderer2, Component, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵsetClassMetadata, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, isDevMode, ɵlistener, HostListener, ɵelementAttribute, ɵbind, ɵelementProperty, HostBinding, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ContentChildren, ElementRef, Input, Renderer2, Component, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵsetClassMetadata, ɵinjectAttribute, NgModuleRef, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, isDevMode, ɵlistener, HostListener, ɵelementAttribute, ɵbind, ɵelementProperty, HostBinding, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, ɵdefineNgModule, defineInjector, NgModule, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵConsole, NgZone } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { concatAll, last, map, catchError, every, first, mergeMap, switchMap, filter, scan, startWith, take, concatMap, reduce, finalize, tap, mergeAll } from 'rxjs/operators';
 import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
@@ -4069,9 +4069,6 @@ var Router = /** @class */ (function () {
                     _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                 if (processCurrentUrl) {
                     return of(t).pipe(
-                    // Update URL if in `eager` update mode
-                    tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                        _this.setBrowserUrl(t.rawUrl, !!t.extras.replaceUrl, t.id); }), 
                     // Fire NavigationStart event
                     switchMap(function (t) {
                         var transition = _this.transitions.getValue();
@@ -4088,6 +4085,9 @@ var Router = /** @class */ (function () {
                     applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                     // Recognize
                     recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
+                    // Update URL if in `eager` update mode
+                    tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                        _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id); }), 
                     // Fire RoutesRecognized
                     tap(function (t) {
                         var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -5649,7 +5649,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0+44.sha-57dae16');
+var VERSION = new Version('7.1.0+45.sha-11a8bd8');
 
 /**
  * @license

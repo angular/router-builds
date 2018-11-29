@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+44.sha-57dae16
+ * @license Angular v7.1.0+45.sha-11a8bd8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4142,9 +4142,6 @@
                         _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                     if (processCurrentUrl) {
                         return rxjs.of(t).pipe(
-                        // Update URL if in `eager` update mode
-                        operators.tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                            _this.setBrowserUrl(t.rawUrl, !!t.extras.replaceUrl, t.id); }), 
                         // Fire NavigationStart event
                         operators.switchMap(function (t) {
                             var transition = _this.transitions.getValue();
@@ -4161,6 +4158,9 @@
                         applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                         // Recognize
                         recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
+                        // Update URL if in `eager` update mode
+                        operators.tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                            _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id); }), 
                         // Fire RoutesRecognized
                         operators.tap(function (t) {
                             var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -5722,7 +5722,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.1.0+44.sha-57dae16');
+    var VERSION = new i0.Version('7.1.0+45.sha-11a8bd8');
 
     /**
      * @license
