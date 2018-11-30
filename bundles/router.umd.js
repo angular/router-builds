@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+96.sha-0df914e
+ * @license Angular v7.1.0+97.sha-a088b8c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4960,11 +4960,12 @@
             configurable: true
         });
         RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+                i0.ɵallocHostVars(2);
                 i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
                 i0.ɵelementAttribute(elIndex, "target", i0.ɵbind(ctx.target));
                 i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href));
-            } }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
+            } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
         return RouterLinkWithHref;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
@@ -5781,7 +5782,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.1.0+96.sha-0df914e');
+    var VERSION = new i0.Version('7.1.0+97.sha-a088b8c');
 
     /**
      * @license
