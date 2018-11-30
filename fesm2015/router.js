@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+75.sha-1b84b11
+ * @license Angular v7.1.0+79.sha-d40af0c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5203,6 +5203,8 @@ class Router {
         this.rootContexts = rootContexts;
         this.location = location;
         this.config = config;
+        this.lastSuccessfulNavigation = null;
+        this.currentNavigation = null;
         this.navigationId = 0;
         this.isNgZoneEnabled = false;
         this.events = new Subject();
@@ -5294,7 +5296,7 @@ class Router {
             reject: null,
             promise: Promise.resolve(true),
             source: 'imperative',
-            state: null,
+            restoredState: null,
             currentSnapshot: this.routerState.snapshot,
             targetSnapshot: null,
             currentRouterState: this.routerState,
@@ -5315,6 +5317,18 @@ class Router {
         return /** @type {?} */ ((transitions.pipe(filter(t => t.id !== 0), 
         // Extract URL
         map(t => (/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })))), 
+        // Store the Navigation object
+        tap(t => {
+            this.currentNavigation = {
+                id: t.id,
+                initialUrl: t.currentRawUrl,
+                extractedUrl: t.extractedUrl,
+                trigger: t.source,
+                extras: t.extras,
+                previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                    null
+            };
+        }), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap(t => {
             /** @type {?} */
@@ -5333,7 +5347,7 @@ class Router {
                     switchMap(t => {
                         /** @type {?} */
                         const transition = this.transitions.getValue();
-                        eventsSubject.next(new NavigationStart(t.id, this.serializeUrl(t.extractedUrl), t.source, t.state));
+                        eventsSubject.next(new NavigationStart(t.id, this.serializeUrl(t.extractedUrl), t.source, t.restoredState));
                         if (transition !== this.transitions.getValue()) {
                             return EMPTY;
                         }
@@ -5344,6 +5358,10 @@ class Router {
                     switchMap(t => Promise.resolve(t)), 
                     // ApplyRedirects
                     applyRedirects$1(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
+                    // Update the currentNavigation
+                    tap(t => {
+                        this.currentNavigation = Object.assign({}, /** @type {?} */ ((this.currentNavigation)), { finalUrl: t.urlAfterRedirects });
+                    }), 
                     // Recognize
                     recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Update URL if in `eager` update mode
@@ -5364,9 +5382,9 @@ class Router {
                                        * handle this "error condition" by navigating to the previously successful URL,
                                        * but leaving the URL intact.*/
                     if (processPreviousUrl) {
-                        const { id, extractedUrl, source, state, extras } = t;
+                        const { id, extractedUrl, source, restoredState, extras } = t;
                         /** @type {?} */
-                        const navStart = new NavigationStart(id, this.serializeUrl(extractedUrl), source, state);
+                        const navStart = new NavigationStart(id, this.serializeUrl(extractedUrl), source, restoredState);
                         eventsSubject.next(navStart);
                         /** @type {?} */
                         const targetSnapshot = createEmptyState(extractedUrl, this.rootComponentType).snapshot;
@@ -5439,7 +5457,7 @@ class Router {
                 return undefined;
             }), 
             // --- AFTER PREACTIVATION ---
-            switchTap(t => {
+            switchTap((t) => {
                 const { targetSnapshot, id: navigationId, extractedUrl: appliedUrlTree, rawUrl: rawUrlTree, extras: { skipLocationChange, replaceUrl } } = t;
                 return this.hooks.afterPreactivation(/** @type {?} */ ((targetSnapshot)), {
                     navigationId,
@@ -5448,7 +5466,7 @@ class Router {
                     skipLocationChange: !!skipLocationChange,
                     replaceUrl: !!replaceUrl,
                 });
-            }), map(t => {
+            }), map((t) => {
                 /** @type {?} */
                 const targetRouterState = createRouterState(this.routeReuseStrategy, /** @type {?} */ ((t.targetSnapshot)), t.currentRouterState);
                 return (Object.assign({}, t, { targetRouterState }));
@@ -5457,12 +5475,12 @@ class Router {
                              activation, we need to update router properties storing the current URL and the
                              RouterState, as well as updated the browser URL. All this should happen *before*
                              activating. */
-            tap(t => {
+            tap((t) => {
                 this.currentUrlTree = t.urlAfterRedirects;
                 this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
                 (/** @type {?} */ (this)).routerState = /** @type {?} */ ((t.targetRouterState));
                 if (this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
-                    this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id);
+                    this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
                 }
             }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({
                 /**
@@ -5491,6 +5509,10 @@ class Router {
                     eventsSubject.next(navCancel);
                     t.resolve(false);
                 }
+                // currentNavigation should always be reset to null here. If navigation was
+                // successful, lastSuccessfulTransition will have already been set. Therefore we
+                // can safely set currentNavigation to null here.
+                this.currentNavigation = null;
             }), catchError((e) => {
                 errored = true;
                 /* This error type is issued during Redirect, and is handled as a cancellation
@@ -5577,9 +5599,7 @@ class Router {
                 /** @type {?} */
                 const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
                 /** @type {?} */
-                const state = change.state && change.state.navigationId ?
-                    { navigationId: change.state.navigationId } :
-                    null;
+                const state = change.state && change.state.navigationId ? change.state : null;
                 setTimeout(() => { this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }, 0);
             }));
         }
@@ -5589,6 +5609,11 @@ class Router {
      * @return {?}
      */
     get url() { return this.serializeUrl(this.currentUrlTree); }
+    /**
+     * The current Navigation object if one exists
+     * @return {?}
+     */
+    getCurrentNavigation() { return this.currentNavigation; }
     /**
      * \@internal
      * @param {?} event
@@ -5771,6 +5796,11 @@ class Router {
      * The first parameter of `navigate()` is a delta to be applied to the current URL
      * or the one provided in the `relativeTo` property of the second parameter (the
      * `NavigationExtras`).
+     *
+     * In order to affect this browser's `history.state` entry, the `state`
+     * parameter can be passed. This must be an object because the router
+     * will add the `navigationId` property to this object before creating
+     * the new history item.
      * @param {?} commands
      * @param {?=} extras
      * @return {?}
@@ -5838,17 +5868,19 @@ class Router {
             this.lastSuccessfulId = t.id;
             (/** @type {?} */ (this.events))
                 .next(new NavigationEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
+            this.lastSuccessfulNavigation = this.currentNavigation;
+            this.currentNavigation = null;
             t.resolve(true);
         }, e => { this.console.warn(`Unhandled Navigation Error: `); });
     }
     /**
      * @param {?} rawUrl
      * @param {?} source
-     * @param {?} state
+     * @param {?} restoredState
      * @param {?} extras
      * @return {?}
      */
-    scheduleNavigation(rawUrl, source, state, extras) {
+    scheduleNavigation(rawUrl, source, restoredState, extras) {
         /** @type {?} */
         const lastNavigation = this.getTransition();
         // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
@@ -5886,7 +5918,7 @@ class Router {
         this.setTransition({
             id,
             source,
-            state,
+            restoredState,
             currentUrlTree: this.currentUrlTree,
             currentRawUrl: this.rawUrlTree, rawUrl, extras, resolve, reject, promise,
             currentSnapshot: this.routerState.snapshot,
@@ -5900,16 +5932,19 @@ class Router {
      * @param {?} url
      * @param {?} replaceUrl
      * @param {?} id
+     * @param {?=} state
      * @return {?}
      */
-    setBrowserUrl(url, replaceUrl, id) {
+    setBrowserUrl(url, replaceUrl, id, state) {
         /** @type {?} */
         const path = this.urlSerializer.serialize(url);
+        state = state || {};
         if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
-            this.location.replaceState(path, '', { navigationId: id });
+            // TODO(jasonaden): Remove first `navigationId` and rely on `ng` namespace.
+            this.location.replaceState(path, '', Object.assign({}, state, { navigationId: id }));
         }
         else {
-            this.location.go(path, '', { navigationId: id });
+            this.location.go(path, '', Object.assign({}, state, { navigationId: id }));
         }
     }
     /**
@@ -6016,6 +6051,27 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
+ * You can provide a `state` value to be persisted to the browser's History.state
+ * property (See https://developer.mozilla.org/en-US/docs/Web/API/History#Properties). It's
+ * used as follows:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [state]="{tracingId: 123}">
+ *   link to user component
+ * </a>
+ * ```
+ *
+ * And later the value can be read from the router through `router.getCurrentNavigation.
+ * For example, to capture the `tracingId` above during the `NavigationStart` event:
+ *
+ * ```
+ * // Get NavigationStart events
+ * router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(e => {
+ *   const navigation = router.getCurrentNavigation();
+ *   tracingService.trace({id: navigation.extras.state.tracingId});
+ * });
+ * ```
+ *
  * The router link directive always treats the provided input as a delta to the current url.
  *
  * For instance, if the current url is `/user/(box//aux:team)`.
@@ -6112,13 +6168,14 @@ RouterLink.propDecorators = {
     preserveFragment: [{ type: Input }],
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
+    state: [{ type: Input }],
     routerLink: [{ type: Input }],
     preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
         ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
-    } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
+    } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a)[routerLink]' }]
@@ -6147,6 +6204,8 @@ RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["
         }], skipLocationChange: [{
             type: Input
         }], replaceUrl: [{
+            type: Input
+        }], state: [{
             type: Input
         }], routerLink: [{
             type: Input
@@ -6233,6 +6292,7 @@ class RouterLinkWithHref {
         const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
+            state: this.state
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return false;
@@ -6274,6 +6334,7 @@ RouterLinkWithHref.propDecorators = {
     preserveFragment: [{ type: Input }],
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
+    state: [{ type: Input }],
     href: [{ type: HostBinding }],
     routerLink: [{ type: Input }],
     preserveQueryParams: [{ type: Input }],
@@ -6284,7 +6345,7 @@ RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref
     } if (rf & 2) {
         ɵelementAttribute(elIndex, "target", ɵbind(ctx.target));
         ɵelementProperty(elIndex, "href", ɵbind(ctx.href));
-    } }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
+    } }, hostVars: 2, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink]' }]
@@ -6310,6 +6371,8 @@ RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref
         }], skipLocationChange: [{
             type: Input
         }], replaceUrl: [{
+            type: Input
+        }], state: [{
             type: Input
         }], href: [{
             type: HostBinding
@@ -7301,7 +7364,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0+75.sha-1b84b11');
+const VERSION = new Version('7.1.0+79.sha-d40af0c');
 
 /**
  * @fileoverview added by tsickle

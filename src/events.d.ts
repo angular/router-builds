@@ -69,8 +69,8 @@ export declare class NavigationStart extends RouterEvent {
      */
     navigationTrigger?: 'imperative' | 'popstate' | 'hashchange';
     /**
-     * This contains the navigation id that pushed the history record that the router navigates
-     * back to. This is not null only when the navigation is triggered by a popstate event.
+     * This reflects the state object that was previously supplied to the pushState call. This is
+     * not null only when the navigation is triggered by a popstate event.
      *
      * The router assigns a navigationId to every router transition/navigation. Even when the user
      * clicks on the back button in the browser, a new navigation id will be created. So from
@@ -79,8 +79,11 @@ export declare class NavigationStart extends RouterEvent {
      * states
      * and popstate events. In the latter case you can restore some remembered state (e.g., scroll
      * position).
+     *
+     * See {@link NavigationExtras} for more information.
      */
     restoredState?: {
+        [k: string]: any;
         navigationId: number;
     } | null;
     constructor(
@@ -92,6 +95,7 @@ export declare class NavigationStart extends RouterEvent {
     navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
     /** @docsNotRequired */
     restoredState?: {
+        [k: string]: any;
         navigationId: number;
     } | null);
     /** @docsNotRequired */
