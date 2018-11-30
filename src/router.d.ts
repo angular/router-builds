@@ -125,6 +125,20 @@ export interface NavigationExtras {
      * ```
      */
     replaceUrl?: boolean;
+    /**
+     * State passed to any navigation. This value will be accessible through the `extras` object
+     * returned from `router.getCurrentNavigation()` while a navigation is executing. Once a
+     * navigation completes, this value will be written to `history.state` when the `location.go`
+     * or `location.replaceState` method is called before activating of this route. Note that
+     * `history.state` will not pass an object equality test because the `navigationId` will be
+     * added to the state before being written.
+     *
+     * While `history.state` can accept any type of value, because the router adds the `navigationId`
+     * on each navigation, the `state` must always be an object.
+     */
+    state?: {
+        [k: string]: any;
+    };
 }
 /**
  * @description
@@ -138,6 +152,56 @@ export interface NavigationExtras {
  * @publicApi
  */
 export declare type ErrorHandler = (error: any) => any;
+export declare type RestoredState = {
+    [k: string]: any;
+    navigationId: number;
+};
+/**
+ * @description
+ *
+ * Information about any given navigation. This information can be gotten from the router at
+ * any time using the `router.getCurrentNavigation()` method.
+ *
+ * @publicApi
+ */
+export declare type Navigation = {
+    /**
+     * The ID of the current navigation.
+     */
+    id: number;
+    /**
+     * Target URL passed into the {@link Router#navigateByUrl} call before navigation. This is
+     * the value before the router has parsed or applied redirects to it.
+     */
+    initialUrl: string | UrlTree;
+    /**
+     * The initial target URL after being parsed with {@link UrlSerializer.extract()}.
+     */
+    extractedUrl: UrlTree;
+    /**
+     * Extracted URL after redirects have been applied. This URL may not be available immediately,
+     * therefore this property can be `undefined`. It is guaranteed to be set after the
+     * {@link RoutesRecognized} event fires.
+     */
+    finalUrl?: UrlTree;
+    /**
+     * Identifies the trigger of the navigation.
+     *
+     * * 'imperative'--triggered by `router.navigateByUrl` or `router.navigate`.
+     * * 'popstate'--triggered by a popstate event
+     * * 'hashchange'--triggered by a hashchange event
+     */
+    trigger: 'imperative' | 'popstate' | 'hashchange';
+    /**
+     * The NavigationExtras used in this navigation. See {@link NavigationExtras} for more info.
+     */
+    extras: NavigationExtras;
+    /**
+     * Previously successful Navigation object. Only a single previous Navigation is available,
+     * therefore this previous Navigation will always have a `null` value for `previousNavigation`.
+     */
+    previousNavigation: Navigation | null;
+};
 export declare type NavigationTransition = {
     id: number;
     currentUrlTree: UrlTree;
@@ -150,9 +214,7 @@ export declare type NavigationTransition = {
     reject: any;
     promise: Promise<boolean>;
     source: NavigationTrigger;
-    state: {
-        navigationId: number;
-    } | null;
+    restoredState: RestoredState | null;
     currentSnapshot: RouterStateSnapshot;
     targetSnapshot: RouterStateSnapshot | null;
     currentRouterState: RouterState;
@@ -181,6 +243,8 @@ export declare class Router {
     private rawUrlTree;
     private readonly transitions;
     private navigations;
+    private lastSuccessfulNavigation;
+    private currentNavigation;
     private locationSubscription;
     private navigationId;
     private configLoader;
@@ -259,6 +323,8 @@ export declare class Router {
     setUpLocationChangeListener(): void;
     /** The current url */
     readonly url: string;
+    /** The current Navigation object if one exists */
+    getCurrentNavigation(): Navigation | null;
     /**
      * Resets the configuration used for navigation and generating links.
      *
@@ -372,6 +438,11 @@ export declare class Router {
      * The first parameter of `navigate()` is a delta to be applied to the current URL
      * or the one provided in the `relativeTo` property of the second parameter (the
      * `NavigationExtras`).
+     *
+     * In order to affect this browser's `history.state` entry, the `state`
+     * parameter can be passed. This must be an object because the router
+     * will add the `navigationId` property to this object before creating
+     * the new history item.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
     /** Serializes a `UrlTree` into a string */
