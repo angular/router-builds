@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0-rc.0+17.sha-e201a67.with-local-changes
+ * @license Angular v7.1.0+103.sha-4fd3402
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3694,6 +3694,8 @@ var Router = /** @class */ (function () {
         this.rootContexts = rootContexts;
         this.location = location;
         this.config = config;
+        this.lastSuccessfulNavigation = null;
+        this.currentNavigation = null;
         this.navigationId = 0;
         this.isNgZoneEnabled = false;
         this.events = new Subject();
@@ -3782,7 +3784,7 @@ var Router = /** @class */ (function () {
             reject: null,
             promise: Promise.resolve(true),
             source: 'imperative',
-            state: null,
+            restoredState: null,
             currentSnapshot: this.routerState.snapshot,
             targetSnapshot: null,
             currentRouterState: this.routerState,
@@ -3799,6 +3801,18 @@ var Router = /** @class */ (function () {
         return transitions.pipe(filter(function (t) { return t.id !== 0; }), 
         // Extract URL
         map(function (t) { return (__assign({}, t, { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) })); }), 
+        // Store the Navigation object
+        tap(function (t) {
+            _this.currentNavigation = {
+                id: t.id,
+                initialUrl: t.currentRawUrl,
+                extractedUrl: t.extractedUrl,
+                trigger: t.source,
+                extras: t.extras,
+                previousNavigation: _this.lastSuccessfulNavigation ? __assign({}, _this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                    null
+            };
+        }), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap(function (t) {
             var completed = false;
@@ -3809,13 +3823,10 @@ var Router = /** @class */ (function () {
                     _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                 if (processCurrentUrl) {
                     return of(t).pipe(
-                    // Update URL if in `eager` update mode
-                    tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                        _this.setBrowserUrl(t.rawUrl, !!t.extras.replaceUrl, t.id); }), 
                     // Fire NavigationStart event
                     switchMap(function (t) {
                         var transition = _this.transitions.getValue();
-                        eventsSubject.next(new NavigationStart(t.id, _this.serializeUrl(t.extractedUrl), t.source, t.state));
+                        eventsSubject.next(new NavigationStart(t.id, _this.serializeUrl(t.extractedUrl), t.source, t.restoredState));
                         if (transition !== _this.transitions.getValue()) {
                             return EMPTY;
                         }
@@ -3826,8 +3837,15 @@ var Router = /** @class */ (function () {
                     switchMap(function (t) { return Promise.resolve(t); }), 
                     // ApplyRedirects
                     applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
+                    // Update the currentNavigation
+                    tap(function (t) {
+                        _this.currentNavigation = __assign({}, _this.currentNavigation, { finalUrl: t.urlAfterRedirects });
+                    }), 
                     // Recognize
                     recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
+                    // Update URL if in `eager` update mode
+                    tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                        _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id); }), 
                     // Fire RoutesRecognized
                     tap(function (t) {
                         var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -3841,8 +3859,8 @@ var Router = /** @class */ (function () {
                      * handle this "error condition" by navigating to the previously successful URL,
                      * but leaving the URL intact.*/
                     if (processPreviousUrl) {
-                        var id = t.id, extractedUrl = t.extractedUrl, source = t.source, state = t.state, extras = t.extras;
-                        var navStart = new NavigationStart(id, _this.serializeUrl(extractedUrl), source, state);
+                        var id = t.id, extractedUrl = t.extractedUrl, source = t.source, restoredState = t.restoredState, extras = t.extras;
+                        var navStart = new NavigationStart(id, _this.serializeUrl(extractedUrl), source, restoredState);
                         eventsSubject.next(navStart);
                         var targetSnapshot = createEmptyState(extractedUrl, _this.rootComponentType).snapshot;
                         return of(__assign({}, t, { targetSnapshot: targetSnapshot, urlAfterRedirects: extractedUrl, extras: __assign({}, extras, { skipLocationChange: false, replaceUrl: false }) }));
@@ -3930,7 +3948,7 @@ var Router = /** @class */ (function () {
                 _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, t.rawUrl);
                 _this.routerState = t.targetRouterState;
                 if (_this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
-                    _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id);
+                    _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
                 }
             }), activateRoutes(_this.rootContexts, _this.routeReuseStrategy, function (evt) { return _this.triggerEvent(evt); }), tap({ next: function () { completed = true; }, complete: function () { completed = true; } }), finalize(function () {
                 /* When the navigation stream finishes either through error or success, we set the
@@ -3950,6 +3968,10 @@ var Router = /** @class */ (function () {
                     eventsSubject.next(navCancel);
                     t.resolve(false);
                 }
+                // currentNavigation should always be reset to null here. If navigation was
+                // successful, lastSuccessfulTransition will have already been set. Therefore we
+                // can safely set currentNavigation to null here.
+                _this.currentNavigation = null;
             }), catchError(function (e) {
                 errored = true;
                 /* This error type is issued during Redirect, and is handled as a cancellation
@@ -4020,9 +4042,9 @@ var Router = /** @class */ (function () {
             this.locationSubscription = this.location.subscribe(function (change) {
                 var rawUrlTree = _this.parseUrl(change['url']);
                 var source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
-                var state = change.state && change.state.navigationId ?
-                    { navigationId: change.state.navigationId } :
-                    null;
+                // Navigations coming from Angular router have a navigationId state property. When this
+                // exists, restore the state.
+                var state = change.state && change.state.navigationId ? change.state : null;
                 setTimeout(function () { _this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }, 0);
             });
         }
@@ -4033,6 +4055,8 @@ var Router = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /** The current Navigation object if one exists */
+    Router.prototype.getCurrentNavigation = function () { return this.currentNavigation; };
     /** @internal */
     Router.prototype.triggerEvent = function (event) { this.events.next(event); };
     /**
@@ -4194,6 +4218,11 @@ var Router = /** @class */ (function () {
      * The first parameter of `navigate()` is a delta to be applied to the current URL
      * or the one provided in the `relativeTo` property of the second parameter (the
      * `NavigationExtras`).
+     *
+     * In order to affect this browser's `history.state` entry, the `state`
+     * parameter can be passed. This must be an object because the router
+     * will add the `navigationId` property to this object before creating
+     * the new history item.
      */
     Router.prototype.navigate = function (commands, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -4237,10 +4266,12 @@ var Router = /** @class */ (function () {
             _this.lastSuccessfulId = t.id;
             _this.events
                 .next(new NavigationEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(_this.currentUrlTree)));
+            _this.lastSuccessfulNavigation = _this.currentNavigation;
+            _this.currentNavigation = null;
             t.resolve(true);
         }, function (e) { _this.console.warn("Unhandled Navigation Error: "); });
     };
-    Router.prototype.scheduleNavigation = function (rawUrl, source, state, extras) {
+    Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras) {
         var lastNavigation = this.getTransition();
         // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
         // and that navigation results in 'replaceState' that leads to the same URL,
@@ -4273,7 +4304,7 @@ var Router = /** @class */ (function () {
         this.setTransition({
             id: id,
             source: source,
-            state: state,
+            restoredState: restoredState,
             currentUrlTree: this.currentUrlTree,
             currentRawUrl: this.rawUrlTree, rawUrl: rawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise,
             currentSnapshot: this.routerState.snapshot,
@@ -4283,13 +4314,15 @@ var Router = /** @class */ (function () {
         // handler does not rethrow
         return promise.catch(function (e) { return Promise.reject(e); });
     };
-    Router.prototype.setBrowserUrl = function (url, replaceUrl, id) {
+    Router.prototype.setBrowserUrl = function (url, replaceUrl, id, state) {
         var path = this.urlSerializer.serialize(url);
+        state = state || {};
         if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
-            this.location.replaceState(path, '', { navigationId: id });
+            // TODO(jasonaden): Remove first `navigationId` and rely on `ng` namespace.
+            this.location.replaceState(path, '', __assign({}, state, { navigationId: id }));
         }
         else {
-            this.location.go(path, '', { navigationId: id });
+            this.location.go(path, '', __assign({}, state, { navigationId: id }));
         }
     };
     Router.prototype.resetStateAndUrl = function (storedState, storedUrl, rawUrl) {
@@ -4377,6 +4410,27 @@ function validateCommands(commands) {
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
  *   link to user component
  * </a>
+ * ```
+ *
+ * You can provide a `state` value to be persisted to the browser's History.state
+ * property (See https://developer.mozilla.org/en-US/docs/Web/API/History#Properties). It's
+ * used as follows:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [state]="{tracingId: 123}">
+ *   link to user component
+ * </a>
+ * ```
+ *
+ * And later the value can be read from the router through `router.getCurrentNavigation.
+ * For example, to capture the `tracingId` above during the `NavigationStart` event:
+ *
+ * ```
+ * // Get NavigationStart events
+ * router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(e => {
+ *   const navigation = router.getCurrentNavigation();
+ *   tracingService.trace({id: navigation.extras.state.tracingId});
+ * });
  * ```
  *
  * The router link directive always treats the provided input as a delta to the current url.
@@ -4474,6 +4528,10 @@ var RouterLink = /** @class */ (function () {
     ], RouterLink.prototype, "replaceUrl", void 0);
     __decorate([
         Input(),
+        __metadata("design:type", Object)
+    ], RouterLink.prototype, "state", void 0);
+    __decorate([
+        Input(),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], RouterLink.prototype, "routerLink", null);
@@ -4553,6 +4611,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         var extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
+            state: this.state
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return false;
@@ -4602,6 +4661,10 @@ var RouterLinkWithHref = /** @class */ (function () {
         Input(),
         __metadata("design:type", Boolean)
     ], RouterLinkWithHref.prototype, "replaceUrl", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], RouterLinkWithHref.prototype, "state", void 0);
     __decorate([
         HostBinding(),
         __metadata("design:type", String)
@@ -5633,7 +5696,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.1.0-rc.0+17.sha-e201a67.with-local-changes');
+var VERSION = new Version('7.1.0+103.sha-4fd3402');
 
 /**
  * @license

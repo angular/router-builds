@@ -71,6 +71,27 @@ import { UrlTree } from '../url_tree';
  * </a>
  * ```
  *
+ * You can provide a `state` value to be persisted to the browser's History.state
+ * property (See https://developer.mozilla.org/en-US/docs/Web/API/History#Properties). It's
+ * used as follows:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [state]="{tracingId: 123}">
+ *   link to user component
+ * </a>
+ * ```
+ *
+ * And later the value can be read from the router through `router.getCurrentNavigation.
+ * For example, to capture the `tracingId` above during the `NavigationStart` event:
+ *
+ * ```
+ * // Get NavigationStart events
+ * router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(e => {
+ *   const navigation = router.getCurrentNavigation();
+ *   tracingService.trace({id: navigation.extras.state.tracingId});
+ * });
+ * ```
+ *
  * The router link directive always treats the provided input as a delta to the current url.
  *
  * For instance, if the current url is `/user/(box//aux:team)`.
@@ -95,6 +116,9 @@ export declare class RouterLink {
     preserveFragment: boolean;
     skipLocationChange: boolean;
     replaceUrl: boolean;
+    state?: {
+        [k: string]: any;
+    };
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
@@ -130,6 +154,9 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     preserveFragment: boolean;
     skipLocationChange: boolean;
     replaceUrl: boolean;
+    state?: {
+        [k: string]: any;
+    };
     private commands;
     private subscription;
     private preserve;
