@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+163.sha-821fecb
+ * @license Angular v7.1.0+164.sha-24ebdbd
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5800,7 +5800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.1.0+163.sha-821fecb');
+    var VERSION = new core.Version('7.1.0+164.sha-24ebdbd');
 
     /**
      * @license
