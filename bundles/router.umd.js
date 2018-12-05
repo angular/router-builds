@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+156.sha-cd85832
+ * @license Angular v7.1.0+160.sha-8f42570
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3279,6 +3279,9 @@
         switch (mode) {
             case 'pathParamsChange':
                 return !equalPath(curr.url, future.url);
+            case 'pathParamsOrQueryParamsChange':
+                return !equalPath(curr.url, future.url) ||
+                    !shallowEqual(curr.queryParams, future.queryParams);
             case 'always':
                 return true;
             case 'paramsOrQueryParamsChange':
@@ -5795,7 +5798,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.1.0+156.sha-cd85832');
+    var VERSION = new i0.Version('7.1.0+160.sha-8f42570');
 
     /**
      * @license

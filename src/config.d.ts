@@ -38,9 +38,11 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *      mode ignores query param changes.
  *    - `paramsOrQueryParamsChange` - Guards and resolvers will run when any parameters change. This
  *      includes path, matrix, and query params.
- *    - `pathParamsChange` Run guards and resolvers path or any path params change. This mode is
+ *    - `pathParamsChange` - Run guards and resolvers path or any path params change. This mode is
  *      useful if you want to ignore changes to all optional parameters such as query *and* matrix
  *      params.
+ *    - `pathParamsOrQueryParamsChange` - Same as `pathParamsChange`, but also rerun when any query
+ *      param changes
  *    - `always` - Run guards and resolvers on every navigation.
  * - `children` is an array of child route definitions.
  * - `loadChildren` is a reference to lazy loaded child routes. See `LoadChildren` for more
@@ -355,7 +357,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * See `Routes` for more details.
  * @publicApi
  */
-export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always';
+export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always';
 /**
  * See `Routes` for more details.
  *
