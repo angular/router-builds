@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+150.sha-4b9948c
+ * @license Angular v7.1.0+153.sha-20cef50
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2460,14 +2460,18 @@ function findStartingPosition(nav, tree, route) {
     if (nav.isAbsolute) {
         return new Position(tree.root, true, 0);
     }
+    /** @type {?} */
+    const segmentGroup = route.snapshot._urlSegment;
     if (route.snapshot._lastPathIndex === -1) {
-        return new Position(route.snapshot._urlSegment, true, 0);
+        // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
+        // see issue #26224
+        return new Position(segmentGroup, segmentGroup.segments.length === 0, 0);
     }
     /** @type {?} */
     const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
     /** @type {?} */
     const index = route.snapshot._lastPathIndex + modifier;
-    return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
+    return createPositionApplyingDoubleDots(segmentGroup, index, nav.numberOfDoubleDots);
 }
 /**
  * @param {?} group
@@ -4185,6 +4189,17 @@ class Recognizer {
      */
     processSegmentGroup(config, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+            /** @type {?} */
+            const empties = config.filter(r => emptyPathMatch(segmentGroup, segmentGroup.segments, r));
+            if (empties.length !== 0) {
+                try {
+                    return this.processSegment(empties, segmentGroup, segmentGroup.segments, outlet);
+                }
+                catch (e) {
+                    if (!(e instanceof NoMatch$1))
+                        throw e;
+                }
+            }
             return this.processChildren(config, segmentGroup);
         }
         return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
@@ -7135,7 +7150,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.1.0+150.sha-4b9948c');
+const VERSION = new Version('7.1.0+153.sha-20cef50');
 
 /**
  * @fileoverview added by tsickle
