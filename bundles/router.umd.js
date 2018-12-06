@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.1+53.sha-d7c72fc
+ * @license Angular v7.1.1+56.sha-84f2928
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2099,15 +2099,12 @@
         if (nav.isAbsolute) {
             return new Position(tree.root, true, 0);
         }
-        var segmentGroup = route.snapshot._urlSegment;
         if (route.snapshot._lastPathIndex === -1) {
-            // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
-            // see issue #26224
-            return new Position(segmentGroup, segmentGroup.segments.length === 0, 0);
+            return new Position(route.snapshot._urlSegment, true, 0);
         }
         var modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
         var index = route.snapshot._lastPathIndex + modifier;
-        return createPositionApplyingDoubleDots(segmentGroup, index, nav.numberOfDoubleDots);
+        return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
     }
     function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
         var g = group;
@@ -3298,16 +3295,6 @@
         };
         Recognizer.prototype.processSegmentGroup = function (config, segmentGroup, outlet) {
             if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-                var empties = config.filter(function (r) { return emptyPathMatch(segmentGroup, segmentGroup.segments, r); });
-                if (empties.length !== 0) {
-                    try {
-                        return this.processSegment(empties, segmentGroup, segmentGroup.segments, outlet);
-                    }
-                    catch (e) {
-                        if (!(e instanceof NoMatch$1))
-                            throw e;
-                    }
-                }
                 return this.processChildren(config, segmentGroup);
             }
             return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
@@ -5734,7 +5721,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.1.1+53.sha-d7c72fc');
+    var VERSION = new core.Version('7.1.1+56.sha-84f2928');
 
     /**
      * @license
