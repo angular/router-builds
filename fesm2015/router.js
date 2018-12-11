@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.1+28.sha-3cb6dad
+ * @license Angular v7.2.0-beta.1+32.sha-053b43d
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6348,7 +6348,7 @@ RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref
         ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
         ɵelementAttribute(elIndex, "target", ɵbind(ctx.target));
-        ɵelementProperty(elIndex, "href", ɵbind(ctx.href));
+        ɵelementProperty(elIndex, "href", ɵbind(ctx.href), null, true);
     } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
@@ -7368,7 +7368,7 @@ function provideRouterInitializer() {
 /** *
  * \@publicApi
   @type {?} */
-const VERSION = new Version('7.2.0-beta.1+28.sha-3cb6dad');
+const VERSION = new Version('7.2.0-beta.1+32.sha-053b43d');
 
 /**
  * @fileoverview added by tsickle
