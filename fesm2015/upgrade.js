@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+8.sha-9c7fb0d
+ * @license Angular v7.2.0-beta.2+6.sha-28ceca0
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -11,9 +11,9 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
-/**
+/** *
  * \@description
  *
  * Creates an initializer that in addition to setting up the Angular
@@ -35,12 +35,11 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * ```
  *
  * \@publicApi
- * @type {?}
- */
+  @type {?} */
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: (/** @type {?} */ (locationSyncBootstrapListener)),
+    useFactory: /** @type {?} */ (locationSyncBootstrapListener),
     deps: [UpgradeModule]
 };
 /**
@@ -83,7 +82,7 @@ function setUpLocationSync(ngUpgrade) {
         router.navigateByUrl(path + url.search + url.hash);
     });
 }
-/**
+/** *
  * Normalize and parse a URL.
  *
  * - Normalizing means that a relative URL will be resolved into an absolute URL in the context of
@@ -100,8 +99,7 @@ function setUpLocationSync(ngUpgrade) {
  * See
  * https://github.com/angular/angular.js/blob/2c7400e7d07b0f6cec1817dab40b9250ce8ebce6/src/ng/urlUtils.js#L26-L33
  * for more info.
- * @type {?}
- */
+  @type {?} */
 let anchor;
 /**
  * @param {?} url
@@ -123,12 +121,13 @@ function resolveUrl(url) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+// This file only reexports content of the `src` folder. Keep it that way.
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
 export { locationSyncBootstrapListener, setUpLocationSync, RouterUpgradeInitializer };
