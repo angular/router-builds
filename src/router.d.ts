@@ -241,6 +241,7 @@ export declare class Router {
     config: Routes;
     private currentUrlTree;
     private rawUrlTree;
+    private browserUrlTree;
     private readonly transitions;
     private navigations;
     private lastSuccessfulNavigation;
