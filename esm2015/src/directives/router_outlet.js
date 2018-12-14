@@ -196,7 +196,7 @@ RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selecto
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], function () { return [{
+    }], [{
         type: ChildrenOutletContexts
     }, {
         type: ViewContainerRef
@@ -210,7 +210,7 @@ RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selecto
             }]
     }, {
         type: ChangeDetectorRef
-    }]; }, { activateEvents: [{
+    }], { activateEvents: [{
             type: Output,
             args: ['activate']
         }], deactivateEvents: [{

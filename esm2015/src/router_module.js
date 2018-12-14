@@ -219,7 +219,7 @@ RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_
                 exports: ROUTER_DIRECTIVES,
                 entryComponents: [EmptyOutletComponent]
             }]
-    }], function () { return [{
+    }], [{
         type: undefined,
         decorators: [{
                 type: Optional
@@ -232,7 +232,7 @@ RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_
         decorators: [{
                 type: Optional
             }]
-    }]; }, null);
+    }], null);
 /**
  * @param {?} router
  * @param {?} viewportScroller
@@ -649,9 +649,9 @@ RouterInitializer.ctorParameters = () => [
 RouterInitializer.ngInjectableDef = i0.defineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.inject(Injector)); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
-    }], function () { return [{
+    }], [{
         type: Injector
-    }]; }, null);
+    }], null);
 if (false) {
     /** @type {?} */
     RouterInitializer.prototype.initNavigation;

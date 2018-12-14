@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+38.sha-a954345
+ * @license Angular v7.2.0-beta.2+36.sha-7fae911
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1914,7 +1914,7 @@ var RouterOutlet = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], function () { return [{
+    }], [{
         type: ChildrenOutletContexts
     }, {
         type: ViewContainerRef
@@ -1928,7 +1928,7 @@ var RouterOutlet = /** @class */ (function () {
             }]
     }, {
         type: ChangeDetectorRef
-    }]; }, { activateEvents: [{
+    }], { activateEvents: [{
             type: Output,
             args: ['activate']
         }], deactivateEvents: [{
@@ -4779,7 +4779,7 @@ var RouterLink = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a)[routerLink]' }]
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: ActivatedRoute
@@ -4793,7 +4793,7 @@ var RouterLink = /** @class */ (function () {
         type: Renderer2
     }, {
         type: ElementRef
-    }]; }, { queryParams: [{
+    }], { queryParams: [{
             type: Input
         }], fragment: [{
             type: Input
@@ -4907,13 +4907,13 @@ var RouterLinkWithHref = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink]' }]
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: ActivatedRoute
     }, {
         type: LocationStrategy
-    }]; }, { target: [{
+    }], { target: [{
             type: HostBinding,
             args: ['attr.target']
         }, {
@@ -5080,7 +5080,7 @@ var RouterLinkActive = /** @class */ (function () {
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }]
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: ElementRef
@@ -5088,7 +5088,7 @@ var RouterLinkActive = /** @class */ (function () {
         type: Renderer2
     }, {
         type: ChangeDetectorRef
-    }]; }, { links: [{
+    }], { links: [{
             type: ContentChildren,
             args: [RouterLink, { descendants: true }]
         }], linksWithHrefs: [{
@@ -5227,7 +5227,7 @@ var RouterPreloader = /** @class */ (function () {
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: NgModuleFactoryLoader
@@ -5237,7 +5237,7 @@ var RouterPreloader = /** @class */ (function () {
         type: Injector
     }, {
         type: PreloadingStrategy
-    }]; }, null);
+    }], null);
 
 /**
  * @license
@@ -5497,7 +5497,7 @@ var RouterModule = /** @class */ (function () {
                 exports: ROUTER_DIRECTIVES,
                 entryComponents: [EmptyOutletComponent]
             }]
-    }], function () { return [{
+    }], [{
         type: undefined,
         decorators: [{
                 type: Optional
@@ -5510,7 +5510,7 @@ var RouterModule = /** @class */ (function () {
         decorators: [{
                 type: Optional
             }]
-    }]; }, null);
+    }], null);
 function createRouterScroller(router, viewportScroller, config) {
     if (config.scrollOffset) {
         viewportScroller.setOffset(config.scrollOffset);
@@ -5679,9 +5679,9 @@ var RouterInitializer = /** @class */ (function () {
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
-    }], function () { return [{
+    }], [{
         type: Injector
-    }]; }, null);
+    }], null);
 function getAppInitializer(r) {
     return r.appInitializer.bind(r);
 }
@@ -5718,7 +5718,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.2.0-beta.2+38.sha-a954345');
+var VERSION = new Version('7.2.0-beta.2+36.sha-7fae911');
 
 /**
  * @license
