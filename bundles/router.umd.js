@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+39.sha-d0d351c
+ * @license Angular v7.2.0-beta.2+37.sha-a8ebc83
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1987,7 +1987,7 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
             type: i0.Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-        }], function () { return [{
+        }], [{
             type: ChildrenOutletContexts
         }, {
             type: i0.ViewContainerRef
@@ -2001,7 +2001,7 @@
                 }]
         }, {
             type: i0.ChangeDetectorRef
-        }]; }, { activateEvents: [{
+        }], { activateEvents: [{
                 type: i0.Output,
                 args: ['activate']
             }], deactivateEvents: [{
@@ -4852,7 +4852,7 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
             type: i0.Directive,
             args: [{ selector: ':not(a)[routerLink]' }]
-        }], function () { return [{
+        }], [{
             type: Router
         }, {
             type: ActivatedRoute
@@ -4866,7 +4866,7 @@
             type: i0.Renderer2
         }, {
             type: i0.ElementRef
-        }]; }, { queryParams: [{
+        }], { queryParams: [{
                 type: i0.Input
             }], fragment: [{
                 type: i0.Input
@@ -4980,13 +4980,13 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
             type: i0.Directive,
             args: [{ selector: 'a[routerLink]' }]
-        }], function () { return [{
+        }], [{
             type: Router
         }, {
             type: ActivatedRoute
         }, {
             type: common.LocationStrategy
-        }]; }, { target: [{
+        }], { target: [{
                 type: i0.HostBinding,
                 args: ['attr.target']
             }, {
@@ -5153,7 +5153,7 @@
                     selector: '[routerLinkActive]',
                     exportAs: 'routerLinkActive',
                 }]
-        }], function () { return [{
+        }], [{
             type: Router
         }, {
             type: i0.ElementRef
@@ -5161,7 +5161,7 @@
             type: i0.Renderer2
         }, {
             type: i0.ChangeDetectorRef
-        }]; }, { links: [{
+        }], { links: [{
                 type: i0.ContentChildren,
                 args: [RouterLink, { descendants: true }]
             }], linksWithHrefs: [{
@@ -5300,7 +5300,7 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
             type: i0.Injectable
-        }], function () { return [{
+        }], [{
             type: Router
         }, {
             type: i0.NgModuleFactoryLoader
@@ -5310,7 +5310,7 @@
             type: i0.Injector
         }, {
             type: PreloadingStrategy
-        }]; }, null);
+        }], null);
 
     /**
      * @license
@@ -5570,7 +5570,7 @@
                     exports: ROUTER_DIRECTIVES,
                     entryComponents: [EmptyOutletComponent]
                 }]
-        }], function () { return [{
+        }], [{
             type: undefined,
             decorators: [{
                     type: i0.Optional
@@ -5583,7 +5583,7 @@
             decorators: [{
                     type: i0.Optional
                 }]
-        }]; }, null);
+        }], null);
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
             viewportScroller.setOffset(config.scrollOffset);
@@ -5752,9 +5752,9 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
             type: i0.Injectable
-        }], function () { return [{
+        }], [{
             type: i0.Injector
-        }]; }, null);
+        }], null);
     function getAppInitializer(r) {
         return r.appInitializer.bind(r);
     }
@@ -5791,7 +5791,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.2.0-beta.2+39.sha-d0d351c');
+    var VERSION = new i0.Version('7.2.0-beta.2+37.sha-a8ebc83');
 
     /**
      * @license

@@ -150,7 +150,7 @@ export { RouterOutlet };
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], function () { return [{
+    }], [{
         type: ChildrenOutletContexts
     }, {
         type: ViewContainerRef
@@ -164,7 +164,7 @@ export { RouterOutlet };
             }]
     }, {
         type: ChangeDetectorRef
-    }]; }, { activateEvents: [{
+    }], { activateEvents: [{
             type: Output,
             args: ['activate']
         }], deactivateEvents: [{

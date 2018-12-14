@@ -203,7 +203,7 @@ RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: 
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a)[routerLink]' }]
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: ActivatedRoute
@@ -217,7 +217,7 @@ RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: 
         type: Renderer2
     }, {
         type: ElementRef
-    }]; }, { queryParams: [{
+    }], { queryParams: [{
             type: Input
         }], fragment: [{
             type: Input
@@ -398,13 +398,13 @@ RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithH
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink]' }]
-    }], function () { return [{
+    }], [{
         type: Router
     }, {
         type: ActivatedRoute
     }, {
         type: LocationStrategy
-    }]; }, { target: [{
+    }], { target: [{
             type: HostBinding,
             args: ['attr.target']
         }, {
