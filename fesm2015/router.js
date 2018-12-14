@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+30.sha-c6ae729
+ * @license Angular v7.2.0-beta.2+41.sha-522919a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2374,7 +2374,7 @@ RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors:
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], [{
+    }], function () { return [{
         type: ChildrenOutletContexts
     }, {
         type: ViewContainerRef
@@ -2388,7 +2388,7 @@ RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors:
             }]
     }, {
         type: ChangeDetectorRef
-    }], { activateEvents: [{
+    }]; }, { activateEvents: [{
             type: Output,
             args: ['activate']
         }], deactivateEvents: [{
@@ -5338,7 +5338,6 @@ class Router {
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
-        this.browserUrlTree = this.parseUrl(this.location.path());
         this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
         this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         this.transitions = new BehaviorSubject({
@@ -5394,7 +5393,7 @@ class Router {
             let errored = false;
             return of(t).pipe(switchMap(t => {
                 /** @type {?} */
-                const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.browserUrlTree.toString();
+                const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.currentUrlTree.toString();
                 /** @type {?} */
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
@@ -5422,12 +5421,8 @@ class Router {
                     // Recognize
                     recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Update URL if in `eager` update mode
-                    tap(t => {
-                        if (this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange) {
-                            this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
-                            this.browserUrlTree = t.urlAfterRedirects;
-                        }
-                    }), 
+                    tap(t => this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                        this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id)), 
                     // Fire RoutesRecognized
                     tap(t => {
                         /** @type {?} */
@@ -5542,7 +5537,6 @@ class Router {
                 ((/** @type {?} */ (this))).routerState = (/** @type {?} */ (t.targetRouterState));
                 if (this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
                     this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
-                    this.browserUrlTree = t.urlAfterRedirects;
                 }
             }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({ /**
                  * @return {?}
@@ -6241,7 +6235,7 @@ RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["
 /*@__PURE__*/ ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a)[routerLink]' }]
-    }], [{
+    }], function () { return [{
         type: Router
     }, {
         type: ActivatedRoute
@@ -6255,7 +6249,7 @@ RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["
         type: Renderer2
     }, {
         type: ElementRef
-    }], { queryParams: [{
+    }]; }, { queryParams: [{
             type: Input
         }], fragment: [{
             type: Input
@@ -6412,13 +6406,13 @@ RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink]' }]
-    }], [{
+    }], function () { return [{
         type: Router
     }, {
         type: ActivatedRoute
     }, {
         type: LocationStrategy
-    }], { target: [{
+    }]; }, { target: [{
             type: HostBinding,
             args: ['attr.target']
         }, {
@@ -6633,7 +6627,7 @@ RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, se
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }]
-    }], [{
+    }], function () { return [{
         type: Router
     }, {
         type: ElementRef
@@ -6641,7 +6635,7 @@ RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, se
         type: Renderer2
     }, {
         type: ChangeDetectorRef
-    }], { links: [{
+    }]; }, { links: [{
             type: ContentChildren,
             args: [RouterLink, { descendants: true }]
         }], linksWithHrefs: [{
@@ -6822,7 +6816,7 @@ RouterPreloader.ctorParameters = () => [
 RouterPreloader.ngInjectableDef = defineInjectable({ token: RouterPreloader, factory: function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(inject(Router), inject(NgModuleFactoryLoader), inject(Compiler), inject(Injector), inject(PreloadingStrategy)); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
-    }], [{
+    }], function () { return [{
         type: Router
     }, {
         type: NgModuleFactoryLoader
@@ -6832,7 +6826,7 @@ RouterPreloader.ngInjectableDef = defineInjectable({ token: RouterPreloader, fac
         type: Injector
     }, {
         type: PreloadingStrategy
-    }], null);
+    }]; }, null);
 
 /**
  * @fileoverview added by tsickle
@@ -7136,7 +7130,7 @@ RouterModule.ngInjectorDef = defineInjector({ factory: function RouterModule_Fac
                 exports: ROUTER_DIRECTIVES,
                 entryComponents: [EmptyOutletComponent]
             }]
-    }], [{
+    }], function () { return [{
         type: undefined,
         decorators: [{
                 type: Optional
@@ -7149,7 +7143,7 @@ RouterModule.ngInjectorDef = defineInjector({ factory: function RouterModule_Fac
         decorators: [{
                 type: Optional
             }]
-    }], null);
+    }]; }, null);
 /**
  * @param {?} router
  * @param {?} viewportScroller
@@ -7387,9 +7381,9 @@ RouterInitializer.ctorParameters = () => [
 RouterInitializer.ngInjectableDef = defineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(inject(Injector)); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
-    }], [{
+    }], function () { return [{
         type: Injector
-    }], null);
+    }]; }, null);
 /**
  * @param {?} r
  * @return {?}
@@ -7436,7 +7430,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.0-beta.2+30.sha-c6ae729');
+const VERSION = new Version('7.2.0-beta.2+41.sha-522919a');
 
 /**
  * @fileoverview added by tsickle

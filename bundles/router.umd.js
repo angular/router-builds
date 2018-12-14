@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+30.sha-c6ae729
+ * @license Angular v7.2.0-beta.2+41.sha-522919a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1987,7 +1987,7 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
             type: i0.Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-        }], [{
+        }], function () { return [{
             type: ChildrenOutletContexts
         }, {
             type: i0.ViewContainerRef
@@ -2001,7 +2001,7 @@
                 }]
         }, {
             type: i0.ChangeDetectorRef
-        }], { activateEvents: [{
+        }]; }, { activateEvents: [{
                 type: i0.Output,
                 args: ['activate']
             }], deactivateEvents: [{
@@ -4106,7 +4106,6 @@
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
-            this.browserUrlTree = this.parseUrl(this.location.path());
             this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
             this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
             this.transitions = new rxjs.BehaviorSubject({
@@ -4155,7 +4154,7 @@
                 var completed = false;
                 var errored = false;
                 return rxjs.of(t).pipe(operators.switchMap(function (t) {
-                    var urlTransition = !_this.navigated || t.extractedUrl.toString() !== _this.browserUrlTree.toString();
+                    var urlTransition = !_this.navigated || t.extractedUrl.toString() !== _this.currentUrlTree.toString();
                     var processCurrentUrl = (_this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                         _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                     if (processCurrentUrl) {
@@ -4181,12 +4180,8 @@
                         // Recognize
                         recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
                         // Update URL if in `eager` update mode
-                        operators.tap(function (t) {
-                            if (_this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange) {
-                                _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
-                                _this.browserUrlTree = t.urlAfterRedirects;
-                            }
-                        }), 
+                        operators.tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
+                            _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id); }), 
                         // Fire RoutesRecognized
                         operators.tap(function (t) {
                             var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -4290,7 +4285,6 @@
                     _this.routerState = t.targetRouterState;
                     if (_this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
                         _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
-                        _this.browserUrlTree = t.urlAfterRedirects;
                     }
                 }), activateRoutes(_this.rootContexts, _this.routeReuseStrategy, function (evt) { return _this.triggerEvent(evt); }), operators.tap({ next: function () { completed = true; }, complete: function () { completed = true; } }), operators.finalize(function () {
                     /* When the navigation stream finishes either through error or success, we set the
@@ -4852,7 +4846,7 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
             type: i0.Directive,
             args: [{ selector: ':not(a)[routerLink]' }]
-        }], [{
+        }], function () { return [{
             type: Router
         }, {
             type: ActivatedRoute
@@ -4866,7 +4860,7 @@
             type: i0.Renderer2
         }, {
             type: i0.ElementRef
-        }], { queryParams: [{
+        }]; }, { queryParams: [{
                 type: i0.Input
             }], fragment: [{
                 type: i0.Input
@@ -4980,13 +4974,13 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
             type: i0.Directive,
             args: [{ selector: 'a[routerLink]' }]
-        }], [{
+        }], function () { return [{
             type: Router
         }, {
             type: ActivatedRoute
         }, {
             type: common.LocationStrategy
-        }], { target: [{
+        }]; }, { target: [{
                 type: i0.HostBinding,
                 args: ['attr.target']
             }, {
@@ -5153,7 +5147,7 @@
                     selector: '[routerLinkActive]',
                     exportAs: 'routerLinkActive',
                 }]
-        }], [{
+        }], function () { return [{
             type: Router
         }, {
             type: i0.ElementRef
@@ -5161,7 +5155,7 @@
             type: i0.Renderer2
         }, {
             type: i0.ChangeDetectorRef
-        }], { links: [{
+        }]; }, { links: [{
                 type: i0.ContentChildren,
                 args: [RouterLink, { descendants: true }]
             }], linksWithHrefs: [{
@@ -5300,7 +5294,7 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
             type: i0.Injectable
-        }], [{
+        }], function () { return [{
             type: Router
         }, {
             type: i0.NgModuleFactoryLoader
@@ -5310,7 +5304,7 @@
             type: i0.Injector
         }, {
             type: PreloadingStrategy
-        }], null);
+        }]; }, null);
 
     /**
      * @license
@@ -5570,7 +5564,7 @@
                     exports: ROUTER_DIRECTIVES,
                     entryComponents: [EmptyOutletComponent]
                 }]
-        }], [{
+        }], function () { return [{
             type: undefined,
             decorators: [{
                     type: i0.Optional
@@ -5583,7 +5577,7 @@
             decorators: [{
                     type: i0.Optional
                 }]
-        }], null);
+        }]; }, null);
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
             viewportScroller.setOffset(config.scrollOffset);
@@ -5752,9 +5746,9 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
             type: i0.Injectable
-        }], [{
+        }], function () { return [{
             type: i0.Injector
-        }], null);
+        }]; }, null);
     function getAppInitializer(r) {
         return r.appInitializer.bind(r);
     }
@@ -5791,7 +5785,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.2.0-beta.2+30.sha-c6ae729');
+    var VERSION = new i0.Version('7.2.0-beta.2+41.sha-522919a');
 
     /**
      * @license
