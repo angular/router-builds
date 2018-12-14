@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+36.sha-7fae911
+ * @license Angular v7.2.0-beta.2+39.sha-d0d351c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -115,9 +115,9 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
             type: i0.Injectable
-        }], [{
+        }], function () { return [{
             type: i0.Compiler
-        }], null);
+        }]; }, null);
     function isUrlHandlingStrategy(opts) {
         // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
         // runtime.
