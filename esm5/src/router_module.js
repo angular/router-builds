@@ -190,7 +190,7 @@ export { RouterModule };
                 exports: ROUTER_DIRECTIVES,
                 entryComponents: [EmptyOutletComponent]
             }]
-    }], [{
+    }], function () { return [{
         type: undefined,
         decorators: [{
                 type: Optional
@@ -203,7 +203,7 @@ export { RouterModule };
         decorators: [{
                 type: Optional
             }]
-    }], null);
+    }]; }, null);
 export function createRouterScroller(router, viewportScroller, config) {
     if (config.scrollOffset) {
         viewportScroller.setOffset(config.scrollOffset);
@@ -373,9 +373,9 @@ var RouterInitializer = /** @class */ (function () {
 export { RouterInitializer };
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
-    }], [{
+    }], function () { return [{
         type: Injector
-    }], null);
+    }]; }, null);
 export function getAppInitializer(r) {
     return r.appInitializer.bind(r);
 }

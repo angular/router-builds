@@ -91,9 +91,9 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
 export { SpyNgModuleFactoryLoader };
 /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
-    }], [{
+    }], function () { return [{
         type: Compiler
-    }], null);
+    }]; }, null);
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.

@@ -181,7 +181,7 @@ RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive,
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }]
-    }], [{
+    }], function () { return [{
         type: Router
     }, {
         type: ElementRef
@@ -189,7 +189,7 @@ RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive,
         type: Renderer2
     }, {
         type: ChangeDetectorRef
-    }], { links: [{
+    }]; }, { links: [{
             type: ContentChildren,
             args: [RouterLink, { descendants: true }]
         }], linksWithHrefs: [{

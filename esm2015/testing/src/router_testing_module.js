@@ -95,9 +95,9 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
 SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(Compiler)); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
-    }], [{
+    }], function () { return [{
         type: Compiler
-    }], null);
+    }]; }, null);
 if (false) {
     /**
      * \@docsNotRequired
