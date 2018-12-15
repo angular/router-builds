@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+40.sha-650c5a0
+ * @license Angular v7.2.0-beta.2+52.sha-f8096d4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4425,7 +4425,7 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
- * And later the value can be read from the router through `router.getCurrentNavigation.
+ * And later the value can be read from the router through `router.getCurrentNavigation`.
  * For example, to capture the `tracingId` above during the `NavigationStart` event:
  *
  * ```
@@ -5699,7 +5699,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.2.0-beta.2+40.sha-650c5a0');
+var VERSION = new Version('7.2.0-beta.2+52.sha-f8096d4');
 
 /**
  * @license
