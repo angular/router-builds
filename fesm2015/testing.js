@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.1.0+202.sha-3fa2a5f
+ * @license Angular v7.2.0-beta.2+63.sha-19508c4
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -11,7 +11,7 @@ import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIG
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -80,7 +80,7 @@ class SpyNgModuleFactoryLoader {
             return this._stubbedModules[path];
         }
         else {
-            return /** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`)));
+            return (/** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`))));
         }
     }
 }
@@ -117,7 +117,7 @@ function isUrlHandlingStrategy(opts) {
  */
 function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
     /** @type {?} */
-    const router = new Router(/** @type {?} */ ((null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+    const router = new Router((/** @type {?} */ (null)), urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (opts) {
         // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
@@ -201,18 +201,17 @@ RouterTestingModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
-// This file only reexports content of the `src` folder. Keep it that way.
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
  */
 
 /**
