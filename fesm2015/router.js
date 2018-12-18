@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-beta.2+82.sha-1c93afe
+ * @license Angular v7.2.0-beta.2+90.sha-7901cd8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12,7 +12,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -492,7 +492,7 @@ class Scroll {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * This component is used internally within the router to be a placeholder when an empty
@@ -511,7 +511,7 @@ EmptyOutletComponent.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -639,7 +639,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LoadedRouterConfig {
     /**
@@ -768,7 +768,7 @@ function standardizeConfig(r) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} a
@@ -887,7 +887,7 @@ function wrapIntoObservable(value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
@@ -1450,6 +1450,7 @@ class UrlParser {
         return this.consumeOptional('#') ? decodeURIComponent(this.remaining) : null;
     }
     /**
+     * @private
      * @return {?}
      */
     parseChildren() {
@@ -1485,6 +1486,7 @@ class UrlParser {
     // parse a segment with its matrix parameters
     // ie `name;k1=v1;k2`
     /**
+     * @private
      * @return {?}
      */
     parseSegment() {
@@ -1497,6 +1499,7 @@ class UrlParser {
         return new UrlSegment(decode(path), this.parseMatrixParams());
     }
     /**
+     * @private
      * @return {?}
      */
     parseMatrixParams() {
@@ -1508,6 +1511,7 @@ class UrlParser {
         return params;
     }
     /**
+     * @private
      * @param {?} params
      * @return {?}
      */
@@ -1532,6 +1536,7 @@ class UrlParser {
     }
     // Parse a single query parameter `name[=value]`
     /**
+     * @private
      * @param {?} params
      * @return {?}
      */
@@ -1573,6 +1578,7 @@ class UrlParser {
     }
     // parse `(a/b//outlet_name:c/d)`
     /**
+     * @private
      * @param {?} allowPrimary
      * @return {?}
      */
@@ -1609,12 +1615,14 @@ class UrlParser {
         return segments;
     }
     /**
+     * @private
      * @param {?} str
      * @return {?}
      */
     peekStartsWith(str) { return this.remaining.startsWith(str); }
     // Consumes the prefix when it is present and returns whether it has been consumed
     /**
+     * @private
      * @param {?} str
      * @return {?}
      */
@@ -1626,6 +1634,7 @@ class UrlParser {
         return false;
     }
     /**
+     * @private
      * @param {?} str
      * @return {?}
      */
@@ -1638,7 +1647,7 @@ class UrlParser {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -1782,7 +1791,7 @@ function nodeChildrenAsMap(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -2234,7 +2243,7 @@ function equalParamsAndUrlSegments(a, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} routeReuseStrategy
@@ -2325,7 +2334,7 @@ function createActivatedRoute(c) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} route
@@ -2729,7 +2738,7 @@ function compare(path, params, segment) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent) => map(t => {
@@ -2765,6 +2774,7 @@ class ActivateRoutes {
     }
     // De-activate the child route that are not re-used for the future state
     /**
+     * @private
      * @param {?} futureNode
      * @param {?} currNode
      * @param {?} contexts
@@ -2786,6 +2796,7 @@ class ActivateRoutes {
         });
     }
     /**
+     * @private
      * @param {?} futureNode
      * @param {?} currNode
      * @param {?} parentContext
@@ -2819,6 +2830,7 @@ class ActivateRoutes {
         }
     }
     /**
+     * @private
      * @param {?} route
      * @param {?} parentContexts
      * @return {?}
@@ -2832,6 +2844,7 @@ class ActivateRoutes {
         }
     }
     /**
+     * @private
      * @param {?} route
      * @param {?} parentContexts
      * @return {?}
@@ -2848,6 +2861,7 @@ class ActivateRoutes {
         }
     }
     /**
+     * @private
      * @param {?} route
      * @param {?} parentContexts
      * @return {?}
@@ -2870,6 +2884,7 @@ class ActivateRoutes {
         }
     }
     /**
+     * @private
      * @param {?} futureNode
      * @param {?} currNode
      * @param {?} contexts
@@ -2887,6 +2902,7 @@ class ActivateRoutes {
         }
     }
     /**
+     * @private
      * @param {?} futureNode
      * @param {?} currNode
      * @param {?} parentContexts
@@ -2979,7 +2995,7 @@ function parentLoadedConfig(snapshot) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Simple function check, but generic so type inference will flow. Example:
@@ -3046,7 +3062,7 @@ function isCanDeactivate(guard) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch {
     /**
@@ -3142,6 +3158,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} tree
      * @return {?}
      */
@@ -3158,6 +3175,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} e
      * @return {?}
      */
@@ -3165,6 +3183,7 @@ class ApplyRedirects {
         return new Error(`Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
     }
     /**
+     * @private
      * @param {?} rootCandidate
      * @param {?} queryParams
      * @param {?} fragment
@@ -3178,6 +3197,7 @@ class ApplyRedirects {
         return new UrlTree(root, queryParams, fragment);
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
@@ -3193,6 +3213,7 @@ class ApplyRedirects {
     }
     // Recursively expand segment groups for all the child outlets
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} routes
      * @param {?} segmentGroup
@@ -3202,6 +3223,7 @@ class ApplyRedirects {
         return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
@@ -3233,6 +3255,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} segmentGroup
      * @param {?} segments
      * @param {?} outlet
@@ -3242,6 +3265,7 @@ class ApplyRedirects {
         return segments.length === 0 && !segmentGroup.children[outlet];
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
@@ -3264,6 +3288,7 @@ class ApplyRedirects {
         return noMatch(segmentGroup);
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
@@ -3279,6 +3304,7 @@ class ApplyRedirects {
         return this.expandRegularSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet);
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} routes
      * @param {?} route
@@ -3298,6 +3324,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} segmentGroup
      * @param {?} routes
@@ -3320,6 +3347,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} rawSegmentGroup
      * @param {?} route
@@ -3364,6 +3392,7 @@ class ApplyRedirects {
         }));
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} route
      * @param {?} segments
@@ -3394,6 +3423,7 @@ class ApplyRedirects {
         return of(new LoadedRouterConfig([], ngModule));
     }
     /**
+     * @private
      * @param {?} route
      * @param {?} urlTree
      * @return {?}
@@ -3415,6 +3445,7 @@ class ApplyRedirects {
         }
     }
     /**
+     * @private
      * @param {?} segments
      * @param {?} redirectTo
      * @param {?} posParams
@@ -3424,6 +3455,7 @@ class ApplyRedirects {
         return this.applyRedirectCreatreUrlTree(redirectTo, this.urlSerializer.parse(redirectTo), segments, posParams);
     }
     /**
+     * @private
      * @param {?} redirectTo
      * @param {?} urlTree
      * @param {?} segments
@@ -3436,6 +3468,7 @@ class ApplyRedirects {
         return new UrlTree(newRoot, this.createQueryParams(urlTree.queryParams, this.urlTree.queryParams), urlTree.fragment);
     }
     /**
+     * @private
      * @param {?} redirectToParams
      * @param {?} actualParams
      * @return {?}
@@ -3458,6 +3491,7 @@ class ApplyRedirects {
         return res;
     }
     /**
+     * @private
      * @param {?} redirectTo
      * @param {?} group
      * @param {?} segments
@@ -3475,6 +3509,7 @@ class ApplyRedirects {
         return new UrlSegmentGroup(updatedSegments, children);
     }
     /**
+     * @private
      * @param {?} redirectTo
      * @param {?} redirectToSegments
      * @param {?} actualSegments
@@ -3486,6 +3521,7 @@ class ApplyRedirects {
             this.findOrReturn(s, actualSegments));
     }
     /**
+     * @private
      * @param {?} redirectTo
      * @param {?} redirectToUrlSegment
      * @param {?} posParams
@@ -3499,6 +3535,7 @@ class ApplyRedirects {
         return pos;
     }
     /**
+     * @private
      * @param {?} redirectToUrlSegment
      * @param {?} actualSegments
      * @return {?}
@@ -3685,7 +3722,7 @@ function getOutlet(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} moduleInjector
@@ -3703,7 +3740,7 @@ function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CanActivate {
     /**
@@ -3917,7 +3954,7 @@ function deactivateRouteAndItsChildren(route, context, checks) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const INITIAL_VALUE = Symbol('INITIAL_VALUE');
@@ -3958,7 +3995,7 @@ function prioritizedGuardValue() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} moduleInjector
@@ -4152,7 +4189,7 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch$1 {
 }
@@ -4268,6 +4305,7 @@ class Recognizer {
         throw new NoMatch$1();
     }
     /**
+     * @private
      * @param {?} segmentGroup
      * @param {?} segments
      * @param {?} outlet
@@ -4559,7 +4597,7 @@ function getResolve(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} rootComponentType
@@ -4578,7 +4616,7 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} paramsInheritanceStrategy
@@ -4661,7 +4699,7 @@ function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Perform a side effect through a switchMap for every emission on the source Observable,
@@ -4687,7 +4725,7 @@ function switchTap(next) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4743,7 +4781,7 @@ class DefaultRouteReuseStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@docsNotRequired
@@ -4785,6 +4823,7 @@ class RouterConfigLoader {
         }));
     }
     /**
+     * @private
      * @param {?} loadChildren
      * @return {?}
      */
@@ -4807,7 +4846,7 @@ class RouterConfigLoader {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4850,7 +4889,7 @@ class DefaultUrlHandlingStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} error
@@ -5012,6 +5051,7 @@ class Router {
         this.processNavigations();
     }
     /**
+     * @private
      * @param {?} transitions
      * @return {?}
      */
@@ -5266,10 +5306,12 @@ class Router {
         this.routerState.root.component = this.rootComponentType;
     }
     /**
+     * @private
      * @return {?}
      */
     getTransition() { return this.transitions.value; }
     /**
+     * @private
      * @param {?} t
      * @return {?}
      */
@@ -5550,6 +5592,7 @@ class Router {
         return containsTree(this.currentUrlTree, urlTree, exact);
     }
     /**
+     * @private
      * @param {?} params
      * @return {?}
      */
@@ -5564,6 +5607,7 @@ class Router {
         }, {});
     }
     /**
+     * @private
      * @return {?}
      */
     processNavigations() {
@@ -5578,6 +5622,7 @@ class Router {
         }, e => { this.console.warn(`Unhandled Navigation Error: `); });
     }
     /**
+     * @private
      * @param {?} rawUrl
      * @param {?} source
      * @param {?} restoredState
@@ -5633,6 +5678,7 @@ class Router {
         return promise.catch((e) => { return Promise.reject(e); });
     }
     /**
+     * @private
      * @param {?} url
      * @param {?} replaceUrl
      * @param {?} id
@@ -5652,6 +5698,7 @@ class Router {
         }
     }
     /**
+     * @private
      * @param {?} storedState
      * @param {?} storedUrl
      * @param {?} rawUrl
@@ -5664,6 +5711,7 @@ class Router {
         this.resetUrlToCurrentUrlTree();
     }
     /**
+     * @private
      * @return {?}
      */
     resetUrlToCurrentUrlTree() {
@@ -5686,7 +5734,7 @@ function validateCommands(commands) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -5953,6 +6001,7 @@ class RouterLinkWithHref {
         return false;
     }
     /**
+     * @private
      * @return {?}
      */
     updateTargetUrlAndHref() {
@@ -6005,7 +6054,7 @@ function attrBoolValue(s) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  *
@@ -6112,6 +6161,7 @@ class RouterLinkActive {
      */
     ngOnDestroy() { this.subscription.unsubscribe(); }
     /**
+     * @private
      * @return {?}
      */
     update() {
@@ -6134,6 +6184,7 @@ class RouterLinkActive {
         });
     }
     /**
+     * @private
      * @param {?} router
      * @return {?}
      */
@@ -6141,6 +6192,7 @@ class RouterLinkActive {
         return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
     }
     /**
+     * @private
      * @return {?}
      */
     hasActiveLinks() {
@@ -6170,7 +6222,7 @@ RouterLinkActive.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6267,7 +6319,7 @@ class ChildrenOutletContexts {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -6476,7 +6528,7 @@ class OutletInjector {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -6581,6 +6633,7 @@ class RouterPreloader {
      */
     ngOnDestroy() { this.subscription.unsubscribe(); }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} routes
      * @return {?}
@@ -6607,6 +6660,7 @@ class RouterPreloader {
         return from(res).pipe(mergeAll(), map((_) => void 0));
     }
     /**
+     * @private
      * @param {?} ngModule
      * @param {?} route
      * @return {?}
@@ -6636,7 +6690,7 @@ RouterPreloader.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class RouterScroller {
     /**
@@ -6670,6 +6724,7 @@ class RouterScroller {
         this.scrollEventsSubscription = this.consumeScrollEvents();
     }
     /**
+     * @private
      * @return {?}
      */
     createScrollEvents() {
@@ -6687,6 +6742,7 @@ class RouterScroller {
         });
     }
     /**
+     * @private
      * @return {?}
      */
     consumeScrollEvents() {
@@ -6714,6 +6770,7 @@ class RouterScroller {
         });
     }
     /**
+     * @private
      * @param {?} routerEvent
      * @param {?} anchor
      * @return {?}
@@ -6736,7 +6793,7 @@ class RouterScroller {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -7132,6 +7189,7 @@ class RouterInitializer {
         this.resultOfPreactivationDone.complete();
     }
     /**
+     * @private
      * @param {?} opts
      * @return {?}
      */
@@ -7140,6 +7198,7 @@ class RouterInitializer {
             opts.initialNavigation === undefined;
     }
     /**
+     * @private
      * @param {?} opts
      * @return {?}
      */
@@ -7194,32 +7253,32 @@ function provideRouterInitializer() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.0-beta.2+82.sha-1c93afe');
+const VERSION = new Version('7.2.0-beta.2+90.sha-7901cd8');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
