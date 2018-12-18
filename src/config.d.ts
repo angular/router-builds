@@ -7,6 +7,7 @@
  */
 import { NgModuleFactory, NgModuleRef, Type } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot } from './router_state';
 import { UrlSegment, UrlSegmentGroup } from './url_tree';
 /**
  * @description
@@ -44,6 +45,10 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *    - `pathParamsOrQueryParamsChange` - Same as `pathParamsChange`, but also rerun when any query
  *      param changes
  *    - `always` - Run guards and resolvers on every navigation.
+ *    - (from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean - Use a predicate
+ *      function when none of the pre-configured modes fit the needs of the application. An example
+ *      might be when you need to ignore updates to a param such as `sortDirection`, but need to
+ *      reload guards and resolvers when changing the `searchRoot` param.
  * - `children` is an array of child route definitions.
  * - `loadChildren` is a reference to lazy loaded child routes. See `LoadChildren` for more
  *   info.
@@ -357,7 +362,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * See `Routes` for more details.
  * @publicApi
  */
-export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always';
+export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always' | ((from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean);
 /**
  * See `Routes` for more details.
  *
