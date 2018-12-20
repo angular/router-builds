@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0-rc.0+13.sha-880e8a5
+ * @license Angular v7.2.0-rc.0+14.sha-07ada7f
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5380,6 +5380,7 @@ class Router {
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
+        this.browserUrlTree = this.parseUrl(this.location.path());
         this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
         this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         this.transitions = new BehaviorSubject({
@@ -5436,7 +5437,7 @@ class Router {
             let errored = false;
             return of(t).pipe(switchMap(t => {
                 /** @type {?} */
-                const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.currentUrlTree.toString();
+                const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.browserUrlTree.toString();
                 /** @type {?} */
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
@@ -5464,8 +5465,12 @@ class Router {
                     // Recognize
                     recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Update URL if in `eager` update mode
-                    tap(t => this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                        this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id)), 
+                    tap(t => {
+                        if (this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange) {
+                            this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                            this.browserUrlTree = t.urlAfterRedirects;
+                        }
+                    }), 
                     // Fire RoutesRecognized
                     tap(t => {
                         /** @type {?} */
@@ -5580,6 +5585,7 @@ class Router {
                 ((/** @type {?} */ (this))).routerState = (/** @type {?} */ (t.targetRouterState));
                 if (this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
                     this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                    this.browserUrlTree = t.urlAfterRedirects;
                 }
             }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({ /**
                  * @return {?}
@@ -7492,7 +7498,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.0-rc.0+13.sha-880e8a5');
+const VERSION = new Version('7.2.0-rc.0+14.sha-07ada7f');
 
 /**
  * @fileoverview added by tsickle
