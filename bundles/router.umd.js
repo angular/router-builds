@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0+55.sha-1de4031
+ * @license Angular v7.2.0+56.sha-c3aa24c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -4970,7 +4970,7 @@
                 i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
                 i0.ɵelementAttribute(elIndex, "target", i0.ɵbind(ctx.target));
-                i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), null, true);
+                i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), i0.ɵsanitizeUrl, true);
             } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
         return RouterLinkWithHref;
     }());
@@ -5788,7 +5788,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.2.0+55.sha-1de4031');
+    var VERSION = new i0.Version('7.2.0+56.sha-c3aa24c');
 
     /**
      * @license

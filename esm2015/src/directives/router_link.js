@@ -406,7 +406,7 @@ RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithH
         i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
         i0.ɵelementAttribute(elIndex, "target", i0.ɵbind(ctx.target));
-        i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), null, true);
+        i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), i0.ɵsanitizeUrl, true);
     } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
