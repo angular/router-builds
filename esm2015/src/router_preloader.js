@@ -182,7 +182,7 @@ RouterPreloader.ctorParameters = () => [
     { type: Injector },
     { type: PreloadingStrategy }
 ];
-RouterPreloader.ngInjectableDef = i0.defineInjectable({ token: RouterPreloader, factory: function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.inject(Router), i0.inject(NgModuleFactoryLoader), i0.inject(Compiler), i0.inject(Injector), i0.inject(PreloadingStrategy)); }, providedIn: null });
+/** @nocollapse */ RouterPreloader.ngInjectableDef = i0.defineInjectable({ token: RouterPreloader, factory: function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.inject(Router), i0.inject(NgModuleFactoryLoader), i0.inject(Compiler), i0.inject(Injector), i0.inject(PreloadingStrategy)); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{
