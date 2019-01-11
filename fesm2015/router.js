@@ -1,13 +1,13 @@
 /**
- * @license Angular v7.2.0+103.sha-885f1af
+ * @license Angular v7.2.0+104.sha-b78351c
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
-import { ɵisObservable, ɵisPromise, Attribute, ChangeDetectorRef, ComponentFactoryResolver, Directive, EventEmitter, Output, ViewContainerRef, InjectionToken, NgModuleFactory, Version, ContentChildren, ElementRef, Input, Renderer2, Compiler, Injectable, Injector, NgModuleFactoryLoader, NgModuleRef, Component, NgZone, isDevMode, ɵConsole, ɵdefineDirective, ɵdirectiveInject, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ɵNgOnChangesFeature, ɵsetClassMetadata, ɵinjectAttribute, defineInjectable, inject, HostListener, ɵlistener, HostBinding, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵdefineComponent, ɵelement, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, SkipSelf, Inject, NgModule, ɵdefineNgModule, defineInjector, ANALYZE_FOR_ENTRY_COMPONENTS, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
-import { concatAll, last, map, catchError, every, first, mergeMap, switchMap, filter, scan, startWith, take, concatMap, reduce, finalize, tap, mergeAll } from 'rxjs/operators';
-import { LocationStrategy, APP_BASE_HREF, HashLocationStrategy, LOCATION_INITIALIZED, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
+import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { ɵisObservable, ɵisPromise, EventEmitter, Directive, ViewContainerRef, ComponentFactoryResolver, Attribute, ChangeDetectorRef, Output, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, ɵsetClassMetadata, Component, ɵdefineComponent, ɵelement, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Renderer2, ElementRef, Input, HostListener, ɵlistener, HostBinding, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, ContentChildren, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, Injectable, NgModuleFactoryLoader, Compiler, Injector, defineInjectable, inject, ApplicationRef, Optional, SystemJsNgModuleLoader, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵdefineNgModule, defineInjector, Version } from '@angular/core';
+import { of, from, BehaviorSubject, EmptyError, Observable, combineLatest, defer, Subject, EMPTY } from 'rxjs';
+import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
@@ -7492,7 +7492,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.0+103.sha-885f1af');
+const VERSION = new Version('7.2.0+104.sha-b78351c');
 
 /**
  * @fileoverview added by tsickle
