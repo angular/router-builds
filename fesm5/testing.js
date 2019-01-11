@@ -1,14 +1,14 @@
 /**
- * @license Angular v7.2.0-rc.0+79.sha-d4b476f
+ * @license Angular v7.2.0-rc.0+82.sha-c18c46a
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
 
 import { __values, __decorate, __metadata } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
-import { MockLocationStrategy, SpyLocation } from '@angular/common/testing';
-import { Compiler, Injectable, Injector, NgModule, NgModuleFactoryLoader, Optional } from '@angular/core';
-import { ChildrenOutletContexts, NoPreloading, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTES, Router, RouterModule, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS, ɵflatten } from '@angular/router';
+import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
+import { Injectable, Compiler, NgModule, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
+import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
  * @license
