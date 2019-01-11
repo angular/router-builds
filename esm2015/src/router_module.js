@@ -210,8 +210,8 @@ RouterModule.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
     { type: Router, decorators: [{ type: Optional }] }
 ];
-RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule, bootstrap: [], declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], imports: [], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent] });
-RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.inject(ROUTER_FORROOT_GUARD, 8), i0.inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
+/** @nocollapse */ RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule, bootstrap: [], declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], imports: [], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent] });
+/** @nocollapse */ RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.inject(ROUTER_FORROOT_GUARD, 8), i0.inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
         args: [{
@@ -648,7 +648,7 @@ RouterInitializer.decorators = [
 RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
-RouterInitializer.ngInjectableDef = i0.defineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.inject(Injector)); }, providedIn: null });
+/** @nocollapse */ RouterInitializer.ngInjectableDef = i0.defineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.inject(Injector)); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{

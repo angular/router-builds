@@ -197,7 +197,7 @@ RouterLink.propDecorators = {
     preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
-RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵinjectAttribute('tabindex'), i0.ɵdirectiveInject(Renderer2), i0.ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLink.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵinjectAttribute('tabindex'), i0.ɵdirectiveInject(Renderer2), i0.ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
         i0.ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
     } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
@@ -401,13 +401,13 @@ RouterLinkWithHref.propDecorators = {
     preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
 };
-RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
         i0.ɵallocHostVars(2);
         i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
         i0.ɵelementAttribute(elIndex, "target", i0.ɵbind(ctx.target));
         i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), i0.ɵsanitizeUrl, true);
-    } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature] });
+    } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink]' }]

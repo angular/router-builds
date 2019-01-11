@@ -92,7 +92,7 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = () => [
     { type: Compiler }
 ];
-SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(Compiler)); }, providedIn: null });
+/** @nocollapse */ SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(Compiler)); }, providedIn: null });
 /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{
@@ -218,8 +218,8 @@ RouterTestingModule.decorators = [
                 ]
             },] },
 ];
-RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
-RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
+/** @nocollapse */ RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
+/** @nocollapse */ RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
         ROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
         { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {

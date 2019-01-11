@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0+126.sha-df292c2
+ * @license Angular v7.2.0+132.sha-0c6fa1d
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -98,7 +98,7 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = () => [
     { type: Compiler }
 ];
-SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
+/** @nocollapse */ SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{
@@ -211,8 +211,8 @@ RouterTestingModule.decorators = [
                 ]
             },] },
 ];
-RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
-RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
+/** @nocollapse */ RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule, bootstrap: [], declarations: [], imports: [], exports: [RouterModule] });
+/** @nocollapse */ RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
         { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
