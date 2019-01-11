@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0+104.sha-b78351c
+ * @license Angular v7.2.0+105.sha-9277142
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2379,7 +2379,7 @@ RouterOutlet.propDecorators = {
     activateEvents: [{ type: Output, args: ['activate',] }],
     deactivateEvents: [{ type: Output, args: ['deactivate',] }]
 };
-RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵdirectiveInject(ViewContainerRef), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: "outlet" });
+RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵdirectiveInject(ViewContainerRef), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
@@ -6675,7 +6675,7 @@ RouterLinkActive.propDecorators = {
     routerLinkActiveOptions: [{ type: Input }],
     routerLinkActive: [{ type: Input }]
 };
-RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { ɵregisterContentQuery(ɵquery(null, RouterLink, true), dirIndex); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { const instance = ɵload(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: "routerLinkActive", features: [ɵNgOnChangesFeature] });
+RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { ɵregisterContentQuery(ɵquery(null, RouterLink, true), dirIndex); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { const instance = ɵload(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵNgOnChangesFeature] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkActive, [{
         type: Directive,
         args: [{
@@ -7492,7 +7492,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.0+104.sha-b78351c');
+const VERSION = new Version('7.2.0+105.sha-9277142');
 
 /**
  * @fileoverview added by tsickle

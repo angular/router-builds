@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.0+104.sha-b78351c
+ * @license Angular v7.2.0+105.sha-9277142
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -1981,7 +1981,7 @@
             this.changeDetector.markForCheck();
             this.activateEvents.emit(this.activated.instance);
         };
-        RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵdirectiveInject(ChildrenOutletContexts), i0.ɵdirectiveInject(i0.ViewContainerRef), i0.ɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵinjectAttribute('name'), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: "outlet" });
+        RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵdirectiveInject(ChildrenOutletContexts), i0.ɵdirectiveInject(i0.ViewContainerRef), i0.ɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵinjectAttribute('name'), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
         return RouterOutlet;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
@@ -5141,7 +5141,7 @@
             return this.links.some(this.isLinkActive(this.router)) ||
                 this.linksWithHrefs.some(this.isLinkActive(this.router));
         };
-        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { i0.ɵregisterContentQuery(i0.ɵquery(null, RouterLink, true), dirIndex); i0.ɵregisterContentQuery(i0.ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = i0.ɵload(dirIndex); var _t; (i0.ɵqueryRefresh((_t = i0.ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (i0.ɵqueryRefresh((_t = i0.ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: "routerLinkActive", features: [i0.ɵNgOnChangesFeature] });
+        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { i0.ɵregisterContentQuery(i0.ɵquery(null, RouterLink, true), dirIndex); i0.ɵregisterContentQuery(i0.ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = i0.ɵload(dirIndex); var _t; (i0.ɵqueryRefresh((_t = i0.ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (i0.ɵqueryRefresh((_t = i0.ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵNgOnChangesFeature] });
         return RouterLinkActive;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkActive, [{
@@ -5788,7 +5788,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('7.2.0+104.sha-b78351c');
+    var VERSION = new i0.Version('7.2.0+105.sha-9277142');
 
     /**
      * @license

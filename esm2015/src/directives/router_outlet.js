@@ -192,7 +192,7 @@ RouterOutlet.propDecorators = {
     activateEvents: [{ type: Output, args: ['activate',] }],
     deactivateEvents: [{ type: Output, args: ['deactivate',] }]
 };
-RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵdirectiveInject(ChildrenOutletContexts), i0.ɵdirectiveInject(ViewContainerRef), i0.ɵdirectiveInject(ComponentFactoryResolver), i0.ɵinjectAttribute('name'), i0.ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: "outlet" });
+RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵdirectiveInject(ChildrenOutletContexts), i0.ɵdirectiveInject(ViewContainerRef), i0.ɵdirectiveInject(ComponentFactoryResolver), i0.ɵinjectAttribute('name'), i0.ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
