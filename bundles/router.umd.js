@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.1+19.sha-7642308
+ * @license Angular v7.2.1+20.sha-32737a6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -3940,8 +3940,10 @@
                         recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
                         // Update URL if in `eager` update mode
                         operators.tap(function (t) {
-                            if (_this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange) {
-                                _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                            if (_this.urlUpdateStrategy === 'eager') {
+                                if (!t.extras.skipLocationChange) {
+                                    _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                }
                                 _this.browserUrlTree = t.urlAfterRedirects;
                             }
                         }), 
@@ -4046,8 +4048,10 @@
                     _this.currentUrlTree = t.urlAfterRedirects;
                     _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, t.rawUrl);
                     _this.routerState = t.targetRouterState;
-                    if (_this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
-                        _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                    if (_this.urlUpdateStrategy === 'deferred') {
+                        if (!t.extras.skipLocationChange) {
+                            _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                        }
                         _this.browserUrlTree = t.urlAfterRedirects;
                     }
                 }), activateRoutes(_this.rootContexts, _this.routeReuseStrategy, function (evt) { return _this.triggerEvent(evt); }), operators.tap({ next: function () { completed = true; }, complete: function () { completed = true; } }), operators.finalize(function () {
@@ -5796,7 +5800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.2.1+19.sha-7642308');
+    var VERSION = new core.Version('7.2.1+20.sha-32737a6');
 
     /**
      * @license

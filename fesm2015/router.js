@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.1+19.sha-7642308
+ * @license Angular v7.2.1+20.sha-32737a6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5114,8 +5114,10 @@ class Router {
                     recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Update URL if in `eager` update mode
                     tap(t => {
-                        if (this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange) {
-                            this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                        if (this.urlUpdateStrategy === 'eager') {
+                            if (!t.extras.skipLocationChange) {
+                                this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                            }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
                     }), 
@@ -5231,8 +5233,10 @@ class Router {
                 this.currentUrlTree = t.urlAfterRedirects;
                 this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
                 ((/** @type {?} */ (this))).routerState = (/** @type {?} */ (t.targetRouterState));
-                if (this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
-                    this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                if (this.urlUpdateStrategy === 'deferred') {
+                    if (!t.extras.skipLocationChange) {
+                        this.setBrowserUrl(this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                    }
                     this.browserUrlTree = t.urlAfterRedirects;
                 }
             }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({ /**
@@ -7268,7 +7272,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.1+19.sha-7642308');
+const VERSION = new Version('7.2.1+20.sha-32737a6');
 
 /**
  * @fileoverview added by tsickle
