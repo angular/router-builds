@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.0+63.sha-ea1b5c1
+ * @license Angular v8.0.0-beta.0+65.sha-50df897
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4109,6 +4109,7 @@
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
+            this.browserUrlTree = this.parseUrl(this.location.path());
             this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
             this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
             this.transitions = new rxjs.BehaviorSubject({
@@ -4157,7 +4158,7 @@
                 var completed = false;
                 var errored = false;
                 return rxjs.of(t).pipe(operators.switchMap(function (t) {
-                    var urlTransition = !_this.navigated || t.extractedUrl.toString() !== _this.currentUrlTree.toString();
+                    var urlTransition = !_this.navigated || t.extractedUrl.toString() !== _this.browserUrlTree.toString();
                     var processCurrentUrl = (_this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                         _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                     if (processCurrentUrl) {
@@ -4183,8 +4184,14 @@
                         // Recognize
                         recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
                         // Update URL if in `eager` update mode
-                        operators.tap(function (t) { return _this.urlUpdateStrategy === 'eager' && !t.extras.skipLocationChange &&
-                            _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id); }), 
+                        operators.tap(function (t) {
+                            if (_this.urlUpdateStrategy === 'eager') {
+                                if (!t.extras.skipLocationChange) {
+                                    _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                }
+                                _this.browserUrlTree = t.urlAfterRedirects;
+                            }
+                        }), 
                         // Fire RoutesRecognized
                         operators.tap(function (t) {
                             var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
@@ -4286,8 +4293,11 @@
                     _this.currentUrlTree = t.urlAfterRedirects;
                     _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, t.rawUrl);
                     _this.routerState = t.targetRouterState;
-                    if (_this.urlUpdateStrategy === 'deferred' && !t.extras.skipLocationChange) {
-                        _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                    if (_this.urlUpdateStrategy === 'deferred') {
+                        if (!t.extras.skipLocationChange) {
+                            _this.setBrowserUrl(_this.rawUrlTree, !!t.extras.replaceUrl, t.id, t.extras.state);
+                        }
+                        _this.browserUrlTree = t.urlAfterRedirects;
                     }
                 }), activateRoutes(_this.rootContexts, _this.routeReuseStrategy, function (evt) { return _this.triggerEvent(evt); }), operators.tap({ next: function () { completed = true; }, complete: function () { completed = true; } }), operators.finalize(function () {
                     /* When the navigation stream finishes either through error or success, we set the
@@ -5788,7 +5798,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.0+63.sha-ea1b5c1');
+    var VERSION = new i0.Version('8.0.0-beta.0+65.sha-50df897');
 
     /**
      * @license
