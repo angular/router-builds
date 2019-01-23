@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.1+11.sha-03c8528
+ * @license Angular v8.0.0-beta.1+7.sha-030350f
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5795,7 +5795,7 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
- * You can tell the directive how to handle queryParams. Available options are:
+ * You can tell the directive to how to handle queryParams, available options are:
  *  - `'merge'`: merge the queryParams into the current queryParams
  *  - `'preserve'`: preserve the current queryParams
  *  - default/`''`: use the queryParams only
@@ -7272,7 +7272,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.1+11.sha-03c8528');
+const VERSION = new Version('8.0.0-beta.1+7.sha-030350f');
 
 /**
  * @fileoverview added by tsickle
