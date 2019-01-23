@@ -292,7 +292,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         } if (rf & 2) {
             i0.ɵelementAttribute(elIndex, "target", i0.ɵbind(ctx.target));
             i0.ɵelementProperty(elIndex, "href", i0.ɵbind(ctx.href), i0.ɵsanitizeUrl, true);
-        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
+        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵNgOnChangesFeature()] });
     return RouterLinkWithHref;
 }());
 export { RouterLinkWithHref };
