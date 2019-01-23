@@ -1,11 +1,11 @@
 /**
- * @license Angular v8.0.0-beta.1+11.sha-03c8528
+ * @license Angular v8.0.0-beta.1+7.sha-030350f
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, LOCATION_INITIALIZED, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ɵisObservable, ɵisPromise, ɵdefineDirective, ɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵinjectAttribute, ChangeDetectorRef, ɵsetClassMetadata, Directive, Attribute, Output, EventEmitter, ɵdefineComponent, ɵelement, Component, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, Renderer2, ElementRef, ɵlistener, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ContentChildren, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, Optional, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, ɵdefineDirective, ɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵinjectAttribute, ChangeDetectorRef, ɵsetClassMetadata, Directive, Attribute, Output, EventEmitter, ɵdefineComponent, ɵelement, Component, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, Renderer2, ElementRef, ɵlistener, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, HostBinding, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ContentChildren, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, Optional, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
 import { __extends, __values, __assign, __spread } from 'tslib';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
@@ -4674,7 +4674,7 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
- * You can tell the directive how to handle queryParams. Available options are:
+ * You can tell the directive to how to handle queryParams, available options are:
  *  - `'merge'`: merge the queryParams into the current queryParams
  *  - `'preserve'`: preserve the current queryParams
  *  - default/`''`: use the queryParams only
@@ -4908,7 +4908,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         } if (rf & 2) {
             ɵelementAttribute(elIndex, "target", ɵbind(ctx.target));
             ɵelementProperty(elIndex, "href", ɵbind(ctx.href), ɵsanitizeUrl, true);
-        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵNgOnChangesFeature()] });
+        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
     return RouterLinkWithHref;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
@@ -5078,7 +5078,7 @@ var RouterLinkActive = /** @class */ (function () {
         return this.links.some(this.isLinkActive(this.router)) ||
             this.linksWithHrefs.some(this.isLinkActive(this.router));
     };
-    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { ɵregisterContentQuery(ɵquery(null, RouterLink, true), dirIndex); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵload(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵNgOnChangesFeature()] });
+    RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { ɵregisterContentQuery(ɵquery(null, RouterLink, true), dirIndex); ɵregisterContentQuery(ɵquery(null, RouterLinkWithHref, true), dirIndex); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex, queryStartIndex) { var instance = ɵload(dirIndex); var _t; (ɵqueryRefresh((_t = ɵloadQueryList(queryStartIndex))) && (instance.links = _t)); (ɵqueryRefresh((_t = ɵloadQueryList((queryStartIndex + 1)))) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"] });
     return RouterLinkActive;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkActive, [{
@@ -5725,7 +5725,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.1+11.sha-03c8528');
+var VERSION = new Version('8.0.0-beta.1+7.sha-030350f');
 
 /**
  * @license
