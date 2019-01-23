@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.1+2.sha-d8f2318
+ * @license Angular v8.0.0-beta.1+11.sha-03c8528
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4502,7 +4502,7 @@
      * </a>
      * ```
      *
-     * You can tell the directive to how to handle queryParams, available options are:
+     * You can tell the directive how to handle queryParams. Available options are:
      *  - `'merge'`: merge the queryParams into the current queryParams
      *  - `'preserve'`: preserve the current queryParams
      *  - default/`''`: use the queryParams only
@@ -5800,7 +5800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.1+2.sha-d8f2318');
+    var VERSION = new core.Version('8.0.0-beta.1+11.sha-03c8528');
 
     /**
      * @license
