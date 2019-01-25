@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.2+15.sha-35f7ff0
+ * @license Angular v7.2.2+16.sha-a1b9995
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -5028,7 +5028,7 @@ class Router {
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
-        this.browserUrlTree = this.parseUrl(this.location.path());
+        this.browserUrlTree = this.currentUrlTree;
         this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
         this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         this.transitions = new BehaviorSubject({
@@ -7272,7 +7272,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.2+15.sha-35f7ff0');
+const VERSION = new Version('7.2.2+16.sha-a1b9995');
 
 /**
  * @fileoverview added by tsickle
