@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.1+28.sha-e2c98fb
+ * @license Angular v8.0.0-beta.1+29.sha-b2811e5
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3864,7 +3864,7 @@
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
-            this.browserUrlTree = this.parseUrl(this.location.path());
+            this.browserUrlTree = this.currentUrlTree;
             this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
             this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
             this.transitions = new rxjs.BehaviorSubject({
@@ -5800,7 +5800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.1+28.sha-e2c98fb');
+    var VERSION = new core.Version('8.0.0-beta.1+29.sha-b2811e5');
 
     /**
      * @license
