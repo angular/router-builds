@@ -1,12 +1,12 @@
 /**
- * @license Angular v8.0.0-beta.1+56.sha-fd8dbd5
+ * @license Angular v8.0.0-beta.1+68.sha-6e16338
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, LOCATION_INITIALIZED, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ɵisObservable, ɵisPromise, ɵdefineDirective, ɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵinjectAttribute, ChangeDetectorRef, ɵsetClassMetadata, Directive, Attribute, Output, EventEmitter, ɵdefineComponent, ɵelement, Component, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, Renderer2, ElementRef, ɵlistener, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ContentChildren, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, Optional, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
-import { __extends, __values, __assign, __spread } from 'tslib';
+import { ɵdefineComponent, ɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, Renderer2, ElementRef, ɵlistener, Directive, Attribute, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ChangeDetectorRef, ɵregisterContentQuery, ɵquery, ɵload, ɵqueryRefresh, ɵloadQueryList, ContentChildren, ViewContainerRef, ComponentFactoryResolver, Output, EventEmitter, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, Optional, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ɵsetComponentScope, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
+import { __extends, __assign, __values, __spread } from 'tslib';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -450,68 +450,26 @@ var Scroll = /** @class */ (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Store contextual information about a `RouterOutlet`
+ * This component is used internally within the router to be a placeholder when an empty
+ * router-outlet is needed. For example, with a config such as:
  *
- * @publicApi
- */
-var OutletContext = /** @class */ (function () {
-    function OutletContext() {
-        this.outlet = null;
-        this.route = null;
-        this.resolver = null;
-        this.children = new ChildrenOutletContexts();
-        this.attachRef = null;
-    }
-    return OutletContext;
-}());
-/**
- * Store contextual information about the children (= nested) `RouterOutlet`
+ * `{path: 'parent', outlet: 'nav', children: [...]}`
  *
- * @publicApi
+ * In order to render, there needs to be a component on this config, which will default
+ * to this `EmptyOutletComponent`.
  */
-var ChildrenOutletContexts = /** @class */ (function () {
-    function ChildrenOutletContexts() {
-        // contexts for child outlets, by name.
-        this.contexts = new Map();
+var EmptyOutletComponent = /** @class */ (function () {
+    function EmptyOutletComponent() {
     }
-    /** Called when a `RouterOutlet` directive is instantiated */
-    ChildrenOutletContexts.prototype.onChildOutletCreated = function (childName, outlet) {
-        var context = this.getOrCreateContext(childName);
-        context.outlet = outlet;
-        this.contexts.set(childName, context);
-    };
-    /**
-     * Called when a `RouterOutlet` directive is destroyed.
-     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
-     * re-created later.
-     */
-    ChildrenOutletContexts.prototype.onChildOutletDestroyed = function (childName) {
-        var context = this.getContext(childName);
-        if (context) {
-            context.outlet = null;
-        }
-    };
-    /**
-     * Called when the corresponding route is deactivated during navigation.
-     * Because the component get destroyed, all children outlet are destroyed.
-     */
-    ChildrenOutletContexts.prototype.onOutletDeactivated = function () {
-        var contexts = this.contexts;
-        this.contexts = new Map();
-        return contexts;
-    };
-    ChildrenOutletContexts.prototype.onOutletReAttached = function (contexts) { this.contexts = contexts; };
-    ChildrenOutletContexts.prototype.getOrCreateContext = function (childName) {
-        var context = this.getContext(childName);
-        if (!context) {
-            context = new OutletContext();
-            this.contexts.set(childName, context);
-        }
-        return context;
-    };
-    ChildrenOutletContexts.prototype.getContext = function (childName) { return this.contexts.get(childName) || null; };
-    return ChildrenOutletContexts;
+    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [["ng-component"]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+            ɵelement(0, "router-outlet");
+        } }, encapsulation: 2 });
+    return EmptyOutletComponent;
 }());
+/*@__PURE__*/ ɵsetClassMetadata(EmptyOutletComponent, [{
+        type: Component,
+        args: [{ template: "<router-outlet></router-outlet>" }]
+    }], null, null);
 
 /**
  * @license
@@ -598,6 +556,104 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
         }
     }
     return { consumed: segments.slice(0, parts.length), posParams: posParams };
+}
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var LoadedRouterConfig = /** @class */ (function () {
+    function LoadedRouterConfig(routes, module) {
+        this.routes = routes;
+        this.module = module;
+    }
+    return LoadedRouterConfig;
+}());
+function validateConfig(config, parentPath) {
+    if (parentPath === void 0) { parentPath = ''; }
+    // forEach doesn't iterate undefined values
+    for (var i = 0; i < config.length; i++) {
+        var route = config[i];
+        var fullPath = getFullPath(parentPath, route);
+        validateNode(route, fullPath);
+    }
+}
+function validateNode(route, fullPath) {
+    if (!route) {
+        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+    }
+    if (Array.isArray(route)) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
+    }
+    if (!route.component && !route.children && !route.loadChildren &&
+        (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
+    }
+    if (route.redirectTo && route.children) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
+    }
+    if (route.redirectTo && route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
+    }
+    if (route.children && route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
+    }
+    if (route.redirectTo && route.component) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
+    }
+    if (route.path && route.matcher) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
+    }
+    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
+    }
+    if (route.path === void 0 && route.matcher === void 0) {
+        throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
+    }
+    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+        throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
+    }
+    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+        var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+        throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+    }
+    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+    }
+    if (route.children) {
+        validateConfig(route.children, fullPath);
+    }
+}
+function getFullPath(parentPath, currentRoute) {
+    if (!currentRoute) {
+        return parentPath;
+    }
+    if (!parentPath && !currentRoute.path) {
+        return '';
+    }
+    else if (parentPath && !currentRoute.path) {
+        return parentPath + "/";
+    }
+    else if (!parentPath && currentRoute.path) {
+        return currentRoute.path;
+    }
+    else {
+        return parentPath + "/" + currentRoute.path;
+    }
+}
+/**
+ * Makes a copy of the config and adds any default required properties.
+ */
+function standardizeConfig(r) {
+    var children = r.children && r.children.map(standardizeConfig);
+    var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
+    if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
+        c.component = EmptyOutletComponent;
+    }
+    return c;
 }
 
 /**
@@ -1766,318 +1822,6 @@ function equalParamsAndUrlSegments(a, b) {
     var parentsMismatch = !a.parent !== !b.parent;
     return equalUrlParams && !parentsMismatch &&
         (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
-}
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * @description
- *
- * Acts as a placeholder that Angular dynamically fills based on the current router state.
- *
- * ```
- * <router-outlet></router-outlet>
- * <router-outlet name='left'></router-outlet>
- * <router-outlet name='right'></router-outlet>
- * ```
- *
- * A router outlet will emit an activate event any time a new component is being instantiated,
- * and a deactivate event when it is being destroyed.
- *
- * ```
- * <router-outlet
- *   (activate)='onActivate($event)'
- *   (deactivate)='onDeactivate($event)'></router-outlet>
- * ```
- * @ngModule RouterModule
- *
- * @publicApi
- */
-var RouterOutlet = /** @class */ (function () {
-    function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {
-        this.parentContexts = parentContexts;
-        this.location = location;
-        this.resolver = resolver;
-        this.changeDetector = changeDetector;
-        this.activated = null;
-        this._activatedRoute = null;
-        this.activateEvents = new EventEmitter();
-        this.deactivateEvents = new EventEmitter();
-        this.name = name || PRIMARY_OUTLET;
-        parentContexts.onChildOutletCreated(this.name, this);
-    }
-    RouterOutlet.prototype.ngOnDestroy = function () { this.parentContexts.onChildOutletDestroyed(this.name); };
-    RouterOutlet.prototype.ngOnInit = function () {
-        if (!this.activated) {
-            // If the outlet was not instantiated at the time the route got activated we need to populate
-            // the outlet when it is initialized (ie inside a NgIf)
-            var context = this.parentContexts.getContext(this.name);
-            if (context && context.route) {
-                if (context.attachRef) {
-                    // `attachRef` is populated when there is an existing component to mount
-                    this.attach(context.attachRef, context.route);
-                }
-                else {
-                    // otherwise the component defined in the configuration is created
-                    this.activateWith(context.route, context.resolver || null);
-                }
-            }
-        }
-    };
-    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
-        get: function () { return !!this.activated; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "component", {
-        get: function () {
-            if (!this.activated)
-                throw new Error('Outlet is not activated');
-            return this.activated.instance;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
-        get: function () {
-            if (!this.activated)
-                throw new Error('Outlet is not activated');
-            return this._activatedRoute;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "activatedRouteData", {
-        get: function () {
-            if (this._activatedRoute) {
-                return this._activatedRoute.snapshot.data;
-            }
-            return {};
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Called when the `RouteReuseStrategy` instructs to detach the subtree
-     */
-    RouterOutlet.prototype.detach = function () {
-        if (!this.activated)
-            throw new Error('Outlet is not activated');
-        this.location.detach();
-        var cmp = this.activated;
-        this.activated = null;
-        this._activatedRoute = null;
-        return cmp;
-    };
-    /**
-     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
-     */
-    RouterOutlet.prototype.attach = function (ref, activatedRoute) {
-        this.activated = ref;
-        this._activatedRoute = activatedRoute;
-        this.location.insert(ref.hostView);
-    };
-    RouterOutlet.prototype.deactivate = function () {
-        if (this.activated) {
-            var c = this.component;
-            this.activated.destroy();
-            this.activated = null;
-            this._activatedRoute = null;
-            this.deactivateEvents.emit(c);
-        }
-    };
-    RouterOutlet.prototype.activateWith = function (activatedRoute, resolver) {
-        if (this.isActivated) {
-            throw new Error('Cannot activate an already activated outlet');
-        }
-        this._activatedRoute = activatedRoute;
-        var snapshot = activatedRoute._futureSnapshot;
-        var component = snapshot.routeConfig.component;
-        resolver = resolver || this.resolver;
-        var factory = resolver.resolveComponentFactory(component);
-        var childContexts = this.parentContexts.getOrCreateContext(this.name).children;
-        var injector = new OutletInjector(activatedRoute, childContexts, this.location.injector);
-        this.activated = this.location.createComponent(factory, this.location.length, injector);
-        // Calling `markForCheck` to make sure we will run the change detection when the
-        // `RouterOutlet` is inside a `ChangeDetectionStrategy.OnPush` component.
-        this.changeDetector.markForCheck();
-        this.activateEvents.emit(this.activated.instance);
-    };
-    RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵdirectiveInject(ViewContainerRef), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
-    return RouterOutlet;
-}());
-/*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
-        type: Directive,
-        args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], function () { return [{
-        type: ChildrenOutletContexts
-    }, {
-        type: ViewContainerRef
-    }, {
-        type: ComponentFactoryResolver
-    }, {
-        type: undefined,
-        decorators: [{
-                type: Attribute,
-                args: ['name']
-            }]
-    }, {
-        type: ChangeDetectorRef
-    }]; }, { activateEvents: [{
-            type: Output,
-            args: ['activate']
-        }], deactivateEvents: [{
-            type: Output,
-            args: ['deactivate']
-        }] });
-var OutletInjector = /** @class */ (function () {
-    function OutletInjector(route, childContexts, parent) {
-        this.route = route;
-        this.childContexts = childContexts;
-        this.parent = parent;
-    }
-    OutletInjector.prototype.get = function (token, notFoundValue) {
-        if (token === ActivatedRoute) {
-            return this.route;
-        }
-        if (token === ChildrenOutletContexts) {
-            return this.childContexts;
-        }
-        return this.parent.get(token, notFoundValue);
-    };
-    return OutletInjector;
-}());
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * This component is used internally within the router to be a placeholder when an empty
- * router-outlet is needed. For example, with a config such as:
- *
- * `{path: 'parent', outlet: 'nav', children: [...]}`
- *
- * In order to render, there needs to be a component on this config, which will default
- * to this `EmptyOutletComponent`.
- */
-var EmptyOutletComponent = /** @class */ (function () {
-    function EmptyOutletComponent() {
-    }
-    EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [["ng-component"]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
-            ɵelement(0, "router-outlet");
-        } }, directives: [RouterOutlet], encapsulation: 2 });
-    return EmptyOutletComponent;
-}());
-/*@__PURE__*/ ɵsetClassMetadata(EmptyOutletComponent, [{
-        type: Component,
-        args: [{ template: "<router-outlet></router-outlet>" }]
-    }], null, null);
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var LoadedRouterConfig = /** @class */ (function () {
-    function LoadedRouterConfig(routes, module) {
-        this.routes = routes;
-        this.module = module;
-    }
-    return LoadedRouterConfig;
-}());
-function validateConfig(config, parentPath) {
-    if (parentPath === void 0) { parentPath = ''; }
-    // forEach doesn't iterate undefined values
-    for (var i = 0; i < config.length; i++) {
-        var route = config[i];
-        var fullPath = getFullPath(parentPath, route);
-        validateNode(route, fullPath);
-    }
-}
-function validateNode(route, fullPath) {
-    if (!route) {
-        throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
-    }
-    if (Array.isArray(route)) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
-    }
-    if (!route.component && !route.children && !route.loadChildren &&
-        (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
-    }
-    if (route.redirectTo && route.children) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
-    }
-    if (route.redirectTo && route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
-    }
-    if (route.children && route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
-    }
-    if (route.redirectTo && route.component) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
-    }
-    if (route.path && route.matcher) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-        throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-        throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-        throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
-        throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
-    }
-    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
-    }
-    if (route.children) {
-        validateConfig(route.children, fullPath);
-    }
-}
-function getFullPath(parentPath, currentRoute) {
-    if (!currentRoute) {
-        return parentPath;
-    }
-    if (!parentPath && !currentRoute.path) {
-        return '';
-    }
-    else if (parentPath && !currentRoute.path) {
-        return parentPath + "/";
-    }
-    else if (!parentPath && currentRoute.path) {
-        return currentRoute.path;
-    }
-    else {
-        return parentPath + "/" + currentRoute.path;
-    }
-}
-/**
- * Makes a copy of the config and adds any default required properties.
- */
-function standardizeConfig(r) {
-    var children = r.children && r.children.map(standardizeConfig);
-    var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
-    if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-        c.component = EmptyOutletComponent;
-    }
-    return c;
 }
 
 /**
@@ -5108,6 +4852,262 @@ var RouterLinkActive = /** @class */ (function () {
         }] });
 
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Store contextual information about a `RouterOutlet`
+ *
+ * @publicApi
+ */
+var OutletContext = /** @class */ (function () {
+    function OutletContext() {
+        this.outlet = null;
+        this.route = null;
+        this.resolver = null;
+        this.children = new ChildrenOutletContexts();
+        this.attachRef = null;
+    }
+    return OutletContext;
+}());
+/**
+ * Store contextual information about the children (= nested) `RouterOutlet`
+ *
+ * @publicApi
+ */
+var ChildrenOutletContexts = /** @class */ (function () {
+    function ChildrenOutletContexts() {
+        // contexts for child outlets, by name.
+        this.contexts = new Map();
+    }
+    /** Called when a `RouterOutlet` directive is instantiated */
+    ChildrenOutletContexts.prototype.onChildOutletCreated = function (childName, outlet) {
+        var context = this.getOrCreateContext(childName);
+        context.outlet = outlet;
+        this.contexts.set(childName, context);
+    };
+    /**
+     * Called when a `RouterOutlet` directive is destroyed.
+     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
+     * re-created later.
+     */
+    ChildrenOutletContexts.prototype.onChildOutletDestroyed = function (childName) {
+        var context = this.getContext(childName);
+        if (context) {
+            context.outlet = null;
+        }
+    };
+    /**
+     * Called when the corresponding route is deactivated during navigation.
+     * Because the component get destroyed, all children outlet are destroyed.
+     */
+    ChildrenOutletContexts.prototype.onOutletDeactivated = function () {
+        var contexts = this.contexts;
+        this.contexts = new Map();
+        return contexts;
+    };
+    ChildrenOutletContexts.prototype.onOutletReAttached = function (contexts) { this.contexts = contexts; };
+    ChildrenOutletContexts.prototype.getOrCreateContext = function (childName) {
+        var context = this.getContext(childName);
+        if (!context) {
+            context = new OutletContext();
+            this.contexts.set(childName, context);
+        }
+        return context;
+    };
+    ChildrenOutletContexts.prototype.getContext = function (childName) { return this.contexts.get(childName) || null; };
+    return ChildrenOutletContexts;
+}());
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @description
+ *
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
+ *
+ * ```
+ * <router-outlet></router-outlet>
+ * <router-outlet name='left'></router-outlet>
+ * <router-outlet name='right'></router-outlet>
+ * ```
+ *
+ * A router outlet will emit an activate event any time a new component is being instantiated,
+ * and a deactivate event when it is being destroyed.
+ *
+ * ```
+ * <router-outlet
+ *   (activate)='onActivate($event)'
+ *   (deactivate)='onDeactivate($event)'></router-outlet>
+ * ```
+ * @ngModule RouterModule
+ *
+ * @publicApi
+ */
+var RouterOutlet = /** @class */ (function () {
+    function RouterOutlet(parentContexts, location, resolver, name, changeDetector) {
+        this.parentContexts = parentContexts;
+        this.location = location;
+        this.resolver = resolver;
+        this.changeDetector = changeDetector;
+        this.activated = null;
+        this._activatedRoute = null;
+        this.activateEvents = new EventEmitter();
+        this.deactivateEvents = new EventEmitter();
+        this.name = name || PRIMARY_OUTLET;
+        parentContexts.onChildOutletCreated(this.name, this);
+    }
+    RouterOutlet.prototype.ngOnDestroy = function () { this.parentContexts.onChildOutletDestroyed(this.name); };
+    RouterOutlet.prototype.ngOnInit = function () {
+        if (!this.activated) {
+            // If the outlet was not instantiated at the time the route got activated we need to populate
+            // the outlet when it is initialized (ie inside a NgIf)
+            var context = this.parentContexts.getContext(this.name);
+            if (context && context.route) {
+                if (context.attachRef) {
+                    // `attachRef` is populated when there is an existing component to mount
+                    this.attach(context.attachRef, context.route);
+                }
+                else {
+                    // otherwise the component defined in the configuration is created
+                    this.activateWith(context.route, context.resolver || null);
+                }
+            }
+        }
+    };
+    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+        get: function () { return !!this.activated; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "component", {
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this.activated.instance;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this._activatedRoute;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRouteData", {
+        get: function () {
+            if (this._activatedRoute) {
+                return this._activatedRoute.snapshot.data;
+            }
+            return {};
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree
+     */
+    RouterOutlet.prototype.detach = function () {
+        if (!this.activated)
+            throw new Error('Outlet is not activated');
+        this.location.detach();
+        var cmp = this.activated;
+        this.activated = null;
+        this._activatedRoute = null;
+        return cmp;
+    };
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
+     */
+    RouterOutlet.prototype.attach = function (ref, activatedRoute) {
+        this.activated = ref;
+        this._activatedRoute = activatedRoute;
+        this.location.insert(ref.hostView);
+    };
+    RouterOutlet.prototype.deactivate = function () {
+        if (this.activated) {
+            var c = this.component;
+            this.activated.destroy();
+            this.activated = null;
+            this._activatedRoute = null;
+            this.deactivateEvents.emit(c);
+        }
+    };
+    RouterOutlet.prototype.activateWith = function (activatedRoute, resolver) {
+        if (this.isActivated) {
+            throw new Error('Cannot activate an already activated outlet');
+        }
+        this._activatedRoute = activatedRoute;
+        var snapshot = activatedRoute._futureSnapshot;
+        var component = snapshot.routeConfig.component;
+        resolver = resolver || this.resolver;
+        var factory = resolver.resolveComponentFactory(component);
+        var childContexts = this.parentContexts.getOrCreateContext(this.name).children;
+        var injector = new OutletInjector(activatedRoute, childContexts, this.location.injector);
+        this.activated = this.location.createComponent(factory, this.location.length, injector);
+        // Calling `markForCheck` to make sure we will run the change detection when the
+        // `RouterOutlet` is inside a `ChangeDetectionStrategy.OnPush` component.
+        this.changeDetector.markForCheck();
+        this.activateEvents.emit(this.activated.instance);
+    };
+    RouterOutlet.ngDirectiveDef = ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵdirectiveInject(ChildrenOutletContexts), ɵdirectiveInject(ViewContainerRef), ɵdirectiveInject(ComponentFactoryResolver), ɵinjectAttribute('name'), ɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    return RouterOutlet;
+}());
+/*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
+        type: Directive,
+        args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
+    }], function () { return [{
+        type: ChildrenOutletContexts
+    }, {
+        type: ViewContainerRef
+    }, {
+        type: ComponentFactoryResolver
+    }, {
+        type: undefined,
+        decorators: [{
+                type: Attribute,
+                args: ['name']
+            }]
+    }, {
+        type: ChangeDetectorRef
+    }]; }, { activateEvents: [{
+            type: Output,
+            args: ['activate']
+        }], deactivateEvents: [{
+            type: Output,
+            args: ['deactivate']
+        }] });
+var OutletInjector = /** @class */ (function () {
+    function OutletInjector(route, childContexts, parent) {
+        this.route = route;
+        this.childContexts = childContexts;
+        this.parent = parent;
+    }
+    OutletInjector.prototype.get = function (token, notFoundValue) {
+        if (token === ActivatedRoute) {
+            return this.route;
+        }
+        if (token === ChildrenOutletContexts) {
+            return this.childContexts;
+        }
+        return this.parent.get(token, notFoundValue);
+    };
+    return OutletInjector;
+}());
+
+/**
  * @description
  *
  * Provides a preloading strategy.
@@ -5518,6 +5518,7 @@ var RouterModule = /** @class */ (function () {
                 type: Optional
             }]
     }]; }, null);
+ɵsetComponentScope(EmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], []);
 function createRouterScroller(router, viewportScroller, config) {
     if (config.scrollOffset) {
         viewportScroller.setOffset(config.scrollOffset);
@@ -5725,7 +5726,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.1+56.sha-fd8dbd5');
+var VERSION = new Version('8.0.0-beta.1+68.sha-6e16338');
 
 /**
  * @license
