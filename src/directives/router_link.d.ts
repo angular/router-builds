@@ -1,4 +1,3 @@
-import * as i0 from '@angular/core';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -12,6 +11,7 @@ import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
 import { UrlTree } from '../url_tree';
+import * as i0 from "@angular/core";
 /**
  * @description
  *
@@ -130,7 +130,7 @@ export declare class RouterLink {
     preserveQueryParams: boolean;
     onClick(): boolean;
     readonly urlTree: UrlTree;
-    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLink, ':not(a)[routerLink]', never, {'queryParams': 'queryParams', 'fragment': 'fragment', 'queryParamsHandling': 'queryParamsHandling', 'preserveFragment': 'preserveFragment', 'skipLocationChange': 'skipLocationChange', 'replaceUrl': 'replaceUrl', 'state': 'state', 'routerLink': 'routerLink', 'preserveQueryParams': 'preserveQueryParams'}, {}, never>;
+    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLink, ":not(a)[routerLink]", never, { 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }
 /**
  * @description
@@ -171,5 +171,5 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
     readonly urlTree: UrlTree;
-    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLinkWithHref, 'a[routerLink]', never, {'target': 'target', 'queryParams': 'queryParams', 'fragment': 'fragment', 'queryParamsHandling': 'queryParamsHandling', 'preserveFragment': 'preserveFragment', 'skipLocationChange': 'skipLocationChange', 'replaceUrl': 'replaceUrl', 'state': 'state', 'routerLink': 'routerLink', 'preserveQueryParams': 'preserveQueryParams'}, {}, never>;
+    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink]", never, { 'target': "target", 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }

@@ -1,4 +1,3 @@
-import * as i0 from '@angular/core';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -9,6 +8,7 @@ import * as i0 from '@angular/core';
 import { AfterContentInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
+import * as i0 from "@angular/core";
 /**
  *
  * @description
@@ -87,5 +87,5 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private update;
     private isLinkActive;
     private hasActiveLinks;
-    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLinkActive, '[routerLinkActive]', ['routerLinkActive'], {'routerLinkActiveOptions': 'routerLinkActiveOptions', 'routerLinkActive': 'routerLinkActive'}, {}, ['links', 'linksWithHrefs']>;
+    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { 'routerLinkActiveOptions': "routerLinkActiveOptions", 'routerLinkActive': "routerLinkActive" }, {}, ["links", "linksWithHrefs"]>;
 }

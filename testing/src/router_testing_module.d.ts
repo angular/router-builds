@@ -1,5 +1,3 @@
-import * as i0 from '@angular/core';
-import * as i1 from '@angular/router';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -10,6 +8,8 @@ import * as i1 from '@angular/router';
 import { Location } from '@angular/common';
 import { Compiler, Injector, ModuleWithProviders, NgModuleFactory, NgModuleFactoryLoader } from '@angular/core';
 import { ChildrenOutletContexts, ExtraOptions, Route, Router, Routes, UrlHandlingStrategy, UrlSerializer } from '@angular/router';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/router";
 /**
  * @description
  *

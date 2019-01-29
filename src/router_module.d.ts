@@ -1,8 +1,3 @@
-import * as i0 from '@angular/core';
-import * as i1 from './directives/router_outlet';
-import * as i2 from './directives/router_link';
-import * as i3 from './directives/router_link_active';
-import * as i4 from './components/empty_outlet';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -20,6 +15,11 @@ import { RouterScroller } from './router_scroller';
 import { ActivatedRoute } from './router_state';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
+import * as i0 from "@angular/core";
+import * as i1 from "./directives/router_outlet";
+import * as i2 from "./directives/router_link";
+import * as i3 from "./directives/router_link_active";
+import * as i4 from "./components/empty_outlet";
 /**
  * @description
  *

@@ -1,4 +1,3 @@
-import * as i0 from '@angular/core';
 /**
 *@license
 *Copyright Google Inc. All Rights Reserved.
@@ -10,6 +9,7 @@ import { Compiler, Injector, NgModuleFactoryLoader, OnDestroy } from '@angular/c
 import { Observable } from 'rxjs';
 import { Route } from './config';
 import { Router } from './router';
+import * as i0 from "@angular/core";
 /**
  * @description
  *

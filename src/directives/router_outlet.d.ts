@@ -1,4 +1,3 @@
-import * as i0 from '@angular/core';
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -10,6 +9,7 @@ import { ChangeDetectorRef, ComponentFactoryResolver, ComponentRef, EventEmitter
 import { Data } from '../config';
 import { ChildrenOutletContexts } from '../router_outlet_context';
 import { ActivatedRoute } from '../router_state';
+import * as i0 from "@angular/core";
 /**
  * @description
  *
@@ -60,5 +60,5 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
-    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterOutlet, 'router-outlet', ['outlet'], {}, {'activateEvents': 'activate', 'deactivateEvents': 'deactivate'}, never>;
+    static ngDirectiveDef: i0.ɵDirectiveDefWithMeta<RouterOutlet, "router-outlet", ["outlet"], {}, { 'activateEvents': "activate", 'deactivateEvents': "deactivate" }, never>;
 }
