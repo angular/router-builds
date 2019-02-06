@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.4
+ * @license Angular v7.2.4+1.sha-d491a20
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5909,7 +5909,7 @@ class RouterLink {
     }
 }
 RouterLink.decorators = [
-    { type: Directive, args: [{ selector: ':not(a)[routerLink]' },] }
+    { type: Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
 ];
 /** @nocollapse */
 RouterLink.ctorParameters = () => [
@@ -6035,7 +6035,7 @@ class RouterLinkWithHref {
     }
 }
 RouterLinkWithHref.decorators = [
-    { type: Directive, args: [{ selector: 'a[routerLink]' },] }
+    { type: Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
 ];
 /** @nocollapse */
 RouterLinkWithHref.ctorParameters = () => [
@@ -7272,7 +7272,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.4');
+const VERSION = new Version('7.2.4+1.sha-d491a20');
 
 /**
  * @fileoverview added by tsickle
