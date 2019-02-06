@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.2+61.sha-5a6f0d0
+ * @license Angular v8.0.0-beta.3+1.sha-ed0cf7e
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4522,14 +4522,14 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLink.ngDirectiveDef = ɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵinjectAttribute('tabindex'), ɵdirectiveInject(Renderer2), ɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
         } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
     return RouterLink;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterLink, [{
         type: Directive,
-        args: [{ selector: ':not(a)[routerLink]' }]
+        args: [{ selector: ':not(a):not(area)[routerLink]' }]
     }], function () { return [{
         type: Router
     }, {
@@ -4646,7 +4646,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLinkWithHref.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵdirectiveInject(Router), ɵdirectiveInject(ActivatedRoute), ɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵallocHostVars(2);
             ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
         } if (rf & 2) {
@@ -4657,7 +4657,7 @@ var RouterLinkWithHref = /** @class */ (function () {
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
-        args: [{ selector: 'a[routerLink]' }]
+        args: [{ selector: 'a[routerLink],area[routerLink]' }]
     }], function () { return [{
         type: Router
     }, {
@@ -5726,7 +5726,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.2+61.sha-5a6f0d0');
+var VERSION = new Version('8.0.0-beta.3+1.sha-ed0cf7e');
 
 /**
  * @license
