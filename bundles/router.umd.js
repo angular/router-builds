@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.2+61.sha-5a6f0d0
+ * @license Angular v8.0.0-beta.3+1.sha-ed0cf7e
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4651,7 +4651,7 @@
             __metadata("design:returntype", Boolean)
         ], RouterLink.prototype, "onClick", null);
         RouterLink = __decorate([
-            core.Directive({ selector: ':not(a)[routerLink]' }),
+            core.Directive({ selector: ':not(a):not(area)[routerLink]' }),
             __param(2, core.Attribute('tabindex')),
             __metadata("design:paramtypes", [Router, ActivatedRoute, String, core.Renderer2, core.ElementRef])
         ], RouterLink);
@@ -4790,7 +4790,7 @@
             __metadata("design:returntype", Boolean)
         ], RouterLinkWithHref.prototype, "onClick", null);
         RouterLinkWithHref = __decorate([
-            core.Directive({ selector: 'a[routerLink]' }),
+            core.Directive({ selector: 'a[routerLink],area[routerLink]' }),
             __metadata("design:paramtypes", [Router, ActivatedRoute,
                 common.LocationStrategy])
         ], RouterLinkWithHref);
@@ -5800,7 +5800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.2+61.sha-5a6f0d0');
+    var VERSION = new core.Version('8.0.0-beta.3+1.sha-ed0cf7e');
 
     /**
      * @license
