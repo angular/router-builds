@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.4+28.sha-da81c9c
+ * @license Angular v7.2.4+29.sha-1e58a21
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4081,9 +4081,14 @@
                     /* This error type is issued during Redirect, and is handled as a cancellation
                      * rather than an error. */
                     if (isNavigationCancelingError(e)) {
-                        _this.navigated = true;
                         var redirecting = isUrlTree(e.url);
                         if (!redirecting) {
+                            // Set property only if we're not redirecting. If we landed on a page and
+                            // redirect to `/` route, the new navigation is going to see the `/` isn't
+                            // a change from the default currentUrlTree and won't navigate. This is
+                            // only applicable with initial navigation, so setting `navigated` only when
+                            // not redirecting resolves this scenario.
+                            _this.navigated = true;
                             _this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
                         }
                         var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), e.message);
@@ -5800,7 +5805,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.2.4+28.sha-da81c9c');
+    var VERSION = new core.Version('7.2.4+29.sha-1e58a21');
 
     /**
      * @license
