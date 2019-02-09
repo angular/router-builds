@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AfterContentInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 import * as i0 from "@angular/core";
@@ -70,7 +70,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private router;
     private element;
     private renderer;
-    private cdr;
+    private link?;
+    private linkWithHref?;
     links: QueryList<RouterLink>;
     linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
@@ -79,7 +80,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     routerLinkActiveOptions: {
         exact: boolean;
     };
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef);
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     ngAfterContentInit(): void;
     routerLinkActive: string[] | string;
     ngOnChanges(changes: SimpleChanges): void;

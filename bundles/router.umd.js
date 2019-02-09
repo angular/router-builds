@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.3+68.sha-7115e7c
+ * @license Angular v8.0.0-beta.3+71.sha-81329c8
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4840,12 +4840,13 @@
      * @publicApi
      */
     var RouterLinkActive = /** @class */ (function () {
-        function RouterLinkActive(router, element, renderer, cdr) {
+        function RouterLinkActive(router, element, renderer, link, linkWithHref) {
             var _this = this;
             this.router = router;
             this.element = element;
             this.renderer = renderer;
-            this.cdr = cdr;
+            this.link = link;
+            this.linkWithHref = linkWithHref;
             this.classes = [];
             this.isActive = false;
             this.routerLinkActiveOptions = { exact: false };
@@ -4897,10 +4898,12 @@
             };
         };
         RouterLinkActive.prototype.hasActiveLinks = function () {
-            return this.links.some(this.isLinkActive(this.router)) ||
-                this.linksWithHrefs.some(this.isLinkActive(this.router));
+            var isActiveCheckFn = this.isLinkActive(this.router);
+            return this.link && isActiveCheckFn(this.link) ||
+                this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
+                this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
-        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { i0.ɵcontentQuery(dirIndex, RouterLink, true); i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex) { var instance = i0.ɵload(dirIndex); var _t; (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (instance.links = _t)); (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵNgOnChangesFeature()] });
+        RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(RouterLink, 8), i0.ɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(dirIndex) { i0.ɵcontentQuery(dirIndex, RouterLink, true); i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true); }, contentQueriesRefresh: function RouterLinkActive_ContentQueriesRefresh(dirIndex) { var instance = i0.ɵload(dirIndex); var _t; (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (instance.links = _t)); (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (instance.linksWithHrefs = _t)); }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵNgOnChangesFeature()] });
         return RouterLinkActive;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkActive, [{
@@ -4916,7 +4919,15 @@
         }, {
             type: i0.Renderer2
         }, {
-            type: i0.ChangeDetectorRef
+            type: RouterLink,
+            decorators: [{
+                    type: i0.Optional
+                }]
+        }, {
+            type: RouterLinkWithHref,
+            decorators: [{
+                    type: i0.Optional
+                }]
         }]; }, { links: [{
                 type: i0.ContentChildren,
                 args: [RouterLink, { descendants: true }]
@@ -5804,7 +5815,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.3+68.sha-7115e7c');
+    var VERSION = new i0.Version('8.0.0-beta.3+71.sha-81329c8');
 
     /**
      * @license
