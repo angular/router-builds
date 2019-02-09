@@ -1,12 +1,12 @@
 /**
- * @license Angular v8.0.0-beta.3+63.sha-f7591f1
+ * @license Angular v8.0.0-beta.3+71.sha-81329c8
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { __extends, __decorate, __assign, __values, __spread, __metadata, __param } from 'tslib';
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, Input, HostListener, Directive, Attribute, Renderer2, ElementRef, HostBinding, ContentChildren, QueryList, ChangeDetectorRef, Output, ViewContainerRef, ComponentFactoryResolver, EventEmitter, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, Input, HostListener, Directive, Attribute, Renderer2, ElementRef, HostBinding, ContentChildren, QueryList, Optional, Output, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, EventEmitter, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -4782,12 +4782,13 @@ function attrBoolValue(s) {
  * @publicApi
  */
 var RouterLinkActive = /** @class */ (function () {
-    function RouterLinkActive(router, element, renderer, cdr) {
+    function RouterLinkActive(router, element, renderer, link, linkWithHref) {
         var _this = this;
         this.router = router;
         this.element = element;
         this.renderer = renderer;
-        this.cdr = cdr;
+        this.link = link;
+        this.linkWithHref = linkWithHref;
         this.classes = [];
         this.isActive = false;
         this.routerLinkActiveOptions = { exact: false };
@@ -4839,8 +4840,10 @@ var RouterLinkActive = /** @class */ (function () {
         };
     };
     RouterLinkActive.prototype.hasActiveLinks = function () {
-        return this.links.some(this.isLinkActive(this.router)) ||
-            this.linksWithHrefs.some(this.isLinkActive(this.router));
+        var isActiveCheckFn = this.isLinkActive(this.router);
+        return this.link && isActiveCheckFn(this.link) ||
+            this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
+            this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     };
     __decorate([
         ContentChildren(RouterLink, { descendants: true }),
@@ -4864,8 +4867,11 @@ var RouterLinkActive = /** @class */ (function () {
             selector: '[routerLinkActive]',
             exportAs: 'routerLinkActive',
         }),
+        __param(3, Optional()),
+        __param(4, Optional()),
         __metadata("design:paramtypes", [Router, ElementRef, Renderer2,
-            ChangeDetectorRef])
+            RouterLink,
+            RouterLinkWithHref])
     ], RouterLinkActive);
     return RouterLinkActive;
 }());
@@ -5717,7 +5723,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.3+63.sha-f7591f1');
+var VERSION = new Version('8.0.0-beta.3+71.sha-81329c8');
 
 /**
  * @license
