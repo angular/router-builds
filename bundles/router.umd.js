@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.3+68.sha-7115e7c
+ * @license Angular v8.0.0-beta.3+89.sha-872a365
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4870,12 +4870,13 @@
      * @publicApi
      */
     var RouterLinkActive = /** @class */ (function () {
-        function RouterLinkActive(router, element, renderer, cdr) {
+        function RouterLinkActive(router, element, renderer, link, linkWithHref) {
             var _this = this;
             this.router = router;
             this.element = element;
             this.renderer = renderer;
-            this.cdr = cdr;
+            this.link = link;
+            this.linkWithHref = linkWithHref;
             this.classes = [];
             this.isActive = false;
             this.routerLinkActiveOptions = { exact: false };
@@ -4927,8 +4928,10 @@
             };
         };
         RouterLinkActive.prototype.hasActiveLinks = function () {
-            return this.links.some(this.isLinkActive(this.router)) ||
-                this.linksWithHrefs.some(this.isLinkActive(this.router));
+            var isActiveCheckFn = this.isLinkActive(this.router);
+            return this.link && isActiveCheckFn(this.link) ||
+                this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
+                this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
         __decorate([
             core.ContentChildren(RouterLink, { descendants: true }),
@@ -4952,8 +4955,11 @@
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }),
+            __param(3, core.Optional()),
+            __param(4, core.Optional()),
             __metadata("design:paramtypes", [Router, core.ElementRef, core.Renderer2,
-                core.ChangeDetectorRef])
+                RouterLink,
+                RouterLinkWithHref])
         ], RouterLinkActive);
         return RouterLinkActive;
     }());
@@ -5805,7 +5811,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.3+68.sha-7115e7c');
+    var VERSION = new core.Version('8.0.0-beta.3+89.sha-872a365');
 
     /**
      * @license

@@ -1,11 +1,11 @@
 /**
- * @license Angular v8.0.0-beta.3+68.sha-7115e7c
+ * @license Angular v8.0.0-beta.3+89.sha-872a365
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, Optional, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
 import { of, from, BehaviorSubject, EmptyError, Observable, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -6136,13 +6136,15 @@ class RouterLinkActive {
      * @param {?} router
      * @param {?} element
      * @param {?} renderer
-     * @param {?} cdr
+     * @param {?=} link
+     * @param {?=} linkWithHref
      */
-    constructor(router, element, renderer, cdr) {
+    constructor(router, element, renderer, link, linkWithHref) {
         this.router = router;
         this.element = element;
         this.renderer = renderer;
-        this.cdr = cdr;
+        this.link = link;
+        this.linkWithHref = linkWithHref;
         this.classes = [];
         this.isActive = false;
         this.routerLinkActiveOptions = { exact: false };
@@ -6214,8 +6216,11 @@ class RouterLinkActive {
      * @return {?}
      */
     hasActiveLinks() {
-        return this.links.some(this.isLinkActive(this.router)) ||
-            this.linksWithHrefs.some(this.isLinkActive(this.router));
+        /** @type {?} */
+        const isActiveCheckFn = this.isLinkActive(this.router);
+        return this.link && isActiveCheckFn(this.link) ||
+            this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
+            this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
 RouterLinkActive.decorators = [
@@ -6229,7 +6234,8 @@ RouterLinkActive.ctorParameters = () => [
     { type: Router },
     { type: ElementRef },
     { type: Renderer2 },
-    { type: ChangeDetectorRef }
+    { type: RouterLink, decorators: [{ type: Optional }] },
+    { type: RouterLinkWithHref, decorators: [{ type: Optional }] }
 ];
 RouterLinkActive.propDecorators = {
     links: [{ type: ContentChildren, args: [RouterLink, { descendants: true },] }],
@@ -7277,7 +7283,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.3+68.sha-7115e7c');
+const VERSION = new Version('8.0.0-beta.3+89.sha-872a365');
 
 /**
  * @fileoverview added by tsickle
