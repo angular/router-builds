@@ -132,8 +132,8 @@ var RouterLinkActive = /** @class */ (function () {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     };
     RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ElementRef), i0.ɵdirectiveInject(Renderer2), i0.ɵdirectiveInject(RouterLink, 8), i0.ɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-            i0.ɵcontentQuery(dirIndex, RouterLink, true);
-            i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true);
+            i0.ɵcontentQuery(dirIndex, RouterLink, true, null);
+            i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
         } if (rf & 2) {
             var _t;
             (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (ctx.links = _t));

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.4+32.sha-ae16378
+ * @license Angular v8.0.0-beta.4+34.sha-3c1a162
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6359,8 +6359,8 @@ RouterLinkActive.propDecorators = {
     routerLinkActive: [{ type: Input }]
 };
 /** @nocollapse */ RouterLinkActive.ngDirectiveDef = ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵdirectiveInject(Router), ɵdirectiveInject(ElementRef), ɵdirectiveInject(Renderer2), ɵdirectiveInject(RouterLink, 8), ɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-        ɵcontentQuery(dirIndex, RouterLink, true);
-        ɵcontentQuery(dirIndex, RouterLinkWithHref, true);
+        ɵcontentQuery(dirIndex, RouterLink, true, null);
+        ɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
     } if (rf & 2) {
         var _t;
         (ɵqueryRefresh((_t = ɵloadContentQuery())) && (ctx.links = _t));
@@ -7529,7 +7529,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.4+32.sha-ae16378');
+const VERSION = new Version('8.0.0-beta.4+34.sha-3c1a162');
 
 /**
  * @fileoverview added by tsickle

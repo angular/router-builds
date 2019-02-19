@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.4+32.sha-ae16378
+ * @license Angular v8.0.0-beta.4+34.sha-3c1a162
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4904,8 +4904,8 @@
                 this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
         RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(RouterLink, 8), i0.ɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-                i0.ɵcontentQuery(dirIndex, RouterLink, true);
-                i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true);
+                i0.ɵcontentQuery(dirIndex, RouterLink, true, null);
+                i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
             } if (rf & 2) {
                 var _t;
                 (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (ctx.links = _t));
@@ -5822,7 +5822,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.4+32.sha-ae16378');
+    var VERSION = new i0.Version('8.0.0-beta.4+34.sha-3c1a162');
 
     /**
      * @license
