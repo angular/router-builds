@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.5+27.sha-48cabb4
+ * @license Angular v7.2.5+29.sha-843fc7d
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -61,10 +61,9 @@ function locationSyncBootstrapListener(ngUpgrade) {
  *
  * \@publicApi
  * @param {?} ngUpgrade
- * @param {?=} urlType
  * @return {?}
  */
-function setUpLocationSync(ngUpgrade, urlType = 'path') {
+function setUpLocationSync(ngUpgrade) {
     if (!ngUpgrade.$injector) {
         throw new Error(`
         RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.
@@ -78,19 +77,7 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
     ngUpgrade.$injector.get('$rootScope')
         .$on('$locationChangeStart', (_, next, __) => {
         /** @type {?} */
-        let url;
-        if (urlType === 'path') {
-            url = resolveUrl(next);
-        }
-        else if (urlType === 'hash') {
-            // Remove the first hash from the URL
-            /** @type {?} */
-            const hashIdx = next.indexOf('#');
-            url = resolveUrl(next.substring(0, hashIdx) + next.substring(hashIdx + 1));
-        }
-        else {
-            throw 'Invalid URLType passed to setUpLocationSync: ' + urlType;
-        }
+        const url = resolveUrl(next);
         /** @type {?} */
         const path = location.normalize(url.pathname);
         router.navigateByUrl(path + url.search + url.hash);
