@@ -46,4 +46,4 @@ export declare const RouterUpgradeInitializer: {
  *
  * @publicApi
  */
-export declare function setUpLocationSync(ngUpgrade: UpgradeModule): void;
+export declare function setUpLocationSync(ngUpgrade: UpgradeModule, urlType?: 'path' | 'hash'): void;
