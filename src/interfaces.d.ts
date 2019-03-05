@@ -43,7 +43,7 @@ import { UrlSegment, UrlTree } from './url_tree';
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         canActivate: [CanActivateTeam]
  *       }
  *     ])
@@ -61,7 +61,7 @@ import { UrlSegment, UrlTree } from './url_tree';
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         canActivate: ['canActivateTeam']
  *       }
  *     ])
@@ -120,7 +120,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  *         children: [
  *           {
  *              path: 'team/:id',
- *              component: Team
+ *              component: TeamComponent
  *           }
  *         ]
  *       }
@@ -143,7 +143,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  *         children: [
  *           {
  *             path: 'team/:id',
- *             component: Team
+ *             component: TeamComponent
  *           }
  *         ]
  *       }
@@ -201,7 +201,7 @@ export declare type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, st
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         canDeactivate: [CanDeactivateTeam]
  *       }
  *     ])
@@ -219,7 +219,7 @@ export declare type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, st
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         canDeactivate: ['canDeactivateTeam']
  *       }
  *     ])
@@ -270,7 +270,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         resolve: {
  *           team: TeamResolver
  *         }
@@ -290,7 +290,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         resolve: {
  *           team: 'teamResolver'
  *         }
@@ -339,7 +339,7 @@ export interface Resolve<T> {
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         loadChildren: 'team.js',
  *         canLoad: [CanLoadTeamSection]
  *       }
@@ -358,7 +358,7 @@ export interface Resolve<T> {
  *     RouterModule.forRoot([
  *       {
  *         path: 'team/:id',
- *         component: TeamCmp,
+ *         component: TeamComponent,
  *         loadChildren: 'team.js',
  *         canLoad: ['canLoadTeamSection']
  *       }
