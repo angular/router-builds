@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.6+85.sha-20a9dbe.with-local-changes
+ * @license Angular v8.0.0-beta.6+86.sha-881807d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4535,21 +4535,10 @@ var RouterLink = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a):not(area)[routerLink]' }]
-    }], function () { return [{
-        type: Router
-    }, {
-        type: ActivatedRoute
-    }, {
-        type: undefined,
-        decorators: [{
+    }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: undefined, decorators: [{
                 type: Attribute,
                 args: ['tabindex']
-            }]
-    }, {
-        type: Renderer2
-    }, {
-        type: ElementRef
-    }]; }, { queryParams: [{
+            }] }, { type: Renderer2 }, { type: ElementRef }]; }, { queryParams: [{
             type: Input
         }], fragment: [{
             type: Input
@@ -4663,13 +4652,7 @@ var RouterLinkWithHref = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink],area[routerLink]' }]
-    }], function () { return [{
-        type: Router
-    }, {
-        type: ActivatedRoute
-    }, {
-        type: LocationStrategy
-    }]; }, { target: [{
+    }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: LocationStrategy }]; }, { target: [{
             type: HostBinding,
             args: ['attr.target']
         }, {
@@ -4846,23 +4829,11 @@ var RouterLinkActive = /** @class */ (function () {
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }]
-    }], function () { return [{
-        type: Router
-    }, {
-        type: ElementRef
-    }, {
-        type: Renderer2
-    }, {
-        type: RouterLink,
-        decorators: [{
+    }], function () { return [{ type: Router }, { type: ElementRef }, { type: Renderer2 }, { type: RouterLink, decorators: [{
                 type: Optional
-            }]
-    }, {
-        type: RouterLinkWithHref,
-        decorators: [{
+            }] }, { type: RouterLinkWithHref, decorators: [{
                 type: Optional
-            }]
-    }]; }, { links: [{
+            }] }]; }, { links: [{
             type: ContentChildren,
             args: [RouterLink, { descendants: true }]
         }], linksWithHrefs: [{
@@ -5091,21 +5062,10 @@ var RouterOutlet = /** @class */ (function () {
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-    }], function () { return [{
-        type: ChildrenOutletContexts
-    }, {
-        type: ViewContainerRef
-    }, {
-        type: ComponentFactoryResolver
-    }, {
-        type: undefined,
-        decorators: [{
+    }], function () { return [{ type: ChildrenOutletContexts }, { type: ViewContainerRef }, { type: ComponentFactoryResolver }, { type: undefined, decorators: [{
                 type: Attribute,
                 args: ['name']
-            }]
-    }, {
-        type: ChangeDetectorRef
-    }]; }, { activateEvents: [{
+            }] }, { type: ChangeDetectorRef }]; }, { activateEvents: [{
             type: Output,
             args: ['activate']
         }], deactivateEvents: [{
@@ -5257,17 +5217,7 @@ var RouterPreloader = /** @class */ (function () {
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
-    }], function () { return [{
-        type: Router
-    }, {
-        type: NgModuleFactoryLoader
-    }, {
-        type: Compiler
-    }, {
-        type: Injector
-    }, {
-        type: PreloadingStrategy
-    }]; }, null);
+    }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null);
 
 /**
  * @license
@@ -5527,20 +5477,14 @@ var RouterModule = /** @class */ (function () {
                 exports: ROUTER_DIRECTIVES,
                 entryComponents: [EmptyOutletComponent]
             }]
-    }], function () { return [{
-        type: undefined,
-        decorators: [{
+    }], function () { return [{ type: undefined, decorators: [{
                 type: Optional
             }, {
                 type: Inject,
                 args: [ROUTER_FORROOT_GUARD]
-            }]
-    }, {
-        type: Router,
-        decorators: [{
+            }] }, { type: Router, decorators: [{
                 type: Optional
-            }]
-    }]; }, null);
+            }] }]; }, null);
 ɵsetComponentScope(EmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], []);
 function createRouterScroller(router, viewportScroller, config) {
     if (config.scrollOffset) {
@@ -5710,9 +5654,7 @@ var RouterInitializer = /** @class */ (function () {
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
-    }], function () { return [{
-        type: Injector
-    }]; }, null);
+    }], function () { return [{ type: Injector }]; }, null);
 function getAppInitializer(r) {
     return r.appInitializer.bind(r);
 }
@@ -5749,7 +5691,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.6+85.sha-20a9dbe.with-local-changes');
+var VERSION = new Version('8.0.0-beta.6+86.sha-881807d.with-local-changes');
 
 /**
  * @license

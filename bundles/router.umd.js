@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.6+85.sha-20a9dbe.with-local-changes
+ * @license Angular v8.0.0-beta.6+86.sha-881807d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/platform-browser')) :
     typeof define === 'function' && define.amd ? define('@angular/router', ['exports', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/platform-browser'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.router = {}), global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.platformBrowser));
-}(this, function (exports, common, i0, rxjs, operators, platformBrowser) { 'use strict';
+}(this, function (exports, i3, i0, rxjs, operators, platformBrowser) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -4608,21 +4608,10 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
             type: i0.Directive,
             args: [{ selector: ':not(a):not(area)[routerLink]' }]
-        }], function () { return [{
-            type: Router
-        }, {
-            type: ActivatedRoute
-        }, {
-            type: undefined,
-            decorators: [{
+        }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: undefined, decorators: [{
                     type: i0.Attribute,
                     args: ['tabindex']
-                }]
-        }, {
-            type: i0.Renderer2
-        }, {
-            type: i0.ElementRef
-        }]; }, { queryParams: [{
+                }] }, { type: i0.Renderer2 }, { type: i0.ElementRef }]; }, { queryParams: [{
                 type: i0.Input
             }], fragment: [{
                 type: i0.Input
@@ -4724,7 +4713,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(common.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+        RouterLinkWithHref.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵdirectiveInject(Router), i0.ɵdirectiveInject(ActivatedRoute), i0.ɵdirectiveInject(i3.LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
                 i0.ɵallocHostVars(2);
                 i0.ɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
@@ -4736,13 +4725,7 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
             type: i0.Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]' }]
-        }], function () { return [{
-            type: Router
-        }, {
-            type: ActivatedRoute
-        }, {
-            type: common.LocationStrategy
-        }]; }, { target: [{
+        }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, { target: [{
                 type: i0.HostBinding,
                 args: ['attr.target']
             }, {
@@ -4919,23 +4902,11 @@
                     selector: '[routerLinkActive]',
                     exportAs: 'routerLinkActive',
                 }]
-        }], function () { return [{
-            type: Router
-        }, {
-            type: i0.ElementRef
-        }, {
-            type: i0.Renderer2
-        }, {
-            type: RouterLink,
-            decorators: [{
+        }], function () { return [{ type: Router }, { type: i0.ElementRef }, { type: i0.Renderer2 }, { type: RouterLink, decorators: [{
                     type: i0.Optional
-                }]
-        }, {
-            type: RouterLinkWithHref,
-            decorators: [{
+                }] }, { type: RouterLinkWithHref, decorators: [{
                     type: i0.Optional
-                }]
-        }]; }, { links: [{
+                }] }]; }, { links: [{
                 type: i0.ContentChildren,
                 args: [RouterLink, { descendants: true }]
             }], linksWithHrefs: [{
@@ -5164,21 +5135,10 @@
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
             type: i0.Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
-        }], function () { return [{
-            type: ChildrenOutletContexts
-        }, {
-            type: i0.ViewContainerRef
-        }, {
-            type: i0.ComponentFactoryResolver
-        }, {
-            type: undefined,
-            decorators: [{
+        }], function () { return [{ type: ChildrenOutletContexts }, { type: i0.ViewContainerRef }, { type: i0.ComponentFactoryResolver }, { type: undefined, decorators: [{
                     type: i0.Attribute,
                     args: ['name']
-                }]
-        }, {
-            type: i0.ChangeDetectorRef
-        }]; }, { activateEvents: [{
+                }] }, { type: i0.ChangeDetectorRef }]; }, { activateEvents: [{
                 type: i0.Output,
                 args: ['activate']
             }], deactivateEvents: [{
@@ -5330,17 +5290,7 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
             type: i0.Injectable
-        }], function () { return [{
-            type: Router
-        }, {
-            type: i0.NgModuleFactoryLoader
-        }, {
-            type: i0.Compiler
-        }, {
-            type: i0.Injector
-        }, {
-            type: PreloadingStrategy
-        }]; }, null);
+        }], function () { return [{ type: Router }, { type: i0.NgModuleFactoryLoader }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; }, null);
 
     /**
      * @license
@@ -5456,13 +5406,13 @@
      */
     var ROUTER_FORROOT_GUARD = new i0.InjectionToken('ROUTER_FORROOT_GUARD');
     var ROUTER_PROVIDERS = [
-        common.Location,
+        i3.Location,
         { provide: UrlSerializer, useClass: DefaultUrlSerializer },
         {
             provide: Router,
             useFactory: setupRouter,
             deps: [
-                i0.ApplicationRef, UrlSerializer, ChildrenOutletContexts, common.Location, i0.Injector,
+                i0.ApplicationRef, UrlSerializer, ChildrenOutletContexts, i3.Location, i0.Injector,
                 i0.NgModuleFactoryLoader, i0.Compiler, ROUTES, ROUTER_CONFIGURATION,
                 [UrlHandlingStrategy, new i0.Optional()], [RouteReuseStrategy, new i0.Optional()]
             ]
@@ -5562,16 +5512,16 @@
                     },
                     { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
                     {
-                        provide: common.LocationStrategy,
+                        provide: i3.LocationStrategy,
                         useFactory: provideLocationStrategy,
                         deps: [
-                            common.PlatformLocation, [new i0.Inject(common.APP_BASE_HREF), new i0.Optional()], ROUTER_CONFIGURATION
+                            i3.PlatformLocation, [new i0.Inject(i3.APP_BASE_HREF), new i0.Optional()], ROUTER_CONFIGURATION
                         ]
                     },
                     {
                         provide: RouterScroller,
                         useFactory: createRouterScroller,
-                        deps: [Router, common.ViewportScroller, ROUTER_CONFIGURATION]
+                        deps: [Router, i3.ViewportScroller, ROUTER_CONFIGURATION]
                     },
                     {
                         provide: PreloadingStrategy,
@@ -5600,20 +5550,14 @@
                     exports: ROUTER_DIRECTIVES,
                     entryComponents: [EmptyOutletComponent]
                 }]
-        }], function () { return [{
-            type: undefined,
-            decorators: [{
+        }], function () { return [{ type: undefined, decorators: [{
                     type: i0.Optional
                 }, {
                     type: i0.Inject,
                     args: [ROUTER_FORROOT_GUARD]
-                }]
-        }, {
-            type: Router,
-            decorators: [{
+                }] }, { type: Router, decorators: [{
                     type: i0.Optional
-                }]
-        }]; }, null);
+                }] }]; }, null);
     i0.ɵsetComponentScope(EmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], []);
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
@@ -5623,8 +5567,8 @@
     }
     function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
         if (options === void 0) { options = {}; }
-        return options.useHash ? new common.HashLocationStrategy(platformLocationStrategy, baseHref) :
-            new common.PathLocationStrategy(platformLocationStrategy, baseHref);
+        return options.useHash ? new i3.HashLocationStrategy(platformLocationStrategy, baseHref) :
+            new i3.PathLocationStrategy(platformLocationStrategy, baseHref);
     }
     function provideForRootGuard(router) {
         if (router) {
@@ -5716,7 +5660,7 @@
         }
         RouterInitializer.prototype.appInitializer = function () {
             var _this = this;
-            var p = this.injector.get(common.LOCATION_INITIALIZED, Promise.resolve(null));
+            var p = this.injector.get(i3.LOCATION_INITIALIZED, Promise.resolve(null));
             return p.then(function () {
                 var resolve = null;
                 var res = new Promise(function (r) { return resolve = r; });
@@ -5783,9 +5727,7 @@
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
             type: i0.Injectable
-        }], function () { return [{
-            type: i0.Injector
-        }]; }, null);
+        }], function () { return [{ type: i0.Injector }]; }, null);
     function getAppInitializer(r) {
         return r.appInitializer.bind(r);
     }
@@ -5822,7 +5764,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.6+85.sha-20a9dbe.with-local-changes');
+    var VERSION = new i0.Version('8.0.0-beta.6+86.sha-881807d.with-local-changes');
 
     /**
      * @license

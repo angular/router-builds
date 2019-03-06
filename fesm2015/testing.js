@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.6+85.sha-20a9dbe.with-local-changes
+ * @license Angular v8.0.0-beta.6+86.sha-881807d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -101,9 +101,7 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
 /** @nocollapse */ SpyNgModuleFactoryLoader.ngInjectableDef = defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(inject(Compiler)); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
-    }], function () { return [{
-        type: Compiler
-    }]; }, null);
+    }], function () { return [{ type: Compiler }]; }, null);
 /**
  * @param {?} opts
  * @return {?}
