@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.7+15.sha-c866c11.with-local-changes
+ * @license Angular v8.0.0-beta.7+16.sha-29f57e3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -546,13 +546,13 @@
      * In order to render, there needs to be a component on this config, which will default
      * to this `EmptyOutletComponent`.
      */
-    var EmptyOutletComponent = /** @class */ (function () {
-        function EmptyOutletComponent() {
+    var ɵEmptyOutletComponent = /** @class */ (function () {
+        function ɵEmptyOutletComponent() {
         }
-        EmptyOutletComponent = __decorate([
+        ɵEmptyOutletComponent = __decorate([
             core.Component({ template: "<router-outlet></router-outlet>" })
-        ], EmptyOutletComponent);
-        return EmptyOutletComponent;
+        ], ɵEmptyOutletComponent);
+        return ɵEmptyOutletComponent;
     }());
 
     /**
@@ -735,7 +735,7 @@
         var children = r.children && r.children.map(standardizeConfig);
         var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
         if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-            c.component = EmptyOutletComponent;
+            c.component = ɵEmptyOutletComponent;
         }
         return c;
     }
@@ -5446,7 +5446,7 @@
      *
      *
      */
-    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent];
+    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
     /**
      * @description
      *
@@ -5599,7 +5599,7 @@
             core.NgModule({
                 declarations: ROUTER_DIRECTIVES,
                 exports: ROUTER_DIRECTIVES,
-                entryComponents: [EmptyOutletComponent]
+                entryComponents: [ɵEmptyOutletComponent]
             }),
             __param(0, core.Optional()), __param(0, core.Inject(ROUTER_FORROOT_GUARD)), __param(1, core.Optional()),
             __metadata("design:paramtypes", [Object, Router])
@@ -5811,7 +5811,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.7+15.sha-c866c11.with-local-changes');
+    var VERSION = new core.Version('8.0.0-beta.7+16.sha-29f57e3.with-local-changes');
 
     /**
      * @license
@@ -5850,6 +5850,8 @@
      * Generated bundle index. Do not edit.
      */
 
+    exports.ɵangular_packages_router_router_l = ɵEmptyOutletComponent;
+    exports.ɵEmptyOutletComponent = ɵEmptyOutletComponent;
     exports.ɵangular_packages_router_router_a = ROUTER_FORROOT_GUARD;
     exports.ɵangular_packages_router_router_h = RouterInitializer;
     exports.ɵangular_packages_router_router_c = createRouterScroller;
@@ -5861,9 +5863,9 @@
     exports.ɵangular_packages_router_router_g = rootRoute;
     exports.ɵangular_packages_router_router_b = routerNgProbeToken;
     exports.ɵangular_packages_router_router_f = setupRouter;
-    exports.ɵangular_packages_router_router_n = RouterScroller;
-    exports.ɵangular_packages_router_router_l = Tree;
-    exports.ɵangular_packages_router_router_m = TreeNode;
+    exports.ɵangular_packages_router_router_o = RouterScroller;
+    exports.ɵangular_packages_router_router_m = Tree;
+    exports.ɵangular_packages_router_router_n = TreeNode;
     exports.RouterLink = RouterLink;
     exports.RouterLinkWithHref = RouterLinkWithHref;
     exports.RouterLinkActive = RouterLinkActive;
@@ -5911,7 +5913,6 @@
     exports.UrlSerializer = UrlSerializer;
     exports.UrlTree = UrlTree;
     exports.VERSION = VERSION;
-    exports.ɵEmptyOutletComponent = EmptyOutletComponent;
     exports.ɵROUTER_PROVIDERS = ROUTER_PROVIDERS;
     exports.ɵflatten = flatten;
 
