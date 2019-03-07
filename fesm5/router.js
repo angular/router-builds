@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.7+34.sha-d95e059.with-local-changes
+ * @license Angular v8.0.0-beta.7+37.sha-aa6db0d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3684,9 +3684,10 @@ function defaultRouterHook(snapshot, runExtras) {
 /**
  * @description
  *
- * Provides the navigation and url manipulation capabilities.
+ * An NgModule that provides navigation and URL manipulation capabilities.
  *
- * See `Routes` for more details and examples.
+ * @see `Route`.
+ * @see [Routing and Navigation Guide](guide/router).
  *
  * @ngModule RouterModule
  *
@@ -3708,11 +3709,12 @@ var Router = /** @class */ (function () {
         this.currentNavigation = null;
         this.navigationId = 0;
         this.isNgZoneEnabled = false;
+        /**
+         * An event stream for routing events in this NgModule.
+         */
         this.events = new Subject();
         /**
-         * Error handler that is invoked when a navigation errors.
-         *
-         * See `ErrorHandler` for more information.
+         * A handler for navigation errors in this NgModule.
          */
         this.errorHandler = defaultErrorHandler;
         /**
@@ -3722,13 +3724,16 @@ var Router = /** @class */ (function () {
          */
         this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
         /**
-         * Indicates if at least one navigation happened.
+         * True if at least one navigation event has occurred,
+         * false otherwise.
          */
         this.navigated = false;
         this.lastSuccessfulId = -1;
         /**
-         * Used by RouterModule. This allows us to
-         * pause the navigation either before preactivation or after it.
+         * Hooks that enable you to pause navigation,
+         * either before or after the preactivation phase.
+         * Used by `RouterModule`.
+         *
          * @internal
          */
         this.hooks = {
@@ -3739,21 +3744,24 @@ var Router = /** @class */ (function () {
          * Extracts and merges URLs. Used for AngularJS to Angular migrations.
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
+        /**
+         * The strategy for re-using routes.
+         */
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         /**
-         * Define what the router should do if it receives a navigation request to the current URL.
-         * By default, the router will ignore this navigation. However, this prevents features such
-         * as a "refresh" button. Use this option to configure the behavior when navigating to the
-         * current URL. Default is 'ignore'.
+         * How to handle a navigation request to the current URL. One of:
+         * - `'ignore'` :  The router ignores the request.
+         * - `'reload'` : The router reloads the URL. Use to implement a "refresh" feature.
          */
         this.onSameUrlNavigation = 'ignore';
         /**
-         * Defines how the router merges params, data and resolved data from parent to child
-         * routes. Available options are:
+         * How to merge parameters, data, and resolved data from parent to child
+         * routes. One of:
          *
-         * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
-         *   routes.
-         * - `'always'`, enables unconditional inheritance of parent params.
+         * - `'emptyOnly'` : Inherit parent parameters, data, and resolved data
+         * for path-less or component-less routes.
+         * - `'always'` : Inherit parent parameters, data, and resolved data
+         * for all child routes.
          */
         this.paramsInheritanceStrategy = 'emptyOnly';
         /**
@@ -4075,7 +4083,7 @@ var Router = /** @class */ (function () {
         }
     };
     Object.defineProperty(Router.prototype, "url", {
-        /** The current url */
+        /** The current URL. */
         get: function () { return this.serializeUrl(this.currentUrlTree); },
         enumerable: true,
         configurable: true
@@ -4087,9 +4095,9 @@ var Router = /** @class */ (function () {
     /**
      * Resets the configuration used for navigation and generating links.
      *
-     * @usageNotes
+     * @param config The route array for the new configuration.
      *
-     * ### Example
+     * @usageNotes
      *
      * ```
      * router.resetConfig([
@@ -4108,7 +4116,7 @@ var Router = /** @class */ (function () {
     };
     /** @docsNotRequired */
     Router.prototype.ngOnDestroy = function () { this.dispose(); };
-    /** Disposes of the router */
+    /** Disposes of the router. */
     Router.prototype.dispose = function () {
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
@@ -4116,14 +4124,16 @@ var Router = /** @class */ (function () {
         }
     };
     /**
-     * Applies an array of commands to the current url tree and creates a new url tree.
+     * Applies an array of commands to the current URL tree and creates a new URL tree.
      *
      * When given an activate route, applies the given commands starting from the route.
      * When not given a route, applies the given command starting from the root.
      *
-     * @usageNotes
+     * @param commands An array of commands to apply.
+     * @param navigationExtras
+     * @returns The new URL tree.
      *
-     * ### Example
+     * @usageNotes
      *
      * ```
      * // create /team/33/user/11
@@ -4188,12 +4198,15 @@ var Router = /** @class */ (function () {
         return createUrlTree(a, this.currentUrlTree, commands, q, f);
     };
     /**
-     * Navigate based on the provided url. This navigation is always absolute.
+     * Navigate based on the provided URL, which must be absolute.
      *
-     * Returns a promise that:
-     * - resolves to 'true' when navigation succeeds,
-     * - resolves to 'false' when navigation fails,
-     * - is rejected when an error happens.
+     * @param url An absolute URL. The function does not apply any delta to the current URL.
+     * @param extras An object containing properties that modify the navigation strategy.
+     * The function ignores any properties in the `NavigationExtras` that would change the
+     * provided URL.
+     *
+     * @returns A Promise that resolves to 'true' when navigation succeeds,
+     * to 'false' when navigation fails, or is rejected on error.
      *
      * @usageNotes
      *
@@ -4206,10 +4219,6 @@ var Router = /** @class */ (function () {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
-     * it will not apply any delta to the current URL and ignores any properties
-     * in the second parameter (the `NavigationExtras`) that would change the
-     * provided URL.
      */
     Router.prototype.navigateByUrl = function (url, extras) {
         if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -5691,7 +5700,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.7+34.sha-d95e059.with-local-changes');
+var VERSION = new Version('8.0.0-beta.7+37.sha-aa6db0d.with-local-changes');
 
 /**
  * @license

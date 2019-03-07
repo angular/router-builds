@@ -20,7 +20,7 @@ import { Checks } from './utils/preactivation';
 /**
  * @description
  *
- * Represents the extra options used during navigation.
+ * Options that modify the navigation strategy.
  *
  * @publicApi
  */
@@ -77,9 +77,8 @@ export interface NavigationExtras {
      */
     fragment?: string;
     /**
-     * Preserves the query parameters for the next navigation.
-     *
-     * deprecated, use `queryParamsHandling` instead
+     * DEPRECATED: Use `queryParamsHandling` instead to preserve
+     * query parameters for the next navigation.
      *
      * ```
      * // Preserve query params from /results?page=1 to /view?page=1
@@ -90,7 +89,7 @@ export interface NavigationExtras {
      */
     preserveQueryParams?: boolean;
     /**
-     *  config strategy to handle the query parameters for the next navigation.
+     * Configuration strategy for how to handle query parameters for the next navigation.
      *
      * ```
      * // from /results?page=1 to /view?page=1&page=2
@@ -225,9 +224,10 @@ export declare type NavigationTransition = {
 /**
  * @description
  *
- * Provides the navigation and url manipulation capabilities.
+ * An NgModule that provides navigation and URL manipulation capabilities.
  *
- * See `Routes` for more details and examples.
+ * @see `Route`.
+ * @see [Routing and Navigation Guide](guide/router).
  *
  * @ngModule RouterModule
  *
@@ -252,12 +252,16 @@ export declare class Router {
     private ngModule;
     private console;
     private isNgZoneEnabled;
+    /**
+     * An event stream for routing events in this NgModule.
+     */
     readonly events: Observable<Event>;
+    /**
+     * The current state of routing in this NgModule.
+     */
     readonly routerState: RouterState;
     /**
-     * Error handler that is invoked when a navigation errors.
-     *
-     * See `ErrorHandler` for more information.
+     * A handler for navigation errors in this NgModule.
      */
     errorHandler: ErrorHandler;
     /**
@@ -267,7 +271,8 @@ export declare class Router {
      */
     malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
     /**
-     * Indicates if at least one navigation happened.
+     * True if at least one navigation event has occurred,
+     * false otherwise.
      */
     navigated: boolean;
     private lastSuccessfulId;
@@ -275,21 +280,24 @@ export declare class Router {
      * Extracts and merges URLs. Used for AngularJS to Angular migrations.
      */
     urlHandlingStrategy: UrlHandlingStrategy;
+    /**
+     * The strategy for re-using routes.
+     */
     routeReuseStrategy: RouteReuseStrategy;
     /**
-     * Define what the router should do if it receives a navigation request to the current URL.
-     * By default, the router will ignore this navigation. However, this prevents features such
-     * as a "refresh" button. Use this option to configure the behavior when navigating to the
-     * current URL. Default is 'ignore'.
+     * How to handle a navigation request to the current URL. One of:
+     * - `'ignore'` :  The router ignores the request.
+     * - `'reload'` : The router reloads the URL. Use to implement a "refresh" feature.
      */
     onSameUrlNavigation: 'reload' | 'ignore';
     /**
-     * Defines how the router merges params, data and resolved data from parent to child
-     * routes. Available options are:
+     * How to merge parameters, data, and resolved data from parent to child
+     * routes. One of:
      *
-     * - `'emptyOnly'`, the default, only inherits parent params for path-less or component-less
-     *   routes.
-     * - `'always'`, enables unconditional inheritance of parent params.
+     * - `'emptyOnly'` : Inherit parent parameters, data, and resolved data
+     * for path-less or component-less routes.
+     * - `'always'` : Inherit parent parameters, data, and resolved data
+     * for all child routes.
      */
     paramsInheritanceStrategy: 'emptyOnly' | 'always';
     /**
@@ -322,16 +330,16 @@ export declare class Router {
      * Sets up the location change listener.
      */
     setUpLocationChangeListener(): void;
-    /** The current url */
+    /** The current URL. */
     readonly url: string;
     /** The current Navigation object if one exists */
     getCurrentNavigation(): Navigation | null;
     /**
      * Resets the configuration used for navigation and generating links.
      *
-     * @usageNotes
+     * @param config The route array for the new configuration.
      *
-     * ### Example
+     * @usageNotes
      *
      * ```
      * router.resetConfig([
@@ -345,17 +353,19 @@ export declare class Router {
     resetConfig(config: Routes): void;
     /** @docsNotRequired */
     ngOnDestroy(): void;
-    /** Disposes of the router */
+    /** Disposes of the router. */
     dispose(): void;
     /**
-     * Applies an array of commands to the current url tree and creates a new url tree.
+     * Applies an array of commands to the current URL tree and creates a new URL tree.
      *
      * When given an activate route, applies the given commands starting from the route.
      * When not given a route, applies the given command starting from the root.
      *
-     * @usageNotes
+     * @param commands An array of commands to apply.
+     * @param navigationExtras
+     * @returns The new URL tree.
      *
-     * ### Example
+     * @usageNotes
      *
      * ```
      * // create /team/33/user/11
@@ -392,12 +402,15 @@ export declare class Router {
      */
     createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
     /**
-     * Navigate based on the provided url. This navigation is always absolute.
+     * Navigate based on the provided URL, which must be absolute.
      *
-     * Returns a promise that:
-     * - resolves to 'true' when navigation succeeds,
-     * - resolves to 'false' when navigation fails,
-     * - is rejected when an error happens.
+     * @param url An absolute URL. The function does not apply any delta to the current URL.
+     * @param extras An object containing properties that modify the navigation strategy.
+     * The function ignores any properties in the `NavigationExtras` that would change the
+     * provided URL.
+     *
+     * @returns A Promise that resolves to 'true' when navigation succeeds,
+     * to 'false' when navigation fails, or is rejected on error.
      *
      * @usageNotes
      *
@@ -410,10 +423,6 @@ export declare class Router {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * Since `navigateByUrl()` takes an absolute URL as the first parameter,
-     * it will not apply any delta to the current URL and ignores any properties
-     * in the second parameter (the `NavigationExtras`) that would change the
-     * provided URL.
      */
     navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
     /**
