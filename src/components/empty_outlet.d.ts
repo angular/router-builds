@@ -8,6 +8,7 @@ import * as i0 from "@angular/core";
  * In order to render, there needs to be a component on this config, which will default
  * to this `EmptyOutletComponent`.
  */
-export declare class EmptyOutletComponent {
-    static ngComponentDef: i0.ɵComponentDefWithMeta<EmptyOutletComponent, "ng-component", never, {}, {}, never>;
+export declare class ɵEmptyOutletComponent {
+    static ngComponentDef: i0.ɵComponentDefWithMeta<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never>;
 }
+export { ɵEmptyOutletComponent as EmptyOutletComponent };

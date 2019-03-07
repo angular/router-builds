@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.7+15.sha-c866c11.with-local-changes
+ * @license Angular v8.0.0-beta.7+16.sha-29f57e3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -510,15 +510,15 @@ class Scroll {
  * In order to render, there needs to be a component on this config, which will default
  * to this `EmptyOutletComponent`.
  */
-class EmptyOutletComponent {
+class ɵEmptyOutletComponent {
 }
-EmptyOutletComponent.decorators = [
+ɵEmptyOutletComponent.decorators = [
     { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] },
 ];
-/** @nocollapse */ EmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: EmptyOutletComponent, selectors: [["ng-component"]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+/** @nocollapse */ ɵEmptyOutletComponent.ngComponentDef = ɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
         ɵelement(0, "router-outlet");
     } }, encapsulation: 2 });
-/*@__PURE__*/ ɵsetClassMetadata(EmptyOutletComponent, [{
+/*@__PURE__*/ ɵsetClassMetadata(ɵEmptyOutletComponent, [{
         type: Component,
         args: [{ template: `<router-outlet></router-outlet>` }]
     }], null, null);
@@ -775,7 +775,7 @@ function standardizeConfig(r) {
     /** @type {?} */
     const c = children ? Object.assign({}, r, { children }) : Object.assign({}, r);
     if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-        c.component = EmptyOutletComponent;
+        c.component = ɵEmptyOutletComponent;
     }
     return c;
 }
@@ -6993,7 +6993,7 @@ class RouterScroller {
  *
  * @type {?}
  */
-const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent];
+const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
 /**
  * \@description
  *
@@ -7159,7 +7159,7 @@ RouterModule.decorators = [
     { type: NgModule, args: [{
                 declarations: ROUTER_DIRECTIVES,
                 exports: ROUTER_DIRECTIVES,
-                entryComponents: [EmptyOutletComponent]
+                entryComponents: [ɵEmptyOutletComponent]
             },] },
 ];
 /** @nocollapse */
@@ -7167,14 +7167,14 @@ RouterModule.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
     { type: Router, decorators: [{ type: Optional }] }
 ];
-/** @nocollapse */ RouterModule.ngModuleDef = ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent] });
+/** @nocollapse */ RouterModule.ngModuleDef = ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
 /** @nocollapse */ RouterModule.ngInjectorDef = defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(inject(ROUTER_FORROOT_GUARD, 8), inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
         args: [{
                 declarations: ROUTER_DIRECTIVES,
                 exports: ROUTER_DIRECTIVES,
-                entryComponents: [EmptyOutletComponent]
+                entryComponents: [ɵEmptyOutletComponent]
             }]
     }], function () { return [{ type: undefined, decorators: [{
                 type: Optional
@@ -7184,7 +7184,7 @@ RouterModule.ctorParameters = () => [
             }] }, { type: Router, decorators: [{
                 type: Optional
             }] }]; }, null);
-ɵsetComponentScope(EmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], []);
+ɵsetComponentScope(ɵEmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], []);
 /**
  * @param {?} router
  * @param {?} viewportScroller
@@ -7471,7 +7471,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.7+15.sha-c866c11.with-local-changes');
+const VERSION = new Version('8.0.0-beta.7+16.sha-29f57e3.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
@@ -7493,5 +7493,5 @@ const VERSION = new Version('8.0.0-beta.7+15.sha-c866c11.with-local-changes');
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, Scroll, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, EmptyOutletComponent as ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
+export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, Scroll, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map

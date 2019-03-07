@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.7+15.sha-c866c11.with-local-changes
+ * @license Angular v8.0.0-beta.7+16.sha-29f57e3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -531,15 +531,15 @@
      * In order to render, there needs to be a component on this config, which will default
      * to this `EmptyOutletComponent`.
      */
-    var EmptyOutletComponent = /** @class */ (function () {
-        function EmptyOutletComponent() {
+    var ɵEmptyOutletComponent = /** @class */ (function () {
+        function ɵEmptyOutletComponent() {
         }
-        EmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: EmptyOutletComponent, selectors: [["ng-component"]], factory: function EmptyOutletComponent_Factory(t) { return new (t || EmptyOutletComponent)(); }, consts: 1, vars: 0, template: function EmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵEmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
                 i0.ɵelement(0, "router-outlet");
             } }, encapsulation: 2 });
-        return EmptyOutletComponent;
+        return ɵEmptyOutletComponent;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(EmptyOutletComponent, [{
+    /*@__PURE__*/ i0.ɵsetClassMetadata(ɵEmptyOutletComponent, [{
             type: i0.Component,
             args: [{ template: "<router-outlet></router-outlet>" }]
         }], null, null);
@@ -724,7 +724,7 @@
         var children = r.children && r.children.map(standardizeConfig);
         var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
         if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-            c.component = EmptyOutletComponent;
+            c.component = ɵEmptyOutletComponent;
         }
         return c;
     }
@@ -5392,7 +5392,7 @@
      *
      *
      */
-    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent];
+    var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
     /**
      * @description
      *
@@ -5539,7 +5539,7 @@
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
-        RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent] });
+        RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
         RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.inject(ROUTER_FORROOT_GUARD, 8), i0.inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
         return RouterModule;
     }());
@@ -5548,7 +5548,7 @@
             args: [{
                     declarations: ROUTER_DIRECTIVES,
                     exports: ROUTER_DIRECTIVES,
-                    entryComponents: [EmptyOutletComponent]
+                    entryComponents: [ɵEmptyOutletComponent]
                 }]
         }], function () { return [{ type: undefined, decorators: [{
                     type: i0.Optional
@@ -5558,7 +5558,7 @@
                 }] }, { type: Router, decorators: [{
                     type: i0.Optional
                 }] }]; }, null);
-    i0.ɵsetComponentScope(EmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, EmptyOutletComponent], []);
+    i0.ɵsetComponentScope(ɵEmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], []);
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
             viewportScroller.setOffset(config.scrollOffset);
@@ -5764,7 +5764,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.7+15.sha-c866c11.with-local-changes');
+    var VERSION = new i0.Version('8.0.0-beta.7+16.sha-29f57e3.with-local-changes');
 
     /**
      * @license
@@ -5846,7 +5846,7 @@
     exports.UrlSerializer = UrlSerializer;
     exports.UrlTree = UrlTree;
     exports.VERSION = VERSION;
-    exports.ɵEmptyOutletComponent = EmptyOutletComponent;
+    exports.ɵEmptyOutletComponent = ɵEmptyOutletComponent;
     exports.ɵROUTER_PROVIDERS = ROUTER_PROVIDERS;
     exports.ɵflatten = flatten;
 
