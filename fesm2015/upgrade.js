@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+8.sha-9a7f560.with-local-changes
+ * @license Angular v8.0.0-beta.8+11.sha-7b20cec.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,7 +11,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -49,7 +49,10 @@ const RouterUpgradeInitializer = {
  * @return {?}
  */
 function locationSyncBootstrapListener(ngUpgrade) {
-    return () => { setUpLocationSync(ngUpgrade); };
+    return (/**
+     * @return {?}
+     */
+    () => { setUpLocationSync(ngUpgrade); });
 }
 /**
  * \@description
@@ -76,7 +79,13 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
     /** @type {?} */
     const location = ngUpgrade.injector.get(Location);
     ngUpgrade.$injector.get('$rootScope')
-        .$on('$locationChangeStart', (_, next, __) => {
+        .$on('$locationChangeStart', (/**
+     * @param {?} _
+     * @param {?} next
+     * @param {?} __
+     * @return {?}
+     */
+    (_, next, __) => {
         /** @type {?} */
         let url;
         if (urlType === 'path') {
@@ -94,7 +103,7 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
         /** @type {?} */
         const path = location.normalize(url.pathname);
         router.navigateByUrl(path + url.search + url.hash);
-    });
+    }));
 }
 /**
  * Normalize and parse a URL.
@@ -136,12 +145,12 @@ function resolveUrl(url) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { locationSyncBootstrapListener, setUpLocationSync, RouterUpgradeInitializer };

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+8.sha-9a7f560.with-local-changes
+ * @license Angular v8.0.0-beta.8+11.sha-7b20cec.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -12,7 +12,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -492,7 +492,7 @@ class Scroll {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -525,7 +525,7 @@ class ɵEmptyOutletComponent {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -653,7 +653,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LoadedRouterConfig {
     /**
@@ -782,7 +782,7 @@ function standardizeConfig(r) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} a
@@ -868,18 +868,30 @@ function waitForMap(obj, fn) {
     const waitTail = [];
     /** @type {?} */
     const res = {};
-    forEach(obj, (a, k) => {
+    forEach(obj, (/**
+     * @param {?} a
+     * @param {?} k
+     * @return {?}
+     */
+    (a, k) => {
         /** @type {?} */
-        const mapped = fn(k, a).pipe(map((r) => res[k] = r));
+        const mapped = fn(k, a).pipe(map((/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => res[k] = r)));
         if (k === PRIMARY_OUTLET) {
             waitHead.push(mapped);
         }
         else {
             waitTail.push(mapped);
         }
-    });
+    }));
     // Closure compiler has problem with using spread operator here. So just using Array.concat.
-    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map(() => res));
+    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map((/**
+     * @return {?}
+     */
+    () => res)));
 }
 /**
  * @template T
@@ -901,7 +913,7 @@ function wrapIntoObservable(value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
@@ -958,7 +970,11 @@ function equalSegmentGroups(container, containee) {
 function containsQueryParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return Object.keys(containee).length <= Object.keys(container).length &&
-        Object.keys(containee).every(key => containee[key] === container[key]);
+        Object.keys(containee).every((/**
+         * @param {?} key
+         * @return {?}
+         */
+        key => containee[key] === container[key]));
 }
 /**
  * @param {?} container
@@ -1085,7 +1101,14 @@ class UrlSegmentGroup {
          * The parent node in the url tree
          */
         this.parent = null;
-        forEach(children, (v, k) => v.parent = this);
+        forEach(children, (/**
+         * @template THIS
+         * @this {THIS}
+         * @param {?} v
+         * @param {?} k
+         * @return {THIS}
+         */
+        (v, k) => v.parent = this));
     }
     /**
      * Whether the segment has child segments
@@ -1159,7 +1182,12 @@ class UrlSegment {
  * @return {?}
  */
 function equalSegments(as, bs) {
-    return equalPath(as, bs) && as.every((a, i) => shallowEqual(a.parameters, bs[i].parameters));
+    return equalPath(as, bs) && as.every((/**
+     * @param {?} a
+     * @param {?} i
+     * @return {?}
+     */
+    (a, i) => shallowEqual(a.parameters, bs[i].parameters)));
 }
 /**
  * @param {?} as
@@ -1169,7 +1197,12 @@ function equalSegments(as, bs) {
 function equalPath(as, bs) {
     if (as.length !== bs.length)
         return false;
-    return as.every((a, i) => a.path === bs[i].path);
+    return as.every((/**
+     * @param {?} a
+     * @param {?} i
+     * @return {?}
+     */
+    (a, i) => a.path === bs[i].path));
 }
 /**
  * @template T
@@ -1180,16 +1213,26 @@ function equalPath(as, bs) {
 function mapChildrenIntoArray(segment, fn) {
     /** @type {?} */
     let res = [];
-    forEach(segment.children, (child, childOutlet) => {
+    forEach(segment.children, (/**
+     * @param {?} child
+     * @param {?} childOutlet
+     * @return {?}
+     */
+    (child, childOutlet) => {
         if (childOutlet === PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
-    });
-    forEach(segment.children, (child, childOutlet) => {
+    }));
+    forEach(segment.children, (/**
+     * @param {?} child
+     * @param {?} childOutlet
+     * @return {?}
+     */
+    (child, childOutlet) => {
         if (childOutlet !== PRIMARY_OUTLET) {
             res = res.concat(fn(child, childOutlet));
         }
-    });
+    }));
     return res;
 }
 /**
@@ -1258,7 +1301,11 @@ const DEFAULT_SERIALIZER = new DefaultUrlSerializer();
  * @return {?}
  */
 function serializePaths(segment) {
-    return segment.segments.map(p => serializePath(p)).join('/');
+    return segment.segments.map((/**
+     * @param {?} p
+     * @return {?}
+     */
+    p => serializePath(p))).join('/');
 }
 /**
  * @param {?} segment
@@ -1276,21 +1323,31 @@ function serializeSegment(segment, root) {
             '';
         /** @type {?} */
         const children = [];
-        forEach(segment.children, (v, k) => {
+        forEach(segment.children, (/**
+         * @param {?} v
+         * @param {?} k
+         * @return {?}
+         */
+        (v, k) => {
             if (k !== PRIMARY_OUTLET) {
                 children.push(`${k}:${serializeSegment(v, false)}`);
             }
-        });
+        }));
         return children.length > 0 ? `${primary}(${children.join('//')})` : primary;
     }
     else {
         /** @type {?} */
-        const children = mapChildrenIntoArray(segment, (v, k) => {
+        const children = mapChildrenIntoArray(segment, (/**
+         * @param {?} v
+         * @param {?} k
+         * @return {?}
+         */
+        (v, k) => {
             if (k === PRIMARY_OUTLET) {
                 return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
             }
             return [`${k}:${serializeSegment(v, false)}`];
-        });
+        }));
         return `${serializePaths(segment)}/(${children.join('//')})`;
     }
 }
@@ -1372,7 +1429,11 @@ function serializePath(path) {
  */
 function serializeMatrixParams(params) {
     return Object.keys(params)
-        .map(key => `;${encodeUriSegment(key)}=${encodeUriSegment(params[key])}`)
+        .map((/**
+     * @param {?} key
+     * @return {?}
+     */
+    key => `;${encodeUriSegment(key)}=${encodeUriSegment(params[key])}`))
         .join('');
 }
 /**
@@ -1381,13 +1442,21 @@ function serializeMatrixParams(params) {
  */
 function serializeQueryParams(params) {
     /** @type {?} */
-    const strParams = Object.keys(params).map((name) => {
+    const strParams = Object.keys(params).map((/**
+     * @param {?} name
+     * @return {?}
+     */
+    (name) => {
         /** @type {?} */
         const value = params[name];
         return Array.isArray(value) ?
-            value.map(v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join('&') :
+            value.map((/**
+             * @param {?} v
+             * @return {?}
+             */
+            v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`)).join('&') :
             `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
-    });
+    }));
     return strParams.length ? `?${strParams.join("&")}` : '';
 }
 /** @type {?} */
@@ -1661,7 +1730,7 @@ class UrlParser {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -1700,7 +1769,11 @@ class Tree {
     children(t) {
         /** @type {?} */
         const n = findNode(t, this._root);
-        return n ? n.children.map(t => t.value) : [];
+        return n ? n.children.map((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => t.value)) : [];
     }
     /**
      * \@internal
@@ -1723,15 +1796,27 @@ class Tree {
         if (p.length < 2)
             return [];
         /** @type {?} */
-        const c = p[p.length - 2].children.map(c => c.value);
-        return c.filter(cc => cc !== t);
+        const c = p[p.length - 2].children.map((/**
+         * @param {?} c
+         * @return {?}
+         */
+        c => c.value));
+        return c.filter((/**
+         * @param {?} cc
+         * @return {?}
+         */
+        cc => cc !== t));
     }
     /**
      * \@internal
      * @param {?} t
      * @return {?}
      */
-    pathFromRoot(t) { return findPath(t, this._root).map(s => s.value); }
+    pathFromRoot(t) { return findPath(t, this._root).map((/**
+     * @param {?} s
+     * @return {?}
+     */
+    s => s.value)); }
 }
 // DFS for the node matching the value
 /**
@@ -1798,14 +1883,18 @@ function nodeChildrenAsMap(node) {
     /** @type {?} */
     const map$$1 = {};
     if (node) {
-        node.children.forEach(child => map$$1[child.value.outlet] = child);
+        node.children.forEach((/**
+         * @param {?} child
+         * @return {?}
+         */
+        child => map$$1[child.value.outlet] = child));
     }
     return map$$1;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@description
@@ -1969,7 +2058,11 @@ class ActivatedRoute {
      */
     get paramMap() {
         if (!this._paramMap) {
-            this._paramMap = this.params.pipe(map((p) => convertToParamMap(p)));
+            this._paramMap = this.params.pipe(map((/**
+             * @param {?} p
+             * @return {?}
+             */
+            (p) => convertToParamMap(p))));
         }
         return this._paramMap;
     }
@@ -1979,7 +2072,11 @@ class ActivatedRoute {
     get queryParamMap() {
         if (!this._queryParamMap) {
             this._queryParamMap =
-                this.queryParams.pipe(map((p) => convertToParamMap(p)));
+                this.queryParams.pipe(map((/**
+                 * @param {?} p
+                 * @return {?}
+                 */
+                (p) => convertToParamMap(p))));
         }
         return this._queryParamMap;
     }
@@ -2031,7 +2128,12 @@ function inheritedParamsDataResolve(route, paramsInheritanceStrategy = 'emptyOnl
  * @return {?}
  */
 function flattenInherited(pathFromRoot) {
-    return pathFromRoot.reduce((res, curr) => {
+    return pathFromRoot.reduce((/**
+     * @param {?} res
+     * @param {?} curr
+     * @return {?}
+     */
+    (res, curr) => {
         /** @type {?} */
         const params = Object.assign({}, res.params, curr.params);
         /** @type {?} */
@@ -2039,7 +2141,7 @@ function flattenInherited(pathFromRoot) {
         /** @type {?} */
         const resolve = Object.assign({}, res.resolve, curr._resolvedData);
         return { params, data, resolve };
-    }, (/** @type {?} */ ({ params: {}, data: {}, resolve: {} })));
+    }), (/** @type {?} */ ({ params: {}, data: {}, resolve: {} })));
 }
 /**
  * \@description
@@ -2137,7 +2239,11 @@ class ActivatedRouteSnapshot {
      */
     toString() {
         /** @type {?} */
-        const url = this.url.map(segment => segment.toString()).join('/');
+        const url = this.url.map((/**
+         * @param {?} segment
+         * @return {?}
+         */
+        segment => segment.toString())).join('/');
         /** @type {?} */
         const matched = this.routeConfig ? this.routeConfig.path : '';
         return `Route(url:'${url}', path:'${matched}')`;
@@ -2194,7 +2300,11 @@ class RouterStateSnapshot extends Tree {
  */
 function setRouterState(state, node) {
     node.value._routerState = state;
-    node.children.forEach(c => setRouterState(state, c));
+    node.children.forEach((/**
+     * @param {?} c
+     * @return {?}
+     */
+    c => setRouterState(state, c)));
 }
 /**
  * @param {?} node
@@ -2257,7 +2367,7 @@ function equalParamsAndUrlSegments(a, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} routeReuseStrategy
@@ -2300,7 +2410,11 @@ function createNode(routeReuseStrategy, curr, prevState) {
             /** @type {?} */
             const value = createActivatedRoute(curr.value);
             /** @type {?} */
-            const children = curr.children.map(c => createNode(routeReuseStrategy, c));
+            const children = curr.children.map((/**
+             * @param {?} c
+             * @return {?}
+             */
+            c => createNode(routeReuseStrategy, c)));
             return new TreeNode(value, children);
         }
     }
@@ -2329,14 +2443,18 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
  * @return {?}
  */
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
-    return curr.children.map(child => {
+    return curr.children.map((/**
+     * @param {?} child
+     * @return {?}
+     */
+    child => {
         for (const p of prevState.children) {
             if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
                 return createNode(routeReuseStrategy, child, p);
             }
         }
         return createNode(routeReuseStrategy, child);
-    });
+    }));
 }
 /**
  * @param {?} c
@@ -2348,7 +2466,7 @@ function createActivatedRoute(c) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} route
@@ -2394,9 +2512,18 @@ function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) 
     /** @type {?} */
     let qp = {};
     if (queryParams) {
-        forEach(queryParams, (value, name) => {
-            qp[name] = Array.isArray(value) ? value.map((v) => `${v}`) : `${value}`;
-        });
+        forEach(queryParams, (/**
+         * @param {?} value
+         * @param {?} name
+         * @return {?}
+         */
+        (value, name) => {
+            qp[name] = Array.isArray(value) ? value.map((/**
+             * @param {?} v
+             * @return {?}
+             */
+            (v) => `${v}`)) : `${value}`;
+        }));
     }
     if (urlTree.root === oldSegmentGroup) {
         return new UrlTree(newSegmentGroup, qp, fragment);
@@ -2412,14 +2539,19 @@ function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) 
 function replaceSegment(current, oldSegment, newSegment) {
     /** @type {?} */
     const children = {};
-    forEach(current.children, (c, outletName) => {
+    forEach(current.children, (/**
+     * @param {?} c
+     * @param {?} outletName
+     * @return {?}
+     */
+    (c, outletName) => {
         if (c === oldSegment) {
             children[outletName] = newSegment;
         }
         else {
             children[outletName] = replaceSegment(c, oldSegment, newSegment);
         }
-    });
+    }));
     return new UrlSegmentGroup(current.segments, children);
 }
 class Navigation {
@@ -2436,7 +2568,11 @@ class Navigation {
             throw new Error('Root segment cannot have matrix parameters');
         }
         /** @type {?} */
-        const cmdWithOutlet = commands.find(c => typeof c === 'object' && c != null && c.outlets);
+        const cmdWithOutlet = commands.find((/**
+         * @param {?} c
+         * @return {?}
+         */
+        c => typeof c === 'object' && c != null && c.outlets));
         if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
@@ -2462,14 +2598,25 @@ function computeNavigation(commands) {
     /** @type {?} */
     let isAbsolute = false;
     /** @type {?} */
-    const res = commands.reduce((res, cmd, cmdIdx) => {
+    const res = commands.reduce((/**
+     * @param {?} res
+     * @param {?} cmd
+     * @param {?} cmdIdx
+     * @return {?}
+     */
+    (res, cmd, cmdIdx) => {
         if (typeof cmd === 'object' && cmd != null) {
             if (cmd.outlets) {
                 /** @type {?} */
                 const outlets = {};
-                forEach(cmd.outlets, (commands, name) => {
+                forEach(cmd.outlets, (/**
+                 * @param {?} commands
+                 * @param {?} name
+                 * @return {?}
+                 */
+                (commands, name) => {
                     outlets[name] = typeof commands === 'string' ? commands.split('/') : commands;
-                });
+                }));
                 return [...res, { outlets }];
             }
             if (cmd.segmentPath) {
@@ -2480,7 +2627,12 @@ function computeNavigation(commands) {
             return [...res, cmd];
         }
         if (cmdIdx === 0) {
-            cmd.split('/').forEach((urlPart, partIndex) => {
+            cmd.split('/').forEach((/**
+             * @param {?} urlPart
+             * @param {?} partIndex
+             * @return {?}
+             */
+            (urlPart, partIndex) => {
                 if (partIndex == 0 && urlPart === '.') ;
                 else if (partIndex == 0 && urlPart === '') { //  '/a'
                     isAbsolute = true;
@@ -2491,11 +2643,11 @@ function computeNavigation(commands) {
                 else if (urlPart != '') {
                     res.push(urlPart);
                 }
-            });
+            }));
             return res;
         }
         return [...res, cmd];
-    }, []);
+    }), []);
     return new Navigation(isAbsolute, numberOfDoubleDots, res);
 }
 class Position {
@@ -2625,16 +2777,26 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
         const outlets = getOutlets(commands);
         /** @type {?} */
         const children = {};
-        forEach(outlets, (commands, outlet) => {
+        forEach(outlets, (/**
+         * @param {?} commands
+         * @param {?} outlet
+         * @return {?}
+         */
+        (commands, outlet) => {
             if (commands !== null) {
                 children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
             }
-        });
-        forEach(segmentGroup.children, (child, childOutlet) => {
+        }));
+        forEach(segmentGroup.children, (/**
+         * @param {?} child
+         * @param {?} childOutlet
+         * @return {?}
+         */
+        (child, childOutlet) => {
             if (outlets[childOutlet] === undefined) {
                 children[childOutlet] = child;
             }
-        });
+        }));
         return new UrlSegmentGroup(segmentGroup.segments, children);
     }
 }
@@ -2723,11 +2885,16 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
 function createNewSegmentChildren(outlets) {
     /** @type {?} */
     const children = {};
-    forEach(outlets, (commands, outlet) => {
+    forEach(outlets, (/**
+     * @param {?} commands
+     * @param {?} outlet
+     * @return {?}
+     */
+    (commands, outlet) => {
         if (commands !== null) {
             children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
         }
-    });
+    }));
     return children;
 }
 /**
@@ -2737,7 +2904,12 @@ function createNewSegmentChildren(outlets) {
 function stringify(params) {
     /** @type {?} */
     const res = {};
-    forEach(params, (v, k) => res[k] = `${v}`);
+    forEach(params, (/**
+     * @param {?} v
+     * @param {?} k
+     * @return {?}
+     */
+    (v, k) => res[k] = `${v}`));
     return res;
 }
 /**
@@ -2752,14 +2924,24 @@ function compare(path, params, segment) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-const activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent) => map(t => {
+const activateRoutes = (/**
+ * @param {?} rootContexts
+ * @param {?} routeReuseStrategy
+ * @param {?} forwardEvent
+ * @return {?}
+ */
+(rootContexts, routeReuseStrategy, forwardEvent) => map((/**
+ * @param {?} t
+ * @return {?}
+ */
+t => {
     new ActivateRoutes(routeReuseStrategy, (/** @type {?} */ (t.targetRouterState)), t.currentRouterState, forwardEvent)
         .activate(rootContexts);
     return t;
-});
+})));
 class ActivateRoutes {
     /**
      * @param {?} routeReuseStrategy
@@ -2798,16 +2980,25 @@ class ActivateRoutes {
         /** @type {?} */
         const children = nodeChildrenAsMap(currNode);
         // Recurse on the routes active in the future state to de-activate deeper children
-        futureNode.children.forEach(futureChild => {
+        futureNode.children.forEach((/**
+         * @param {?} futureChild
+         * @return {?}
+         */
+        futureChild => {
             /** @type {?} */
             const childOutletName = futureChild.value.outlet;
             this.deactivateRoutes(futureChild, children[childOutletName], contexts);
             delete children[childOutletName];
-        });
+        }));
         // De-activate the routes that will not be re-used
-        forEach(children, (v, childName) => {
+        forEach(children, (/**
+         * @param {?} v
+         * @param {?} childName
+         * @return {?}
+         */
+        (v, childName) => {
             this.deactivateRouteAndItsChildren(v, contexts);
-        });
+        }));
     }
     /**
      * @private
@@ -2888,7 +3079,12 @@ class ActivateRoutes {
             const children = nodeChildrenAsMap(route);
             /** @type {?} */
             const contexts = route.value.component ? context.children : parentContexts;
-            forEach(children, (v, k) => this.deactivateRouteAndItsChildren(v, contexts));
+            forEach(children, (/**
+             * @param {?} v
+             * @param {?} k
+             * @return {?}
+             */
+            (v, k) => this.deactivateRouteAndItsChildren(v, contexts)));
             if (context.outlet) {
                 // Destroy the component
                 context.outlet.deactivate();
@@ -2907,10 +3103,14 @@ class ActivateRoutes {
     activateChildRoutes(futureNode, currNode, contexts) {
         /** @type {?} */
         const children = nodeChildrenAsMap(currNode);
-        futureNode.children.forEach(c => {
+        futureNode.children.forEach((/**
+         * @param {?} c
+         * @return {?}
+         */
+        c => {
             this.activateRoutes(c, children[c.value.outlet], contexts);
             this.forwardEvent(new ActivationEnd(c.value.snapshot));
-        });
+        }));
         if (futureNode.children.length) {
             this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
         }
@@ -3009,7 +3209,7 @@ function parentLoadedConfig(snapshot) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Simple function check, but generic so type inference will flow. Example:
@@ -3076,7 +3276,7 @@ function isCanDeactivate(guard) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch {
     /**
@@ -3097,28 +3297,44 @@ class AbsoluteRedirect {
  * @return {?}
  */
 function noMatch(segmentGroup) {
-    return new Observable((obs) => obs.error(new NoMatch(segmentGroup)));
+    return new Observable((/**
+     * @param {?} obs
+     * @return {?}
+     */
+    (obs) => obs.error(new NoMatch(segmentGroup))));
 }
 /**
  * @param {?} newTree
  * @return {?}
  */
 function absoluteRedirect(newTree) {
-    return new Observable((obs) => obs.error(new AbsoluteRedirect(newTree)));
+    return new Observable((/**
+     * @param {?} obs
+     * @return {?}
+     */
+    (obs) => obs.error(new AbsoluteRedirect(newTree))));
 }
 /**
  * @param {?} redirectTo
  * @return {?}
  */
 function namedOutletsRedirect(redirectTo) {
-    return new Observable((obs) => obs.error(new Error(`Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`)));
+    return new Observable((/**
+     * @param {?} obs
+     * @return {?}
+     */
+    (obs) => obs.error(new Error(`Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`))));
 }
 /**
  * @param {?} route
  * @return {?}
  */
 function canLoadFails(route) {
-    return new Observable((obs) => obs.error(navigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`)));
+    return new Observable((/**
+     * @param {?} obs
+     * @return {?}
+     */
+    (obs) => obs.error(navigationCancelingError(`Cannot load children because the guard of the route "path: '${route.path}'" returned false`))));
 }
 /**
  * Returns the `UrlTree` with the redirection applied.
@@ -3157,8 +3373,16 @@ class ApplyRedirects {
         /** @type {?} */
         const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
         /** @type {?} */
-        const urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, (/** @type {?} */ (this.urlTree.fragment)))));
-        return urlTrees$.pipe(catchError((e) => {
+        const urlTrees$ = expanded$.pipe(map((/**
+         * @param {?} rootSegmentGroup
+         * @return {?}
+         */
+        (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, (/** @type {?} */ (this.urlTree.fragment))))));
+        return urlTrees$.pipe(catchError((/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
                 this.allowRedirects = false;
@@ -3169,7 +3393,7 @@ class ApplyRedirects {
                 throw this.noMatchError(e);
             }
             throw e;
-        }));
+        })));
     }
     /**
      * @private
@@ -3180,13 +3404,21 @@ class ApplyRedirects {
         /** @type {?} */
         const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
         /** @type {?} */
-        const mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, (/** @type {?} */ (tree.fragment)))));
-        return mapped$.pipe(catchError((e) => {
+        const mapped$ = expanded$.pipe(map((/**
+         * @param {?} rootSegmentGroup
+         * @return {?}
+         */
+        (rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, (/** @type {?} */ (tree.fragment))))));
+        return mapped$.pipe(catchError((/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
             }
             throw e;
-        }));
+        })));
     }
     /**
      * @private
@@ -3221,7 +3453,11 @@ class ApplyRedirects {
     expandSegmentGroup(ngModule, routes, segmentGroup, outlet) {
         if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
             return this.expandChildren(ngModule, routes, segmentGroup)
-                .pipe(map((children) => new UrlSegmentGroup([], children)));
+                .pipe(map((/**
+             * @param {?} children
+             * @return {?}
+             */
+            (children) => new UrlSegmentGroup([], children))));
         }
         return this.expandSegment(ngModule, segmentGroup, routes, segmentGroup.segments, outlet, true);
     }
@@ -3234,7 +3470,12 @@ class ApplyRedirects {
      * @return {?}
      */
     expandChildren(ngModule, routes, segmentGroup) {
-        return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
+        return waitForMap(segmentGroup.children, (/**
+         * @param {?} childOutlet
+         * @param {?} child
+         * @return {?}
+         */
+        (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet)));
     }
     /**
      * @private
@@ -3247,18 +3488,35 @@ class ApplyRedirects {
      * @return {?}
      */
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        return of(...routes).pipe(map((r) => {
+        return of(...routes).pipe(map((/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => {
             /** @type {?} */
             const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return expanded$.pipe(catchError((e) => {
+            return expanded$.pipe(catchError((/**
+             * @param {?} e
+             * @return {?}
+             */
+            (e) => {
                 if (e instanceof NoMatch) {
                     // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
                     // talk to Jason
                     return (/** @type {?} */ (of(null)));
                 }
                 throw e;
-            }));
-        }), concatAll(), first((s) => !!s), catchError((e, _) => {
+            })));
+        })), concatAll(), first((/**
+         * @param {?} s
+         * @return {?}
+         */
+        (s) => !!s)), catchError((/**
+         * @param {?} e
+         * @param {?} _
+         * @return {?}
+         */
+        (e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -3266,7 +3524,7 @@ class ApplyRedirects {
                 throw new NoMatch(segmentGroup);
             }
             throw e;
-        }));
+        })));
     }
     /**
      * @private
@@ -3331,11 +3589,15 @@ class ApplyRedirects {
         if ((/** @type {?} */ (route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((/**
+         * @param {?} newSegments
+         * @return {?}
+         */
+        (newSegments) => {
             /** @type {?} */
             const group = new UrlSegmentGroup(newSegments, {});
             return this.expandSegment(ngModule, group, routes, newSegments, outlet, false);
-        }));
+        })));
     }
     /**
      * @private
@@ -3356,9 +3618,13 @@ class ApplyRedirects {
         if ((/** @type {?} */ (route.redirectTo)).startsWith('/')) {
             return absoluteRedirect(newTree);
         }
-        return this.lineralizeSegments(route, newTree).pipe(mergeMap((newSegments) => {
+        return this.lineralizeSegments(route, newTree).pipe(mergeMap((/**
+         * @param {?} newSegments
+         * @return {?}
+         */
+        (newSegments) => {
             return this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-        }));
+        })));
     }
     /**
      * @private
@@ -3372,10 +3638,14 @@ class ApplyRedirects {
         if (route.path === '**') {
             if (route.loadChildren) {
                 return this.configLoader.load(ngModule.injector, route)
-                    .pipe(map((cfg) => {
+                    .pipe(map((/**
+                 * @param {?} cfg
+                 * @return {?}
+                 */
+                (cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                }));
+                })));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -3386,7 +3656,11 @@ class ApplyRedirects {
         const rawSlicedSegments = segments.slice(lastChild);
         /** @type {?} */
         const childConfig$ = this.getChildConfig(ngModule, route, segments);
-        return childConfig$.pipe(mergeMap((routerConfig) => {
+        return childConfig$.pipe(mergeMap((/**
+         * @param {?} routerConfig
+         * @return {?}
+         */
+        (routerConfig) => {
             /** @type {?} */
             const childModule = routerConfig.module;
             /** @type {?} */
@@ -3395,15 +3669,23 @@ class ApplyRedirects {
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 /** @type {?} */
                 const expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
-                return expanded$.pipe(map((children) => new UrlSegmentGroup(consumedSegments, children)));
+                return expanded$.pipe(map((/**
+                 * @param {?} children
+                 * @return {?}
+                 */
+                (children) => new UrlSegmentGroup(consumedSegments, children))));
             }
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
             /** @type {?} */
             const expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
-        }));
+            return expanded$.pipe(map((/**
+             * @param {?} cs
+             * @return {?}
+             */
+            (cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children))));
+        })));
     }
     /**
      * @private
@@ -3423,16 +3705,24 @@ class ApplyRedirects {
                 return of(route._loadedConfig);
             }
             return runCanLoadGuard(ngModule.injector, route, segments)
-                .pipe(mergeMap((shouldLoad) => {
+                .pipe(mergeMap((/**
+             * @param {?} shouldLoad
+             * @return {?}
+             */
+            (shouldLoad) => {
                 if (shouldLoad) {
                     return this.configLoader.load(ngModule.injector, route)
-                        .pipe(map((cfg) => {
+                        .pipe(map((/**
+                     * @param {?} cfg
+                     * @return {?}
+                     */
+                    (cfg) => {
                         route._loadedConfig = cfg;
                         return cfg;
-                    }));
+                    })));
                 }
                 return canLoadFails(route);
-            }));
+            })));
         }
         return of(new LoadedRouterConfig([], ngModule));
     }
@@ -3490,7 +3780,12 @@ class ApplyRedirects {
     createQueryParams(redirectToParams, actualParams) {
         /** @type {?} */
         const res = {};
-        forEach(redirectToParams, (v, k) => {
+        forEach(redirectToParams, (/**
+         * @param {?} v
+         * @param {?} k
+         * @return {?}
+         */
+        (v, k) => {
             /** @type {?} */
             const copySourceValue = typeof v === 'string' && v.startsWith(':');
             if (copySourceValue) {
@@ -3501,7 +3796,7 @@ class ApplyRedirects {
             else {
                 res[k] = v;
             }
-        });
+        }));
         return res;
     }
     /**
@@ -3517,9 +3812,14 @@ class ApplyRedirects {
         const updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
         /** @type {?} */
         let children = {};
-        forEach(group.children, (child, name) => {
+        forEach(group.children, (/**
+         * @param {?} child
+         * @param {?} name
+         * @return {?}
+         */
+        (child, name) => {
             children[name] = this.createSegmentGroup(redirectTo, child, segments, posParams);
-        });
+        }));
         return new UrlSegmentGroup(updatedSegments, children);
     }
     /**
@@ -3531,8 +3831,12 @@ class ApplyRedirects {
      * @return {?}
      */
     createSegments(redirectTo, redirectToSegments, actualSegments, posParams) {
-        return redirectToSegments.map(s => s.path.startsWith(':') ? this.findPosParam(redirectTo, s, posParams) :
-            this.findOrReturn(s, actualSegments));
+        return redirectToSegments.map((/**
+         * @param {?} s
+         * @return {?}
+         */
+        s => s.path.startsWith(':') ? this.findPosParam(redirectTo, s, posParams) :
+            this.findOrReturn(s, actualSegments)));
     }
     /**
      * @private
@@ -3579,7 +3883,11 @@ function runCanLoadGuard(moduleInjector, route, segments) {
     if (!canLoad || canLoad.length === 0)
         return of(true);
     /** @type {?} */
-    const obs = from(canLoad).pipe(map((injectionToken) => {
+    const obs = from(canLoad).pipe(map((/**
+     * @param {?} injectionToken
+     * @return {?}
+     */
+    (injectionToken) => {
         /** @type {?} */
         const guard = moduleInjector.get(injectionToken);
         /** @type {?} */
@@ -3594,8 +3902,12 @@ function runCanLoadGuard(moduleInjector, route, segments) {
             throw new Error('Invalid CanLoad guard');
         }
         return wrapIntoObservable(guardVal);
-    }));
-    return obs.pipe(concatAll(), every(result => result === true));
+    })));
+    return obs.pipe(concatAll(), every((/**
+     * @param {?} result
+     * @return {?}
+     */
+    result => result === true)));
 }
 /**
  * @param {?} segmentGroup
@@ -3703,7 +4015,11 @@ function createChildrenForEmptySegments(routes, primarySegmentGroup) {
  * @return {?}
  */
 function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, routes) {
-    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet(r) !== PRIMARY_OUTLET);
+    return routes.some((/**
+     * @param {?} r
+     * @return {?}
+     */
+    r => isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet(r) !== PRIMARY_OUTLET));
 }
 /**
  * @param {?} segmentGroup
@@ -3712,7 +4028,11 @@ function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, rout
  * @return {?}
  */
 function containsEmptyPathRedirects(segmentGroup, segments, routes) {
-    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r));
+    return routes.some((/**
+     * @param {?} r
+     * @return {?}
+     */
+    r => isEmptyPathRedirect(segmentGroup, segments, r)));
 }
 /**
  * @param {?} segmentGroup
@@ -3736,7 +4056,7 @@ function getOutlet(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} moduleInjector
@@ -3746,15 +4066,27 @@ function getOutlet(route) {
  * @return {?}
  */
 function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
-    return function (source) {
-        return source.pipe(switchMap(t => applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
-            .pipe(map(urlAfterRedirects => (Object.assign({}, t, { urlAfterRedirects }))))));
-    };
+    return (/**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return source.pipe(switchMap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
+            .pipe(map((/**
+         * @param {?} urlAfterRedirects
+         * @return {?}
+         */
+        urlAfterRedirects => (Object.assign({}, t, { urlAfterRedirects }))))))));
+    });
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CanActivate {
     /**
@@ -3842,12 +4174,21 @@ function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks 
     /** @type {?} */
     const prevChildren = nodeChildrenAsMap(currNode);
     // Process the children of the future route
-    futureNode.children.forEach(c => {
+    futureNode.children.forEach((/**
+     * @param {?} c
+     * @return {?}
+     */
+    c => {
         getRouteGuards(c, prevChildren[c.value.outlet], contexts, futurePath.concat([c.value]), checks);
         delete prevChildren[c.value.outlet];
-    });
+    }));
     // Process any children left from the current route (not active for the future route)
-    forEach(prevChildren, (v, k) => deactivateRouteAndItsChildren(v, (/** @type {?} */ (contexts)).getContext(k), checks));
+    forEach(prevChildren, (/**
+     * @param {?} v
+     * @param {?} k
+     * @return {?}
+     */
+    (v, k) => deactivateRouteAndItsChildren(v, (/** @type {?} */ (contexts)).getContext(k), checks)));
     return checks;
 }
 /**
@@ -3947,7 +4288,12 @@ function deactivateRouteAndItsChildren(route, context, checks) {
     const children = nodeChildrenAsMap(route);
     /** @type {?} */
     const r = route.value;
-    forEach(children, (node, childName) => {
+    forEach(children, (/**
+     * @param {?} node
+     * @param {?} childName
+     * @return {?}
+     */
+    (node, childName) => {
         if (!r.component) {
             deactivateRouteAndItsChildren(node, context, checks);
         }
@@ -3957,7 +4303,7 @@ function deactivateRouteAndItsChildren(route, context, checks) {
         else {
             deactivateRouteAndItsChildren(node, null, checks);
         }
-    });
+    }));
     if (!r.component) {
         checks.canDeactivateChecks.push(new CanDeactivate(null, r));
     }
@@ -3971,7 +4317,7 @@ function deactivateRouteAndItsChildren(route, context, checks) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const INITIAL_VALUE = Symbol('INITIAL_VALUE');
@@ -3979,12 +4325,31 @@ const INITIAL_VALUE = Symbol('INITIAL_VALUE');
  * @return {?}
  */
 function prioritizedGuardValue() {
-    return switchMap(obs => {
-        return (/** @type {?} */ (combineLatest(...obs.map(o => o.pipe(take(1), startWith((/** @type {?} */ (INITIAL_VALUE))))))
-            .pipe(scan((acc, list) => {
+    return switchMap((/**
+     * @param {?} obs
+     * @return {?}
+     */
+    obs => {
+        return (/** @type {?} */ (combineLatest(...obs.map((/**
+         * @param {?} o
+         * @return {?}
+         */
+        o => o.pipe(take(1), startWith((/** @type {?} */ (INITIAL_VALUE)))))))
+            .pipe(scan((/**
+         * @param {?} acc
+         * @param {?} list
+         * @return {?}
+         */
+        (acc, list) => {
             /** @type {?} */
             let isPending = false;
-            return list.reduce((innerAcc, val, i) => {
+            return list.reduce((/**
+             * @param {?} innerAcc
+             * @param {?} val
+             * @param {?} i
+             * @return {?}
+             */
+            (innerAcc, val, i) => {
                 if (innerAcc !== INITIAL_VALUE)
                     return innerAcc;
                 // Toggle pending flag if any values haven't been set yet
@@ -4004,15 +4369,23 @@ function prioritizedGuardValue() {
                     }
                 }
                 return innerAcc;
-            }, acc);
-        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
+            }), acc);
+        }), INITIAL_VALUE), filter((/**
+         * @param {?} item
+         * @return {?}
+         */
+        item => item !== INITIAL_VALUE)), map((/**
+         * @param {?} item
+         * @return {?}
+         */
+        item => isUrlTree(item) ? item : item === true)), //
         take(1))));
-    });
+    }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} moduleInjector
@@ -4020,20 +4393,36 @@ function prioritizedGuardValue() {
  * @return {?}
  */
 function checkGuards(moduleInjector, forwardEvent) {
-    return function (source) {
-        return source.pipe(mergeMap(t => {
+    return (/**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return source.pipe(mergeMap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => {
             const { targetSnapshot, currentSnapshot, guards: { canActivateChecks, canDeactivateChecks } } = t;
             if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
                 return of(Object.assign({}, t, { guardsResult: true }));
             }
             return runCanDeactivateChecks(canDeactivateChecks, (/** @type {?} */ (targetSnapshot)), currentSnapshot, moduleInjector)
-                .pipe(mergeMap(canDeactivate => {
+                .pipe(mergeMap((/**
+             * @param {?} canDeactivate
+             * @return {?}
+             */
+            canDeactivate => {
                 return canDeactivate && isBoolean(canDeactivate) ?
                     runCanActivateChecks((/** @type {?} */ (targetSnapshot)), canActivateChecks, moduleInjector, forwardEvent) :
                     of(canDeactivate);
-            }), map(guardsResult => (Object.assign({}, t, { guardsResult }))));
-        }));
-    };
+            })), map((/**
+             * @param {?} guardsResult
+             * @return {?}
+             */
+            guardsResult => (Object.assign({}, t, { guardsResult })))));
+        })));
+    });
 }
 /**
  * @param {?} checks
@@ -4043,7 +4432,15 @@ function checkGuards(moduleInjector, forwardEvent) {
  * @return {?}
  */
 function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
-    return from(checks).pipe(mergeMap(check => runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector)), first(result => { return result !== true; }, (/** @type {?} */ (true))));
+    return from(checks).pipe(mergeMap((/**
+     * @param {?} check
+     * @return {?}
+     */
+    check => runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector))), first((/**
+     * @param {?} result
+     * @return {?}
+     */
+    result => { return result !== true; }), (/** @type {?} */ (true))));
 }
 /**
  * @param {?} futureSnapshot
@@ -4053,17 +4450,29 @@ function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
  * @return {?}
  */
 function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
-    return from(checks).pipe(concatMap((check) => {
+    return from(checks).pipe(concatMap((/**
+     * @param {?} check
+     * @return {?}
+     */
+    (check) => {
         return from([
             fireChildActivationStart(check.route.parent, forwardEvent),
             fireActivationStart(check.route, forwardEvent),
             runCanActivateChild(futureSnapshot, check.path, moduleInjector),
             runCanActivate(futureSnapshot, check.route, moduleInjector)
         ])
-            .pipe(concatAll(), first(result => {
+            .pipe(concatAll(), first((/**
+         * @param {?} result
+         * @return {?}
+         */
+        result => {
             return result !== true;
-        }, (/** @type {?} */ (true))));
-    }), first(result => { return result !== true; }, (/** @type {?} */ (true))));
+        }), (/** @type {?} */ (true))));
+    })), first((/**
+     * @param {?} result
+     * @return {?}
+     */
+    result => { return result !== true; }), (/** @type {?} */ (true))));
 }
 /**
  * This should fire off `ActivationStart` events for each route being activated at this
@@ -4111,8 +4520,15 @@ function runCanActivate(futureRSS, futureARS, moduleInjector) {
     if (!canActivate || canActivate.length === 0)
         return of(true);
     /** @type {?} */
-    const canActivateObservables = canActivate.map((c) => {
-        return defer(() => {
+    const canActivateObservables = canActivate.map((/**
+     * @param {?} c
+     * @return {?}
+     */
+    (c) => {
+        return defer((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             const guard = getToken(c, futureARS, moduleInjector);
             /** @type {?} */
@@ -4127,8 +4543,8 @@ function runCanActivate(futureRSS, futureARS, moduleInjector) {
                 throw new Error('Invalid CanActivate guard');
             }
             return observable.pipe(first());
-        });
-    });
+        }));
+    }));
     return of(canActivateObservables).pipe(prioritizedGuardValue());
 }
 /**
@@ -4143,13 +4559,32 @@ function runCanActivateChild(futureRSS, path, moduleInjector) {
     /** @type {?} */
     const canActivateChildGuards = path.slice(0, path.length - 1)
         .reverse()
-        .map(p => getCanActivateChild(p))
-        .filter(_ => _ !== null);
+        .map((/**
+     * @param {?} p
+     * @return {?}
+     */
+    p => getCanActivateChild(p)))
+        .filter((/**
+     * @param {?} _
+     * @return {?}
+     */
+    _ => _ !== null));
     /** @type {?} */
-    const canActivateChildGuardsMapped = canActivateChildGuards.map((d) => {
-        return defer(() => {
+    const canActivateChildGuardsMapped = canActivateChildGuards.map((/**
+     * @param {?} d
+     * @return {?}
+     */
+    (d) => {
+        return defer((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
-            const guardsMapped = d.guards.map((c) => {
+            const guardsMapped = d.guards.map((/**
+             * @param {?} c
+             * @return {?}
+             */
+            (c) => {
                 /** @type {?} */
                 const guard = getToken(c, d.node, moduleInjector);
                 /** @type {?} */
@@ -4164,10 +4599,10 @@ function runCanActivateChild(futureRSS, path, moduleInjector) {
                     throw new Error('Invalid CanActivateChild guard');
                 }
                 return observable.pipe(first());
-            });
+            }));
             return of(guardsMapped).pipe(prioritizedGuardValue());
-        });
-    });
+        }));
+    }));
     return of(canActivateChildGuardsMapped).pipe(prioritizedGuardValue());
 }
 /**
@@ -4184,7 +4619,11 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
     if (!canDeactivate || canDeactivate.length === 0)
         return of(true);
     /** @type {?} */
-    const canDeactivateObservables = canDeactivate.map((c) => {
+    const canDeactivateObservables = canDeactivate.map((/**
+     * @param {?} c
+     * @return {?}
+     */
+    (c) => {
         /** @type {?} */
         const guard = getToken(c, currARS, moduleInjector);
         /** @type {?} */
@@ -4200,13 +4639,13 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
             throw new Error('Invalid CanDeactivate guard');
         }
         return observable.pipe(first());
-    });
+    }));
     return of(canDeactivateObservables).pipe(prioritizedGuardValue());
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch$1 {
 }
@@ -4259,7 +4698,11 @@ class Recognizer {
             return of(routeState);
         }
         catch (e) {
-            return new Observable((obs) => obs.error(e));
+            return new Observable((/**
+             * @param {?} obs
+             * @return {?}
+             */
+            (obs) => obs.error(e)));
         }
     }
     /**
@@ -4273,7 +4716,11 @@ class Recognizer {
         const i = inheritedParamsDataResolve(route, this.paramsInheritanceStrategy);
         route.params = Object.freeze(i.params);
         route.data = Object.freeze(i.data);
-        routeNode.children.forEach(n => this.inheritParamsAndData(n));
+        routeNode.children.forEach((/**
+         * @param {?} n
+         * @return {?}
+         */
+        n => this.inheritParamsAndData(n)));
     }
     /**
      * @param {?} config
@@ -4294,7 +4741,12 @@ class Recognizer {
      */
     processChildren(config, segmentGroup) {
         /** @type {?} */
-        const children = mapChildrenIntoArray(segmentGroup, (child, childOutlet) => this.processSegmentGroup(config, child, childOutlet));
+        const children = mapChildrenIntoArray(segmentGroup, (/**
+         * @param {?} child
+         * @param {?} childOutlet
+         * @return {?}
+         */
+        (child, childOutlet) => this.processSegmentGroup(config, child, childOutlet)));
         checkOutletNameUniqueness(children);
         sortActivatedRouteSnapshots(children);
         return children;
@@ -4382,13 +4834,18 @@ class Recognizer {
  * @return {?}
  */
 function sortActivatedRouteSnapshots(nodes) {
-    nodes.sort((a, b) => {
+    nodes.sort((/**
+     * @param {?} a
+     * @param {?} b
+     * @return {?}
+     */
+    (a, b) => {
         if (a.value.outlet === PRIMARY_OUTLET)
             return -1;
         if (b.value.outlet === PRIMARY_OUTLET)
             return 1;
         return a.value.outlet.localeCompare(b.value.outlet);
-    });
+    }));
 }
 /**
  * @param {?} route
@@ -4424,7 +4881,12 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     /** @type {?} */
     const posParams = {};
-    forEach((/** @type {?} */ (res.posParams)), (v, k) => { posParams[k] = v.path; });
+    forEach((/** @type {?} */ (res.posParams)), (/**
+     * @param {?} v
+     * @param {?} k
+     * @return {?}
+     */
+    (v, k) => { posParams[k] = v.path; }));
     /** @type {?} */
     const parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
         posParams;
@@ -4437,18 +4899,30 @@ function match$1(segmentGroup, route, segments) {
 function checkOutletNameUniqueness(nodes) {
     /** @type {?} */
     const names = {};
-    nodes.forEach(n => {
+    nodes.forEach((/**
+     * @param {?} n
+     * @return {?}
+     */
+    n => {
         /** @type {?} */
         const routeWithSameOutletName = names[n.value.outlet];
         if (routeWithSameOutletName) {
             /** @type {?} */
-            const p = routeWithSameOutletName.url.map(s => s.toString()).join('/');
+            const p = routeWithSameOutletName.url.map((/**
+             * @param {?} s
+             * @return {?}
+             */
+            s => s.toString())).join('/');
             /** @type {?} */
-            const c = n.value.url.map(s => s.toString()).join('/');
+            const c = n.value.url.map((/**
+             * @param {?} s
+             * @return {?}
+             */
+            s => s.toString())).join('/');
             throw new Error(`Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
         }
         names[n.value.outlet] = n.value;
-    });
+    }));
 }
 /**
  * @param {?} segmentGroup
@@ -4567,7 +5041,11 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
  * @return {?}
  */
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET);
+    return routes.some((/**
+     * @param {?} r
+     * @return {?}
+     */
+    r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET));
 }
 /**
  * @param {?} segmentGroup
@@ -4576,7 +5054,11 @@ function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, 
  * @return {?}
  */
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
-    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r));
+    return routes.some((/**
+     * @param {?} r
+     * @return {?}
+     */
+    r => emptyPathMatch(segmentGroup, slicedSegments, r)));
 }
 /**
  * @param {?} segmentGroup
@@ -4614,7 +5096,7 @@ function getResolve(route) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} rootComponentType
@@ -4625,15 +5107,27 @@ function getResolve(route) {
  * @return {?}
  */
 function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
-    return function (source) {
-        return source.pipe(mergeMap(t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
-            .pipe(map(targetSnapshot => (Object.assign({}, t, { targetSnapshot }))))));
-    };
+    return (/**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return source.pipe(mergeMap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
+            .pipe(map((/**
+         * @param {?} targetSnapshot
+         * @return {?}
+         */
+        targetSnapshot => (Object.assign({}, t, { targetSnapshot }))))))));
+    });
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} paramsInheritanceStrategy
@@ -4641,16 +5135,37 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
  * @return {?}
  */
 function resolveData(paramsInheritanceStrategy, moduleInjector) {
-    return function (source) {
-        return source.pipe(mergeMap(t => {
+    return (/**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return source.pipe(mergeMap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => {
             const { targetSnapshot, guards: { canActivateChecks } } = t;
             if (!canActivateChecks.length) {
                 return of(t);
             }
             return from(canActivateChecks)
-                .pipe(concatMap(check => runResolve(check.route, (/** @type {?} */ (targetSnapshot)), paramsInheritanceStrategy, moduleInjector)), reduce((_, __) => _), map(_ => t));
-        }));
-    };
+                .pipe(concatMap((/**
+             * @param {?} check
+             * @return {?}
+             */
+            check => runResolve(check.route, (/** @type {?} */ (targetSnapshot)), paramsInheritanceStrategy, moduleInjector))), reduce((/**
+             * @param {?} _
+             * @param {?} __
+             * @return {?}
+             */
+            (_, __) => _)), map((/**
+             * @param {?} _
+             * @return {?}
+             */
+            _ => t)));
+        })));
+    });
 }
 /**
  * @param {?} futureARS
@@ -4663,11 +5178,15 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjec
     /** @type {?} */
     const resolve = futureARS._resolve;
     return resolveNode(resolve, futureARS, futureRSS, moduleInjector)
-        .pipe(map((resolvedData) => {
+        .pipe(map((/**
+     * @param {?} resolvedData
+     * @return {?}
+     */
+    (resolvedData) => {
         futureARS._resolvedData = resolvedData;
         futureARS.data = Object.assign({}, futureARS.data, inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
         return null;
-    }));
+    })));
 }
 /**
  * @param {?} resolve
@@ -4686,19 +5205,34 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
         /** @type {?} */
         const key = keys[0];
         return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-            .pipe(map((value) => { return { [key]: value }; }));
+            .pipe(map((/**
+         * @param {?} value
+         * @return {?}
+         */
+        (value) => { return { [key]: value }; })));
     }
     /** @type {?} */
     const data = {};
     /** @type {?} */
-    const runningResolvers$ = from(keys).pipe(mergeMap((key) => {
+    const runningResolvers$ = from(keys).pipe(mergeMap((/**
+     * @param {?} key
+     * @return {?}
+     */
+    (key) => {
         return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-            .pipe(map((value) => {
+            .pipe(map((/**
+         * @param {?} value
+         * @return {?}
+         */
+        (value) => {
             data[key] = value;
             return value;
-        }));
-    }));
-    return runningResolvers$.pipe(last(), map(() => data));
+        })));
+    })));
+    return runningResolvers$.pipe(last(), map((/**
+     * @return {?}
+     */
+    () => data)));
 }
 /**
  * @param {?} injectionToken
@@ -4716,7 +5250,7 @@ function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Perform a side effect through a switchMap for every emission on the source Observable,
@@ -4728,21 +5262,32 @@ function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
  * @return {?}
  */
 function switchTap(next) {
-    return function (source) {
-        return source.pipe(switchMap(v => {
+    return (/**
+     * @param {?} source
+     * @return {?}
+     */
+    function (source) {
+        return source.pipe(switchMap((/**
+         * @param {?} v
+         * @return {?}
+         */
+        v => {
             /** @type {?} */
             const nextResult = next(v);
             if (nextResult) {
-                return from(nextResult).pipe(map(() => v));
+                return from(nextResult).pipe(map((/**
+                 * @return {?}
+                 */
+                () => v)));
             }
             return from([v]);
-        }));
-    };
+        })));
+    });
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4798,7 +5343,7 @@ class DefaultRouteReuseStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@docsNotRequired
@@ -4830,14 +5375,18 @@ class RouterConfigLoader {
         }
         /** @type {?} */
         const moduleFactory$ = this.loadModuleFactory((/** @type {?} */ (route.loadChildren)));
-        return moduleFactory$.pipe(map((factory) => {
+        return moduleFactory$.pipe(map((/**
+         * @param {?} factory
+         * @return {?}
+         */
+        (factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             /** @type {?} */
             const module = factory.create(parentInjector);
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
-        }));
+        })));
     }
     /**
      * @private
@@ -4849,21 +5398,25 @@ class RouterConfigLoader {
             return from(this.loader.load(loadChildren));
         }
         else {
-            return wrapIntoObservable(loadChildren()).pipe(mergeMap((t) => {
+            return wrapIntoObservable(loadChildren()).pipe(mergeMap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            (t) => {
                 if (t instanceof NgModuleFactory) {
                     return of(t);
                 }
                 else {
                     return from(this.compiler.compileModuleAsync(t));
                 }
-            }));
+            })));
         }
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -4906,7 +5459,7 @@ class DefaultUrlHandlingStrategy {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} error
@@ -5039,9 +5592,17 @@ class Router {
          */
         this.relativeLinkResolution = 'legacy';
         /** @type {?} */
-        const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
+        const onLoadStart = (/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => this.triggerEvent(new RouteConfigLoadStart(r)));
         /** @type {?} */
-        const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
+        const onLoadEnd = (/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => this.triggerEvent(new RouteConfigLoadEnd(r)));
         this.ngModule = injector.get(NgModuleRef);
         this.console = injector.get(ɵConsole);
         /** @type {?} */
@@ -5084,11 +5645,23 @@ class Router {
     setupNavigations(transitions) {
         /** @type {?} */
         const eventsSubject = ((/** @type {?} */ (this.events)));
-        return (/** @type {?} */ ((/** @type {?} */ (transitions.pipe(filter(t => t.id !== 0), 
+        return (/** @type {?} */ ((/** @type {?} */ (transitions.pipe(filter((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => t.id !== 0)), 
         // Extract URL
-        map(t => ((/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) }))))), 
+        map((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => ((/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })))))), 
         // Store the Navigation object
-        tap(t => {
+        tap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => {
             this.currentNavigation = {
                 id: t.id,
                 initialUrl: t.currentRawUrl,
@@ -5098,14 +5671,22 @@ class Router {
                 previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
                     null
             };
-        }), 
+        })), 
         // Using switchMap so we cancel executing navigations when a new one comes in
-        switchMap(t => {
+        switchMap((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => {
             /** @type {?} */
             let completed = false;
             /** @type {?} */
             let errored = false;
-            return of(t).pipe(switchMap(t => {
+            return of(t).pipe(switchMap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 /** @type {?} */
                 const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.browserUrlTree.toString();
                 /** @type {?} */
@@ -5114,7 +5695,11 @@ class Router {
                 if (processCurrentUrl) {
                     return of(t).pipe(
                     // Fire NavigationStart event
-                    switchMap(t => {
+                    switchMap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         /** @type {?} */
                         const transition = this.transitions.getValue();
                         eventsSubject.next(new NavigationStart(t.id, this.serializeUrl(t.extractedUrl), t.source, t.restoredState));
@@ -5122,33 +5707,53 @@ class Router {
                             return EMPTY;
                         }
                         return [t];
-                    }), 
+                    })), 
                     // This delay is required to match old behavior that forced navigation to
                     // always be async
-                    switchMap(t => Promise.resolve(t)), 
+                    switchMap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => Promise.resolve(t))), 
                     // ApplyRedirects
                     applyRedirects$1(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
                     // Update the currentNavigation
-                    tap(t => {
+                    tap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         this.currentNavigation = Object.assign({}, (/** @type {?} */ (this.currentNavigation)), { finalUrl: t.urlAfterRedirects });
-                    }), 
+                    })), 
                     // Recognize
-                    recognize$1(this.rootComponentType, this.config, (url) => this.serializeUrl(url), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
+                    recognize$1(this.rootComponentType, this.config, (/**
+                     * @param {?} url
+                     * @return {?}
+                     */
+                    (url) => this.serializeUrl(url)), this.paramsInheritanceStrategy, this.relativeLinkResolution), 
                     // Update URL if in `eager` update mode
-                    tap(t => {
+                    tap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         if (this.urlUpdateStrategy === 'eager') {
                             if (!t.extras.skipLocationChange) {
                                 this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
                             }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
-                    }), 
+                    })), 
                     // Fire RoutesRecognized
-                    tap(t => {
+                    tap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         /** @type {?} */
                         const routesRecognized = new RoutesRecognized(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)));
                         eventsSubject.next(routesRecognized);
-                    }));
+                    })));
                 }
                 else {
                     /** @type {?} */
@@ -5176,9 +5781,13 @@ class Router {
                         return EMPTY;
                     }
                 }
-            }), 
+            })), 
             // Before Preactivation
-            switchTap(t => {
+            switchTap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 const { targetSnapshot, id: navigationId, extractedUrl: appliedUrlTree, rawUrl: rawUrlTree, extras: { skipLocationChange, replaceUrl } } = t;
                 return this.hooks.beforePreactivation((/** @type {?} */ (targetSnapshot)), {
                     navigationId,
@@ -5187,24 +5796,48 @@ class Router {
                     skipLocationChange: !!skipLocationChange,
                     replaceUrl: !!replaceUrl,
                 });
-            }), 
+            })), 
             // --- GUARDS ---
-            tap(t => {
+            tap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 /** @type {?} */
                 const guardsStart = new GuardsCheckStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)));
                 this.triggerEvent(guardsStart);
-            }), map(t => (Object.assign({}, t, { guards: getAllRouteGuards((/** @type {?} */ (t.targetSnapshot)), t.currentSnapshot, this.rootContexts) }))), checkGuards(this.ngModule.injector, (evt) => this.triggerEvent(evt)), tap(t => {
+            })), map((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => (Object.assign({}, t, { guards: getAllRouteGuards((/** @type {?} */ (t.targetSnapshot)), t.currentSnapshot, this.rootContexts) })))), checkGuards(this.ngModule.injector, (/**
+             * @param {?} evt
+             * @return {?}
+             */
+            (evt) => this.triggerEvent(evt))), tap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 if (isUrlTree(t.guardsResult)) {
                     /** @type {?} */
                     const error = navigationCancelingError(`Redirecting to "${this.serializeUrl(t.guardsResult)}"`);
                     error.url = t.guardsResult;
                     throw error;
                 }
-            }), tap(t => {
+            })), tap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 /** @type {?} */
                 const guardsEnd = new GuardsCheckEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)), !!t.guardsResult);
                 this.triggerEvent(guardsEnd);
-            }), filter(t => {
+            })), filter((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 if (!t.guardsResult) {
                     this.resetUrlToCurrentUrlTree();
                     /** @type {?} */
@@ -5214,25 +5847,41 @@ class Router {
                     return false;
                 }
                 return true;
-            }), 
+            })), 
             // --- RESOLVE ---
-            switchTap(t => {
+            switchTap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
                 if (t.guards.canActivateChecks.length) {
-                    return of(t).pipe(tap(t => {
+                    return of(t).pipe(tap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         /** @type {?} */
                         const resolveStart = new ResolveStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)));
                         this.triggerEvent(resolveStart);
-                    }), resolveData(this.paramsInheritanceStrategy, this.ngModule.injector), //
-                    tap(t => {
+                    })), resolveData(this.paramsInheritanceStrategy, this.ngModule.injector), //
+                    tap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
                         /** @type {?} */
                         const resolveEnd = new ResolveEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)));
                         this.triggerEvent(resolveEnd);
-                    }));
+                    })));
                 }
                 return undefined;
-            }), 
+            })), 
             // --- AFTER PREACTIVATION ---
-            switchTap((t) => {
+            switchTap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            (t) => {
                 const { targetSnapshot, id: navigationId, extractedUrl: appliedUrlTree, rawUrl: rawUrlTree, extras: { skipLocationChange, replaceUrl } } = t;
                 return this.hooks.afterPreactivation((/** @type {?} */ (targetSnapshot)), {
                     navigationId,
@@ -5241,17 +5890,25 @@ class Router {
                     skipLocationChange: !!skipLocationChange,
                     replaceUrl: !!replaceUrl,
                 });
-            }), map((t) => {
+            })), map((/**
+             * @param {?} t
+             * @return {?}
+             */
+            (t) => {
                 /** @type {?} */
                 const targetRouterState = createRouterState(this.routeReuseStrategy, (/** @type {?} */ (t.targetSnapshot)), t.currentRouterState);
                 return (Object.assign({}, t, { targetRouterState }));
-            }), 
+            })), 
             /* Once here, we are about to activate syncronously. The assumption is this will
                succeed, and user code may read from the Router service. Therefore before
                activation, we need to update router properties storing the current URL and the
                RouterState, as well as updated the browser URL. All this should happen *before*
                activating. */
-            tap((t) => {
+            tap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            (t) => {
                 this.currentUrlTree = t.urlAfterRedirects;
                 this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
                 ((/** @type {?} */ (this))).routerState = (/** @type {?} */ (t.targetRouterState));
@@ -5261,13 +5918,20 @@ class Router {
                     }
                     this.browserUrlTree = t.urlAfterRedirects;
                 }
-            }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({ /**
+            })), activateRoutes(this.rootContexts, this.routeReuseStrategy, (/**
+             * @param {?} evt
+             * @return {?}
+             */
+            (evt) => this.triggerEvent(evt))), tap({ /**
                  * @return {?}
                  */
                 next() { completed = true; }, /**
                  * @return {?}
                  */
-                complete() { completed = true; } }), finalize(() => {
+                complete() { completed = true; } }), finalize((/**
+             * @return {?}
+             */
+            () => {
                 /* When the navigation stream finishes either through error or success, we set the
                  * `completed` or `errored` flag. However, there are some situations where we could
                  * get here without either of those being set. For instance, a redirect during
@@ -5290,7 +5954,11 @@ class Router {
                 // successful, lastSuccessfulTransition will have already been set. Therefore we
                 // can safely set currentNavigation to null here.
                 this.currentNavigation = null;
-            }), catchError((e) => {
+            })), catchError((/**
+             * @param {?} e
+             * @return {?}
+             */
+            (e) => {
                 errored = true;
                 /* This error type is issued during Redirect, and is handled as a cancellation
                  * rather than an error. */
@@ -5329,9 +5997,9 @@ class Router {
                     }
                 }
                 return EMPTY;
-            }));
+            })));
             // TODO(jasonaden): remove cast once g3 is on updated TypeScript
-        }))))));
+        })))))));
     }
     /**
      * \@internal
@@ -5377,7 +6045,11 @@ class Router {
         // already patch onPopState, so location change callback will
         // run into ngZone
         if (!this.locationSubscription) {
-            this.locationSubscription = (/** @type {?} */ (this.location.subscribe((change) => {
+            this.locationSubscription = (/** @type {?} */ (this.location.subscribe((/**
+             * @param {?} change
+             * @return {?}
+             */
+            (change) => {
                 /** @type {?} */
                 let rawUrlTree = this.parseUrl(change['url']);
                 /** @type {?} */
@@ -5386,8 +6058,11 @@ class Router {
                 // exists, restore the state.
                 /** @type {?} */
                 const state = change.state && change.state.navigationId ? change.state : null;
-                setTimeout(() => { this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }, 0);
-            })));
+                setTimeout((/**
+                 * @return {?}
+                 */
+                () => { this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }), 0);
+            }))));
         }
     }
     /**
@@ -5631,21 +6306,30 @@ class Router {
      * @return {?}
      */
     removeEmptyProps(params) {
-        return Object.keys(params).reduce((result, key) => {
+        return Object.keys(params).reduce((/**
+         * @param {?} result
+         * @param {?} key
+         * @return {?}
+         */
+        (result, key) => {
             /** @type {?} */
             const value = params[key];
             if (value !== null && value !== undefined) {
                 result[key] = value;
             }
             return result;
-        }, {});
+        }), {});
     }
     /**
      * @private
      * @return {?}
      */
     processNavigations() {
-        this.navigations.subscribe(t => {
+        this.navigations.subscribe((/**
+         * @param {?} t
+         * @return {?}
+         */
+        t => {
             this.navigated = true;
             this.lastSuccessfulId = t.id;
             ((/** @type {?} */ (this.events)))
@@ -5653,7 +6337,11 @@ class Router {
             this.lastSuccessfulNavigation = this.currentNavigation;
             this.currentNavigation = null;
             t.resolve(true);
-        }, e => { this.console.warn(`Unhandled Navigation Error: `); });
+        }), (/**
+         * @param {?} e
+         * @return {?}
+         */
+        e => { this.console.warn(`Unhandled Navigation Error: `); }));
     }
     /**
      * @private
@@ -5692,10 +6380,15 @@ class Router {
         /** @type {?} */
         let reject = null;
         /** @type {?} */
-        const promise = new Promise((res, rej) => {
+        const promise = new Promise((/**
+         * @param {?} res
+         * @param {?} rej
+         * @return {?}
+         */
+        (res, rej) => {
             resolve = res;
             reject = rej;
-        });
+        }));
         /** @type {?} */
         const id = ++this.navigationId;
         this.setTransition({
@@ -5709,7 +6402,11 @@ class Router {
         });
         // Make sure that the error is propagated even though `processNavigations` catch
         // handler does not rethrow
-        return promise.catch((e) => { return Promise.reject(e); });
+        return promise.catch((/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => { return Promise.reject(e); }));
     }
     /**
      * @private
@@ -5768,7 +6465,7 @@ function validateCommands(commands) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6012,11 +6709,15 @@ class RouterLinkWithHref {
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
-        this.subscription = router.events.subscribe((s) => {
+        this.subscription = router.events.subscribe((/**
+         * @param {?} s
+         * @return {?}
+         */
+        (s) => {
             if (s instanceof NavigationEnd) {
                 this.updateTargetUrlAndHref();
             }
-        });
+        }));
     }
     /**
      * @param {?} commands
@@ -6165,7 +6866,7 @@ function attrBoolValue(s) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6248,18 +6949,30 @@ class RouterLinkActive {
         this.classes = [];
         this.isActive = false;
         this.routerLinkActiveOptions = { exact: false };
-        this.subscription = router.events.subscribe((s) => {
+        this.subscription = router.events.subscribe((/**
+         * @param {?} s
+         * @return {?}
+         */
+        (s) => {
             if (s instanceof NavigationEnd) {
                 this.update();
             }
-        });
+        }));
     }
     /**
      * @return {?}
      */
     ngAfterContentInit() {
-        this.links.changes.subscribe(_ => this.update());
-        this.linksWithHrefs.changes.subscribe(_ => this.update());
+        this.links.changes.subscribe((/**
+         * @param {?} _
+         * @return {?}
+         */
+        _ => this.update()));
+        this.linksWithHrefs.changes.subscribe((/**
+         * @param {?} _
+         * @return {?}
+         */
+        _ => this.update()));
         this.update();
     }
     /**
@@ -6269,7 +6982,11 @@ class RouterLinkActive {
     set routerLinkActive(data) {
         /** @type {?} */
         const classes = Array.isArray(data) ? data : data.split(' ');
-        this.classes = classes.filter(c => !!c);
+        this.classes = classes.filter((/**
+         * @param {?} c
+         * @return {?}
+         */
+        c => !!c));
     }
     /**
      * @param {?} changes
@@ -6287,21 +7004,28 @@ class RouterLinkActive {
     update() {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
             return;
-        Promise.resolve().then(() => {
+        Promise.resolve().then((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             const hasActiveLinks = this.hasActiveLinks();
             if (this.isActive !== hasActiveLinks) {
                 ((/** @type {?} */ (this))).isActive = hasActiveLinks;
-                this.classes.forEach((c) => {
+                this.classes.forEach((/**
+                 * @param {?} c
+                 * @return {?}
+                 */
+                (c) => {
                     if (hasActiveLinks) {
                         this.renderer.addClass(this.element.nativeElement, c);
                     }
                     else {
                         this.renderer.removeClass(this.element.nativeElement, c);
                     }
-                });
+                }));
             }
-        });
+        }));
     }
     /**
      * @private
@@ -6309,7 +7033,11 @@ class RouterLinkActive {
      * @return {?}
      */
     isLinkActive(router) {
-        return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
+        return (/**
+         * @param {?} link
+         * @return {?}
+         */
+        (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact));
     }
     /**
      * @private
@@ -6375,7 +7103,7 @@ RouterLinkActive.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6472,7 +7200,7 @@ class ChildrenOutletContexts {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -6702,7 +7430,7 @@ class OutletInjector {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
 *@license
@@ -6739,7 +7467,10 @@ class PreloadAllModules {
      * @return {?}
      */
     preload(route, fn) {
-        return fn().pipe(catchError(() => of(null)));
+        return fn().pipe(catchError((/**
+         * @return {?}
+         */
+        () => of(null))));
     }
 }
 /**
@@ -6784,9 +7515,17 @@ class RouterPreloader {
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
         /** @type {?} */
-        const onStartLoad = (r) => router.triggerEvent(new RouteConfigLoadStart(r));
+        const onStartLoad = (/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => router.triggerEvent(new RouteConfigLoadStart(r)));
         /** @type {?} */
-        const onEndLoad = (r) => router.triggerEvent(new RouteConfigLoadEnd(r));
+        const onEndLoad = (/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => router.triggerEvent(new RouteConfigLoadEnd(r)));
         this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
     }
     /**
@@ -6795,8 +7534,18 @@ class RouterPreloader {
     setUpPreloading() {
         this.subscription =
             this.router.events
-                .pipe(filter((e) => e instanceof NavigationEnd), concatMap(() => this.preload()))
-                .subscribe(() => { });
+                .pipe(filter((/**
+             * @param {?} e
+             * @return {?}
+             */
+            (e) => e instanceof NavigationEnd)), concatMap((/**
+             * @return {?}
+             */
+            () => this.preload())))
+                .subscribe((/**
+             * @return {?}
+             */
+            () => { }));
     }
     /**
      * @return {?}
@@ -6838,7 +7587,11 @@ class RouterPreloader {
                 res.push(this.processRoutes(ngModule, route.children));
             }
         }
-        return from(res).pipe(mergeAll(), map((_) => void 0));
+        return from(res).pipe(mergeAll(), map((/**
+         * @param {?} _
+         * @return {?}
+         */
+        (_) => void 0)));
     }
     /**
      * @private
@@ -6847,14 +7600,21 @@ class RouterPreloader {
      * @return {?}
      */
     preloadConfig(ngModule, route) {
-        return this.preloadingStrategy.preload(route, () => {
+        return this.preloadingStrategy.preload(route, (/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             const loaded$ = this.loader.load(ngModule.injector, route);
-            return loaded$.pipe(mergeMap((config) => {
+            return loaded$.pipe(mergeMap((/**
+             * @param {?} config
+             * @return {?}
+             */
+            (config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
-            }));
-        });
+            })));
+        }));
     }
 }
 RouterPreloader.decorators = [
@@ -6875,7 +7635,7 @@ RouterPreloader.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class RouterScroller {
     /**
@@ -6913,7 +7673,11 @@ class RouterScroller {
      * @return {?}
      */
     createScrollEvents() {
-        return this.router.events.subscribe(e => {
+        return this.router.events.subscribe((/**
+         * @param {?} e
+         * @return {?}
+         */
+        e => {
             if (e instanceof NavigationStart) {
                 // store the scroll position of the current stable navigations.
                 this.store[this.lastId] = this.viewportScroller.getScrollPosition();
@@ -6924,14 +7688,18 @@ class RouterScroller {
                 this.lastId = e.id;
                 this.scheduleScrollEvent(e, this.router.parseUrl(e.urlAfterRedirects).fragment);
             }
-        });
+        }));
     }
     /**
      * @private
      * @return {?}
      */
     consumeScrollEvents() {
-        return this.router.events.subscribe(e => {
+        return this.router.events.subscribe((/**
+         * @param {?} e
+         * @return {?}
+         */
+        e => {
             if (!(e instanceof Scroll))
                 return;
             // a popstate event. The pop state event will always ignore anchor scrolling.
@@ -6952,7 +7720,7 @@ class RouterScroller {
                     this.viewportScroller.scrollToPosition([0, 0]);
                 }
             }
-        });
+        }));
     }
     /**
      * @private
@@ -6978,7 +7746,7 @@ class RouterScroller {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @license
@@ -7277,12 +8045,16 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
     if (opts.enableTracing) {
         /** @type {?} */
         const dom = ɵgetDOM();
-        router.events.subscribe((e) => {
+        router.events.subscribe((/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => {
             dom.logGroup(`Router Event: ${((/** @type {?} */ (e.constructor))).name}`);
             dom.log(e.toString());
             dom.log(e);
             dom.logGroupEnd();
-        });
+        }));
     }
     if (opts.onSameUrlNavigation) {
         router.onSameUrlNavigation = opts.onSameUrlNavigation;
@@ -7331,11 +8103,18 @@ class RouterInitializer {
     appInitializer() {
         /** @type {?} */
         const p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-        return p.then(() => {
+        return p.then((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             let resolve = (/** @type {?} */ (null));
             /** @type {?} */
-            const res = new Promise(r => resolve = r);
+            const res = new Promise((/**
+             * @param {?} r
+             * @return {?}
+             */
+            r => resolve = r));
             /** @type {?} */
             const router = this.injector.get(Router);
             /** @type {?} */
@@ -7348,7 +8127,10 @@ class RouterInitializer {
                 resolve(true);
             }
             else if (opts.initialNavigation === 'enabled') {
-                router.hooks.afterPreactivation = () => {
+                router.hooks.afterPreactivation = (/**
+                 * @return {?}
+                 */
+                () => {
                     // only the initial navigation should be delayed
                     if (!this.initNavigation) {
                         this.initNavigation = true;
@@ -7359,14 +8141,14 @@ class RouterInitializer {
                     else {
                         return (/** @type {?} */ (of(null)));
                     }
-                };
+                });
                 router.initialNavigation();
             }
             else {
                 throw new Error(`Invalid initialNavigation options: '${opts.initialNavigation}'`);
             }
             return res;
-        });
+        }));
     }
     /**
      * @param {?} bootstrappedComponentRef
@@ -7467,32 +8249,32 @@ function provideRouterInitializer() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.8+8.sha-9a7f560.with-local-changes');
+const VERSION = new Version('8.0.0-beta.8+11.sha-7b20cec.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, Scroll, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
