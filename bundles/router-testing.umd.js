@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+9.sha-75748d6.with-local-changes
+ * @license Angular v8.0.0-beta.8+33.sha-7c297e0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -145,26 +145,26 @@
      * @publicApi
      */
     function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
-        var router$$1 = new router.Router(null, urlSerializer, contexts, location, injector, loader, compiler, router.ɵflatten(routes));
+        var router$1 = new router.Router(null, urlSerializer, contexts, location, injector, loader, compiler, router.ɵflatten(routes));
         if (opts) {
             // Handle deprecated argument ordering.
             if (isUrlHandlingStrategy(opts)) {
-                router$$1.urlHandlingStrategy = opts;
+                router$1.urlHandlingStrategy = opts;
             }
             else {
                 // Handle ExtraOptions
                 if (opts.malformedUriErrorHandler) {
-                    router$$1.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+                    router$1.malformedUriErrorHandler = opts.malformedUriErrorHandler;
                 }
                 if (opts.paramsInheritanceStrategy) {
-                    router$$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
+                    router$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
                 }
             }
         }
         if (urlHandlingStrategy) {
-            router$$1.urlHandlingStrategy = urlHandlingStrategy;
+            router$1.urlHandlingStrategy = urlHandlingStrategy;
         }
-        return router$$1;
+        return router$1;
     }
     /**
      * @description
