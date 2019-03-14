@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+20.sha-a3e1054.with-local-changes
+ * @license Angular v8.0.0-beta.8+25.sha-410ccac.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { LocationStrategy, Location, LOCATION_INITIALIZED, PlatformLocation, APP
 import { ɵdefineComponent, ɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, Renderer2, ElementRef, ɵlistener, Directive, Attribute, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ɵcontentQuery, ɵqueryRefresh, ɵloadContentQuery, Optional, ContentChildren, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, EventEmitter, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ɵsetComponentScope, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
-import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
@@ -696,13 +696,13 @@ function flatten(arr) {
 /**
  * Return the last element of an array.
  */
-function last$1(a) {
+function last(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
-function forEach(map$$1, callback) {
-    for (var prop in map$$1) {
-        if (map$$1.hasOwnProperty(prop)) {
-            callback(map$$1[prop], prop);
+function forEach(map, callback) {
+    for (var prop in map) {
+        if (map.hasOwnProperty(prop)) {
+            callback(map[prop], prop);
         }
     }
 }
@@ -723,7 +723,7 @@ function waitForMap(obj, fn) {
         }
     });
     // Closure compiler has problem with using spread operator here. So just using Array.concat.
-    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map(function () { return res; }));
+    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last$1(), map(function () { return res; }));
 }
 function wrapIntoObservable(value) {
     if (ɵisObservable(value)) {
@@ -1408,11 +1408,11 @@ var TreeNode = /** @class */ (function () {
 }());
 // Return the list of T indexed by outlet name
 function nodeChildrenAsMap(node) {
-    var map$$1 = {};
+    var map = {};
     if (node) {
-        node.children.forEach(function (child) { return map$$1[child.value.outlet] = child; });
+        node.children.forEach(function (child) { return map[child.value.outlet] = child; });
     }
-    return map$$1;
+    return map;
 }
 
 /**
@@ -1952,7 +1952,7 @@ var Navigation = /** @class */ (function () {
             throw new Error('Root segment cannot have matrix parameters');
         }
         var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
-        if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
+        if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
     }
@@ -3266,7 +3266,7 @@ var Recognizer = /** @class */ (function () {
         var consumedSegments = [];
         var rawSlicedSegments = [];
         if (route.path === '**') {
-            var params = segments.length > 0 ? last$1(segments).parameters : {};
+            var params = segments.length > 0 ? last(segments).parameters : {};
             snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
         else {
@@ -3511,7 +3511,7 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
             return value;
         }));
     }));
-    return runningResolvers$.pipe(last(), map(function () { return data; }));
+    return runningResolvers$.pipe(last$1(), map(function () { return data; }));
 }
 function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
     var resolver = getToken(injectionToken, futureARS, moduleInjector);
@@ -5700,7 +5700,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.8+20.sha-a3e1054.with-local-changes');
+var VERSION = new Version('8.0.0-beta.8+25.sha-410ccac.with-local-changes');
 
 /**
  * @license
