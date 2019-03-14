@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+20.sha-a3e1054.with-local-changes
+ * @license Angular v8.0.0-beta.8+25.sha-410ccac.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
 import { of, from, BehaviorSubject, EmptyError, Observable, combineLatest, defer, Subject, EMPTY } from 'rxjs';
-import { map, concatAll, last, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
@@ -822,7 +822,7 @@ function flatten(arr) {
  * @param {?} a
  * @return {?}
  */
-function last$1(a) {
+function last(a) {
     return a.length > 0 ? a[a.length - 1] : null;
 }
 /**
@@ -831,10 +831,10 @@ function last$1(a) {
  * @param {?} callback
  * @return {?}
  */
-function forEach(map$$1, callback) {
-    for (const prop in map$$1) {
-        if (map$$1.hasOwnProperty(prop)) {
-            callback(map$$1[prop], prop);
+function forEach(map, callback) {
+    for (const prop in map) {
+        if (map.hasOwnProperty(prop)) {
+            callback(map[prop], prop);
         }
     }
 }
@@ -874,7 +874,7 @@ function waitForMap(obj, fn) {
         }
     }));
     // Closure compiler has problem with using spread operator here. So just using Array.concat.
-    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last(), map((/**
+    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last$1(), map((/**
      * @return {?}
      */
     () => res)));
@@ -1867,15 +1867,15 @@ class TreeNode {
  */
 function nodeChildrenAsMap(node) {
     /** @type {?} */
-    const map$$1 = {};
+    const map = {};
     if (node) {
         node.children.forEach((/**
          * @param {?} child
          * @return {?}
          */
-        child => map$$1[child.value.outlet] = child));
+        child => map[child.value.outlet] = child));
     }
-    return map$$1;
+    return map;
 }
 
 /**
@@ -2559,7 +2559,7 @@ class Navigation {
          * @return {?}
          */
         c => typeof c === 'object' && c != null && c.outlets));
-        if (cmdWithOutlet && cmdWithOutlet !== last$1(commands)) {
+        if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
     }
@@ -4789,7 +4789,7 @@ class Recognizer {
         let rawSlicedSegments = [];
         if (route.path === '**') {
             /** @type {?} */
-            const params = segments.length > 0 ? (/** @type {?} */ (last$1(segments))).parameters : {};
+            const params = segments.length > 0 ? (/** @type {?} */ (last(segments))).parameters : {};
             snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), (/** @type {?} */ (this.urlTree.fragment)), getData(route), outlet, (/** @type {?} */ (route.component)), route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
         else {
@@ -5215,7 +5215,7 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
             return value;
         })));
     })));
-    return runningResolvers$.pipe(last(), map((/**
+    return runningResolvers$.pipe(last$1(), map((/**
      * @return {?}
      */
     () => data)));
@@ -8067,7 +8067,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.8+20.sha-a3e1054.with-local-changes');
+const VERSION = new Version('8.0.0-beta.8+25.sha-410ccac.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.8+20.sha-a3e1054.with-local-changes
+ * @license Angular v8.0.0-beta.8+25.sha-410ccac.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -67,7 +67,7 @@
         if (!ngUpgrade.$injector) {
             throw new Error("\n        RouterUpgradeInitializer can be used only after UpgradeModule.bootstrap has been called.\n        Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.\n      ");
         }
-        var router$$1 = ngUpgrade.injector.get(router.Router);
+        var router$1 = ngUpgrade.injector.get(router.Router);
         var location = ngUpgrade.injector.get(common.Location);
         ngUpgrade.$injector.get('$rootScope')
             .$on('$locationChangeStart', function (_, next, __) {
@@ -84,7 +84,7 @@
                 throw 'Invalid URLType passed to setUpLocationSync: ' + urlType;
             }
             var path = location.normalize(url.pathname);
-            router$$1.navigateByUrl(path + url.search + url.hash);
+            router$1.navigateByUrl(path + url.search + url.hash);
         });
     }
     /**
