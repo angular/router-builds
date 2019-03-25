@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.9+83.sha-bef5043.with-local-changes
+ * @license Angular v8.0.0-beta.9+90.sha-c34c223.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -892,7 +892,7 @@ export declare type LoadChildren = string | LoadChildrenCallback;
  * @see `Route#loadChildren`.
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<Type<any>> | Observable<Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<NgModuleFactory<any>> | Promise<Type<any>> | Observable<Type<any>>;
 
 /**
  * @description
