@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.11+44.sha-ab72e06.with-local-changes
+ * @license Angular v7.2.11+45.sha-e884c0c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5073,25 +5073,25 @@ class Router {
         return (/** @type {?} */ ((/** @type {?} */ (transitions.pipe(filter(t => t.id !== 0), 
         // Extract URL
         map(t => ((/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) }))))), 
-        // Store the Navigation object
-        tap(t => {
-            this.currentNavigation = {
-                id: t.id,
-                initialUrl: t.currentRawUrl,
-                extractedUrl: t.extractedUrl,
-                trigger: t.source,
-                extras: t.extras,
-                previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
-                    null
-            };
-        }), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap(t => {
             /** @type {?} */
             let completed = false;
             /** @type {?} */
             let errored = false;
-            return of(t).pipe(switchMap(t => {
+            return of(t).pipe(
+            // Store the Navigation object
+            tap(t => {
+                this.currentNavigation = {
+                    id: t.id,
+                    initialUrl: t.currentRawUrl,
+                    extractedUrl: t.extractedUrl,
+                    trigger: t.source,
+                    extras: t.extras,
+                    previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                        null
+                };
+            }), switchMap(t => {
                 /** @type {?} */
                 const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.browserUrlTree.toString();
                 /** @type {?} */
@@ -7279,7 +7279,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('7.2.11+44.sha-ab72e06.with-local-changes');
+const VERSION = new Version('7.2.11+45.sha-e884c0c.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.11+44.sha-ab72e06.with-local-changes
+ * @license Angular v7.2.11+45.sha-e884c0c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3816,23 +3816,23 @@ var Router = /** @class */ (function () {
         return transitions.pipe(filter(function (t) { return t.id !== 0; }), 
         // Extract URL
         map(function (t) { return (__assign({}, t, { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) })); }), 
-        // Store the Navigation object
-        tap(function (t) {
-            _this.currentNavigation = {
-                id: t.id,
-                initialUrl: t.currentRawUrl,
-                extractedUrl: t.extractedUrl,
-                trigger: t.source,
-                extras: t.extras,
-                previousNavigation: _this.lastSuccessfulNavigation ? __assign({}, _this.lastSuccessfulNavigation, { previousNavigation: null }) :
-                    null
-            };
-        }), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap(function (t) {
             var completed = false;
             var errored = false;
-            return of(t).pipe(switchMap(function (t) {
+            return of(t).pipe(
+            // Store the Navigation object
+            tap(function (t) {
+                _this.currentNavigation = {
+                    id: t.id,
+                    initialUrl: t.currentRawUrl,
+                    extractedUrl: t.extractedUrl,
+                    trigger: t.source,
+                    extras: t.extras,
+                    previousNavigation: _this.lastSuccessfulNavigation ? __assign({}, _this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                        null
+                };
+            }), switchMap(function (t) {
                 var urlTransition = !_this.navigated || t.extractedUrl.toString() !== _this.browserUrlTree.toString();
                 var processCurrentUrl = (_this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
@@ -5726,7 +5726,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.2.11+44.sha-ab72e06.with-local-changes');
+var VERSION = new Version('7.2.11+45.sha-e884c0c.with-local-changes');
 
 /**
  * @license
