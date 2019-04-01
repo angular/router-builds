@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.10+57.sha-c67f6a7.with-local-changes
+ * @license Angular v8.0.0-beta.10+84.sha-f9497bf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5642,22 +5642,6 @@ class Router {
          * @return {?}
          */
         t => ((/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })))))), 
-        // Store the Navigation object
-        tap((/**
-         * @param {?} t
-         * @return {?}
-         */
-        t => {
-            this.currentNavigation = {
-                id: t.id,
-                initialUrl: t.currentRawUrl,
-                extractedUrl: t.extractedUrl,
-                trigger: t.source,
-                extras: t.extras,
-                previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
-                    null
-            };
-        })), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap((/**
          * @param {?} t
@@ -5668,7 +5652,23 @@ class Router {
             let completed = false;
             /** @type {?} */
             let errored = false;
-            return of(t).pipe(switchMap((/**
+            return of(t).pipe(
+            // Store the Navigation object
+            tap((/**
+             * @param {?} t
+             * @return {?}
+             */
+            t => {
+                this.currentNavigation = {
+                    id: t.id,
+                    initialUrl: t.currentRawUrl,
+                    extractedUrl: t.extractedUrl,
+                    trigger: t.source,
+                    extras: t.extras,
+                    previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                        null
+                };
+            })), switchMap((/**
              * @param {?} t
              * @return {?}
              */
@@ -8067,7 +8067,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.10+57.sha-c67f6a7.with-local-changes');
+const VERSION = new Version('8.0.0-beta.10+84.sha-f9497bf.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
