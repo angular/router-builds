@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.10+117.sha-6b39c9c.with-local-changes
+ * @license Angular v8.0.0-beta.10+120.sha-60afe88.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5548,10 +5548,11 @@
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
-        RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-        RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.inject(ROUTER_FORROOT_GUARD, 8), i0.inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
+        RouterModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterModule });
+        RouterModule.ngInjectorDef = i0.defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.inject(ROUTER_FORROOT_GUARD, 8), i0.inject(Router, 8)); } });
         return RouterModule;
     }());
+    /*@__PURE__*/ i0.ɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterModule, [{
             type: i0.NgModule,
             args: [{
@@ -5773,7 +5774,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.10+117.sha-6b39c9c.with-local-changes');
+    var VERSION = new i0.Version('8.0.0-beta.10+120.sha-60afe88.with-local-changes');
 
     /**
      * @license

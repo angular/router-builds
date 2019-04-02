@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.10+117.sha-6b39c9c.with-local-changes
+ * @license Angular v8.0.0-beta.10+120.sha-60afe88.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -186,7 +186,7 @@
                 ]
             };
         };
-        RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule, exports: [router.RouterModule] });
+        RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule });
         RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
                 router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
                 { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
@@ -199,9 +199,10 @@
                     ]
                 },
                 { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
-            ], imports: [[router.RouterModule]] });
+            ], imports: [router.RouterModule] });
         return RouterTestingModule;
     }());
+    /*@__PURE__*/ i0.ɵsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] });
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterTestingModule, [{
             type: i0.NgModule,
             args: [{

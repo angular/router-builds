@@ -1,11 +1,11 @@
 /**
- * @license Angular v8.0.0-beta.10+117.sha-6b39c9c.with-local-changes
+ * @license Angular v8.0.0-beta.10+120.sha-60afe88.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, LOCATION_INITIALIZED, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ɵdefineComponent, ɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, Renderer2, ElementRef, ɵlistener, Directive, Attribute, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ɵcontentQuery, ɵqueryRefresh, ɵloadContentQuery, Optional, ContentChildren, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, EventEmitter, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, NgModule, Inject, ɵsetComponentScope, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
+import { ɵdefineComponent, ɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, isDevMode, NgZone, ɵConsole, ɵdefineDirective, ɵdirectiveInject, ɵinjectAttribute, Renderer2, ElementRef, ɵlistener, Directive, Attribute, Input, HostListener, ɵallocHostVars, ɵelementAttribute, ɵbind, ɵelementProperty, ɵsanitizeUrl, ɵNgOnChangesFeature, HostBinding, ɵcontentQuery, ɵqueryRefresh, ɵloadContentQuery, Optional, ContentChildren, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, EventEmitter, defineInjectable, inject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, ɵdefineNgModule, defineInjector, ɵsetNgModuleScope, NgModule, Inject, ɵsetComponentScope, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
 import { from, of, BehaviorSubject, EmptyError, Observable, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
@@ -5475,10 +5475,11 @@ var RouterModule = /** @class */ (function () {
     RouterModule.forChild = function (routes) {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     };
-    RouterModule.ngModuleDef = ɵdefineNgModule({ type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-    RouterModule.ngInjectorDef = defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(inject(ROUTER_FORROOT_GUARD, 8), inject(Router, 8)); }, providers: [], imports: [ROUTER_DIRECTIVES] });
+    RouterModule.ngModuleDef = ɵdefineNgModule({ type: RouterModule });
+    RouterModule.ngInjectorDef = defineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(inject(ROUTER_FORROOT_GUARD, 8), inject(Router, 8)); } });
     return RouterModule;
 }());
+/*@__PURE__*/ ɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
         args: [{
@@ -5700,7 +5701,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-beta.10+117.sha-6b39c9c.with-local-changes');
+var VERSION = new Version('8.0.0-beta.10+120.sha-60afe88.with-local-changes');
 
 /**
  * @license

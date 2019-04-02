@@ -1,12 +1,12 @@
 /**
- * @license Angular v8.0.0-beta.10+117.sha-6b39c9c.with-local-changes
+ * @license Angular v8.0.0-beta.10+120.sha-60afe88.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
-import { Injectable, Compiler, defineInjectable, inject, ɵsetClassMetadata, NgModule, NgModuleFactoryLoader, Injector, Optional, ɵdefineNgModule, defineInjector } from '@angular/core';
+import { Injectable, Compiler, defineInjectable, inject, ɵsetClassMetadata, NgModule, NgModuleFactoryLoader, Injector, Optional, ɵdefineNgModule, defineInjector, ɵsetNgModuleScope } from '@angular/core';
 import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
@@ -209,7 +209,7 @@ RouterTestingModule.decorators = [
                 ]
             },] },
 ];
-/** @nocollapse */ RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule, exports: [RouterModule] });
+/** @nocollapse */ RouterTestingModule.ngModuleDef = ɵdefineNgModule({ type: RouterTestingModule });
 /** @nocollapse */ RouterTestingModule.ngInjectorDef = defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
@@ -222,7 +222,8 @@ RouterTestingModule.decorators = [
             ]
         },
         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
-    ], imports: [[RouterModule]] });
+    ], imports: [RouterModule] });
+/*@__PURE__*/ ɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
         args: [{
