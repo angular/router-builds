@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.11+24.sha-609024f.with-local-changes
+ * @license Angular v8.0.0-beta.11+29.sha-ec56354.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1659,7 +1659,7 @@ export declare class ResolveStart extends RouterEvent {
 export declare interface Route {
     /**
      * The path to match against, a URL string that uses router matching notation.
-     * Can include wild-card characters (*).   [where is that defined?]
+     * Can be a wild card (`**`) that matches any URL (see Usage Notes below).
      * Default is "/" (the root path).
      */
     path?: string;
@@ -1670,6 +1670,7 @@ export declare interface Route {
      * By default, the router checks URL elements from the left to see if the URL
      * matches a given  path, and stops when there is a match. For example,
      * '/team/11/user' matches 'team/:id'.
+     *
      * The path-match strategy 'full' matches against the entire URL.
      * It is important to do this when redirecting empty-path routes.
      * Otherwise, because an empty path is a prefix of any URL,
