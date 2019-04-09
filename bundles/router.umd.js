@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.12+17.sha-f971f83.with-local-changes
+ * @license Angular v7.2.12+19.sha-77ee22e.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1577,10 +1577,10 @@
      * @Component({...})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
-     *     const id: Observable<string> = route.params.map(p => p.id);
-     *     const url: Observable<string> = route.url.map(segments => segments.join(''));
+     *     const id: Observable<string> = route.params.pipe(map(p => p.id));
+     *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
      *     // route.data includes both `data` and `resolve`
-     *     const user = route.data.map(d => d.user);
+     *     const user = route.data.pipe(map(d => d.user));
      *   }
      * }
      * ```
@@ -5814,7 +5814,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.2.12+17.sha-f971f83.with-local-changes');
+    var VERSION = new core.Version('7.2.12+19.sha-77ee22e.with-local-changes');
 
     /**
      * @license
