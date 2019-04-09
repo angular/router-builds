@@ -56,10 +56,10 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * @Component({...})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
- *     const id: Observable<string> = route.params.map(p => p.id);
- *     const url: Observable<string> = route.url.map(segments => segments.join(''));
+ *     const id: Observable<string> = route.params.pipe(map(p => p.id));
+ *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
  *     // route.data includes both `data` and `resolve`
- *     const user = route.data.map(d => d.user);
+ *     const user = route.data.pipe(map(d => d.user));
  *   }
  * }
  * ```
