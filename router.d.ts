@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.11+42.sha-d144a3b.with-local-changes
+ * @license Angular v8.0.0-beta.11+46.sha-e682b44.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -46,10 +46,10 @@ import { ViewportScroller } from '@angular/common';
  * @Component({...})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
- *     const id: Observable<string> = route.params.map(p => p.id);
- *     const url: Observable<string> = route.url.map(segments => segments.join(''));
+ *     const id: Observable<string> = route.params.pipe(map(p => p.id));
+ *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
  *     // route.data includes both `data` and `resolve`
- *     const user = route.data.map(d => d.user);
+ *     const user = route.data.pipe(map(d => d.user));
  *   }
  * }
  * ```
