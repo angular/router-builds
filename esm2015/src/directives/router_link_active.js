@@ -212,14 +212,14 @@ RouterLinkActive.propDecorators = {
     routerLinkActiveOptions: [{ type: Input }],
     routerLinkActive: [{ type: Input }]
 };
-/** @nocollapse */ RouterLinkActive.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵdirectiveInject(i1.Router), i0.ɵdirectiveInject(i0.ElementRef), i0.ɵdirectiveInject(i0.Renderer2), i0.ɵdirectiveInject(i2.RouterLink, 8), i0.ɵdirectiveInject(i2.RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-        i0.ɵcontentQuery(dirIndex, RouterLink, true, null);
-        i0.ɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
+/** @nocollapse */ RouterLinkActive.ngDirectiveDef = i0.ΔdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ΔdirectiveInject(i1.Router), i0.ΔdirectiveInject(i0.ElementRef), i0.ΔdirectiveInject(i0.Renderer2), i0.ΔdirectiveInject(i2.RouterLink, 8), i0.ΔdirectiveInject(i2.RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
+        i0.ΔcontentQuery(dirIndex, RouterLink, true, null);
+        i0.ΔcontentQuery(dirIndex, RouterLinkWithHref, true, null);
     } if (rf & 2) {
         var _t;
-        (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (ctx.links = _t));
-        (i0.ɵqueryRefresh((_t = i0.ɵloadContentQuery())) && (ctx.linksWithHrefs = _t));
-    } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵNgOnChangesFeature()] });
+        (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.links = _t));
+        (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.linksWithHrefs = _t));
+    } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ΔNgOnChangesFeature()] });
 /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkActive, [{
         type: Directive,
         args: [{

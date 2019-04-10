@@ -19,8 +19,8 @@ import * as i0 from "@angular/core";
 var ɵEmptyOutletComponent = /** @class */ (function () {
     function ɵEmptyOutletComponent() {
     }
-    ɵEmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
-            i0.ɵelement(0, "router-outlet");
+    ɵEmptyOutletComponent.ngComponentDef = i0.ΔdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+            i0.Δelement(0, "router-outlet");
         } }, encapsulation: 2 });
     return ɵEmptyOutletComponent;
 }());

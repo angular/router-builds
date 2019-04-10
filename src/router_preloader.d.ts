@@ -70,5 +70,5 @@ export declare class RouterPreloader implements OnDestroy {
     ngOnDestroy(): void;
     private processRoutes;
     private preloadConfig;
-    static ngInjectableDef: i0.ɵInjectableDef<RouterPreloader>;
+    static ngInjectableDef: i0.ΔInjectableDef<RouterPreloader>;
 }

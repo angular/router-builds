@@ -144,7 +144,7 @@ var RouterOutlet = /** @class */ (function () {
         this.changeDetector.markForCheck();
         this.activateEvents.emit(this.activated.instance);
     };
-    RouterOutlet.ngDirectiveDef = i0.ɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵdirectiveInject(i1.ChildrenOutletContexts), i0.ɵdirectiveInject(i0.ViewContainerRef), i0.ɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵinjectAttribute('name'), i0.ɵdirectiveInject(i0.ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    RouterOutlet.ngDirectiveDef = i0.ΔdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ΔdirectiveInject(i1.ChildrenOutletContexts), i0.ΔdirectiveInject(i0.ViewContainerRef), i0.ΔdirectiveInject(i0.ComponentFactoryResolver), i0.ΔinjectAttribute('name'), i0.ΔdirectiveInject(i0.ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
     return RouterOutlet;
 }());
 export { RouterOutlet };

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.11+55.sha-db62ccf.with-local-changes
+ * @license Angular v8.0.0-beta.11+57.sha-ef85336.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -110,7 +110,7 @@
                 return Promise.reject(new Error("Cannot find module " + path));
             }
         };
-        SpyNgModuleFactoryLoader.ngInjectableDef = i0.defineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.inject(i0.Compiler)); }, providedIn: null });
+        SpyNgModuleFactoryLoader.ngInjectableDef = i0.ΔdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.Δinject(i0.Compiler)); }, providedIn: null });
         return SpyNgModuleFactoryLoader;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
@@ -186,8 +186,8 @@
                 ]
             };
         };
-        RouterTestingModule.ngModuleDef = i0.ɵdefineNgModule({ type: RouterTestingModule });
-        RouterTestingModule.ngInjectorDef = i0.defineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
+        RouterTestingModule.ngModuleDef = i0.ΔdefineNgModule({ type: RouterTestingModule });
+        RouterTestingModule.ngInjectorDef = i0.ΔdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
                 router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
                 { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
                 { provide: i0.NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
@@ -202,7 +202,7 @@
             ], imports: [router.RouterModule] });
         return RouterTestingModule;
     }());
-    /*@__PURE__*/ i0.ɵsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] });
+    /*@__PURE__*/ i0.ΔsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] });
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterTestingModule, [{
             type: i0.NgModule,
             args: [{

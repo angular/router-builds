@@ -25,8 +25,8 @@ export class ɵEmptyOutletComponent {
 ɵEmptyOutletComponent.decorators = [
     { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] },
 ];
-/** @nocollapse */ ɵEmptyOutletComponent.ngComponentDef = i0.ɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
-        i0.ɵelement(0, "router-outlet");
+/** @nocollapse */ ɵEmptyOutletComponent.ngComponentDef = i0.ΔdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+        i0.Δelement(0, "router-outlet");
     } }, encapsulation: 2 });
 /*@__PURE__*/ i0.ɵsetClassMetadata(ɵEmptyOutletComponent, [{
         type: Component,
