@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.11+45.sha-84be7c5.with-local-changes
+ * @license Angular v8.0.0-beta.11+64.sha-675f390.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1577,10 +1577,10 @@
      * @Component({...})
      * class MyComponent {
      *   constructor(route: ActivatedRoute) {
-     *     const id: Observable<string> = route.params.map(p => p.id);
-     *     const url: Observable<string> = route.url.map(segments => segments.join(''));
+     *     const id: Observable<string> = route.params.pipe(map(p => p.id));
+     *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
      *     // route.data includes both `data` and `resolve`
-     *     const user = route.data.map(d => d.user);
+     *     const user = route.data.pipe(map(d => d.user));
      *   }
      * }
      * ```
@@ -5820,7 +5820,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.11+45.sha-84be7c5.with-local-changes');
+    var VERSION = new core.Version('8.0.0-beta.11+64.sha-675f390.with-local-changes');
 
     /**
      * @license
