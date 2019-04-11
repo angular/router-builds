@@ -88,5 +88,5 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private update;
     private isLinkActive;
     private hasActiveLinks;
-    static ngDirectiveDef: i0.ΔDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { 'routerLinkActiveOptions': "routerLinkActiveOptions", 'routerLinkActive': "routerLinkActive" }, {}, ["links", "linksWithHrefs"]>;
+    static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { 'routerLinkActiveOptions': "routerLinkActiveOptions", 'routerLinkActive': "routerLinkActive" }, {}, ["links", "linksWithHrefs"]>;
 }
