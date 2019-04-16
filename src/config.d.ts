@@ -88,7 +88,7 @@ export declare type ResolveData = {
  * @see `Route#loadChildren`.
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<NgModuleFactory<any>> | Promise<Type<any>> | Observable<Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any> | any>;
 /**
  *
  * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load,
