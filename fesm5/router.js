@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.13+13.sha-dcfde77.with-local-changes
+ * @license Angular v7.2.13+12.sha-4994527.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5740,7 +5740,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('7.2.13+13.sha-dcfde77.with-local-changes');
+var VERSION = new Version('7.2.13+12.sha-4994527.with-local-changes');
 
 /**
  * @license
