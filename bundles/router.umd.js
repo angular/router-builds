@@ -1,5 +1,5 @@
 /**
- * @license Angular v7.2.13+20.sha-546299b.with-local-changes
+ * @license Angular v7.2.13+22.sha-903aef0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5828,7 +5828,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('7.2.13+20.sha-546299b.with-local-changes');
+    var VERSION = new core.Version('7.2.13+22.sha-903aef0.with-local-changes');
 
     /**
      * @license
