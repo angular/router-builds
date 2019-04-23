@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.12+18.sha-1b7749d.with-local-changes
+ * @license Angular v8.0.0-beta.13+62.sha-5c8d156.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -875,7 +875,7 @@ export declare type LoadChildren = string | LoadChildrenCallback;
  * @see `Route#loadChildren`.
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Promise<NgModuleFactory<any>> | Promise<Type<any>> | Observable<Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any> | any>;
 
 /**
  * @description
@@ -2406,18 +2406,32 @@ export declare class RouterModule {
      * Creates a module with all the router providers and directives. It also optionally sets up an
      * application listener to perform an initial navigation.
      *
-     * Options (see `ExtraOptions`):
-     * * `enableTracing` makes the router log all its internal events to the console.
-     * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+     * Configuration Options:
+     *
+     * * `enableTracing` Toggles whether the router should log all navigation events to the console.
+     * * `useHash` Enables the location strategy that uses the URL fragment instead of the history
      * API.
-     * * `initialNavigation` disables the initial navigation.
-     * * `errorHandler` provides a custom error handler.
-     * * `preloadingStrategy` configures a preloading strategy (see `PreloadAllModules`).
-     * * `onSameUrlNavigation` configures how the router handles navigation to the current URL. See
-     * `ExtraOptions` for more details.
-     * * `paramsInheritanceStrategy` defines how the router merges params, data and resolved data
-     * from parent to child routes.
-     */
+     * * `initialNavigation` Disables the initial navigation.
+     * * `errorHandler` Defines a custom error handler for failed navigations.
+     * * `preloadingStrategy` Configures a preloading strategy. See `PreloadAllModules`.
+     * * `onSameUrlNavigation` Define what the router should do if it receives a navigation request to
+     * the current URL.
+     * * `scrollPositionRestoration` Configures if the scroll position needs to be restored when
+     * navigating back.
+     * * `anchorScrolling` Configures if the router should scroll to the element when the url has a
+     * fragment.
+     * * `scrollOffset` Configures the scroll offset the router will use when scrolling to an element.
+     * * `paramsInheritanceStrategy` Defines how the router merges params, data and resolved data from
+     * parent to child routes.
+     * * `malformedUriErrorHandler` Defines a custom malformed uri error handler function. This
+     * handler is invoked when encodedURI contains invalid character sequences.
+     * * `urlUpdateStrategy` Defines when the router updates the browser URL. The default behavior is
+     * to update after successful navigation.
+     * * `relativeLinkResolution` Enables the correct relative link resolution in components with
+     * empty paths.
+     *
+     * See `ExtraOptions` for more details about the above options.
+    */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterModule>;
     /**
      * Creates a module with all the router directives and a provider registering routes.
