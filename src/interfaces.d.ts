@@ -244,7 +244,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
 /**
  * @description
  *
- * Interface that class can implement to be a data provider.
+ * Interface that classes can implement to be a data provider.
  *
  * ```
  * class Backend {
