@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+80.sha-9873356.with-local-changes
+ * @license Angular v8.0.0-beta.13+82.sha-8e73f9b.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7612,6 +7612,7 @@ const ROUTER_CONFIGURATION = new InjectionToken('ROUTER_CONFIGURATION');
  * @type {?}
  */
 const ROUTER_FORROOT_GUARD = new InjectionToken('ROUTER_FORROOT_GUARD');
+const ɵ0 = { enableTracing: false };
 /** @type {?} */
 const ROUTER_PROVIDERS = [
     Location,
@@ -7631,7 +7632,7 @@ const ROUTER_PROVIDERS = [
     RouterPreloader,
     NoPreloading,
     PreloadAllModules,
-    { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } },
+    { provide: ROUTER_CONFIGURATION, useValue: ɵ0 },
 ];
 /**
  * @return {?}
@@ -8081,7 +8082,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-beta.13+80.sha-9873356.with-local-changes');
+const VERSION = new Version('8.0.0-beta.13+82.sha-8e73f9b.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
