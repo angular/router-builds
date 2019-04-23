@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+78.sha-19dfadb.with-local-changes
+ * @license Angular v8.0.0-beta.13+79.sha-0f9230d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4727,7 +4727,7 @@
                 i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
                 i0.ɵɵelementAttribute(elIndex, "target", i0.ɵɵbind(ctx.target));
-                i0.ɵɵelementProperty(elIndex, "href", i0.ɵɵbind(ctx.href), i0.ɵɵsanitizeUrl, true);
+                i0.ɵɵproperty("href", ctx.href, i0.ɵɵsanitizeUrl, true);
             } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵɵNgOnChangesFeature()] });
         return RouterLinkWithHref;
     }());
@@ -5788,7 +5788,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-beta.13+78.sha-19dfadb.with-local-changes');
+    var VERSION = new i0.Version('8.0.0-beta.13+79.sha-0f9230d.with-local-changes');
 
     /**
      * @license
