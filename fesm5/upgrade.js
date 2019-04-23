@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+80.sha-9873356.with-local-changes
+ * @license Angular v8.0.0-beta.13+88.sha-8e8e89a.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -16,6 +16,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var ɵ0 = locationSyncBootstrapListener;
 /**
  * @description
  *
@@ -42,7 +43,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 var RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: locationSyncBootstrapListener,
+    useFactory: ɵ0,
     deps: [UpgradeModule]
 };
 /**
@@ -140,5 +141,5 @@ function resolveUrl(url) {
  * Generated bundle index. Do not edit.
  */
 
-export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
+export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync, ɵ0 };
 //# sourceMappingURL=upgrade.js.map

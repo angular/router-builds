@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+80.sha-9873356.with-local-changes
+ * @license Angular v8.0.0-beta.13+88.sha-8e8e89a.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,6 +17,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var ɵ0 = locationSyncBootstrapListener;
     /**
      * @description
      *
@@ -43,7 +44,7 @@
     var RouterUpgradeInitializer = {
         provide: core.APP_BOOTSTRAP_LISTENER,
         multi: true,
-        useFactory: locationSyncBootstrapListener,
+        useFactory: ɵ0,
         deps: [_static.UpgradeModule]
     };
     /**
@@ -144,6 +145,7 @@
     exports.RouterUpgradeInitializer = RouterUpgradeInitializer;
     exports.locationSyncBootstrapListener = locationSyncBootstrapListener;
     exports.setUpLocationSync = setUpLocationSync;
+    exports.ɵ0 = ɵ0;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

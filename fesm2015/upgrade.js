@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+80.sha-9873356.with-local-changes
+ * @license Angular v8.0.0-beta.13+88.sha-8e8e89a.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -13,6 +13,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+const ɵ0 = (locationSyncBootstrapListener);
 /**
  * \@description
  *
@@ -40,7 +41,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: (/** @type {?} */ (locationSyncBootstrapListener)),
+    useFactory: (/** @type {?} */ (ɵ0)),
     deps: [UpgradeModule]
 };
 /**
