@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-beta.13+62.sha-5c8d156.with-local-changes
+ * @license Angular v8.0.0-beta.13+91.sha-b61c9df.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5468,6 +5468,7 @@
      * @docsNotRequired
      */
     var ROUTER_FORROOT_GUARD = new core.InjectionToken('ROUTER_FORROOT_GUARD');
+    var ɵ0 = { enableTracing: false };
     var ROUTER_PROVIDERS = [
         common.Location,
         { provide: UrlSerializer, useClass: DefaultUrlSerializer },
@@ -5486,7 +5487,7 @@
         RouterPreloader,
         NoPreloading,
         PreloadAllModules,
-        { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } },
+        { provide: ROUTER_CONFIGURATION, useValue: ɵ0 },
     ];
     function routerNgProbeToken() {
         return new core.NgProbeToken('Router', Router);
@@ -5834,7 +5835,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-beta.13+62.sha-5c8d156.with-local-changes');
+    var VERSION = new core.Version('8.0.0-beta.13+91.sha-b61c9df.with-local-changes');
 
     /**
      * @license
