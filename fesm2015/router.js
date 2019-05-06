@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.2+23.sha-132f01c.with-local-changes
+ * @license Angular v8.0.0-rc.2+24.sha-9720227.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5725,7 +5725,7 @@ class Router {
                     t => {
                         if (this.urlUpdateStrategy === 'eager') {
                             if (!t.extras.skipLocationChange) {
-                                this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id, t.extras.state);
                             }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
@@ -8083,7 +8083,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-rc.2+23.sha-132f01c.with-local-changes');
+const VERSION = new Version('8.0.0-rc.2+24.sha-9720227.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.2+23.sha-132f01c.with-local-changes
+ * @license Angular v8.0.0-rc.2+24.sha-9720227.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3862,7 +3862,7 @@ var Router = /** @class */ (function () {
                     tap(function (t) {
                         if (_this.urlUpdateStrategy === 'eager') {
                             if (!t.extras.skipLocationChange) {
-                                _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id, t.extras.state);
                             }
                             _this.browserUrlTree = t.urlAfterRedirects;
                         }
@@ -5748,7 +5748,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.0.0-rc.2+23.sha-132f01c.with-local-changes');
+var VERSION = new Version('8.0.0-rc.2+24.sha-9720227.with-local-changes');
 
 /**
  * @license
