@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+88.sha-b2437c4.with-local-changes
+ * @license Angular v8.0.0-rc.0+91.sha-b40f6f3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5725,7 +5725,7 @@ class Router {
                     t => {
                         if (this.urlUpdateStrategy === 'eager') {
                             if (!t.extras.skipLocationChange) {
-                                this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id, t.extras.state);
                             }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
@@ -5763,6 +5763,7 @@ class Router {
                          * way the next navigation will be coming from the current URL in the browser.
                          */
                         this.rawUrlTree = t.rawUrl;
+                        this.browserUrlTree = t.urlAfterRedirects;
                         t.resolve(null);
                         return EMPTY;
                     }
@@ -8082,7 +8083,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-rc.0+88.sha-b2437c4.with-local-changes');
+const VERSION = new Version('8.0.0-rc.0+91.sha-b40f6f3.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+88.sha-b2437c4.with-local-changes
+ * @license Angular v8.0.0-rc.0+91.sha-b40f6f3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3950,7 +3950,7 @@
                         operators.tap(function (t) {
                             if (_this.urlUpdateStrategy === 'eager') {
                                 if (!t.extras.skipLocationChange) {
-                                    _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id);
+                                    _this.setBrowserUrl(t.urlAfterRedirects, !!t.extras.replaceUrl, t.id, t.extras.state);
                                 }
                                 _this.browserUrlTree = t.urlAfterRedirects;
                             }
@@ -3980,6 +3980,7 @@
                              * way the next navigation will be coming from the current URL in the browser.
                              */
                             _this.rawUrlTree = t.rawUrl;
+                            _this.browserUrlTree = t.urlAfterRedirects;
                             t.resolve(null);
                             return rxjs.EMPTY;
                         }
@@ -5835,7 +5836,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-rc.0+88.sha-b2437c4.with-local-changes');
+    var VERSION = new core.Version('8.0.0-rc.0+91.sha-b40f6f3.with-local-changes');
 
     /**
      * @license
