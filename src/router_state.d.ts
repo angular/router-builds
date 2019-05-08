@@ -52,17 +52,8 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * Contains the information about a route associated with a component loaded in an
  * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
- * ```
- * @Component({...})
- * class MyComponent {
- *   constructor(route: ActivatedRoute) {
- *     const id: Observable<string> = route.params.pipe(map(p => p.id));
- *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
- *     // route.data includes both `data` and `resolve`
- *     const user = route.data.pipe(map(d => d.user));
- *   }
- * }
- * ```
+ * {@example router/activated-route/module.ts region="activated-route"
+ *     header="activated-route.component.ts" linenums="false"}
  *
  * @publicApi
  */
