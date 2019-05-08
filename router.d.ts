@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.3+12.sha-a71d8a8.with-local-changes
+ * @license Angular v8.0.0-rc.3+13.sha-5bbbe3f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -42,17 +42,8 @@ import { ViewportScroller } from '@angular/common';
  * Contains the information about a route associated with a component loaded in an
  * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
  *
- * ```
- * @Component({...})
- * class MyComponent {
- *   constructor(route: ActivatedRoute) {
- *     const id: Observable<string> = route.params.pipe(map(p => p.id));
- *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
- *     // route.data includes both `data` and `resolve`
- *     const user = route.data.pipe(map(d => d.user));
- *   }
- * }
- * ```
+ * {@example router/activated-route/module.ts region="activated-route"
+ *     header="activated-route.component.ts" linenums="false"}
  *
  * @publicApi
  */
