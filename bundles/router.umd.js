@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+117.sha-eccc41c.with-local-changes
+ * @license Angular v8.0.0-rc.0+118.sha-9a807bd.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1573,17 +1573,8 @@
      * Contains the information about a route associated with a component loaded in an
      * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
      *
-     * ```
-     * @Component({...})
-     * class MyComponent {
-     *   constructor(route: ActivatedRoute) {
-     *     const id: Observable<string> = route.params.pipe(map(p => p.id));
-     *     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
-     *     // route.data includes both `data` and `resolve`
-     *     const user = route.data.pipe(map(d => d.user));
-     *   }
-     * }
-     * ```
+     * {@example router/activated-route/module.ts region="activated-route"
+     *     header="activated-route.component.ts" linenums="false"}
      *
      * @publicApi
      */
@@ -5835,7 +5826,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-rc.0+117.sha-eccc41c.with-local-changes');
+    var VERSION = new core.Version('8.0.0-rc.0+118.sha-9a807bd.with-local-changes');
 
     /**
      * @license
