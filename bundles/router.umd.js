@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.3+2.sha-d1fcc2b.with-local-changes
+ * @license Angular v8.0.0-rc.3+3.sha-08841e3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3980,7 +3980,6 @@
                              * way the next navigation will be coming from the current URL in the browser.
                              */
                             _this.rawUrlTree = t.rawUrl;
-                            _this.browserUrlTree = t.urlAfterRedirects;
                             t.resolve(null);
                             return rxjs.EMPTY;
                         }
@@ -5836,7 +5835,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-rc.3+2.sha-d1fcc2b.with-local-changes');
+    var VERSION = new core.Version('8.0.0-rc.3+3.sha-08841e3.with-local-changes');
 
     /**
      * @license
