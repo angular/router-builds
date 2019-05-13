@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.3+40.sha-a481772.with-local-changes
+ * @license Angular v8.0.0-rc.3+41.sha-c383491.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -759,7 +759,8 @@
     function shallowEqual(a, b) {
         var k1 = Object.keys(a);
         var k2 = Object.keys(b);
-        if (k1.length != k2.length) {
+        // IE 11 sometimes returns an `undefined` value here. This guard is for IE 11 only.
+        if (!(k1 || k2) || k1.length != k2.length) {
             return false;
         }
         var key;
@@ -5826,7 +5827,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-rc.3+40.sha-a481772.with-local-changes');
+    var VERSION = new core.Version('8.0.0-rc.3+41.sha-c383491.with-local-changes');
 
     /**
      * @license
