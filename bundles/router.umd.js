@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+183.sha-d20b0f4.with-local-changes
+ * @license Angular v8.0.0-rc.0+184.sha-53f3564.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -757,10 +757,13 @@
         return true;
     }
     function shallowEqual(a, b) {
+        // Casting Object.keys return values to include `undefined` as there are some cases
+        // in IE 11 where this can happen. Cannot provide a test because the behavior only
+        // exists in certain circumstances in IE 11, therefore doing this cast ensures the
+        // logic is correct for when this edge case is hit.
         var k1 = Object.keys(a);
         var k2 = Object.keys(b);
-        // IE 11 sometimes returns an `undefined` value here. This guard is for IE 11 only.
-        if (!(k1 || k2) || k1.length != k2.length) {
+        if (!k1 || !k2 || k1.length != k2.length) {
             return false;
         }
         var key;
@@ -5835,7 +5838,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.0.0-rc.0+183.sha-d20b0f4.with-local-changes');
+    var VERSION = new core.Version('8.0.0-rc.0+184.sha-53f3564.with-local-changes');
 
     /**
      * @license
