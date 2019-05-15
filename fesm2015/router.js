@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.4.with-local-changes
+ * @license Angular v8.0.0-rc.4+4.sha-766615c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -790,12 +790,15 @@ function shallowEqualArrays(a, b) {
  * @return {?}
  */
 function shallowEqual(a, b) {
+    // Casting Object.keys return values to include `undefined` as there are some cases
+    // in IE 11 where this can happen. Cannot provide a test because the behavior only
+    // exists in certain circumstances in IE 11, therefore doing this cast ensures the
+    // logic is correct for when this edge case is hit.
     /** @type {?} */
-    const k1 = Object.keys(a);
+    const k1 = (/** @type {?} */ (Object.keys(a)));
     /** @type {?} */
-    const k2 = Object.keys(b);
-    // IE 11 sometimes returns an `undefined` value here. This guard is for IE 11 only.
-    if (!(k1 || k2) || k1.length != k2.length) {
+    const k2 = (/** @type {?} */ (Object.keys(b)));
+    if (!k1 || !k2 || k1.length != k2.length) {
         return false;
     }
     /** @type {?} */
@@ -8083,7 +8086,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-rc.4.with-local-changes');
+const VERSION = new Version('8.0.0-rc.4+4.sha-766615c.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
