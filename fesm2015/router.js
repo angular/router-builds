@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+170.sha-c7f9a95.with-local-changes
+ * @license Angular v8.0.0-rc.0+182.sha-79d4b16.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5755,6 +5755,7 @@ class Router {
                          * way the next navigation will be coming from the current URL in the browser.
                          */
                         this.rawUrlTree = t.rawUrl;
+                        this.browserUrlTree = t.urlAfterRedirects;
                         t.resolve(null);
                         return EMPTY;
                     }
@@ -5995,7 +5996,15 @@ class Router {
      * @private
      * @return {?}
      */
-    getTransition() { return this.transitions.value; }
+    getTransition() {
+        /** @type {?} */
+        const transition = this.transitions.value;
+        // This value needs to be set. Other values such as extractedUrl are set on initial navigation
+        // but the urlAfterRedirects may not get set if we aren't processing the new URL *and* not
+        // processing the previous URL.
+        transition.urlAfterRedirects = this.browserUrlTree;
+        return transition;
+    }
     /**
      * @private
      * @param {?} t
@@ -8074,7 +8083,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-rc.0+170.sha-c7f9a95.with-local-changes');
+const VERSION = new Version('8.0.0-rc.0+182.sha-79d4b16.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
