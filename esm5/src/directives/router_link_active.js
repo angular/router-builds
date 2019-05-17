@@ -138,8 +138,8 @@ var RouterLinkActive = /** @class */ (function () {
             i0.ΔcontentQuery(dirIndex, RouterLinkWithHref, true, null);
         } if (rf & 2) {
             var _t;
-            (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.links = _t));
-            (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.linksWithHrefs = _t));
+            i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.links = _t);
+            i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.linksWithHrefs = _t);
         } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ΔNgOnChangesFeature()] });
     return RouterLinkActive;
 }());

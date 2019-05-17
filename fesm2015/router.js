@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+243.sha-0937062.with-local-changes
+ * @license Angular v8.0.0-rc.0+244.sha-eda09e6.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7080,8 +7080,8 @@ RouterLinkActive.propDecorators = {
         ΔcontentQuery(dirIndex, RouterLinkWithHref, true, null);
     } if (rf & 2) {
         var _t;
-        (ΔqueryRefresh((_t = ΔloadContentQuery())) && (ctx.links = _t));
-        (ΔqueryRefresh((_t = ΔloadContentQuery())) && (ctx.linksWithHrefs = _t));
+        ΔqueryRefresh((_t = ΔloadContentQuery())) && (ctx.links = _t);
+        ΔqueryRefresh((_t = ΔloadContentQuery())) && (ctx.linksWithHrefs = _t);
     } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ΔNgOnChangesFeature()] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkActive, [{
         type: Directive,
@@ -8274,7 +8274,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.0.0-rc.0+243.sha-0937062.with-local-changes');
+const VERSION = new Version('8.0.0-rc.0+244.sha-eda09e6.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

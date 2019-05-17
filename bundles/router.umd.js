@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0-rc.0+243.sha-0937062.with-local-changes
+ * @license Angular v8.0.0-rc.0+244.sha-eda09e6.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4903,8 +4903,8 @@
                 i0.ΔcontentQuery(dirIndex, RouterLinkWithHref, true, null);
             } if (rf & 2) {
                 var _t;
-                (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.links = _t));
-                (i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.linksWithHrefs = _t));
+                i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.links = _t);
+                i0.ΔqueryRefresh((_t = i0.ΔloadContentQuery())) && (ctx.linksWithHrefs = _t);
             } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ΔNgOnChangesFeature()] });
         return RouterLinkActive;
     }());
@@ -5791,7 +5791,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.0.0-rc.0+243.sha-0937062.with-local-changes');
+    var VERSION = new i0.Version('8.0.0-rc.0+244.sha-eda09e6.with-local-changes');
 
     /**
      * @license
