@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.0.0+34.sha-ccc1c27.with-local-changes
+ * @license Angular v8.0.0+36.sha-ea2adb1.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
