@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.1.0-rc.0+12.sha-8b03418.with-local-changes
+ * @license Angular v8.1.0-rc.0+17.sha-299a43c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5750,7 +5750,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.1.0-rc.0+12.sha-8b03418.with-local-changes');
+var VERSION = new Version('8.1.0-rc.0+17.sha-299a43c.with-local-changes');
 
 /**
  * @license
