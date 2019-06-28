@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.1.0-rc.0+2.sha-f2360aa.with-local-changes
+ * @license Angular v8.1.0-rc.0+16.sha-15e3978.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4097,9 +4097,23 @@
                         }
                         var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), e.message);
                         eventsSubject.next(navCancel);
-                        t.resolve(false);
-                        if (redirecting) {
-                            _this.navigateByUrl(e.url);
+                        // When redirecting, we need to delay resolving the navigation promise and push
+                        // it to the redirect navigation
+                        if (!redirecting) {
+                            t.resolve(false);
+                        }
+                        else {
+                            // setTimeout is required so this navigation finishes with the return EMPTY
+                            // below. If it isn't allowed to finish processing, there can be multiple
+                            // navigations to the same URL.
+                            setTimeout(function () {
+                                var mergedTree = _this.urlHandlingStrategy.merge(e.url, _this.rawUrlTree);
+                                var extras = {
+                                    skipLocationChange: t.extras.skipLocationChange,
+                                    replaceUrl: _this.urlUpdateStrategy === 'eager'
+                                };
+                                return _this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
+                            }, 0);
                         }
                         /* All other errors should reset to the router's internal URL reference to the
                          * pre-error state. */
@@ -4392,7 +4406,7 @@
                 t.resolve(true);
             }, function (e) { _this.console.warn("Unhandled Navigation Error: "); });
         };
-        Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras) {
+        Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
             var lastNavigation = this.getTransition();
             // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
             // and that navigation results in 'replaceState' that leads to the same URL,
@@ -4415,12 +4429,20 @@
                 lastNavigation.rawUrl.toString() === rawUrl.toString()) {
                 return Promise.resolve(true); // return value is not used
             }
-            var resolve = null;
-            var reject = null;
-            var promise = new Promise(function (res, rej) {
-                resolve = res;
-                reject = rej;
-            });
+            var resolve;
+            var reject;
+            var promise;
+            if (priorPromise) {
+                resolve = priorPromise.resolve;
+                reject = priorPromise.reject;
+                promise = priorPromise.promise;
+            }
+            else {
+                promise = new Promise(function (res, rej) {
+                    resolve = res;
+                    reject = rej;
+                });
+            }
             var id = ++this.navigationId;
             this.setTransition({
                 id: id,
@@ -5838,7 +5860,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.1.0-rc.0+2.sha-f2360aa.with-local-changes');
+    var VERSION = new core.Version('8.1.0-rc.0+16.sha-15e3978.with-local-changes');
 
     /**
      * @license
