@@ -1,11 +1,11 @@
 /**
- * @license Angular v8.2.0-next.1+56.sha-8853f13.with-local-changes
+ * @license Angular v8.2.0-next.1+60.sha-09576e9.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵproperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadContentQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, ɵɵinject, ApplicationRef, SystemJsNgModuleLoader, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
+import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadContentQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, ɵɵinject, ApplicationRef, SystemJsNgModuleLoader, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, NgProbeToken, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
 import { of, from, BehaviorSubject, EmptyError, Observable, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -6825,7 +6825,7 @@ RouterLinkWithHref.propDecorators = {
         ɵɵallocHostVars(2);
         ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
-        ɵɵproperty("href", ctx.href, ɵɵsanitizeUrl, true);
+        ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
         ɵɵattribute("target", ctx.target);
     } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵɵNgOnChangesFeature()] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkWithHref, [{
@@ -8274,7 +8274,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.0-next.1+56.sha-8853f13.with-local-changes');
+const VERSION = new Version('8.2.0-next.1+60.sha-09576e9.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
