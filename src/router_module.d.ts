@@ -318,8 +318,8 @@ export declare class RouterInitializer {
     private isLegacyDisabled;
     static ngInjectableDef: i0.ɵɵInjectableDef<RouterInitializer>;
 }
-export declare function getAppInitializer(r: RouterInitializer): any;
-export declare function getBootstrapListener(r: RouterInitializer): any;
+export declare function getAppInitializer(r: RouterInitializer): () => Promise<any>;
+export declare function getBootstrapListener(r: RouterInitializer): (bootstrappedComponentRef: ComponentRef<any>) => void;
 /**
  * A [DI token](guide/glossary/#di-token) for the router initializer that
  * is called after the app is bootstrapped.

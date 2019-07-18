@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModuleFactory } from '@angular/core';
 import { Observable } from 'rxjs';
 export declare function shallowEqualArrays(a: any[], b: any[]): boolean;
 export declare function shallowEqual(a: {
@@ -33,4 +32,4 @@ export declare function waitForMap<A, B>(obj: {
 }, fn: (k: string, a: A) => Observable<B>): Observable<{
     [k: string]: B;
 }>;
-export declare function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>): Observable<T | NgModuleFactory<T>>;
+export declare function wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>): Observable<T>;
