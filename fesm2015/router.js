@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2.with-local-changes
+ * @license Angular v8.2.0-next.2+7.sha-1e9eeaf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -22,14 +22,12 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@description
+ * Base for events the router goes through, as opposed to events tied to a specific
+ * route. Fired one time for any given navigation.
  *
- * Base for events the Router goes through, as opposed to events tied to a specific
- * Route. `RouterEvent`s will only be fired one time for any given navigation.
+ * \@usageNotes
  *
- * Example:
- *
- * ```
+ * ```ts
  * class MyService {
  *   constructor(public router: Router, logger: Logger) {
  *     router.events.pipe(
@@ -41,6 +39,7 @@ import { ɵgetDOM } from '@angular/platform-browser';
  * }
  * ```
  *
+ * @see `Event`
  * \@publicApi
  */
 class RouterEvent {
@@ -54,9 +53,7 @@ class RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents an event triggered when a navigation starts.
+ * An event triggered when a navigation starts.
  *
  * \@publicApi
  */
@@ -87,9 +84,7 @@ class NavigationStart extends RouterEvent {
     toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
 }
 /**
- * \@description
- *
- * Represents an event triggered when a navigation ends successfully.
+ * An event triggered when a navigation ends successfully.
  *
  * \@publicApi
  */
@@ -116,9 +111,7 @@ class NavigationEnd extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents an event triggered when a navigation is canceled.
+ * An event triggered when a navigation is canceled.
  *
  * \@publicApi
  */
@@ -143,9 +136,7 @@ class NavigationCancel extends RouterEvent {
     toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
 }
 /**
- * \@description
- *
- * Represents an event triggered when a navigation fails due to an unexpected error.
+ * An event triggered when a navigation fails due to an unexpected error.
  *
  * \@publicApi
  */
@@ -172,9 +163,7 @@ class NavigationError extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents an event triggered when routes are recognized.
+ * An event triggered when routes are recognized.
  *
  * \@publicApi
  */
@@ -203,9 +192,7 @@ class RoutesRecognized extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents the start of the Guard phase of routing.
+ * An event triggered at the start of the Guard phase of routing.
  *
  * \@publicApi
  */
@@ -233,9 +220,7 @@ class GuardsCheckStart extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents the end of the Guard phase of routing.
+ * An event triggered at the end of the Guard phase of routing.
  *
  * \@publicApi
  */
@@ -265,12 +250,10 @@ class GuardsCheckEnd extends RouterEvent {
     }
 }
 /**
- * \@description
+ * An event triggered at the the start of the Resolve phase of routing.
  *
- * Represents the start of the Resolve phase of routing. The timing of this
- * event may change, thus it's experimental. In the current iteration it will run
- * in the "resolve" phase whether there's things to resolve or not. In the future this
- * behavior may change to only run when there are things to be resolved.
+ * Runs in the "resolve" phase whether or not there is anything to resolve.
+ * In future, may change to only run when there are things to be resolved.
  *
  * \@publicApi
  */
@@ -298,10 +281,8 @@ class ResolveStart extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents the end of the Resolve phase of routing. See note on
- * `ResolveStart` for use of this experimental API.
+ * An event triggered at the end of the Resolve phase of routing.
+ * @see `ResolveStart`.
  *
  * \@publicApi
  */
@@ -329,9 +310,7 @@ class ResolveEnd extends RouterEvent {
     }
 }
 /**
- * \@description
- *
- * Represents an event triggered before lazy loading a route config.
+ * An event triggered before lazy loading a route configuration.
  *
  * \@publicApi
  */
@@ -348,9 +327,7 @@ class RouteConfigLoadStart {
     toString() { return `RouteConfigLoadStart(path: ${this.route.path})`; }
 }
 /**
- * \@description
- *
- * Represents an event triggered when a route has been lazy loaded.
+ * An event triggered when a route has been lazy loaded.
  *
  * \@publicApi
  */
@@ -367,10 +344,10 @@ class RouteConfigLoadEnd {
     toString() { return `RouteConfigLoadEnd(path: ${this.route.path})`; }
 }
 /**
- * \@description
- *
- * Represents the start of end of the Resolve phase of routing. See note on
- * `ChildActivationEnd` for use of this experimental API.
+ * An event triggered at the start of the child-activation
+ * part of the Resolve phase of routing.
+ * @see `ChildActivationEnd`
+ * @see `ResolveStart`
  *
  * \@publicApi
  */
@@ -391,11 +368,10 @@ class ChildActivationStart {
     }
 }
 /**
- * \@description
- *
- * Represents the start of end of the Resolve phase of routing. See note on
- * `ChildActivationStart` for use of this experimental API.
- *
+ * An event triggered at the end of the child-activation part
+ * of the Resolve phase of routing.
+ * @see `ChildActivationStart`
+ * @see `ResolveStart` *
  * \@publicApi
  */
 class ChildActivationEnd {
@@ -415,10 +391,10 @@ class ChildActivationEnd {
     }
 }
 /**
- * \@description
- *
- * Represents the start of end of the Resolve phase of routing. See note on
- * `ActivationEnd` for use of this experimental API.
+ * An event triggered at the start of the activation part
+ * of the Resolve phase of routing.
+ * @see ActivationEnd`
+ * @see `ResolveStart`
  *
  * \@publicApi
  */
@@ -439,10 +415,10 @@ class ActivationStart {
     }
 }
 /**
- * \@description
- *
- * Represents the start of end of the Resolve phase of routing. See note on
- * `ActivationStart` for use of this experimental API.
+ * An event triggered at the end of the activation part
+ * of the Resolve phase of routing.
+ * @see `ActivationStart`
+ * @see `ResolveStart`
  *
  * \@publicApi
  */
@@ -463,9 +439,7 @@ class ActivationEnd {
     }
 }
 /**
- * \@description
- *
- * Represents a scrolling event.
+ * An event triggered by scrolling.
  *
  * \@publicApi
  */
@@ -521,9 +495,7 @@ class ɵEmptyOutletComponent {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@description
- *
- * Name of the primary outlet.
+ * The primary routing outlet.
  *
  * \@publicApi
  * @type {?}
@@ -569,11 +541,11 @@ class ParamsAsMap {
     get keys() { return Object.keys(this.params); }
 }
 /**
- * Convert a `Params` instance to a `ParamMap`.
- *
+ * Converts a `Params` instance to a `ParamMap`.
  * \@publicApi
- * @param {?} params
- * @return {?}
+ * @param {?} params The instance to convert.
+ * @return {?} The new map instance.
+ *
  */
 function convertToParamMap(params) {
     return new ParamsAsMap(params);
@@ -1887,14 +1859,15 @@ function nodeChildrenAsMap(node) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
- * \@description
- *
- * Represents the state of the router.
- *
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
+ * Represents the state of the router as a tree of activated routes.
  *
  * \@usageNotes
+ *
+ * Every node in the route tree is an `ActivatedRoute` instance
+ * that knows about the "consumed" URL segments, the extracted parameters,
+ * and the resolved data.
+ * Use the `ActivatedRoute` properties to traverse the tree from any node.
+ *
  * ### Example
  *
  * ```
@@ -1910,7 +1883,7 @@ function nodeChildrenAsMap(node) {
  * }
  * ```
  *
- * See `ActivatedRoute` for more information.
+ * @see `ActivatedRoute`
  *
  * \@publicApi
  */
@@ -1972,10 +1945,9 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
     return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 /**
- * \@description
- *
- * Contains the information about a route associated with a component loaded in an
- * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
+ * Provides access to information about a route associated with a component
+ * that is loaded in an outlet.
+ * Use to traverse the `RouterState` tree and extract information from nodes.
  *
  * {\@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts" linenums="false"}
@@ -2005,36 +1977,39 @@ class ActivatedRoute {
         this._futureSnapshot = futureSnapshot;
     }
     /**
-     * The configuration used to match this route
+     * The configuration used to match this route.
      * @return {?}
      */
     get routeConfig() { return this._futureSnapshot.routeConfig; }
     /**
-     * The root of the router state
+     * The root of the router state.
      * @return {?}
      */
     get root() { return this._routerState.root; }
     /**
-     * The parent of this route in the router state tree
+     * The parent of this route in the router state tree.
      * @return {?}
      */
     get parent() { return this._routerState.parent(this); }
     /**
-     * The first child of this route in the router state tree
+     * The first child of this route in the router state tree.
      * @return {?}
      */
     get firstChild() { return this._routerState.firstChild(this); }
     /**
-     * The children of this route in the router state tree
+     * The children of this route in the router state tree.
      * @return {?}
      */
     get children() { return this._routerState.children(this); }
     /**
-     * The path from the root of the router state tree to this route
+     * The path from the root of the router state tree to this route.
      * @return {?}
      */
     get pathFromRoot() { return this._routerState.pathFromRoot(this); }
     /**
+     * An Observable that contains a map of the required and optional parameters
+     * specific to the route.
+     * The map supports retrieving single and multiple values from the same parameter.
      * @return {?}
      */
     get paramMap() {
@@ -2048,6 +2023,8 @@ class ActivatedRoute {
         return this._paramMap;
     }
     /**
+     * An Observable that contains a map of the query parameters available to all routes.
+     * The map supports retrieving single and multiple values from the query parameter.
      * @return {?}
      */
     get queryParamMap() {
@@ -5327,7 +5304,8 @@ class DefaultRouteReuseStrategy {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
- * \@docsNotRequired
+ * The [DI token](guide/glossary/#di-token) for a router configuration.
+ * @see `ROUTES`
  * \@publicApi
  * @type {?}
  */
@@ -5511,8 +5489,9 @@ class Router {
          */
         this.errorHandler = defaultErrorHandler;
         /**
-         * Malformed uri error handler is invoked when `Router.parseUrl(url)` throws an
-         * error due to containing an invalid character. The most common case would be a `%` sign
+         * A handler for errors thrown by `Router.parseUrl(url)`
+         * when `url` contains an invalid character.
+         * The most common case is a `%` sign
          * that's not encoded and is not part of a percent encoded sequence.
          */
         this.malformedUriErrorHandler = defaultMalformedUriErrorHandler;
@@ -5534,11 +5513,12 @@ class Router {
             afterPreactivation: defaultRouterHook
         };
         /**
-         * Extracts and merges URLs. Used for AngularJS to Angular migrations.
+         * A strategy for extracting and merging URLs.
+         * Used for AngularJS to Angular migrations.
          */
         this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
         /**
-         * The strategy for re-using routes.
+         * A strategy for re-using routes.
          */
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         /**
@@ -5558,18 +5538,16 @@ class Router {
          */
         this.paramsInheritanceStrategy = 'emptyOnly';
         /**
-         * Defines when the router updates the browser URL. The default behavior is to update after
-         * successful navigation. However, some applications may prefer a mode where the URL gets
-         * updated at the beginning of navigation. The most common use case would be updating the
-         * URL early so if navigation fails, you can show an error message with the URL that failed.
-         * Available options are:
-         *
-         * - `'deferred'`, the default, updates the browser URL after navigation has finished.
-         * - `'eager'`, updates browser URL at the beginning of navigation.
+         * Determines when the router updates the browser URL.
+         * By default (`"deferred"`), udates the browser URL after navigation has finished.
+         * Set to `'eager'` to update the browser URL at the beginning of navigation.
+         * You can choose to update early so that, if navigation fails,
+         * you can show an error message with the URL that failed.
          */
         this.urlUpdateStrategy = 'deferred';
         /**
-         * See {\@link RouterModule} for more information.
+         * Enables a bug fix that corrects relative link resolution in components with empty paths.
+         * @see `RouterModule`
          */
         this.relativeLinkResolution = 'legacy';
         /** @type {?} */
@@ -6113,7 +6091,7 @@ class Router {
      * Applies an array of commands to the current URL tree and creates a new URL tree.
      *
      * When given an activate route, applies the given commands starting from the route.
-     * When not given a route, applies the given command starting from the root.
+     * Otherwise, applies the given command starting from the root.
      *
      * \@usageNotes
      *
@@ -6127,9 +6105,8 @@ class Router {
      * // you can collapse static segments like this (this works only with the first passed-in value):
      * router.createUrlTree(['/team/33/user', userId]);
      *
-     * // If the first segment can contain slashes, and you do not want the router to split it, you
-     * // can do the following:
-     *
+     * // If the first segment can contain slashes, and you do not want the router to split it,
+     * // you can do the following:
      * router.createUrlTree([{segmentPath: '/one/two'}]);
      *
      * // create /team/33/(user/11//right:chat)
@@ -6150,7 +6127,7 @@ class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      * @param {?} commands An array of commands to apply.
-     * @param {?=} navigationExtras
+     * @param {?=} navigationExtras Options that control the navigation strategy.
      * @return {?} The new URL tree.
      *
      */
@@ -6190,8 +6167,6 @@ class Router {
      *
      * \@usageNotes
      *
-     * ### Example
-     *
      * ```
      * router.navigateByUrl("/team/33/user/11");
      *
@@ -6228,8 +6203,6 @@ class Router {
      * - is rejected when an error happens.
      *
      * \@usageNotes
-     *
-     * ### Example
      *
      * ```
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
@@ -7594,18 +7567,12 @@ class RouterScroller {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
- * \@description
- *
- * Contains a list of directives
- *
- *
+ * The directives defined in the `RouterModule`.
  * @type {?}
  */
 const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
 /**
- * \@description
- *
- * Is used in DI to configure the router.
+ * A [DI token](guide/glossary/#di-token) for the router service.
  *
  * \@publicApi
  * @type {?}
@@ -7686,12 +7653,12 @@ function routerNgProbeToken() {
  * In addition, we often want to split applications into multiple bundles and load them on demand.
  * Doing this transparently is not trivial.
  *
- * The Angular router solves these problems. Using the router, you can declaratively specify
+ * The Angular router service solves these problems. Using the router, you can declaratively specify
  * application states, manage state transitions while taking care of the URL, and load bundles on
  * demand.
  *
- * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
- * overview of how the router should be used.
+ * @see [Routing and Navigation](guide/router.html) for an
+ * overview of how the router service should be used.
  *
  * \@publicApi
  */
@@ -7703,37 +7670,12 @@ class RouterModule {
      */
     constructor(guard, router) { }
     /**
-     * Creates a module with all the router providers and directives. It also optionally sets up an
-     * application listener to perform an initial navigation.
+     * Creates and configures a module with all the router providers and directives.
+     * Optionally sets up an application listener to perform an initial navigation.
      *
-     * Configuration Options:
-     *
-     * * `enableTracing` Toggles whether the router should log all navigation events to the console.
-     * * `useHash` Enables the location strategy that uses the URL fragment instead of the history
-     * API.
-     * * `initialNavigation` Disables the initial navigation.
-     * * `errorHandler` Defines a custom error handler for failed navigations.
-     * * `preloadingStrategy` Configures a preloading strategy. See `PreloadAllModules`.
-     * * `onSameUrlNavigation` Define what the router should do if it receives a navigation request to
-     * the current URL.
-     * * `scrollPositionRestoration` Configures if the scroll position needs to be restored when
-     * navigating back.
-     * * `anchorScrolling` Configures if the router should scroll to the element when the url has a
-     * fragment.
-     * * `scrollOffset` Configures the scroll offset the router will use when scrolling to an element.
-     * * `paramsInheritanceStrategy` Defines how the router merges params, data and resolved data from
-     * parent to child routes.
-     * * `malformedUriErrorHandler` Defines a custom malformed uri error handler function. This
-     * handler is invoked when encodedURI contains invalid character sequences.
-     * * `urlUpdateStrategy` Defines when the router updates the browser URL. The default behavior is
-     * to update after successful navigation.
-     * * `relativeLinkResolution` Enables the correct relative link resolution in components with
-     * empty paths.
-     *
-     * See `ExtraOptions` for more details about the above options.
-     * @param {?} routes
-     * @param {?=} config
-     * @return {?}
+     * @param {?} routes An array of `Route` objects that define the navigation paths for the application.
+     * @param {?=} config An `ExtraOptions` configuration object that controls how navigation is performed.
+     * @return {?} The new router module.
      */
     static forRoot(routes, config) {
         return {
@@ -7823,12 +7765,8 @@ function provideForRootGuard(router) {
     return 'guarded';
 }
 /**
- * \@description
- *
- * Registers routes.
- *
+ * Registers a [DI provider](guide/glossary#provider) for a set of routes.
  * \@usageNotes
- * ### Example
  *
  * ```
  * \@NgModule({
@@ -7839,7 +7777,8 @@ function provideForRootGuard(router) {
  * ```
  *
  * \@publicApi
- * @param {?} routes
+ * @param {?} routes The route configuration to provide.
+ *
  * @return {?}
  */
 function provideRoutes(routes) {
@@ -7913,13 +7852,13 @@ function rootRoute(router) {
     return router.routerState.root;
 }
 /**
- * To initialize the router properly we need to do in two steps:
+ * Router initialization requires two steps:
  *
- * We need to start the navigation in a APP_INITIALIZER to block the bootstrap if
- * a resolver or a guards executes asynchronously. Second, we need to actually run
- * activation in a BOOTSTRAP_LISTENER. We utilize the afterPreactivation
- * hook provided by the router to do that.
+ * First, we start the navigation in a `APP_INITIALIZER` to block the bootstrap if
+ * a resolver or a guard executes asynchronously.
  *
+ * Next, we actually run activation in a `BOOTSTRAP_LISTENER`, using the
+ * `afterPreactivation` hook provided by the router.
  * The router navigation starts, reaches the point when preactivation is done, and then
  * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
@@ -8055,7 +7994,8 @@ function getBootstrapListener(r) {
     return r.bootstrapListener.bind(r);
 }
 /**
- * A token for the router initializer that will be called after the app is bootstrapped.
+ * A [DI token](guide/glossary/#di-token) for the router initializer that
+ * is called after the app is bootstrapped.
  *
  * \@publicApi
  * @type {?}
@@ -8086,7 +8026,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.0-next.2.with-local-changes');
+const VERSION = new Version('8.2.0-next.2+7.sha-1e9eeaf.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
