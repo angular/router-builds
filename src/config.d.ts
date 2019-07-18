@@ -130,7 +130,8 @@ export declare type DeprecatedLoadChildren = string;
  * - `merge` : Merge new with current parameters.
  * - `preserve` : Preserve current parameters.
  *
- * @see `RouterLink#queryParamsHandling`.
+ * @see `NavigationExtras#queryParamsHandling`
+ * @see `RouterLink`
  * @publicApi
  */
 export declare type QueryParamsHandling = 'merge' | 'preserve' | '';

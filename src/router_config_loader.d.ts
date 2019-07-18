@@ -9,7 +9,8 @@ import { Compiler, InjectionToken, Injector, NgModuleFactoryLoader } from '@angu
 import { Observable } from 'rxjs';
 import { LoadedRouterConfig, Route } from './config';
 /**
- * @docsNotRequired
+ * The [DI token](guide/glossary/#di-token) for a router configuration.
+ * @see `ROUTES`
  * @publicApi
  */
 export declare const ROUTES: InjectionToken<Route[][]>;

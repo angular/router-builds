@@ -12,14 +12,15 @@ import { ParamMap, Params } from './shared';
 import { UrlSegment, UrlTree } from './url_tree';
 import { Tree } from './utils/tree';
 /**
- * @description
- *
- * Represents the state of the router.
- *
- * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
- * segments, the extracted parameters, and the resolved data.
+ * Represents the state of the router as a tree of activated routes.
  *
  * @usageNotes
+ *
+ * Every node in the route tree is an `ActivatedRoute` instance
+ * that knows about the "consumed" URL segments, the extracted parameters,
+ * and the resolved data.
+ * Use the `ActivatedRoute` properties to traverse the tree from any node.
+ *
  * ### Example
  *
  * ```
@@ -35,7 +36,7 @@ import { Tree } from './utils/tree';
  * }
  * ```
  *
- * See `ActivatedRoute` for more information.
+ * @see `ActivatedRoute`
  *
  * @publicApi
  */
@@ -47,10 +48,9 @@ export declare class RouterState extends Tree<ActivatedRoute> {
 export declare function createEmptyState(urlTree: UrlTree, rootComponent: Type<any> | null): RouterState;
 export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent: Type<any> | null): RouterStateSnapshot;
 /**
- * @description
- *
- * Contains the information about a route associated with a component loaded in an
- * outlet.  An `ActivatedRoute` can also be used to traverse the router state tree.
+ * Provides access to information about a route associated with a component
+ * that is loaded in an outlet.
+ * Use to traverse the `RouterState` tree and extract information from nodes.
  *
  * {@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts" linenums="false"}
@@ -58,35 +58,42 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * @publicApi
  */
 export declare class ActivatedRoute {
-    /** An observable of the URL segments matched by this route */
+    /** An observable of the URL segments matched by this route. */
     url: Observable<UrlSegment[]>;
-    /** An observable of the matrix parameters scoped to this route */
+    /** An observable of the matrix parameters scoped to this route. */
     params: Observable<Params>;
-    /** An observable of the query parameters shared by all the routes */
+    /** An observable of the query parameters shared by all the routes. */
     queryParams: Observable<Params>;
-    /** An observable of the URL fragment shared by all the routes */
+    /** An observable of the URL fragment shared by all the routes. */
     fragment: Observable<string>;
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
-    /** The outlet name of the route. It's a constant */
+    /** The outlet name of the route, a constant. */
     outlet: string;
-    /** The component of the route. It's a constant */
+    /** The component of the route, a constant. */
     component: Type<any> | string | null;
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
-    /** The configuration used to match this route */
+    /** The configuration used to match this route. */
     readonly routeConfig: Route | null;
-    /** The root of the router state */
+    /** The root of the router state. */
     readonly root: ActivatedRoute;
-    /** The parent of this route in the router state tree */
+    /** The parent of this route in the router state tree. */
     readonly parent: ActivatedRoute | null;
-    /** The first child of this route in the router state tree */
+    /** The first child of this route in the router state tree. */
     readonly firstChild: ActivatedRoute | null;
-    /** The children of this route in the router state tree */
+    /** The children of this route in the router state tree. */
     readonly children: ActivatedRoute[];
-    /** The path from the root of the router state tree to this route */
+    /** The path from the root of the router state tree to this route. */
     readonly pathFromRoot: ActivatedRoute[];
+    /** An Observable that contains a map of the required and optional parameters
+     * specific to the route.
+     * The map supports retrieving single and multiple values from the same parameter. */
     readonly paramMap: Observable<ParamMap>;
+    /**
+     * An Observable that contains a map of the query parameters available to all routes.
+     * The map supports retrieving single and multiple values from the query parameter.
+     */
     readonly queryParamMap: Observable<ParamMap>;
     toString(): string;
 }
