@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+8.sha-78e7fdd.with-local-changes
+ * @license Angular v8.2.0-next.2+22.sha-60f58bf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -696,8 +696,11 @@ function waitForMap(obj, fn) {
             waitTail.push(mapped);
         }
     });
-    // Closure compiler has problem with using spread operator here. So just using Array.concat.
-    return of.apply(null, waitHead.concat(waitTail)).pipe(concatAll(), last$1(), map(function () { return res; }));
+    // Closure compiler has problem with using spread operator here. So we use "Array.concat".
+    // Note that we also need to cast the new promise because TypeScript cannot infer the type
+    // when calling the "of" function through "Function.apply"
+    return of.apply(null, waitHead.concat(waitTail))
+        .pipe(concatAll(), last$1(), map(function () { return res; }));
 }
 function wrapIntoObservable(value) {
     if (ɵisObservable(value)) {
@@ -5698,7 +5701,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('8.2.0-next.2+8.sha-78e7fdd.with-local-changes');
+var VERSION = new Version('8.2.0-next.2+22.sha-60f58bf.with-local-changes');
 
 /**
  * @license

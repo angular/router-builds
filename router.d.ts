@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+8.sha-78e7fdd.with-local-changes
+ * @license Angular v8.2.0-next.2+22.sha-60f58bf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2890,9 +2890,9 @@ export declare class ɵangular_packages_router_router_h {
     private isLegacyDisabled;
 }
 
-export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): any;
+export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): () => Promise<any>;
 
-export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): any;
+export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): (bootstrappedComponentRef: ComponentRef<any>) => void;
 
 export declare function ɵangular_packages_router_router_k(): (typeof ɵangular_packages_router_router_h | {
     provide: InjectionToken<(() => void)[]>;
