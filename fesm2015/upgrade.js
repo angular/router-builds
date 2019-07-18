@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.1.0+56.sha-f025fe6.with-local-changes
+ * @license Angular v8.1.2+9.sha-a56c1c4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -15,12 +15,12 @@ import { UpgradeModule } from '@angular/upgrade/static';
  */
 const ɵ0 = (locationSyncBootstrapListener);
 /**
- * \@description
+ * Creates an initializer that sets up `ngRoute` integration
+ * along with setting up the Angular router.
  *
- * Creates an initializer that in addition to setting up the Angular
- * router sets up the ngRoute integration.
+ * \@usageNotes
  *
- * ```
+ * <code-example language="typescript" linenums="false">
  * \@NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
@@ -33,7 +33,7 @@ const ɵ0 = (locationSyncBootstrapListener);
  * export class AppModule {
  *   ngDoBootstrap() {}
  * }
- * ```
+ * </code-example>
  *
  * \@publicApi
  * @type {?}
@@ -56,16 +56,15 @@ function locationSyncBootstrapListener(ngUpgrade) {
     () => { setUpLocationSync(ngUpgrade); });
 }
 /**
- * \@description
+ * Sets up a location change listener to trigger `history.pushState`.
+ * Works around the problem that `onPopState` does not trigger `history.pushState`.
+ * Must be called *after* calling `UpgradeModule.bootstrap`.
  *
- * Sets up a location synchronization.
- *
- * History.pushState does not fire onPopState, so the Angular location
- * doesn't detect it. The workaround is to attach a location change listener
+ * @see `HashLocationStrategy` / `PathLocationStrategy`
  *
  * \@publicApi
- * @param {?} ngUpgrade
- * @param {?=} urlType
+ * @param {?} ngUpgrade The upgrade NgModule.
+ * @param {?=} urlType The location strategy.
  * @return {?}
  */
 function setUpLocationSync(ngUpgrade, urlType = 'path') {
@@ -107,7 +106,7 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
     }));
 }
 /**
- * Normalize and parse a URL.
+ * Normalizes and parses a URL.
  *
  * - Normalizing means that a relative URL will be resolved into an absolute URL in the context of
  *   the application document.
