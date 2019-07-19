@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+7.sha-1e9eeaf.with-local-changes
+ * @license Angular v8.2.0-next.2+25.sha-7151eae.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -784,8 +784,11 @@
                 waitTail.push(mapped);
             }
         });
-        // Closure compiler has problem with using spread operator here. So just using Array.concat.
-        return rxjs.of.apply(null, waitHead.concat(waitTail)).pipe(operators.concatAll(), operators.last(), operators.map(function () { return res; }));
+        // Closure compiler has problem with using spread operator here. So we use "Array.concat".
+        // Note that we also need to cast the new promise because TypeScript cannot infer the type
+        // when calling the "of" function through "Function.apply"
+        return rxjs.of.apply(null, waitHead.concat(waitTail))
+            .pipe(operators.concatAll(), operators.last(), operators.map(function () { return res; }));
     }
     function wrapIntoObservable(value) {
         if (core.ɵisObservable(value)) {
@@ -5786,7 +5789,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('8.2.0-next.2+7.sha-1e9eeaf.with-local-changes');
+    var VERSION = new core.Version('8.2.0-next.2+25.sha-7151eae.with-local-changes');
 
     /**
      * @license
