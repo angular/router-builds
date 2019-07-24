@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+84.sha-2172368.with-local-changes
+ * @license Angular v8.2.0-next.2+78.sha-3d7303e.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1953,7 +1953,7 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * Use to traverse the `RouterState` tree and extract information from nodes.
  *
  * {\@example router/activated-route/module.ts region="activated-route"
- *     header="activated-route.component.ts"}
+ *     header="activated-route.component.ts" linenums="false"}
  *
  * \@publicApi
  */
@@ -8029,7 +8029,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.0-next.2+84.sha-2172368.with-local-changes');
+const VERSION = new Version('8.2.0-next.2+78.sha-3d7303e.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
