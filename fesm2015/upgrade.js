@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+77.sha-716af10.with-local-changes
+ * @license Angular v8.2.0-next.2+83.sha-2c402d5.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -20,7 +20,7 @@ const ɵ0 = (locationSyncBootstrapListener);
  *
  * \@usageNotes
  *
- * <code-example language="typescript" linenums="false">
+ * <code-example language="typescript">
  * \@NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),

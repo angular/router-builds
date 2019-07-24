@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+77.sha-716af10.with-local-changes
+ * @license Angular v8.2.0-next.2+83.sha-2c402d5.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -42,7 +42,7 @@ import { ViewportScroller } from '@angular/common';
  * Use to traverse the `RouterState` tree and extract information from nodes.
  *
  * {@example router/activated-route/module.ts region="activated-route"
- *     header="activated-route.component.ts" linenums="false"}
+ *     header="activated-route.component.ts"}
  *
  * @publicApi
  */
