@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+84.sha-2172368.with-local-changes
+ * @license Angular v8.2.0-next.2+78.sha-3d7303e.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1544,7 +1544,7 @@
      * Use to traverse the `RouterState` tree and extract information from nodes.
      *
      * {@example router/activated-route/module.ts region="activated-route"
-     *     header="activated-route.component.ts"}
+     *     header="activated-route.component.ts" linenums="false"}
      *
      * @publicApi
      */
@@ -5742,7 +5742,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.2.0-next.2+84.sha-2172368.with-local-changes');
+    var VERSION = new i0.Version('8.2.0-next.2+78.sha-3d7303e.with-local-changes');
 
     /**
      * @license
