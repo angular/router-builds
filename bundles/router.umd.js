@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+77.sha-716af10.with-local-changes
+ * @license Angular v8.2.0-next.2+83.sha-2c402d5.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1544,7 +1544,7 @@
      * Use to traverse the `RouterState` tree and extract information from nodes.
      *
      * {@example router/activated-route/module.ts region="activated-route"
-     *     header="activated-route.component.ts" linenums="false"}
+     *     header="activated-route.component.ts"}
      *
      * @publicApi
      */
@@ -4879,8 +4879,8 @@
                 this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
         RouterLinkActive.ngDirectiveDef = i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-                i0.ɵɵcontentQuery(dirIndex, RouterLink, true, null);
-                i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
+                i0.ɵɵcontentQuery(dirIndex, RouterLink, true);
+                i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
             } if (rf & 2) {
                 var _t;
                 i0.ɵɵqueryRefresh((_t = i0.ɵɵloadContentQuery())) && (ctx.links = _t);
@@ -5742,7 +5742,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('8.2.0-next.2+77.sha-716af10.with-local-changes');
+    var VERSION = new i0.Version('8.2.0-next.2+83.sha-2c402d5.with-local-changes');
 
     /**
      * @license

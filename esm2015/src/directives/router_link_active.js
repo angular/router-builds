@@ -213,8 +213,8 @@ RouterLinkActive.propDecorators = {
     routerLinkActive: [{ type: Input }]
 };
 /** @nocollapse */ RouterLinkActive.ngDirectiveDef = i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(i1.Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i2.RouterLink, 8), i0.ɵɵdirectiveInject(i2.RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-        i0.ɵɵcontentQuery(dirIndex, RouterLink, true, null);
-        i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true, null);
+        i0.ɵɵcontentQuery(dirIndex, RouterLink, true);
+        i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
     } if (rf & 2) {
         var _t;
         i0.ɵɵqueryRefresh((_t = i0.ɵɵloadContentQuery())) && (ctx.links = _t);

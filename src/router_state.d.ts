@@ -53,7 +53,7 @@ export declare function createEmptyStateSnapshot(urlTree: UrlTree, rootComponent
  * Use to traverse the `RouterState` tree and extract information from nodes.
  *
  * {@example router/activated-route/module.ts region="activated-route"
- *     header="activated-route.component.ts" linenums="false"}
+ *     header="activated-route.component.ts"}
  *
  * @publicApi
  */
