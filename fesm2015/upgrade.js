@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.0-next.2+78.sha-3d7303e.with-local-changes
+ * @license Angular v8.2.0-next.2+86.sha-85d051f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -19,7 +19,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * \@usageNotes
  *
- * <code-example language="typescript" linenums="false">
+ * <code-example language="typescript">
  * \@NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
