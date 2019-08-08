@@ -316,7 +316,7 @@ export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQu
  * and both of them require an ID parameter. You can accomplish this using a route
  * that does not specify a component at the top level.
  *
- * In the following example, 'ChildCmp' and 'AuxCmp' are siblings.
+ * In the following example, 'MainChild' and 'AuxChild' are siblings.
  * When navigating to 'parent/10/(a//aux:b)', the route instantiates
  * the main child and aux child components next to each other.
  * For this to work, the application component must have the primary and aux outlets defined.
