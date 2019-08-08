@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.0+19.sha-a2183dd.with-local-changes
+ * @license Angular v9.0.0-next.0+72.sha-4b8cdd4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1615,7 +1615,7 @@ export declare class ResolveStart extends RouterEvent {
  * and both of them require an ID parameter. You can accomplish this using a route
  * that does not specify a component at the top level.
  *
- * In the following example, 'ChildCmp' and 'AuxCmp' are siblings.
+ * In the following example, 'MainChild' and 'AuxChild' are siblings.
  * When navigating to 'parent/10/(a//aux:b)', the route instantiates
  * the main child and aux child components next to each other.
  * For this to work, the application component must have the primary and aux outlets defined.
