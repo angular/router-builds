@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.1+4.sha-6ec91dd.with-local-changes
+ * @license Angular v8.2.1+6.sha-eccb60c.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -91,6 +91,19 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = () => [
     { type: Compiler }
 ];
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     * @private
+     */
+    SpyNgModuleFactoryLoader.prototype._stubbedModules;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpyNgModuleFactoryLoader.prototype.compiler;
+}
 /**
  * @param {?} opts
  * @return {?}
