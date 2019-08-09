@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+13.sha-c198a27.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -102,6 +102,19 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
 /*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: Compiler }]; }, null);
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     * @private
+     */
+    SpyNgModuleFactoryLoader.prototype._stubbedModules;
+    /**
+     * @type {?}
+     * @private
+     */
+    SpyNgModuleFactoryLoader.prototype.compiler;
+}
 /**
  * @param {?} opts
  * @return {?}

@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+13.sha-c198a27.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { __values } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import { ɵɵdefineInjectable, ɵɵinject, Compiler, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, ɵɵsetNgModuleScope, NgModule } from '@angular/core';
-import { Router, ɵflatten, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy, PreloadingStrategy, NoPreloading, provideRoutes, RouterModule } from '@angular/router';
+import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading, RouterModule } from '@angular/router';
 
 /**
  * @description
