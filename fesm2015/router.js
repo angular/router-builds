@@ -1,12 +1,12 @@
 /**
- * @license Angular v9.0.0-next.1+11.sha-0ddf0c4.with-local-changes
+ * @license Angular v9.0.0-next.1+18.sha-9a37e82.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
-import { of, from, BehaviorSubject, EmptyError, Observable, combineLatest, defer, Subject, EMPTY } from 'rxjs';
+import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
 
@@ -52,6 +52,18 @@ class RouterEvent {
         this.url = url;
     }
 }
+if (false) {
+    /**
+     * A unique ID that the router assigns to every router navigation.
+     * @type {?}
+     */
+    RouterEvent.prototype.id;
+    /**
+     * The URL that is the destination for this navigation.
+     * @type {?}
+     */
+    RouterEvent.prototype.url;
+}
 /**
  * An event triggered when a navigation starts.
  *
@@ -83,6 +95,34 @@ class NavigationStart extends RouterEvent {
      */
     toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
 }
+if (false) {
+    /**
+     * Identifies the call or event that triggered the navigation.
+     * An `imperative` trigger is a call to `router.navigateByUrl()` or `router.navigate()`.
+     *
+     * @type {?}
+     */
+    NavigationStart.prototype.navigationTrigger;
+    /**
+     * The navigation state that was previously supplied to the `pushState` call,
+     * when the navigation is triggered by a `popstate` event. Otherwise null.
+     *
+     * The state object is defined by `NavigationExtras`, and contains any
+     * developer-defined state value, as well as a unique ID that
+     * the router assigns to every router transition/navigation.
+     *
+     * From the perspective of the router, the router never "goes back".
+     * When the user clicks on the back button in the browser,
+     * a new navigation ID is created.
+     *
+     * Use the ID in this previous-state object to differentiate between a newly created
+     * state and one returned to by a `popstate` event, so that you can restore some
+     * remembered state, such as scroll position.
+     *
+     * @type {?}
+     */
+    NavigationStart.prototype.restoredState;
+}
 /**
  * An event triggered when a navigation ends successfully.
  *
@@ -110,6 +150,13 @@ class NavigationEnd extends RouterEvent {
         return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    NavigationEnd.prototype.urlAfterRedirects;
+}
 /**
  * An event triggered when a navigation is canceled.
  *
@@ -134,6 +181,13 @@ class NavigationCancel extends RouterEvent {
      * @return {?}
      */
     toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    NavigationCancel.prototype.reason;
 }
 /**
  * An event triggered when a navigation fails due to an unexpected error.
@@ -161,6 +215,13 @@ class NavigationError extends RouterEvent {
     toString() {
         return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    NavigationError.prototype.error;
 }
 /**
  * An event triggered when routes are recognized.
@@ -191,6 +252,18 @@ class RoutesRecognized extends RouterEvent {
         return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    RoutesRecognized.prototype.urlAfterRedirects;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    RoutesRecognized.prototype.state;
+}
 /**
  * An event triggered at the start of the Guard phase of routing.
  *
@@ -218,6 +291,18 @@ class GuardsCheckStart extends RouterEvent {
     toString() {
         return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    GuardsCheckStart.prototype.urlAfterRedirects;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    GuardsCheckStart.prototype.state;
 }
 /**
  * An event triggered at the end of the Guard phase of routing.
@@ -248,6 +333,23 @@ class GuardsCheckEnd extends RouterEvent {
     toString() {
         return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    GuardsCheckEnd.prototype.urlAfterRedirects;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    GuardsCheckEnd.prototype.state;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    GuardsCheckEnd.prototype.shouldActivate;
 }
 /**
  * An event triggered at the the start of the Resolve phase of routing.
@@ -280,6 +382,18 @@ class ResolveStart extends RouterEvent {
         return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ResolveStart.prototype.urlAfterRedirects;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ResolveStart.prototype.state;
+}
 /**
  * An event triggered at the end of the Resolve phase of routing.
  * @see `ResolveStart`.
@@ -309,6 +423,18 @@ class ResolveEnd extends RouterEvent {
         return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ResolveEnd.prototype.urlAfterRedirects;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ResolveEnd.prototype.state;
+}
 /**
  * An event triggered before lazy loading a route configuration.
  *
@@ -326,6 +452,13 @@ class RouteConfigLoadStart {
      */
     toString() { return `RouteConfigLoadStart(path: ${this.route.path})`; }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    RouteConfigLoadStart.prototype.route;
+}
 /**
  * An event triggered when a route has been lazy loaded.
  *
@@ -342,6 +475,13 @@ class RouteConfigLoadEnd {
      * @return {?}
      */
     toString() { return `RouteConfigLoadEnd(path: ${this.route.path})`; }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    RouteConfigLoadEnd.prototype.route;
 }
 /**
  * An event triggered at the start of the child-activation
@@ -367,6 +507,13 @@ class ChildActivationStart {
         return `ChildActivationStart(path: '${path}')`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ChildActivationStart.prototype.snapshot;
+}
 /**
  * An event triggered at the end of the child-activation part
  * of the Resolve phase of routing.
@@ -389,6 +536,13 @@ class ChildActivationEnd {
         const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ChildActivationEnd(path: '${path}')`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ChildActivationEnd.prototype.snapshot;
 }
 /**
  * An event triggered at the start of the activation part
@@ -414,6 +568,13 @@ class ActivationStart {
         return `ActivationStart(path: '${path}')`;
     }
 }
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ActivationStart.prototype.snapshot;
+}
 /**
  * An event triggered at the end of the activation part
  * of the Resolve phase of routing.
@@ -437,6 +598,13 @@ class ActivationEnd {
         const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
         return `ActivationEnd(path: '${path}')`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    ActivationEnd.prototype.snapshot;
 }
 /**
  * An event triggered by scrolling.
@@ -462,6 +630,23 @@ class Scroll {
         const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
         return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
     }
+}
+if (false) {
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    Scroll.prototype.routerEvent;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    Scroll.prototype.position;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    Scroll.prototype.anchor;
 }
 
 /**
@@ -501,6 +686,47 @@ class ɵEmptyOutletComponent {
  * @type {?}
  */
 const PRIMARY_OUTLET = 'primary';
+/**
+ * A map that provides access to the required and optional parameters
+ * specific to a route.
+ * The map supports retrieving a single value with `get()`
+ * or multiple values with `getAll()`.
+ *
+ * @see [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+ *
+ * \@publicApi
+ * @record
+ */
+function ParamMap() { }
+if (false) {
+    /**
+     * Names of the parameters in the map.
+     * @type {?}
+     */
+    ParamMap.prototype.keys;
+    /**
+     * Reports whether the map contains a given parameter.
+     * @param {?} name The parameter name.
+     * @return {?} True if the map contains the given parameter, false otherwise.
+     */
+    ParamMap.prototype.has = function (name) { };
+    /**
+     * Retrieves a single value for a parameter.
+     * @param {?} name The parameter name.
+     * @return {?} The parameter's single value,
+     * or the first value if the parameter has multiple values,
+     * or `null` when there is no such parameter.
+     */
+    ParamMap.prototype.get = function (name) { };
+    /**
+     * Retrieves multiple values for a parameter.
+     * @param {?} name The parameter name.
+     * @return {?} An array containing one or more values,
+     * or an empty array if there is no such parameter.
+     *
+     */
+    ParamMap.prototype.getAll = function (name) { };
+}
 class ParamsAsMap {
     /**
      * @param {?} params
@@ -539,6 +765,13 @@ class ParamsAsMap {
      * @return {?}
      */
     get keys() { return Object.keys(this.params); }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ParamsAsMap.prototype.params;
 }
 /**
  * Converts a `Params` instance to a `ParamMap`.
@@ -613,6 +846,351 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * A configuration object that defines a single route.
+ * A set of routes are collected in a `Routes` array to define a `Router` configuration.
+ * The router attempts to match segments of a given URL against each route,
+ * using the configuration options defined in this object.
+ *
+ * Supports static, parameterized, redirect, and wildcard routes, as well as
+ * custom route data and resolve methods.
+ *
+ * For detailed usage information, see the [Routing Guide](guide/router).
+ *
+ * \@usageNotes
+ *
+ * ### Simple Configuration
+ *
+ * The following route specifies that when navigating to, for example,
+ * `/team/11/user/bob`, the router creates the 'Team' component
+ * with the 'User' child component in it.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *  component: Team,
+ *   children: [{
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
+ * }]
+ * ```
+ *
+ * ### Multiple Outlets
+ *
+ * The following route creates sibling components with multiple outlets.
+ * When navigating to `/team/11(aux:chat/jim)`, the router creates the 'Team' component next to
+ * the 'Chat' component. The 'Chat' component is placed into the 'aux' outlet.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team
+ * }, {
+ *   path: 'chat/:user',
+ *   component: Chat
+ *   outlet: 'aux'
+ * }]
+ * ```
+ *
+ * ### Wild Cards
+ *
+ * The following route uses wild-card notation to specify a component
+ * that is always instantiated regardless of where you navigate to.
+ *
+ * ```
+ * [{
+ *   path: '**',
+ *   component: WildcardComponent
+ * }]
+ * ```
+ *
+ * ### Redirects
+ *
+ * The following route uses the `redirectTo` property to ignore a segment of
+ * a given URL when looking for a child path.
+ *
+ * When navigating to '/team/11/legacy/user/jim', the router changes the URL segment
+ * '/team/11/legacy/user/jim' to '/team/11/user/jim', and then instantiates
+ * the Team component with the User child component in it.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team,
+ *   children: [{
+ *     path: 'legacy/user/:name',
+ *     redirectTo: 'user/:name'
+ *   }, {
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
+ * }]
+ * ```
+ *
+ * The redirect path can be relative, as shown in this example, or absolute.
+ * If we change the `redirectTo` value in the example to the absolute URL segment '/user/:name',
+ * the result URL is also absolute, '/user/jim'.
+ * ### Empty Path
+ *
+ * Empty-path route configurations can be used to instantiate components that do not 'consume'
+ * any URL segments.
+ *
+ * In the following configuration, when navigating to
+ * `/team/11`, the router instantiates the 'AllUsers' component.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team,
+ *   children: [{
+ *     path: '',
+ *     component: AllUsers
+ *   }, {
+ *     path: 'user/:name',
+ *     component: User
+ *   }]
+ * }]
+ * ```
+ *
+ * Empty-path routes can have children. In the following example, when navigating
+ * to `/team/11/user/jim`, the router instantiates the wrapper component with
+ * the user component in it.
+ *
+ * Note that an empty path route inherits its parent's parameters and data.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team,
+ *   children: [{
+ *     path: '',
+ *     component: WrapperCmp,
+ *     children: [{
+ *       path: 'user/:name',
+ *       component: User
+ *     }]
+ *   }]
+ * }]
+ * ```
+ *
+ * ### Matching Strategy
+ *
+ * The default path-match strategy is 'prefix', which means that the router
+ * checks URL elements from the left to see if the URL matches a specified path.
+ * For example, '/team/11/user' matches 'team/:id'.
+ *
+ * ```
+ * [{
+ *   path: '',
+ *   pathMatch: 'prefix', //default
+ *   redirectTo: 'main'
+ * }, {
+ *   path: 'main',
+ *   component: Main
+ * }]
+ * ```
+ *
+ * You can specify the path-match strategy 'full' to make sure that the path
+ * covers the whole unconsumed URL. It is important to do this when redirecting
+ * empty-path routes. Otherwise, because an empty path is a prefix of any URL,
+ * the router would apply the redirect even when navigating to the redirect destination,
+ * creating an endless loop.
+ *
+ * In the following example, supplying the 'full' `patchMatch` strategy ensures
+ * that the router applies the redirect if and only if navigating to '/'.
+ *
+ * ```
+ * [{
+ *   path: '',
+ *   pathMatch: 'full',
+ *   redirectTo: 'main'
+ * }, {
+ *   path: 'main',
+ *   component: Main
+ * }]
+ * ```
+ *
+ * ### Componentless Routes
+ *
+ * You can share parameters between sibling components.
+ * For example, suppose that two sibling components should go next to each other,
+ * and both of them require an ID parameter. You can accomplish this using a route
+ * that does not specify a component at the top level.
+ *
+ * In the following example, 'MainChild' and 'AuxChild' are siblings.
+ * When navigating to 'parent/10/(a//aux:b)', the route instantiates
+ * the main child and aux child components next to each other.
+ * For this to work, the application component must have the primary and aux outlets defined.
+ *
+ * ```
+ * [{
+ *    path: 'parent/:id',
+ *    children: [
+ *      { path: 'a', component: MainChild },
+ *      { path: 'b', component: AuxChild, outlet: 'aux' }
+ *    ]
+ * }]
+ * ```
+ *
+ * The router merges the parameters, data, and resolve of the componentless
+ * parent into the parameters, data, and resolve of the children.
+ *
+ * This is especially useful when child components are defined
+ * with an empty path string, as in the following example.
+ * With this configuration, navigating to '/parent/10' creates
+ * the main child and aux components.
+ *
+ * ```
+ * [{
+ *    path: 'parent/:id',
+ *    children: [
+ *      { path: '', component: MainChild },
+ *      { path: '', component: AuxChild, outlet: 'aux' }
+ *    ]
+ * }]
+ * ```
+ *
+ * ### Lazy Loading
+ *
+ * Lazy loading speeds up application load time by splitting the application
+ * into multiple bundles and loading them on demand.
+ * To use lazy loading, provide the `loadChildren` property  instead of the `children` property.
+ *
+ * Given the following example route, the router uses the registered
+ * `NgModuleFactoryLoader` to fetch an NgModule associated with 'team'.
+ * It then extracts the set of routes defined in that NgModule,
+ * and transparently adds those routes to the main configuration.
+ *
+ * ```
+ * [{
+ *   path: 'team/:id',
+ *   component: Team,
+ *   loadChildren: 'team'
+ * }]
+ * ```
+ *
+ * \@publicApi
+ * @record
+ */
+function Route() { }
+if (false) {
+    /**
+     * The path to match against, a URL string that uses router matching notation.
+     * Can be a wild card (`**`) that matches any URL (see Usage Notes below).
+     * Default is "/" (the root path).
+     * @type {?|undefined}
+     */
+    Route.prototype.path;
+    /**
+     * The path-matching strategy, one of 'prefix' or 'full'.
+     * Default is 'prefix'.
+     *
+     * By default, the router checks URL elements from the left to see if the URL
+     * matches a given  path, and stops when there is a match. For example,
+     * '/team/11/user' matches 'team/:id'.
+     *
+     * The path-match strategy 'full' matches against the entire URL.
+     * It is important to do this when redirecting empty-path routes.
+     * Otherwise, because an empty path is a prefix of any URL,
+     * the router would apply the redirect even when navigating
+     * to the redirect destination, creating an endless loop.
+     *
+     * @type {?|undefined}
+     */
+    Route.prototype.pathMatch;
+    /**
+     * A URL-matching function to use as a custom strategy for path matching.
+     * If present, supersedes `path` and `pathMatch`.
+     * @type {?|undefined}
+     */
+    Route.prototype.matcher;
+    /**
+     * The component to instantiate when the path matches.
+     * Can be empty if child routes specify components.
+     * @type {?|undefined}
+     */
+    Route.prototype.component;
+    /**
+     * A URL to which to redirect when a the path matches.
+     * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
+     * When not present, router does not redirect.
+     * @type {?|undefined}
+     */
+    Route.prototype.redirectTo;
+    /**
+     * Name of a `RouterOutlet` object where the component can be placed
+     * when the path matches.
+     * @type {?|undefined}
+     */
+    Route.prototype.outlet;
+    /**
+     * An array of dependency-injection tokens used to look up `CanActivate()`
+     * handlers, in order to determine if the current user is allowed to
+     * activate the component. By default, any user can activate.
+     * @type {?|undefined}
+     */
+    Route.prototype.canActivate;
+    /**
+     * An array of DI tokens used to look up `CanActivateChild()` handlers,
+     * in order to determine if the current user is allowed to activate
+     * a child of the component. By default, any user can activate a child.
+     * @type {?|undefined}
+     */
+    Route.prototype.canActivateChild;
+    /**
+     * An array of DI tokens used to look up `CanDeactivate()`
+     * handlers, in order to determine if the current user is allowed to
+     * deactivate the component. By default, any user can deactivate.
+     *
+     * @type {?|undefined}
+     */
+    Route.prototype.canDeactivate;
+    /**
+     * An array of DI tokens used to look up `CanLoad()`
+     * handlers, in order to determine if the current user is allowed to
+     * load the component. By default, any user can load.
+     * @type {?|undefined}
+     */
+    Route.prototype.canLoad;
+    /**
+     * Additional developer-defined data provided to the component via
+     * `ActivatedRoute`. By default, no additional data is passed.
+     * @type {?|undefined}
+     */
+    Route.prototype.data;
+    /**
+     * A map of DI tokens used to look up data resolvers. See `Resolve`.
+     * @type {?|undefined}
+     */
+    Route.prototype.resolve;
+    /**
+     * An array of child `Route` objects that specifies a nested route
+     * configuration.
+     * @type {?|undefined}
+     */
+    Route.prototype.children;
+    /**
+     * A `LoadChildren` object specifying lazy-loaded child routes.
+     * @type {?|undefined}
+     */
+    Route.prototype.loadChildren;
+    /**
+     * Defines when guards and resolvers will be run. One of
+     * - `paramsOrQueryParamsChange` : Run when query parameters change.
+     * - `always` : Run on every execution.
+     * By default, guards and resolvers run only when the matrix
+     * parameters of the route change.
+     * @type {?|undefined}
+     */
+    Route.prototype.runGuardsAndResolvers;
+    /**
+     * Filled for routes with `loadChildren` once the module has been loaded
+     * \@internal
+     * @type {?|undefined}
+     */
+    Route.prototype._loadedConfig;
+}
 class LoadedRouterConfig {
     /**
      * @param {?} routes
@@ -622,6 +1200,12 @@ class LoadedRouterConfig {
         this.routes = routes;
         this.module = module;
     }
+}
+if (false) {
+    /** @type {?} */
+    LoadedRouterConfig.prototype.routes;
+    /** @type {?} */
+    LoadedRouterConfig.prototype.module;
 }
 /**
  * @param {?} config
@@ -800,6 +1384,18 @@ function flatten(arr) {
  */
 function last(a) {
     return a.length > 0 ? a[a.length - 1] : null;
+}
+/**
+ * Verifys all booleans in an array are `true`.
+ * @param {?} bools
+ * @return {?}
+ */
+function and(bools) {
+    return !bools.some((/**
+     * @param {?} v
+     * @return {?}
+     */
+    v => !v));
 }
 /**
  * @template K, V
@@ -1045,6 +1641,28 @@ class UrlTree {
      */
     toString() { return DEFAULT_SERIALIZER.serialize(this); }
 }
+if (false) {
+    /**
+     * \@internal
+     * @type {?}
+     */
+    UrlTree.prototype._queryParamMap;
+    /**
+     * The root segment group of the URL tree
+     * @type {?}
+     */
+    UrlTree.prototype.root;
+    /**
+     * The query params of the URL
+     * @type {?}
+     */
+    UrlTree.prototype.queryParams;
+    /**
+     * The fragment of the URL
+     * @type {?}
+     */
+    UrlTree.prototype.fragment;
+}
 /**
  * \@description
  *
@@ -1090,6 +1708,33 @@ class UrlSegmentGroup {
      * @return {?}
      */
     toString() { return serializePaths(this); }
+}
+if (false) {
+    /**
+     * \@internal
+     * @type {?}
+     */
+    UrlSegmentGroup.prototype._sourceSegment;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    UrlSegmentGroup.prototype._segmentIndexShift;
+    /**
+     * The parent node in the url tree
+     * @type {?}
+     */
+    UrlSegmentGroup.prototype.parent;
+    /**
+     * The URL segments of this group. See `UrlSegment` for more information
+     * @type {?}
+     */
+    UrlSegmentGroup.prototype.segments;
+    /**
+     * The list of children of this group
+     * @type {?}
+     */
+    UrlSegmentGroup.prototype.children;
 }
 /**
  * \@description
@@ -1140,6 +1785,23 @@ class UrlSegment {
      * @return {?}
      */
     toString() { return serializePath(this); }
+}
+if (false) {
+    /**
+     * \@internal
+     * @type {?}
+     */
+    UrlSegment.prototype._parameterMap;
+    /**
+     * The path part of a URL segment
+     * @type {?}
+     */
+    UrlSegment.prototype.path;
+    /**
+     * The matrix parameters associated with a segment
+     * @type {?}
+     */
+    UrlSegment.prototype.parameters;
 }
 /**
  * @param {?} as
@@ -1214,6 +1876,22 @@ function mapChildrenIntoArray(segment, fn) {
  * @abstract
  */
 class UrlSerializer {
+}
+if (false) {
+    /**
+     * Parse a url into a `UrlTree`
+     * @abstract
+     * @param {?} url
+     * @return {?}
+     */
+    UrlSerializer.prototype.parse = function (url) { };
+    /**
+     * Converts a `UrlTree` into a url
+     * @abstract
+     * @param {?} tree
+     * @return {?}
+     */
+    UrlSerializer.prototype.serialize = function (tree) { };
 }
 /**
  * \@description
@@ -1692,6 +2370,18 @@ class UrlParser {
         }
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    UrlParser.prototype.remaining;
+    /**
+     * @type {?}
+     * @private
+     */
+    UrlParser.prototype.url;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1783,6 +2473,13 @@ class Tree {
      */
     s => s.value)); }
 }
+if (false) {
+    /**
+     * \@internal
+     * @type {?}
+     */
+    Tree.prototype._root;
+}
 // DFS for the node matching the value
 /**
  * @template T
@@ -1837,6 +2534,12 @@ class TreeNode {
      * @return {?}
      */
     toString() { return `TreeNode(${this.value})`; }
+}
+if (false) {
+    /** @type {?} */
+    TreeNode.prototype.value;
+    /** @type {?} */
+    TreeNode.prototype.children;
 }
 // Return the list of T indexed by outlet name
 /**
@@ -1905,6 +2608,13 @@ class RouterState extends Tree {
      * @return {?}
      */
     toString() { return this.snapshot.toString(); }
+}
+if (false) {
+    /**
+     * The current snapshot of the router state
+     * @type {?}
+     */
+    RouterState.prototype.snapshot;
 }
 /**
  * @param {?} urlTree
@@ -2047,6 +2757,68 @@ class ActivatedRoute {
     toString() {
         return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
     }
+}
+if (false) {
+    /**
+     * The current snapshot of this route
+     * @type {?}
+     */
+    ActivatedRoute.prototype.snapshot;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRoute.prototype._futureSnapshot;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRoute.prototype._routerState;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRoute.prototype._paramMap;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRoute.prototype._queryParamMap;
+    /**
+     * An observable of the URL segments matched by this route.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.url;
+    /**
+     * An observable of the matrix parameters scoped to this route.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.params;
+    /**
+     * An observable of the query parameters shared by all the routes.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.queryParams;
+    /**
+     * An observable of the URL fragment shared by all the routes.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.fragment;
+    /**
+     * An observable of the static and resolved data of this route.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.data;
+    /**
+     * The outlet name of the route, a constant.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.outlet;
+    /**
+     * The component of the route, a constant.
+     * @type {?}
+     */
+    ActivatedRoute.prototype.component;
 }
 /**
  * Returns the inherited params, data, and resolve for a given route.
@@ -2210,6 +2982,83 @@ class ActivatedRouteSnapshot {
         return `Route(url:'${url}', path:'${matched}')`;
     }
 }
+if (false) {
+    /**
+     * The configuration used to match this route *
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.routeConfig;
+    /**
+     * \@internal *
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._urlSegment;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._lastPathIndex;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._resolve;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._resolvedData;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._routerState;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._paramMap;
+    /**
+     * \@internal
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype._queryParamMap;
+    /**
+     * The URL segments matched by this route
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.url;
+    /**
+     * The matrix parameters scoped to this route
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.params;
+    /**
+     * The query parameters shared by all the routes
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.queryParams;
+    /**
+     * The URL fragment shared by all the routes
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.fragment;
+    /**
+     * The static and resolved data of this route
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.data;
+    /**
+     * The outlet name of the route
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.outlet;
+    /**
+     * The component of the route
+     * @type {?}
+     */
+    ActivatedRouteSnapshot.prototype.component;
+}
 /**
  * \@description
  *
@@ -2252,6 +3101,13 @@ class RouterStateSnapshot extends Tree {
      * @return {?}
      */
     toString() { return serializeNode(this._root); }
+}
+if (false) {
+    /**
+     * The url from which this snapshot was created
+     * @type {?}
+     */
+    RouterStateSnapshot.prototype.url;
 }
 /**
  * @template U, T
@@ -2545,6 +3401,14 @@ class Navigation {
         return this.isAbsolute && this.commands.length === 1 && this.commands[0] == '/';
     }
 }
+if (false) {
+    /** @type {?} */
+    Navigation.prototype.isAbsolute;
+    /** @type {?} */
+    Navigation.prototype.numberOfDoubleDots;
+    /** @type {?} */
+    Navigation.prototype.commands;
+}
 /**
  * Transforms commands to a normalized `Navigation`
  * @param {?} commands
@@ -2594,7 +3458,9 @@ function computeNavigation(commands) {
              * @return {?}
              */
             (urlPart, partIndex) => {
-                if (partIndex == 0 && urlPart === '.') ;
+                if (partIndex == 0 && urlPart === '.') {
+                    // skip './a'
+                }
                 else if (partIndex == 0 && urlPart === '') { //  '/a'
                     isAbsolute = true;
                 }
@@ -2622,6 +3488,14 @@ class Position {
         this.processChildren = processChildren;
         this.index = index;
     }
+}
+if (false) {
+    /** @type {?} */
+    Position.prototype.segmentGroup;
+    /** @type {?} */
+    Position.prototype.processChildren;
+    /** @type {?} */
+    Position.prototype.index;
 }
 /**
  * @param {?} nav
@@ -3144,6 +4018,28 @@ class ActivateRoutes {
         }
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ActivateRoutes.prototype.routeReuseStrategy;
+    /**
+     * @type {?}
+     * @private
+     */
+    ActivateRoutes.prototype.futureState;
+    /**
+     * @type {?}
+     * @private
+     */
+    ActivateRoutes.prototype.currState;
+    /**
+     * @type {?}
+     * @private
+     */
+    ActivateRoutes.prototype.forwardEvent;
+}
 /**
  * @param {?} node
  * @return {?}
@@ -3245,6 +4141,10 @@ class NoMatch {
      */
     constructor(segmentGroup) { this.segmentGroup = segmentGroup || null; }
 }
+if (false) {
+    /** @type {?} */
+    NoMatch.prototype.segmentGroup;
+}
 class AbsoluteRedirect {
     /**
      * @param {?} urlTree
@@ -3252,6 +4152,10 @@ class AbsoluteRedirect {
     constructor(urlTree) {
         this.urlTree = urlTree;
     }
+}
+if (false) {
+    /** @type {?} */
+    AbsoluteRedirect.prototype.urlTree;
 }
 /**
  * @param {?} segmentGroup
@@ -3832,6 +4736,38 @@ class ApplyRedirects {
         return redirectToUrlSegment;
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.allowRedirects;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.ngModule;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.configLoader;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.urlSerializer;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.urlTree;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplyRedirects.prototype.config;
+}
 /**
  * @param {?} moduleInjector
  * @param {?} route
@@ -4058,6 +4994,12 @@ class CanActivate {
         this.route = this.path[this.path.length - 1];
     }
 }
+if (false) {
+    /** @type {?} */
+    CanActivate.prototype.route;
+    /** @type {?} */
+    CanActivate.prototype.path;
+}
 class CanDeactivate {
     /**
      * @param {?} component
@@ -4067,6 +5009,12 @@ class CanDeactivate {
         this.component = component;
         this.route = route;
     }
+}
+if (false) {
+    /** @type {?} */
+    CanDeactivate.prototype.component;
+    /** @type {?} */
+    CanDeactivate.prototype.route;
 }
 /**
  * @param {?} future
@@ -4790,6 +5738,38 @@ class Recognizer {
         return [new TreeNode(snapshot, children)];
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.rootComponentType;
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.config;
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.urlTree;
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.url;
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.paramsInheritanceStrategy;
+    /**
+     * @type {?}
+     * @private
+     */
+    Recognizer.prototype.relativeLinkResolution;
+}
 /**
  * @param {?} nodes
  * @return {?}
@@ -4820,6 +5800,18 @@ function getChildConfig(route) {
         return (/** @type {?} */ (route._loadedConfig)).routes;
     }
     return [];
+}
+/**
+ * @record
+ */
+function MatchResult() { }
+if (false) {
+    /** @type {?} */
+    MatchResult.prototype.consumedSegments;
+    /** @type {?} */
+    MatchResult.prototype.lastChild;
+    /** @type {?} */
+    MatchResult.prototype.parameters;
 }
 /**
  * @param {?} segmentGroup
@@ -5267,6 +6259,47 @@ function switchTap(next) {
  */
 class RouteReuseStrategy {
 }
+if (false) {
+    /**
+     * Determines if this route (and its subtree) should be detached to be reused later
+     * @abstract
+     * @param {?} route
+     * @return {?}
+     */
+    RouteReuseStrategy.prototype.shouldDetach = function (route) { };
+    /**
+     * Stores the detached route.
+     *
+     * Storing a `null` value should erase the previously stored value.
+     * @abstract
+     * @param {?} route
+     * @param {?} handle
+     * @return {?}
+     */
+    RouteReuseStrategy.prototype.store = function (route, handle) { };
+    /**
+     * Determines if this route (and its subtree) should be reattached
+     * @abstract
+     * @param {?} route
+     * @return {?}
+     */
+    RouteReuseStrategy.prototype.shouldAttach = function (route) { };
+    /**
+     * Retrieves the previously stored route
+     * @abstract
+     * @param {?} route
+     * @return {?}
+     */
+    RouteReuseStrategy.prototype.retrieve = function (route) { };
+    /**
+     * Determines if a route should be reused
+     * @abstract
+     * @param {?} future
+     * @param {?} curr
+     * @return {?}
+     */
+    RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
+}
 /**
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
@@ -5375,6 +6408,28 @@ class RouterConfigLoader {
         }
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterConfigLoader.prototype.loader;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterConfigLoader.prototype.compiler;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterConfigLoader.prototype.onLoadStartListener;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterConfigLoader.prototype.onLoadEndListener;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -5396,6 +6451,36 @@ class RouterConfigLoader {
  * @abstract
  */
 class UrlHandlingStrategy {
+}
+if (false) {
+    /**
+     * Tells the router if this URL should be processed.
+     *
+     * When it returns true, the router will execute the regular navigation.
+     * When it returns false, the router will set the router state to an empty state.
+     * As a result, all the active components will be destroyed.
+     *
+     * @abstract
+     * @param {?} url
+     * @return {?}
+     */
+    UrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { };
+    /**
+     * Extracts the part of the URL that should be handled by the router.
+     * The rest of the URL will remain untouched.
+     * @abstract
+     * @param {?} url
+     * @return {?}
+     */
+    UrlHandlingStrategy.prototype.extract = function (url) { };
+    /**
+     * Merges the URL fragment with the rest of the URL.
+     * @abstract
+     * @param {?} newUrlPart
+     * @param {?} rawUrl
+     * @return {?}
+     */
+    UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
 }
 /**
  * \@publicApi
@@ -5423,6 +6508,139 @@ class DefaultUrlHandlingStrategy {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * \@description
+ *
+ * Options that modify the navigation strategy.
+ *
+ * \@publicApi
+ * @record
+ */
+function NavigationExtras() { }
+if (false) {
+    /**
+     * Specifies a root URI to use for relative navigation.
+     *
+     * For example, consider the following route configuration where the parent route
+     * has two children.
+     *
+     * ```
+     * [{
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
+     * ```
+     *
+     * The following `go()` function navigates to the `list` route by
+     * interpreting the destination URI as relative to the activated `child`  route
+     *
+     * ```
+     * \@Component({...})
+     *  class ChildComponent {
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.relativeTo;
+    /**
+     * Sets query parameters to the URL.
+     *
+     * ```
+     * // Navigate to /results?page=1
+     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.queryParams;
+    /**
+     * Sets the hash fragment for the URL.
+     *
+     * ```
+     * // Navigate to /results#top
+     * this.router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.fragment;
+    /**
+     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
+     * query parameters for the next navigation.
+     *
+     * @deprecated since v4
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.preserveQueryParams;
+    /**
+     * How to handle query parameters in the router link for the next navigation.
+     * One of:
+     * * `merge` : Merge new with current parameters.
+     * * `preserve` : Preserve current parameters.
+     *
+     * ```
+     * // from /results?page=1 to /view?page=1&page=2
+     * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.queryParamsHandling;
+    /**
+     * When true, preserves the URL fragment for the next navigation
+     *
+     * ```
+     * // Preserve fragment from /results#top to /view#top
+     * this.router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.preserveFragment;
+    /**
+     * When true, navigates without pushing a new state into history.
+     *
+     * ```
+     * // Navigate silently to /view
+     * this.router.navigate(['/view'], { skipLocationChange: true });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.skipLocationChange;
+    /**
+     * When true, navigates while replacing the current state in history.
+     *
+     * ```
+     * // Navigate to /view
+     * this.router.navigate(['/view'], { replaceUrl: true });
+     * ```
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.replaceUrl;
+    /**
+     * Developer-defined state that can be passed to any navigation.
+     * Access this value through the `Navigation.extras` object
+     * returned from `router.getCurrentNavigation()` while a navigation is executing.
+     *
+     * After a navigation completes, the router writes an object containing this
+     * value together with a `navigationId` to `history.state`.
+     * The value is written when `location.go()` or `location.replaceState()`
+     * is called before activating this route.
+     *
+     * Note that `history.state` does not pass an object equality test because
+     * the router adds the `navigationId` on each navigation.
+     * @type {?|undefined}
+     */
+    NavigationExtras.prototype.state;
+}
 /**
  * @param {?} error
  * @return {?}
@@ -6415,6 +7633,182 @@ class Router {
         this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.currentUrlTree;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.rawUrlTree;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.browserUrlTree;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.transitions;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.navigations;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.lastSuccessfulNavigation;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.currentNavigation;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.locationSubscription;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.navigationId;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.configLoader;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.ngModule;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.console;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.isNgZoneEnabled;
+    /**
+     * An event stream for routing events in this NgModule.
+     * @type {?}
+     */
+    Router.prototype.events;
+    /**
+     * The current state of routing in this NgModule.
+     * @type {?}
+     */
+    Router.prototype.routerState;
+    /**
+     * A handler for navigation errors in this NgModule.
+     * @type {?}
+     */
+    Router.prototype.errorHandler;
+    /**
+     * A handler for errors thrown by `Router.parseUrl(url)`
+     * when `url` contains an invalid character.
+     * The most common case is a `%` sign
+     * that's not encoded and is not part of a percent encoded sequence.
+     * @type {?}
+     */
+    Router.prototype.malformedUriErrorHandler;
+    /**
+     * True if at least one navigation event has occurred,
+     * false otherwise.
+     * @type {?}
+     */
+    Router.prototype.navigated;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.lastSuccessfulId;
+    /**
+     * Hooks that enable you to pause navigation,
+     * either before or after the preactivation phase.
+     * Used by `RouterModule`.
+     *
+     * \@internal
+     * @type {?}
+     */
+    Router.prototype.hooks;
+    /**
+     * A strategy for extracting and merging URLs.
+     * Used for AngularJS to Angular migrations.
+     * @type {?}
+     */
+    Router.prototype.urlHandlingStrategy;
+    /**
+     * A strategy for re-using routes.
+     * @type {?}
+     */
+    Router.prototype.routeReuseStrategy;
+    /**
+     * How to handle a navigation request to the current URL. One of:
+     * - `'ignore'` :  The router ignores the request.
+     * - `'reload'` : The router reloads the URL. Use to implement a "refresh" feature.
+     * @type {?}
+     */
+    Router.prototype.onSameUrlNavigation;
+    /**
+     * How to merge parameters, data, and resolved data from parent to child
+     * routes. One of:
+     *
+     * - `'emptyOnly'` : Inherit parent parameters, data, and resolved data
+     * for path-less or component-less routes.
+     * - `'always'` : Inherit parent parameters, data, and resolved data
+     * for all child routes.
+     * @type {?}
+     */
+    Router.prototype.paramsInheritanceStrategy;
+    /**
+     * Determines when the router updates the browser URL.
+     * By default (`"deferred"`), udates the browser URL after navigation has finished.
+     * Set to `'eager'` to update the browser URL at the beginning of navigation.
+     * You can choose to update early so that, if navigation fails,
+     * you can show an error message with the URL that failed.
+     * @type {?}
+     */
+    Router.prototype.urlUpdateStrategy;
+    /**
+     * Enables a bug fix that corrects relative link resolution in components with empty paths.
+     * @see `RouterModule`
+     * @type {?}
+     */
+    Router.prototype.relativeLinkResolution;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.rootComponentType;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.urlSerializer;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.rootContexts;
+    /**
+     * @type {?}
+     * @private
+     */
+    Router.prototype.location;
+    /** @type {?} */
+    Router.prototype.config;
+}
 /**
  * @param {?} commands
  * @return {?}
@@ -6615,6 +8009,42 @@ RouterLink.propDecorators = {
     preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
+if (false) {
+    /** @type {?} */
+    RouterLink.prototype.queryParams;
+    /** @type {?} */
+    RouterLink.prototype.fragment;
+    /** @type {?} */
+    RouterLink.prototype.queryParamsHandling;
+    /** @type {?} */
+    RouterLink.prototype.preserveFragment;
+    /** @type {?} */
+    RouterLink.prototype.skipLocationChange;
+    /** @type {?} */
+    RouterLink.prototype.replaceUrl;
+    /** @type {?} */
+    RouterLink.prototype.state;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLink.prototype.commands;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLink.prototype.preserve;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLink.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLink.prototype.route;
+}
 /**
  * \@description
  *
@@ -6745,6 +8175,56 @@ RouterLinkWithHref.propDecorators = {
     preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
 };
+if (false) {
+    /** @type {?} */
+    RouterLinkWithHref.prototype.target;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.queryParams;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.fragment;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.queryParamsHandling;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.preserveFragment;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.skipLocationChange;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.replaceUrl;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.state;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.commands;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.subscription;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.preserve;
+    /** @type {?} */
+    RouterLinkWithHref.prototype.href;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.route;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkWithHref.prototype.locationStrategy;
+}
 /**
  * @param {?} s
  * @return {?}
@@ -6953,6 +8433,51 @@ RouterLinkActive.propDecorators = {
     routerLinkActiveOptions: [{ type: Input }],
     routerLinkActive: [{ type: Input }]
 };
+if (false) {
+    /** @type {?} */
+    RouterLinkActive.prototype.links;
+    /** @type {?} */
+    RouterLinkActive.prototype.linksWithHrefs;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.classes;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.subscription;
+    /** @type {?} */
+    RouterLinkActive.prototype.isActive;
+    /** @type {?} */
+    RouterLinkActive.prototype.routerLinkActiveOptions;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.element;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.link;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterLinkActive.prototype.linkWithHref;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -6978,6 +8503,18 @@ class OutletContext {
         this.children = new ChildrenOutletContexts();
         this.attachRef = null;
     }
+}
+if (false) {
+    /** @type {?} */
+    OutletContext.prototype.outlet;
+    /** @type {?} */
+    OutletContext.prototype.route;
+    /** @type {?} */
+    OutletContext.prototype.resolver;
+    /** @type {?} */
+    OutletContext.prototype.children;
+    /** @type {?} */
+    OutletContext.prototype.attachRef;
 }
 /**
  * Store contextual information about the children (= nested) `RouterOutlet`
@@ -7049,6 +8586,13 @@ class ChildrenOutletContexts {
      * @return {?}
      */
     getContext(childName) { return this.contexts.get(childName) || null; }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ChildrenOutletContexts.prototype.contexts;
 }
 
 /**
@@ -7233,6 +8777,47 @@ RouterOutlet.propDecorators = {
     activateEvents: [{ type: Output, args: ['activate',] }],
     deactivateEvents: [{ type: Output, args: ['deactivate',] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.activated;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype._activatedRoute;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.name;
+    /** @type {?} */
+    RouterOutlet.prototype.activateEvents;
+    /** @type {?} */
+    RouterOutlet.prototype.deactivateEvents;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.parentContexts;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.location;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.resolver;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterOutlet.prototype.changeDetector;
+}
 class OutletInjector {
     /**
      * @param {?} route
@@ -7259,6 +8844,23 @@ class OutletInjector {
         return this.parent.get(token, notFoundValue);
     }
 }
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    OutletInjector.prototype.route;
+    /**
+     * @type {?}
+     * @private
+     */
+    OutletInjector.prototype.childContexts;
+    /**
+     * @type {?}
+     * @private
+     */
+    OutletInjector.prototype.parent;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -7273,6 +8875,15 @@ class OutletInjector {
  * @abstract
  */
 class PreloadingStrategy {
+}
+if (false) {
+    /**
+     * @abstract
+     * @param {?} route
+     * @param {?} fn
+     * @return {?}
+     */
+    PreloadingStrategy.prototype.preload = function (route, fn) { };
 }
 /**
  * \@description
@@ -7453,6 +9064,33 @@ RouterPreloader.ctorParameters = () => [
     { type: Injector },
     { type: PreloadingStrategy }
 ];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterPreloader.prototype.loader;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterPreloader.prototype.subscription;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterPreloader.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterPreloader.prototype.injector;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterPreloader.prototype.preloadingStrategy;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -7563,6 +9201,53 @@ class RouterScroller {
             this.scrollEventsSubscription.unsubscribe();
         }
     }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.routerEventsSubscription;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.scrollEventsSubscription;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.lastId;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.lastSource;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.restoredId;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.router;
+    /**
+     * \@docsNotRequired
+     * @type {?}
+     */
+    RouterScroller.prototype.viewportScroller;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterScroller.prototype.options;
 }
 
 /**
@@ -7791,6 +9476,171 @@ function provideRoutes(routes) {
     ];
 }
 /**
+ * A set of configuration options for a router module, provided in the
+ * `forRoot()` method.
+ *
+ * \@publicApi
+ * @record
+ */
+function ExtraOptions() { }
+if (false) {
+    /**
+     * When true, log all internal navigation events to the console.
+     * Use for debugging.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.enableTracing;
+    /**
+     * When true, enable the location strategy that uses the URL fragment
+     * instead of the history API.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.useHash;
+    /**
+     * One of `enabled` (the default) or `disabled`.
+     * By default, the initial navigation starts before the root component is created.
+     * The bootstrap is blocked until the initial navigation is complete.
+     * When set to `disabled`, the initial navigation is not performed.
+     * The location listener is set up before the root component gets created.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.initialNavigation;
+    /**
+     * A custom error handler for failed navigations.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.errorHandler;
+    /**
+     * Configures a preloading strategy.
+     * One of `PreloadAllModules` or `NoPreloading` (the default).
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.preloadingStrategy;
+    /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * Default is `ignore`, which causes the router ignores the navigation.
+     * This can disable features such as a "refresh" button.
+     * Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.onSameUrlNavigation;
+    /**
+     * Configures if the scroll position needs to be restored when navigating back.
+     *
+     * * 'disabled'- (Default) Does nothing. Scroll position is maintained on navigation.
+     * * 'top'- Sets the scroll position to x = 0, y = 0 on all navigation.
+     * * 'enabled'- Restores the previous scroll position on backward navigation, else sets the
+     * position to the anchor if one is provided, or sets the scroll position to [0, 0] (forward
+     * navigation). This option will be the default in the future.
+     *
+     * You can implement custom scroll restoration behavior by adapting the enabled behavior as
+     * in the following example.
+     *
+     * ```typescript
+     * class AppModule {
+     *   constructor(router: Router, viewportScroller: ViewportScroller) {
+     *     router.events.pipe(
+     *       filter((e: Event): e is Scroll => e instanceof Scroll)
+     *     ).subscribe(e => {
+     *       if (e.position) {
+     *         // backward navigation
+     *         viewportScroller.scrollToPosition(e.position);
+     *       } else if (e.anchor) {
+     *         // anchor navigation
+     *         viewportScroller.scrollToAnchor(e.anchor);
+     *       } else {
+     *         // forward navigation
+     *         viewportScroller.scrollToPosition([0, 0]);
+     *       }
+     *     });
+     *   }
+     * }
+     * ```
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.scrollPositionRestoration;
+    /**
+     * When set to 'enabled', scrolls to the anchor element when the URL has a fragment.
+     * Anchor scrolling is disabled by default.
+     *
+     * Anchor scrolling does not happen on 'popstate'. Instead, we restore the position
+     * that we stored or scroll to the top.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.anchorScrolling;
+    /**
+     * Configures the scroll offset the router will use when scrolling to an element.
+     *
+     * When given a tuple with x and y position value,
+     * the router uses that offset each time it scrolls.
+     * When given a function, the router invokes the function every time
+     * it restores scroll position.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.scrollOffset;
+    /**
+     * Defines how the router merges parameters, data, and resolved data from parent to child
+     * routes. By default ('emptyOnly'), inherits parent parameters only for
+     * path-less or component-less routes.
+     * Set to 'always' to enable unconditional inheritance of parent parameters.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.paramsInheritanceStrategy;
+    /**
+     * A custom handler for malformed URI errors. The handler is invoked when `encodedURI` contains
+     * invalid character sequences.
+     * The default implementation is to redirect to the root URL, dropping
+     * any path or parameter information. The function takes three parameters:
+     *
+     * - `'URIError'` - Error thrown when parsing a bad URL.
+     * - `'UrlSerializer'` - UrlSerializer that’s configured with the router.
+     * - `'url'` -  The malformed URL that caused the URIError
+     *
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.malformedUriErrorHandler;
+    /**
+     * Defines when the router updates the browser URL. By default ('deferred'),
+     * update after successful navigation.
+     * Set to 'eager' if prefer to update the URL at the beginning of navigation.
+     * Updating the URL early allows you to handle a failure of navigation by
+     * showing an error message with the URL that failed.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.urlUpdateStrategy;
+    /**
+     * Enables a bug fix that corrects relative link resolution in components with empty paths.
+     * Example:
+     *
+     * ```
+     * const routes = [
+     *   {
+     *     path: '',
+     *     component: ContainerComponent,
+     *     children: [
+     *       { path: 'a', component: AComponent },
+     *       { path: 'b', component: BComponent },
+     *     ]
+     *   }
+     * ];
+     * ```
+     *
+     * From the `ContainerComponent`, this will not work:
+     *
+     * `<a [routerLink]="['./a']">Link to A</a>`
+     *
+     * However, this will work:
+     *
+     * `<a [routerLink]="['../a']">Link to A</a>`
+     *
+     * In other words, you're required to use `../` rather than `./`. This is currently the default
+     * behavior. Setting this option to `corrected` enables the fix.
+     * @type {?|undefined}
+     */
+    ExtraOptions.prototype.relativeLinkResolution;
+}
+/**
  * @param {?} ref
  * @param {?} urlSerializer
  * @param {?} contexts
@@ -7982,6 +9832,23 @@ RouterInitializer.decorators = [
 RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterInitializer.prototype.initNavigation;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterInitializer.prototype.resultOfPreactivationDone;
+    /**
+     * @type {?}
+     * @private
+     */
+    RouterInitializer.prototype.injector;
+}
 /**
  * @param {?} r
  * @return {?}
@@ -8029,7 +9896,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.1+11.sha-0ddf0c4.with-local-changes');
+const VERSION = new Version('9.0.0-next.1+18.sha-9a37e82.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
