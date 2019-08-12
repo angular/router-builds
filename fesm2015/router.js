@@ -1,11 +1,11 @@
 /**
- * @license Angular v9.0.0-next.1+22.sha-6eb9c2f.with-local-changes
+ * @license Angular v9.0.0-next.1+23.sha-4ea3e7e.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadContentQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, ɵɵinject, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
+import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, ɵɵinject, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 import { ɵgetDOM } from '@angular/platform-browser';
@@ -8536,8 +8536,8 @@ RouterLinkActive.propDecorators = {
         ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
     } if (rf & 2) {
         var _t;
-        ɵɵqueryRefresh((_t = ɵɵloadContentQuery())) && (ctx.links = _t);
-        ɵɵqueryRefresh((_t = ɵɵloadContentQuery())) && (ctx.linksWithHrefs = _t);
+        ɵɵqueryRefresh((_t = ɵɵloadQuery())) && (ctx.links = _t);
+        ɵɵqueryRefresh((_t = ɵɵloadQuery())) && (ctx.linksWithHrefs = _t);
     } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature()] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterLinkActive, [{
         type: Directive,
@@ -10084,7 +10084,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.1+22.sha-6eb9c2f.with-local-changes');
+const VERSION = new Version('9.0.0-next.1+23.sha-4ea3e7e.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
