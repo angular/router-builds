@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.2+29.sha-4055150.with-local-changes
+ * @license Angular v9.0.0-next.2+31.sha-5a562d8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3854,7 +3854,7 @@
     /**
      * @description
      *
-     * An NgModule that provides navigation and URL manipulation capabilities.
+     * A service that provides navigation and URL manipulation capabilities.
      *
      * @see `Route`.
      * @see [Routing and Navigation Guide](guide/router).
@@ -5895,7 +5895,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.0.0-next.2+29.sha-4055150.with-local-changes');
+    var VERSION = new core.Version('9.0.0-next.2+31.sha-5a562d8.with-local-changes');
 
     /**
      * @license
