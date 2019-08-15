@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.2+13.sha-628b0c1.with-local-changes
+ * @license Angular v9.0.0-next.2+39.sha-2e4d17f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3668,7 +3668,7 @@ function defaultRouterHook(snapshot, runExtras) {
 /**
  * @description
  *
- * An NgModule that provides navigation and URL manipulation capabilities.
+ * A service that provides navigation and URL manipulation capabilities.
  *
  * @see `Route`.
  * @see [Routing and Navigation Guide](guide/router).
@@ -5709,7 +5709,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.2+13.sha-628b0c1.with-local-changes');
+var VERSION = new Version('9.0.0-next.2+39.sha-2e4d17f.with-local-changes');
 
 /**
  * @license
