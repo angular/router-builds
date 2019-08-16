@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.2+47.sha-4c3b791.with-local-changes
+ * @license Angular v9.0.0-next.2+48.sha-ee48623.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3907,9 +3907,9 @@ var Router = /** @class */ (function () {
                 _this.triggerEvent(guardsStart);
             }), map(function (t) { return (__assign({}, t, { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), tap(function (t) {
                 if (isUrlTree(t.guardsResult)) {
-                    var error = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
-                    error.url = t.guardsResult;
-                    throw error;
+                    var error_1 = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
+                    error_1.url = t.guardsResult;
+                    throw error_1;
                 }
             }), tap(function (t) {
                 var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
@@ -5677,7 +5677,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.2+47.sha-4c3b791.with-local-changes');
+var VERSION = new Version('9.0.0-next.2+48.sha-ee48623.with-local-changes');
 
 /**
  * @license
