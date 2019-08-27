@@ -1,11 +1,11 @@
 /**
- * @license Angular v9.0.0-next.3+53.sha-14feb56.with-local-changes
+ * @license Angular v9.0.0-next.3+55.sha-7c7fcd7.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵdefineInjectable, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, Version } from '@angular/core';
+import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵdefineDirective, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵdefineInjectable, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
@@ -435,7 +435,8 @@ var Scroll = /** @class */ (function () {
 var ɵEmptyOutletComponent = /** @class */ (function () {
     function ɵEmptyOutletComponent() {
     }
-    ɵEmptyOutletComponent.ngComponentDef = ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], factory: function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); }, consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    ɵEmptyOutletComponent.ngFactoryDef = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
+    ɵEmptyOutletComponent.ngComponentDef = ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             ɵɵelement(0, "router-outlet");
         } }, encapsulation: 2 });
     return ɵEmptyOutletComponent;
@@ -4527,7 +4528,8 @@ var RouterLink = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLink.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], factory: function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); }, hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLink.ngFactoryDef = function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); };
+    RouterLink.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
         } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
     return RouterLink;
@@ -4640,7 +4642,8 @@ var RouterLinkWithHref = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouterLinkWithHref.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], factory: function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵdirectiveInject(LocationStrategy)); }, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLinkWithHref.ngFactoryDef = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵdirectiveInject(LocationStrategy)); };
+    RouterLinkWithHref.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵɵallocHostVars(2);
             ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
         } if (rf & 2) {
@@ -4813,7 +4816,8 @@ var RouterLinkActive = /** @class */ (function () {
             this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     };
-    RouterLinkActive.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], factory: function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); }, contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
+    RouterLinkActive.ngFactoryDef = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
+    RouterLinkActive.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
             ɵɵcontentQuery(dirIndex, RouterLink, true);
             ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
         } if (rf & 2) {
@@ -5056,7 +5060,8 @@ var RouterOutlet = /** @class */ (function () {
         this.changeDetector.markForCheck();
         this.activateEvents.emit(this.activated.instance);
     };
-    RouterOutlet.ngDirectiveDef = ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], factory: function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵɵdirectiveInject(ChildrenOutletContexts), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(ComponentFactoryResolver), ɵɵinjectAttribute('name'), ɵɵdirectiveInject(ChangeDetectorRef)); }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    RouterOutlet.ngFactoryDef = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵɵdirectiveInject(ChildrenOutletContexts), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(ComponentFactoryResolver), ɵɵinjectAttribute('name'), ɵɵdirectiveInject(ChangeDetectorRef)); };
+    RouterOutlet.ngDirectiveDef = ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
     return RouterOutlet;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
@@ -5677,7 +5682,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.3+53.sha-14feb56.with-local-changes');
+var VERSION = new Version('9.0.0-next.3+55.sha-7c7fcd7.with-local-changes');
 
 /**
  * @license

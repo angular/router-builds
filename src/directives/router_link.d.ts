@@ -130,6 +130,7 @@ export declare class RouterLink {
     preserveQueryParams: boolean;
     onClick(): boolean;
     readonly urlTree: UrlTree;
+    static ngFactoryDef: i0.ɵɵFactoryDef<RouterLink>;
     static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }
 /**
@@ -171,5 +172,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
     readonly urlTree: UrlTree;
+    static ngFactoryDef: i0.ɵɵFactoryDef<RouterLinkWithHref>;
     static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { 'target': "target", 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }

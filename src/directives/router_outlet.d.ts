@@ -60,5 +60,6 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+    static ngFactoryDef: i0.ɵɵFactoryDef<RouterOutlet>;
     static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterOutlet, "router-outlet", ["outlet"], {}, { 'activateEvents': "activate", 'deactivateEvents': "deactivate" }, never>;
 }
