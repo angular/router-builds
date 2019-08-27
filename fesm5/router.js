@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.3+55.sha-7c7fcd7.with-local-changes
+ * @license Angular v9.0.0-next.3+58.sha-e3f4281.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -102,7 +102,10 @@ var NavigationEnd = /** @class */ (function (_super) {
     return NavigationEnd;
 }(RouterEvent));
 /**
- * An event triggered when a navigation is canceled.
+ * An event triggered when a navigation is canceled, directly or indirectly.
+ *
+ * This can happen when a [route guard](guide/router#milestone-5-route-guards)
+ * returns `false` or initiates a redirect by returning a `UrlTree`.
  *
  * @publicApi
  */
@@ -5682,7 +5685,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.3+55.sha-7c7fcd7.with-local-changes');
+var VERSION = new Version('9.0.0-next.3+58.sha-e3f4281.with-local-changes');
 
 /**
  * @license
