@@ -1,15 +1,14 @@
 /**
- * @license Angular v9.0.0-next.4+39.sha-3758978.with-local-changes
+ * @license Angular v9.0.0-next.4+44.sha-1537791.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵdefineDirective, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵdefineInjectable, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, Injectable, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
-import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
  * @license
@@ -5685,7 +5684,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.4+39.sha-3758978.with-local-changes');
+var VERSION = new Version('9.0.0-next.4+44.sha-1537791.with-local-changes');
 
 /**
  * @license

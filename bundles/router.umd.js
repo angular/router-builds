@@ -1,14 +1,14 @@
 /**
- * @license Angular v9.0.0-next.4+39.sha-3758978.with-local-changes
+ * @license Angular v9.0.0-next.4+44.sha-1537791.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/platform-browser')) :
-    typeof define === 'function' && define.amd ? define('@angular/router', ['exports', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/platform-browser'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.router = {}), global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.platformBrowser));
-}(this, function (exports, i3, i0, rxjs, operators, platformBrowser) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
+    typeof define === 'function' && define.amd ? define('@angular/router', ['exports', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.router = {}), global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
+}(this, function (exports, i3, i0, rxjs, operators) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -5722,7 +5722,7 @@
             router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
         }
         if (opts.enableTracing) {
-            var dom_1 = platformBrowser.ɵgetDOM();
+            var dom_1 = i3.ɵgetDOM();
             router.events.subscribe(function (e) {
                 dom_1.logGroup("Router Event: " + e.constructor.name);
                 dom_1.log(e.toString());
@@ -5871,7 +5871,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.4+39.sha-3758978.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.4+44.sha-1537791.with-local-changes');
 
     /**
      * @license
