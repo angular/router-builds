@@ -1,14 +1,13 @@
 /**
- * @license Angular v9.0.0-next.4+39.sha-3758978.with-local-changes
+ * @license Angular v9.0.0-next.4+44.sha-1537791.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
-import { ɵgetDOM } from '@angular/platform-browser';
 
 /**
  * @fileoverview added by tsickle
@@ -9899,7 +9898,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.4+39.sha-3758978.with-local-changes');
+const VERSION = new Version('9.0.0-next.4+44.sha-1537791.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
