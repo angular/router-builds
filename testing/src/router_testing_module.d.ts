@@ -16,7 +16,7 @@ import * as i1 from "@angular/router";
  * Allows to simulate the loading of ng modules in tests.
  *
  * ```
- * const loader = TestBed.get(NgModuleFactoryLoader);
+ * const loader = TestBed.inject(NgModuleFactoryLoader);
  *
  * @Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}

@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.5+46.sha-a391aeb.with-local-changes
+ * @license Angular v9.0.0-next.5+48.sha-9166baf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -16,7 +16,7 @@ import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, ɵROUTER_PROVID
  * Allows to simulate the loading of ng modules in tests.
  *
  * ```
- * const loader = TestBed.get(NgModuleFactoryLoader);
+ * const loader = TestBed.inject(NgModuleFactoryLoader);
  *
  * @Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}
