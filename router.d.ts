@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.5+13.sha-1c71db8.with-local-changes
+ * @license Angular v8.2.5+14.sha-39302ba.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1934,7 +1934,7 @@ export declare class Router {
     /**
      * Applies an array of commands to the current URL tree and creates a new URL tree.
      *
-     * When given an activate route, applies the given commands starting from the route.
+     * When given an activated route, applies the given commands starting from the route.
      * Otherwise, applies the given command starting from the root.
      *
      * @param commands An array of commands to apply.
