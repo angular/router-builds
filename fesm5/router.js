@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.5+55.sha-6052b12.with-local-changes
+ * @license Angular v9.0.0-next.5+57.sha-5b2408f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4125,7 +4125,7 @@ var Router = /** @class */ (function () {
     /**
      * Applies an array of commands to the current URL tree and creates a new URL tree.
      *
-     * When given an activate route, applies the given commands starting from the route.
+     * When given an activated route, applies the given commands starting from the route.
      * Otherwise, applies the given command starting from the root.
      *
      * @param commands An array of commands to apply.
@@ -5684,7 +5684,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.5+55.sha-6052b12.with-local-changes');
+var VERSION = new Version('9.0.0-next.5+57.sha-5b2408f.with-local-changes');
 
 /**
  * @license
