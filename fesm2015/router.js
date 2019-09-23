@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.7+2.sha-af99f9e.with-local-changes
+ * @license Angular v8.2.7+3.sha-e63390d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9500,11 +9500,24 @@ if (false) {
      */
     ExtraOptions.prototype.useHash;
     /**
-     * One of `enabled` (the default) or `disabled`.
-     * By default, the initial navigation starts before the root component is created.
-     * The bootstrap is blocked until the initial navigation is complete.
+     * One of `enabled` or `disabled`.
+     * When set to `enabled`, the initial navigation starts before the root component is created.
+     * The bootstrap is blocked until the initial navigation is complete. This value is required for
+     * [server-side rendering](guide/universal) to work.
      * When set to `disabled`, the initial navigation is not performed.
      * The location listener is set up before the root component gets created.
+     * Use if there is a reason to have more control over when the router
+     * starts its initial navigation due to some complex initialization logic.
+     *
+     * Legacy values are deprecated since v4 and should not be used for new applications:
+     *
+     * * `legacy_enabled` - Default for compatibility.
+     * The initial navigation starts after the root component has been created,
+     * but the bootstrap is not blocked until the initial navigation is complete.
+     * * `legacy_disabled` - The initial navigation is not performed.
+     * The location listener is set up after the root component gets created.
+     * * `true` - same as `legacy_enabled`.
+     * * `false` - same as `legacy_disabled`.
      * @type {?|undefined}
      */
     ExtraOptions.prototype.initialNavigation;
@@ -9899,7 +9912,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.7+2.sha-af99f9e.with-local-changes');
+const VERSION = new Version('8.2.7+3.sha-e63390d.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
