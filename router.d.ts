@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.8+18.sha-e41cbfb.with-local-changes
+ * @license Angular v9.0.0-next.8+19.sha-a23ee2b.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -706,24 +706,24 @@ export declare interface ExtraOptions {
      *
      * ```typescript
      * class AppModule {
-      *   constructor(router: Router, viewportScroller: ViewportScroller) {
-      *     router.events.pipe(
-      *       filter((e: Event): e is Scroll => e instanceof Scroll)
-      *     ).subscribe(e => {
-      *       if (e.position) {
-      *         // backward navigation
-      *         viewportScroller.scrollToPosition(e.position);
-      *       } else if (e.anchor) {
-      *         // anchor navigation
-      *         viewportScroller.scrollToAnchor(e.anchor);
-      *       } else {
-      *         // forward navigation
-      *         viewportScroller.scrollToPosition([0, 0]);
-      *       }
-      *     });
-      *   }
-      * }
-      * ```
+     *   constructor(router: Router, viewportScroller: ViewportScroller) {
+     *     router.events.pipe(
+     *       filter((e: Event): e is Scroll => e instanceof Scroll)
+     *     ).subscribe(e => {
+     *       if (e.position) {
+     *         // backward navigation
+     *         viewportScroller.scrollToPosition(e.position);
+     *       } else if (e.anchor) {
+     *         // anchor navigation
+     *         viewportScroller.scrollToAnchor(e.anchor);
+     *       } else {
+     *         // forward navigation
+     *         viewportScroller.scrollToPosition([0, 0]);
+     *       }
+     *     });
+     *   }
+     * }
+     * ```
      */
     scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
     /**
@@ -872,7 +872,7 @@ export declare class GuardsCheckStart extends RouterEvent {
  *
  * @publicApi
  */
-declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
+export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
 
 /**
  *
