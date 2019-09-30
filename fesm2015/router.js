@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.8+21.sha-8985233.with-local-changes
+ * @license Angular v9.0.0-next.8+23.sha-f438ae8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1059,17 +1059,14 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * into multiple bundles and loading them on demand.
  * To use lazy loading, provide the `loadChildren` property  instead of the `children` property.
  *
- * Given the following example route, the router uses the registered
- * `NgModuleFactoryLoader` to fetch an NgModule associated with 'team'.
- * It then extracts the set of routes defined in that NgModule,
- * and transparently adds those routes to the main configuration.
+ * Given the following example route, the router will lazy load
+ * the associated module on demand using the browser native import system.
  *
  * ```
  * [{
- *   path: 'team/:id',
- *   component: Team,
- *   loadChildren: 'team'
- * }]
+ *   path: 'lazy',
+ *   loadChildren: () => import('./lazy-route/lazy.module').then(mod => mod.LazyModule),
+ * }];
  * ```
  *
  * \@publicApi
@@ -9911,7 +9908,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.8+21.sha-8985233.with-local-changes');
+const VERSION = new Version('9.0.0-next.8+23.sha-f438ae8.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
