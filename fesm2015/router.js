@@ -1,11 +1,11 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵdefineDirective, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, ɵɵinject, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
+import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵdefineDirective, ɵɵlistener, HostBinding, ɵɵallocHostVars, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵinject, ɵɵdefineInjectable, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
 
@@ -9223,7 +9223,8 @@ RouterPreloader.ctorParameters = () => [
     { type: Injector },
     { type: PreloadingStrategy }
 ];
-/** @nocollapse */ RouterPreloader.ngInjectableDef = ɵɵdefineInjectable({ token: RouterPreloader, factory: function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); }, providedIn: null });
+/** @nocollapse */ RouterPreloader.ngFactoryDef = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
+/** @nocollapse */ RouterPreloader.ngInjectableDef = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ngFactoryDef(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null);
@@ -10033,7 +10034,8 @@ RouterInitializer.decorators = [
 RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
-/** @nocollapse */ RouterInitializer.ngInjectableDef = ɵɵdefineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); }, providedIn: null });
+/** @nocollapse */ RouterInitializer.ngFactoryDef = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
+/** @nocollapse */ RouterInitializer.ngInjectableDef = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ngFactoryDef(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{ type: Injector }]; }, null);
@@ -10101,7 +10103,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.9.with-local-changes');
+const VERSION = new Version('9.0.0-next.9+1.sha-4e35e34.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

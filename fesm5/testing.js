@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { __values } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
-import { ɵɵdefineInjectable, ɵɵinject, Compiler, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, ɵɵsetNgModuleScope, NgModule } from '@angular/core';
+import { ɵɵinject, Compiler, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, ɵɵsetNgModuleScope, NgModule } from '@angular/core';
 import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading, RouterModule } from '@angular/router';
 
 /**
@@ -84,7 +84,8 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
             return Promise.reject(new Error("Cannot find module " + path));
         }
     };
-    SpyNgModuleFactoryLoader.ngInjectableDef = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); }, providedIn: null });
+    SpyNgModuleFactoryLoader.ngFactoryDef = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
+    SpyNgModuleFactoryLoader.ngInjectableDef = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function (t) { return SpyNgModuleFactoryLoader.ngFactoryDef(t); }, providedIn: null });
     return SpyNgModuleFactoryLoader;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{

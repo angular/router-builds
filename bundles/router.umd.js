@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5406,7 +5406,8 @@
                 }));
             });
         };
-        RouterPreloader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); }, providedIn: null });
+        RouterPreloader.ngFactoryDef = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
+        RouterPreloader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ngFactoryDef(t); }, providedIn: null });
         return RouterPreloader;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
@@ -5828,7 +5829,8 @@
         RouterInitializer.prototype.isLegacyDisabled = function (opts) {
             return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
         };
-        RouterInitializer.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); }, providedIn: null });
+        RouterInitializer.ngFactoryDef = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
+        RouterInitializer.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ngFactoryDef(t); }, providedIn: null });
         return RouterInitializer;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
@@ -5871,7 +5873,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.9.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.9+1.sha-4e35e34.with-local-changes');
 
     /**
      * @license

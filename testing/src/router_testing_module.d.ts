@@ -56,6 +56,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     };
     constructor(compiler: Compiler);
     load(path: string): Promise<NgModuleFactory<any>>;
+    static ngFactoryDef: i0.ɵɵFactoryDef<SpyNgModuleFactoryLoader>;
     static ngInjectableDef: i0.ɵɵInjectableDef<SpyNgModuleFactoryLoader>;
 }
 /**

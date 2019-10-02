@@ -330,6 +330,7 @@ export declare class RouterInitializer {
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
     private isLegacyEnabled;
     private isLegacyDisabled;
+    static ngFactoryDef: i0.ɵɵFactoryDef<RouterInitializer>;
     static ngInjectableDef: i0.ɵɵInjectableDef<RouterInitializer>;
 }
 export declare function getAppInitializer(r: RouterInitializer): () => Promise<any>;

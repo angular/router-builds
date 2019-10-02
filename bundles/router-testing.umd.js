@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -271,7 +271,8 @@
                 return Promise.reject(new Error("Cannot find module " + path));
             }
         };
-        SpyNgModuleFactoryLoader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.ɵɵinject(i0.Compiler)); }, providedIn: null });
+        SpyNgModuleFactoryLoader.ngFactoryDef = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.ɵɵinject(i0.Compiler)); };
+        SpyNgModuleFactoryLoader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function (t) { return SpyNgModuleFactoryLoader.ngFactoryDef(t); }, providedIn: null });
         return SpyNgModuleFactoryLoader;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{

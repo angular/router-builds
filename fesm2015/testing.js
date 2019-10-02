@@ -1,12 +1,12 @@
 /**
- * @license Angular v9.0.0-next.9.with-local-changes
+ * @license Angular v9.0.0-next.9+1.sha-4e35e34.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
-import { Injectable, Compiler, ɵɵdefineInjectable, ɵɵinject, ɵsetClassMetadata, NgModule, NgModuleFactoryLoader, Injector, Optional, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope } from '@angular/core';
+import { Injectable, Compiler, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, NgModule, NgModuleFactoryLoader, Injector, Optional, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope } from '@angular/core';
 import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
@@ -98,7 +98,8 @@ SpyNgModuleFactoryLoader.decorators = [
 SpyNgModuleFactoryLoader.ctorParameters = () => [
     { type: Compiler }
 ];
-/** @nocollapse */ SpyNgModuleFactoryLoader.ngInjectableDef = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); }, providedIn: null });
+/** @nocollapse */ SpyNgModuleFactoryLoader.ngFactoryDef = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
+/** @nocollapse */ SpyNgModuleFactoryLoader.ngInjectableDef = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function (t) { return SpyNgModuleFactoryLoader.ngFactoryDef(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: Compiler }]; }, null);
