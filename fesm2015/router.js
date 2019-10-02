@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.8+22.sha-57457fb.with-local-changes
+ * @license Angular v8.2.8+24.sha-d96167f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6760,7 +6760,7 @@ class Router {
         this.paramsInheritanceStrategy = 'emptyOnly';
         /**
          * Determines when the router updates the browser URL.
-         * By default (`"deferred"`), udates the browser URL after navigation has finished.
+         * By default (`"deferred"`), updates the browser URL after navigation has finished.
          * Set to `'eager'` to update the browser URL at the beginning of navigation.
          * You can choose to update early so that, if navigation fails,
          * you can show an error message with the URL that failed.
@@ -7773,7 +7773,7 @@ if (false) {
     Router.prototype.paramsInheritanceStrategy;
     /**
      * Determines when the router updates the browser URL.
-     * By default (`"deferred"`), udates the browser URL after navigation has finished.
+     * By default (`"deferred"`), updates the browser URL after navigation has finished.
      * Set to `'eager'` to update the browser URL at the beginning of navigation.
      * You can choose to update early so that, if navigation fails,
      * you can show an error message with the URL that failed.
@@ -9909,7 +9909,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.8+22.sha-57457fb.with-local-changes');
+const VERSION = new Version('8.2.8+24.sha-d96167f.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
