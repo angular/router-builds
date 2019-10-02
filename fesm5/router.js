@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.8+55.sha-879ad69.with-local-changes
+ * @license Angular v9.0.0-next.8+57.sha-add5c39.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3759,7 +3759,7 @@ var Router = /** @class */ (function () {
         this.paramsInheritanceStrategy = 'emptyOnly';
         /**
          * Determines when the router updates the browser URL.
-         * By default (`"deferred"`), udates the browser URL after navigation has finished.
+         * By default (`"deferred"`), updates the browser URL after navigation has finished.
          * Set to `'eager'` to update the browser URL at the beginning of navigation.
          * You can choose to update early so that, if navigation fails,
          * you can show an error message with the URL that failed.
@@ -5684,7 +5684,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.8+55.sha-879ad69.with-local-changes');
+var VERSION = new Version('9.0.0-next.8+57.sha-add5c39.with-local-changes');
 
 /**
  * @license
