@@ -20,7 +20,7 @@ var ɵEmptyOutletComponent = /** @class */ (function () {
     function ɵEmptyOutletComponent() {
     }
     ɵEmptyOutletComponent.ngFactoryDef = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
-    ɵEmptyOutletComponent.ngComponentDef = i0.ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], consts: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+    ɵEmptyOutletComponent.ngComponentDef = i0.ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
             i0.ɵɵelement(0, "router-outlet");
         } }, encapsulation: 2 });
     return ɵEmptyOutletComponent;
