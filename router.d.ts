@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+34.sha-b934898.with-local-changes
+ * @license Angular v9.0.0-next.10+33.sha-9c153cf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1331,20 +1331,23 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * @description
  *
  * Interface that classes can implement to be a data provider.
- * A data provider class can be used with the router to resolve data during navigation.
- * The interface defines a `resolve()` method that will be invoked when the navigation starts.
- * The router will then wait for the data to be resolved before the route is finally activated.
  *
  * ```
- * @Injectable({ providedIn: 'root' })
- * export class HeroResolver implements Resolve<Hero> {
- *   constructor(private service: HeroService) {}
+ * class Backend {
+ *   fetchTeam(id: string) {
+ *     return 'someTeam';
+ *   }
+ * }
+ *
+ * @Injectable()
+ * class TeamResolver implements Resolve<Team> {
+ *   constructor(private backend: Backend) {}
  *
  *   resolve(
  *     route: ActivatedRouteSnapshot,
  *     state: RouterStateSnapshot
  *   ): Observable<any>|Promise<any>|any {
- *     return this.service.getHero(route.paramMap.get('id'));
+ *     return this.backend.fetchTeam(route.params.id);
  *   }
  * }
  *
@@ -1352,46 +1355,42 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *   imports: [
  *     RouterModule.forRoot([
  *       {
- *         path: 'detail/:id',
- *         component: HeroDetailComponent,
+ *         path: 'team/:id',
+ *         component: TeamComponent,
  *         resolve: {
- *           hero: HeroResolver
+ *           team: TeamResolver
  *         }
  *       }
  *     ])
  *   ],
- *   exports: [RouterModule]
+ *   providers: [TeamResolver]
  * })
- * export class AppRoutingModule {}
+ * class AppModule {}
  * ```
  *
  * You can alternatively provide a function with the `resolve` signature:
  *
  * ```
- * export const myHero: Hero = {
- *   // ...
- * }
- *
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
  *       {
- *         path: 'detail/:id',
- *         component: HeroComponent,
+ *         path: 'team/:id',
+ *         component: TeamComponent,
  *         resolve: {
- *           hero: 'heroResolver'
+ *           team: 'teamResolver'
  *         }
  *       }
  *     ])
  *   ],
  *   providers: [
  *     {
- *       provide: 'heroResolver',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
+ *       provide: 'teamResolver',
+ *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => 'team'
  *     }
  *   ]
  * })
- * export class AppModule {}
+ * class AppModule {}
  * ```
  *
  * @publicApi
