@@ -245,23 +245,20 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * @description
  *
  * Interface that classes can implement to be a data provider.
+ * A data provider class can be used with the router to resolve data during navigation.
+ * The interface defines a `resolve()` method that will be invoked when the navigation starts.
+ * The router will then wait for the data to be resolved before the route is finally activated.
  *
  * ```
- * class Backend {
- *   fetchTeam(id: string) {
- *     return 'someTeam';
- *   }
- * }
- *
- * @Injectable()
- * class TeamResolver implements Resolve<Team> {
- *   constructor(private backend: Backend) {}
+ * @Injectable({ providedIn: 'root' })
+ * export class HeroResolver implements Resolve<Hero> {
+ *   constructor(private service: HeroService) {}
  *
  *   resolve(
  *     route: ActivatedRouteSnapshot,
  *     state: RouterStateSnapshot
  *   ): Observable<any>|Promise<any>|any {
- *     return this.backend.fetchTeam(route.params.id);
+ *     return this.service.getHero(route.paramMap.get('id'));
  *   }
  * }
  *
@@ -269,42 +266,46 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  *   imports: [
  *     RouterModule.forRoot([
  *       {
- *         path: 'team/:id',
- *         component: TeamComponent,
+ *         path: 'detail/:id',
+ *         component: HeroDetailComponent,
  *         resolve: {
- *           team: TeamResolver
+ *           hero: HeroResolver
  *         }
  *       }
  *     ])
  *   ],
- *   providers: [TeamResolver]
+ *   exports: [RouterModule]
  * })
- * class AppModule {}
+ * export class AppRoutingModule {}
  * ```
  *
  * You can alternatively provide a function with the `resolve` signature:
  *
  * ```
+ * export const myHero: Hero = {
+ *   // ...
+ * }
+ *
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
  *       {
- *         path: 'team/:id',
- *         component: TeamComponent,
+ *         path: 'detail/:id',
+ *         component: HeroComponent,
  *         resolve: {
- *           team: 'teamResolver'
+ *           hero: 'heroResolver'
  *         }
  *       }
  *     ])
  *   ],
  *   providers: [
  *     {
- *       provide: 'teamResolver',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => 'team'
+ *       provide: 'heroResolver',
+ *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
  *     }
  *   ]
  * })
- * class AppModule {}
+ * export class AppModule {}
  * ```
  *
  * @publicApi
