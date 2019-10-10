@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+32.sha-c8fd94e.with-local-changes
+ * @license Angular v9.0.0-next.10+34.sha-b934898.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7362,7 +7362,8 @@ class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      * @param {?} commands An array of commands to apply.
-     * @param {?=} navigationExtras Options that control the navigation strategy.
+     * @param {?=} navigationExtras Options that control the navigation strategy. This function
+     * only utilizes properties in `NavigationExtras` that would change the provided URL.
      * @return {?} The new URL tree.
      *
      */
@@ -10103,7 +10104,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.10+32.sha-c8fd94e.with-local-changes');
+const VERSION = new Version('9.0.0-next.10+34.sha-b934898.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
