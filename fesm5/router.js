@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+44.sha-d8249d1.with-local-changes
+ * @license Angular v9.0.0-next.10+46.sha-84ba1f0.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4532,7 +4532,7 @@ var RouterLink = /** @class */ (function () {
         configurable: true
     });
     RouterLink.ngFactoryDef = function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); };
-    RouterLink.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
         } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
     return RouterLink;
@@ -4646,7 +4646,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         configurable: true
     });
     RouterLinkWithHref.ngFactoryDef = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵdirectiveInject(LocationStrategy)); };
-    RouterLinkWithHref.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+    RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
             ɵɵallocHostVars(2);
             ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
         } if (rf & 2) {
@@ -4820,7 +4820,7 @@ var RouterLinkActive = /** @class */ (function () {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     };
     RouterLinkActive.ngFactoryDef = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
-    RouterLinkActive.ngDirectiveDef = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
+    RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
             ɵɵcontentQuery(dirIndex, RouterLink, true);
             ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
         } if (rf & 2) {
@@ -5064,7 +5064,7 @@ var RouterOutlet = /** @class */ (function () {
         this.activateEvents.emit(this.activated.instance);
     };
     RouterOutlet.ngFactoryDef = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵɵdirectiveInject(ChildrenOutletContexts), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(ComponentFactoryResolver), ɵɵinjectAttribute('name'), ɵɵdirectiveInject(ChangeDetectorRef)); };
-    RouterOutlet.ngDirectiveDef = ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    RouterOutlet.ɵdir = ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
     return RouterOutlet;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterOutlet, [{
@@ -5687,7 +5687,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.10+44.sha-d8249d1.with-local-changes');
+var VERSION = new Version('9.0.0-next.10+46.sha-84ba1f0.with-local-changes');
 
 /**
  * @license

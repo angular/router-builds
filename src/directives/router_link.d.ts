@@ -131,7 +131,7 @@ export declare class RouterLink {
     onClick(): boolean;
     readonly urlTree: UrlTree;
     static ngFactoryDef: i0.ɵɵFactoryDef<RouterLink>;
-    static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }
 /**
  * @description
@@ -173,5 +173,5 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private updateTargetUrlAndHref;
     readonly urlTree: UrlTree;
     static ngFactoryDef: i0.ɵɵFactoryDef<RouterLinkWithHref>;
-    static ngDirectiveDef: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { 'target': "target", 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { 'target': "target", 'queryParams': "queryParams", 'fragment': "fragment", 'queryParamsHandling': "queryParamsHandling", 'preserveFragment': "preserveFragment", 'skipLocationChange': "skipLocationChange", 'replaceUrl': "replaceUrl", 'state': "state", 'routerLink': "routerLink", 'preserveQueryParams': "preserveQueryParams" }, {}, never>;
 }
