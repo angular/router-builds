@@ -98,7 +98,7 @@ export declare class RouterModule {
      * Creates a module with all the router directives and a provider registering routes.
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ngModuleDef: i0.ɵɵNgModuleDefWithMeta<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ngInjectorDef: i0.ɵɵInjectorDef<RouterModule>;
 }
 export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;

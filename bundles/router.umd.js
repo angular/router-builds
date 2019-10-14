@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+73.sha-f433d66.with-local-changes
+ * @license Angular v9.0.0-next.10+75.sha-fc93daf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5648,7 +5648,7 @@
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
-        RouterModule.ngModuleDef = i0.ɵɵdefineNgModule({ type: RouterModule });
+        RouterModule.ɵmod = i0.ɵɵdefineNgModule({ type: RouterModule });
         RouterModule.ngInjectorDef = i0.ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.ɵɵinject(ROUTER_FORROOT_GUARD, 8), i0.ɵɵinject(Router, 8)); } });
         return RouterModule;
     }());
@@ -5874,7 +5874,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.10+73.sha-f433d66.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.10+75.sha-fc93daf.with-local-changes');
 
     /**
      * @license

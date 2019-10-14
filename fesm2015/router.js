@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+73.sha-f433d66.with-local-changes
+ * @license Angular v9.0.0-next.10+75.sha-fc93daf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9591,7 +9591,7 @@ RouterModule.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
     { type: Router, decorators: [{ type: Optional }] }
 ];
-/** @nocollapse */ RouterModule.ngModuleDef = ɵɵdefineNgModule({ type: RouterModule });
+/** @nocollapse */ RouterModule.ɵmod = ɵɵdefineNgModule({ type: RouterModule });
 /** @nocollapse */ RouterModule.ngInjectorDef = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
 /*@__PURE__*/ ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterModule, [{
@@ -10104,7 +10104,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.10+73.sha-f433d66.with-local-changes');
+const VERSION = new Version('9.0.0-next.10+75.sha-fc93daf.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

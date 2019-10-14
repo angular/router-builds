@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+73.sha-f433d66.with-local-changes
+ * @license Angular v9.0.0-next.10+75.sha-fc93daf.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -348,7 +348,7 @@
                 ]
             };
         };
-        RouterTestingModule.ngModuleDef = i0.ɵɵdefineNgModule({ type: RouterTestingModule });
+        RouterTestingModule.ɵmod = i0.ɵɵdefineNgModule({ type: RouterTestingModule });
         RouterTestingModule.ngInjectorDef = i0.ɵɵdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
                 router.ɵROUTER_PROVIDERS, { provide: common.Location, useClass: testing.SpyLocation },
                 { provide: common.LocationStrategy, useClass: testing.MockLocationStrategy },
