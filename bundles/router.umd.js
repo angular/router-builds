@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+66.sha-cd7b199.with-local-changes
+ * @license Angular v9.0.0-next.10+73.sha-f433d66.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -624,7 +624,7 @@
     var ɵEmptyOutletComponent = /** @class */ (function () {
         function ɵEmptyOutletComponent() {
         }
-        ɵEmptyOutletComponent.ngFactoryDef = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
+        ɵEmptyOutletComponent.ɵfac = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
         ɵEmptyOutletComponent.ɵcmp = i0.ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
                 i0.ɵɵelement(0, "router-outlet");
             } }, encapsulation: 2 });
@@ -4718,7 +4718,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLink.ngFactoryDef = function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵinjectAttribute('tabindex'), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ElementRef)); };
+        RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵinjectAttribute('tabindex'), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ElementRef)); };
         RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
             } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
@@ -4832,7 +4832,7 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.ngFactoryDef = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
+        RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
         RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
                 i0.ɵɵallocHostVars(2);
                 i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
@@ -5006,7 +5006,7 @@
                 this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
                 this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
-        RouterLinkActive.ngFactoryDef = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
+        RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
         RouterLinkActive.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
                 i0.ɵɵcontentQuery(dirIndex, RouterLink, true);
                 i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
@@ -5250,7 +5250,7 @@
             this.changeDetector.markForCheck();
             this.activateEvents.emit(this.activated.instance);
         };
-        RouterOutlet.ngFactoryDef = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵɵdirectiveInject(ChildrenOutletContexts), i0.ɵɵdirectiveInject(i0.ViewContainerRef), i0.ɵɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵɵinjectAttribute('name'), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef)); };
+        RouterOutlet.ɵfac = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵɵdirectiveInject(ChildrenOutletContexts), i0.ɵɵdirectiveInject(i0.ViewContainerRef), i0.ɵɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵɵinjectAttribute('name'), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef)); };
         RouterOutlet.ɵdir = i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
         return RouterOutlet;
     }());
@@ -5407,8 +5407,8 @@
                 }));
             });
         };
-        RouterPreloader.ngFactoryDef = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
-        RouterPreloader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ngFactoryDef(t); }, providedIn: null });
+        RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
+        RouterPreloader.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
         return RouterPreloader;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
@@ -5830,8 +5830,8 @@
         RouterInitializer.prototype.isLegacyDisabled = function (opts) {
             return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
         };
-        RouterInitializer.ngFactoryDef = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
-        RouterInitializer.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ngFactoryDef(t); }, providedIn: null });
+        RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
+        RouterInitializer.ngInjectableDef = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
         return RouterInitializer;
     }());
     /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
@@ -5874,7 +5874,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.10+66.sha-cd7b199.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.10+73.sha-f433d66.with-local-changes');
 
     /**
      * @license

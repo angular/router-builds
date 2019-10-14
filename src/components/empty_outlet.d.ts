@@ -9,7 +9,7 @@ import * as i0 from "@angular/core";
  * to this `EmptyOutletComponent`.
  */
 export declare class ɵEmptyOutletComponent {
-    static ngFactoryDef: i0.ɵɵFactoryDef<ɵEmptyOutletComponent>;
+    static ɵfac: i0.ɵɵFactoryDef<ɵEmptyOutletComponent>;
     static ɵcmp: i0.ɵɵComponentDefWithMeta<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never>;
 }
 export { ɵEmptyOutletComponent as EmptyOutletComponent };
