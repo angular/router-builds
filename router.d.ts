@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.10+8.sha-9e76a38.with-local-changes
+ * @license Angular v8.2.10+13.sha-9409dce.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1686,9 +1686,11 @@ export declare class ResolveStart extends RouterEvent {
  */
 export declare interface Route {
     /**
-     * The path to match against, a URL string that uses router matching notation.
+     * The path to match against. Cannot be used together with a custom `matcher` function.
+     * A URL string that uses router matching notation.
      * Can be a wild card (`**`) that matches any URL (see Usage Notes below).
      * Default is "/" (the root path).
+     *
      */
     path?: string;
     /**
@@ -1708,8 +1710,7 @@ export declare interface Route {
      */
     pathMatch?: string;
     /**
-     * A URL-matching function to use as a custom strategy for path matching.
-     * If present, supersedes `path` and `pathMatch`.
+     * A custom URL-matching function. Cannot be used together with `path`.
      */
     matcher?: UrlMatcher;
     /**
@@ -2439,14 +2440,17 @@ export declare class RouterModule {
  *
  * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
+ * Each outlet can have a unique name, determined by the optional `name` attribute.
+ * The name cannot be set or changed dynamically. If not set, default value is "primary".
+ *
  * ```
  * <router-outlet></router-outlet>
  * <router-outlet name='left'></router-outlet>
  * <router-outlet name='right'></router-outlet>
  * ```
  *
- * A router outlet will emit an activate event any time a new component is being instantiated,
- * and a deactivate event when it is being destroyed.
+ * A router outlet emits an activate event when a new component is instantiated,
+ * and a deactivate event when a component is destroyed.
  *
  * ```
  * <router-outlet
@@ -2683,12 +2687,12 @@ export declare abstract class UrlHandlingStrategy {
 /**
  * A function for matching a route against URLs. Implement a custom URL matcher
  * for `Route.matcher` when a combination of `path` and `pathMatch`
- * is not expressive enough.
+ * is not expressive enough. Cannot be used together with `path` and `pathMatch`.
  *
  * @param segments An array of URL segments.
  * @param group A segment group.
  * @param route The route to match against.
- * @returns The match-result,
+ * @returns The match-result.
  *
  * @usageNotes
  *
