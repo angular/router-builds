@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+83.sha-ac745c8.with-local-changes
+ * @license Angular v9.0.0-next.10+84.sha-8b0cb2f.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1090,9 +1090,11 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
 function Route() { }
 if (false) {
     /**
-     * The path to match against, a URL string that uses router matching notation.
+     * The path to match against. Cannot be used together with a custom `matcher` function.
+     * A URL string that uses router matching notation.
      * Can be a wild card (`**`) that matches any URL (see Usage Notes below).
      * Default is "/" (the root path).
+     *
      * @type {?|undefined}
      */
     Route.prototype.path;
@@ -1114,8 +1116,7 @@ if (false) {
      */
     Route.prototype.pathMatch;
     /**
-     * A URL-matching function to use as a custom strategy for path matching.
-     * If present, supersedes `path` and `pathMatch`.
+     * A custom URL-matching function. Cannot be used together with `path`.
      * @type {?|undefined}
      */
     Route.prototype.matcher;
@@ -10107,7 +10108,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.10+83.sha-ac745c8.with-local-changes');
+const VERSION = new Version('9.0.0-next.10+84.sha-8b0cb2f.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
