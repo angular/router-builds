@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.10+81.sha-8321bd8.with-local-changes
+ * @license Angular v9.0.0-next.10+83.sha-ac745c8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5122,14 +5122,17 @@
      *
      * Acts as a placeholder that Angular dynamically fills based on the current router state.
      *
+     * Each outlet can have a unique name, determined by the optional `name` attribute.
+     * The name cannot be set or changed dynamically. If not set, default value is "primary".
+     *
      * ```
      * <router-outlet></router-outlet>
      * <router-outlet name='left'></router-outlet>
      * <router-outlet name='right'></router-outlet>
      * ```
      *
-     * A router outlet will emit an activate event any time a new component is being instantiated,
-     * and a deactivate event when it is being destroyed.
+     * A router outlet emits an activate event when a new component is instantiated,
+     * and a deactivate event when a component is destroyed.
      *
      * ```
      * <router-outlet
@@ -5874,7 +5877,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.10+81.sha-8321bd8.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.10+83.sha-ac745c8.with-local-changes');
 
     /**
      * @license
