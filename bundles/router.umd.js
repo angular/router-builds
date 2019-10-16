@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+13.sha-11bf767.with-local-changes
+ * @license Angular v9.0.0-next.11+17.sha-a67df65.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5877,7 +5877,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.11+13.sha-11bf767.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.11+17.sha-a67df65.with-local-changes');
 
     /**
      * @license
