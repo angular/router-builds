@@ -99,7 +99,7 @@ export declare class RouterModule {
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
-    static ngInjectorDef: i0.ɵɵInjectorDef<RouterModule>;
+    static ɵinj: i0.ɵɵInjectorDef<RouterModule>;
 }
 export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
@@ -331,7 +331,7 @@ export declare class RouterInitializer {
     private isLegacyEnabled;
     private isLegacyDisabled;
     static ɵfac: i0.ɵɵFactoryDef<RouterInitializer>;
-    static ngInjectableDef: i0.ɵɵInjectableDef<RouterInitializer>;
+    static ɵprov: i0.ɵɵInjectableDef<RouterInitializer>;
 }
 export declare function getAppInitializer(r: RouterInitializer): () => Promise<any>;
 export declare function getBootstrapListener(r: RouterInitializer): (bootstrappedComponentRef: ComponentRef<any>) => void;

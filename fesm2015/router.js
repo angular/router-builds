@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+8.sha-3e14c2d.with-local-changes
+ * @license Angular v9.0.0-next.11+10.sha-86104b8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9229,7 +9229,7 @@ RouterPreloader.ctorParameters = () => [
     { type: PreloadingStrategy }
 ];
 /** @nocollapse */ RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
-/** @nocollapse */ RouterPreloader.ngInjectableDef = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
+/** @nocollapse */ RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null);
@@ -9596,7 +9596,7 @@ RouterModule.ctorParameters = () => [
     { type: Router, decorators: [{ type: Optional }] }
 ];
 /** @nocollapse */ RouterModule.ɵmod = ɵɵdefineNgModule({ type: RouterModule });
-/** @nocollapse */ RouterModule.ngInjectorDef = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
+/** @nocollapse */ RouterModule.ɵinj = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
 /*@__PURE__*/ ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
 /*@__PURE__*/ ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
@@ -10040,7 +10040,7 @@ RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
 /** @nocollapse */ RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
-/** @nocollapse */ RouterInitializer.ngInjectableDef = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
+/** @nocollapse */ RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{ type: Injector }]; }, null);
@@ -10108,7 +10108,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.11+8.sha-3e14c2d.with-local-changes');
+const VERSION = new Version('9.0.0-next.11+10.sha-86104b8.with-local-changes');
 
 /**
  * @fileoverview added by tsickle

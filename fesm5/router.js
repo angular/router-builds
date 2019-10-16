@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+8.sha-3e14c2d.with-local-changes
+ * @license Angular v9.0.0-next.11+10.sha-86104b8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5224,7 +5224,7 @@ var RouterPreloader = /** @class */ (function () {
         });
     };
     RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
-    RouterPreloader.ngInjectableDef = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
+    RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
     return RouterPreloader;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterPreloader, [{
@@ -5465,7 +5465,7 @@ var RouterModule = /** @class */ (function () {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     };
     RouterModule.ɵmod = ɵɵdefineNgModule({ type: RouterModule });
-    RouterModule.ngInjectorDef = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
+    RouterModule.ɵinj = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
     return RouterModule;
 }());
 /*@__PURE__*/ ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
@@ -5647,7 +5647,7 @@ var RouterInitializer = /** @class */ (function () {
         return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     };
     RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
-    RouterInitializer.ngInjectableDef = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
+    RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
     return RouterInitializer;
 }());
 /*@__PURE__*/ ɵsetClassMetadata(RouterInitializer, [{
@@ -5690,7 +5690,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.11+8.sha-3e14c2d.with-local-changes');
+var VERSION = new Version('9.0.0-next.11+10.sha-86104b8.with-local-changes');
 
 /**
  * @license
