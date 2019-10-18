@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 /**
  * This component is used internally within the router to be a placeholder when an empty
@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
 var ɵEmptyOutletComponent = /** @class */ (function () {
     function ɵEmptyOutletComponent() {
     }
-    ɵEmptyOutletComponent = tslib_1.__decorate([
+    ɵEmptyOutletComponent = __decorate([
         Component({ template: "<router-outlet></router-outlet>" })
     ], ɵEmptyOutletComponent);
     return ɵEmptyOutletComponent;
