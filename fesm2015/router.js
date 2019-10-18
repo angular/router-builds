@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+65.sha-6958d11.with-local-changes
+ * @license Angular v9.0.0-next.11+74.sha-e0059c7.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7158,9 +7158,29 @@ class Router {
                     /** @type {?} */
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), e.message);
                     eventsSubject.next(navCancel);
-                    t.resolve(false);
-                    if (redirecting) {
-                        this.navigateByUrl(e.url);
+                    // When redirecting, we need to delay resolving the navigation
+                    // promise and push it to the redirect navigation
+                    if (!redirecting) {
+                        t.resolve(false);
+                    }
+                    else {
+                        // setTimeout is required so this navigation finishes with
+                        // the return EMPTY below. If it isn't allowed to finish
+                        // processing, there can be multiple navigations to the same
+                        // URL.
+                        setTimeout((/**
+                         * @return {?}
+                         */
+                        () => {
+                            /** @type {?} */
+                            const mergedTree = this.urlHandlingStrategy.merge(e.url, this.rawUrlTree);
+                            /** @type {?} */
+                            const extras = {
+                                skipLocationChange: t.extras.skipLocationChange,
+                                replaceUrl: this.urlUpdateStrategy === 'eager'
+                            };
+                            return this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
+                        }), 0);
                     }
                     /* All other errors should reset to the router's internal URL reference to the
                      * pre-error state. */
@@ -7534,9 +7554,10 @@ class Router {
      * @param {?} source
      * @param {?} restoredState
      * @param {?} extras
+     * @param {?=} priorPromise
      * @return {?}
      */
-    scheduleNavigation(rawUrl, source, restoredState, extras) {
+    scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
         /** @type {?} */
         const lastNavigation = this.getTransition();
         // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
@@ -7561,19 +7582,27 @@ class Router {
             return Promise.resolve(true); // return value is not used
         }
         /** @type {?} */
-        let resolve = null;
+        let resolve;
         /** @type {?} */
-        let reject = null;
+        let reject;
         /** @type {?} */
-        const promise = new Promise((/**
-         * @param {?} res
-         * @param {?} rej
-         * @return {?}
-         */
-        (res, rej) => {
-            resolve = res;
-            reject = rej;
-        }));
+        let promise;
+        if (priorPromise) {
+            resolve = priorPromise.resolve;
+            reject = priorPromise.reject;
+            promise = priorPromise.promise;
+        }
+        else {
+            promise = new Promise((/**
+             * @param {?} res
+             * @param {?} rej
+             * @return {?}
+             */
+            (res, rej) => {
+                resolve = res;
+                reject = rej;
+            }));
+        }
         /** @type {?} */
         const id = ++this.navigationId;
         this.setTransition({
@@ -9914,7 +9943,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.11+65.sha-6958d11.with-local-changes');
+const VERSION = new Version('9.0.0-next.11+74.sha-e0059c7.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
