@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+59.sha-117ca7c.with-local-changes
+ * @license Angular v9.0.0-next.11+62.sha-a0d16dc.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -626,7 +626,7 @@ function getFullPath(parentPath, currentRoute) {
  */
 function standardizeConfig(r) {
     var children = r.children && r.children.map(standardizeConfig);
-    var c = children ? __assign({}, r, { children: children }) : __assign({}, r);
+    var c = children ? __assign(__assign({}, r), { children: children }) : __assign({}, r);
     if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
         c.component = ɵEmptyOutletComponent;
     }
@@ -1612,9 +1612,9 @@ function inheritedParamsDataResolve(route, paramsInheritanceStrategy) {
 /** @internal */
 function flattenInherited(pathFromRoot) {
     return pathFromRoot.reduce(function (res, curr) {
-        var params = __assign({}, res.params, curr.params);
-        var data = __assign({}, res.data, curr.data);
-        var resolve = __assign({}, res.resolve, curr._resolvedData);
+        var params = __assign(__assign({}, res.params), curr.params);
+        var data = __assign(__assign({}, res.data), curr.data);
+        var resolve = __assign(__assign({}, res.resolve), curr._resolvedData);
         return { params: params, data: data, resolve: resolve };
     }, { params: {}, data: {}, resolve: {} });
 }
@@ -2768,7 +2768,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
         }
         finally { if (e_2) throw e_2.error; }
     }
-    return __assign({}, children, res);
+    return __assign(__assign({}, children), res);
 }
 function createChildrenForEmptySegments(routes, primarySegmentGroup) {
     var e_3, _a;
@@ -2817,7 +2817,7 @@ function getOutlet(route) {
 function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
     return function (source) {
         return source.pipe(switchMap(function (t) { return applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
-            .pipe(map(function (urlAfterRedirects) { return (__assign({}, t, { urlAfterRedirects: urlAfterRedirects })); })); }));
+            .pipe(map(function (urlAfterRedirects) { return (__assign(__assign({}, t), { urlAfterRedirects: urlAfterRedirects })); })); }));
     };
 }
 
@@ -3028,14 +3028,14 @@ function checkGuards(moduleInjector, forwardEvent) {
         return source.pipe(mergeMap(function (t) {
             var targetSnapshot = t.targetSnapshot, currentSnapshot = t.currentSnapshot, _a = t.guards, canActivateChecks = _a.canActivateChecks, canDeactivateChecks = _a.canDeactivateChecks;
             if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
-                return of(__assign({}, t, { guardsResult: true }));
+                return of(__assign(__assign({}, t), { guardsResult: true }));
             }
             return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
                 .pipe(mergeMap(function (canDeactivate) {
                 return canDeactivate && isBoolean(canDeactivate) ?
                     runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
                     of(canDeactivate);
-            }), map(function (guardsResult) { return (__assign({}, t, { guardsResult: guardsResult })); }));
+            }), map(function (guardsResult) { return (__assign(__assign({}, t), { guardsResult: guardsResult })); }));
         }));
     };
 }
@@ -3310,7 +3310,7 @@ function match$1(segmentGroup, route, segments) {
         throw new NoMatch$1();
     var posParams = {};
     forEach(res.posParams, function (v, k) { posParams[k] = v.path; });
-    var parameters = res.consumed.length > 0 ? __assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
+    var parameters = res.consumed.length > 0 ? __assign(__assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
         posParams;
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
 }
@@ -3388,7 +3388,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedS
         }
         finally { if (e_2) throw e_2.error; }
     }
-    return __assign({}, children, res);
+    return __assign(__assign({}, children), res);
 }
 function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
     var e_3, _a;
@@ -3448,7 +3448,7 @@ function getResolve(route) {
 function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
     return function (source) {
         return source.pipe(mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
-            .pipe(map(function (targetSnapshot) { return (__assign({}, t, { targetSnapshot: targetSnapshot })); })); }));
+            .pipe(map(function (targetSnapshot) { return (__assign(__assign({}, t), { targetSnapshot: targetSnapshot })); })); }));
     };
 }
 
@@ -3476,7 +3476,7 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjec
     return resolveNode(resolve, futureARS, futureRSS, moduleInjector)
         .pipe(map(function (resolvedData) {
         futureARS._resolvedData = resolvedData;
-        futureARS.data = __assign({}, futureARS.data, inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
+        futureARS.data = __assign(__assign({}, futureARS.data), inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
         return null;
     }));
 }
@@ -3810,7 +3810,7 @@ var Router = /** @class */ (function () {
         var eventsSubject = this.events;
         return transitions.pipe(filter(function (t) { return t.id !== 0; }), 
         // Extract URL
-        map(function (t) { return (__assign({}, t, { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) })); }), 
+        map(function (t) { return (__assign(__assign({}, t), { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) })); }), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap(function (t) {
             var completed = false;
@@ -3824,7 +3824,7 @@ var Router = /** @class */ (function () {
                     extractedUrl: t.extractedUrl,
                     trigger: t.source,
                     extras: t.extras,
-                    previousNavigation: _this.lastSuccessfulNavigation ? __assign({}, _this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                    previousNavigation: _this.lastSuccessfulNavigation ? __assign(__assign({}, _this.lastSuccessfulNavigation), { previousNavigation: null }) :
                         null
                 };
             }), switchMap(function (t) {
@@ -3849,7 +3849,7 @@ var Router = /** @class */ (function () {
                     applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                     // Update the currentNavigation
                     tap(function (t) {
-                        _this.currentNavigation = __assign({}, _this.currentNavigation, { finalUrl: t.urlAfterRedirects });
+                        _this.currentNavigation = __assign(__assign({}, _this.currentNavigation), { finalUrl: t.urlAfterRedirects });
                     }), 
                     // Recognize
                     recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
@@ -3879,7 +3879,7 @@ var Router = /** @class */ (function () {
                         var navStart = new NavigationStart(id, _this.serializeUrl(extractedUrl), source, restoredState);
                         eventsSubject.next(navStart);
                         var targetSnapshot = createEmptyState(extractedUrl, _this.rootComponentType).snapshot;
-                        return of(__assign({}, t, { targetSnapshot: targetSnapshot, urlAfterRedirects: extractedUrl, extras: __assign({}, extras, { skipLocationChange: false, replaceUrl: false }) }));
+                        return of(__assign(__assign({}, t), { targetSnapshot: targetSnapshot, urlAfterRedirects: extractedUrl, extras: __assign(__assign({}, extras), { skipLocationChange: false, replaceUrl: false }) }));
                     }
                     else {
                         /* When neither the current or previous URL can be processed, do nothing other
@@ -3908,7 +3908,7 @@ var Router = /** @class */ (function () {
             tap(function (t) {
                 var guardsStart = new GuardsCheckStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                 _this.triggerEvent(guardsStart);
-            }), map(function (t) { return (__assign({}, t, { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), tap(function (t) {
+            }), map(function (t) { return (__assign(__assign({}, t), { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), tap(function (t) {
                 if (isUrlTree(t.guardsResult)) {
                     var error_1 = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
                     error_1.url = t.guardsResult;
@@ -3953,7 +3953,7 @@ var Router = /** @class */ (function () {
                 });
             }), map(function (t) {
                 var targetRouterState = createRouterState(_this.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
-                return (__assign({}, t, { targetRouterState: targetRouterState }));
+                return (__assign(__assign({}, t), { targetRouterState: targetRouterState }));
             }), 
             /* Once here, we are about to activate syncronously. The assumption is this will
                succeed, and user code may read from the Router service. Therefore before
@@ -4051,7 +4051,7 @@ var Router = /** @class */ (function () {
         return transition;
     };
     Router.prototype.setTransition = function (t) {
-        this.transitions.next(__assign({}, this.getTransition(), t));
+        this.transitions.next(__assign(__assign({}, this.getTransition()), t));
     };
     /**
      * Sets up the location change listener and performs the initial navigation.
@@ -4179,7 +4179,7 @@ var Router = /** @class */ (function () {
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
-                    q = __assign({}, this.currentUrlTree.queryParams, queryParams);
+                    q = __assign(__assign({}, this.currentUrlTree.queryParams), queryParams);
                     break;
                 case 'preserve':
                     q = this.currentUrlTree.queryParams;
@@ -4348,10 +4348,10 @@ var Router = /** @class */ (function () {
         state = state || {};
         if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
             // TODO(jasonaden): Remove first `navigationId` and rely on `ng` namespace.
-            this.location.replaceState(path, '', __assign({}, state, { navigationId: id }));
+            this.location.replaceState(path, '', __assign(__assign({}, state), { navigationId: id }));
         }
         else {
-            this.location.go(path, '', __assign({}, state, { navigationId: id }));
+            this.location.go(path, '', __assign(__assign({}, state), { navigationId: id }));
         }
     };
     Router.prototype.resetStateAndUrl = function (storedState, storedUrl, rawUrl) {
@@ -5690,7 +5690,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.11+59.sha-117ca7c.with-local-changes');
+var VERSION = new Version('9.0.0-next.11+62.sha-a0d16dc.with-local-changes');
 
 /**
  * @license
