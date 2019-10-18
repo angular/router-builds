@@ -1,5 +1,5 @@
 /**
- * @license Angular v8.2.11+5.sha-fab6ea0.with-local-changes
+ * @license Angular v8.2.11+6.sha-f13e40d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1000,7 +1000,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * the router would apply the redirect even when navigating to the redirect destination,
  * creating an endless loop.
  *
- * In the following example, supplying the 'full' `patchMatch` strategy ensures
+ * In the following example, supplying the 'full' `pathMatch` strategy ensures
  * that the router applies the redirect if and only if navigating to '/'.
  *
  * ```
@@ -9913,7 +9913,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('8.2.11+5.sha-fab6ea0.with-local-changes');
+const VERSION = new Version('8.2.11+6.sha-f13e40d.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
