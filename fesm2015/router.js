@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.11+24.sha-20be755.with-local-changes
+ * @license Angular v9.0.0-next.12+50.sha-dfff5fe.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -999,7 +999,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
  * the router would apply the redirect even when navigating to the redirect destination,
  * creating an endless loop.
  *
- * In the following example, supplying the 'full' `patchMatch` strategy ensures
+ * In the following example, supplying the 'full' `pathMatch` strategy ensures
  * that the router applies the redirect if and only if navigating to '/'.
  *
  * ```
@@ -1315,7 +1315,7 @@ function standardizeConfig(r) {
     /** @type {?} */
     const children = r.children && r.children.map(standardizeConfig);
     /** @type {?} */
-    const c = children ? Object.assign({}, r, { children }) : Object.assign({}, r);
+    const c = children ? Object.assign(Object.assign({}, r), { children }) : Object.assign({}, r);
     if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
         c.component = ɵEmptyOutletComponent;
     }
@@ -2868,11 +2868,11 @@ function flattenInherited(pathFromRoot) {
      */
     (res, curr) => {
         /** @type {?} */
-        const params = Object.assign({}, res.params, curr.params);
+        const params = Object.assign(Object.assign({}, res.params), curr.params);
         /** @type {?} */
-        const data = Object.assign({}, res.data, curr.data);
+        const data = Object.assign(Object.assign({}, res.data), curr.data);
         /** @type {?} */
-        const resolve = Object.assign({}, res.resolve, curr._resolvedData);
+        const resolve = Object.assign(Object.assign({}, res.resolve), curr._resolvedData);
         return { params, data, resolve };
     }), (/** @type {?} */ ({ params: {}, data: {}, resolve: {} })));
 }
@@ -4887,7 +4887,7 @@ function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes
             res[getOutlet(r)] = new UrlSegmentGroup([], {});
         }
     }
-    return Object.assign({}, children, res);
+    return Object.assign(Object.assign({}, children), res);
 }
 /**
  * @param {?} routes
@@ -4977,7 +4977,7 @@ function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
          * @param {?} urlAfterRedirects
          * @return {?}
          */
-        urlAfterRedirects => (Object.assign({}, t, { urlAfterRedirects }))))))));
+        urlAfterRedirects => (Object.assign(Object.assign({}, t), { urlAfterRedirects }))))))));
     });
 }
 
@@ -5314,7 +5314,7 @@ function checkGuards(moduleInjector, forwardEvent) {
         t => {
             const { targetSnapshot, currentSnapshot, guards: { canActivateChecks, canDeactivateChecks } } = t;
             if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
-                return of(Object.assign({}, t, { guardsResult: true }));
+                return of(Object.assign(Object.assign({}, t), { guardsResult: true }));
             }
             return runCanDeactivateChecks(canDeactivateChecks, (/** @type {?} */ (targetSnapshot)), currentSnapshot, moduleInjector)
                 .pipe(mergeMap((/**
@@ -5329,7 +5329,7 @@ function checkGuards(moduleInjector, forwardEvent) {
              * @param {?} guardsResult
              * @return {?}
              */
-            guardsResult => (Object.assign({}, t, { guardsResult })))));
+            guardsResult => (Object.assign(Object.assign({}, t), { guardsResult })))));
         })));
     });
 }
@@ -5841,7 +5841,7 @@ function match$1(segmentGroup, route, segments) {
      */
     (v, k) => { posParams[k] = v.path; }));
     /** @type {?} */
-    const parameters = res.consumed.length > 0 ? Object.assign({}, posParams, res.consumed[res.consumed.length - 1].parameters) :
+    const parameters = res.consumed.length > 0 ? Object.assign(Object.assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
         posParams;
     return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters };
 }
@@ -5961,7 +5961,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedS
             res[getOutlet$1(r)] = s;
         }
     }
-    return Object.assign({}, children, res);
+    return Object.assign(Object.assign({}, children), res);
 }
 /**
  * @param {?} segmentGroup
@@ -6074,7 +6074,7 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
          * @param {?} targetSnapshot
          * @return {?}
          */
-        targetSnapshot => (Object.assign({}, t, { targetSnapshot }))))))));
+        targetSnapshot => (Object.assign(Object.assign({}, t), { targetSnapshot }))))))));
     });
 }
 
@@ -6137,7 +6137,7 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjec
      */
     (resolvedData) => {
         futureARS._resolvedData = resolvedData;
-        futureARS.data = Object.assign({}, futureARS.data, inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
+        futureARS.data = Object.assign(Object.assign({}, futureARS.data), inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
         return null;
     })));
 }
@@ -6835,7 +6835,7 @@ class Router {
          * @param {?} t
          * @return {?}
          */
-        t => ((/** @type {?} */ (Object.assign({}, t, { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })))))), 
+        t => ((/** @type {?} */ (Object.assign(Object.assign({}, t), { extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })))))), 
         // Using switchMap so we cancel executing navigations when a new one comes in
         switchMap((/**
          * @param {?} t
@@ -6859,7 +6859,7 @@ class Router {
                     extractedUrl: t.extractedUrl,
                     trigger: t.source,
                     extras: t.extras,
-                    previousNavigation: this.lastSuccessfulNavigation ? Object.assign({}, this.lastSuccessfulNavigation, { previousNavigation: null }) :
+                    previousNavigation: this.lastSuccessfulNavigation ? Object.assign(Object.assign({}, this.lastSuccessfulNavigation), { previousNavigation: null }) :
                         null
                 };
             })), switchMap((/**
@@ -6903,7 +6903,7 @@ class Router {
                      * @return {?}
                      */
                     t => {
-                        this.currentNavigation = Object.assign({}, (/** @type {?} */ (this.currentNavigation)), { finalUrl: t.urlAfterRedirects });
+                        this.currentNavigation = Object.assign(Object.assign({}, (/** @type {?} */ (this.currentNavigation))), { finalUrl: t.urlAfterRedirects });
                     })), 
                     // Recognize
                     recognize$1(this.rootComponentType, this.config, (/**
@@ -6949,7 +6949,7 @@ class Router {
                         eventsSubject.next(navStart);
                         /** @type {?} */
                         const targetSnapshot = createEmptyState(extractedUrl, this.rootComponentType).snapshot;
-                        return of(Object.assign({}, t, { targetSnapshot, urlAfterRedirects: extractedUrl, extras: Object.assign({}, extras, { skipLocationChange: false, replaceUrl: false }) }));
+                        return of(Object.assign(Object.assign({}, t), { targetSnapshot, urlAfterRedirects: extractedUrl, extras: Object.assign(Object.assign({}, extras), { skipLocationChange: false, replaceUrl: false }) }));
                     }
                     else {
                         /* When neither the current or previous URL can be processed, do nothing other
@@ -6991,7 +6991,7 @@ class Router {
              * @param {?} t
              * @return {?}
              */
-            t => (Object.assign({}, t, { guards: getAllRouteGuards((/** @type {?} */ (t.targetSnapshot)), t.currentSnapshot, this.rootContexts) })))), checkGuards(this.ngModule.injector, (/**
+            t => (Object.assign(Object.assign({}, t), { guards: getAllRouteGuards((/** @type {?} */ (t.targetSnapshot)), t.currentSnapshot, this.rootContexts) })))), checkGuards(this.ngModule.injector, (/**
              * @param {?} evt
              * @return {?}
              */
@@ -7078,7 +7078,7 @@ class Router {
             (t) => {
                 /** @type {?} */
                 const targetRouterState = createRouterState(this.routeReuseStrategy, (/** @type {?} */ (t.targetSnapshot)), t.currentRouterState);
-                return (Object.assign({}, t, { targetRouterState }));
+                return (Object.assign(Object.assign({}, t), { targetRouterState }));
             })), 
             /* Once here, we are about to activate syncronously. The assumption is this will
                succeed, and user code may read from the Router service. Therefore before
@@ -7158,9 +7158,29 @@ class Router {
                     /** @type {?} */
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), e.message);
                     eventsSubject.next(navCancel);
-                    t.resolve(false);
-                    if (redirecting) {
-                        this.navigateByUrl(e.url);
+                    // When redirecting, we need to delay resolving the navigation
+                    // promise and push it to the redirect navigation
+                    if (!redirecting) {
+                        t.resolve(false);
+                    }
+                    else {
+                        // setTimeout is required so this navigation finishes with
+                        // the return EMPTY below. If it isn't allowed to finish
+                        // processing, there can be multiple navigations to the same
+                        // URL.
+                        setTimeout((/**
+                         * @return {?}
+                         */
+                        () => {
+                            /** @type {?} */
+                            const mergedTree = this.urlHandlingStrategy.merge(e.url, this.rawUrlTree);
+                            /** @type {?} */
+                            const extras = {
+                                skipLocationChange: t.extras.skipLocationChange,
+                                replaceUrl: this.urlUpdateStrategy === 'eager'
+                            };
+                            return this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
+                        }), 0);
                     }
                     /* All other errors should reset to the router's internal URL reference to the
                      * pre-error state. */
@@ -7213,7 +7233,7 @@ class Router {
      * @return {?}
      */
     setTransition(t) {
-        this.transitions.next(Object.assign({}, this.getTransition(), t));
+        this.transitions.next(Object.assign(Object.assign({}, this.getTransition()), t));
     }
     /**
      * Sets up the location change listener and performs the initial navigation.
@@ -7367,7 +7387,7 @@ class Router {
         if (queryParamsHandling) {
             switch (queryParamsHandling) {
                 case 'merge':
-                    q = Object.assign({}, this.currentUrlTree.queryParams, queryParams);
+                    q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
                     break;
                 case 'preserve':
                     q = this.currentUrlTree.queryParams;
@@ -7534,9 +7554,10 @@ class Router {
      * @param {?} source
      * @param {?} restoredState
      * @param {?} extras
+     * @param {?=} priorPromise
      * @return {?}
      */
-    scheduleNavigation(rawUrl, source, restoredState, extras) {
+    scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
         /** @type {?} */
         const lastNavigation = this.getTransition();
         // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
@@ -7561,19 +7582,27 @@ class Router {
             return Promise.resolve(true); // return value is not used
         }
         /** @type {?} */
-        let resolve = null;
+        let resolve;
         /** @type {?} */
-        let reject = null;
+        let reject;
         /** @type {?} */
-        const promise = new Promise((/**
-         * @param {?} res
-         * @param {?} rej
-         * @return {?}
-         */
-        (res, rej) => {
-            resolve = res;
-            reject = rej;
-        }));
+        let promise;
+        if (priorPromise) {
+            resolve = priorPromise.resolve;
+            reject = priorPromise.reject;
+            promise = priorPromise.promise;
+        }
+        else {
+            promise = new Promise((/**
+             * @param {?} res
+             * @param {?} rej
+             * @return {?}
+             */
+            (res, rej) => {
+                resolve = res;
+                reject = rej;
+            }));
+        }
         /** @type {?} */
         const id = ++this.navigationId;
         this.setTransition({
@@ -7607,10 +7636,10 @@ class Router {
         state = state || {};
         if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
             // TODO(jasonaden): Remove first `navigationId` and rely on `ng` namespace.
-            this.location.replaceState(path, '', Object.assign({}, state, { navigationId: id }));
+            this.location.replaceState(path, '', Object.assign(Object.assign({}, state), { navigationId: id }));
         }
         else {
-            this.location.go(path, '', Object.assign({}, state, { navigationId: id }));
+            this.location.go(path, '', Object.assign(Object.assign({}, state), { navigationId: id }));
         }
     }
     /**
@@ -9360,7 +9389,8 @@ class RouterModule {
      * @param {?} guard
      * @param {?} router
      */
-    constructor(guard, router) { }
+    constructor(guard, router) {
+    }
     /**
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
@@ -9913,7 +9943,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-next.11+24.sha-20be755.with-local-changes');
+const VERSION = new Version('9.0.0-next.12+50.sha-dfff5fe.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
