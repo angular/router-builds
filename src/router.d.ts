@@ -17,6 +17,7 @@ import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
 import { UrlSerializer, UrlTree } from './url_tree';
 import { Checks } from './utils/preactivation';
+import * as i0 from "@angular/core";
 /**
  * @description
  *
@@ -463,4 +464,6 @@ export declare class Router {
     private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
+    static ɵfac: i0.ɵɵFactoryDef<Router>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<Router, never, never, {}, {}, never>;
 }

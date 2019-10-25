@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.13+53.sha-3505692.with-local-changes
+ * @license Angular v9.0.0-next.13+54.sha-14c4b1b.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3850,13 +3850,6 @@
         return DefaultUrlHandlingStrategy;
     }());
 
-    /**
-     * @license
-     * Copyright Google Inc. All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     function defaultErrorHandler(error) {
         throw error;
     }
@@ -4583,6 +4576,8 @@
         Router.prototype.resetUrlToCurrentUrlTree = function () {
             this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
         };
+        Router.ɵfac = function Router_Factory(t) { i0.ɵɵinvalidFactory(); };
+        Router.ɵdir = i0.ɵɵdefineDirective({ type: Router, selectors: [] });
         return Router;
     }());
     function validateCommands(commands) {
@@ -5451,13 +5446,6 @@
             type: i0.Injectable
         }], function () { return [{ type: Router }, { type: i0.NgModuleFactoryLoader }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; }, null);
 
-    /**
-     * @license
-     * Copyright Google Inc. All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var RouterScroller = /** @class */ (function () {
         function RouterScroller(router, 
         /** @docsNotRequired */ viewportScroller, options) {
@@ -5534,6 +5522,8 @@
                 this.scrollEventsSubscription.unsubscribe();
             }
         };
+        RouterScroller.ɵfac = function RouterScroller_Factory(t) { i0.ɵɵinvalidFactory(); };
+        RouterScroller.ɵdir = i0.ɵɵdefineDirective({ type: RouterScroller, selectors: [] });
         return RouterScroller;
     }());
 
@@ -5910,7 +5900,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-next.13+53.sha-3505692.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-next.13+54.sha-14c4b1b.with-local-changes');
 
     /**
      * @license

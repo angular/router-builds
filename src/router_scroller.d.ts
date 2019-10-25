@@ -8,6 +8,7 @@
 import { ViewportScroller } from '@angular/common';
 import { OnDestroy } from '@angular/core';
 import { Router } from './router';
+import * as i0 from "@angular/core";
 export declare class RouterScroller implements OnDestroy {
     private router;
     /** @docsNotRequired */ readonly viewportScroller: ViewportScroller;
@@ -28,4 +29,6 @@ export declare class RouterScroller implements OnDestroy {
     private consumeScrollEvents;
     private scheduleScrollEvent;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDef<RouterScroller>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterScroller, never, never, {}, {}, never>;
 }
