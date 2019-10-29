@@ -118,7 +118,7 @@ export class RouterScroller {
     }
 }
 /** @nocollapse */ RouterScroller.ɵfac = function RouterScroller_Factory(t) { i0.ɵɵinvalidFactory(); };
-/** @nocollapse */ RouterScroller.ɵdir = i0.ɵɵdefineDirective({ type: RouterScroller, selectors: [] });
+/** @nocollapse */ RouterScroller.ɵdir = i0.ɵɵdefineDirective({ type: RouterScroller });
 if (false) {
     /**
      * @type {?}

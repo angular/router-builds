@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.14+24.sha-d1246a1.with-local-changes
+ * @license Angular v9.0.0-next.14+25.sha-c3e9356.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4380,7 +4380,7 @@ var Router = /** @class */ (function () {
         this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
     };
     Router.ɵfac = function Router_Factory(t) { ɵɵinvalidFactory(); };
-    Router.ɵdir = ɵɵdefineDirective({ type: Router, selectors: [] });
+    Router.ɵdir = ɵɵdefineDirective({ type: Router });
     return Router;
 }());
 function validateCommands(commands) {
@@ -5326,7 +5326,7 @@ var RouterScroller = /** @class */ (function () {
         }
     };
     RouterScroller.ɵfac = function RouterScroller_Factory(t) { ɵɵinvalidFactory(); };
-    RouterScroller.ɵdir = ɵɵdefineDirective({ type: RouterScroller, selectors: [] });
+    RouterScroller.ɵdir = ɵɵdefineDirective({ type: RouterScroller });
     return RouterScroller;
 }());
 
@@ -5703,7 +5703,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-next.14+24.sha-d1246a1.with-local-changes');
+var VERSION = new Version('9.0.0-next.14+25.sha-c3e9356.with-local-changes');
 
 /**
  * @license

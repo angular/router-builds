@@ -77,7 +77,7 @@ var RouterScroller = /** @class */ (function () {
         }
     };
     RouterScroller.ɵfac = function RouterScroller_Factory(t) { i0.ɵɵinvalidFactory(); };
-    RouterScroller.ɵdir = i0.ɵɵdefineDirective({ type: RouterScroller, selectors: [] });
+    RouterScroller.ɵdir = i0.ɵɵdefineDirective({ type: RouterScroller });
     return RouterScroller;
 }());
 export { RouterScroller };

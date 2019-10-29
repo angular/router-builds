@@ -748,7 +748,7 @@ var Router = /** @class */ (function () {
         this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
     };
     Router.ɵfac = function Router_Factory(t) { i0.ɵɵinvalidFactory(); };
-    Router.ɵdir = i0.ɵɵdefineDirective({ type: Router, selectors: [] });
+    Router.ɵdir = i0.ɵɵdefineDirective({ type: Router });
     return Router;
 }());
 export { Router };

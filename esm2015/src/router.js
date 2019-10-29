@@ -1187,7 +1187,7 @@ export class Router {
     }
 }
 /** @nocollapse */ Router.ɵfac = function Router_Factory(t) { i0.ɵɵinvalidFactory(); };
-/** @nocollapse */ Router.ɵdir = i0.ɵɵdefineDirective({ type: Router, selectors: [] });
+/** @nocollapse */ Router.ɵdir = i0.ɵɵdefineDirective({ type: Router });
 if (false) {
     /**
      * @type {?}
