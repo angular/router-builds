@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
+ * @license Angular v9.0.0-rc.0+63.sha-3de72e4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9943,7 +9943,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.0+62.sha-d751ca7.with-local-changes');
+const VERSION = new Version('9.0.0-rc.0+63.sha-3de72e4.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
@@ -9969,5 +9969,5 @@ const VERSION = new Version('9.0.0-rc.0+62.sha-d751ca7.with-local-changes');
  * Generated bundle index. Do not edit.
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, routerNgProbeToken as ɵangular_packages_router_router_b, createRouterScroller as ɵangular_packages_router_router_c, provideLocationStrategy as ɵangular_packages_router_router_d, provideForRootGuard as ɵangular_packages_router_router_e, setupRouter as ɵangular_packages_router_router_f, rootRoute as ɵangular_packages_router_router_g, RouterInitializer as ɵangular_packages_router_router_h, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideRouterInitializer as ɵangular_packages_router_router_k, ɵEmptyOutletComponent as ɵangular_packages_router_router_l, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterScroller as ɵangular_packages_router_router_o, flatten as ɵflatten };
+export { ɵEmptyOutletComponent as ɵangular_packages_router_router_l, ɵEmptyOutletComponent, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, RouterInitializer as ɵangular_packages_router_router_h, createRouterScroller as ɵangular_packages_router_router_c, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideForRootGuard as ɵangular_packages_router_router_e, provideLocationStrategy as ɵangular_packages_router_router_d, provideRouterInitializer as ɵangular_packages_router_router_k, rootRoute as ɵangular_packages_router_router_g, routerNgProbeToken as ɵangular_packages_router_router_b, setupRouter as ɵangular_packages_router_router_f, RouterScroller as ɵangular_packages_router_router_o, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterLink, RouterLinkWithHref, RouterLinkActive, RouterOutlet, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouterEvent, RoutesRecognized, Scroll, RouteReuseStrategy, Router, ROUTES, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, RouterModule, provideRoutes, ChildrenOutletContexts, OutletContext, NoPreloading, PreloadAllModules, PreloadingStrategy, RouterPreloader, ActivatedRoute, ActivatedRouteSnapshot, RouterState, RouterStateSnapshot, PRIMARY_OUTLET, convertToParamMap, UrlHandlingStrategy, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map

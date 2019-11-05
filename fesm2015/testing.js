@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
+ * @license Angular v9.0.0-rc.0+63.sha-3de72e4.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -231,5 +231,5 @@ RouterTestingModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { RouterTestingModule, SpyNgModuleFactoryLoader, setupTestingRouter };
+export { setupTestingRouter, SpyNgModuleFactoryLoader, RouterTestingModule };
 //# sourceMappingURL=testing.js.map
