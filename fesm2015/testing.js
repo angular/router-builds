@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+47.sha-85298e3.with-local-changes
+ * @license Angular v9.0.0-rc.0+62.sha-d751ca7.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -273,5 +273,5 @@ RouterTestingModule.decorators = [
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { setupTestingRouter, SpyNgModuleFactoryLoader, RouterTestingModule };
+export { RouterTestingModule, SpyNgModuleFactoryLoader, setupTestingRouter };
 //# sourceMappingURL=testing.js.map
