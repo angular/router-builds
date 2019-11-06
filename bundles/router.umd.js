@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.0+62.sha-d8e6501.with-local-changes
+ * @license Angular v9.0.0-rc.0+63.sha-88eefd8.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4102,9 +4102,9 @@
                     _this.triggerEvent(guardsStart);
                 }), operators.map(function (t) { return (__assign(__assign({}, t), { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), operators.tap(function (t) {
                     if (isUrlTree(t.guardsResult)) {
-                        var error_1 = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
-                        error_1.url = t.guardsResult;
-                        throw error_1;
+                        var error = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
+                        error.url = t.guardsResult;
+                        throw error;
                     }
                 }), operators.tap(function (t) {
                     var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
@@ -5935,7 +5935,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.0.0-rc.0+62.sha-d8e6501.with-local-changes');
+    var VERSION = new core.Version('9.0.0-rc.0+63.sha-88eefd8.with-local-changes');
 
     /**
      * @license
