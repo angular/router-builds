@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-next.12+25.sha-083d4b8.with-local-changes
+ * @license Angular v9.0.0-rc.1+58.sha-dbd55fc.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
     typeof define === 'function' && define.amd ? define('@angular/router', ['exports', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.router = {}), global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, function (exports, common, core, rxjs, operators) { 'use strict';
+}(this, (function (exports, common, core, rxjs, operators) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -4102,9 +4102,9 @@
                     _this.triggerEvent(guardsStart);
                 }), operators.map(function (t) { return (__assign(__assign({}, t), { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), operators.tap(function (t) {
                     if (isUrlTree(t.guardsResult)) {
-                        var error_1 = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
-                        error_1.url = t.guardsResult;
-                        throw error_1;
+                        var error = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
+                        error.url = t.guardsResult;
+                        throw error;
                     }
                 }), operators.tap(function (t) {
                     var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
@@ -5935,7 +5935,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.0.0-next.12+25.sha-083d4b8.with-local-changes');
+    var VERSION = new core.Version('9.0.0-rc.1+58.sha-dbd55fc.with-local-changes');
 
     /**
      * @license
@@ -5974,73 +5974,73 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ɵangular_packages_router_router_l = ɵEmptyOutletComponent;
-    exports.ɵEmptyOutletComponent = ɵEmptyOutletComponent;
-    exports.ɵangular_packages_router_router_a = ROUTER_FORROOT_GUARD;
-    exports.ɵangular_packages_router_router_h = RouterInitializer;
-    exports.ɵangular_packages_router_router_c = createRouterScroller;
-    exports.ɵangular_packages_router_router_i = getAppInitializer;
-    exports.ɵangular_packages_router_router_j = getBootstrapListener;
-    exports.ɵangular_packages_router_router_e = provideForRootGuard;
-    exports.ɵangular_packages_router_router_d = provideLocationStrategy;
-    exports.ɵangular_packages_router_router_k = provideRouterInitializer;
-    exports.ɵangular_packages_router_router_g = rootRoute;
-    exports.ɵangular_packages_router_router_b = routerNgProbeToken;
-    exports.ɵangular_packages_router_router_f = setupRouter;
-    exports.ɵangular_packages_router_router_o = RouterScroller;
-    exports.ɵangular_packages_router_router_m = Tree;
-    exports.ɵangular_packages_router_router_n = TreeNode;
-    exports.RouterLink = RouterLink;
-    exports.RouterLinkWithHref = RouterLinkWithHref;
-    exports.RouterLinkActive = RouterLinkActive;
-    exports.RouterOutlet = RouterOutlet;
+    exports.ActivatedRoute = ActivatedRoute;
+    exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
     exports.ActivationEnd = ActivationEnd;
     exports.ActivationStart = ActivationStart;
     exports.ChildActivationEnd = ChildActivationEnd;
     exports.ChildActivationStart = ChildActivationStart;
+    exports.ChildrenOutletContexts = ChildrenOutletContexts;
+    exports.DefaultUrlSerializer = DefaultUrlSerializer;
     exports.GuardsCheckEnd = GuardsCheckEnd;
     exports.GuardsCheckStart = GuardsCheckStart;
     exports.NavigationCancel = NavigationCancel;
     exports.NavigationEnd = NavigationEnd;
     exports.NavigationError = NavigationError;
     exports.NavigationStart = NavigationStart;
+    exports.NoPreloading = NoPreloading;
+    exports.OutletContext = OutletContext;
+    exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
+    exports.PreloadAllModules = PreloadAllModules;
+    exports.PreloadingStrategy = PreloadingStrategy;
+    exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
+    exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
+    exports.ROUTES = ROUTES;
     exports.ResolveEnd = ResolveEnd;
     exports.ResolveStart = ResolveStart;
     exports.RouteConfigLoadEnd = RouteConfigLoadEnd;
     exports.RouteConfigLoadStart = RouteConfigLoadStart;
-    exports.RouterEvent = RouterEvent;
-    exports.RoutesRecognized = RoutesRecognized;
-    exports.Scroll = Scroll;
     exports.RouteReuseStrategy = RouteReuseStrategy;
     exports.Router = Router;
-    exports.ROUTES = ROUTES;
-    exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
-    exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
+    exports.RouterEvent = RouterEvent;
+    exports.RouterLink = RouterLink;
+    exports.RouterLinkActive = RouterLinkActive;
+    exports.RouterLinkWithHref = RouterLinkWithHref;
     exports.RouterModule = RouterModule;
-    exports.provideRoutes = provideRoutes;
-    exports.ChildrenOutletContexts = ChildrenOutletContexts;
-    exports.OutletContext = OutletContext;
-    exports.NoPreloading = NoPreloading;
-    exports.PreloadAllModules = PreloadAllModules;
-    exports.PreloadingStrategy = PreloadingStrategy;
+    exports.RouterOutlet = RouterOutlet;
     exports.RouterPreloader = RouterPreloader;
-    exports.ActivatedRoute = ActivatedRoute;
-    exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
     exports.RouterState = RouterState;
     exports.RouterStateSnapshot = RouterStateSnapshot;
-    exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
-    exports.convertToParamMap = convertToParamMap;
+    exports.RoutesRecognized = RoutesRecognized;
+    exports.Scroll = Scroll;
     exports.UrlHandlingStrategy = UrlHandlingStrategy;
-    exports.DefaultUrlSerializer = DefaultUrlSerializer;
     exports.UrlSegment = UrlSegment;
     exports.UrlSegmentGroup = UrlSegmentGroup;
     exports.UrlSerializer = UrlSerializer;
     exports.UrlTree = UrlTree;
     exports.VERSION = VERSION;
+    exports.convertToParamMap = convertToParamMap;
+    exports.provideRoutes = provideRoutes;
+    exports.ɵEmptyOutletComponent = ɵEmptyOutletComponent;
     exports.ɵROUTER_PROVIDERS = ROUTER_PROVIDERS;
+    exports.ɵangular_packages_router_router_a = ROUTER_FORROOT_GUARD;
+    exports.ɵangular_packages_router_router_b = routerNgProbeToken;
+    exports.ɵangular_packages_router_router_c = createRouterScroller;
+    exports.ɵangular_packages_router_router_d = provideLocationStrategy;
+    exports.ɵangular_packages_router_router_e = provideForRootGuard;
+    exports.ɵangular_packages_router_router_f = setupRouter;
+    exports.ɵangular_packages_router_router_g = rootRoute;
+    exports.ɵangular_packages_router_router_h = RouterInitializer;
+    exports.ɵangular_packages_router_router_i = getAppInitializer;
+    exports.ɵangular_packages_router_router_j = getBootstrapListener;
+    exports.ɵangular_packages_router_router_k = provideRouterInitializer;
+    exports.ɵangular_packages_router_router_l = ɵEmptyOutletComponent;
+    exports.ɵangular_packages_router_router_m = Tree;
+    exports.ɵangular_packages_router_router_n = TreeNode;
+    exports.ɵangular_packages_router_router_o = RouterScroller;
     exports.ɵflatten = flatten;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=router.umd.js.map
