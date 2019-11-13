@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+89.sha-f1b3284.with-local-changes
+ * @license Angular v9.0.0-rc.1+100.sha-b30bb8d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1361,11 +1361,31 @@ function shallowEqual(a, b) {
     let key;
     for (let i = 0; i < k1.length; i++) {
         key = k1[i];
-        if (a[key] !== b[key]) {
+        if (!equalArraysOrString(a[key], b[key])) {
             return false;
         }
     }
     return true;
+}
+/**
+ * Test equality for arrays of strings or a string.
+ * @param {?} a
+ * @param {?} b
+ * @return {?}
+ */
+function equalArraysOrString(a, b) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length != b.length)
+            return false;
+        return a.every((/**
+         * @param {?} aItem
+         * @return {?}
+         */
+        aItem => b.indexOf(aItem) > -1));
+    }
+    else {
+        return a === b;
+    }
 }
 /**
  * Flattens single-level nested arrays.
@@ -1535,7 +1555,7 @@ function containsQueryParams(container, containee) {
          * @param {?} key
          * @return {?}
          */
-        key => containee[key] === container[key]));
+        key => equalArraysOrString(container[key], containee[key])));
 }
 /**
  * @param {?} container
@@ -9943,7 +9963,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.1+89.sha-f1b3284.with-local-changes');
+const VERSION = new Version('9.0.0-rc.1+100.sha-b30bb8d.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
