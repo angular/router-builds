@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "8.2.13+4.sha-2c74996.with-local-changes",
+  "version": "8.2.13+5.sha-03b3a38.with-local-changes",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./fesm5/router.js",
@@ -28,9 +28,9 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@angular/core": "8.2.13+4.sha-2c74996.with-local-changes",
-    "@angular/common": "8.2.13+4.sha-2c74996.with-local-changes",
-    "@angular/platform-browser": "8.2.13+4.sha-2c74996.with-local-changes",
+    "@angular/core": "8.2.13+5.sha-03b3a38.with-local-changes",
+    "@angular/common": "8.2.13+5.sha-03b3a38.with-local-changes",
+    "@angular/platform-browser": "8.2.13+5.sha-03b3a38.with-local-changes",
     "rxjs": "^6.4.0"
   },
   "ng-update": {
@@ -54,5 +54,8 @@
       "@angular/service-worker"
     ]
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  }
 }
