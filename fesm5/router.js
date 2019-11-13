@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+89.sha-f1b3284.with-local-changes
+ * @license Angular v9.0.0-rc.1+100.sha-b30bb8d.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -662,11 +662,24 @@ function shallowEqual(a, b) {
     var key;
     for (var i = 0; i < k1.length; i++) {
         key = k1[i];
-        if (a[key] !== b[key]) {
+        if (!equalArraysOrString(a[key], b[key])) {
             return false;
         }
     }
     return true;
+}
+/**
+ * Test equality for arrays of strings or a string.
+ */
+function equalArraysOrString(a, b) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length != b.length)
+            return false;
+        return a.every(function (aItem) { return b.indexOf(aItem) > -1; });
+    }
+    else {
+        return a === b;
+    }
 }
 /**
  * Flattens single-level nested arrays.
@@ -766,7 +779,7 @@ function equalSegmentGroups(container, containee) {
 function containsQueryParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return Object.keys(containee).length <= Object.keys(container).length &&
-        Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
+        Object.keys(containee).every(function (key) { return equalArraysOrString(container[key], containee[key]); });
 }
 function containsSegmentGroup(container, containee) {
     return containsSegmentGroupHelper(container, containee, containee.segments);
@@ -4843,8 +4856,8 @@ var RouterLinkActive = /** @class */ (function () {
             ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
         } if (rf & 2) {
             var _t;
-            ɵɵqueryRefresh((_t = ɵɵloadQuery())) && (ctx.links = _t);
-            ɵɵqueryRefresh((_t = ɵɵloadQuery())) && (ctx.linksWithHrefs = _t);
+            ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.links = _t);
+            ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.linksWithHrefs = _t);
         } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature()] });
     return RouterLinkActive;
 }());
@@ -5703,7 +5716,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-rc.1+89.sha-f1b3284.with-local-changes');
+var VERSION = new Version('9.0.0-rc.1+100.sha-b30bb8d.with-local-changes');
 
 /**
  * @license

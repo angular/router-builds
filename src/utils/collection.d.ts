@@ -6,12 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Observable } from 'rxjs';
+import { Params } from '../shared';
 export declare function shallowEqualArrays(a: any[], b: any[]): boolean;
-export declare function shallowEqual(a: {
-    [x: string]: any;
-}, b: {
-    [x: string]: any;
-}): boolean;
+export declare function shallowEqual(a: Params, b: Params): boolean;
+/**
+ * Test equality for arrays of strings or a string.
+ */
+export declare function equalArraysOrString(a: string | string[], b: string | string[]): boolean;
 /**
  * Flattens single-level nested arrays.
  */
