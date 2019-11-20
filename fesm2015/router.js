@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+186.sha-97fbdab.with-local-changes
+ * @license Angular v9.0.0-rc.1+188.sha-b54ed98.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9645,7 +9645,7 @@ RouterModule.ctorParameters = () => [
 ];
 /** @nocollapse */ RouterModule.ɵmod = ɵɵdefineNgModule({ type: RouterModule });
 /** @nocollapse */ RouterModule.ɵinj = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
-/*@__PURE__*/ ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
 /*@__PURE__*/ ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
         args: [{
@@ -10156,7 +10156,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.1+186.sha-97fbdab.with-local-changes');
+const VERSION = new Version('9.0.0-rc.1+188.sha-b54ed98.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
