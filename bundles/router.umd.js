@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+188.sha-b54ed98.with-local-changes
+ * @license Angular v9.0.0-rc.1+197.sha-55748db.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -640,10 +640,10 @@
             } }, encapsulation: 2 });
         return ɵEmptyOutletComponent;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(ɵEmptyOutletComponent, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(ɵEmptyOutletComponent, [{
             type: i0.Component,
             args: [{ template: "<router-outlet></router-outlet>" }]
-        }], null, null);
+        }], null, null); })();
 
     /**
      * @license
@@ -4752,7 +4752,7 @@
             } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
         return RouterLink;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLink, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterLink, [{
             type: i0.Directive,
             args: [{ selector: ':not(a):not(area)[routerLink]' }]
         }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: undefined, decorators: [{
@@ -4779,7 +4779,7 @@
             }], onClick: [{
                 type: i0.HostListener,
                 args: ['click']
-            }] });
+            }] }); })();
     /**
      * @description
      *
@@ -4870,7 +4870,7 @@
             } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [i0.ɵɵNgOnChangesFeature()] });
         return RouterLinkWithHref;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkWithHref, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterLinkWithHref, [{
             type: i0.Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]' }]
         }], function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, { target: [{
@@ -4901,7 +4901,7 @@
             }], onClick: [{
                 type: i0.HostListener,
                 args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey']]
-            }] });
+            }] }); })();
     function attrBoolValue(s) {
         return s === '' || !!s;
     }
@@ -5045,7 +5045,7 @@
             } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵɵNgOnChangesFeature()] });
         return RouterLinkActive;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterLinkActive, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterLinkActive, [{
             type: i0.Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -5065,7 +5065,7 @@
                 type: i0.Input
             }], routerLinkActive: [{
                 type: i0.Input
-            }] });
+            }] }); })();
 
     /**
      * @license
@@ -5285,7 +5285,7 @@
         RouterOutlet.ɵdir = i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
         return RouterOutlet;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterOutlet, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterOutlet, [{
             type: i0.Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
         }], function () { return [{ type: ChildrenOutletContexts }, { type: i0.ViewContainerRef }, { type: i0.ComponentFactoryResolver }, { type: undefined, decorators: [{
@@ -5297,7 +5297,7 @@
             }], deactivateEvents: [{
                 type: i0.Output,
                 args: ['deactivate']
-            }] });
+            }] }); })();
     var OutletInjector = /** @class */ (function () {
         function OutletInjector(route, childContexts, parent) {
             this.route = route;
@@ -5442,9 +5442,9 @@
         RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
         return RouterPreloader;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterPreloader, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterPreloader, [{
             type: i0.Injectable
-        }], function () { return [{ type: Router }, { type: i0.NgModuleFactoryLoader }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; }, null);
+        }], function () { return [{ type: Router }, { type: i0.NgModuleFactoryLoader }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; }, null); })();
 
     var RouterScroller = /** @class */ (function () {
         function RouterScroller(router, 
@@ -5679,7 +5679,7 @@
         return RouterModule;
     }());
     (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterModule, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterModule, [{
             type: i0.NgModule,
             args: [{
                     declarations: ROUTER_DIRECTIVES,
@@ -5693,7 +5693,7 @@
                     args: [ROUTER_FORROOT_GUARD]
                 }] }, { type: Router, decorators: [{
                     type: i0.Optional
-                }] }]; }, null);
+                }] }]; }, null); })();
     i0.ɵɵsetComponentScope(ɵEmptyOutletComponent, [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], []);
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
@@ -5860,9 +5860,9 @@
         RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
         return RouterInitializer;
     }());
-    /*@__PURE__*/ i0.ɵsetClassMetadata(RouterInitializer, [{
+    /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterInitializer, [{
             type: i0.Injectable
-        }], function () { return [{ type: i0.Injector }]; }, null);
+        }], function () { return [{ type: i0.Injector }]; }, null); })();
     function getAppInitializer(r) {
         return r.appInitializer.bind(r);
     }
@@ -5900,7 +5900,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-rc.1+188.sha-b54ed98.with-local-changes');
+    var VERSION = new i0.Version('9.0.0-rc.1+197.sha-55748db.with-local-changes');
 
     /**
      * @license

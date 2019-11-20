@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+188.sha-b54ed98.with-local-changes
+ * @license Angular v9.0.0-rc.1+197.sha-55748db.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -100,9 +100,9 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
 ];
 /** @nocollapse */ SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
 /** @nocollapse */ SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function (t) { return SpyNgModuleFactoryLoader.ɵfac(t); }, providedIn: null });
-/*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+/*@__PURE__*/ (function () { ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
-    }], function () { return [{ type: Compiler }]; }, null);
+    }], function () { return [{ type: Compiler }]; }, null); })();
 if (false) {
     /**
      * \@docsNotRequired
@@ -238,7 +238,7 @@ RouterTestingModule.decorators = [
         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
     ], imports: [RouterModule] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
-/*@__PURE__*/ ɵsetClassMetadata(RouterTestingModule, [{
+/*@__PURE__*/ (function () { ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
         args: [{
                 exports: [RouterModule],
@@ -256,7 +256,7 @@ RouterTestingModule.decorators = [
                     { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
                 ]
             }]
-    }], null, null);
+    }], null, null); })();
 
 /**
  * @fileoverview added by tsickle

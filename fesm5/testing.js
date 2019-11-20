@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+188.sha-b54ed98.with-local-changes
+ * @license Angular v9.0.0-rc.1+197.sha-55748db.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -88,9 +88,9 @@ var SpyNgModuleFactoryLoader = /** @class */ (function () {
     SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: function (t) { return SpyNgModuleFactoryLoader.ɵfac(t); }, providedIn: null });
     return SpyNgModuleFactoryLoader;
 }());
-/*@__PURE__*/ ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+/*@__PURE__*/ (function () { ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
-    }], function () { return [{ type: Compiler }]; }, null);
+    }], function () { return [{ type: Compiler }]; }, null); })();
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
@@ -178,7 +178,7 @@ var RouterTestingModule = /** @class */ (function () {
     return RouterTestingModule;
 }());
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
-/*@__PURE__*/ ɵsetClassMetadata(RouterTestingModule, [{
+/*@__PURE__*/ (function () { ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
         args: [{
                 exports: [RouterModule],
@@ -196,7 +196,7 @@ var RouterTestingModule = /** @class */ (function () {
                     { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
                 ]
             }]
-    }], null, null);
+    }], null, null); })();
 
 /**
  * @license
