@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+218.sha-7d579b9.with-local-changes
+ * @license Angular v9.0.0-rc.1+220.sha-828e5c1.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -657,11 +657,24 @@ function shallowEqual(a, b) {
     var key;
     for (var i = 0; i < k1.length; i++) {
         key = k1[i];
-        if (a[key] !== b[key]) {
+        if (!equalArraysOrString(a[key], b[key])) {
             return false;
         }
     }
     return true;
+}
+/**
+ * Test equality for arrays of strings or a string.
+ */
+function equalArraysOrString(a, b) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length != b.length)
+            return false;
+        return a.every(function (aItem) { return b.indexOf(aItem) > -1; });
+    }
+    else {
+        return a === b;
+    }
 }
 /**
  * Flattens single-level nested arrays.
@@ -761,7 +774,7 @@ function equalSegmentGroups(container, containee) {
 function containsQueryParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return Object.keys(containee).length <= Object.keys(container).length &&
-        Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
+        Object.keys(containee).every(function (key) { return equalArraysOrString(container[key], containee[key]); });
 }
 function containsSegmentGroup(container, containee) {
     return containsSegmentGroupHelper(container, containee, containee.segments);
@@ -5738,7 +5751,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-rc.1+218.sha-7d579b9.with-local-changes');
+var VERSION = new Version('9.0.0-rc.1+220.sha-828e5c1.with-local-changes');
 
 /**
  * @license
