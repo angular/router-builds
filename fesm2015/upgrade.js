@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+226.sha-a37bf9a.with-local-changes
+ * @license Angular v9.0.0-rc.1+227.sha-3c335c3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,6 +11,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/upgrade/src/upgrade.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -144,11 +145,13 @@ function resolveUrl(url) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/upgrade/public_api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/upgrade/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

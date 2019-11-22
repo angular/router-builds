@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+226.sha-a37bf9a.with-local-changes
+ * @license Angular v9.0.0-rc.1+227.sha-3c335c3.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,6 +11,7 @@ import { map, concatAll, last as last$1, catchError, first, mergeMap, every, swi
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/events.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -653,6 +654,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/components/empty_outlet.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -687,6 +689,7 @@ class ɵEmptyOutletComponent {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/shared.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -861,6 +864,7 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/config.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1339,6 +1343,7 @@ function standardizeConfig(r) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/utils/collection.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1509,6 +1514,7 @@ function wrapIntoObservable(value) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/url_tree.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2420,6 +2426,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/utils/tree.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2597,6 +2604,7 @@ function nodeChildrenAsMap(node) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3219,6 +3227,7 @@ function equalParamsAndUrlSegments(a, b) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/create_router_state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3318,6 +3327,7 @@ function createActivatedRoute(c) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/create_url_tree.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3794,6 +3804,7 @@ function compare(path, params, segment) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/activate_routes.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -4101,6 +4112,7 @@ function parentLoadedConfig(snapshot) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/utils/type_guards.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -4168,6 +4180,7 @@ function isCanDeactivate(guard) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/apply_redirects.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch {
@@ -4988,6 +5001,7 @@ function getOutlet(route) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/apply_redirects.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -5018,6 +5032,7 @@ function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/utils/preactivation.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CanActivate {
@@ -5261,6 +5276,7 @@ function deactivateRouteAndItsChildren(route, context, checks) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/prioritized_guard_value.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -5329,6 +5345,7 @@ function prioritizedGuardValue() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/check_guards.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -5589,6 +5606,7 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/recognize.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NoMatch$1 {
@@ -6084,6 +6102,7 @@ function getResolve(route) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/recognize.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6115,6 +6134,7 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/resolve_data.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6238,6 +6258,7 @@ function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/operators/switch_tap.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6275,6 +6296,7 @@ function switchTap(next) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/route_reuse_strategy.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6372,6 +6394,7 @@ class DefaultRouteReuseStrategy {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_config_loader.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6468,6 +6491,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/url_handling_strategy.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -6541,6 +6565,7 @@ class DefaultUrlHandlingStrategy {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -7899,6 +7924,7 @@ function validateCommands(commands) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/directives/router_link.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -8388,6 +8414,7 @@ function attrBoolValue(s) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/directives/router_link_active.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -8671,6 +8698,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_outlet_context.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -8787,6 +8815,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/directives/router_outlet.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -9079,6 +9108,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_preloader.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -9321,6 +9351,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_scroller.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -9488,6 +9519,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -10170,31 +10202,36 @@ function provideRouterInitializer() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/version.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.1+226.sha-a37bf9a.with-local-changes');
+const VERSION = new Version('9.0.0-rc.1+227.sha-3c335c3.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/private_export.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/public_api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
