@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+329.sha-02958c0.with-local-changes
+ * @license Angular v9.0.0-rc.1+330.sha-755d2d5.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9317,7 +9317,7 @@ RouterPreloader.ctorParameters = () => [
     { type: PreloadingStrategy }
 ];
 /** @nocollapse */ RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
-/** @nocollapse */ RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: function (t) { return RouterPreloader.ɵfac(t); }, providedIn: null });
+/** @nocollapse */ RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac, providedIn: null });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null); })();
@@ -10140,7 +10140,7 @@ RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
 /** @nocollapse */ RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
-/** @nocollapse */ RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: function (t) { return RouterInitializer.ɵfac(t); }, providedIn: null });
+/** @nocollapse */ RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac, providedIn: null });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{ type: Injector }]; }, null); })();
@@ -10209,7 +10209,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.1+329.sha-02958c0.with-local-changes');
+const VERSION = new Version('9.0.0-rc.1+330.sha-755d2d5.with-local-changes');
 
 /**
  * @fileoverview added by tsickle
