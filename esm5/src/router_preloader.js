@@ -140,7 +140,7 @@ var RouterPreloader = /** @class */ (function () {
         });
     };
     RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(i1.Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
-    RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac, providedIn: null });
+    RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
     return RouterPreloader;
 }());
 export { RouterPreloader };

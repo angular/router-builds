@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+335.sha-56f4e56.with-local-changes
+ * @license Angular v9.0.0-rc.1+336.sha-67eac73.with-local-changes
  * (c) 2010-2019 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5255,7 +5255,7 @@ var RouterPreloader = /** @class */ (function () {
         });
     };
     RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
-    RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac, providedIn: null });
+    RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
     return RouterPreloader;
 }());
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterPreloader, [{
@@ -5673,7 +5673,7 @@ var RouterInitializer = /** @class */ (function () {
         return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     };
     RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
-    RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac, providedIn: null });
+    RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
     return RouterInitializer;
 }());
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterInitializer, [{
@@ -5716,7 +5716,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.0.0-rc.1+335.sha-56f4e56.with-local-changes');
+var VERSION = new Version('9.0.0-rc.1+336.sha-67eac73.with-local-changes');
 
 /**
  * @license

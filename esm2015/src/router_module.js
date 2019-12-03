@@ -640,7 +640,7 @@ RouterInitializer.ctorParameters = () => [
     { type: Injector }
 ];
 /** @nocollapse */ RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
-/** @nocollapse */ RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac, providedIn: null });
+/** @nocollapse */ RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
 /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{ type: i0.Injector }]; }, null); })();

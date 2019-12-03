@@ -94,7 +94,7 @@ SpyNgModuleFactoryLoader.ctorParameters = () => [
     { type: Compiler }
 ];
 /** @nocollapse */ SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.ɵɵinject(i0.Compiler)); };
-/** @nocollapse */ SpyNgModuleFactoryLoader.ɵprov = i0.ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac, providedIn: null });
+/** @nocollapse */ SpyNgModuleFactoryLoader.ɵprov = i0.ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
 /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: i0.Compiler }]; }, null); })();

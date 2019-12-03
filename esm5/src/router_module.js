@@ -348,7 +348,7 @@ var RouterInitializer = /** @class */ (function () {
         return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     };
     RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
-    RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac, providedIn: null });
+    RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
     return RouterInitializer;
 }());
 export { RouterInitializer };

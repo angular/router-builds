@@ -217,7 +217,7 @@ RouterPreloader.ctorParameters = () => [
     { type: PreloadingStrategy }
 ];
 /** @nocollapse */ RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(i1.Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
-/** @nocollapse */ RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac, providedIn: null });
+/** @nocollapse */ RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
 /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{ type: i1.Router }, { type: i0.NgModuleFactoryLoader }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; }, null); })();
