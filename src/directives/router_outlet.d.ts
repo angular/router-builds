@@ -64,5 +64,5 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
     static ɵfac: i0.ɵɵFactoryDef<RouterOutlet>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterOutlet, "router-outlet", ["outlet"], {}, { 'activateEvents': "activate", 'deactivateEvents': "deactivate" }, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; }, never>;
 }

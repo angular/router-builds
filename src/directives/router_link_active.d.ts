@@ -89,5 +89,5 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private isLinkActive;
     private hasActiveLinks;
     static ɵfac: i0.ɵɵFactoryDef<RouterLinkActive>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { 'routerLinkActiveOptions': "routerLinkActiveOptions", 'routerLinkActive': "routerLinkActive" }, {}, ["links", "linksWithHrefs"]>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "routerLinkActive": "routerLinkActive"; }, {}, ["links", "linksWithHrefs"]>;
 }
