@@ -123,13 +123,13 @@ export declare class RouterLink {
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
-    routerLink: any[] | string;
+    set routerLink(commands: any[] | string);
     /**
      * @deprecated 4.0.0 use `queryParamsHandling` instead.
      */
-    preserveQueryParams: boolean;
+    set preserveQueryParams(value: boolean);
     onClick(): boolean;
-    readonly urlTree: UrlTree;
+    get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLink>;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
 }
@@ -165,13 +165,13 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private preserve;
     href: string;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
-    routerLink: any[] | string;
-    preserveQueryParams: boolean;
+    set routerLink(commands: any[] | string);
+    set preserveQueryParams(value: boolean);
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
-    readonly urlTree: UrlTree;
+    get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref>;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
 }

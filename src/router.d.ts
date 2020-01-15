@@ -332,7 +332,7 @@ export declare class Router {
      */
     setUpLocationChangeListener(): void;
     /** The current URL. */
-    readonly url: string;
+    get url(): string;
     /** The current Navigation object if one exists */
     getCurrentNavigation(): Navigation | null;
     /**

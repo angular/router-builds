@@ -75,26 +75,26 @@ export declare class ActivatedRoute {
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
     /** The configuration used to match this route. */
-    readonly routeConfig: Route | null;
+    get routeConfig(): Route | null;
     /** The root of the router state. */
-    readonly root: ActivatedRoute;
+    get root(): ActivatedRoute;
     /** The parent of this route in the router state tree. */
-    readonly parent: ActivatedRoute | null;
+    get parent(): ActivatedRoute | null;
     /** The first child of this route in the router state tree. */
-    readonly firstChild: ActivatedRoute | null;
+    get firstChild(): ActivatedRoute | null;
     /** The children of this route in the router state tree. */
-    readonly children: ActivatedRoute[];
+    get children(): ActivatedRoute[];
     /** The path from the root of the router state tree to this route. */
-    readonly pathFromRoot: ActivatedRoute[];
+    get pathFromRoot(): ActivatedRoute[];
     /** An Observable that contains a map of the required and optional parameters
      * specific to the route.
      * The map supports retrieving single and multiple values from the same parameter. */
-    readonly paramMap: Observable<ParamMap>;
+    get paramMap(): Observable<ParamMap>;
     /**
      * An Observable that contains a map of the query parameters available to all routes.
      * The map supports retrieving single and multiple values from the query parameter.
      */
-    readonly queryParamMap: Observable<ParamMap>;
+    get queryParamMap(): Observable<ParamMap>;
     toString(): string;
 }
 export declare type ParamsInheritanceStrategy = 'emptyOnly' | 'always';
@@ -136,17 +136,17 @@ export declare class ActivatedRouteSnapshot {
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /** The root of the router state */
-    readonly root: ActivatedRouteSnapshot;
+    get root(): ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
-    readonly parent: ActivatedRouteSnapshot | null;
+    get parent(): ActivatedRouteSnapshot | null;
     /** The first child of this route in the router state tree */
-    readonly firstChild: ActivatedRouteSnapshot | null;
+    get firstChild(): ActivatedRouteSnapshot | null;
     /** The children of this route in the router state tree */
-    readonly children: ActivatedRouteSnapshot[];
+    get children(): ActivatedRouteSnapshot[];
     /** The path from the root of the router state tree to this route */
-    readonly pathFromRoot: ActivatedRouteSnapshot[];
-    readonly paramMap: ParamMap;
-    readonly queryParamMap: ParamMap;
+    get pathFromRoot(): ActivatedRouteSnapshot[];
+    get paramMap(): ParamMap;
+    get queryParamMap(): ParamMap;
     toString(): string;
 }
 /**

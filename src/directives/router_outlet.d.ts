@@ -49,10 +49,10 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
     ngOnDestroy(): void;
     ngOnInit(): void;
-    readonly isActivated: boolean;
-    readonly component: Object;
-    readonly activatedRoute: ActivatedRoute;
-    readonly activatedRouteData: Data;
+    get isActivated(): boolean;
+    get component(): Object;
+    get activatedRoute(): ActivatedRoute;
+    get activatedRouteData(): Data;
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      */

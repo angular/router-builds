@@ -48,10 +48,13 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     /**
      * @docsNotRequired
      */
+    set stubbedModules(modules: {
+        [path: string]: any;
+    });
     /**
-    * @docsNotRequired
-    */
-    stubbedModules: {
+     * @docsNotRequired
+     */
+    get stubbedModules(): {
         [path: string]: any;
     };
     constructor(compiler: Compiler);
