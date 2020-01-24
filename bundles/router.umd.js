@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+793.sha-ef95da6
+ * @license Angular v9.0.0-rc.1+806.sha-9bd9590
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4874,8 +4874,7 @@
             configurable: true
         });
         RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
-        RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
-                i0.ɵɵallocHostVars(2);
+        RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
                 i0.ɵɵhostProperty("href", ctx.href, i0.ɵɵsanitizeUrl);
@@ -5913,7 +5912,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-rc.1+793.sha-ef95da6');
+    var VERSION = new i0.Version('9.0.0-rc.1+806.sha-9bd9590');
 
     /**
      * @license
