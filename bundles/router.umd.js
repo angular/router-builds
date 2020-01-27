@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+828.sha-7069a83
+ * @license Angular v9.0.0-rc.1+829.sha-304584c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4760,7 +4760,7 @@
             configurable: true
         });
         RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵinjectAttribute('tabindex'), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ElementRef)); };
-        RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+        RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
             } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
         return RouterLink;
@@ -4874,7 +4874,7 @@
             configurable: true
         });
         RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
-        RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+        RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
             } if (rf & 2) {
                 i0.ɵɵhostProperty("href", ctx.href, i0.ɵɵsanitizeUrl);
@@ -5912,7 +5912,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.0.0-rc.1+828.sha-7069a83');
+    var VERSION = new i0.Version('9.0.0-rc.1+829.sha-304584c');
 
     /**
      * @license

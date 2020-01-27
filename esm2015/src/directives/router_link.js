@@ -202,7 +202,7 @@ RouterLink.propDecorators = {
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 /** @nocollapse */ RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵɵdirectiveInject(i1.Router), i0.ɵɵdirectiveInject(i2.ActivatedRoute), i0.ɵɵinjectAttribute('tabindex'), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ElementRef)); };
-/** @nocollapse */ RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
         i0.ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
     } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
 /*@__PURE__*/ (function () { i0.ɵsetClassMetadata(RouterLink, [{
@@ -400,7 +400,7 @@ RouterLinkWithHref.propDecorators = {
     onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
 };
 /** @nocollapse */ RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(i1.Router), i0.ɵɵdirectiveInject(i2.ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
-/** @nocollapse */ RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
         i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
         i0.ɵɵhostProperty("href", ctx.href, i0.ɵɵsanitizeUrl);

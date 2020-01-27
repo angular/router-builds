@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.0.0-rc.1+828.sha-7069a83
+ * @license Angular v9.0.0-rc.1+829.sha-304584c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8117,7 +8117,7 @@ RouterLink.propDecorators = {
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 /** @nocollapse */ RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); };
-/** @nocollapse */ RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLink_click_HostBindingHandler($event) { return ctx.onClick(); });
     } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" } });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterLink, [{
@@ -8315,7 +8315,7 @@ RouterLinkWithHref.propDecorators = {
     onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
 };
 /** @nocollapse */ RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵdirectiveInject(LocationStrategy)); };
-/** @nocollapse */ RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx, elIndex) { if (rf & 1) {
+/** @nocollapse */ RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
     } if (rf & 2) {
         ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
@@ -10208,7 +10208,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.0.0-rc.1+828.sha-7069a83');
+const VERSION = new Version('9.0.0-rc.1+829.sha-304584c');
 
 /**
  * @fileoverview added by tsickle
