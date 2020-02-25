@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.1+46.sha-3893799
+ * @license Angular v9.1.0-next.1+48.sha-c839c05
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5567,9 +5567,9 @@
             provide: Router,
             useFactory: setupRouter,
             deps: [
-                i0.ApplicationRef, UrlSerializer, ChildrenOutletContexts, i3.Location, i0.Injector,
-                i0.NgModuleFactoryLoader, i0.Compiler, ROUTES, ROUTER_CONFIGURATION,
-                [UrlHandlingStrategy, new i0.Optional()], [RouteReuseStrategy, new i0.Optional()]
+                UrlSerializer, ChildrenOutletContexts, i3.Location, i0.Injector, i0.NgModuleFactoryLoader, i0.Compiler,
+                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new i0.Optional()],
+                [RouteReuseStrategy, new i0.Optional()]
             ]
         },
         ChildrenOutletContexts,
@@ -5746,7 +5746,7 @@
             { provide: ROUTES, multi: true, useValue: routes },
         ];
     }
-    function setupRouter(ref, urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+    function setupRouter(urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
         if (opts === void 0) { opts = {}; }
         var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
         if (urlHandlingStrategy) {
@@ -5912,7 +5912,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('9.1.0-next.1+46.sha-3893799');
+    var VERSION = new i0.Version('9.1.0-next.1+48.sha-c839c05');
 
     /**
      * @license

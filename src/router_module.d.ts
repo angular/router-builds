@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
-import { ApplicationRef, Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, Provider } from '@angular/core';
+import { Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
@@ -308,7 +308,7 @@ export interface ExtraOptions {
      */
     relativeLinkResolution?: 'legacy' | 'corrected';
 }
-export declare function setupRouter(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function setupRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 export declare function rootRoute(router: Router): ActivatedRoute;
 /**
  * Router initialization requires two steps:
