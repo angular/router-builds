@@ -1,11 +1,11 @@
 /**
- * @license Angular v9.1.0-next.1+48.sha-c839c05
+ * @license Angular v9.1.0-next.1+47.sha-737ec52
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, Injectable, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
+import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, Injectable, ApplicationRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
@@ -5370,9 +5370,9 @@ var ROUTER_PROVIDERS = [
         provide: Router,
         useFactory: setupRouter,
         deps: [
-            UrlSerializer, ChildrenOutletContexts, Location, Injector, NgModuleFactoryLoader, Compiler,
-            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
-            [RouteReuseStrategy, new Optional()]
+            ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
+            NgModuleFactoryLoader, Compiler, ROUTES, ROUTER_CONFIGURATION,
+            [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
         ]
     },
     ChildrenOutletContexts,
@@ -5549,7 +5549,7 @@ function provideRoutes(routes) {
         { provide: ROUTES, multi: true, useValue: routes },
     ];
 }
-function setupRouter(urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+function setupRouter(ref, urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
     if (opts === void 0) { opts = {}; }
     var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
     if (urlHandlingStrategy) {
@@ -5715,7 +5715,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.1.0-next.1+48.sha-c839c05');
+var VERSION = new Version('9.1.0-next.1+47.sha-737ec52');
 
 /**
  * @license
