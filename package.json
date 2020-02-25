@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "9.1.0-next.1+59.sha-8e354da",
+  "version": "9.1.0-next.1+62.sha-835618c",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./fesm5/router.js",
@@ -16,7 +16,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/angular/angular.git"
+    "url": "git+https://github.com/angular/angular.git",
+    "directory": "packages/router"
   },
   "author": "angular",
   "license": "MIT",
@@ -26,9 +27,9 @@
   "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {},
   "peerDependencies": {
-    "@angular/core": "9.1.0-next.1+59.sha-8e354da",
-    "@angular/common": "9.1.0-next.1+59.sha-8e354da",
-    "@angular/platform-browser": "9.1.0-next.1+59.sha-8e354da",
+    "@angular/core": "9.1.0-next.1+62.sha-835618c",
+    "@angular/common": "9.1.0-next.1+62.sha-835618c",
+    "@angular/platform-browser": "9.1.0-next.1+62.sha-835618c",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0"
   },
