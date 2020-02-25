@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.1+48.sha-c839c05
+ * @license Angular v9.1.0-next.1+47.sha-737ec52
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5612,9 +5612,9 @@
             provide: Router,
             useFactory: setupRouter,
             deps: [
-                UrlSerializer, ChildrenOutletContexts, common.Location, core.Injector, core.NgModuleFactoryLoader, core.Compiler,
-                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new core.Optional()],
-                [RouteReuseStrategy, new core.Optional()]
+                core.ApplicationRef, UrlSerializer, ChildrenOutletContexts, common.Location, core.Injector,
+                core.NgModuleFactoryLoader, core.Compiler, ROUTES, ROUTER_CONFIGURATION,
+                [UrlHandlingStrategy, new core.Optional()], [RouteReuseStrategy, new core.Optional()]
             ]
         },
         ChildrenOutletContexts,
@@ -5783,7 +5783,7 @@
             { provide: ROUTES, multi: true, useValue: routes },
         ];
     }
-    function setupRouter(urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+    function setupRouter(ref, urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
         if (opts === void 0) { opts = {}; }
         var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
         if (urlHandlingStrategy) {
@@ -5948,7 +5948,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.1.0-next.1+48.sha-c839c05');
+    var VERSION = new core.Version('9.1.0-next.1+47.sha-737ec52');
 
     /**
      * @license
