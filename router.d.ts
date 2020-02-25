@@ -1,11 +1,10 @@
 /**
- * @license Angular v9.1.0-next.1+46.sha-3893799
+ * @license Angular v9.1.0-next.1+48.sha-c839c05
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { AfterContentInit } from '@angular/core';
-import { ApplicationRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Compiler } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
@@ -2884,7 +2883,7 @@ export declare function ɵangular_packages_router_router_d(platformLocationStrat
 
 export declare function ɵangular_packages_router_router_e(router: Router): any;
 
-export declare function ɵangular_packages_router_router_f(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function ɵangular_packages_router_router_f(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 
 export declare function ɵangular_packages_router_router_g(router: Router): ActivatedRoute;
 
