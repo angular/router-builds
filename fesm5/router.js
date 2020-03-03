@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+41.sha-47a1811
+ * @license Angular v9.1.0-next.2+46.sha-c195d22
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4682,7 +4682,7 @@ var RouterLinkWithHref = /** @class */ (function () {
         } if (rf & 2) {
             ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
             ɵɵattribute("target", ctx.target);
-        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵɵNgOnChangesFeature()] });
+        } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink", preserveQueryParams: "preserveQueryParams" }, features: [ɵɵNgOnChangesFeature] });
     return RouterLinkWithHref;
 }());
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterLinkWithHref, [{
@@ -4857,7 +4857,7 @@ var RouterLinkActive = /** @class */ (function () {
             var _t;
             ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.links = _t);
             ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.linksWithHrefs = _t);
-        } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature()] });
+        } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature] });
     return RouterLinkActive;
 }());
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterLinkActive, [{
@@ -5715,7 +5715,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.1.0-next.2+41.sha-47a1811');
+var VERSION = new Version('9.1.0-next.2+46.sha-c195d22');
 
 /**
  * @license
