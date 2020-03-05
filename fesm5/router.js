@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+79.sha-716d50a
+ * @license Angular v9.1.0-next.2+80.sha-98a9daf
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4544,7 +4544,6 @@ var RouterLink = /** @class */ (function () {
         var extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
-            state: this.state
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return true;
@@ -5716,7 +5715,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('9.1.0-next.2+79.sha-716d50a');
+var VERSION = new Version('9.1.0-next.2+80.sha-98a9daf');
 
 /**
  * @license
