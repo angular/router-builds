@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "9.1.0-next.2+85.sha-b42e2e0",
+  "version": "9.1.0-next.2+87.sha-44f9fa6",
   "description": "Angular - the routing library",
   "main": "./bundles/router.umd.js",
   "module": "./fesm5/router.js",
@@ -27,9 +27,9 @@
   "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {},
   "peerDependencies": {
-    "@angular/core": "9.1.0-next.2+85.sha-b42e2e0",
-    "@angular/common": "9.1.0-next.2+85.sha-b42e2e0",
-    "@angular/platform-browser": "9.1.0-next.2+85.sha-b42e2e0",
+    "@angular/core": "9.1.0-next.2+87.sha-44f9fa6",
+    "@angular/common": "9.1.0-next.2+87.sha-44f9fa6",
+    "@angular/platform-browser": "9.1.0-next.2+87.sha-44f9fa6",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0"
   },
