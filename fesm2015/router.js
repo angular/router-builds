@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-next.2+128.sha-c98c6e8
+ * @license Angular v9.1.0-next.2+129.sha-95c729f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9629,8 +9629,7 @@ class RouterModule {
      * @param {?} guard
      * @param {?} router
      */
-    constructor(guard, router) {
-    }
+    constructor(guard, router) { }
     /**
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
@@ -10207,7 +10206,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.1.0-next.2+128.sha-c98c6e8');
+const VERSION = new Version('9.1.0-next.2+129.sha-95c729f');
 
 /**
  * @fileoverview added by tsickle
