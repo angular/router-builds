@@ -130,7 +130,7 @@ export declare class RouterLink {
     set preserveQueryParams(value: boolean);
     onClick(): boolean;
     get urlTree(): UrlTree;
-    static ɵfac: i0.ɵɵFactoryDef<RouterLink>;
+    static ɵfac: i0.ɵɵFactoryDef<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
 }
 /**
@@ -172,6 +172,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
-    static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref>;
+    static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref, never>;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
 }
