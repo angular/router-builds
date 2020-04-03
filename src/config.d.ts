@@ -58,7 +58,7 @@ export declare type UrlMatchResult = {
  *
  * @publicApi
  */
-export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult;
+export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult | null;
 /**
  *
  * Represents static data associated with a particular route.
