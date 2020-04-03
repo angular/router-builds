@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0-rc.0+105.sha-ca25c95
+ * @license Angular v9.1.0-rc.0+109.sha-568e9df
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2708,7 +2708,7 @@ export declare abstract class UrlHandlingStrategy {
  *
  * @publicApi
  */
-export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult;
+export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult | null;
 
 /**
  * Represents the result of matching URLs with a custom matching function.
