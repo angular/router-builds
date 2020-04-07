@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0+95.sha-af42694
+ * @license Angular v9.1.0+99.sha-b02c950
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8044,6 +8044,7 @@ class RouterLink {
         const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
+            state: this.state,
         };
         this.router.navigateByUrl(this.urlTree, extras);
         return true;
@@ -8179,11 +8180,15 @@ class RouterLinkWithHref {
      * @param {?} changes
      * @return {?}
      */
-    ngOnChanges(changes) { this.updateTargetUrlAndHref(); }
+    ngOnChanges(changes) {
+        this.updateTargetUrlAndHref();
+    }
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.subscription.unsubscribe(); }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
     /**
      * @param {?} button
      * @param {?} ctrlKey
@@ -9994,7 +9999,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.1.0+95.sha-af42694');
+const VERSION = new Version('9.1.0+99.sha-b02c950');
 
 /**
  * @fileoverview added by tsickle

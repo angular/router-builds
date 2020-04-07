@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.0+95.sha-af42694
+ * @license Angular v9.1.0+99.sha-b02c950
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4758,6 +4758,7 @@
             var extras = {
                 skipLocationChange: attrBoolValue(this.skipLocationChange),
                 replaceUrl: attrBoolValue(this.replaceUrl),
+                state: this.state,
             };
             this.router.navigateByUrl(this.urlTree, extras);
             return true;
@@ -4873,8 +4874,12 @@
             enumerable: true,
             configurable: true
         });
-        RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
-        RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+        RouterLinkWithHref.prototype.ngOnChanges = function (changes) {
+            this.updateTargetUrlAndHref();
+        };
+        RouterLinkWithHref.prototype.ngOnDestroy = function () {
+            this.subscription.unsubscribe();
+        };
         RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
             if (button !== 0 || ctrlKey || metaKey || shiftKey) {
                 return true;
@@ -5965,7 +5970,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.1.0+95.sha-af42694');
+    var VERSION = new core.Version('9.1.0+99.sha-b02c950');
 
     /**
      * @license
