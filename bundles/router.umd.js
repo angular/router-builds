@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.1+9.sha-34aa557
+ * @license Angular v10.0.0-next.1+10.sha-80e6c07
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3103,7 +3103,7 @@
         });
         // Process any children left from the current route (not active for the future route)
         forEach(prevChildren, function (v, k) {
-            return deactivateRouteAndItsChildren(v, contexts.getContext(k), checks);
+            return deactivateRouteAndItsChildren(v, contexts.getContext(k), contexts, checks);
         });
         return checks;
     }
@@ -3141,7 +3141,7 @@
         }
         else {
             if (curr) {
-                deactivateRouteAndItsChildren(currNode, context, checks);
+                deactivateRouteAndItsChildren(currNode, context, parentContexts, checks);
             }
             checks.canActivateChecks.push(new CanActivate(futurePath));
             // If we have a component, we need to go through an outlet.
@@ -3175,18 +3175,18 @@
                 return !equalParamsAndUrlSegments(curr, future);
         }
     }
-    function deactivateRouteAndItsChildren(route, context, checks) {
+    function deactivateRouteAndItsChildren(route, context, parentContexts, checks) {
         var children = nodeChildrenAsMap(route);
         var r = route.value;
         forEach(children, function (node, childName) {
             if (!r.component) {
-                deactivateRouteAndItsChildren(node, context, checks);
+                deactivateRouteAndItsChildren(node, parentContexts ? parentContexts.getContext(childName) : context, parentContexts, checks);
             }
             else if (context) {
-                deactivateRouteAndItsChildren(node, context.children.getContext(childName), checks);
+                deactivateRouteAndItsChildren(node, context.children.getContext(childName), parentContexts, checks);
             }
             else {
-                deactivateRouteAndItsChildren(node, null, checks);
+                deactivateRouteAndItsChildren(node, null, parentContexts, checks);
             }
         });
         if (!r.component) {
@@ -5970,7 +5970,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-next.1+9.sha-34aa557');
+    var VERSION = new core.Version('10.0.0-next.1+10.sha-80e6c07');
 
     /**
      * @license
