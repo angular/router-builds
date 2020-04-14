@@ -92,7 +92,7 @@ export declare class RouterModule {
      * @param routes An array of `Route` objects that define the navigation paths for the application.
      * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
      * @return The new router module.
-    */
+     */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterModule>;
     /**
      * Creates a module with all the router directives and a provider registering routes.
@@ -132,8 +132,9 @@ export declare function provideRoutes(routes: Routes): any;
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
- * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root component has been created.
- * The bootstrap is not blocked until the initial navigation is complete. @deprecated
+ * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root
+ * component has been created. The bootstrap is not blocked until the initial navigation is
+ * complete. @deprecated
  * * 'legacy_disabled'- The initial navigation is not performed. The location listener is set up
  * after the root component gets created. @deprecated since v4
  * * `true` - same as 'legacy_enabled'. @deprecated since v4

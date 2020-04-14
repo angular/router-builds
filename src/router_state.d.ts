@@ -86,9 +86,11 @@ export declare class ActivatedRoute {
     get children(): ActivatedRoute[];
     /** The path from the root of the router state tree to this route. */
     get pathFromRoot(): ActivatedRoute[];
-    /** An Observable that contains a map of the required and optional parameters
+    /**
+     * An Observable that contains a map of the required and optional parameters
      * specific to the route.
-     * The map supports retrieving single and multiple values from the same parameter. */
+     * The map supports retrieving single and multiple values from the same parameter.
+     */
     get paramMap(): Observable<ParamMap>;
     /**
      * An Observable that contains a map of the query parameters available to all routes.

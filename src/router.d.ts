@@ -34,16 +34,16 @@ export interface NavigationExtras {
      *
      * ```
      * [{
-    *   path: 'parent',
-    *   component: ParentComponent,
-    *   children: [{
-    *     path: 'list',
-    *     component: ListComponent
-    *   },{
-    *     path: 'child',
-    *     component: ChildComponent
-    *   }]
-    * }]
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
      * ```
      *
      * The following `go()` function navigates to the `list` route by
@@ -52,12 +52,12 @@ export interface NavigationExtras {
      * ```
      *  @Component({...})
      *  class ChildComponent {
-    *    constructor(private router: Router, private route: ActivatedRoute) {}
-    *
-    *    go() {
-    *      this.router.navigate(['../list'], { relativeTo: this.route });
-    *    }
-    *  }
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
      * ```
      */
     relativeTo?: ActivatedRoute | null;

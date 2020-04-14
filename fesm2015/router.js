@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.1+32.sha-5e80e7e
+ * @license Angular v10.0.0-next.1+33.sha-698b028
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -93,7 +93,9 @@ class NavigationStart extends RouterEvent {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return `NavigationStart(id: ${this.id}, url: '${this.url}')`; }
+    toString() {
+        return `NavigationStart(id: ${this.id}, url: '${this.url}')`;
+    }
 }
 if (false) {
     /**
@@ -183,7 +185,9 @@ class NavigationCancel extends RouterEvent {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return `NavigationCancel(id: ${this.id}, url: '${this.url}')`; }
+    toString() {
+        return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
+    }
 }
 if (false) {
     /**
@@ -453,7 +457,9 @@ class RouteConfigLoadStart {
     /**
      * @return {?}
      */
-    toString() { return `RouteConfigLoadStart(path: ${this.route.path})`; }
+    toString() {
+        return `RouteConfigLoadStart(path: ${this.route.path})`;
+    }
 }
 if (false) {
     /**
@@ -477,7 +483,9 @@ class RouteConfigLoadEnd {
     /**
      * @return {?}
      */
-    toString() { return `RouteConfigLoadEnd(path: ${this.route.path})`; }
+    toString() {
+        return `RouteConfigLoadEnd(path: ${this.route.path})`;
+    }
 }
 if (false) {
     /**
@@ -751,12 +759,16 @@ class ParamsAsMap {
     /**
      * @param {?} params
      */
-    constructor(params) { this.params = params || {}; }
+    constructor(params) {
+        this.params = params || {};
+    }
     /**
      * @param {?} name
      * @return {?}
      */
-    has(name) { return this.params.hasOwnProperty(name); }
+    has(name) {
+        return this.params.hasOwnProperty(name);
+    }
     /**
      * @param {?} name
      * @return {?}
@@ -784,7 +796,9 @@ class ParamsAsMap {
     /**
      * @return {?}
      */
-    get keys() { return Object.keys(this.params); }
+    get keys() {
+        return Object.keys(this.params);
+    }
 }
 if (false) {
     /**
@@ -1680,7 +1694,9 @@ class UrlTree {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return DEFAULT_SERIALIZER.serialize(this); }
+    toString() {
+        return DEFAULT_SERIALIZER.serialize(this);
+    }
 }
 if (false) {
     /**
@@ -1738,17 +1754,23 @@ class UrlSegmentGroup {
      * Whether the segment has child segments
      * @return {?}
      */
-    hasChildren() { return this.numberOfChildren > 0; }
+    hasChildren() {
+        return this.numberOfChildren > 0;
+    }
     /**
      * Number of child segments
      * @return {?}
      */
-    get numberOfChildren() { return Object.keys(this.children).length; }
+    get numberOfChildren() {
+        return Object.keys(this.children).length;
+    }
     /**
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return serializePaths(this); }
+    toString() {
+        return serializePaths(this);
+    }
 }
 if (false) {
     /**
@@ -1825,7 +1847,9 @@ class UrlSegment {
      * \@docsNotRequired
      * @return {?}
      */
-    toString() { return serializePath(this); }
+    toString() {
+        return serializePath(this);
+    }
 }
 if (false) {
     /**
@@ -2141,7 +2165,7 @@ function serializeQueryParams(params) {
             v => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`)).join('&') :
             `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
     }));
-    return strParams.length ? `?${strParams.join("&")}` : '';
+    return strParams.length ? `?${strParams.join('&')}` : '';
 }
 /** @type {?} */
 const SEGMENT_RE = /^[^\/()?;=#]+/;
@@ -2386,7 +2410,9 @@ class UrlParser {
      * @param {?} str
      * @return {?}
      */
-    peekStartsWith(str) { return this.remaining.startsWith(str); }
+    peekStartsWith(str) {
+        return this.remaining.startsWith(str);
+    }
     // Consumes the prefix when it is present and returns whether it has been consumed
     /**
      * @private
@@ -2443,11 +2469,15 @@ class Tree {
     /**
      * @param {?} root
      */
-    constructor(root) { this._root = root; }
+    constructor(root) {
+        this._root = root;
+    }
     /**
      * @return {?}
      */
-    get root() { return this._root.value; }
+    get root() {
+        return this._root.value;
+    }
     /**
      * \@internal
      * @param {?} t
@@ -2509,11 +2539,13 @@ class Tree {
      * @param {?} t
      * @return {?}
      */
-    pathFromRoot(t) { return findPath(t, this._root).map((/**
-     * @param {?} s
-     * @return {?}
-     */
-    s => s.value)); }
+    pathFromRoot(t) {
+        return findPath(t, this._root).map((/**
+         * @param {?} s
+         * @return {?}
+         */
+        s => s.value));
+    }
 }
 if (false) {
     /**
@@ -2575,7 +2607,9 @@ class TreeNode {
     /**
      * @return {?}
      */
-    toString() { return `TreeNode(${this.value})`; }
+    toString() {
+        return `TreeNode(${this.value})`;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -2650,7 +2684,9 @@ class RouterState extends Tree {
     /**
      * @return {?}
      */
-    toString() { return this.snapshot.toString(); }
+    toString() {
+        return this.snapshot.toString();
+    }
 }
 if (false) {
     /**
@@ -2736,32 +2772,44 @@ class ActivatedRoute {
      * The configuration used to match this route.
      * @return {?}
      */
-    get routeConfig() { return this._futureSnapshot.routeConfig; }
+    get routeConfig() {
+        return this._futureSnapshot.routeConfig;
+    }
     /**
      * The root of the router state.
      * @return {?}
      */
-    get root() { return this._routerState.root; }
+    get root() {
+        return this._routerState.root;
+    }
     /**
      * The parent of this route in the router state tree.
      * @return {?}
      */
-    get parent() { return this._routerState.parent(this); }
+    get parent() {
+        return this._routerState.parent(this);
+    }
     /**
      * The first child of this route in the router state tree.
      * @return {?}
      */
-    get firstChild() { return this._routerState.firstChild(this); }
+    get firstChild() {
+        return this._routerState.firstChild(this);
+    }
     /**
      * The children of this route in the router state tree.
      * @return {?}
      */
-    get children() { return this._routerState.children(this); }
+    get children() {
+        return this._routerState.children(this);
+    }
     /**
      * The path from the root of the router state tree to this route.
      * @return {?}
      */
-    get pathFromRoot() { return this._routerState.pathFromRoot(this); }
+    get pathFromRoot() {
+        return this._routerState.pathFromRoot(this);
+    }
     /**
      * An Observable that contains a map of the required and optional parameters
      * specific to the route.
@@ -2971,27 +3019,37 @@ class ActivatedRouteSnapshot {
      * The root of the router state
      * @return {?}
      */
-    get root() { return this._routerState.root; }
+    get root() {
+        return this._routerState.root;
+    }
     /**
      * The parent of this route in the router state tree
      * @return {?}
      */
-    get parent() { return this._routerState.parent(this); }
+    get parent() {
+        return this._routerState.parent(this);
+    }
     /**
      * The first child of this route in the router state tree
      * @return {?}
      */
-    get firstChild() { return this._routerState.firstChild(this); }
+    get firstChild() {
+        return this._routerState.firstChild(this);
+    }
     /**
      * The children of this route in the router state tree
      * @return {?}
      */
-    get children() { return this._routerState.children(this); }
+    get children() {
+        return this._routerState.children(this);
+    }
     /**
      * The path from the root of the router state tree to this route
      * @return {?}
      */
-    get pathFromRoot() { return this._routerState.pathFromRoot(this); }
+    get pathFromRoot() {
+        return this._routerState.pathFromRoot(this);
+    }
     /**
      * @return {?}
      */
@@ -3143,7 +3201,9 @@ class RouterStateSnapshot extends Tree {
     /**
      * @return {?}
      */
-    toString() { return serializeNode(this._root); }
+    toString() {
+        return serializeNode(this._root);
+    }
 }
 if (false) {
     /**
@@ -4187,7 +4247,9 @@ class NoMatch {
     /**
      * @param {?=} segmentGroup
      */
-    constructor(segmentGroup) { this.segmentGroup = segmentGroup || null; }
+    constructor(segmentGroup) {
+        this.segmentGroup = segmentGroup || null;
+    }
 }
 if (false) {
     /** @type {?} */
@@ -5316,13 +5378,13 @@ function prioritizedGuardValue() {
                 // Toggle pending flag if any values haven't been set yet
                 if (val === INITIAL_VALUE)
                     isPending = true;
-                // Any other return values are only valid if we haven't yet hit a pending call.
-                // This guarantees that in the case of a guard at the bottom of the tree that
-                // returns a redirect, we will wait for the higher priority guard at the top to
-                // finish before performing the redirect.
+                // Any other return values are only valid if we haven't yet hit a pending
+                // call. This guarantees that in the case of a guard at the bottom of the
+                // tree that returns a redirect, we will wait for the higher priority
+                // guard at the top to finish before performing the redirect.
                 if (!isPending) {
-                    // Early return when we hit a `false` value as that should always cancel
-                    // navigation
+                    // Early return when we hit a `false` value as that should always
+                    // cancel navigation
                     if (val === false)
                         return val;
                     if (i === list.length - 1 || isUrlTree(val)) {
@@ -5402,7 +5464,9 @@ function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
      * @param {?} result
      * @return {?}
      */
-    result => { return result !== true; }), (/** @type {?} */ (true))));
+    result => {
+        return result !== true;
+    }), (/** @type {?} */ (true))));
 }
 /**
  * @param {?} futureSnapshot
@@ -5434,7 +5498,9 @@ function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEve
      * @param {?} result
      * @return {?}
      */
-    result => { return result !== true; }), (/** @type {?} */ (true))));
+    result => {
+        return result !== true;
+    }), (/** @type {?} */ (true))));
 }
 /**
  * This should fire off `ActivationStart` events for each route being activated at this
@@ -5591,8 +5657,7 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
         /** @type {?} */
         let observable;
         if (isCanDeactivate(guard)) {
-            observable =
-                wrapIntoObservable(guard.canDeactivate((/** @type {?} */ (component)), currARS, currRSS, futureRSS));
+            observable = wrapIntoObservable(guard.canDeactivate((/** @type {?} */ (component)), currARS, currRSS, futureRSS));
         }
         else if (isFunction(guard)) {
             observable = wrapIntoObservable(guard(component, currARS, currRSS, futureRSS));
@@ -5893,7 +5958,9 @@ function match$1(segmentGroup, route, segments) {
      * @param {?} k
      * @return {?}
      */
-    (v, k) => { posParams[k] = v.path; }));
+    (v, k) => {
+        posParams[k] = v.path;
+    }));
     /** @type {?} */
     const parameters = res.consumed.length > 0 ? Object.assign(Object.assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
         posParams;
@@ -6218,7 +6285,9 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
          * @param {?} value
          * @return {?}
          */
-        (value) => { return { [key]: value }; })));
+        (value) => {
+            return { [key]: value };
+        })));
     }
     /** @type {?} */
     const data = {};
@@ -6366,7 +6435,9 @@ class DefaultRouteReuseStrategy {
      * @param {?} route
      * @return {?}
      */
-    shouldDetach(route) { return false; }
+    shouldDetach(route) {
+        return false;
+    }
     /**
      * @param {?} route
      * @param {?} detachedTree
@@ -6377,12 +6448,16 @@ class DefaultRouteReuseStrategy {
      * @param {?} route
      * @return {?}
      */
-    shouldAttach(route) { return false; }
+    shouldAttach(route) {
+        return false;
+    }
     /**
      * @param {?} route
      * @return {?}
      */
-    retrieve(route) { return null; }
+    retrieve(route) {
+        return null;
+    }
     /**
      * @param {?} future
      * @param {?} curr
@@ -6550,18 +6625,24 @@ class DefaultUrlHandlingStrategy {
      * @param {?} url
      * @return {?}
      */
-    shouldProcessUrl(url) { return true; }
+    shouldProcessUrl(url) {
+        return true;
+    }
     /**
      * @param {?} url
      * @return {?}
      */
-    extract(url) { return url; }
+    extract(url) {
+        return url;
+    }
     /**
      * @param {?} newUrlPart
      * @param {?} wholeUrl
      * @return {?}
      */
-    merge(newUrlPart, wholeUrl) { return newUrlPart; }
+    merge(newUrlPart, wholeUrl) {
+        return newUrlPart;
+    }
 }
 
 /**
@@ -6797,10 +6878,7 @@ class Router {
          *
          * \@internal
          */
-        this.hooks = {
-            beforePreactivation: defaultRouterHook,
-            afterPreactivation: defaultRouterHook
-        };
+        this.hooks = { beforePreactivation: defaultRouterHook, afterPreactivation: defaultRouterHook };
         /**
          * A strategy for extracting and merging URLs.
          * Used for AngularJS to Angular migrations.
@@ -6936,7 +7014,8 @@ class Router {
              */
             t => {
                 /** @type {?} */
-                const urlTransition = !this.navigated || t.extractedUrl.toString() !== this.browserUrlTree.toString();
+                const urlTransition = !this.navigated ||
+                    t.extractedUrl.toString() !== this.browserUrlTree.toString();
                 /** @type {?} */
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
@@ -6956,8 +7035,8 @@ class Router {
                         }
                         return [t];
                     })), 
-                    // This delay is required to match old behavior that forced navigation to
-                    // always be async
+                    // This delay is required to match old behavior that forced navigation
+                    // to always be async
                     switchMap((/**
                      * @param {?} t
                      * @return {?}
@@ -7007,9 +7086,9 @@ class Router {
                     /** @type {?} */
                     const processPreviousUrl = urlTransition && this.rawUrlTree &&
                         this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree);
-                    /* When the current URL shouldn't be processed, but the previous one was, we
-                     * handle this "error condition" by navigating to the previously successful URL,
-                     * but leaving the URL intact.*/
+                    /* When the current URL shouldn't be processed, but the previous one was,
+                     * we handle this "error condition" by navigating to the previously
+                     * successful URL, but leaving the URL intact.*/
                     if (processPreviousUrl) {
                         const { id, extractedUrl, source, restoredState, extras } = t;
                         /** @type {?} */
@@ -7020,9 +7099,10 @@ class Router {
                         return of(Object.assign(Object.assign({}, t), { targetSnapshot, urlAfterRedirects: extractedUrl, extras: Object.assign(Object.assign({}, extras), { skipLocationChange: false, replaceUrl: false }) }));
                     }
                     else {
-                        /* When neither the current or previous URL can be processed, do nothing other
-                         * than update router's internal reference to the current "settled" URL. This
-                         * way the next navigation will be coming from the current URL in the browser.
+                        /* When neither the current or previous URL can be processed, do nothing
+                         * other than update router's internal reference to the current "settled"
+                         * URL. This way the next navigation will be coming from the current URL
+                         * in the browser.
                          */
                         this.rawUrlTree = t.rawUrl;
                         this.browserUrlTree = t.urlAfterRedirects;
@@ -7148,18 +7228,19 @@ class Router {
                 const targetRouterState = createRouterState(this.routeReuseStrategy, (/** @type {?} */ (t.targetSnapshot)), t.currentRouterState);
                 return (Object.assign(Object.assign({}, t), { targetRouterState }));
             })), 
-            /* Once here, we are about to activate syncronously. The assumption is this will
-               succeed, and user code may read from the Router service. Therefore before
-               activation, we need to update router properties storing the current URL and the
-               RouterState, as well as updated the browser URL. All this should happen *before*
-               activating. */
+            /* Once here, we are about to activate syncronously. The assumption is this
+               will succeed, and user code may read from the Router service. Therefore
+               before activation, we need to update router properties storing the current
+               URL and the RouterState, as well as updated the browser URL. All this should
+               happen *before* activating. */
             tap((/**
              * @param {?} t
              * @return {?}
              */
             (t) => {
                 this.currentUrlTree = t.urlAfterRedirects;
-                this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
+                this.rawUrlTree =
+                    this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
                 ((/** @type {?} */ (this))).routerState = (/** @type {?} */ (t.targetRouterState));
                 if (this.urlUpdateStrategy === 'deferred') {
                     if (!t.extras.skipLocationChange) {
@@ -7171,28 +7252,38 @@ class Router {
              * @param {?} evt
              * @return {?}
              */
-            (evt) => this.triggerEvent(evt))), tap({ /**
+            (evt) => this.triggerEvent(evt))), tap({
+                /**
                  * @return {?}
                  */
-                next() { completed = true; }, /**
+                next() {
+                    completed = true;
+                },
+                /**
                  * @return {?}
                  */
-                complete() { completed = true; } }), finalize((/**
+                complete() {
+                    completed = true;
+                }
+            }), finalize((/**
              * @return {?}
              */
             () => {
-                /* When the navigation stream finishes either through error or success, we set the
-                 * `completed` or `errored` flag. However, there are some situations where we could
-                 * get here without either of those being set. For instance, a redirect during
-                 * NavigationStart. Therefore, this is a catch-all to make sure the NavigationCancel
-                 * event is fired when a navigation gets cancelled but not caught by other means. */
+                /* When the navigation stream finishes either through error or success, we
+                 * set the `completed` or `errored` flag. However, there are some situations
+                 * where we could get here without either of those being set. For instance, a
+                 * redirect during NavigationStart. Therefore, this is a catch-all to make
+                 * sure the NavigationCancel
+                 * event is fired when a navigation gets cancelled but not caught by other
+                 * means. */
                 if (!completed && !errored) {
-                    // Must reset to current URL tree here to ensure history.state is set. On a fresh
-                    // page load, if a new navigation comes in before a successful navigation
-                    // completes, there will be nothing in history.state.navigationId. This can cause
-                    // sync problems with AngularJS sync code which looks for a value here in order
-                    // to determine whether or not to handle a given popstate event or to leave it
-                    // to the Angualr router.
+                    // Must reset to current URL tree here to ensure history.state is set. On a
+                    // fresh page load, if a new navigation comes in before a successful
+                    // navigation completes, there will be nothing in
+                    // history.state.navigationId. This can cause sync problems with AngularJS
+                    // sync code which looks for a value here in order to determine whether or
+                    // not to handle a given popstate event or to leave it to the Angualr
+                    // router.
                     this.resetUrlToCurrentUrlTree();
                     /** @type {?} */
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), `Navigation ID ${t.id} is not equal to the current navigation id ${this.navigationId}`);
@@ -7200,8 +7291,8 @@ class Router {
                     t.resolve(false);
                 }
                 // currentNavigation should always be reset to null here. If navigation was
-                // successful, lastSuccessfulTransition will have already been set. Therefore we
-                // can safely set currentNavigation to null here.
+                // successful, lastSuccessfulTransition will have already been set. Therefore
+                // we can safely set currentNavigation to null here.
                 this.currentNavigation = null;
             })), catchError((/**
              * @param {?} e
@@ -7209,17 +7300,17 @@ class Router {
              */
             (e) => {
                 errored = true;
-                /* This error type is issued during Redirect, and is handled as a cancellation
-                 * rather than an error. */
+                /* This error type is issued during Redirect, and is handled as a
+                 * cancellation rather than an error. */
                 if (isNavigationCancelingError(e)) {
                     /** @type {?} */
                     const redirecting = isUrlTree(e.url);
                     if (!redirecting) {
                         // Set property only if we're not redirecting. If we landed on a page and
-                        // redirect to `/` route, the new navigation is going to see the `/` isn't
-                        // a change from the default currentUrlTree and won't navigate. This is
-                        // only applicable with initial navigation, so setting `navigated` only when
-                        // not redirecting resolves this scenario.
+                        // redirect to `/` route, the new navigation is going to see the `/`
+                        // isn't a change from the default currentUrlTree and won't navigate.
+                        // This is only applicable with initial navigation, so setting
+                        // `navigated` only when not redirecting resolves this scenario.
                         this.navigated = true;
                         this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
                     }
@@ -7250,8 +7341,8 @@ class Router {
                             return this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
                         }), 0);
                     }
-                    /* All other errors should reset to the router's internal URL reference to the
-                     * pre-error state. */
+                    /* All other errors should reset to the router's internal URL reference to
+                     * the pre-error state. */
                 }
                 else {
                     this.resetStateAndUrl(t.currentRouterState, t.currentUrlTree, t.rawUrl);
@@ -7338,7 +7429,9 @@ class Router {
                 setTimeout((/**
                  * @return {?}
                  */
-                () => { this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true }); }), 0);
+                () => {
+                    this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true });
+                }), 0);
             }))));
         }
     }
@@ -7346,18 +7439,24 @@ class Router {
      * The current URL.
      * @return {?}
      */
-    get url() { return this.serializeUrl(this.currentUrlTree); }
+    get url() {
+        return this.serializeUrl(this.currentUrlTree);
+    }
     /**
      * The current Navigation object if one exists
      * @return {?}
      */
-    getCurrentNavigation() { return this.currentNavigation; }
+    getCurrentNavigation() {
+        return this.currentNavigation;
+    }
     /**
      * \@internal
      * @param {?} event
      * @return {?}
      */
-    triggerEvent(event) { ((/** @type {?} */ (this.events))).next(event); }
+    triggerEvent(event) {
+        ((/** @type {?} */ (this.events))).next(event);
+    }
     /**
      * Resets the configuration used for navigation and generating links.
      *
@@ -7385,7 +7484,9 @@ class Router {
      * \@docsNotRequired
      * @return {?}
      */
-    ngOnDestroy() { this.dispose(); }
+    ngOnDestroy() {
+        this.dispose();
+    }
     /**
      * Disposes of the router.
      * @return {?}
@@ -7542,7 +7643,9 @@ class Router {
      * @param {?} url
      * @return {?}
      */
-    serializeUrl(url) { return this.urlSerializer.serialize(url); }
+    serializeUrl(url) {
+        return this.urlSerializer.serialize(url);
+    }
     /**
      * Parses a string into a `UrlTree`
      * @param {?} url
@@ -7614,7 +7717,9 @@ class Router {
          * @param {?} e
          * @return {?}
          */
-        e => { this.console.warn(`Unhandled Navigation Error: `); }));
+        e => {
+            this.console.warn(`Unhandled Navigation Error: `);
+        }));
     }
     /**
      * @private
@@ -7678,7 +7783,12 @@ class Router {
             source,
             restoredState,
             currentUrlTree: this.currentUrlTree,
-            currentRawUrl: this.rawUrlTree, rawUrl, extras, resolve, reject, promise,
+            currentRawUrl: this.rawUrlTree,
+            rawUrl,
+            extras,
+            resolve,
+            reject,
+            promise,
             currentSnapshot: this.routerState.snapshot,
             currentRouterState: this.routerState
         });
@@ -7688,7 +7798,9 @@ class Router {
          * @param {?} e
          * @return {?}
          */
-        (e) => { return Promise.reject(e); }));
+        (e) => {
+            return Promise.reject(e);
+        }));
     }
     /**
      * @private
@@ -8546,11 +8658,15 @@ class RouterLinkActive {
      * @param {?} changes
      * @return {?}
      */
-    ngOnChanges(changes) { this.update(); }
+    ngOnChanges(changes) {
+        this.update();
+    }
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.subscription.unsubscribe(); }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
     /**
      * @private
      * @return {?}
@@ -8790,7 +8906,9 @@ class ChildrenOutletContexts {
      * @param {?} contexts
      * @return {?}
      */
-    onOutletReAttached(contexts) { this.contexts = contexts; }
+    onOutletReAttached(contexts) {
+        this.contexts = contexts;
+    }
     /**
      * @param {?} childName
      * @return {?}
@@ -8808,7 +8926,9 @@ class ChildrenOutletContexts {
      * @param {?} childName
      * @return {?}
      */
-    getContext(childName) { return this.contexts.get(childName) || null; }
+    getContext(childName) {
+        return this.contexts.get(childName) || null;
+    }
 }
 if (false) {
     /**
@@ -8879,7 +8999,9 @@ class RouterOutlet {
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.parentContexts.onChildOutletDestroyed(this.name); }
+    ngOnDestroy() {
+        this.parentContexts.onChildOutletDestroyed(this.name);
+    }
     /**
      * @return {?}
      */
@@ -8904,7 +9026,9 @@ class RouterOutlet {
     /**
      * @return {?}
      */
-    get isActivated() { return !!this.activated; }
+    get isActivated() {
+        return !!this.activated;
+    }
     /**
      * @return {?}
      */
@@ -9117,12 +9241,12 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
-*@license
-*Copyright Google Inc. All Rights Reserved.
-*
-*Use of this source code is governed by an MIT-style license that can be
-*found in the LICENSE file at https://angular.io/license
-*/
+ *@license
+ *Copyright Google Inc. All Rights Reserved.
+ *
+ *Use of this source code is governed by an MIT-style license that can be
+ *found in the LICENSE file at https://angular.io/license
+ */
 /**
  * \@description
  *
@@ -9181,7 +9305,9 @@ class NoPreloading {
      * @param {?} fn
      * @return {?}
      */
-    preload(route, fn) { return of(null); }
+    preload(route, fn) {
+        return of(null);
+    }
 }
 /**
  * The preloader optimistically loads all router configurations to
@@ -9254,7 +9380,9 @@ class RouterPreloader {
     /**
      * @return {?}
      */
-    ngOnDestroy() { this.subscription.unsubscribe(); }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
     /**
      * @private
      * @param {?} ngModule
@@ -9659,9 +9787,7 @@ class RouterModule {
                 {
                     provide: LocationStrategy,
                     useFactory: provideLocationStrategy,
-                    deps: [
-                        PlatformLocation, [new Inject(APP_BASE_HREF), new Optional()], ROUTER_CONFIGURATION
-                    ]
+                    deps: [PlatformLocation, [new Inject(APP_BASE_HREF), new Optional()], ROUTER_CONFIGURATION]
                 },
                 {
                     provide: RouterScroller,
@@ -10212,7 +10338,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.1+32.sha-5e80e7e');
+const VERSION = new Version('10.0.0-next.1+33.sha-698b028');
 
 /**
  * @fileoverview added by tsickle
