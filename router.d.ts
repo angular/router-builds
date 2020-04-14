@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.1+36.sha-c8f2ca2
+ * @license Angular v9.1.1+40.sha-26f4915
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -74,9 +74,11 @@ export declare class ActivatedRoute {
     get children(): ActivatedRoute[];
     /** The path from the root of the router state tree to this route. */
     get pathFromRoot(): ActivatedRoute[];
-    /** An Observable that contains a map of the required and optional parameters
+    /**
+     * An Observable that contains a map of the required and optional parameters
      * specific to the route.
-     * The map supports retrieving single and multiple values from the same parameter. */
+     * The map supports retrieving single and multiple values from the same parameter.
+     */
     get paramMap(): Observable<ParamMap>;
     /**
      * An Observable that contains a map of the query parameters available to all routes.
@@ -858,8 +860,9 @@ export declare class GuardsCheckStart extends RouterEvent {
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
- * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root component has been created.
- * The bootstrap is not blocked until the initial navigation is complete. @deprecated
+ * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root
+ * component has been created. The bootstrap is not blocked until the initial navigation is
+ * complete. @deprecated
  * * 'legacy_disabled'- The initial navigation is not performed. The location listener is set up
  * after the root component gets created. @deprecated since v4
  * * `true` - same as 'legacy_enabled'. @deprecated since v4
@@ -1030,16 +1033,16 @@ export declare interface NavigationExtras {
      *
      * ```
      * [{
-    *   path: 'parent',
-    *   component: ParentComponent,
-    *   children: [{
-    *     path: 'list',
-    *     component: ListComponent
-    *   },{
-    *     path: 'child',
-    *     component: ChildComponent
-    *   }]
-    * }]
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
      * ```
      *
      * The following `go()` function navigates to the `list` route by
@@ -1048,12 +1051,12 @@ export declare interface NavigationExtras {
      * ```
      *  @Component({...})
      *  class ChildComponent {
-    *    constructor(private router: Router, private route: ActivatedRoute) {}
-    *
-    *    go() {
-    *      this.router.navigate(['../list'], { relativeTo: this.route });
-    *    }
-    *  }
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
      * ```
      */
     relativeTo?: ActivatedRoute | null;
@@ -2427,7 +2430,7 @@ export declare class RouterModule {
      * @param routes An array of `Route` objects that define the navigation paths for the application.
      * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
      * @return The new router module.
-    */
+     */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterModule>;
     /**
      * Creates a module with all the router directives and a provider registering routes.
