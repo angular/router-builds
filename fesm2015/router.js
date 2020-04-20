@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.2+47.sha-28ff02b
+ * @license Angular v10.0.0-next.2+48.sha-b5e92b9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5209,7 +5209,7 @@ function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks 
      * @param {?} k
      * @return {?}
      */
-    (v, k) => deactivateRouteAndItsChildren(v, (/** @type {?} */ (contexts)).getContext(k), contexts, checks)));
+    (v, k) => deactivateRouteAndItsChildren(v, (/** @type {?} */ (contexts)).getContext(k), checks)));
     return checks;
 }
 /**
@@ -5258,7 +5258,7 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
     }
     else {
         if (curr) {
-            deactivateRouteAndItsChildren(currNode, context, parentContexts, checks);
+            deactivateRouteAndItsChildren(currNode, context, checks);
         }
         checks.canActivateChecks.push(new CanActivate(futurePath));
         // If we have a component, we need to go through an outlet.
@@ -5301,11 +5301,10 @@ function shouldRunGuardsAndResolvers(curr, future, mode) {
 /**
  * @param {?} route
  * @param {?} context
- * @param {?} parentContexts
  * @param {?} checks
  * @return {?}
  */
-function deactivateRouteAndItsChildren(route, context, parentContexts, checks) {
+function deactivateRouteAndItsChildren(route, context, checks) {
     /** @type {?} */
     const children = nodeChildrenAsMap(route);
     /** @type {?} */
@@ -5317,13 +5316,13 @@ function deactivateRouteAndItsChildren(route, context, parentContexts, checks) {
      */
     (node, childName) => {
         if (!r.component) {
-            deactivateRouteAndItsChildren(node, parentContexts ? parentContexts.getContext(childName) : context, parentContexts, checks);
+            deactivateRouteAndItsChildren(node, context, checks);
         }
         else if (context) {
-            deactivateRouteAndItsChildren(node, context.children.getContext(childName), parentContexts, checks);
+            deactivateRouteAndItsChildren(node, context.children.getContext(childName), checks);
         }
         else {
-            deactivateRouteAndItsChildren(node, null, parentContexts, checks);
+            deactivateRouteAndItsChildren(node, null, checks);
         }
     }));
     if (!r.component) {
@@ -10338,7 +10337,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.2+47.sha-28ff02b');
+const VERSION = new Version('10.0.0-next.2+48.sha-b5e92b9');
 
 /**
  * @fileoverview added by tsickle

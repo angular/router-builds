@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.2+47.sha-28ff02b
+ * @license Angular v10.0.0-next.2+48.sha-b5e92b9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2952,7 +2952,7 @@ function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks)
     });
     // Process any children left from the current route (not active for the future route)
     forEach(prevChildren, function (v, k) {
-        return deactivateRouteAndItsChildren(v, contexts.getContext(k), contexts, checks);
+        return deactivateRouteAndItsChildren(v, contexts.getContext(k), checks);
     });
     return checks;
 }
@@ -2990,7 +2990,7 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
     }
     else {
         if (curr) {
-            deactivateRouteAndItsChildren(currNode, context, parentContexts, checks);
+            deactivateRouteAndItsChildren(currNode, context, checks);
         }
         checks.canActivateChecks.push(new CanActivate(futurePath));
         // If we have a component, we need to go through an outlet.
@@ -3024,18 +3024,18 @@ function shouldRunGuardsAndResolvers(curr, future, mode) {
             return !equalParamsAndUrlSegments(curr, future);
     }
 }
-function deactivateRouteAndItsChildren(route, context, parentContexts, checks) {
+function deactivateRouteAndItsChildren(route, context, checks) {
     var children = nodeChildrenAsMap(route);
     var r = route.value;
     forEach(children, function (node, childName) {
         if (!r.component) {
-            deactivateRouteAndItsChildren(node, parentContexts ? parentContexts.getContext(childName) : context, parentContexts, checks);
+            deactivateRouteAndItsChildren(node, context, checks);
         }
         else if (context) {
-            deactivateRouteAndItsChildren(node, context.children.getContext(childName), parentContexts, checks);
+            deactivateRouteAndItsChildren(node, context.children.getContext(childName), checks);
         }
         else {
-            deactivateRouteAndItsChildren(node, null, parentContexts, checks);
+            deactivateRouteAndItsChildren(node, null, checks);
         }
     });
     if (!r.component) {
@@ -5842,7 +5842,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('10.0.0-next.2+47.sha-28ff02b');
+var VERSION = new Version('10.0.0-next.2+48.sha-b5e92b9');
 
 /**
  * @license
