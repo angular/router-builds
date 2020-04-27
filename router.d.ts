@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.3+33.sha-b34fb04
+ * @license Angular v10.0.0-next.3+35.sha-00e6cb1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -410,6 +410,10 @@ export declare interface CanDeactivate<T> {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if children can be loaded.
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -471,7 +475,7 @@ export declare interface CanDeactivate<T> {
  * @publicApi
  */
 export declare interface CanLoad {
-    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean;
+    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
 
 /**

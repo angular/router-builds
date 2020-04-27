@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.3+33.sha-b34fb04
+ * @license Angular v10.0.0-next.3+35.sha-00e6cb1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
-import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
@@ -4664,13 +4664,13 @@ class ApplyRedirects {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route, segments)
+            return this.runCanLoadGuards(ngModule.injector, route, segments)
                 .pipe(mergeMap((/**
-             * @param {?} shouldLoad
+             * @param {?} shouldLoadResult
              * @return {?}
              */
-            (shouldLoad) => {
-                if (shouldLoad) {
+            (shouldLoadResult) => {
+                if (shouldLoadResult) {
                     return this.configLoader.load(ngModule.injector, route)
                         .pipe(map((/**
                      * @param {?} cfg
@@ -4685,6 +4685,56 @@ class ApplyRedirects {
             })));
         }
         return of(new LoadedRouterConfig([], ngModule));
+    }
+    /**
+     * @private
+     * @param {?} moduleInjector
+     * @param {?} route
+     * @param {?} segments
+     * @return {?}
+     */
+    runCanLoadGuards(moduleInjector, route, segments) {
+        /** @type {?} */
+        const canLoad = route.canLoad;
+        if (!canLoad || canLoad.length === 0)
+            return of(true);
+        /** @type {?} */
+        const obs = from(canLoad).pipe(map((/**
+         * @param {?} injectionToken
+         * @return {?}
+         */
+        (injectionToken) => {
+            /** @type {?} */
+            const guard = moduleInjector.get(injectionToken);
+            /** @type {?} */
+            let guardVal;
+            if (isCanLoad(guard)) {
+                guardVal = guard.canLoad(route, segments);
+            }
+            else if (isFunction(guard)) {
+                guardVal = guard(route, segments);
+            }
+            else {
+                throw new Error('Invalid CanLoad guard');
+            }
+            return wrapIntoObservable(guardVal);
+        })));
+        return obs.pipe(concatAll(), tap((/**
+         * @param {?} result
+         * @return {?}
+         */
+        (result) => {
+            if (!isUrlTree(result))
+                return;
+            /** @type {?} */
+            const error = navigationCancelingError(`Redirecting to "${this.urlSerializer.serialize(result)}"`);
+            error.url = result;
+            throw error;
+        })), every((/**
+         * @param {?} result
+         * @return {?}
+         */
+        result => result === true)));
     }
     /**
      * @private
@@ -4862,44 +4912,6 @@ if (false) {
      * @private
      */
     ApplyRedirects.prototype.config;
-}
-/**
- * @param {?} moduleInjector
- * @param {?} route
- * @param {?} segments
- * @return {?}
- */
-function runCanLoadGuard(moduleInjector, route, segments) {
-    /** @type {?} */
-    const canLoad = route.canLoad;
-    if (!canLoad || canLoad.length === 0)
-        return of(true);
-    /** @type {?} */
-    const obs = from(canLoad).pipe(map((/**
-     * @param {?} injectionToken
-     * @return {?}
-     */
-    (injectionToken) => {
-        /** @type {?} */
-        const guard = moduleInjector.get(injectionToken);
-        /** @type {?} */
-        let guardVal;
-        if (isCanLoad(guard)) {
-            guardVal = guard.canLoad(route, segments);
-        }
-        else if (isFunction(guard)) {
-            guardVal = guard(route, segments);
-        }
-        else {
-            throw new Error('Invalid CanLoad guard');
-        }
-        return wrapIntoObservable(guardVal);
-    })));
-    return obs.pipe(concatAll(), every((/**
-     * @param {?} result
-     * @return {?}
-     */
-    result => result === true)));
 }
 /**
  * @param {?} segmentGroup
@@ -10125,7 +10137,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.3+33.sha-b34fb04');
+const VERSION = new Version('10.0.0-next.3+35.sha-00e6cb1');
 
 /**
  * @fileoverview added by tsickle

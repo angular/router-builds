@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.3+33.sha-b34fb04
+ * @license Angular v10.0.0-next.3+35.sha-00e6cb1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { __extends, __decorate, __assign, __values, __spread, __metadata, __para
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Input, HostListener, Directive, Attribute, Renderer2, ElementRef, HostBinding, ContentChildren, QueryList, Optional, EventEmitter, Output, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Injectable, NgModuleFactoryLoader, Compiler, Injector, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
-import { map, concatAll, last as last$1, catchError, first, mergeMap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, tap, finalize, mergeAll } from 'rxjs/operators';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -2659,9 +2659,9 @@ var ApplyRedirects = /** @class */ (function () {
             if (route._loadedConfig !== undefined) {
                 return of(route._loadedConfig);
             }
-            return runCanLoadGuard(ngModule.injector, route, segments)
-                .pipe(mergeMap(function (shouldLoad) {
-                if (shouldLoad) {
+            return this.runCanLoadGuards(ngModule.injector, route, segments)
+                .pipe(mergeMap(function (shouldLoadResult) {
+                if (shouldLoadResult) {
                     return _this.configLoader.load(ngModule.injector, route)
                         .pipe(map(function (cfg) {
                         route._loadedConfig = cfg;
@@ -2672,6 +2672,33 @@ var ApplyRedirects = /** @class */ (function () {
             }));
         }
         return of(new LoadedRouterConfig([], ngModule));
+    };
+    ApplyRedirects.prototype.runCanLoadGuards = function (moduleInjector, route, segments) {
+        var _this = this;
+        var canLoad = route.canLoad;
+        if (!canLoad || canLoad.length === 0)
+            return of(true);
+        var obs = from(canLoad).pipe(map(function (injectionToken) {
+            var guard = moduleInjector.get(injectionToken);
+            var guardVal;
+            if (isCanLoad(guard)) {
+                guardVal = guard.canLoad(route, segments);
+            }
+            else if (isFunction(guard)) {
+                guardVal = guard(route, segments);
+            }
+            else {
+                throw new Error('Invalid CanLoad guard');
+            }
+            return wrapIntoObservable(guardVal);
+        }));
+        return obs.pipe(concatAll(), tap(function (result) {
+            if (!isUrlTree(result))
+                return;
+            var error = navigationCancelingError("Redirecting to \"" + _this.urlSerializer.serialize(result) + "\"");
+            error.url = result;
+            throw error;
+        }), every(function (result) { return result === true; }));
     };
     ApplyRedirects.prototype.lineralizeSegments = function (route, urlTree) {
         var res = [];
@@ -2752,26 +2779,6 @@ var ApplyRedirects = /** @class */ (function () {
     };
     return ApplyRedirects;
 }());
-function runCanLoadGuard(moduleInjector, route, segments) {
-    var canLoad = route.canLoad;
-    if (!canLoad || canLoad.length === 0)
-        return of(true);
-    var obs = from(canLoad).pipe(map(function (injectionToken) {
-        var guard = moduleInjector.get(injectionToken);
-        var guardVal;
-        if (isCanLoad(guard)) {
-            guardVal = guard.canLoad(route, segments);
-        }
-        else if (isFunction(guard)) {
-            guardVal = guard(route, segments);
-        }
-        else {
-            throw new Error('Invalid CanLoad guard');
-        }
-        return wrapIntoObservable(guardVal);
-    }));
-    return obs.pipe(concatAll(), every(function (result) { return result === true; }));
-}
 function match(segmentGroup, route, segments) {
     if (route.path === '') {
         if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
@@ -5878,7 +5885,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('10.0.0-next.3+33.sha-b34fb04');
+var VERSION = new Version('10.0.0-next.3+35.sha-00e6cb1');
 
 /**
  * @license
