@@ -317,6 +317,10 @@ export interface Resolve<T> {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if children can be loaded.
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -378,6 +382,6 @@ export interface Resolve<T> {
  * @publicApi
  */
 export interface CanLoad {
-    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean;
+    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
-export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observable<boolean> | Promise<boolean> | boolean;
+export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;

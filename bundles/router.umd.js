@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.3+33.sha-b34fb04
+ * @license Angular v10.0.0-next.3+35.sha-00e6cb1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2878,9 +2878,9 @@
                 if (route._loadedConfig !== undefined) {
                     return rxjs.of(route._loadedConfig);
                 }
-                return runCanLoadGuard(ngModule.injector, route, segments)
-                    .pipe(operators.mergeMap(function (shouldLoad) {
-                    if (shouldLoad) {
+                return this.runCanLoadGuards(ngModule.injector, route, segments)
+                    .pipe(operators.mergeMap(function (shouldLoadResult) {
+                    if (shouldLoadResult) {
                         return _this.configLoader.load(ngModule.injector, route)
                             .pipe(operators.map(function (cfg) {
                             route._loadedConfig = cfg;
@@ -2891,6 +2891,33 @@
                 }));
             }
             return rxjs.of(new LoadedRouterConfig([], ngModule));
+        };
+        ApplyRedirects.prototype.runCanLoadGuards = function (moduleInjector, route, segments) {
+            var _this = this;
+            var canLoad = route.canLoad;
+            if (!canLoad || canLoad.length === 0)
+                return rxjs.of(true);
+            var obs = rxjs.from(canLoad).pipe(operators.map(function (injectionToken) {
+                var guard = moduleInjector.get(injectionToken);
+                var guardVal;
+                if (isCanLoad(guard)) {
+                    guardVal = guard.canLoad(route, segments);
+                }
+                else if (isFunction(guard)) {
+                    guardVal = guard(route, segments);
+                }
+                else {
+                    throw new Error('Invalid CanLoad guard');
+                }
+                return wrapIntoObservable(guardVal);
+            }));
+            return obs.pipe(operators.concatAll(), operators.tap(function (result) {
+                if (!isUrlTree(result))
+                    return;
+                var error = navigationCancelingError("Redirecting to \"" + _this.urlSerializer.serialize(result) + "\"");
+                error.url = result;
+                throw error;
+            }), operators.every(function (result) { return result === true; }));
         };
         ApplyRedirects.prototype.lineralizeSegments = function (route, urlTree) {
             var res = [];
@@ -2971,26 +2998,6 @@
         };
         return ApplyRedirects;
     }());
-    function runCanLoadGuard(moduleInjector, route, segments) {
-        var canLoad = route.canLoad;
-        if (!canLoad || canLoad.length === 0)
-            return rxjs.of(true);
-        var obs = rxjs.from(canLoad).pipe(operators.map(function (injectionToken) {
-            var guard = moduleInjector.get(injectionToken);
-            var guardVal;
-            if (isCanLoad(guard)) {
-                guardVal = guard.canLoad(route, segments);
-            }
-            else if (isFunction(guard)) {
-                guardVal = guard(route, segments);
-            }
-            else {
-                throw new Error('Invalid CanLoad guard');
-            }
-            return wrapIntoObservable(guardVal);
-        }));
-        return obs.pipe(operators.concatAll(), operators.every(function (result) { return result === true; }));
-    }
     function match(segmentGroup, route, segments) {
         if (route.path === '') {
             if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
@@ -6056,7 +6063,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-next.3+33.sha-b34fb04');
+    var VERSION = new i0.Version('10.0.0-next.3+35.sha-00e6cb1');
 
     /**
      * @license
