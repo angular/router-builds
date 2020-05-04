@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.4+17.sha-a034276
+ * @license Angular v9.1.4+26.sha-7537010
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6092,7 +6092,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('9.1.4+17.sha-a034276');
+    var VERSION = new core.Version('9.1.4+26.sha-7537010');
 
     /**
      * @license
