@@ -1,13 +1,13 @@
 /**
- * @license Angular v10.0.0-next.4+29.sha-e9300c9
+ * @license Angular v10.0.0-next.4+32.sha-d9c4840
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineDirective, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵinject, ɵɵdefineInjectable, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
-import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
-import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, finalize, mergeAll } from 'rxjs/operators';
+import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
@@ -6236,21 +6236,21 @@ function resolveData(paramsInheritanceStrategy, moduleInjector) {
             if (!canActivateChecks.length) {
                 return of(t);
             }
+            /** @type {?} */
+            let canActivateChecksResolved = 0;
             return from(canActivateChecks)
                 .pipe(concatMap((/**
              * @param {?} check
              * @return {?}
              */
-            check => runResolve(check.route, (/** @type {?} */ (targetSnapshot)), paramsInheritanceStrategy, moduleInjector))), reduce((/**
-             * @param {?} _
-             * @param {?} __
+            check => runResolve(check.route, (/** @type {?} */ (targetSnapshot)), paramsInheritanceStrategy, moduleInjector))), tap((/**
              * @return {?}
              */
-            (_, __) => _)), map((/**
+            () => canActivateChecksResolved++)), takeLast(1), mergeMap((/**
              * @param {?} _
              * @return {?}
              */
-            _ => t)));
+            _ => canActivateChecksResolved === canActivateChecks.length ? of(t) : EMPTY)));
         })));
     });
 }
@@ -6288,40 +6288,30 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
     if (keys.length === 0) {
         return of({});
     }
-    if (keys.length === 1) {
-        /** @type {?} */
-        const key = keys[0];
-        return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-            .pipe(map((/**
-         * @param {?} value
-         * @return {?}
-         */
-        (value) => {
-            return { [key]: value };
-        })));
-    }
     /** @type {?} */
     const data = {};
-    /** @type {?} */
-    const runningResolvers$ = from(keys).pipe(mergeMap((/**
+    return from(keys).pipe(mergeMap((/**
      * @param {?} key
      * @return {?}
      */
-    (key) => {
-        return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-            .pipe(map((/**
-         * @param {?} value
-         * @return {?}
-         */
-        (value) => {
-            data[key] = value;
-            return value;
-        })));
-    })));
-    return runningResolvers$.pipe(last$1(), map((/**
+    (key) => getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
+        .pipe(tap((/**
+     * @param {?} value
      * @return {?}
      */
-    () => data)));
+    (value) => {
+        data[key] = value;
+    }))))), takeLast(1), mergeMap((/**
+     * @return {?}
+     */
+    () => {
+        // Ensure all resolvers returned values, otherwise don't emit any "next" and just complete
+        // the chain which will cancel navigation
+        if (Object.keys(data).length === keys.length) {
+            return of(data);
+        }
+        return EMPTY;
+    })));
 }
 /**
  * @param {?} injectionToken
@@ -7203,8 +7193,31 @@ class Router {
                         /** @type {?} */
                         const resolveStart = new ResolveStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), (/** @type {?} */ (t.targetSnapshot)));
                         this.triggerEvent(resolveStart);
-                    })), resolveData(this.paramsInheritanceStrategy, this.ngModule.injector), //
-                    tap((/**
+                    })), switchMap((/**
+                     * @param {?} t
+                     * @return {?}
+                     */
+                    t => {
+                        /** @type {?} */
+                        let dataResolved = false;
+                        return of(t).pipe(resolveData(this.paramsInheritanceStrategy, this.ngModule.injector), tap({
+                            next: (/**
+                             * @return {?}
+                             */
+                            () => dataResolved = true),
+                            complete: (/**
+                             * @return {?}
+                             */
+                            () => {
+                                if (!dataResolved) {
+                                    /** @type {?} */
+                                    const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), `At least one route resolver didn't emit any value.`);
+                                    eventsSubject.next(navCancel);
+                                    t.resolve(false);
+                                }
+                            })
+                        }));
+                    })), tap((/**
                      * @param {?} t
                      * @return {?}
                      */
@@ -10349,7 +10362,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.4+29.sha-e9300c9');
+const VERSION = new Version('10.0.0-next.4+32.sha-d9c4840');
 
 /**
  * @fileoverview added by tsickle

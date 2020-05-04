@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.4+29.sha-e9300c9
+ * @license Angular v10.0.0-next.4+32.sha-d9c4840
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3763,8 +3763,9 @@
                 if (!canActivateChecks.length) {
                     return rxjs.of(t);
                 }
+                var canActivateChecksResolved = 0;
                 return rxjs.from(canActivateChecks)
-                    .pipe(operators.concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), operators.reduce(function (_, __) { return _; }), operators.map(function (_) { return t; }));
+                    .pipe(operators.concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), operators.tap(function () { return canActivateChecksResolved++; }), operators.takeLast(1), operators.mergeMap(function (_) { return canActivateChecksResolved === canActivateChecks.length ? rxjs.of(t) : rxjs.EMPTY; }));
             }));
         };
     }
@@ -3782,23 +3783,18 @@
         if (keys.length === 0) {
             return rxjs.of({});
         }
-        if (keys.length === 1) {
-            var key_1 = keys[0];
-            return getResolver(resolve[key_1], futureARS, futureRSS, moduleInjector)
-                .pipe(operators.map(function (value) {
-                var _a;
-                return _a = {}, _a[key_1] = value, _a;
-            }));
-        }
         var data = {};
-        var runningResolvers$ = rxjs.from(keys).pipe(operators.mergeMap(function (key) {
-            return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-                .pipe(operators.map(function (value) {
-                data[key] = value;
-                return value;
-            }));
+        return rxjs.from(keys).pipe(operators.mergeMap(function (key) { return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
+            .pipe(operators.tap(function (value) {
+            data[key] = value;
+        })); }), operators.takeLast(1), operators.mergeMap(function () {
+            // Ensure all resolvers returned values, otherwise don't emit any "next" and just complete
+            // the chain which will cancel navigation
+            if (Object.keys(data).length === keys.length) {
+                return rxjs.of(data);
+            }
+            return rxjs.EMPTY;
         }));
-        return runningResolvers$.pipe(operators.last(), operators.map(function () { return data; }));
     }
     function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
         var resolver = getToken(injectionToken, futureARS, moduleInjector);
@@ -4236,8 +4232,19 @@
                         return rxjs.of(t).pipe(operators.tap(function (t) {
                             var resolveStart = new ResolveStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                             _this.triggerEvent(resolveStart);
-                        }), resolveData(_this.paramsInheritanceStrategy, _this.ngModule.injector), //
-                        operators.tap(function (t) {
+                        }), operators.switchMap(function (t) {
+                            var dataResolved = false;
+                            return rxjs.of(t).pipe(resolveData(_this.paramsInheritanceStrategy, _this.ngModule.injector), operators.tap({
+                                next: function () { return dataResolved = true; },
+                                complete: function () {
+                                    if (!dataResolved) {
+                                        var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), "At least one route resolver didn't emit any value.");
+                                        eventsSubject.next(navCancel);
+                                        t.resolve(false);
+                                    }
+                                }
+                            }));
+                        }), operators.tap(function (t) {
                             var resolveEnd = new ResolveEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                             _this.triggerEvent(resolveEnd);
                         }));
@@ -6063,7 +6070,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-next.4+29.sha-e9300c9');
+    var VERSION = new i0.Version('10.0.0-next.4+32.sha-d9c4840');
 
     /**
      * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.4+29.sha-e9300c9
+ * @license Angular v10.0.0-next.4+32.sha-d9c4840
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,8 +7,8 @@
 import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineDirective, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵinject, NgModuleFactoryLoader, Compiler, Injector, ɵɵdefineInjectable, Injectable, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
 import { __extends, __assign, __values, __spread } from 'tslib';
-import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, Subject, EMPTY } from 'rxjs';
-import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, reduce, finalize, mergeAll } from 'rxjs/operators';
+import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
+import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -3549,8 +3549,9 @@ function resolveData(paramsInheritanceStrategy, moduleInjector) {
             if (!canActivateChecks.length) {
                 return of(t);
             }
+            var canActivateChecksResolved = 0;
             return from(canActivateChecks)
-                .pipe(concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), reduce(function (_, __) { return _; }), map(function (_) { return t; }));
+                .pipe(concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), tap(function () { return canActivateChecksResolved++; }), takeLast(1), mergeMap(function (_) { return canActivateChecksResolved === canActivateChecks.length ? of(t) : EMPTY; }));
         }));
     };
 }
@@ -3568,23 +3569,18 @@ function resolveNode(resolve, futureARS, futureRSS, moduleInjector) {
     if (keys.length === 0) {
         return of({});
     }
-    if (keys.length === 1) {
-        var key_1 = keys[0];
-        return getResolver(resolve[key_1], futureARS, futureRSS, moduleInjector)
-            .pipe(map(function (value) {
-            var _a;
-            return _a = {}, _a[key_1] = value, _a;
-        }));
-    }
     var data = {};
-    var runningResolvers$ = from(keys).pipe(mergeMap(function (key) {
-        return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
-            .pipe(map(function (value) {
-            data[key] = value;
-            return value;
-        }));
+    return from(keys).pipe(mergeMap(function (key) { return getResolver(resolve[key], futureARS, futureRSS, moduleInjector)
+        .pipe(tap(function (value) {
+        data[key] = value;
+    })); }), takeLast(1), mergeMap(function () {
+        // Ensure all resolvers returned values, otherwise don't emit any "next" and just complete
+        // the chain which will cancel navigation
+        if (Object.keys(data).length === keys.length) {
+            return of(data);
+        }
+        return EMPTY;
     }));
-    return runningResolvers$.pipe(last$1(), map(function () { return data; }));
 }
 function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
     var resolver = getToken(injectionToken, futureARS, moduleInjector);
@@ -4022,8 +4018,19 @@ var Router = /** @class */ (function () {
                     return of(t).pipe(tap(function (t) {
                         var resolveStart = new ResolveStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                         _this.triggerEvent(resolveStart);
-                    }), resolveData(_this.paramsInheritanceStrategy, _this.ngModule.injector), //
-                    tap(function (t) {
+                    }), switchMap(function (t) {
+                        var dataResolved = false;
+                        return of(t).pipe(resolveData(_this.paramsInheritanceStrategy, _this.ngModule.injector), tap({
+                            next: function () { return dataResolved = true; },
+                            complete: function () {
+                                if (!dataResolved) {
+                                    var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), "At least one route resolver didn't emit any value.");
+                                    eventsSubject.next(navCancel);
+                                    t.resolve(false);
+                                }
+                            }
+                        }));
+                    }), tap(function (t) {
                         var resolveEnd = new ResolveEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                         _this.triggerEvent(resolveEnd);
                     }));
@@ -5849,7 +5856,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-var VERSION = new Version('10.0.0-next.4+29.sha-e9300c9');
+var VERSION = new Version('10.0.0-next.4+32.sha-d9c4840');
 
 /**
  * @license
