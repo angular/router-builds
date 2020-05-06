@@ -465,5 +465,5 @@ export declare class Router {
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
     static ɵfac: i0.ɵɵFactoryDef<Router, never>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<Router, never, never, {}, {}, never>;
+    static ɵprov: i0.ɵɵInjectableDef<Router>;
 }

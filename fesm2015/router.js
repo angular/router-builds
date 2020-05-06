@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.0.0-next.5+55.sha-20cc3ab
+ * @license Angular v10.0.0-next.5+61.sha-f930e75
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { LocationStrategy, Location, PlatformLocation, APP_BASE_HREF, ViewportScroller, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineDirective, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵlistener, HostBinding, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, Injectable, NgModuleFactoryLoader, Compiler, Injector, ɵɵinject, ɵɵdefineInjectable, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
+import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
+import { Component, ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Injector, NgModuleFactoryLoader, Compiler, ɵɵinvalidFactory, ɵɵdefineInjectable, Type, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, ɵɵdirectiveInject, ɵɵinjectAttribute, ɵɵdefineDirective, ɵɵlistener, HostBinding, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, Optional, ContentChildren, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -6568,6 +6568,127 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: packages/router/src/router_outlet_context.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Store contextual information about a `RouterOutlet`
+ *
+ * \@publicApi
+ */
+class OutletContext {
+    constructor() {
+        this.outlet = null;
+        this.route = null;
+        this.resolver = null;
+        this.children = new ChildrenOutletContexts();
+        this.attachRef = null;
+    }
+}
+if (false) {
+    /** @type {?} */
+    OutletContext.prototype.outlet;
+    /** @type {?} */
+    OutletContext.prototype.route;
+    /** @type {?} */
+    OutletContext.prototype.resolver;
+    /** @type {?} */
+    OutletContext.prototype.children;
+    /** @type {?} */
+    OutletContext.prototype.attachRef;
+}
+/**
+ * Store contextual information about the children (= nested) `RouterOutlet`
+ *
+ * \@publicApi
+ */
+class ChildrenOutletContexts {
+    constructor() {
+        // contexts for child outlets, by name.
+        this.contexts = new Map();
+    }
+    /**
+     * Called when a `RouterOutlet` directive is instantiated
+     * @param {?} childName
+     * @param {?} outlet
+     * @return {?}
+     */
+    onChildOutletCreated(childName, outlet) {
+        /** @type {?} */
+        const context = this.getOrCreateContext(childName);
+        context.outlet = outlet;
+        this.contexts.set(childName, context);
+    }
+    /**
+     * Called when a `RouterOutlet` directive is destroyed.
+     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
+     * re-created later.
+     * @param {?} childName
+     * @return {?}
+     */
+    onChildOutletDestroyed(childName) {
+        /** @type {?} */
+        const context = this.getContext(childName);
+        if (context) {
+            context.outlet = null;
+        }
+    }
+    /**
+     * Called when the corresponding route is deactivated during navigation.
+     * Because the component get destroyed, all children outlet are destroyed.
+     * @return {?}
+     */
+    onOutletDeactivated() {
+        /** @type {?} */
+        const contexts = this.contexts;
+        this.contexts = new Map();
+        return contexts;
+    }
+    /**
+     * @param {?} contexts
+     * @return {?}
+     */
+    onOutletReAttached(contexts) {
+        this.contexts = contexts;
+    }
+    /**
+     * @param {?} childName
+     * @return {?}
+     */
+    getOrCreateContext(childName) {
+        /** @type {?} */
+        let context = this.getContext(childName);
+        if (!context) {
+            context = new OutletContext();
+            this.contexts.set(childName, context);
+        }
+        return context;
+    }
+    /**
+     * @param {?} childName
+     * @return {?}
+     */
+    getContext(childName) {
+        return this.contexts.get(childName) || null;
+    }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ChildrenOutletContexts.prototype.contexts;
+}
+
+/**
+ * @fileoverview added by tsickle
  * Generated from: packages/router/src/url_handling_strategy.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -7867,8 +7988,25 @@ class Router {
         this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
     }
 }
+Router.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+Router.ctorParameters = () => [
+    { type: undefined },
+    { type: UrlSerializer },
+    { type: ChildrenOutletContexts },
+    { type: Location },
+    { type: Injector },
+    { type: NgModuleFactoryLoader },
+    { type: Compiler },
+    { type: undefined }
+];
 /** @nocollapse */ Router.ɵfac = function Router_Factory(t) { ɵɵinvalidFactory(); };
-/** @nocollapse */ Router.ɵdir = ɵɵdefineDirective({ type: Router });
+/** @nocollapse */ Router.ɵprov = ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(Router, [{
+        type: Injectable
+    }], function () { return [{ type: Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: Location }, { type: Injector }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: undefined }]; }, null); })();
 if (false) {
     /**
      * @type {?}
@@ -8843,127 +8981,6 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * Generated from: packages/router/src/router_outlet_context.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Store contextual information about a `RouterOutlet`
- *
- * \@publicApi
- */
-class OutletContext {
-    constructor() {
-        this.outlet = null;
-        this.route = null;
-        this.resolver = null;
-        this.children = new ChildrenOutletContexts();
-        this.attachRef = null;
-    }
-}
-if (false) {
-    /** @type {?} */
-    OutletContext.prototype.outlet;
-    /** @type {?} */
-    OutletContext.prototype.route;
-    /** @type {?} */
-    OutletContext.prototype.resolver;
-    /** @type {?} */
-    OutletContext.prototype.children;
-    /** @type {?} */
-    OutletContext.prototype.attachRef;
-}
-/**
- * Store contextual information about the children (= nested) `RouterOutlet`
- *
- * \@publicApi
- */
-class ChildrenOutletContexts {
-    constructor() {
-        // contexts for child outlets, by name.
-        this.contexts = new Map();
-    }
-    /**
-     * Called when a `RouterOutlet` directive is instantiated
-     * @param {?} childName
-     * @param {?} outlet
-     * @return {?}
-     */
-    onChildOutletCreated(childName, outlet) {
-        /** @type {?} */
-        const context = this.getOrCreateContext(childName);
-        context.outlet = outlet;
-        this.contexts.set(childName, context);
-    }
-    /**
-     * Called when a `RouterOutlet` directive is destroyed.
-     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
-     * re-created later.
-     * @param {?} childName
-     * @return {?}
-     */
-    onChildOutletDestroyed(childName) {
-        /** @type {?} */
-        const context = this.getContext(childName);
-        if (context) {
-            context.outlet = null;
-        }
-    }
-    /**
-     * Called when the corresponding route is deactivated during navigation.
-     * Because the component get destroyed, all children outlet are destroyed.
-     * @return {?}
-     */
-    onOutletDeactivated() {
-        /** @type {?} */
-        const contexts = this.contexts;
-        this.contexts = new Map();
-        return contexts;
-    }
-    /**
-     * @param {?} contexts
-     * @return {?}
-     */
-    onOutletReAttached(contexts) {
-        this.contexts = contexts;
-    }
-    /**
-     * @param {?} childName
-     * @return {?}
-     */
-    getOrCreateContext(childName) {
-        /** @type {?} */
-        let context = this.getContext(childName);
-        if (!context) {
-            context = new OutletContext();
-            this.contexts.set(childName, context);
-        }
-        return context;
-    }
-    /**
-     * @param {?} childName
-     * @return {?}
-     */
-    getContext(childName) {
-        return this.contexts.get(childName) || null;
-    }
-}
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ChildrenOutletContexts.prototype.contexts;
-}
-
-/**
- * @fileoverview added by tsickle
  * Generated from: packages/router/src/directives/router_outlet.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -9624,8 +9641,20 @@ class RouterScroller {
         }
     }
 }
+RouterScroller.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+RouterScroller.ctorParameters = () => [
+    { type: Router },
+    { type: ViewportScroller },
+    { type: undefined }
+];
 /** @nocollapse */ RouterScroller.ɵfac = function RouterScroller_Factory(t) { ɵɵinvalidFactory(); };
-/** @nocollapse */ RouterScroller.ɵdir = ɵɵdefineDirective({ type: RouterScroller });
+/** @nocollapse */ RouterScroller.ɵprov = ɵɵdefineInjectable({ token: RouterScroller, factory: RouterScroller.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(RouterScroller, [{
+        type: Injectable
+    }], function () { return [{ type: Router }, { type: ViewportScroller }, { type: undefined }]; }, null); })();
 if (false) {
     /**
      * @type {?}
@@ -10362,7 +10391,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.5+55.sha-20cc3ab');
+const VERSION = new Version('10.0.0-next.5+61.sha-f930e75');
 
 /**
  * @fileoverview added by tsickle
