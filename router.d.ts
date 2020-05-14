@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.6+33.sha-ef9da2f
+ * @license Angular v9.1.6+35.sha-3813f54
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2105,8 +2105,8 @@ export declare abstract class RouteReuseStrategy {
  * class MyService {
  *   constructor(public router: Router, logger: Logger) {
  *     router.events.pipe(
- *       filter(e => e instanceof RouterEvent)
- *     ).subscribe(e => {
+ *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
+ *     ).subscribe((e: RouterEvent) => {
  *       logger.log(e.id, e.url);
  *     });
  *   }
