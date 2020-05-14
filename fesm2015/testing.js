@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+17.sha-2418c6a
+ * @license Angular v10.0.0-next.7+43.sha-f16ca1c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -50,59 +50,91 @@ import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, �
  *
  * \@publicApi
  */
-class SpyNgModuleFactoryLoader {
+let SpyNgModuleFactoryLoader = /** @class */ (() => {
     /**
-     * @param {?} compiler
+     * \@description
+     *
+     * Allows to simulate the loading of ng modules in tests.
+     *
+     * ```
+     * const loader = TestBed.inject(NgModuleFactoryLoader);
+     *
+     * \@Component({template: 'lazy-loaded'})
+     * class LazyLoadedComponent {}
+     * \@NgModule({
+     *   declarations: [LazyLoadedComponent],
+     *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
+     * })
+     *
+     * class LoadedModule {}
+     *
+     * // sets up stubbedModules
+     * loader.stubbedModules = {lazyModule: LoadedModule};
+     *
+     * router.resetConfig([
+     *   {path: 'lazy', loadChildren: 'lazyModule'},
+     * ]);
+     *
+     * router.navigateByUrl('/lazy/loaded');
+     * ```
+     *
+     * \@publicApi
      */
-    constructor(compiler) {
-        this.compiler = compiler;
+    class SpyNgModuleFactoryLoader {
+        /**
+         * @param {?} compiler
+         */
+        constructor(compiler) {
+            this.compiler = compiler;
+            /**
+             * \@docsNotRequired
+             */
+            this._stubbedModules = {};
+        }
         /**
          * \@docsNotRequired
+         * @param {?} modules
+         * @return {?}
          */
-        this._stubbedModules = {};
-    }
-    /**
-     * \@docsNotRequired
-     * @param {?} modules
-     * @return {?}
-     */
-    set stubbedModules(modules) {
-        /** @type {?} */
-        const res = {};
-        for (const t of Object.keys(modules)) {
-            res[t] = this.compiler.compileModuleAsync(modules[t]);
+        set stubbedModules(modules) {
+            /** @type {?} */
+            const res = {};
+            for (const t of Object.keys(modules)) {
+                res[t] = this.compiler.compileModuleAsync(modules[t]);
+            }
+            this._stubbedModules = res;
         }
-        this._stubbedModules = res;
-    }
-    /**
-     * \@docsNotRequired
-     * @return {?}
-     */
-    get stubbedModules() {
-        return this._stubbedModules;
-    }
-    /**
-     * @param {?} path
-     * @return {?}
-     */
-    load(path) {
-        if (this._stubbedModules[path]) {
-            return this._stubbedModules[path];
+        /**
+         * \@docsNotRequired
+         * @return {?}
+         */
+        get stubbedModules() {
+            return this._stubbedModules;
         }
-        else {
-            return (/** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`))));
+        /**
+         * @param {?} path
+         * @return {?}
+         */
+        load(path) {
+            if (this._stubbedModules[path]) {
+                return this._stubbedModules[path];
+            }
+            else {
+                return (/** @type {?} */ (Promise.reject(new Error(`Cannot find module ${path}`))));
+            }
         }
     }
-}
-SpyNgModuleFactoryLoader.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-SpyNgModuleFactoryLoader.ctorParameters = () => [
-    { type: Compiler }
-];
-/** @nocollapse */ SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
-/** @nocollapse */ SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
+    SpyNgModuleFactoryLoader.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    SpyNgModuleFactoryLoader.ctorParameters = () => [
+        { type: Compiler }
+    ];
+    /** @nocollapse */ SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
+    /** @nocollapse */ SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
+    return SpyNgModuleFactoryLoader;
+})();
 /*@__PURE__*/ (function () { ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: Compiler }]; }, null); })();
@@ -192,54 +224,83 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  * \@publicApi
  */
-class RouterTestingModule {
+let RouterTestingModule = /** @class */ (() => {
     /**
-     * @param {?} routes
-     * @param {?=} config
-     * @return {?}
+     * \@description
+     *
+     * Sets up the router to be used for testing.
+     *
+     * The modules sets up the router to be used for testing.
+     * It provides spy implementations of `Location`, `LocationStrategy`, and {\@link
+     * NgModuleFactoryLoader}.
+     *
+     * \@usageNotes
+     * ### Example
+     *
+     * ```
+     * beforeEach(() => {
+     *   TestBed.configureTestModule({
+     *     imports: [
+     *       RouterTestingModule.withRoutes(
+     *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
+     *       )
+     *     ]
+     *   });
+     * });
+     * ```
+     *
+     * \@publicApi
      */
-    static withRoutes(routes, config) {
-        return {
-            ngModule: RouterTestingModule,
-            providers: [
-                provideRoutes(routes),
-                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
-            ]
-        };
-    }
-}
-RouterTestingModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [RouterModule],
+    class RouterTestingModule {
+        /**
+         * @param {?} routes
+         * @param {?=} config
+         * @return {?}
+         */
+        static withRoutes(routes, config) {
+            return {
+                ngModule: RouterTestingModule,
                 providers: [
-                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                    { provide: LocationStrategy, useClass: MockLocationStrategy },
-                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                        provide: Router,
-                        useFactory: setupTestingRouter,
-                        deps: [
-                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
-                        ]
-                    },
-                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                    provideRoutes(routes),
+                    { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
                 ]
-            },] },
-];
-/** @nocollapse */ RouterTestingModule.ɵmod = ɵɵdefineNgModule({ type: RouterTestingModule });
-/** @nocollapse */ RouterTestingModule.ɵinj = ɵɵdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
-        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-        { provide: LocationStrategy, useClass: MockLocationStrategy },
-        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-            provide: Router,
-            useFactory: setupTestingRouter,
-            deps: [
-                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
-            ]
-        },
-        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
-    ], imports: [RouterModule] });
+            };
+        }
+    }
+    RouterTestingModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [RouterModule],
+                    providers: [
+                        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                        { provide: LocationStrategy, useClass: MockLocationStrategy },
+                        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: Router,
+                            useFactory: setupTestingRouter,
+                            deps: [
+                                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                            ]
+                        },
+                        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                    ]
+                },] },
+    ];
+    /** @nocollapse */ RouterTestingModule.ɵmod = ɵɵdefineNgModule({ type: RouterTestingModule });
+    /** @nocollapse */ RouterTestingModule.ɵinj = ɵɵdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
+            ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+            { provide: LocationStrategy, useClass: MockLocationStrategy },
+            { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                provide: Router,
+                useFactory: setupTestingRouter,
+                deps: [
+                    UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                    ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                ]
+            },
+            { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+        ], imports: [RouterModule] });
+    return RouterTestingModule;
+})();
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
