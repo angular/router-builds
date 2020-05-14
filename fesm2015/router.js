@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+46.sha-5f64e52
+ * @license Angular v10.0.0-next.7+47.sha-77c0ef3
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -31,8 +31,8 @@ import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every
  * class MyService {
  *   constructor(public router: Router, logger: Logger) {
  *     router.events.pipe(
- *       filter(e => e instanceof RouterEvent)
- *     ).subscribe(e => {
+ *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
+ *     ).subscribe((e: RouterEvent) => {
  *       logger.log(e.id, e.url);
  *     });
  *   }
@@ -10486,7 +10486,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('10.0.0-next.7+46.sha-5f64e52');
+const VERSION = new Version('10.0.0-next.7+47.sha-77c0ef3');
 
 /**
  * @fileoverview added by tsickle
