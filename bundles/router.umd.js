@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.7+17.sha-2418c6a
+ * @license Angular v10.0.0-next.7+43.sha-f16ca1c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -703,7 +703,7 @@
             get: function () {
                 return Object.keys(this.params);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return ParamsAsMap;
@@ -1085,7 +1085,7 @@
                 }
                 return this._queryParamMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** @docsNotRequired */
@@ -1125,7 +1125,7 @@
             get: function () {
                 return Object.keys(this.children).length;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** @docsNotRequired */
@@ -1176,7 +1176,7 @@
                 }
                 return this._parameterMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** @docsNotRequired */
@@ -1550,7 +1550,7 @@
             get: function () {
                 return this._root.value;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /**
@@ -1770,7 +1770,7 @@
             get: function () {
                 return this._futureSnapshot.routeConfig;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "root", {
@@ -1778,7 +1778,7 @@
             get: function () {
                 return this._routerState.root;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "parent", {
@@ -1786,7 +1786,7 @@
             get: function () {
                 return this._routerState.parent(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
@@ -1794,7 +1794,7 @@
             get: function () {
                 return this._routerState.firstChild(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "children", {
@@ -1802,7 +1802,7 @@
             get: function () {
                 return this._routerState.children(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
@@ -1810,7 +1810,7 @@
             get: function () {
                 return this._routerState.pathFromRoot(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "paramMap", {
@@ -1825,7 +1825,7 @@
                 }
                 return this._paramMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRoute.prototype, "queryParamMap", {
@@ -1840,7 +1840,7 @@
                 }
                 return this._queryParamMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         ActivatedRoute.prototype.toString = function () {
@@ -1940,7 +1940,7 @@
             get: function () {
                 return this._routerState.root;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
@@ -1948,7 +1948,7 @@
             get: function () {
                 return this._routerState.parent(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
@@ -1956,7 +1956,7 @@
             get: function () {
                 return this._routerState.firstChild(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
@@ -1964,7 +1964,7 @@
             get: function () {
                 return this._routerState.children(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
@@ -1972,7 +1972,7 @@
             get: function () {
                 return this._routerState.pathFromRoot(this);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "paramMap", {
@@ -1982,7 +1982,7 @@
                 }
                 return this._paramMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ActivatedRouteSnapshot.prototype, "queryParamMap", {
@@ -1992,7 +1992,7 @@
                 }
                 return this._queryParamMap;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         ActivatedRouteSnapshot.prototype.toString = function () {
@@ -4501,7 +4501,7 @@
             get: function () {
                 return this.serializeUrl(this.currentUrlTree);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** The current Navigation object if one exists */
@@ -4941,7 +4941,7 @@
                     this.commands = [];
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(RouterLink.prototype, "preserveQueryParams", {
@@ -4954,7 +4954,7 @@
                 }
                 this.preserve = value;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         RouterLink.prototype.onClick = function () {
@@ -4977,7 +4977,7 @@
                     preserveFragment: attrBoolValue(this.preserveFragment),
                 });
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         __decorate([
@@ -5064,7 +5064,7 @@
                     this.commands = [];
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(RouterLinkWithHref.prototype, "preserveQueryParams", {
@@ -5074,7 +5074,7 @@
                 }
                 this.preserve = value;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         RouterLinkWithHref.prototype.ngOnChanges = function (changes) {
@@ -5112,11 +5112,12 @@
                     preserveFragment: attrBoolValue(this.preserveFragment),
                 });
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         __decorate([
-            core.HostBinding('attr.target'), core.Input(),
+            core.HostBinding('attr.target'),
+            core.Input(),
             __metadata("design:type", String)
         ], RouterLinkWithHref.prototype, "target", void 0);
         __decorate([
@@ -5270,7 +5271,7 @@
                 var classes = Array.isArray(data) ? data : data.split(' ');
                 this.classes = classes.filter(function (c) { return !!c; });
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         RouterLinkActive.prototype.ngOnChanges = function (changes) {
@@ -5411,7 +5412,7 @@
             get: function () {
                 return !!this.activated;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(RouterOutlet.prototype, "component", {
@@ -5420,7 +5421,7 @@
                     throw new Error('Outlet is not activated');
                 return this.activated.instance;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
@@ -5429,7 +5430,7 @@
                     throw new Error('Outlet is not activated');
                 return this._activatedRoute;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(RouterOutlet.prototype, "activatedRouteData", {
@@ -5439,7 +5440,7 @@
                 }
                 return {};
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /**
@@ -6117,7 +6118,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-next.7+17.sha-2418c6a');
+    var VERSION = new core.Version('10.0.0-next.7+43.sha-f16ca1c');
 
     /**
      * @license
