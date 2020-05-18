@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.6+67.sha-ba9e63a
+ * @license Angular v9.1.6+70.sha-178a78f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8126,7 +8126,12 @@ class RouterLink {
         }
     }
     /**
-     * @param {?} commands
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @param {?} commands An array of commands to pass to {\@link Router#createUrlTree
+     *     Router#createUrlTree}.
+     *   - **array**: commands to pass to {\@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
      * @return {?}
      */
     set routerLink(commands) {
@@ -8138,7 +8143,7 @@ class RouterLink {
         }
     }
     /**
-     * @deprecated 4.0.0 use `queryParamsHandling` instead.
+     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      * @param {?} value
      * @return {?}
      */
@@ -8199,19 +8204,54 @@ RouterLink.propDecorators = {
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 if (false) {
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.queryParams;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#fragment NavigationExtras#fragment}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.fragment;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.queryParamsHandling;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.preserveFragment;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.skipLocationChange;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.replaceUrl;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#state NavigationExtras#state}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLink.prototype.state;
     /**
      * @type {?}
@@ -8267,7 +8307,12 @@ class RouterLinkWithHref {
         }));
     }
     /**
-     * @param {?} commands
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @param {?} commands An array of commands to pass to {\@link Router#createUrlTree
+     *     Router#createUrlTree}.
+     *   - **array**: commands to pass to {\@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
      * @return {?}
      */
     set routerLink(commands) {
@@ -8279,6 +8324,7 @@ class RouterLinkWithHref {
         }
     }
     /**
+     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      * @param {?} value
      * @return {?}
      */
@@ -8371,19 +8417,54 @@ RouterLinkWithHref.propDecorators = {
 if (false) {
     /** @type {?} */
     RouterLinkWithHref.prototype.target;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.queryParams;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#fragment NavigationExtras#fragment}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.fragment;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.queryParamsHandling;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.preserveFragment;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.skipLocationChange;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.replaceUrl;
-    /** @type {?} */
+    /**
+     * Passed to {\@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {\@link NavigationExtras#state NavigationExtras#state}
+     * @see {\@link Router#createUrlTree Router#createUrlTree}
+     * @type {?}
+     */
     RouterLinkWithHref.prototype.state;
     /**
      * @type {?}
@@ -10125,7 +10206,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.1.6+67.sha-ba9e63a');
+const VERSION = new Version('9.1.6+70.sha-178a78f');
 
 /**
  * @fileoverview added by tsickle
