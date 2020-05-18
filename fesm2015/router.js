@@ -1,5 +1,5 @@
 /**
- * @license Angular v9.1.6+70.sha-178a78f
+ * @license Angular v9.1.6+74.sha-c423457
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1130,7 +1130,7 @@ if (false) {
      */
     Route.prototype.component;
     /**
-     * A URL to which to redirect when a the path matches.
+     * A URL to redirect to when the path matches.
      * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
      * When not present, router does not redirect.
      * @type {?|undefined}
@@ -10206,7 +10206,7 @@ function provideRouterInitializer() {
  * \@publicApi
  * @type {?}
  */
-const VERSION = new Version('9.1.6+70.sha-178a78f');
+const VERSION = new Version('9.1.6+74.sha-c423457');
 
 /**
  * @fileoverview added by tsickle
