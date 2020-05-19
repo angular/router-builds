@@ -109,23 +109,66 @@ import * as i0 from "@angular/core";
 export declare class RouterLink {
     private router;
     private route;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     queryParams: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     fragment: string;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     queryParamsHandling: QueryParamsHandling;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     preserveFragment: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     skipLocationChange: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     replaceUrl: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#state NavigationExtras#state}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     state?: {
         [k: string]: any;
     };
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
-    set routerLink(commands: any[] | string);
     /**
-     * @deprecated 4.0.0 use `queryParamsHandling` instead.
+     * @param commands An array of commands to pass to {@link Router#createUrlTree
+     *     Router#createUrlTree}.
+     *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    set routerLink(commands: any[] | string | null | undefined);
+    /**
+     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      */
     set preserveQueryParams(value: boolean);
     onClick(): boolean;
@@ -149,14 +192,49 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private route;
     private locationStrategy;
     target: string;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     queryParams: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     fragment: string;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     queryParamsHandling: QueryParamsHandling;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     preserveFragment: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     skipLocationChange: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     replaceUrl: boolean;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
+     * @see {@link NavigationExtras#state NavigationExtras#state}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     state?: {
         [k: string]: any;
     };
@@ -165,7 +243,18 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private preserve;
     href: string;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
-    set routerLink(commands: any[] | string);
+    /**
+     * @param commands An array of commands to pass to {@link Router#createUrlTree
+     *     Router#createUrlTree}.
+     *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    set routerLink(commands: any[] | string | null | undefined);
+    /**
+     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
+     */
     set preserveQueryParams(value: boolean);
     ngOnChanges(changes: {}): any;
     ngOnDestroy(): any;
