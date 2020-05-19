@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.8+15.sha-c2c14c2
+ * @license Angular v10.0.0-next.8+23.sha-3a4e1b8
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4933,6 +4933,14 @@
             }
         }
         Object.defineProperty(RouterLink.prototype, "routerLink", {
+            /**
+             * @param commands An array of commands to pass to {@link Router#createUrlTree
+             *     Router#createUrlTree}.
+             *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+             *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+             *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+             * @see {@link Router#createUrlTree Router#createUrlTree}
+             */
             set: function (commands) {
                 if (commands != null) {
                     this.commands = Array.isArray(commands) ? commands : [commands];
@@ -4946,7 +4954,7 @@
         });
         Object.defineProperty(RouterLink.prototype, "preserveQueryParams", {
             /**
-             * @deprecated 4.0.0 use `queryParamsHandling` instead.
+             * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
              */
             set: function (value) {
                 if (core.isDevMode() && console && console.warn) {
@@ -5056,6 +5064,14 @@
             });
         }
         Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+            /**
+             * @param commands An array of commands to pass to {@link Router#createUrlTree
+             *     Router#createUrlTree}.
+             *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+             *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+             *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+             * @see {@link Router#createUrlTree Router#createUrlTree}
+             */
             set: function (commands) {
                 if (commands != null) {
                     this.commands = Array.isArray(commands) ? commands : [commands];
@@ -5068,6 +5084,9 @@
             configurable: true
         });
         Object.defineProperty(RouterLinkWithHref.prototype, "preserveQueryParams", {
+            /**
+             * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
+             */
             set: function (value) {
                 if (core.isDevMode() && console && console.warn) {
                     console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
@@ -6118,7 +6137,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-next.8+15.sha-c2c14c2');
+    var VERSION = new core.Version('10.0.0-next.8+23.sha-3a4e1b8');
 
     /**
      * @license

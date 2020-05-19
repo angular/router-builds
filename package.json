@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "10.0.0-next.8+15.sha-c2c14c2",
+  "version": "10.0.0-next.8+23.sha-3a4e1b8",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -19,9 +19,9 @@
   "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {},
   "peerDependencies": {
-    "@angular/core": "10.0.0-next.8+15.sha-c2c14c2",
-    "@angular/common": "10.0.0-next.8+15.sha-c2c14c2",
-    "@angular/platform-browser": "10.0.0-next.8+15.sha-c2c14c2",
+    "@angular/core": "10.0.0-next.8+23.sha-3a4e1b8",
+    "@angular/common": "10.0.0-next.8+23.sha-3a4e1b8",
+    "@angular/platform-browser": "10.0.0-next.8+23.sha-3a4e1b8",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0"
   },
