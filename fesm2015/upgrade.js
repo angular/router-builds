@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-next.9+22.sha-6ca3fb1
+ * @license Angular v10.0.0-next.9+23.sha-a1001f2
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,19 +10,21 @@ import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
- * @fileoverview added by tsickle
- * Generated from: packages/router/upgrade/src/upgrade.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-const ɵ0 = (locationSyncBootstrapListener);
+const ɵ0 = locationSyncBootstrapListener;
 /**
  * Creates an initializer that sets up `ngRoute` integration
  * along with setting up the Angular router.
  *
- * \@usageNotes
+ * @usageNotes
  *
  * <code-example language="typescript">
- * \@NgModule({
+ * @NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
  *   UpgradeModule
@@ -36,39 +38,33 @@ const ɵ0 = (locationSyncBootstrapListener);
  * }
  * </code-example>
  *
- * \@publicApi
- * @type {?}
+ * @publicApi
  */
 const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
-    useFactory: (/** @type {?} */ (ɵ0)),
+    useFactory: ɵ0,
     deps: [UpgradeModule]
 };
 /**
- * \@internal
- * @param {?} ngUpgrade
- * @return {?}
+ * @internal
  */
 function locationSyncBootstrapListener(ngUpgrade) {
-    return (/**
-     * @return {?}
-     */
-    () => {
+    return () => {
         setUpLocationSync(ngUpgrade);
-    });
+    };
 }
 /**
  * Sets up a location change listener to trigger `history.pushState`.
  * Works around the problem that `onPopState` does not trigger `history.pushState`.
  * Must be called *after* calling `UpgradeModule.bootstrap`.
  *
- * @see `HashLocationStrategy` / `PathLocationStrategy`
+ * @param ngUpgrade The upgrade NgModule.
+ * @param urlType The location strategy.
+ * @see `HashLocationStrategy`
+ * @see `PathLocationStrategy`
  *
- * \@publicApi
- * @param {?} ngUpgrade The upgrade NgModule.
- * @param {?=} urlType The location strategy.
- * @return {?}
+ * @publicApi
  */
 function setUpLocationSync(ngUpgrade, urlType = 'path') {
     if (!ngUpgrade.$injector) {
@@ -77,36 +73,25 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
         Remove RouterUpgradeInitializer and call setUpLocationSync after UpgradeModule.bootstrap.
       `);
     }
-    /** @type {?} */
     const router = ngUpgrade.injector.get(Router);
-    /** @type {?} */
     const location = ngUpgrade.injector.get(Location);
     ngUpgrade.$injector.get('$rootScope')
-        .$on('$locationChangeStart', (/**
-     * @param {?} _
-     * @param {?} next
-     * @param {?} __
-     * @return {?}
-     */
-    (_, next, __) => {
-        /** @type {?} */
+        .$on('$locationChangeStart', (_, next, __) => {
         let url;
         if (urlType === 'path') {
             url = resolveUrl(next);
         }
         else if (urlType === 'hash') {
             // Remove the first hash from the URL
-            /** @type {?} */
             const hashIdx = next.indexOf('#');
             url = resolveUrl(next.substring(0, hashIdx) + next.substring(hashIdx + 1));
         }
         else {
             throw 'Invalid URLType passed to setUpLocationSync: ' + urlType;
         }
-        /** @type {?} */
         const path = location.normalize(url.pathname);
         router.navigateByUrl(path + url.search + url.hash);
-    }));
+    });
 }
 /**
  * Normalizes and parses a URL.
@@ -125,13 +110,8 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
  * See
  * https://github.com/angular/angular.js/blob/2c7400e7d07b0f6cec1817dab40b9250ce8ebce6/src/ng/urlUtils.js#L26-L33
  * for more info.
- * @type {?}
  */
 let anchor;
-/**
- * @param {?} url
- * @return {?}
- */
 function resolveUrl(url) {
     if (!anchor) {
         anchor = document.createElement('a');
@@ -147,20 +127,25 @@ function resolveUrl(url) {
 }
 
 /**
- * @fileoverview added by tsickle
- * Generated from: packages/router/upgrade/public_api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
+// This file only reexports content of the `src` folder. Keep it that way.
 
 /**
- * @fileoverview added by tsickle
- * Generated from: packages/router/upgrade/index.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
+export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync, ɵ0 };
 //# sourceMappingURL=upgrade.js.map
