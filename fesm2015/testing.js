@@ -1,10 +1,9 @@
 /**
- * @license Angular v10.0.0-rc.0+22.sha-82761ec
+ * @license Angular v10.0.0-rc.0+23.sha-d16a7f3
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata } from 'tslib';
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import { Injectable, Compiler, NgModule, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
@@ -47,7 +46,7 @@ import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, �
  * @publicApi
  */
 let SpyNgModuleFactoryLoader = /** @class */ (() => {
-    let SpyNgModuleFactoryLoader = class SpyNgModuleFactoryLoader {
+    class SpyNgModuleFactoryLoader {
         constructor(compiler) {
             this.compiler = compiler;
             /**
@@ -79,11 +78,14 @@ let SpyNgModuleFactoryLoader = /** @class */ (() => {
                 return Promise.reject(new Error(`Cannot find module ${path}`));
             }
         }
-    };
-    SpyNgModuleFactoryLoader = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [Compiler])
-    ], SpyNgModuleFactoryLoader);
+    }
+    SpyNgModuleFactoryLoader.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    SpyNgModuleFactoryLoader.ctorParameters = () => [
+        { type: Compiler }
+    ];
     return SpyNgModuleFactoryLoader;
 })();
 function isUrlHandlingStrategy(opts) {
@@ -145,36 +147,35 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * @publicApi
  */
 let RouterTestingModule = /** @class */ (() => {
-    var RouterTestingModule_1;
-    let RouterTestingModule = RouterTestingModule_1 = class RouterTestingModule {
+    class RouterTestingModule {
         static withRoutes(routes, config) {
             return {
-                ngModule: RouterTestingModule_1,
+                ngModule: RouterTestingModule,
                 providers: [
                     provideRoutes(routes),
                     { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
                 ]
             };
         }
-    };
-    RouterTestingModule = RouterTestingModule_1 = __decorate([
-        NgModule({
-            exports: [RouterModule],
-            providers: [
-                ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                { provide: LocationStrategy, useClass: MockLocationStrategy },
-                { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                    provide: Router,
-                    useFactory: setupTestingRouter,
-                    deps: [
-                        UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                        ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+    }
+    RouterTestingModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [RouterModule],
+                    providers: [
+                        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                        { provide: LocationStrategy, useClass: MockLocationStrategy },
+                        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                            provide: Router,
+                            useFactory: setupTestingRouter,
+                            deps: [
+                                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                            ]
+                        },
+                        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
                     ]
-                },
-                { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
-            ]
-        })
-    ], RouterTestingModule);
+                },] }
+    ];
     return RouterTestingModule;
 })();
 

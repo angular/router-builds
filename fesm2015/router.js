@@ -1,12 +1,11 @@
 /**
- * @license Angular v10.0.0-rc.0+22.sha-82761ec
+ * @license Angular v10.0.0-rc.0+23.sha-d16a7f3
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { __decorate, __metadata, __param } from 'tslib';
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Injector, NgModuleFactoryLoader, Compiler, Input, HostListener, Directive, Attribute, Renderer2, ElementRef, HostBinding, ContentChildren, QueryList, Optional, EventEmitter, Output, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -406,11 +405,11 @@ class Scroll {
  * to this `EmptyOutletComponent`.
  */
 let ɵEmptyOutletComponent = /** @class */ (() => {
-    let ɵEmptyOutletComponent = class ɵEmptyOutletComponent {
-    };
-    ɵEmptyOutletComponent = __decorate([
-        Component({ template: `<router-outlet></router-outlet>` })
-    ], ɵEmptyOutletComponent);
+    class ɵEmptyOutletComponent {
+    }
+    ɵEmptyOutletComponent.decorators = [
+        { type: Component, args: [{ template: `<router-outlet></router-outlet>` }] }
+    ];
     return ɵEmptyOutletComponent;
 })();
 
@@ -3555,7 +3554,7 @@ function defaultRouterHook(snapshot, runExtras) {
  * @publicApi
  */
 let Router = /** @class */ (() => {
-    let Router = class Router {
+    class Router {
         /**
          * Creates the router service.
          */
@@ -4288,13 +4287,21 @@ let Router = /** @class */ (() => {
         resetUrlToCurrentUrlTree() {
             this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
         }
-    };
-    Router = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [Object, UrlSerializer,
-            ChildrenOutletContexts, Location, Injector,
-            NgModuleFactoryLoader, Compiler, Array])
-    ], Router);
+    }
+    Router.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    Router.ctorParameters = () => [
+        { type: undefined },
+        { type: UrlSerializer },
+        { type: ChildrenOutletContexts },
+        { type: Location },
+        { type: Injector },
+        { type: NgModuleFactoryLoader },
+        { type: Compiler },
+        { type: undefined }
+    ];
     return Router;
 })();
 function validateCommands(commands) {
@@ -4408,7 +4415,7 @@ function validateCommands(commands) {
  * @publicApi
  */
 let RouterLink = /** @class */ (() => {
-    let RouterLink = class RouterLink {
+    class RouterLink {
         constructor(router, route, tabIndex, renderer, el) {
             this.router = router;
             this.route = route;
@@ -4461,56 +4468,30 @@ let RouterLink = /** @class */ (() => {
                 preserveFragment: attrBoolValue(this.preserveFragment),
             });
         }
+    }
+    RouterLink.decorators = [
+        { type: Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
+    ];
+    /** @nocollapse */
+    RouterLink.ctorParameters = () => [
+        { type: Router },
+        { type: ActivatedRoute },
+        { type: String, decorators: [{ type: Attribute, args: ['tabindex',] }] },
+        { type: Renderer2 },
+        { type: ElementRef }
+    ];
+    RouterLink.propDecorators = {
+        queryParams: [{ type: Input }],
+        fragment: [{ type: Input }],
+        queryParamsHandling: [{ type: Input }],
+        preserveFragment: [{ type: Input }],
+        skipLocationChange: [{ type: Input }],
+        replaceUrl: [{ type: Input }],
+        state: [{ type: Input }],
+        routerLink: [{ type: Input }],
+        preserveQueryParams: [{ type: Input }],
+        onClick: [{ type: HostListener, args: ['click',] }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], RouterLink.prototype, "queryParams", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], RouterLink.prototype, "fragment", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], RouterLink.prototype, "queryParamsHandling", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLink.prototype, "preserveFragment", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLink.prototype, "skipLocationChange", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLink.prototype, "replaceUrl", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], RouterLink.prototype, "state", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], RouterLink.prototype, "routerLink", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], RouterLink.prototype, "preserveQueryParams", null);
-    __decorate([
-        HostListener('click'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", Boolean)
-    ], RouterLink.prototype, "onClick", null);
-    RouterLink = __decorate([
-        Directive({ selector: ':not(a):not(area)[routerLink]' }),
-        __param(2, Attribute('tabindex')),
-        __metadata("design:paramtypes", [Router, ActivatedRoute, String, Renderer2, ElementRef])
-    ], RouterLink);
     return RouterLink;
 })();
 /**
@@ -4525,7 +4506,7 @@ let RouterLink = /** @class */ (() => {
  * @publicApi
  */
 let RouterLinkWithHref = /** @class */ (() => {
-    let RouterLinkWithHref = class RouterLinkWithHref {
+    class RouterLinkWithHref {
         constructor(router, route, locationStrategy) {
             this.router = router;
             this.route = route;
@@ -4596,65 +4577,30 @@ let RouterLinkWithHref = /** @class */ (() => {
                 preserveFragment: attrBoolValue(this.preserveFragment),
             });
         }
+    }
+    RouterLinkWithHref.decorators = [
+        { type: Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = () => [
+        { type: Router },
+        { type: ActivatedRoute },
+        { type: LocationStrategy }
+    ];
+    RouterLinkWithHref.propDecorators = {
+        target: [{ type: HostBinding, args: ['attr.target',] }, { type: Input }],
+        queryParams: [{ type: Input }],
+        fragment: [{ type: Input }],
+        queryParamsHandling: [{ type: Input }],
+        preserveFragment: [{ type: Input }],
+        skipLocationChange: [{ type: Input }],
+        replaceUrl: [{ type: Input }],
+        state: [{ type: Input }],
+        href: [{ type: HostBinding }],
+        routerLink: [{ type: Input }],
+        preserveQueryParams: [{ type: Input }],
+        onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
     };
-    __decorate([
-        HostBinding('attr.target'),
-        Input(),
-        __metadata("design:type", String)
-    ], RouterLinkWithHref.prototype, "target", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], RouterLinkWithHref.prototype, "queryParams", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], RouterLinkWithHref.prototype, "fragment", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], RouterLinkWithHref.prototype, "queryParamsHandling", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLinkWithHref.prototype, "preserveFragment", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLinkWithHref.prototype, "skipLocationChange", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean)
-    ], RouterLinkWithHref.prototype, "replaceUrl", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], RouterLinkWithHref.prototype, "state", void 0);
-    __decorate([
-        HostBinding(),
-        __metadata("design:type", String)
-    ], RouterLinkWithHref.prototype, "href", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], RouterLinkWithHref.prototype, "routerLink", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], RouterLinkWithHref.prototype, "preserveQueryParams", null);
-    __decorate([
-        HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey']),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Number, Boolean, Boolean, Boolean]),
-        __metadata("design:returntype", Boolean)
-    ], RouterLinkWithHref.prototype, "onClick", null);
-    RouterLinkWithHref = __decorate([
-        Directive({ selector: 'a[routerLink],area[routerLink]' }),
-        __metadata("design:paramtypes", [Router, ActivatedRoute,
-            LocationStrategy])
-    ], RouterLinkWithHref);
     return RouterLinkWithHref;
 })();
 function attrBoolValue(s) {
@@ -4726,7 +4672,7 @@ function attrBoolValue(s) {
  * @publicApi
  */
 let RouterLinkActive = /** @class */ (() => {
-    let RouterLinkActive = class RouterLinkActive {
+    class RouterLinkActive {
         constructor(router, element, renderer, link, linkWithHref) {
             this.router = router;
             this.element = element;
@@ -4784,35 +4730,27 @@ let RouterLinkActive = /** @class */ (() => {
                 this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
                 this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         }
+    }
+    RouterLinkActive.decorators = [
+        { type: Directive, args: [{
+                    selector: '[routerLinkActive]',
+                    exportAs: 'routerLinkActive',
+                },] }
+    ];
+    /** @nocollapse */
+    RouterLinkActive.ctorParameters = () => [
+        { type: Router },
+        { type: ElementRef },
+        { type: Renderer2 },
+        { type: RouterLink, decorators: [{ type: Optional }] },
+        { type: RouterLinkWithHref, decorators: [{ type: Optional }] }
+    ];
+    RouterLinkActive.propDecorators = {
+        links: [{ type: ContentChildren, args: [RouterLink, { descendants: true },] }],
+        linksWithHrefs: [{ type: ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
+        routerLinkActiveOptions: [{ type: Input }],
+        routerLinkActive: [{ type: Input }]
     };
-    __decorate([
-        ContentChildren(RouterLink, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], RouterLinkActive.prototype, "links", void 0);
-    __decorate([
-        ContentChildren(RouterLinkWithHref, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], RouterLinkActive.prototype, "linksWithHrefs", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], RouterLinkActive.prototype, "routerLinkActiveOptions", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], RouterLinkActive.prototype, "routerLinkActive", null);
-    RouterLinkActive = __decorate([
-        Directive({
-            selector: '[routerLinkActive]',
-            exportAs: 'routerLinkActive',
-        }),
-        __param(3, Optional()),
-        __param(4, Optional()),
-        __metadata("design:paramtypes", [Router, ElementRef, Renderer2,
-            RouterLink,
-            RouterLinkWithHref])
-    ], RouterLinkActive);
     return RouterLinkActive;
 })();
 
@@ -4850,7 +4788,7 @@ let RouterLinkActive = /** @class */ (() => {
  * @publicApi
  */
 let RouterOutlet = /** @class */ (() => {
-    let RouterOutlet = class RouterOutlet {
+    class RouterOutlet {
         constructor(parentContexts, location, resolver, name, changeDetector) {
             this.parentContexts = parentContexts;
             this.location = location;
@@ -4948,21 +4886,22 @@ let RouterOutlet = /** @class */ (() => {
             this.changeDetector.markForCheck();
             this.activateEvents.emit(this.activated.instance);
         }
+    }
+    RouterOutlet.decorators = [
+        { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
+    ];
+    /** @nocollapse */
+    RouterOutlet.ctorParameters = () => [
+        { type: ChildrenOutletContexts },
+        { type: ViewContainerRef },
+        { type: ComponentFactoryResolver },
+        { type: String, decorators: [{ type: Attribute, args: ['name',] }] },
+        { type: ChangeDetectorRef }
+    ];
+    RouterOutlet.propDecorators = {
+        activateEvents: [{ type: Output, args: ['activate',] }],
+        deactivateEvents: [{ type: Output, args: ['deactivate',] }]
     };
-    __decorate([
-        Output('activate'),
-        __metadata("design:type", Object)
-    ], RouterOutlet.prototype, "activateEvents", void 0);
-    __decorate([
-        Output('deactivate'),
-        __metadata("design:type", Object)
-    ], RouterOutlet.prototype, "deactivateEvents", void 0);
-    RouterOutlet = __decorate([
-        Directive({ selector: 'router-outlet', exportAs: 'outlet' }),
-        __param(3, Attribute('name')),
-        __metadata("design:paramtypes", [ChildrenOutletContexts, ViewContainerRef,
-            ComponentFactoryResolver, String, ChangeDetectorRef])
-    ], RouterOutlet);
     return RouterOutlet;
 })();
 class OutletInjector {
@@ -5041,7 +4980,7 @@ class NoPreloading {
  * @publicApi
  */
 let RouterPreloader = /** @class */ (() => {
-    let RouterPreloader = class RouterPreloader {
+    class RouterPreloader {
         constructor(router, moduleLoader, compiler, injector, preloadingStrategy) {
             this.router = router;
             this.injector = injector;
@@ -5094,12 +5033,18 @@ let RouterPreloader = /** @class */ (() => {
                 }));
             });
         }
-    };
-    RouterPreloader = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [Router, NgModuleFactoryLoader, Compiler,
-            Injector, PreloadingStrategy])
-    ], RouterPreloader);
+    }
+    RouterPreloader.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    RouterPreloader.ctorParameters = () => [
+        { type: Router },
+        { type: NgModuleFactoryLoader },
+        { type: Compiler },
+        { type: Injector },
+        { type: PreloadingStrategy }
+    ];
     return RouterPreloader;
 })();
 
@@ -5111,7 +5056,7 @@ let RouterPreloader = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let RouterScroller = /** @class */ (() => {
-    let RouterScroller = class RouterScroller {
+    class RouterScroller {
         constructor(router, 
         /** @docsNotRequired */ viewportScroller, options = {}) {
             this.router = router;
@@ -5184,12 +5129,16 @@ let RouterScroller = /** @class */ (() => {
                 this.scrollEventsSubscription.unsubscribe();
             }
         }
-    };
-    RouterScroller = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [Router,
-            ViewportScroller, Object])
-    ], RouterScroller);
+    }
+    RouterScroller.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    RouterScroller.ctorParameters = () => [
+        { type: Router },
+        { type: ViewportScroller },
+        { type: undefined }
+    ];
     return RouterScroller;
 })();
 
@@ -5290,8 +5239,7 @@ function routerNgProbeToken() {
  * @publicApi
  */
 let RouterModule = /** @class */ (() => {
-    var RouterModule_1;
-    let RouterModule = RouterModule_1 = class RouterModule {
+    class RouterModule {
         // Note: We are injecting the Router so it gets created eagerly...
         constructor(guard, router) { }
         /**
@@ -5304,7 +5252,7 @@ let RouterModule = /** @class */ (() => {
          */
         static forRoot(routes, config) {
             return {
-                ngModule: RouterModule_1,
+                ngModule: RouterModule,
                 providers: [
                     ROUTER_PROVIDERS,
                     provideRoutes(routes),
@@ -5338,18 +5286,21 @@ let RouterModule = /** @class */ (() => {
          * Creates a module with all the router directives and a provider registering routes.
          */
         static forChild(routes) {
-            return { ngModule: RouterModule_1, providers: [provideRoutes(routes)] };
+            return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         }
-    };
-    RouterModule = RouterModule_1 = __decorate([
-        NgModule({
-            declarations: ROUTER_DIRECTIVES,
-            exports: ROUTER_DIRECTIVES,
-            entryComponents: [ɵEmptyOutletComponent]
-        }),
-        __param(0, Optional()), __param(0, Inject(ROUTER_FORROOT_GUARD)), __param(1, Optional()),
-        __metadata("design:paramtypes", [Object, Router])
-    ], RouterModule);
+    }
+    RouterModule.decorators = [
+        { type: NgModule, args: [{
+                    declarations: ROUTER_DIRECTIVES,
+                    exports: ROUTER_DIRECTIVES,
+                    entryComponents: [ɵEmptyOutletComponent]
+                },] }
+    ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
+        { type: Router, decorators: [{ type: Optional }] }
+    ];
     return RouterModule;
 })();
 function createRouterScroller(router, viewportScroller, config) {
@@ -5442,7 +5393,7 @@ function rootRoute(router) {
  * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
 let RouterInitializer = /** @class */ (() => {
-    let RouterInitializer = class RouterInitializer {
+    class RouterInitializer {
         constructor(injector) {
             this.injector = injector;
             this.initNavigation = false;
@@ -5511,11 +5462,14 @@ let RouterInitializer = /** @class */ (() => {
         isLegacyDisabled(opts) {
             return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
         }
-    };
-    RouterInitializer = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [Injector])
-    ], RouterInitializer);
+    }
+    RouterInitializer.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    RouterInitializer.ctorParameters = () => [
+        { type: Injector }
+    ];
     return RouterInitializer;
 })();
 function getAppInitializer(r) {
@@ -5555,7 +5509,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+22.sha-82761ec');
+const VERSION = new Version('10.0.0-rc.0+23.sha-d16a7f3');
 
 /**
  * @license
