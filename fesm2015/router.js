@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+97.sha-87fdd23
+ * @license Angular v10.0.0-rc.0+99.sha-8d817da
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1909,7 +1909,12 @@ function findStartingPosition(nav, tree, route) {
         return new Position(tree.root, true, 0);
     }
     if (route.snapshot._lastPathIndex === -1) {
-        return new Position(route.snapshot._urlSegment, true, 0);
+        const segmentGroup = route.snapshot._urlSegment;
+        // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
+        // see issue #26224, #13011, #35687
+        // However, if the ActivatedRoute is the root we should process children like above.
+        const processChildren = segmentGroup === tree.root;
+        return new Position(segmentGroup, processChildren, 0);
     }
     const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
     const index = route.snapshot._lastPathIndex + modifier;
@@ -5534,7 +5539,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+97.sha-87fdd23');
+const VERSION = new Version('10.0.0-rc.0+99.sha-8d817da');
 
 /**
  * @license
