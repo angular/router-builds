@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+99.sha-8d817da
+ * @license Angular v10.0.0-rc.0+98.sha-946f117
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2305,12 +2305,7 @@
             return new Position(tree.root, true, 0);
         }
         if (route.snapshot._lastPathIndex === -1) {
-            var segmentGroup = route.snapshot._urlSegment;
-            // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
-            // see issue #26224, #13011, #35687
-            // However, if the ActivatedRoute is the root we should process children like above.
-            var processChildren = segmentGroup === tree.root;
-            return new Position(segmentGroup, processChildren, 0);
+            return new Position(route.snapshot._urlSegment, true, 0);
         }
         var modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
         var index = route.snapshot._lastPathIndex + modifier;
@@ -6121,7 +6116,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+99.sha-8d817da');
+    var VERSION = new i0.Version('10.0.0-rc.0+98.sha-946f117');
 
     /**
      * @license
