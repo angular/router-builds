@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.0.0-rc.3+14.sha-9d397eb
+ * @license Angular v10.0.0-rc.3+16.sha-742f3d6
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -408,7 +408,7 @@ let ɵEmptyOutletComponent = /** @class */ (() => {
     class ɵEmptyOutletComponent {
     }
     ɵEmptyOutletComponent.decorators = [
-        { type: Component, args: [{ template: `<router-outlet></router-outlet>` }] }
+        { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] }
     ];
     return ɵEmptyOutletComponent;
 })();
@@ -4296,9 +4296,8 @@ let Router = /** @class */ (() => {
     Router.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
     Router.ctorParameters = () => [
-        { type: undefined },
+        { type: Type },
         { type: UrlSerializer },
         { type: ChildrenOutletContexts },
         { type: Location },
@@ -4477,7 +4476,6 @@ let RouterLink = /** @class */ (() => {
     RouterLink.decorators = [
         { type: Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
     ];
-    /** @nocollapse */
     RouterLink.ctorParameters = () => [
         { type: Router },
         { type: ActivatedRoute },
@@ -4586,7 +4584,6 @@ let RouterLinkWithHref = /** @class */ (() => {
     RouterLinkWithHref.decorators = [
         { type: Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
     ];
-    /** @nocollapse */
     RouterLinkWithHref.ctorParameters = () => [
         { type: Router },
         { type: ActivatedRoute },
@@ -4742,7 +4739,6 @@ let RouterLinkActive = /** @class */ (() => {
                     exportAs: 'routerLinkActive',
                 },] }
     ];
-    /** @nocollapse */
     RouterLinkActive.ctorParameters = () => [
         { type: Router },
         { type: ElementRef },
@@ -4895,7 +4891,6 @@ let RouterOutlet = /** @class */ (() => {
     RouterOutlet.decorators = [
         { type: Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
     ];
-    /** @nocollapse */
     RouterOutlet.ctorParameters = () => [
         { type: ChildrenOutletContexts },
         { type: ViewContainerRef },
@@ -5042,7 +5037,6 @@ let RouterPreloader = /** @class */ (() => {
     RouterPreloader.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
     RouterPreloader.ctorParameters = () => [
         { type: Router },
         { type: NgModuleFactoryLoader },
@@ -5138,7 +5132,6 @@ let RouterScroller = /** @class */ (() => {
     RouterScroller.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
     RouterScroller.ctorParameters = () => [
         { type: Router },
         { type: ViewportScroller },
@@ -5301,7 +5294,6 @@ let RouterModule = /** @class */ (() => {
                     entryComponents: [ɵEmptyOutletComponent]
                 },] }
     ];
-    /** @nocollapse */
     RouterModule.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [ROUTER_FORROOT_GUARD,] }] },
         { type: Router, decorators: [{ type: Optional }] }
@@ -5471,7 +5463,6 @@ let RouterInitializer = /** @class */ (() => {
     RouterInitializer.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
     RouterInitializer.ctorParameters = () => [
         { type: Injector }
     ];
@@ -5514,7 +5505,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.3+14.sha-9d397eb');
+const VERSION = new Version('10.0.0-rc.3+16.sha-742f3d6');
 
 /**
  * @license

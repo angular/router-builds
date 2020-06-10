@@ -19,7 +19,7 @@ let ɵEmptyOutletComponent = /** @class */ (() => {
     class ɵEmptyOutletComponent {
     }
     ɵEmptyOutletComponent.decorators = [
-        { type: Component, args: [{ template: `<router-outlet></router-outlet>` }] }
+        { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] }
     ];
     return ɵEmptyOutletComponent;
 })();

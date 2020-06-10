@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.3+14.sha-9d397eb
+ * @license Angular v10.0.0-rc.3+16.sha-742f3d6
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -674,7 +674,7 @@
         function ɵEmptyOutletComponent() {
         }
         ɵEmptyOutletComponent.decorators = [
-            { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" }] }
+            { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" },] }
         ];
         return ɵEmptyOutletComponent;
     }());
@@ -4827,9 +4827,8 @@
         Router.decorators = [
             { type: core.Injectable }
         ];
-        /** @nocollapse */
         Router.ctorParameters = function () { return [
-            { type: undefined },
+            { type: core.Type },
             { type: UrlSerializer },
             { type: ChildrenOutletContexts },
             { type: common.Location },
@@ -5018,7 +5017,6 @@
         RouterLink.decorators = [
             { type: core.Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
         ];
-        /** @nocollapse */
         RouterLink.ctorParameters = function () { return [
             { type: Router },
             { type: ActivatedRoute },
@@ -5138,7 +5136,6 @@
         RouterLinkWithHref.decorators = [
             { type: core.Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
         ];
-        /** @nocollapse */
         RouterLinkWithHref.ctorParameters = function () { return [
             { type: Router },
             { type: ActivatedRoute },
@@ -5302,7 +5299,6 @@
                         exportAs: 'routerLinkActive',
                     },] }
         ];
-        /** @nocollapse */
         RouterLinkActive.ctorParameters = function () { return [
             { type: Router },
             { type: core.ElementRef },
@@ -5469,7 +5465,6 @@
         RouterOutlet.decorators = [
             { type: core.Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
         ];
-        /** @nocollapse */
         RouterOutlet.ctorParameters = function () { return [
             { type: ChildrenOutletContexts },
             { type: core.ViewContainerRef },
@@ -5637,7 +5632,6 @@
         RouterPreloader.decorators = [
             { type: core.Injectable }
         ];
-        /** @nocollapse */
         RouterPreloader.ctorParameters = function () { return [
             { type: Router },
             { type: core.NgModuleFactoryLoader },
@@ -5734,7 +5728,6 @@
         RouterScroller.decorators = [
             { type: core.Injectable }
         ];
-        /** @nocollapse */
         RouterScroller.ctorParameters = function () { return [
             { type: Router },
             { type: common.ViewportScroller },
@@ -5896,7 +5889,6 @@
                         entryComponents: [ɵEmptyOutletComponent]
                     },] }
         ];
-        /** @nocollapse */
         RouterModule.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [ROUTER_FORROOT_GUARD,] }] },
             { type: Router, decorators: [{ type: core.Optional }] }
@@ -6067,7 +6059,6 @@
         RouterInitializer.decorators = [
             { type: core.Injectable }
         ];
-        /** @nocollapse */
         RouterInitializer.ctorParameters = function () { return [
             { type: core.Injector }
         ]; };
@@ -6110,7 +6101,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-rc.3+14.sha-9d397eb');
+    var VERSION = new core.Version('10.0.0-rc.3+16.sha-742f3d6');
 
     /**
      * @license
