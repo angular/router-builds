@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.4+6.sha-c2f4a9b
+ * @license Angular v10.0.0-rc.4+14.sha-38c48be
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -45,48 +45,45 @@ import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, �
  *
  * @publicApi
  */
-let SpyNgModuleFactoryLoader = /** @class */ (() => {
-    class SpyNgModuleFactoryLoader {
-        constructor(compiler) {
-            this.compiler = compiler;
-            /**
-             * @docsNotRequired
-             */
-            this._stubbedModules = {};
-        }
+class SpyNgModuleFactoryLoader {
+    constructor(compiler) {
+        this.compiler = compiler;
         /**
          * @docsNotRequired
          */
-        set stubbedModules(modules) {
-            const res = {};
-            for (const t of Object.keys(modules)) {
-                res[t] = this.compiler.compileModuleAsync(modules[t]);
-            }
-            this._stubbedModules = res;
+        this._stubbedModules = {};
+    }
+    /**
+     * @docsNotRequired
+     */
+    set stubbedModules(modules) {
+        const res = {};
+        for (const t of Object.keys(modules)) {
+            res[t] = this.compiler.compileModuleAsync(modules[t]);
         }
-        /**
-         * @docsNotRequired
-         */
-        get stubbedModules() {
-            return this._stubbedModules;
+        this._stubbedModules = res;
+    }
+    /**
+     * @docsNotRequired
+     */
+    get stubbedModules() {
+        return this._stubbedModules;
+    }
+    load(path) {
+        if (this._stubbedModules[path]) {
+            return this._stubbedModules[path];
         }
-        load(path) {
-            if (this._stubbedModules[path]) {
-                return this._stubbedModules[path];
-            }
-            else {
-                return Promise.reject(new Error(`Cannot find module ${path}`));
-            }
+        else {
+            return Promise.reject(new Error(`Cannot find module ${path}`));
         }
     }
-    SpyNgModuleFactoryLoader.decorators = [
-        { type: Injectable }
-    ];
-    SpyNgModuleFactoryLoader.ctorParameters = () => [
-        { type: Compiler }
-    ];
-    return SpyNgModuleFactoryLoader;
-})();
+}
+SpyNgModuleFactoryLoader.decorators = [
+    { type: Injectable }
+];
+SpyNgModuleFactoryLoader.ctorParameters = () => [
+    { type: Compiler }
+];
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
@@ -145,38 +142,35 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  *
  * @publicApi
  */
-let RouterTestingModule = /** @class */ (() => {
-    class RouterTestingModule {
-        static withRoutes(routes, config) {
-            return {
-                ngModule: RouterTestingModule,
-                providers: [
-                    provideRoutes(routes),
-                    { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
-                ]
-            };
-        }
+class RouterTestingModule {
+    static withRoutes(routes, config) {
+        return {
+            ngModule: RouterTestingModule,
+            providers: [
+                provideRoutes(routes),
+                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
+            ]
+        };
     }
-    RouterTestingModule.decorators = [
-        { type: NgModule, args: [{
-                    exports: [RouterModule],
-                    providers: [
-                        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                        { provide: LocationStrategy, useClass: MockLocationStrategy },
-                        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
-                            provide: Router,
-                            useFactory: setupTestingRouter,
-                            deps: [
-                                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
-                            ]
-                        },
-                        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
-                    ]
-                },] }
-    ];
-    return RouterTestingModule;
-})();
+}
+RouterTestingModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [RouterModule],
+                providers: [
+                    ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
+                    { provide: LocationStrategy, useClass: MockLocationStrategy },
+                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                        provide: Router,
+                        useFactory: setupTestingRouter,
+                        deps: [
+                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
+                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                        ]
+                    },
+                    { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                ]
+            },] }
+];
 
 /**
  * @license
