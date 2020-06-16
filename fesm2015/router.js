@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.6+3.sha-6c7467a
+ * @license Angular v10.0.0-rc.6+4.sha-97bb88f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4361,7 +4361,7 @@ function validateCommands(commands) {
  *   link to user component
  * </a>
  * ```
- * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+ * RouterLink will use these to generate this link: `/user/bob?debug=true#education`.
  *
  * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
  * directive to preserve the current query params and fragment:
@@ -5483,7 +5483,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.6+3.sha-6c7467a');
+const VERSION = new Version('10.0.0-rc.6+4.sha-97bb88f');
 
 /**
  * @license
