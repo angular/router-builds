@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+186.sha-ceca5dd
+ * @license Angular v10.0.0-rc.0+187.sha-1185aa0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4888,7 +4888,7 @@
      *   link to user component
      * </a>
      * ```
-     * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+     * RouterLink will use these to generate this link: `/user/bob?debug=true#education`.
      *
      * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
      * directive to preserve the current query params and fragment:
@@ -6129,7 +6129,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+186.sha-ceca5dd');
+    var VERSION = new i0.Version('10.0.0-rc.0+187.sha-1185aa0');
 
     /**
      * @license

@@ -47,7 +47,7 @@ import * as i0 from "@angular/core";
  *   link to user component
  * </a>
  * ```
- * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+ * RouterLink will use these to generate this link: `/user/bob?debug=true#education`.
  *
  * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
  * directive to preserve the current query params and fragment:
