@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+200.sha-7e0eccc
+ * @license Angular v10.0.0-rc.0+208.sha-fd65958
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -25,35 +25,36 @@
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
     /* global Reflect, Promise */
-
-    var extendStatics = function(d, b) {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b)
+                if (b.hasOwnProperty(p))
+                    d[p] = b[p]; };
         return extendStatics(d, b);
     };
-
     function __extends(d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
-
-    var __assign = function() {
+    var __assign = function () {
         __assign = Object.assign || function __assign(t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+                for (var p in s)
+                    if (Object.prototype.hasOwnProperty.call(s, p))
+                        t[p] = s[p];
             }
             return t;
         };
         return __assign.apply(this, arguments);
     };
-
     function __rest(s, e) {
         var t = {};
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-            t[p] = s[p];
+        for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+                t[p] = s[p];
         if (s != null && typeof Object.getOwnPropertySymbols === "function")
             for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
                 if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -61,175 +62,247 @@
             }
         return t;
     }
-
     function __decorate(decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+            r = Reflect.decorate(decorators, target, key, desc);
+        else
+            for (var i = decorators.length - 1; i >= 0; i--)
+                if (d = decorators[i])
+                    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
-
     function __param(paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); }
+        return function (target, key) { decorator(target, key, paramIndex); };
     }
-
     function __metadata(metadataKey, metadataValue) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+            return Reflect.metadata(metadataKey, metadataValue);
     }
-
     function __awaiter(thisArg, _arguments, P, generator) {
         function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
         return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function fulfilled(value) { try {
+                step(generator.next(value));
+            }
+            catch (e) {
+                reject(e);
+            } }
+            function rejected(value) { try {
+                step(generator["throw"](value));
+            }
+            catch (e) {
+                reject(e);
+            } }
             function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
     }
-
     function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        var _ = { label: 0, sent: function () { if (t[0] & 1)
+                throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
         function verb(n) { return function (v) { return step([n, v]); }; }
         function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
+            if (f)
+                throw new TypeError("Generator is already executing.");
+            while (_)
+                try {
+                    if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+                        return t;
+                    if (y = 0, t)
+                        op = [op[0] & 2, t.value];
+                    switch (op[0]) {
+                        case 0:
+                        case 1:
+                            t = op;
+                            break;
+                        case 4:
+                            _.label++;
+                            return { value: op[1], done: false };
+                        case 5:
+                            _.label++;
+                            y = op[1];
+                            op = [0];
+                            continue;
+                        case 7:
+                            op = _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                        default:
+                            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                                _ = 0;
+                                continue;
+                            }
+                            if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
+                                _.label = op[1];
+                                break;
+                            }
+                            if (op[0] === 6 && _.label < t[1]) {
+                                _.label = t[1];
+                                t = op;
+                                break;
+                            }
+                            if (t && _.label < t[2]) {
+                                _.label = t[2];
+                                _.ops.push(op);
+                                break;
+                            }
+                            if (t[2])
+                                _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                    }
+                    op = body.call(thisArg, _);
                 }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+                catch (e) {
+                    op = [6, e];
+                    y = 0;
+                }
+                finally {
+                    f = t = 0;
+                }
+            if (op[0] & 5)
+                throw op[1];
+            return { value: op[0] ? op[1] : void 0, done: true };
         }
     }
-
-    var __createBinding = Object.create ? (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-    }) : (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
+    var __createBinding = Object.create ? (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function () { return m[k]; } });
+    }) : (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
         o[k2] = m[k];
     });
-
     function __exportStar(m, exports) {
-        for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+        for (var p in m)
+            if (p !== "default" && !exports.hasOwnProperty(p))
+                __createBinding(exports, m, p);
     }
-
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-        if (m) return m.call(o);
-        if (o && typeof o.length === "number") return {
-            next: function () {
-                if (o && i >= o.length) o = void 0;
-                return { value: o && o[i++], done: !o };
-            }
-        };
+        if (m)
+            return m.call(o);
+        if (o && typeof o.length === "number")
+            return {
+                next: function () {
+                    if (o && i >= o.length)
+                        o = void 0;
+                    return { value: o && o[i++], done: !o };
+                }
+            };
         throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
     }
-
     function __read(o, n) {
         var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m) return o;
+        if (!m)
+            return o;
         var i = m.call(o), r, ar = [], e;
         try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+                ar.push(r.value);
         }
-        catch (error) { e = { error: error }; }
+        catch (error) {
+            e = { error: error };
+        }
         finally {
             try {
-                if (r && !r.done && (m = i["return"])) m.call(i);
+                if (r && !r.done && (m = i["return"]))
+                    m.call(i);
             }
-            finally { if (e) throw e.error; }
+            finally {
+                if (e)
+                    throw e.error;
+            }
         }
         return ar;
     }
-
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
-
     function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++)
+            s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
             for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
                 r[k] = a[j];
         return r;
-    };
-
+    }
+    ;
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
-
     function __asyncGenerator(thisArg, _arguments, generator) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var g = generator.apply(thisArg, _arguments || []), i, q = [];
         return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function verb(n) { if (g[n])
+            i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try {
+            step(g[n](v));
+        }
+        catch (e) {
+            settle(q[0][3], e);
+        } }
         function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
         function fulfill(value) { resume("next", value); }
         function reject(value) { resume("throw", value); }
-        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+        function settle(f, v) { if (f(v), q.shift(), q.length)
+            resume(q[0][0], q[0][1]); }
     }
-
     function __asyncDelegator(o) {
         var i, p;
         return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
         function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
     }
-
     function __asyncValues(o) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var m = o[Symbol.asyncIterator], i;
         return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
         function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function (v) { resolve({ value: v, done: d }); }, reject); }
     }
-
     function __makeTemplateObject(cooked, raw) {
-        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        if (Object.defineProperty) {
+            Object.defineProperty(cooked, "raw", { value: raw });
+        }
+        else {
+            cooked.raw = raw;
+        }
         return cooked;
-    };
-
-    var __setModuleDefault = Object.create ? (function(o, v) {
+    }
+    ;
+    var __setModuleDefault = Object.create ? (function (o, v) {
         Object.defineProperty(o, "default", { enumerable: true, value: v });
-    }) : function(o, v) {
+    }) : function (o, v) {
         o["default"] = v;
     };
-
     function __importStar(mod) {
-        if (mod && mod.__esModule) return mod;
+        if (mod && mod.__esModule)
+            return mod;
         var result = {};
-        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        if (mod != null)
+            for (var k in mod)
+                if (Object.hasOwnProperty.call(mod, k))
+                    __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
     }
-
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
     function __classPrivateFieldGet(receiver, privateMap) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to get private field on non-instance");
         }
         return privateMap.get(receiver);
     }
-
     function __classPrivateFieldSet(receiver, privateMap, value) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to set private field on non-instance");
@@ -673,11 +746,11 @@
     var ɵEmptyOutletComponent = /** @class */ (function () {
         function ɵEmptyOutletComponent() {
         }
-        ɵEmptyOutletComponent.decorators = [
-            { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" },] }
-        ];
         return ɵEmptyOutletComponent;
     }());
+    ɵEmptyOutletComponent.decorators = [
+        { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" },] }
+    ];
 
     /**
      * @license
@@ -861,7 +934,7 @@
      */
     function standardizeConfig(r) {
         var children = r.children && r.children.map(standardizeConfig);
-        var c = children ? __assign(__assign({}, r), { children: children }) : __assign({}, r);
+        var c = children ? Object.assign(Object.assign({}, r), { children: children }) : Object.assign({}, r);
         if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
             c.component = ɵEmptyOutletComponent;
         }
@@ -1676,13 +1749,6 @@
     }
 
     /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
      * Represents the state of the router as a tree of activated routes.
      *
      * @usageNotes
@@ -1879,13 +1945,13 @@
             inheritingStartingFrom = pathFromRoot.length - 1;
             while (inheritingStartingFrom >= 1) {
                 var current = pathFromRoot[inheritingStartingFrom];
-                var parent_1 = pathFromRoot[inheritingStartingFrom - 1];
+                var parent = pathFromRoot[inheritingStartingFrom - 1];
                 // current route is an empty path => inherits its parent's params and data
                 if (current.routeConfig && current.routeConfig.path === '') {
                     inheritingStartingFrom--;
                     // parent is componentless => current route should inherit its params and data
                 }
-                else if (!parent_1.component) {
+                else if (!parent.component) {
                     inheritingStartingFrom--;
                 }
                 else {
@@ -1898,9 +1964,9 @@
     /** @internal */
     function flattenInherited(pathFromRoot) {
         return pathFromRoot.reduce(function (res, curr) {
-            var params = __assign(__assign({}, res.params), curr.params);
-            var data = __assign(__assign({}, res.data), curr.data);
-            var resolve = __assign(__assign({}, res.resolve), curr._resolvedData);
+            var params = Object.assign(Object.assign({}, res.params), curr.params);
+            var data = Object.assign(Object.assign({}, res.data), curr.data);
+            var resolve = Object.assign(Object.assign({}, res.resolve), curr._resolvedData);
             return { params: params, data: data, resolve: resolve };
         }, { params: {}, data: {}, resolve: {} });
     }
@@ -2110,13 +2176,6 @@
             (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     function createRouterState(routeReuseStrategy, curr, prevState) {
         var root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
         return new RouterState(root, curr);
@@ -2181,13 +2240,6 @@
         return new ActivatedRoute(new rxjs.BehaviorSubject(c.url), new rxjs.BehaviorSubject(c.params), new rxjs.BehaviorSubject(c.queryParams), new rxjs.BehaviorSubject(c.fragment), new rxjs.BehaviorSubject(c.data), c.outlet, c.component, c);
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     function createUrlTree(route, urlTree, commands, queryParams, fragment) {
         if (commands.length === 0) {
             return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
@@ -2470,13 +2522,11 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var activateRoutes = function (rootContexts, routeReuseStrategy, forwardEvent) {
-        return operators.map(function (t) {
-            new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent)
-                .activate(rootContexts);
-            return t;
-        });
-    };
+    var activateRoutes = function (rootContexts, routeReuseStrategy, forwardEvent) { return operators.map(function (t) {
+        new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent)
+            .activate(rootContexts);
+        return t;
+    }); };
     var ActivateRoutes = /** @class */ (function () {
         function ActivateRoutes(routeReuseStrategy, futureState, currState, forwardEvent) {
             this.routeReuseStrategy = routeReuseStrategy;
@@ -2684,13 +2734,6 @@
         return guard && isFunction(guard.canDeactivate);
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var NoMatch = /** @class */ (function () {
         function NoMatch(segmentGroup) {
             this.segmentGroup = segmentGroup || null;
@@ -2752,9 +2795,7 @@
         ApplyRedirects.prototype.match = function (tree) {
             var _this = this;
             var expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-            var mapped$ = expanded$.pipe(operators.map(function (rootSegmentGroup) {
-                return _this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment);
-            }));
+            var mapped$ = expanded$.pipe(operators.map(function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment); }));
             return mapped$.pipe(operators.catchError(function (e) {
                 if (e instanceof NoMatch) {
                     throw _this.noMatchError(e);
@@ -2880,9 +2921,7 @@
                     return rxjs.of(new UrlSegmentGroup(consumedSegments, {}));
                 }
                 var expanded$ = _this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-                return expanded$.pipe(operators.map(function (cs) {
-                    return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children);
-                }));
+                return expanded$.pipe(operators.map(function (cs) { return new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children); }));
             }));
         };
         ApplyRedirects.prototype.getChildConfig = function (ngModule, route, segments) {
@@ -3078,7 +3117,7 @@
             }
             finally { if (e_2) throw e_2.error; }
         }
-        return __assign(__assign({}, children), res);
+        return Object.assign(Object.assign({}, children), res);
     }
     function createChildrenForEmptySegments(routes, primarySegmentGroup) {
         var e_3, _a;
@@ -3127,7 +3166,7 @@
     function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
         return function (source) {
             return source.pipe(operators.switchMap(function (t) { return applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
-                .pipe(operators.map(function (urlAfterRedirects) { return (__assign(__assign({}, t), { urlAfterRedirects: urlAfterRedirects })); })); }));
+                .pipe(operators.map(function (urlAfterRedirects) { return (Object.assign(Object.assign({}, t), { urlAfterRedirects: urlAfterRedirects })); })); }));
         };
     }
 
@@ -3190,9 +3229,7 @@
             delete prevChildren[c.value.outlet];
         });
         // Process any children left from the current route (not active for the future route)
-        forEach(prevChildren, function (v, k) {
-            return deactivateRouteAndItsChildren(v, contexts.getContext(k), checks);
-        });
+        forEach(prevChildren, function (v, k) { return deactivateRouteAndItsChildren(v, contexts.getContext(k), checks); });
         return checks;
     }
     function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks) {
@@ -3288,13 +3325,6 @@
         }
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var INITIAL_VALUE = Symbol('INITIAL_VALUE');
     function prioritizedGuardValue() {
         return operators.switchMap(function (obs) {
@@ -3338,21 +3368,19 @@
             return source.pipe(operators.mergeMap(function (t) {
                 var targetSnapshot = t.targetSnapshot, currentSnapshot = t.currentSnapshot, _a = t.guards, canActivateChecks = _a.canActivateChecks, canDeactivateChecks = _a.canDeactivateChecks;
                 if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
-                    return rxjs.of(__assign(__assign({}, t), { guardsResult: true }));
+                    return rxjs.of(Object.assign(Object.assign({}, t), { guardsResult: true }));
                 }
                 return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
                     .pipe(operators.mergeMap(function (canDeactivate) {
                     return canDeactivate && isBoolean(canDeactivate) ?
                         runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
                         rxjs.of(canDeactivate);
-                }), operators.map(function (guardsResult) { return (__assign(__assign({}, t), { guardsResult: guardsResult })); }));
+                }), operators.map(function (guardsResult) { return (Object.assign(Object.assign({}, t), { guardsResult: guardsResult })); }));
             }));
         };
     }
     function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
-        return rxjs.from(checks).pipe(operators.mergeMap(function (check) {
-            return runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector);
-        }), operators.first(function (result) {
+        return rxjs.from(checks).pipe(operators.mergeMap(function (check) { return runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector); }), operators.first(function (result) {
             return result !== true;
         }, true));
     }
@@ -3469,13 +3497,6 @@
         return rxjs.of(canDeactivateObservables).pipe(prioritizedGuardValue());
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var NoMatch$1 = /** @class */ (function () {
         function NoMatch() {
         }
@@ -3500,7 +3521,7 @@
             try {
                 var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config, this.relativeLinkResolution).segmentGroup;
                 var children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
-                var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
+                var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
                 var rootNode = new TreeNode(root, children);
                 var routeState = new RouterStateSnapshot(this.url, rootNode);
                 this.inheritParamsAndData(routeState._root);
@@ -3570,13 +3591,13 @@
             var rawSlicedSegments = [];
             if (route.path === '**') {
                 var params = segments.length > 0 ? last(segments).parameters : {};
-                snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
+                snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
             }
             else {
                 var result = match$1(rawSegment, route, segments);
                 consumedSegments = result.consumedSegments;
                 rawSlicedSegments = segments.slice(result.lastChild);
-                snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(__assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+                snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
             }
             var childConfig = getChildConfig(route);
             var _a = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig, this.relativeLinkResolution), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
@@ -3625,7 +3646,7 @@
         forEach(res.posParams, function (v, k) {
             posParams[k] = v.path;
         });
-        var parameters = res.consumed.length > 0 ? __assign(__assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
+        var parameters = res.consumed.length > 0 ? Object.assign(Object.assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
             posParams;
         return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
     }
@@ -3703,7 +3724,7 @@
             }
             finally { if (e_2) throw e_2.error; }
         }
-        return __assign(__assign({}, children), res);
+        return Object.assign(Object.assign({}, children), res);
     }
     function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
         var e_3, _a;
@@ -3763,7 +3784,7 @@
     function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
         return function (source) {
             return source.pipe(operators.mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
-                .pipe(operators.map(function (targetSnapshot) { return (__assign(__assign({}, t), { targetSnapshot: targetSnapshot })); })); }));
+                .pipe(operators.map(function (targetSnapshot) { return (Object.assign(Object.assign({}, t), { targetSnapshot: targetSnapshot })); })); }));
         };
     }
 
@@ -3792,7 +3813,7 @@
         return resolveNode(resolve, futureARS, futureRSS, moduleInjector)
             .pipe(operators.map(function (resolvedData) {
             futureARS._resolvedData = resolvedData;
-            futureARS.data = __assign(__assign({}, futureARS.data), inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
+            futureARS.data = Object.assign(Object.assign({}, futureARS.data), inheritedParamsDataResolve(futureARS, paramsInheritanceStrategy).resolve);
             return null;
         }));
     }
@@ -4205,9 +4226,7 @@
             var eventsSubject = this.events;
             return transitions.pipe(operators.filter(function (t) { return t.id !== 0; }), 
             // Extract URL
-            operators.map(function (t) {
-                return (__assign(__assign({}, t), { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) }));
-            }), 
+            operators.map(function (t) { return (Object.assign(Object.assign({}, t), { extractedUrl: _this.urlHandlingStrategy.extract(t.rawUrl) })); }), 
             // Using switchMap so we cancel executing navigations when a new one comes in
             operators.switchMap(function (t) {
                 var completed = false;
@@ -4221,7 +4240,7 @@
                         extractedUrl: t.extractedUrl,
                         trigger: t.source,
                         extras: t.extras,
-                        previousNavigation: _this.lastSuccessfulNavigation ? __assign(__assign({}, _this.lastSuccessfulNavigation), { previousNavigation: null }) :
+                        previousNavigation: _this.lastSuccessfulNavigation ? Object.assign(Object.assign({}, _this.lastSuccessfulNavigation), { previousNavigation: null }) :
                             null
                     };
                 }), operators.switchMap(function (t) {
@@ -4247,7 +4266,7 @@
                         applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                         // Update the currentNavigation
                         operators.tap(function (t) {
-                            _this.currentNavigation = __assign(__assign({}, _this.currentNavigation), { finalUrl: t.urlAfterRedirects });
+                            _this.currentNavigation = Object.assign(Object.assign({}, _this.currentNavigation), { finalUrl: t.urlAfterRedirects });
                         }), 
                         // Recognize
                         recognize$1(_this.rootComponentType, _this.config, function (url) { return _this.serializeUrl(url); }, _this.paramsInheritanceStrategy, _this.relativeLinkResolution), 
@@ -4277,7 +4296,7 @@
                             var navStart = new NavigationStart(id, _this.serializeUrl(extractedUrl), source, restoredState);
                             eventsSubject.next(navStart);
                             var targetSnapshot = createEmptyState(extractedUrl, _this.rootComponentType).snapshot;
-                            return rxjs.of(__assign(__assign({}, t), { targetSnapshot: targetSnapshot, urlAfterRedirects: extractedUrl, extras: __assign(__assign({}, extras), { skipLocationChange: false, replaceUrl: false }) }));
+                            return rxjs.of(Object.assign(Object.assign({}, t), { targetSnapshot: targetSnapshot, urlAfterRedirects: extractedUrl, extras: Object.assign(Object.assign({}, extras), { skipLocationChange: false, replaceUrl: false }) }));
                         }
                         else {
                             /* When neither the current or previous URL can be processed, do nothing
@@ -4307,7 +4326,7 @@
                 operators.tap(function (t) {
                     var guardsStart = new GuardsCheckStart(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                     _this.triggerEvent(guardsStart);
-                }), operators.map(function (t) { return (__assign(__assign({}, t), { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), operators.tap(function (t) {
+                }), operators.map(function (t) { return (Object.assign(Object.assign({}, t), { guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, _this.rootContexts) })); }), checkGuards(_this.ngModule.injector, function (evt) { return _this.triggerEvent(evt); }), operators.tap(function (t) {
                     if (isUrlTree(t.guardsResult)) {
                         var error = navigationCancelingError("Redirecting to \"" + _this.serializeUrl(t.guardsResult) + "\"");
                         error.url = t.guardsResult;
@@ -4363,7 +4382,7 @@
                     });
                 }), operators.map(function (t) {
                     var targetRouterState = createRouterState(_this.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
-                    return (__assign(__assign({}, t), { targetRouterState: targetRouterState }));
+                    return (Object.assign(Object.assign({}, t), { targetRouterState: targetRouterState }));
                 }), 
                 /* Once here, we are about to activate syncronously. The assumption is this
                    will succeed, and user code may read from the Router service. Therefore
@@ -4487,7 +4506,7 @@
             return transition;
         };
         Router.prototype.setTransition = function (t) {
-            this.transitions.next(__assign(__assign({}, this.getTransition()), t));
+            this.transitions.next(Object.assign(Object.assign({}, this.getTransition()), t));
         };
         /**
          * Sets up the location change listener and performs the initial navigation.
@@ -4625,7 +4644,7 @@
             if (queryParamsHandling) {
                 switch (queryParamsHandling) {
                     case 'merge':
-                        q = __assign(__assign({}, this.currentUrlTree.queryParams), queryParams);
+                        q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
                         break;
                     case 'preserve':
                         q = this.currentUrlTree.queryParams;
@@ -4813,10 +4832,10 @@
             state = state || {};
             if (this.location.isCurrentPathEqualTo(path) || replaceUrl) {
                 // TODO(jasonaden): Remove first `navigationId` and rely on `ng` namespace.
-                this.location.replaceState(path, '', __assign(__assign({}, state), { navigationId: id }));
+                this.location.replaceState(path, '', Object.assign(Object.assign({}, state), { navigationId: id }));
             }
             else {
-                this.location.go(path, '', __assign(__assign({}, state), { navigationId: id }));
+                this.location.go(path, '', Object.assign(Object.assign({}, state), { navigationId: id }));
             }
         };
         Router.prototype.resetStateAndUrl = function (storedState, storedUrl, rawUrl) {
@@ -4828,21 +4847,21 @@
         Router.prototype.resetUrlToCurrentUrlTree = function () {
             this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', { navigationId: this.lastSuccessfulId });
         };
-        Router.decorators = [
-            { type: core.Injectable }
-        ];
-        Router.ctorParameters = function () { return [
-            { type: core.Type },
-            { type: UrlSerializer },
-            { type: ChildrenOutletContexts },
-            { type: common.Location },
-            { type: core.Injector },
-            { type: core.NgModuleFactoryLoader },
-            { type: core.Compiler },
-            { type: undefined }
-        ]; };
         return Router;
     }());
+    Router.decorators = [
+        { type: core.Injectable }
+    ];
+    Router.ctorParameters = function () { return [
+        { type: core.Type },
+        { type: UrlSerializer },
+        { type: ChildrenOutletContexts },
+        { type: common.Location },
+        { type: core.Injector },
+        { type: core.NgModuleFactoryLoader },
+        { type: core.Compiler },
+        { type: undefined }
+    ]; };
     function validateCommands(commands) {
         for (var i = 0; i < commands.length; i++) {
             var cmd = commands[i];
@@ -5018,30 +5037,30 @@
             enumerable: false,
             configurable: true
         });
-        RouterLink.decorators = [
-            { type: core.Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
-        ];
-        RouterLink.ctorParameters = function () { return [
-            { type: Router },
-            { type: ActivatedRoute },
-            { type: String, decorators: [{ type: core.Attribute, args: ['tabindex',] }] },
-            { type: core.Renderer2 },
-            { type: core.ElementRef }
-        ]; };
-        RouterLink.propDecorators = {
-            queryParams: [{ type: core.Input }],
-            fragment: [{ type: core.Input }],
-            queryParamsHandling: [{ type: core.Input }],
-            preserveFragment: [{ type: core.Input }],
-            skipLocationChange: [{ type: core.Input }],
-            replaceUrl: [{ type: core.Input }],
-            state: [{ type: core.Input }],
-            routerLink: [{ type: core.Input }],
-            preserveQueryParams: [{ type: core.Input }],
-            onClick: [{ type: core.HostListener, args: ['click',] }]
-        };
         return RouterLink;
     }());
+    RouterLink.decorators = [
+        { type: core.Directive, args: [{ selector: ':not(a):not(area)[routerLink]' },] }
+    ];
+    RouterLink.ctorParameters = function () { return [
+        { type: Router },
+        { type: ActivatedRoute },
+        { type: String, decorators: [{ type: core.Attribute, args: ['tabindex',] }] },
+        { type: core.Renderer2 },
+        { type: core.ElementRef }
+    ]; };
+    RouterLink.propDecorators = {
+        queryParams: [{ type: core.Input }],
+        fragment: [{ type: core.Input }],
+        queryParamsHandling: [{ type: core.Input }],
+        preserveFragment: [{ type: core.Input }],
+        skipLocationChange: [{ type: core.Input }],
+        replaceUrl: [{ type: core.Input }],
+        state: [{ type: core.Input }],
+        routerLink: [{ type: core.Input }],
+        preserveQueryParams: [{ type: core.Input }],
+        onClick: [{ type: core.HostListener, args: ['click',] }]
+    };
     /**
      * @description
      *
@@ -5137,30 +5156,30 @@
             enumerable: false,
             configurable: true
         });
-        RouterLinkWithHref.decorators = [
-            { type: core.Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
-        ];
-        RouterLinkWithHref.ctorParameters = function () { return [
-            { type: Router },
-            { type: ActivatedRoute },
-            { type: common.LocationStrategy }
-        ]; };
-        RouterLinkWithHref.propDecorators = {
-            target: [{ type: core.HostBinding, args: ['attr.target',] }, { type: core.Input }],
-            queryParams: [{ type: core.Input }],
-            fragment: [{ type: core.Input }],
-            queryParamsHandling: [{ type: core.Input }],
-            preserveFragment: [{ type: core.Input }],
-            skipLocationChange: [{ type: core.Input }],
-            replaceUrl: [{ type: core.Input }],
-            state: [{ type: core.Input }],
-            href: [{ type: core.HostBinding }],
-            routerLink: [{ type: core.Input }],
-            preserveQueryParams: [{ type: core.Input }],
-            onClick: [{ type: core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
-        };
         return RouterLinkWithHref;
     }());
+    RouterLinkWithHref.decorators = [
+        { type: core.Directive, args: [{ selector: 'a[routerLink],area[routerLink]' },] }
+    ];
+    RouterLinkWithHref.ctorParameters = function () { return [
+        { type: Router },
+        { type: ActivatedRoute },
+        { type: common.LocationStrategy }
+    ]; };
+    RouterLinkWithHref.propDecorators = {
+        target: [{ type: core.HostBinding, args: ['attr.target',] }, { type: core.Input }],
+        queryParams: [{ type: core.Input }],
+        fragment: [{ type: core.Input }],
+        queryParamsHandling: [{ type: core.Input }],
+        preserveFragment: [{ type: core.Input }],
+        skipLocationChange: [{ type: core.Input }],
+        replaceUrl: [{ type: core.Input }],
+        state: [{ type: core.Input }],
+        href: [{ type: core.HostBinding }],
+        routerLink: [{ type: core.Input }],
+        preserveQueryParams: [{ type: core.Input }],
+        onClick: [{ type: core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
+    };
     function attrBoolValue(s) {
         return s === '' || !!s;
     }
@@ -5287,9 +5306,7 @@
         };
         RouterLinkActive.prototype.isLinkActive = function (router) {
             var _this = this;
-            return function (link) {
-                return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
-            };
+            return function (link) { return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact); };
         };
         RouterLinkActive.prototype.hasActiveLinks = function () {
             var isActiveCheckFn = this.isLinkActive(this.router);
@@ -5297,27 +5314,27 @@
                 this.linkWithHref && isActiveCheckFn(this.linkWithHref) ||
                 this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
         };
-        RouterLinkActive.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[routerLinkActive]',
-                        exportAs: 'routerLinkActive',
-                    },] }
-        ];
-        RouterLinkActive.ctorParameters = function () { return [
-            { type: Router },
-            { type: core.ElementRef },
-            { type: core.Renderer2 },
-            { type: RouterLink, decorators: [{ type: core.Optional }] },
-            { type: RouterLinkWithHref, decorators: [{ type: core.Optional }] }
-        ]; };
-        RouterLinkActive.propDecorators = {
-            links: [{ type: core.ContentChildren, args: [RouterLink, { descendants: true },] }],
-            linksWithHrefs: [{ type: core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
-            routerLinkActiveOptions: [{ type: core.Input }],
-            routerLinkActive: [{ type: core.Input }]
-        };
         return RouterLinkActive;
     }());
+    RouterLinkActive.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[routerLinkActive]',
+                    exportAs: 'routerLinkActive',
+                },] }
+    ];
+    RouterLinkActive.ctorParameters = function () { return [
+        { type: Router },
+        { type: core.ElementRef },
+        { type: core.Renderer2 },
+        { type: RouterLink, decorators: [{ type: core.Optional }] },
+        { type: RouterLinkWithHref, decorators: [{ type: core.Optional }] }
+    ]; };
+    RouterLinkActive.propDecorators = {
+        links: [{ type: core.ContentChildren, args: [RouterLink, { descendants: true },] }],
+        linksWithHrefs: [{ type: core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
+        routerLinkActiveOptions: [{ type: core.Input }],
+        routerLinkActive: [{ type: core.Input }]
+    };
 
     /**
      * @license
@@ -5466,22 +5483,22 @@
             this.changeDetector.markForCheck();
             this.activateEvents.emit(this.activated.instance);
         };
-        RouterOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
-        ];
-        RouterOutlet.ctorParameters = function () { return [
-            { type: ChildrenOutletContexts },
-            { type: core.ViewContainerRef },
-            { type: core.ComponentFactoryResolver },
-            { type: String, decorators: [{ type: core.Attribute, args: ['name',] }] },
-            { type: core.ChangeDetectorRef }
-        ]; };
-        RouterOutlet.propDecorators = {
-            activateEvents: [{ type: core.Output, args: ['activate',] }],
-            deactivateEvents: [{ type: core.Output, args: ['deactivate',] }]
-        };
         return RouterOutlet;
     }());
+    RouterOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: 'router-outlet', exportAs: 'outlet' },] }
+    ];
+    RouterOutlet.ctorParameters = function () { return [
+        { type: ChildrenOutletContexts },
+        { type: core.ViewContainerRef },
+        { type: core.ComponentFactoryResolver },
+        { type: String, decorators: [{ type: core.Attribute, args: ['name',] }] },
+        { type: core.ChangeDetectorRef }
+    ]; };
+    RouterOutlet.propDecorators = {
+        activateEvents: [{ type: core.Output, args: ['activate',] }],
+        deactivateEvents: [{ type: core.Output, args: ['deactivate',] }]
+    };
     var OutletInjector = /** @class */ (function () {
         function OutletInjector(route, childContexts, parent) {
             this.route = route;
@@ -5500,13 +5517,6 @@
         return OutletInjector;
     }());
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * @description
      *
@@ -5633,18 +5643,18 @@
                 }));
             });
         };
-        RouterPreloader.decorators = [
-            { type: core.Injectable }
-        ];
-        RouterPreloader.ctorParameters = function () { return [
-            { type: Router },
-            { type: core.NgModuleFactoryLoader },
-            { type: core.Compiler },
-            { type: core.Injector },
-            { type: PreloadingStrategy }
-        ]; };
         return RouterPreloader;
     }());
+    RouterPreloader.decorators = [
+        { type: core.Injectable }
+    ];
+    RouterPreloader.ctorParameters = function () { return [
+        { type: Router },
+        { type: core.NgModuleFactoryLoader },
+        { type: core.Compiler },
+        { type: core.Injector },
+        { type: PreloadingStrategy }
+    ]; };
 
     /**
      * @license
@@ -5729,16 +5739,16 @@
                 this.scrollEventsSubscription.unsubscribe();
             }
         };
-        RouterScroller.decorators = [
-            { type: core.Injectable }
-        ];
-        RouterScroller.ctorParameters = function () { return [
-            { type: Router },
-            { type: common.ViewportScroller },
-            { type: undefined }
-        ]; };
         return RouterScroller;
     }());
+    RouterScroller.decorators = [
+        { type: core.Injectable }
+    ];
+    RouterScroller.ctorParameters = function () { return [
+        { type: Router },
+        { type: common.ViewportScroller },
+        { type: undefined }
+    ]; };
 
     /**
      * @license
@@ -5886,19 +5896,19 @@
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
         };
-        RouterModule.decorators = [
-            { type: core.NgModule, args: [{
-                        declarations: ROUTER_DIRECTIVES,
-                        exports: ROUTER_DIRECTIVES,
-                        entryComponents: [ɵEmptyOutletComponent]
-                    },] }
-        ];
-        RouterModule.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [ROUTER_FORROOT_GUARD,] }] },
-            { type: Router, decorators: [{ type: core.Optional }] }
-        ]; };
         return RouterModule;
     }());
+    RouterModule.decorators = [
+        { type: core.NgModule, args: [{
+                    declarations: ROUTER_DIRECTIVES,
+                    exports: ROUTER_DIRECTIVES,
+                    entryComponents: [ɵEmptyOutletComponent]
+                },] }
+    ];
+    RouterModule.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [ROUTER_FORROOT_GUARD,] }] },
+        { type: Router, decorators: [{ type: core.Optional }] }
+    ]; };
     function createRouterScroller(router, viewportScroller, config) {
         if (config.scrollOffset) {
             viewportScroller.setOffset(config.scrollOffset);
@@ -6060,14 +6070,14 @@
         RouterInitializer.prototype.isLegacyDisabled = function (opts) {
             return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
         };
-        RouterInitializer.decorators = [
-            { type: core.Injectable }
-        ];
-        RouterInitializer.ctorParameters = function () { return [
-            { type: core.Injector }
-        ]; };
         return RouterInitializer;
     }());
+    RouterInitializer.decorators = [
+        { type: core.Injectable }
+    ];
+    RouterInitializer.ctorParameters = function () { return [
+        { type: core.Injector }
+    ]; };
     function getAppInitializer(r) {
         return r.appInitializer.bind(r);
     }
@@ -6105,7 +6115,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-rc.0+200.sha-7e0eccc');
+    var VERSION = new core.Version('10.0.0-rc.0+208.sha-fd65958');
 
     /**
      * @license
