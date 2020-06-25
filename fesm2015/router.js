@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+240.sha-2170ea2
+ * @license Angular v10.0.0-rc.0+241.sha-616543d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1937,11 +1937,10 @@ function getPath(command) {
     return `${command}`;
 }
 function getOutlets(commands) {
-    if (!(typeof commands[0] === 'object'))
-        return { [PRIMARY_OUTLET]: commands };
-    if (commands[0].outlets === undefined)
-        return { [PRIMARY_OUTLET]: commands };
-    return commands[0].outlets;
+    if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+        return commands[0].outlets;
+    }
+    return { [PRIMARY_OUTLET]: commands };
 }
 function updateSegmentGroup(segmentGroup, startIndex, commands) {
     if (!segmentGroup) {
@@ -2021,7 +2020,8 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
     const paths = segmentGroup.segments.slice(0, startIndex);
     let i = 0;
     while (i < commands.length) {
-        if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+        if (typeof commands[i] === 'object' && commands[i] !== null &&
+            commands[i].outlets !== undefined) {
             const children = createNewSegmentChildren(commands[i].outlets);
             return new UrlSegmentGroup(paths, children);
         }
@@ -5482,7 +5482,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+240.sha-2170ea2');
+const VERSION = new Version('10.0.0-rc.0+241.sha-616543d');
 
 /**
  * @license
