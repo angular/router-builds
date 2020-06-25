@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0+4.sha-0d2cdf6
+ * @license Angular v10.0.0+15.sha-a5d5f67
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2356,6 +2356,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private router;
     private element;
     private renderer;
+    private readonly cdr;
     private link?;
     private linkWithHref?;
     links: QueryList<RouterLink>;
@@ -2366,7 +2367,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     routerLinkActiveOptions: {
         exact: boolean;
     };
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     ngAfterContentInit(): void;
     set routerLinkActive(data: string[] | string);
     ngOnChanges(changes: SimpleChanges): void;

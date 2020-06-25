@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0+4.sha-0d2cdf6
+ * @license Angular v10.0.0+15.sha-a5d5f67
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -697,7 +697,7 @@
             this.params = params || {};
         }
         ParamsAsMap.prototype.has = function (name) {
-            return this.params.hasOwnProperty(name);
+            return Object.prototype.hasOwnProperty.call(this.params, name);
         };
         ParamsAsMap.prototype.get = function (name) {
             if (this.has(name)) {
@@ -2332,12 +2332,11 @@
         return "" + command;
     }
     function getOutlets(commands) {
-        var _a, _b;
-        if (!(typeof commands[0] === 'object'))
-            return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
-        if (commands[0].outlets === undefined)
-            return _b = {}, _b[PRIMARY_OUTLET] = commands, _b;
-        return commands[0].outlets;
+        var _a;
+        if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+            return commands[0].outlets;
+        }
+        return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
     }
     function updateSegmentGroup(segmentGroup, startIndex, commands) {
         if (!segmentGroup) {
@@ -2417,7 +2416,8 @@
         var paths = segmentGroup.segments.slice(0, startIndex);
         var i = 0;
         while (i < commands.length) {
-            if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+            if (typeof commands[i] === 'object' && commands[i] !== null &&
+                commands[i].outlets !== undefined) {
                 var children = createNewSegmentChildren(commands[i].outlets);
                 return new UrlSegmentGroup(paths, children);
             }
@@ -5226,11 +5226,12 @@
      * @publicApi
      */
     var RouterLinkActive = /** @class */ (function () {
-        function RouterLinkActive(router, element, renderer, link, linkWithHref) {
+        function RouterLinkActive(router, element, renderer, cdr, link, linkWithHref) {
             var _this = this;
             this.router = router;
             this.element = element;
             this.renderer = renderer;
+            this.cdr = cdr;
             this.link = link;
             this.linkWithHref = linkWithHref;
             this.classes = [];
@@ -5270,6 +5271,7 @@
                 var hasActiveLinks = _this.hasActiveLinks();
                 if (_this.isActive !== hasActiveLinks) {
                     _this.isActive = hasActiveLinks;
+                    _this.cdr.markForCheck();
                     _this.classes.forEach(function (c) {
                         if (hasActiveLinks) {
                             _this.renderer.addClass(_this.element.nativeElement, c);
@@ -5303,6 +5305,7 @@
             { type: Router },
             { type: core.ElementRef },
             { type: core.Renderer2 },
+            { type: core.ChangeDetectorRef },
             { type: RouterLink, decorators: [{ type: core.Optional }] },
             { type: RouterLinkWithHref, decorators: [{ type: core.Optional }] }
         ]; };
@@ -6101,7 +6104,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0+4.sha-0d2cdf6');
+    var VERSION = new core.Version('10.0.0+15.sha-a5d5f67');
 
     /**
      * @license

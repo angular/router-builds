@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.0.0+4.sha-0d2cdf6
+ * @license Angular v10.0.0+15.sha-a5d5f67
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -428,7 +428,7 @@ class ParamsAsMap {
         this.params = params || {};
     }
     has(name) {
-        return this.params.hasOwnProperty(name);
+        return Object.prototype.hasOwnProperty.call(this.params, name);
     }
     get(name) {
         if (this.has(name)) {
@@ -1933,11 +1933,10 @@ function getPath(command) {
     return `${command}`;
 }
 function getOutlets(commands) {
-    if (!(typeof commands[0] === 'object'))
-        return { [PRIMARY_OUTLET]: commands };
-    if (commands[0].outlets === undefined)
-        return { [PRIMARY_OUTLET]: commands };
-    return commands[0].outlets;
+    if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+        return commands[0].outlets;
+    }
+    return { [PRIMARY_OUTLET]: commands };
 }
 function updateSegmentGroup(segmentGroup, startIndex, commands) {
     if (!segmentGroup) {
@@ -2017,7 +2016,8 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
     const paths = segmentGroup.segments.slice(0, startIndex);
     let i = 0;
     while (i < commands.length) {
-        if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+        if (typeof commands[i] === 'object' && commands[i] !== null &&
+            commands[i].outlets !== undefined) {
             const children = createNewSegmentChildren(commands[i].outlets);
             return new UrlSegmentGroup(paths, children);
         }
@@ -4662,10 +4662,11 @@ function attrBoolValue(s) {
  * @publicApi
  */
 class RouterLinkActive {
-    constructor(router, element, renderer, link, linkWithHref) {
+    constructor(router, element, renderer, cdr, link, linkWithHref) {
         this.router = router;
         this.element = element;
         this.renderer = renderer;
+        this.cdr = cdr;
         this.link = link;
         this.linkWithHref = linkWithHref;
         this.classes = [];
@@ -4699,6 +4700,7 @@ class RouterLinkActive {
             const hasActiveLinks = this.hasActiveLinks();
             if (this.isActive !== hasActiveLinks) {
                 this.isActive = hasActiveLinks;
+                this.cdr.markForCheck();
                 this.classes.forEach((c) => {
                     if (hasActiveLinks) {
                         this.renderer.addClass(this.element.nativeElement, c);
@@ -4730,6 +4732,7 @@ RouterLinkActive.ctorParameters = () => [
     { type: Router },
     { type: ElementRef },
     { type: Renderer2 },
+    { type: ChangeDetectorRef },
     { type: RouterLink, decorators: [{ type: Optional }] },
     { type: RouterLinkWithHref, decorators: [{ type: Optional }] }
 ];
@@ -5475,7 +5478,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0+4.sha-0d2cdf6');
+const VERSION = new Version('10.0.0+15.sha-a5d5f67');
 
 /**
  * @license
