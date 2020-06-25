@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+240.sha-2170ea2
+ * @license Angular v10.0.0-rc.0+241.sha-616543d
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2397,12 +2397,11 @@
         return "" + command;
     }
     function getOutlets(commands) {
-        var _a, _b;
-        if (!(typeof commands[0] === 'object'))
-            return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
-        if (commands[0].outlets === undefined)
-            return _b = {}, _b[PRIMARY_OUTLET] = commands, _b;
-        return commands[0].outlets;
+        var _a;
+        if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+            return commands[0].outlets;
+        }
+        return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
     }
     function updateSegmentGroup(segmentGroup, startIndex, commands) {
         if (!segmentGroup) {
@@ -2482,7 +2481,8 @@
         var paths = segmentGroup.segments.slice(0, startIndex);
         var i = 0;
         while (i < commands.length) {
-            if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+            if (typeof commands[i] === 'object' && commands[i] !== null &&
+                commands[i].outlets !== undefined) {
                 var children = createNewSegmentChildren(commands[i].outlets);
                 return new UrlSegmentGroup(paths, children);
             }
@@ -6168,7 +6168,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+240.sha-2170ea2');
+    var VERSION = new i0.Version('10.0.0-rc.0+241.sha-616543d');
 
     /**
      * @license
