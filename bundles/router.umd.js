@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+239.sha-80d0067
+ * @license Angular v10.0.0-rc.0+240.sha-2170ea2
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -779,7 +779,7 @@
             this.params = params || {};
         }
         ParamsAsMap.prototype.has = function (name) {
-            return this.params.hasOwnProperty(name);
+            return Object.prototype.hasOwnProperty.call(this.params, name);
         };
         ParamsAsMap.prototype.get = function (name) {
             if (this.has(name)) {
@@ -6168,7 +6168,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+239.sha-80d0067');
+    var VERSION = new i0.Version('10.0.0-rc.0+240.sha-2170ea2');
 
     /**
      * @license
