@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AfterContentInit, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '../router';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 import * as i0 from "@angular/core";
@@ -70,6 +70,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private router;
     private element;
     private renderer;
+    private readonly cdr;
     private link?;
     private linkWithHref?;
     links: QueryList<RouterLink>;
@@ -80,7 +81,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     routerLinkActiveOptions: {
         exact: boolean;
     };
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     ngAfterContentInit(): void;
     set routerLinkActive(data: string[] | string);
     ngOnChanges(changes: SimpleChanges): void;
@@ -88,6 +89,6 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private update;
     private isLinkActive;
     private hasActiveLinks;
-    static ɵfac: i0.ɵɵFactoryDef<RouterLinkActive, [null, null, null, { optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDef<RouterLinkActive, [null, null, null, null, { optional: true; }, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "routerLinkActive": "routerLinkActive"; }, {}, ["links", "linksWithHrefs"]>;
 }

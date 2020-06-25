@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.0.0-rc.0+238.sha-5218916
+ * @license Angular v10.0.0-rc.0+239.sha-80d0067
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵdefineDirective, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef, Output, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
+import { ɵɵdefineComponent, ɵɵelement, ɵsetClassMetadata, Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, ɵɵdirectiveInject, ɵɵinjectAttribute, Renderer2, ElementRef, ɵɵdefineDirective, ɵɵlistener, Directive, Attribute, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ChangeDetectorRef, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -4690,10 +4690,11 @@ function attrBoolValue(s) {
  * @publicApi
  */
 class RouterLinkActive {
-    constructor(router, element, renderer, link, linkWithHref) {
+    constructor(router, element, renderer, cdr, link, linkWithHref) {
         this.router = router;
         this.element = element;
         this.renderer = renderer;
+        this.cdr = cdr;
         this.link = link;
         this.linkWithHref = linkWithHref;
         this.classes = [];
@@ -4727,6 +4728,7 @@ class RouterLinkActive {
             const hasActiveLinks = this.hasActiveLinks();
             if (this.isActive !== hasActiveLinks) {
                 this.isActive = hasActiveLinks;
+                this.cdr.markForCheck();
                 this.classes.forEach((c) => {
                     if (hasActiveLinks) {
                         this.renderer.addClass(this.element.nativeElement, c);
@@ -4748,7 +4750,7 @@ class RouterLinkActive {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
+RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
 RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
         ɵɵcontentQuery(dirIndex, RouterLink, true);
         ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
@@ -4763,7 +4765,7 @@ RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors
                 selector: '[routerLinkActive]',
                 exportAs: 'routerLinkActive',
             }]
-    }], function () { return [{ type: Router }, { type: ElementRef }, { type: Renderer2 }, { type: RouterLink, decorators: [{
+    }], function () { return [{ type: Router }, { type: ElementRef }, { type: Renderer2 }, { type: ChangeDetectorRef }, { type: RouterLink, decorators: [{
                 type: Optional
             }] }, { type: RouterLinkWithHref, decorators: [{
                 type: Optional
@@ -5513,7 +5515,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+238.sha-5218916');
+const VERSION = new Version('10.0.0-rc.0+239.sha-80d0067');
 
 /**
  * @license

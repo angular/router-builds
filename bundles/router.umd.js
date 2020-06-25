@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+238.sha-5218916
+ * @license Angular v10.0.0-rc.0+239.sha-80d0067
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5276,11 +5276,12 @@
      * @publicApi
      */
     var RouterLinkActive = /** @class */ (function () {
-        function RouterLinkActive(router, element, renderer, link, linkWithHref) {
+        function RouterLinkActive(router, element, renderer, cdr, link, linkWithHref) {
             var _this = this;
             this.router = router;
             this.element = element;
             this.renderer = renderer;
+            this.cdr = cdr;
             this.link = link;
             this.linkWithHref = linkWithHref;
             this.classes = [];
@@ -5320,6 +5321,7 @@
                 var hasActiveLinks = _this.hasActiveLinks();
                 if (_this.isActive !== hasActiveLinks) {
                     _this.isActive = hasActiveLinks;
+                    _this.cdr.markForCheck();
                     _this.classes.forEach(function (c) {
                         if (hasActiveLinks) {
                             _this.renderer.addClass(_this.element.nativeElement, c);
@@ -5343,7 +5345,7 @@
         };
         return RouterLinkActive;
     }());
-    RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
+    RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
     RouterLinkActive.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) {
             if (rf & 1) {
                 i0.ɵɵcontentQuery(dirIndex, RouterLink, true);
@@ -5363,7 +5365,7 @@
                         exportAs: 'routerLinkActive',
                     }]
             }], function () {
-            return [{ type: Router }, { type: i0.ElementRef }, { type: i0.Renderer2 }, { type: RouterLink, decorators: [{
+            return [{ type: Router }, { type: i0.ElementRef }, { type: i0.Renderer2 }, { type: i0.ChangeDetectorRef }, { type: RouterLink, decorators: [{
                             type: i0.Optional
                         }] }, { type: RouterLinkWithHref, decorators: [{
                             type: i0.Optional
@@ -6166,7 +6168,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+238.sha-5218916');
+    var VERSION = new i0.Version('10.0.0-rc.0+239.sha-80d0067');
 
     /**
      * @license
