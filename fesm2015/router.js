@@ -1,13 +1,13 @@
 /**
- * @license Angular v10.0.0-rc.0+313.sha-a5ffca0
+ * @license Angular v10.0.0-rc.0+315.sha-a5c3073
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { Component, ɵisObservable, ɵisPromise, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
-import { of, from, BehaviorSubject, Observable, EmptyError, combineLatest, defer, EMPTY, Subject } from 'rxjs';
-import { map, concatAll, last as last$1, catchError, first, mergeMap, tap, every, switchMap, take, startWith, scan, filter, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
+import { of, from, BehaviorSubject, combineLatest, Observable, EmptyError, defer, EMPTY, Subject } from 'rxjs';
+import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, first, mergeMap, tap, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -2285,6 +2285,45 @@ function isCanDeactivate(guard) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const INITIAL_VALUE = Symbol('INITIAL_VALUE');
+function prioritizedGuardValue() {
+    return switchMap(obs => {
+        return combineLatest(...obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
+            .pipe(scan((acc, list) => {
+            let isPending = false;
+            return list.reduce((innerAcc, val, i) => {
+                if (innerAcc !== INITIAL_VALUE)
+                    return innerAcc;
+                // Toggle pending flag if any values haven't been set yet
+                if (val === INITIAL_VALUE)
+                    isPending = true;
+                // Any other return values are only valid if we haven't yet hit a pending
+                // call. This guarantees that in the case of a guard at the bottom of the
+                // tree that returns a redirect, we will wait for the higher priority
+                // guard at the top to finish before performing the redirect.
+                if (!isPending) {
+                    // Early return when we hit a `false` value as that should always
+                    // cancel navigation
+                    if (val === false)
+                        return val;
+                    if (i === list.length - 1 || isUrlTree(val)) {
+                        return val;
+                    }
+                }
+                return innerAcc;
+            }, acc);
+        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
+        take(1));
+    });
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class NoMatch {
     constructor(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
@@ -2493,7 +2532,7 @@ class ApplyRedirects {
         const canLoad = route.canLoad;
         if (!canLoad || canLoad.length === 0)
             return of(true);
-        const obs = from(canLoad).pipe(map((injectionToken) => {
+        const canLoadObservables = canLoad.map((injectionToken) => {
             const guard = moduleInjector.get(injectionToken);
             let guardVal;
             if (isCanLoad(guard)) {
@@ -2506,14 +2545,15 @@ class ApplyRedirects {
                 throw new Error('Invalid CanLoad guard');
             }
             return wrapIntoObservable(guardVal);
-        }));
-        return obs.pipe(concatAll(), tap((result) => {
+        });
+        return of(canLoadObservables)
+            .pipe(prioritizedGuardValue(), tap((result) => {
             if (!isUrlTree(result))
                 return;
             const error = navigationCancelingError(`Redirecting to "${this.urlSerializer.serialize(result)}"`);
             error.url = result;
             throw error;
-        }), every(result => result === true));
+        }), map(result => result === true));
     }
     lineralizeSegments(route, urlTree) {
         let res = [];
@@ -2822,45 +2862,6 @@ function deactivateRouteAndItsChildren(route, context, checks) {
     else {
         checks.canDeactivateChecks.push(new CanDeactivate(null, r));
     }
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-const INITIAL_VALUE = Symbol('INITIAL_VALUE');
-function prioritizedGuardValue() {
-    return switchMap(obs => {
-        return combineLatest(...obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
-            .pipe(scan((acc, list) => {
-            let isPending = false;
-            return list.reduce((innerAcc, val, i) => {
-                if (innerAcc !== INITIAL_VALUE)
-                    return innerAcc;
-                // Toggle pending flag if any values haven't been set yet
-                if (val === INITIAL_VALUE)
-                    isPending = true;
-                // Any other return values are only valid if we haven't yet hit a pending
-                // call. This guarantees that in the case of a guard at the bottom of the
-                // tree that returns a redirect, we will wait for the higher priority
-                // guard at the top to finish before performing the redirect.
-                if (!isPending) {
-                    // Early return when we hit a `false` value as that should always
-                    // cancel navigation
-                    if (val === false)
-                        return val;
-                    if (i === list.length - 1 || isUrlTree(val)) {
-                        return val;
-                    }
-                }
-                return innerAcc;
-            }, acc);
-        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
-        take(1));
-    });
 }
 
 /**
@@ -5497,7 +5498,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+313.sha-a5ffca0');
+const VERSION = new Version('10.0.0-rc.0+315.sha-a5c3073');
 
 /**
  * @license
