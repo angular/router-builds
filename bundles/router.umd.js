@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+314.sha-d7dd295
+ * @license Angular v10.0.0-rc.0+316.sha-1801d0c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -941,13 +941,6 @@
         return c;
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     function shallowEqualArrays(a, b) {
         if (a.length !== b.length)
             return false;
@@ -981,9 +974,11 @@
      */
     function equalArraysOrString(a, b) {
         if (Array.isArray(a) && Array.isArray(b)) {
-            if (a.length != b.length)
+            if (a.length !== b.length)
                 return false;
-            return a.every(function (aItem) { return b.indexOf(aItem) > -1; });
+            var aSorted = __spread(a).sort();
+            var bSorted_1 = __spread(b).sort();
+            return aSorted.every(function (val, index) { return bSorted_1[index] === val; });
         }
         else {
             return a === b;
@@ -1085,7 +1080,6 @@
         return true;
     }
     function containsQueryParams(container, containee) {
-        // TODO: This does not handle array params correctly.
         return Object.keys(containee).length <= Object.keys(container).length &&
             Object.keys(containee).every(function (key) { return equalArraysOrString(container[key], containee[key]); });
     }
@@ -6134,7 +6128,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.0-rc.0+314.sha-d7dd295');
+    var VERSION = new core.Version('10.0.0-rc.0+316.sha-1801d0c');
 
     /**
      * @license
