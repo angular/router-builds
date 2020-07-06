@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+312.sha-196bfa8
+ * @license Angular v10.0.0-rc.0+313.sha-a5ffca0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4772,12 +4772,27 @@
             });
         };
         Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
+            // * Imperative navigations (router.navigate) might trigger additional navigations to the same
+            //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
+            //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
+            //   states.
+            // * Imperative navigations can be cancelled by router guards, meaning the URL won't change. If
+            //   the user follows that with a navigation using the back/forward button or manual URL change,
+            //   the destination may be the same as the previous imperative attempt. We should not skip
+            //   these navigations because it's a separate case from the one above -- it's not a duplicate
+            //   navigation.
             var lastNavigation = this.getTransition();
-            // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
-            // and that navigation results in 'replaceState' that leads to the same URL,
-            // we should skip those.
-            if (lastNavigation && source !== 'imperative' && lastNavigation.source === 'imperative' &&
-                lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+            // We don't want to skip duplicate successful navs if they're imperative because
+            // onSameUrlNavigation could be 'reload' (so the duplicate is intended).
+            var browserNavPrecededByRouterNav = source !== 'imperative' && (lastNavigation === null || lastNavigation === void 0 ? void 0 : lastNavigation.source) === 'imperative';
+            var lastNavigationSucceeded = this.lastSuccessfulId === lastNavigation.id;
+            // If the last navigation succeeded or is in flight, we can use the rawUrl as the comparison.
+            // However, if it failed, we should compare to the final result (urlAfterRedirects).
+            var lastNavigationUrl = (lastNavigationSucceeded || this.currentNavigation) ?
+                lastNavigation.rawUrl :
+                lastNavigation.urlAfterRedirects;
+            var duplicateNav = lastNavigationUrl.toString() === rawUrl.toString();
+            if (browserNavPrecededByRouterNav && duplicateNav) {
                 return Promise.resolve(true); // return value is not used
             }
             // Because of a bug in IE and Edge, the location class fires two events (popstate and
@@ -6168,7 +6183,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+312.sha-196bfa8');
+    var VERSION = new i0.Version('10.0.0-rc.0+313.sha-a5ffca0');
 
     /**
      * @license
