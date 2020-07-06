@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+313.sha-a5ffca0
+ * @license Angular v10.0.0-rc.0+315.sha-a5c3073
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2743,6 +2743,37 @@
         return guard && isFunction(guard.canDeactivate);
     }
 
+    var INITIAL_VALUE = Symbol('INITIAL_VALUE');
+    function prioritizedGuardValue() {
+        return operators.switchMap(function (obs) {
+            return rxjs.combineLatest.apply(void 0, __spread(obs.map(function (o) { return o.pipe(operators.take(1), operators.startWith(INITIAL_VALUE)); }))).pipe(operators.scan(function (acc, list) {
+                var isPending = false;
+                return list.reduce(function (innerAcc, val, i) {
+                    if (innerAcc !== INITIAL_VALUE)
+                        return innerAcc;
+                    // Toggle pending flag if any values haven't been set yet
+                    if (val === INITIAL_VALUE)
+                        isPending = true;
+                    // Any other return values are only valid if we haven't yet hit a pending
+                    // call. This guarantees that in the case of a guard at the bottom of the
+                    // tree that returns a redirect, we will wait for the higher priority
+                    // guard at the top to finish before performing the redirect.
+                    if (!isPending) {
+                        // Early return when we hit a `false` value as that should always
+                        // cancel navigation
+                        if (val === false)
+                            return val;
+                        if (i === list.length - 1 || isUrlTree(val)) {
+                            return val;
+                        }
+                    }
+                    return innerAcc;
+                }, acc);
+            }, INITIAL_VALUE), operators.filter(function (item) { return item !== INITIAL_VALUE; }), operators.map(function (item) { return isUrlTree(item) ? item : item === true; }), //
+            operators.take(1));
+        });
+    }
+
     var NoMatch = /** @class */ (function () {
         function NoMatch(segmentGroup) {
             this.segmentGroup = segmentGroup || null;
@@ -2963,7 +2994,7 @@
             var canLoad = route.canLoad;
             if (!canLoad || canLoad.length === 0)
                 return rxjs.of(true);
-            var obs = rxjs.from(canLoad).pipe(operators.map(function (injectionToken) {
+            var canLoadObservables = canLoad.map(function (injectionToken) {
                 var guard = moduleInjector.get(injectionToken);
                 var guardVal;
                 if (isCanLoad(guard)) {
@@ -2976,14 +3007,15 @@
                     throw new Error('Invalid CanLoad guard');
                 }
                 return wrapIntoObservable(guardVal);
-            }));
-            return obs.pipe(operators.concatAll(), operators.tap(function (result) {
+            });
+            return rxjs.of(canLoadObservables)
+                .pipe(prioritizedGuardValue(), operators.tap(function (result) {
                 if (!isUrlTree(result))
                     return;
                 var error = navigationCancelingError("Redirecting to \"" + _this.urlSerializer.serialize(result) + "\"");
                 error.url = result;
                 throw error;
-            }), operators.every(function (result) { return result === true; }));
+            }), operators.map(function (result) { return result === true; }));
         };
         ApplyRedirects.prototype.lineralizeSegments = function (route, urlTree) {
             var res = [];
@@ -3332,37 +3364,6 @@
         else {
             checks.canDeactivateChecks.push(new CanDeactivate(null, r));
         }
-    }
-
-    var INITIAL_VALUE = Symbol('INITIAL_VALUE');
-    function prioritizedGuardValue() {
-        return operators.switchMap(function (obs) {
-            return rxjs.combineLatest.apply(void 0, __spread(obs.map(function (o) { return o.pipe(operators.take(1), operators.startWith(INITIAL_VALUE)); }))).pipe(operators.scan(function (acc, list) {
-                var isPending = false;
-                return list.reduce(function (innerAcc, val, i) {
-                    if (innerAcc !== INITIAL_VALUE)
-                        return innerAcc;
-                    // Toggle pending flag if any values haven't been set yet
-                    if (val === INITIAL_VALUE)
-                        isPending = true;
-                    // Any other return values are only valid if we haven't yet hit a pending
-                    // call. This guarantees that in the case of a guard at the bottom of the
-                    // tree that returns a redirect, we will wait for the higher priority
-                    // guard at the top to finish before performing the redirect.
-                    if (!isPending) {
-                        // Early return when we hit a `false` value as that should always
-                        // cancel navigation
-                        if (val === false)
-                            return val;
-                        if (i === list.length - 1 || isUrlTree(val)) {
-                            return val;
-                        }
-                    }
-                    return innerAcc;
-                }, acc);
-            }, INITIAL_VALUE), operators.filter(function (item) { return item !== INITIAL_VALUE; }), operators.map(function (item) { return isUrlTree(item) ? item : item === true; }), //
-            operators.take(1));
-        });
     }
 
     /**
@@ -6183,7 +6184,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.0.0-rc.0+313.sha-a5ffca0');
+    var VERSION = new i0.Version('10.0.0-rc.0+315.sha-a5c3073');
 
     /**
      * @license
