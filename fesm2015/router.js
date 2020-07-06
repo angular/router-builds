@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.0-rc.0+314.sha-d7dd295
+ * @license Angular v10.0.0-rc.0+316.sha-1801d0c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -647,9 +647,11 @@ function shallowEqual(a, b) {
  */
 function equalArraysOrString(a, b) {
     if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length != b.length)
+        if (a.length !== b.length)
             return false;
-        return a.every(aItem => b.indexOf(aItem) > -1);
+        const aSorted = [...a].sort();
+        const bSorted = [...b].sort();
+        return aSorted.every((val, index) => bSorted[index] === val);
     }
     else {
         return a === b;
@@ -751,7 +753,6 @@ function equalSegmentGroups(container, containee) {
     return true;
 }
 function containsQueryParams(container, containee) {
-    // TODO: This does not handle array params correctly.
     return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(key => equalArraysOrString(container[key], containee[key]));
 }
@@ -5531,7 +5532,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.0-rc.0+314.sha-d7dd295');
+const VERSION = new Version('10.0.0-rc.0+316.sha-1801d0c');
 
 /**
  * @license
