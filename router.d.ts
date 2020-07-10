@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.0+23.sha-9322b9a
+ * @license Angular v10.1.0-next.0+24.sha-4783a07
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2279,8 +2279,7 @@ export declare class RouterLink {
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
     /**
-     * @param commands An array of commands to pass to {@link Router#createUrlTree
-     *     Router#createUrlTree}.
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
      *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
@@ -2445,8 +2444,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     href: string;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     /**
-     * @param commands An array of commands to pass to {@link Router#createUrlTree
-     *     Router#createUrlTree}.
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
      *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
