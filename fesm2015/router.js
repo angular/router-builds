@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.3+36.sha-a94383f
+ * @license Angular v10.0.3+37.sha-2e9b953
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4422,8 +4422,7 @@ class RouterLink {
         }
     }
     /**
-     * @param commands An array of commands to pass to {@link Router#createUrlTree
-     *     Router#createUrlTree}.
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
      *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
@@ -4512,8 +4511,7 @@ class RouterLinkWithHref {
         });
     }
     /**
-     * @param commands An array of commands to pass to {@link Router#createUrlTree
-     *     Router#createUrlTree}.
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
      *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
@@ -5478,7 +5476,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.3+36.sha-a94383f');
+const VERSION = new Version('10.0.3+37.sha-2e9b953');
 
 /**
  * @license

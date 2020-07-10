@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.3+36.sha-a94383f
+ * @license Angular v10.0.3+37.sha-2e9b953
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4979,8 +4979,7 @@
         }
         Object.defineProperty(RouterLink.prototype, "routerLink", {
             /**
-             * @param commands An array of commands to pass to {@link Router#createUrlTree
-             *     Router#createUrlTree}.
+             * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
              *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
@@ -5083,8 +5082,7 @@
         }
         Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
             /**
-             * @param commands An array of commands to pass to {@link Router#createUrlTree
-             *     Router#createUrlTree}.
+             * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
              *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
@@ -6114,7 +6112,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.3+36.sha-a94383f');
+    var VERSION = new core.Version('10.0.3+37.sha-2e9b953');
 
     /**
      * @license
