@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.3+37.sha-2e9b953
+ * @license Angular v10.0.3+38.sha-0d38288
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -406,7 +406,7 @@
     /**
      * An event triggered when a navigation is canceled, directly or indirectly.
      *
-     * This can happen when a [route guard](guide/router#milestone-5-route-guards)
+     * This can happen when a [route guard](guide/router-tutorial-toh#milestone-5-route-guards)
      * returns `false` or initiates a redirect by returning a `UrlTree`.
      *
      * @publicApi
@@ -6112,7 +6112,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.3+37.sha-2e9b953');
+    var VERSION = new core.Version('10.0.3+38.sha-0d38288');
 
     /**
      * @license
