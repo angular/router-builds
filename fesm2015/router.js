@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.0+39.sha-69472a1
+ * @license Angular v10.1.0-next.0+40.sha-9185c6e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3579,6 +3579,11 @@ class Router {
         this.config = config;
         this.lastSuccessfulNavigation = null;
         this.currentNavigation = null;
+        /**
+         * Tracks the previously seen location change from the location subscription so we can compare
+         * the two latest to see if they are duplicates. See setUpLocationChangeListener.
+         */
+        this.lastLocationChangeInfo = null;
         this.navigationId = 0;
         this.isNgZoneEnabled = false;
         /**
@@ -3979,24 +3984,60 @@ class Router {
         }
     }
     /**
-     * Sets up the location change listener.
+     * Sets up the location change listener. This listener detects navigations triggered from outside
+     * the Router (the browser back/forward buttons, for example) and schedules a corresponding Router
+     * navigation so that the correct events, guards, etc. are triggered.
      */
     setUpLocationChangeListener() {
         // Don't need to use Zone.wrap any more, because zone.js
         // already patch onPopState, so location change callback will
         // run into ngZone
         if (!this.locationSubscription) {
-            this.locationSubscription = this.location.subscribe((change) => {
-                let rawUrlTree = this.parseUrl(change['url']);
-                const source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
-                // Navigations coming from Angular router have a navigationId state property. When this
-                // exists, restore the state.
-                const state = change.state && change.state.navigationId ? change.state : null;
-                setTimeout(() => {
-                    this.scheduleNavigation(rawUrlTree, source, state, { replaceUrl: true });
-                }, 0);
+            this.locationSubscription = this.location.subscribe(event => {
+                const currentChange = this.extractLocationChangeInfoFromEvent(event);
+                if (this.shouldScheduleNavigation(this.lastLocationChangeInfo, currentChange)) {
+                    // The `setTimeout` was added in #12160 and is likely to support Angular/AngularJS
+                    // hybrid apps.
+                    setTimeout(() => {
+                        const { source, state, urlTree } = currentChange;
+                        this.scheduleNavigation(urlTree, source, state, { replaceUrl: true });
+                    }, 0);
+                }
+                this.lastLocationChangeInfo = currentChange;
             });
         }
+    }
+    /** Extracts router-related information from a `PopStateEvent`. */
+    extractLocationChangeInfoFromEvent(change) {
+        var _a;
+        return {
+            source: change['type'] === 'popstate' ? 'popstate' : 'hashchange',
+            urlTree: this.parseUrl(change['url']),
+            // Navigations coming from Angular router have a navigationId state
+            // property. When this exists, restore the state.
+            state: ((_a = change.state) === null || _a === void 0 ? void 0 : _a.navigationId) ? change.state : null,
+            transitionId: this.getTransition().id
+        };
+    }
+    /**
+     * Determines whether two events triggered by the Location subscription are due to the same
+     * navigation. The location subscription can fire two events (popstate and hashchange) for a
+     * single navigation. The second one should be ignored, that is, we should not schedule another
+     * navigation in the Router.
+     */
+    shouldScheduleNavigation(previous, current) {
+        if (!previous)
+            return true;
+        const sameDestination = current.urlTree.toString() === previous.urlTree.toString();
+        const eventsOccurredAtSameTime = current.transitionId === previous.transitionId;
+        if (!eventsOccurredAtSameTime || !sameDestination) {
+            return true;
+        }
+        if ((current.source === 'hashchange' && previous.source === 'popstate') ||
+            (current.source === 'popstate' && previous.source === 'hashchange')) {
+            return false;
+        }
+        return true;
     }
     /** The current URL. */
     get url() {
@@ -4040,7 +4081,7 @@ class Router {
     dispose() {
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
-            this.locationSubscription = null;
+            this.locationSubscription = undefined;
         }
     }
     /**
@@ -4243,20 +4284,6 @@ class Router {
             lastNavigation.urlAfterRedirects;
         const duplicateNav = lastNavigationUrl.toString() === rawUrl.toString();
         if (browserNavPrecededByRouterNav && duplicateNav) {
-            return Promise.resolve(true); // return value is not used
-        }
-        // Because of a bug in IE and Edge, the location class fires two events (popstate and
-        // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
-        // flicker. Handles the case when a popstate was emitted first.
-        if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
-            lastNavigation.rawUrl.toString() === rawUrl.toString()) {
-            return Promise.resolve(true); // return value is not used
-        }
-        // Because of a bug in IE and Edge, the location class fires two events (popstate and
-        // hashchange) every single time. The second one should be ignored. Otherwise, the URL will
-        // flicker. Handles the case when a hashchange was emitted first.
-        if (lastNavigation && source == 'popstate' && lastNavigation.source === 'hashchange' &&
-            lastNavigation.rawUrl.toString() === rawUrl.toString()) {
             return Promise.resolve(true); // return value is not used
         }
         let resolve;
@@ -5530,7 +5557,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.0+39.sha-69472a1');
+const VERSION = new Version('10.1.0-next.0+40.sha-9185c6e');
 
 /**
  * @license
