@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.1+6.sha-09eee5b
+ * @license Angular v10.1.0-next.1+2.sha-45d79ef
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -178,12 +178,10 @@ export declare class ActivationStart {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if a route can be activated.
- * If all guards return `true`, navigation continues. If any guard returns `false`,
- * navigation is cancelled. If any guard returns a `UrlTree`, the current navigation
- * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
- *
- * The following example implements a `CanActivate` function that checks whether the
- * current user has permission to activate the requested route.
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -204,12 +202,7 @@ export declare class ActivationStart {
  *     return this.permissions.canActivate(this.currentUser, route.params.id);
  *   }
  * }
- * ```
  *
- * Here, the defined guard function is provided as part of the `Route` object
- * in the router configuration:
- *
- * ```
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -225,7 +218,7 @@ export declare class ActivationStart {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivate` signature:
+ * You can alternatively provide a function with the `canActivate` signature:
  *
  * ```
  * @NgModule({
@@ -258,12 +251,10 @@ export declare interface CanActivate {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if a child route can be activated.
- * If all guards return `true`, navigation continues. If any guard returns `false`,
- * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
- * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
- *
- * The following example implements a `CanActivateChild` function that checks whether the
- * current user has permission to activate the requested child route.
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -284,12 +275,7 @@ export declare interface CanActivate {
  *     return this.permissions.canActivate(this.currentUser, route.params.id);
  *   }
  * }
- * ```
  *
- * Here, the defined guard function is provided as part of the `Route` object
- * in the router configuration:
- *
- * ```
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -310,7 +296,7 @@ export declare interface CanActivate {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivateChild` signature:
+ * You can alternatively provide a function with the `canActivateChild` signature:
  *
  * ```
  * @NgModule({
@@ -348,12 +334,10 @@ export declare interface CanActivateChild {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if a route can be deactivated.
- * If all guards return `true`, navigation continues. If any guard returns `false`,
- * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
- * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
- *
- * The following example implements a `CanDeactivate` function that checks whether the
- * current user has permission to deactivate the requested route.
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -362,12 +346,6 @@ export declare interface CanActivateChild {
  *     return true;
  *   }
  * }
- * ```
- *
- * Here, the defined guard function is provided as part of the `Route` object
- * in the router configuration:
- *
- * ```
  *
  * @Injectable()
  * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
@@ -398,7 +376,7 @@ export declare interface CanActivateChild {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canDeactivate` signature:
+ * You can alternatively provide a function with the `canDeactivate` signature:
  *
  * ```
  * @NgModule({
@@ -432,13 +410,10 @@ export declare interface CanDeactivate<T> {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if children can be loaded.
- * If all guards return `true`, navigation continues. If any guard returns `false`,
- * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
- * is cancelled and a new navigation starts to the `UrlTree` returned from the guard.
- *
- * The following example implements a `CanLoad` function that decides whether the
- * current user has permission to load requested child routes.
- *
+ * If all guards return `true`, navigation will continue. If any guard returns `false`,
+ * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
+ * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
+ * guard.
  *
  * ```
  * class UserToken {}
@@ -456,12 +431,6 @@ export declare interface CanDeactivate<T> {
  *     return this.permissions.canLoadChildren(this.currentUser, route, segments);
  *   }
  * }
- * ```
- *
- * Here, the defined guard function is provided as part of the `Route` object
- * in the router configuration:
- *
- * ```
  *
  * @NgModule({
  *   imports: [
@@ -479,7 +448,7 @@ export declare interface CanDeactivate<T> {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canLoad` signature:
+ * You can alternatively provide a function with the `canLoad` signature:
  *
  * ```
  * @NgModule({
@@ -1369,11 +1338,8 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *
  * Interface that classes can implement to be a data provider.
  * A data provider class can be used with the router to resolve data during navigation.
- * The interface defines a `resolve()` method that is invoked when the navigation starts.
- * The router waits for the data to be resolved before the route is finally activated.
- *
- * The following example implements a `resolve()` method that retrieves the data
- * needed to activate the requested route.
+ * The interface defines a `resolve()` method that will be invoked when the navigation starts.
+ * The router will then wait for the data to be resolved before the route is finally activated.
  *
  * ```
  * @Injectable({ providedIn: 'root' })
@@ -1387,13 +1353,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *     return this.service.getHero(route.paramMap.get('id'));
  *   }
  * }
- * ```
  *
- * Here, the defined `resolve()` function is provided as part of the `Route` object
- * in the router configuration:
- *
- * ```
-
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -1411,7 +1371,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * export class AppRoutingModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `resolve()` signature:
+ * You can alternatively provide a function with the `resolve` signature:
  *
  * ```
  * export const myHero: Hero = {
@@ -1439,29 +1399,6 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * })
  * export class AppModule {}
  * ```
- *
- * @usageNotes
- *
- * When both guard and resolvers are specified, the resolvers are not executed until
- * all guards have run and succeeded.
- * For example, consider the following route configuration:
- *
- * ```
- * {
- *  path: 'base'
- *  canActivate: [BaseGuard],
- *  resolve: {data: BaseDataResolver}
- *  children: [
- *   {
- *     path: 'child',
- *     guards: [ChildGuard],
- *     component: ChildComponent,
- *     resolve: {childData: ChildDataResolver}
- *    }
- *  ]
- * }
- * ```
- * The order of execution is: BaseGuard, ChildGuard, BaseDataResolver, ChildDataResolver.
  *
  * @publicApi
  */
