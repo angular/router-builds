@@ -16,6 +16,7 @@ import { UrlSegment, UrlSegmentGroup } from './url_tree';
  *
  * @see `Route`
  * @see `Router`
+ * @see [Router configuration guide](guide/router#configuration)
  * @publicApi
  */
 export declare type Routes = Route[];
@@ -39,14 +40,12 @@ export declare type UrlMatchResult = {
  * for `Route.matcher` when a combination of `path` and `pathMatch`
  * is not expressive enough. Cannot be used together with `path` and `pathMatch`.
  *
- * @param segments An array of URL segments.
- * @param group A segment group.
- * @param route The route to match against.
- * @returns The match-result.
+ * The function takes the following arguments and returns a `UrlMatchResult` object.
+ * * *segments* : An array of URL segments.
+ * * *group* : A segment group.
+ * * *route* : The route to match against.
  *
- * @usageNotes
- *
- * The following matcher matches HTML files.
+ * The following example implementation matches HTML files.
  *
  * ```
  * export function htmlFiles(url: UrlSegment[]) {
@@ -84,8 +83,10 @@ export declare type ResolveData = {
 /**
  *
  * A function that is called to resolve a collection of lazy-loaded routes.
+ * Must be an arrow function of the following form:
+ * `() => import('...').then(mod => mod.MODULE)`
  *
- * Often this function will be implemented using an ES dynamic `import()` expression. For example:
+ * For example:
  *
  * ```
  * [{
@@ -94,32 +95,29 @@ export declare type ResolveData = {
  * }];
  * ```
  *
- * This function _must_ match the form above: an arrow function of the form
- * `() => import('...').then(mod => mod.MODULE)`.
- *
- * @see `Route#loadChildren`.
+ * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
 export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any> | any>;
 /**
  *
- * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load,
- * or a function that returns such a set.
+ * A function that returns a set of routes to load.
  *
  * The string form of `LoadChildren` is deprecated (see `DeprecatedLoadChildren`). The function
  * form (`LoadChildrenCallback`) should be used instead.
  *
- * @see `Route#loadChildren`.
+ * @see `loadChildrenCallback`
  * @publicApi
  */
 export declare type LoadChildren = LoadChildrenCallback | DeprecatedLoadChildren;
 /**
  * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load.
  *
- * @see `Route#loadChildren`
+ * @see `loadChildrenCallback`
  * @publicApi
- * @deprecated the `string` form of `loadChildren` is deprecated in favor of the proposed ES dynamic
- * `import()` expression, which offers a more natural and standards-based mechanism to dynamically
+ * @deprecated The `string` form of `loadChildren` is deprecated in favor of the
+ * `LoadChildrenCallback` function which uses the ES dynamic `import()` expression.
+ * This offers a more natural and standards-based mechanism to dynamically
  * load an ES module at runtime.
  */
 export declare type DeprecatedLoadChildren = string;
@@ -139,7 +137,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *
  * A policy for when to run guards and resolvers on a route.
  *
- * @see `Route#runGuardsAndResolvers`
+ * @see [Route.runGuardsAndResolvers](api/router/Route#runGuardsAndResolvers)
  * @publicApi
  */
 export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always' | ((from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean);
@@ -353,7 +351,8 @@ export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQu
  *
  * Lazy loading speeds up application load time by splitting the application
  * into multiple bundles and loading them on demand.
- * To use lazy loading, provide the `loadChildren` property  instead of the `children` property.
+ * To use lazy loading, provide the `loadChildren` property in the `Route` object,
+ * instead of the `children` property.
  *
  * Given the following example route, the router will lazy load
  * the associated module on demand using the browser native import system.
@@ -452,7 +451,7 @@ export interface Route {
      */
     children?: Routes;
     /**
-     * A `LoadChildren` object specifying lazy-loaded child routes.
+     * An object specifying lazy-loaded child routes.
      */
     loadChildren?: LoadChildren;
     /**
