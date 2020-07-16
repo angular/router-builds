@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.4+15.sha-9ac3383
+ * @license Angular v10.0.4+16.sha-99960a9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -322,7 +322,7 @@
      * Base for events the router goes through, as opposed to events tied to a specific
      * route. Fired one time for any given navigation.
      *
-     * @usageNotes
+     * The following code shows how a class subscribes to router events.
      *
      * ```ts
      * class MyService {
@@ -337,6 +337,7 @@
      * ```
      *
      * @see `Event`
+     * @see [Router events summary](guide/router#router-events)
      * @publicApi
      */
     var RouterEvent = /** @class */ (function () {
@@ -382,6 +383,10 @@
     /**
      * An event triggered when a navigation ends successfully.
      *
+     * @see `NavigationStart`
+     * @see `NavigationCancel`
+     * @see `NavigationError`
+     *
      * @publicApi
      */
     var NavigationEnd = /** @class */ (function (_super) {
@@ -405,9 +410,12 @@
     }(RouterEvent));
     /**
      * An event triggered when a navigation is canceled, directly or indirectly.
-     *
-     * This can happen when a [route guard](guide/router-tutorial-toh#milestone-5-route-guards)
+     * This can happen when a route guard
      * returns `false` or initiates a redirect by returning a `UrlTree`.
+     *
+     * @see `NavigationStart`
+     * @see `NavigationEnd`
+     * @see `NavigationError`
      *
      * @publicApi
      */
@@ -433,6 +441,10 @@
     /**
      * An event triggered when a navigation fails due to an unexpected error.
      *
+     * @see `NavigationStart`
+     * @see `NavigationEnd`
+     * @see `NavigationCancel`
+     *
      * @publicApi
      */
     var NavigationError = /** @class */ (function (_super) {
@@ -455,7 +467,7 @@
         return NavigationError;
     }(RouterEvent));
     /**
-     *An event triggered when routes are recognized.
+     * An event triggered when routes are recognized.
      *
      * @publicApi
      */
@@ -484,6 +496,8 @@
     /**
      * An event triggered at the start of the Guard phase of routing.
      *
+     * @see `GuardsCheckEnd`
+     *
      * @publicApi
      */
     var GuardsCheckStart = /** @class */ (function (_super) {
@@ -509,6 +523,8 @@
     }(RouterEvent));
     /**
      * An event triggered at the end of the Guard phase of routing.
+     *
+     * @see `GuardsCheckStart`
      *
      * @publicApi
      */
@@ -541,6 +557,8 @@
      *
      * Runs in the "resolve" phase whether or not there is anything to resolve.
      * In future, may change to only run when there are things to be resolved.
+     *
+     * @see `ResolveEnd`
      *
      * @publicApi
      */
@@ -595,6 +613,8 @@
     /**
      * An event triggered before lazy loading a route configuration.
      *
+     * @see `RouteConfigLoadEnd`
+     *
      * @publicApi
      */
     var RouteConfigLoadStart = /** @class */ (function () {
@@ -610,6 +630,8 @@
     }());
     /**
      * An event triggered when a route has been lazy loaded.
+     *
+     * @see `RouteConfigLoadStart`
      *
      * @publicApi
      */
@@ -648,7 +670,7 @@
      * An event triggered at the end of the child-activation part
      * of the Resolve phase of routing.
      * @see `ChildActivationStart`
-     * @see `ResolveStart` *
+     * @see `ResolveStart`
      * @publicApi
      */
     var ChildActivationEnd = /** @class */ (function () {
@@ -666,7 +688,7 @@
     /**
      * An event triggered at the start of the activation part
      * of the Resolve phase of routing.
-     * @see ActivationEnd`
+     * @see `ActivationEnd`
      * @see `ResolveStart`
      *
      * @publicApi
@@ -1754,7 +1776,8 @@
      * and the resolved data.
      * Use the `ActivatedRoute` properties to traverse the tree from any node.
      *
-     * ### Example
+     * The following fragment shows how a component gets the root node
+     * of the current state to establish its own route tree:
      *
      * ```
      * @Component({templateUrl:'template.html'})
@@ -1770,6 +1793,7 @@
      * ```
      *
      * @see `ActivatedRoute`
+     * @see [Getting route information](guide/router#getting-route-information)
      *
      * @publicApi
      */
@@ -1813,8 +1837,13 @@
      * that is loaded in an outlet.
      * Use to traverse the `RouterState` tree and extract information from nodes.
      *
+     * The following example shows how to construct a component using information from a
+     * currently activated route.
+     *
      * {@example router/activated-route/module.ts region="activated-route"
      *     header="activated-route.component.ts"}
+     *
+     * @see [Getting route information](guide/router#getting-route-information)
      *
      * @publicApi
      */
@@ -1973,6 +2002,9 @@
      * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
      * traverse the router state tree.
      *
+     * The following example initializes a component with route information extracted
+     * from the snapshot of the root node at the time of creation.
+     *
      * ```
      * @Component({templateUrl:'./my-component.html'})
      * class MyComponent {
@@ -2090,8 +2122,8 @@
      * This is a tree of activated route snapshots. Every node in this tree knows about
      * the "consumed" URL segments, the extracted parameters, and the resolved data.
      *
-     * @usageNotes
-     * ### Example
+     * The following example shows how a component is initialized with information
+     * from the snapshot of the root node's state at the time of creation.
      *
      * ```
      * @Component({templateUrl:'template.html'})
@@ -4090,7 +4122,7 @@
     /**
      * @description
      *
-     * A service that provides navigation and URL manipulation capabilities.
+     * A service that provides navigation among views and URL manipulation capabilities.
      *
      * @see `Route`.
      * @see [Routing and Navigation Guide](guide/router).
@@ -4551,7 +4583,7 @@
             this.events.next(event);
         };
         /**
-         * Resets the configuration used for navigation and generating links.
+         * Resets the route configuration used for navigation and generating links.
          *
          * @param config The route array for the new configuration.
          *
@@ -4584,14 +4616,15 @@
             }
         };
         /**
-         * Applies an array of commands to the current URL tree and creates a new URL tree.
+         * Appends URL segments to the current URL tree to create a new URL tree.
          *
-         * When given an activated route, applies the given commands starting from the route.
-         * Otherwise, applies the given command starting from the root.
-         *
-         * @param commands An array of commands to apply.
+         * @param commands An array of URL fragments with which to construct the new URL tree.
+         * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+         * segments, followed by the parameters for each segment.
+         * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
+         * property of the options object, if supplied.
          * @param navigationExtras Options that control the navigation strategy. This function
-         * only utilizes properties in `NavigationExtras` that would change the provided URL.
+         * only uses properties in `NavigationExtras` that would change the provided URL.
          * @returns The new URL tree.
          *
          * @usageNotes
@@ -4658,9 +4691,10 @@
             return createUrlTree(a, this.currentUrlTree, commands, q, f);
         };
         /**
-         * Navigate based on the provided URL, which must be absolute.
+         * Navigates to a view using an absolute route path.
          *
-         * @param url An absolute URL. The function does not apply any delta to the current URL.
+         * @param url An absolute path for a defined route. The function does not apply any delta to the
+         *     current URL.
          * @param extras An object containing properties that modify the navigation strategy.
          * The function ignores any properties in the `NavigationExtras` that would change the
          * provided URL.
@@ -4670,12 +4704,16 @@
          *
          * @usageNotes
          *
+         * The following calls request navigation to an absolute path.
+         *
          * ```
          * router.navigateByUrl("/team/33/user/11");
          *
          * // Navigate without updating the URL
          * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
          * ```
+         *
+         * @see [Routing and Navigation guide](guide/router)
          *
          */
         Router.prototype.navigateByUrl = function (url, extras) {
@@ -4691,28 +4729,31 @@
          * Navigate based on the provided array of commands and a starting point.
          * If no starting route is provided, the navigation is absolute.
          *
-         * Returns a promise that:
-         * - resolves to 'true' when navigation succeeds,
-         * - resolves to 'false' when navigation fails,
-         * - is rejected when an error happens.
+         * @param commands An array of URL fragments with which to construct the target URL.
+         * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+         * segments, followed by the parameters for each segment.
+         * The fragments are applied to the current URL or the one provided  in the `relativeTo` property
+         * of the options object, if supplied.
+         * @param extras An options object that determines how the URL should be constructed or
+         *     interpreted.
+         *
+         * @returns A Promise that resolves to `true` when navigation succeeds, to `false` when navigation
+         *     fails,
+         * or is rejected on error.
          *
          * @usageNotes
+         *
+         * The following calls request navigation to a dynamic route path relative to the current URL.
          *
          * ```
          * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
          *
-         * // Navigate without updating the URL
+         * // Navigate without updating the URL, overriding the default behavior
          * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
          * ```
          *
-         * The first parameter of `navigate()` is a delta to be applied to the current URL
-         * or the one provided in the `relativeTo` property of the second parameter (the
-         * `NavigationExtras`).
+         * @see [Routing and Navigation guide](guide/router)
          *
-         * In order to affect this browser's `history.state` entry, the `state`
-         * parameter can be passed. This must be an object because the router
-         * will add the `navigationId` property to this object before creating
-         * the new history item.
          */
         Router.prototype.navigate = function (commands, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
@@ -5793,53 +5834,23 @@
         return new core.NgProbeToken('Router', Router);
     }
     /**
-     * @usageNotes
-     *
-     * RouterModule can be imported multiple times: once per lazily-loaded bundle.
-     * Since the router deals with a global shared resource--location, we cannot have
-     * more than one router service active.
-     *
-     * That is why there are two ways to create the module: `RouterModule.forRoot` and
-     * `RouterModule.forChild`.
-     *
-     * * `forRoot` creates a module that contains all the directives, the given routes, and the router
-     *   service itself.
-     * * `forChild` creates a module that contains all the directives and the given routes, but does not
-     *   include the router service.
-     *
-     * When registered at the root, the module should be used as follows
-     *
-     * ```
-     * @NgModule({
-     *   imports: [RouterModule.forRoot(ROUTES)]
-     * })
-     * class MyNgModule {}
-     * ```
-     *
-     * For submodules and lazy loaded submodules the module should be used as follows:
-     *
-     * ```
-     * @NgModule({
-     *   imports: [RouterModule.forChild(ROUTES)]
-     * })
-     * class MyNgModule {}
-     * ```
-     *
      * @description
      *
-     * Adds router directives and providers.
+     * Adds directives and providers for in-app navigation among views defined in an application.
+     * Use the Angular `Router` service to declaratively specify application states and manage state
+     * transitions.
      *
-     * Managing state transitions is one of the hardest parts of building applications. This is
-     * especially true on the web, where you also need to ensure that the state is reflected in the URL.
-     * In addition, we often want to split applications into multiple bundles and load them on demand.
-     * Doing this transparently is not trivial.
+     * You can import this NgModule multiple times, once for each lazy-loaded bundle.
+     * However, only one `Router` service can be active.
+     * To ensure this, there are two ways to register routes when importing this module:
      *
-     * The Angular router service solves these problems. Using the router, you can declaratively specify
-     * application states, manage state transitions while taking care of the URL, and load bundles on
-     * demand.
+     * * The `forRoot()` method creates an `NgModule` that contains all the directives, the given
+     * routes, and the `Router` service itself.
+     * * The `forChild()` method creates an `NgModule` that contains all the directives and the given
+     * routes, but does not include the `Router` service.
      *
-     * @see [Routing and Navigation](guide/router.html) for an
-     * overview of how the router service should be used.
+     * @see [Routing and Navigation guide](guide/router) for an
+     * overview of how the `Router` service should be used.
      *
      * @publicApi
      */
@@ -5851,9 +5862,19 @@
          * Creates and configures a module with all the router providers and directives.
          * Optionally sets up an application listener to perform an initial navigation.
          *
+         * When registering the NgModule at the root, import as follows:
+         *
+         * ```
+         * @NgModule({
+         *   imports: [RouterModule.forRoot(ROUTES)]
+         * })
+         * class MyNgModule {}
+         * ```
+         *
          * @param routes An array of `Route` objects that define the navigation paths for the application.
          * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
-         * @return The new router module.
+         * @return The new `NgModule`.
+         *
          */
         RouterModule.forRoot = function (routes, config) {
             return {
@@ -5888,7 +5909,20 @@
             };
         };
         /**
-         * Creates a module with all the router directives and a provider registering routes.
+         * Creates a module with all the router directives and a provider registering routes,
+         * without creating a new Router service.
+         * When registering for submodules and lazy-loaded submodules, create the NgModule as follows:
+         *
+         * ```
+         * @NgModule({
+         *   imports: [RouterModule.forChild(ROUTES)]
+         * })
+         * class MyNgModule {}
+         * ```
+         *
+         * @param routes An array of `Route` objects that define the navigation paths for the submodule.
+         * @return The new NgModule.
+         *
          */
         RouterModule.forChild = function (routes) {
             return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
@@ -6112,7 +6146,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.4+15.sha-9ac3383');
+    var VERSION = new core.Version('10.0.4+16.sha-99960a9');
 
     /**
      * @license
