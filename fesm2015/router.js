@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.2+11.sha-062b8d9
+ * @license Angular v10.1.0-next.2+12.sha-3c1866b
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4885,6 +4885,21 @@ RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors
  * <router-outlet name='right'></router-outlet>
  * ```
  *
+ * Named outlets can be the targets of secondary routes.
+ * The `Route` object for a secondary route has an `outlet` property to identify the target outlet:
+ *
+ * `{path: <base-path>, component: <component>, outlet: <target_outlet_name>}`
+ *
+ * Using named outlets and secondary routes, you can target multiple outlets in
+ * the same `RouterLink` directive.
+ *
+ * The router keeps track of separate branches in a navigation tree for each named outlet and
+ * generates a representation of that tree in the URL.
+ * The URL for a secondary route uses the following syntax to specify both the primary and secondary
+ * routes at the same time:
+ *
+ * `http://base-path/primary-route-path(outlet-name:route-path)`
+ *
  * A router outlet emits an activate event when a new component is instantiated,
  * and a deactivate event when a component is destroyed.
  *
@@ -4893,6 +4908,11 @@ RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors
  *   (activate)='onActivate($event)'
  *   (deactivate)='onDeactivate($event)'></router-outlet>
  * ```
+ *
+ * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
+ * outlet and secondary route configuration").
+ * @see `RouterLink`
+ * @see `Route`
  * @ngModule RouterModule
  *
  * @publicApi
@@ -5591,7 +5611,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.2+11.sha-062b8d9');
+const VERSION = new Version('10.1.0-next.2+12.sha-3c1866b');
 
 /**
  * @license
