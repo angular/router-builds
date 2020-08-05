@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.8
+ * @license Angular v10.0.8+6.sha-4151314
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2782,7 +2782,7 @@ export declare class RouterPreloader implements OnDestroy {
     private injector;
     private preloadingStrategy;
     private loader;
-    private subscription;
+    private subscription?;
     constructor(router: Router, moduleLoader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
     setUpPreloading(): void;
     preload(): Observable<any>;
