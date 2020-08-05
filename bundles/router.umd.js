@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.4+6.sha-7630234
+ * @license Angular v10.1.0-next.4+5.sha-ba175be
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5709,10 +5709,11 @@
             var ngModule = this.injector.get(core.NgModuleRef);
             return this.processRoutes(ngModule, this.router.config);
         };
+        // TODO(jasonaden): This class relies on code external to the class to call setUpPreloading. If
+        // this hasn't been done, ngOnDestroy will fail as this.subscription will be undefined. This
+        // should be refactored.
         RouterPreloader.prototype.ngOnDestroy = function () {
-            if (this.subscription) {
-                this.subscription.unsubscribe();
-            }
+            this.subscription.unsubscribe();
         };
         RouterPreloader.prototype.processRoutes = function (ngModule, routes) {
             var e_1, _a;
@@ -6219,7 +6220,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0-next.4+6.sha-7630234');
+    var VERSION = new core.Version('10.1.0-next.4+5.sha-ba175be');
 
     /**
      * @license
