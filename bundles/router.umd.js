@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.4+5.sha-ba175be
+ * @license Angular v10.1.0-next.4+7.sha-1609815
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2568,6 +2568,9 @@
                             // Activate the outlet when it has already been instantiated
                             // Otherwise it will get activated from its `ngOnInit` when instantiated
                             context.outlet.activateWith(future, cmpFactoryResolver);
+                        }
+                        else if (core.isDevMode() && console && console.warn) {
+                            console.warn("A router outlet has not been instantiated during routes activation. URL Segment: '" + future.snapshot._urlSegment + "'");
                         }
                         this.activateChildRoutes(futureNode, null, context.children);
                     }
@@ -5709,11 +5712,10 @@
             var ngModule = this.injector.get(core.NgModuleRef);
             return this.processRoutes(ngModule, this.router.config);
         };
-        // TODO(jasonaden): This class relies on code external to the class to call setUpPreloading. If
-        // this hasn't been done, ngOnDestroy will fail as this.subscription will be undefined. This
-        // should be refactored.
         RouterPreloader.prototype.ngOnDestroy = function () {
-            this.subscription.unsubscribe();
+            if (this.subscription) {
+                this.subscription.unsubscribe();
+            }
         };
         RouterPreloader.prototype.processRoutes = function (ngModule, routes) {
             var e_1, _a;
@@ -6220,7 +6222,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0-next.4+5.sha-ba175be');
+    var VERSION = new core.Version('10.1.0-next.4+7.sha-1609815');
 
     /**
      * @license
