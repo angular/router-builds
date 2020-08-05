@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.1.0-next.4+5.sha-ba175be
+ * @license Angular v10.1.0-next.4+7.sha-1609815
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, NgModuleRef, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, isDevMode, NgModuleRef, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, ɵɵNgOnChangesFeature, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, combineLatest, Observable, EmptyError, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, first, mergeMap, tap, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -2115,6 +2115,9 @@ class ActivateRoutes {
                         // Activate the outlet when it has already been instantiated
                         // Otherwise it will get activated from its `ngOnInit` when instantiated
                         context.outlet.activateWith(future, cmpFactoryResolver);
+                    }
+                    else if (isDevMode() && console && console.warn) {
+                        console.warn(`A router outlet has not been instantiated during routes activation. URL Segment: '${future.snapshot._urlSegment}'`);
                     }
                     this.activateChildRoutes(futureNode, null, context.children);
                 }
@@ -5138,11 +5141,10 @@ class RouterPreloader {
         const ngModule = this.injector.get(NgModuleRef);
         return this.processRoutes(ngModule, this.router.config);
     }
-    // TODO(jasonaden): This class relies on code external to the class to call setUpPreloading. If
-    // this hasn't been done, ngOnDestroy will fail as this.subscription will be undefined. This
-    // should be refactored.
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
     processRoutes(ngModule, routes) {
         const res = [];
@@ -5623,7 +5625,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.4+5.sha-ba175be');
+const VERSION = new Version('10.1.0-next.4+7.sha-1609815');
 
 /**
  * @license

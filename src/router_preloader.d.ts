@@ -63,7 +63,7 @@ export declare class RouterPreloader implements OnDestroy {
     private injector;
     private preloadingStrategy;
     private loader;
-    private subscription;
+    private subscription?;
     constructor(router: Router, moduleLoader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
     setUpPreloading(): void;
     preload(): Observable<any>;
