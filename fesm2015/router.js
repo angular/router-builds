@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.4+30.sha-e34c33c
+ * @license Angular v10.1.0-next.4+31.sha-8f708b5
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2398,11 +2398,11 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return this.configLoader.load(ngModule.injector, route)
+                return defer(() => this.configLoader.load(ngModule.injector, route)
                     .pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                }));
+                })));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -5593,7 +5593,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.4+30.sha-e34c33c');
+const VERSION = new Version('10.1.0-next.4+31.sha-8f708b5');
 
 /**
  * @license
