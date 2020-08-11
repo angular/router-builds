@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.4+35.sha-3d15616
+ * @license Angular v10.1.0-next.4+36.sha-df76a20
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4786,7 +4786,15 @@
                         // hybrid apps.
                         setTimeout(function () {
                             var source = currentChange.source, state = currentChange.state, urlTree = currentChange.urlTree;
-                            _this.scheduleNavigation(urlTree, source, state, { replaceUrl: true });
+                            var extras = { replaceUrl: true };
+                            if (state) {
+                                var stateCopy = Object.assign({}, state);
+                                delete stateCopy.navigationId;
+                                if (Object.keys(stateCopy).length !== 0) {
+                                    extras.state = stateCopy;
+                                }
+                            }
+                            _this.scheduleNavigation(urlTree, source, state, extras);
                         }, 0);
                     }
                     _this.lastLocationChangeInfo = currentChange;
@@ -6271,7 +6279,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('10.1.0-next.4+35.sha-3d15616');
+    var VERSION = new i0.Version('10.1.0-next.4+36.sha-df76a20');
 
     /**
      * @license

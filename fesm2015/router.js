@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.4+35.sha-3d15616
+ * @license Angular v10.1.0-next.4+36.sha-df76a20
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4227,7 +4227,15 @@ class Router {
                     // hybrid apps.
                     setTimeout(() => {
                         const { source, state, urlTree } = currentChange;
-                        this.scheduleNavigation(urlTree, source, state, { replaceUrl: true });
+                        const extras = { replaceUrl: true };
+                        if (state) {
+                            const stateCopy = Object.assign({}, state);
+                            delete stateCopy.navigationId;
+                            if (Object.keys(stateCopy).length !== 0) {
+                                extras.state = stateCopy;
+                            }
+                        }
+                        this.scheduleNavigation(urlTree, source, state, extras);
                     }, 0);
                 }
                 this.lastLocationChangeInfo = currentChange;
@@ -5625,7 +5633,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.4+35.sha-3d15616');
+const VERSION = new Version('10.1.0-next.4+36.sha-df76a20');
 
 /**
  * @license
