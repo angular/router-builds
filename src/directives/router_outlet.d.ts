@@ -67,7 +67,9 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
+    /** @nodoc */
     ngOnDestroy(): void;
+    /** @nodoc */
     ngOnInit(): void;
     get isActivated(): boolean;
     get component(): Object;

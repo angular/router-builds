@@ -173,6 +173,7 @@ export declare class RouterLink {
      * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      */
     set preserveQueryParams(value: boolean);
+    /** @nodoc */
     onClick(): boolean;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
@@ -257,8 +258,11 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      */
     set preserveQueryParams(value: boolean);
+    /** @nodoc */
     ngOnChanges(changes: {}): any;
+    /** @nodoc */
     ngOnDestroy(): any;
+    /** @nodoc */
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;

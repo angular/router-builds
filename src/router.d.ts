@@ -406,7 +406,7 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
-    /** @docsNotRequired */
+    /** @nodoc */
     ngOnDestroy(): void;
     /** Disposes of the router. */
     dispose(): void;
