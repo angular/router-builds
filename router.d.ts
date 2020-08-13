@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.5+10.sha-a80f654
+ * @license Angular v10.1.0-next.5+11.sha-b769771
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2114,7 +2114,7 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
-    /** @docsNotRequired */
+    /** @nodoc */
     ngOnDestroy(): void;
     /** Disposes of the router. */
     dispose(): void;
@@ -2471,6 +2471,7 @@ export declare class RouterLink {
      * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      */
     set preserveQueryParams(value: boolean);
+    /** @nodoc */
     onClick(): boolean;
     get urlTree(): UrlTree;
 }
@@ -2550,9 +2551,12 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
         exact: boolean;
     };
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    /** @nodoc */
     ngAfterContentInit(): void;
     set routerLinkActive(data: string[] | string);
+    /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;
+    /** @nodoc */
     ngOnDestroy(): void;
     private update;
     private isLinkActive;
@@ -2638,8 +2642,11 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
      */
     set preserveQueryParams(value: boolean);
+    /** @nodoc */
     ngOnChanges(changes: {}): any;
+    /** @nodoc */
     ngOnDestroy(): any;
+    /** @nodoc */
     onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
@@ -2763,7 +2770,9 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
+    /** @nodoc */
     ngOnDestroy(): void;
+    /** @nodoc */
     ngOnInit(): void;
     get isActivated(): boolean;
     get component(): Object;
@@ -2802,6 +2811,7 @@ export declare class RouterPreloader implements OnDestroy {
     constructor(router: Router, moduleLoader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
     setUpPreloading(): void;
     preload(): Observable<any>;
+    /** @nodoc */
     ngOnDestroy(): void;
     private processRoutes;
     private preloadConfig;
@@ -3257,6 +3267,7 @@ export declare class ɵangular_packages_router_router_o implements OnDestroy {
     private createScrollEvents;
     private consumeScrollEvents;
     private scheduleScrollEvent;
+    /** @nodoc */
     ngOnDestroy(): void;
 }
 
