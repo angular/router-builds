@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.9+9.sha-cb83b8a
+ * @license Angular v10.0.9+11.sha-aa816d3
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4612,7 +4612,7 @@
             this.navigated = false;
             this.lastSuccessfulId = -1;
         };
-        /** @docsNotRequired */
+        /** @nodoc */
         Router.prototype.ngOnDestroy = function () {
             this.dispose();
         };
@@ -5061,6 +5061,7 @@
             enumerable: false,
             configurable: true
         });
+        /** @nodoc */
         RouterLink.prototype.onClick = function () {
             var extras = {
                 skipLocationChange: attrBoolValue(this.skipLocationChange),
@@ -5164,12 +5165,15 @@
             enumerable: false,
             configurable: true
         });
+        /** @nodoc */
         RouterLinkWithHref.prototype.ngOnChanges = function (changes) {
             this.updateTargetUrlAndHref();
         };
+        /** @nodoc */
         RouterLinkWithHref.prototype.ngOnDestroy = function () {
             this.subscription.unsubscribe();
         };
+        /** @nodoc */
         RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
             if (button !== 0 || ctrlKey || metaKey || shiftKey) {
                 return true;
@@ -5314,6 +5318,7 @@
                 }
             });
         }
+        /** @nodoc */
         RouterLinkActive.prototype.ngAfterContentInit = function () {
             var _this = this;
             this.links.changes.subscribe(function (_) { return _this.update(); });
@@ -5328,9 +5333,11 @@
             enumerable: false,
             configurable: true
         });
+        /** @nodoc */
         RouterLinkActive.prototype.ngOnChanges = function (changes) {
             this.update();
         };
+        /** @nodoc */
         RouterLinkActive.prototype.ngOnDestroy = function () {
             this.subscription.unsubscribe();
         };
@@ -5453,9 +5460,11 @@
             this.name = name || PRIMARY_OUTLET;
             parentContexts.onChildOutletCreated(this.name, this);
         }
+        /** @nodoc */
         RouterOutlet.prototype.ngOnDestroy = function () {
             this.parentContexts.onChildOutletDestroyed(this.name);
         };
+        /** @nodoc */
         RouterOutlet.prototype.ngOnInit = function () {
             if (!this.activated) {
                 // If the outlet was not instantiated at the time the route got activated we need to populate
@@ -5668,6 +5677,7 @@
             var ngModule = this.injector.get(core.NgModuleRef);
             return this.processRoutes(ngModule, this.router.config);
         };
+        /** @nodoc */
         RouterPreloader.prototype.ngOnDestroy = function () {
             if (this.subscription) {
                 this.subscription.unsubscribe();
@@ -5801,6 +5811,7 @@
         RouterScroller.prototype.scheduleScrollEvent = function (routerEvent, anchor) {
             this.router.triggerEvent(new Scroll(routerEvent, this.lastSource === 'popstate' ? this.store[this.restoredId] : null, anchor));
         };
+        /** @nodoc */
         RouterScroller.prototype.ngOnDestroy = function () {
             if (this.routerEventsSubscription) {
                 this.routerEventsSubscription.unsubscribe();
@@ -6178,7 +6189,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.9+9.sha-cb83b8a');
+    var VERSION = new core.Version('10.0.9+11.sha-aa816d3');
 
     /**
      * @license
