@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.5+18.sha-b071495
+ * @license Angular v10.1.0-next.5+19.sha-ca79880
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3808,26 +3808,61 @@
         return RouteReuseStrategy;
     }());
     /**
-     * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+     * @description
+     *
+     * This base route reuse strategy only reuses routes when the matched router configs are
+     * identical. This prevents components from being destroyed and recreated
+     * when just the fragment or query parameters change
+     * (that is, the existing component is _reused_).
+     *
+     * This strategy does not store any routes for later reuse.
+     *
+     * Angular uses this strategy by default.
+     *
+     *
+     * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+     * class that extends the `BaseRouteReuseStrategy` one.
+     * @publicApi
      */
-    var DefaultRouteReuseStrategy = /** @class */ (function () {
-        function DefaultRouteReuseStrategy() {
+    var BaseRouteReuseStrategy = /** @class */ (function () {
+        function BaseRouteReuseStrategy() {
         }
-        DefaultRouteReuseStrategy.prototype.shouldDetach = function (route) {
+        /**
+         * Whether the given route should detach for later reuse.
+         * Always returns false for `BaseRouteReuseStrategy`.
+         * */
+        BaseRouteReuseStrategy.prototype.shouldDetach = function (route) {
             return false;
         };
-        DefaultRouteReuseStrategy.prototype.store = function (route, detachedTree) { };
-        DefaultRouteReuseStrategy.prototype.shouldAttach = function (route) {
+        /**
+         * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+         */
+        BaseRouteReuseStrategy.prototype.store = function (route, detachedTree) { };
+        /** Returns `false`, meaning the route (and its subtree) is never reattached */
+        BaseRouteReuseStrategy.prototype.shouldAttach = function (route) {
             return false;
         };
-        DefaultRouteReuseStrategy.prototype.retrieve = function (route) {
+        /** Returns `null` because this strategy does not store routes for later re-use. */
+        BaseRouteReuseStrategy.prototype.retrieve = function (route) {
             return null;
         };
-        DefaultRouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) {
+        /**
+         * Determines if a route should be reused.
+         * This strategy returns `true` when the future route config and current route config are
+         * identical.
+         */
+        BaseRouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) {
             return future.routeConfig === curr.routeConfig;
         };
-        return DefaultRouteReuseStrategy;
+        return BaseRouteReuseStrategy;
     }());
+    var DefaultRouteReuseStrategy = /** @class */ (function (_super) {
+        __extends(DefaultRouteReuseStrategy, _super);
+        function DefaultRouteReuseStrategy() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return DefaultRouteReuseStrategy;
+    }(BaseRouteReuseStrategy));
 
     /**
      * @license
@@ -6241,7 +6276,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0-next.5+18.sha-b071495');
+    var VERSION = new core.Version('10.1.0-next.5+19.sha-ca79880');
 
     /**
      * @license
@@ -6284,6 +6319,7 @@
     exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
     exports.ActivationEnd = ActivationEnd;
     exports.ActivationStart = ActivationStart;
+    exports.BaseRouteReuseStrategy = BaseRouteReuseStrategy;
     exports.ChildActivationEnd = ChildActivationEnd;
     exports.ChildActivationStart = ChildActivationStart;
     exports.ChildrenOutletContexts = ChildrenOutletContexts;
