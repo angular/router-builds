@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.5+18.sha-b071495
+ * @license Angular v10.1.0-next.5+19.sha-ca79880
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3279,22 +3279,52 @@ function switchTap(next) {
 class RouteReuseStrategy {
 }
 /**
- * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ * @description
+ *
+ * This base route reuse strategy only reuses routes when the matched router configs are
+ * identical. This prevents components from being destroyed and recreated
+ * when just the fragment or query parameters change
+ * (that is, the existing component is _reused_).
+ *
+ * This strategy does not store any routes for later reuse.
+ *
+ * Angular uses this strategy by default.
+ *
+ *
+ * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+ * class that extends the `BaseRouteReuseStrategy` one.
+ * @publicApi
  */
-class DefaultRouteReuseStrategy {
+class BaseRouteReuseStrategy {
+    /**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for `BaseRouteReuseStrategy`.
+     * */
     shouldDetach(route) {
         return false;
     }
+    /**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */
     store(route, detachedTree) { }
+    /** Returns `false`, meaning the route (and its subtree) is never reattached */
     shouldAttach(route) {
         return false;
     }
+    /** Returns `null` because this strategy does not store routes for later re-use. */
     retrieve(route) {
         return null;
     }
+    /**
+     * Determines if a route should be reused.
+     * This strategy returns `true` when the future route config and current route config are
+     * identical.
+     */
     shouldReuseRoute(future, curr) {
         return future.routeConfig === curr.routeConfig;
     }
+}
+class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
 
 /**
@@ -5644,7 +5674,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.5+18.sha-b071495');
+const VERSION = new Version('10.1.0-next.5+19.sha-ca79880');
 
 /**
  * @license
@@ -5683,5 +5713,5 @@ const VERSION = new Version('10.1.0-next.5+18.sha-b071495');
  * Generated bundle index. Do not edit.
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map
