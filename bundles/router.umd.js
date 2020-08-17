@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.5+27.sha-cfe424e
+ * @license Angular v10.1.0-next.5+28.sha-e0e5c9f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5112,10 +5112,18 @@
             this.router = router;
             this.route = route;
             this.commands = [];
+            /** @internal */
+            this.onChanges = new rxjs.Subject();
             if (tabIndex == null) {
                 renderer.setAttribute(el.nativeElement, 'tabindex', '0');
             }
         }
+        /** @nodoc */
+        RouterLink.prototype.ngOnChanges = function (changes) {
+            // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
+            // to the RouterLinks it's tracking.
+            this.onChanges.next();
+        };
         Object.defineProperty(RouterLink.prototype, "routerLink", {
             /**
              * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -5214,6 +5222,8 @@
             this.route = route;
             this.locationStrategy = locationStrategy;
             this.commands = [];
+            /** @internal */
+            this.onChanges = new rxjs.Subject();
             this.subscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
                     _this.updateTargetUrlAndHref();
@@ -5255,6 +5265,7 @@
         /** @nodoc */
         RouterLinkWithHref.prototype.ngOnChanges = function (changes) {
             this.updateTargetUrlAndHref();
+            this.onChanges.next();
         };
         /** @nodoc */
         RouterLinkWithHref.prototype.ngOnDestroy = function () {
@@ -5321,13 +5332,6 @@
         return s === '' || !!s;
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      *
      * @description
@@ -5399,7 +5403,7 @@
             this.classes = [];
             this.isActive = false;
             this.routerLinkActiveOptions = { exact: false };
-            this.subscription = router.events.subscribe(function (s) {
+            this.routerEventsSubscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
                     _this.update();
                 }
@@ -5408,9 +5412,22 @@
         /** @nodoc */
         RouterLinkActive.prototype.ngAfterContentInit = function () {
             var _this = this;
-            this.links.changes.subscribe(function (_) { return _this.update(); });
-            this.linksWithHrefs.changes.subscribe(function (_) { return _this.update(); });
-            this.update();
+            // `of(null)` is used to force subscribe body to execute once immediately (like `startWith`).
+            rxjs.from([this.links.changes, this.linksWithHrefs.changes, rxjs.of(null)])
+                .pipe(operators.mergeAll())
+                .subscribe(function (_) {
+                _this.update();
+                _this.subscribeToEachLinkOnChanges();
+            });
+        };
+        RouterLinkActive.prototype.subscribeToEachLinkOnChanges = function () {
+            var _this = this;
+            var _a;
+            (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
+            var allLinkChanges = __spread(this.links.toArray(), this.linksWithHrefs.toArray(), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
+                .map(function (link) { return link.onChanges; });
+            this.linkInputChangesSubscription =
+                rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function () { return _this.update(); });
         };
         Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
             set: function (data) {
@@ -5426,7 +5443,9 @@
         };
         /** @nodoc */
         RouterLinkActive.prototype.ngOnDestroy = function () {
-            this.subscription.unsubscribe();
+            var _a;
+            this.routerEventsSubscription.unsubscribe();
+            (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
         };
         RouterLinkActive.prototype.update = function () {
             var _this = this;
@@ -6276,7 +6295,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0-next.5+27.sha-cfe424e');
+    var VERSION = new core.Version('10.1.0-next.5+28.sha-e0e5c9f');
 
     /**
      * @license

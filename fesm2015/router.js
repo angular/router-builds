@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.5+27.sha-cfe424e
+ * @license Angular v10.1.0-next.5+28.sha-e0e5c9f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4558,9 +4558,17 @@ class RouterLink {
         this.router = router;
         this.route = route;
         this.commands = [];
+        /** @internal */
+        this.onChanges = new Subject();
         if (tabIndex == null) {
             renderer.setAttribute(el.nativeElement, 'tabindex', '0');
         }
+    }
+    /** @nodoc */
+    ngOnChanges(changes) {
+        // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
+        // to the RouterLinks it's tracking.
+        this.onChanges.next();
     }
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -4646,6 +4654,8 @@ class RouterLinkWithHref {
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
+        /** @internal */
+        this.onChanges = new Subject();
         this.subscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.updateTargetUrlAndHref();
@@ -4679,6 +4689,7 @@ class RouterLinkWithHref {
     /** @nodoc */
     ngOnChanges(changes) {
         this.updateTargetUrlAndHref();
+        this.onChanges.next();
     }
     /** @nodoc */
     ngOnDestroy() {
@@ -4817,7 +4828,7 @@ class RouterLinkActive {
         this.classes = [];
         this.isActive = false;
         this.routerLinkActiveOptions = { exact: false };
-        this.subscription = router.events.subscribe((s) => {
+        this.routerEventsSubscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.update();
             }
@@ -4825,9 +4836,22 @@ class RouterLinkActive {
     }
     /** @nodoc */
     ngAfterContentInit() {
-        this.links.changes.subscribe(_ => this.update());
-        this.linksWithHrefs.changes.subscribe(_ => this.update());
-        this.update();
+        // `of(null)` is used to force subscribe body to execute once immediately (like `startWith`).
+        from([this.links.changes, this.linksWithHrefs.changes, of(null)])
+            .pipe(mergeAll())
+            .subscribe(_ => {
+            this.update();
+            this.subscribeToEachLinkOnChanges();
+        });
+    }
+    subscribeToEachLinkOnChanges() {
+        var _a;
+        (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
+        const allLinkChanges = [...this.links.toArray(), ...this.linksWithHrefs.toArray(), this.link, this.linkWithHref]
+            .filter((link) => !!link)
+            .map(link => link.onChanges);
+        this.linkInputChangesSubscription =
+            from(allLinkChanges).pipe(mergeAll()).subscribe(() => this.update());
     }
     set routerLinkActive(data) {
         const classes = Array.isArray(data) ? data : data.split(' ');
@@ -4839,7 +4863,9 @@ class RouterLinkActive {
     }
     /** @nodoc */
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        var _a;
+        this.routerEventsSubscription.unsubscribe();
+        (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
     }
     update() {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
@@ -5642,7 +5668,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.5+27.sha-cfe424e');
+const VERSION = new Version('10.1.0-next.5+28.sha-e0e5c9f');
 
 /**
  * @license
