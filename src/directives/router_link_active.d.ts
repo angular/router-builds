@@ -78,7 +78,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     links: QueryList<RouterLink>;
     linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
-    private subscription;
+    private routerEventsSubscription;
+    private linkInputChangesSubscription?;
     readonly isActive: boolean;
     routerLinkActiveOptions: {
         exact: boolean;
@@ -86,6 +87,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
+    private subscribeToEachLinkOnChanges;
     set routerLinkActive(data: string[] | string);
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;

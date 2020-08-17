@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { LocationStrategy } from '@angular/common';
-import { ElementRef, OnChanges, OnDestroy, Renderer2 } from '@angular/core';
+import { ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges } from '@angular/core';
 import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
@@ -109,7 +109,7 @@ import * as i0 from "@angular/core";
  *
  * @publicApi
  */
-export declare class RouterLink {
+export declare class RouterLink implements OnChanges {
     private router;
     private route;
     /**
@@ -161,6 +161,8 @@ export declare class RouterLink {
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
+    /** @nodoc */
+    ngOnChanges(changes: SimpleChanges): void;
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -259,7 +261,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      */
     set preserveQueryParams(value: boolean);
     /** @nodoc */
-    ngOnChanges(changes: {}): any;
+    ngOnChanges(changes: SimpleChanges): any;
     /** @nodoc */
     ngOnDestroy(): any;
     /** @nodoc */
