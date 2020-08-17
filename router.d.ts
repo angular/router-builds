@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.9+18.sha-84d1ba7
+ * @license Angular v10.0.9+21.sha-f3dd6c2
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2391,7 +2391,7 @@ export declare class RouterEvent {
  *
  * @publicApi
  */
-export declare class RouterLink {
+export declare class RouterLink implements OnChanges {
     private router;
     private route;
     /**
@@ -2443,6 +2443,8 @@ export declare class RouterLink {
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
+    /** @nodoc */
+    ngOnChanges(changes: SimpleChanges): void;
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -2529,7 +2531,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     links: QueryList<RouterLink>;
     linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
-    private subscription;
+    private routerEventsSubscription;
+    private linkInputChangesSubscription?;
     readonly isActive: boolean;
     routerLinkActiveOptions: {
         exact: boolean;
@@ -2537,6 +2540,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
+    private subscribeToEachLinkOnChanges;
     set routerLinkActive(data: string[] | string);
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;
@@ -2627,7 +2631,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      */
     set preserveQueryParams(value: boolean);
     /** @nodoc */
-    ngOnChanges(changes: {}): any;
+    ngOnChanges(changes: SimpleChanges): any;
     /** @nodoc */
     ngOnDestroy(): any;
     /** @nodoc */
