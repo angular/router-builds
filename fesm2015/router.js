@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.6+4.sha-723a9ff
+ * @license Angular v10.1.0-next.6+6.sha-dbfb50e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4751,7 +4751,7 @@ class RouterLink {
     ngOnChanges(changes) {
         // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
         // to the RouterLinks it's tracking.
-        this.onChanges.next();
+        this.onChanges.next(this);
     }
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -4882,7 +4882,7 @@ class RouterLinkWithHref {
     /** @nodoc */
     ngOnChanges(changes) {
         this.updateTargetUrlAndHref();
-        this.onChanges.next();
+        this.onChanges.next(this);
     }
     /** @nodoc */
     ngOnDestroy() {
@@ -5060,8 +5060,11 @@ class RouterLinkActive {
         const allLinkChanges = [...this.links.toArray(), ...this.linksWithHrefs.toArray(), this.link, this.linkWithHref]
             .filter((link) => !!link)
             .map(link => link.onChanges);
-        this.linkInputChangesSubscription =
-            from(allLinkChanges).pipe(mergeAll()).subscribe(() => this.update());
+        this.linkInputChangesSubscription = from(allLinkChanges).pipe(mergeAll()).subscribe(link => {
+            if (this.isActive !== this.isLinkActive(this.router)(link)) {
+                this.update();
+            }
+        });
     }
     set routerLinkActive(data) {
         const classes = Array.isArray(data) ? data : data.split(' ');
@@ -5700,7 +5703,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.6+4.sha-723a9ff');
+const VERSION = new Version('10.1.0-next.6+6.sha-dbfb50e');
 
 /**
  * @license
