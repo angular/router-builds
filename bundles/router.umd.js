@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.10
+ * @license Angular v10.0.10+6.sha-0af9533
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5035,7 +5035,7 @@
         RouterLink.prototype.ngOnChanges = function (changes) {
             // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
             // to the RouterLinks it's tracking.
-            this.onChanges.next();
+            this.onChanges.next(this);
         };
         Object.defineProperty(RouterLink.prototype, "routerLink", {
             /**
@@ -5178,7 +5178,7 @@
         /** @nodoc */
         RouterLinkWithHref.prototype.ngOnChanges = function (changes) {
             this.updateTargetUrlAndHref();
-            this.onChanges.next();
+            this.onChanges.next(this);
         };
         /** @nodoc */
         RouterLinkWithHref.prototype.ngOnDestroy = function () {
@@ -5339,8 +5339,11 @@
             (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
             var allLinkChanges = __spread(this.links.toArray(), this.linksWithHrefs.toArray(), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
                 .map(function (link) { return link.onChanges; });
-            this.linkInputChangesSubscription =
-                rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function () { return _this.update(); });
+            this.linkInputChangesSubscription = rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function (link) {
+                if (_this.isActive !== _this.isLinkActive(_this.router)(link)) {
+                    _this.update();
+                }
+            });
         };
         Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
             set: function (data) {
@@ -6208,7 +6211,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.0.10');
+    var VERSION = new core.Version('10.0.10+6.sha-0af9533');
 
     /**
      * @license
