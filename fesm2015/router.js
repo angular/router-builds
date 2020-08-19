@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.6+12.sha-0270020
+ * @license Angular v10.1.0-next.7+2.sha-7ad3264
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2332,17 +2332,30 @@ class ApplyRedirects {
         return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
     }
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        return of(...routes).pipe(map((r) => {
-            const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-            return expanded$.pipe(catchError((e) => {
-                if (e instanceof NoMatch) {
-                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
-                    // talk to Jason
-                    return of(null);
+        // This logic takes each route and switches to a new observable that depends on the result of
+        // the previous route expansion. In this way, we compose a list of results where each one can
+        // depend on and look at the previous to determine how to proceed with expansion of the
+        // current route.
+        return routes
+            .reduce((accumulatedResults, r) => {
+            return accumulatedResults.pipe(switchMap(resultsThusFar => {
+                // If we already matched a previous `Route` with the same outlet as the current,
+                // we should not process the current one.
+                if (resultsThusFar.some(result => result && result.outlet === getOutlet(r))) {
+                    return of(resultsThusFar);
                 }
-                throw e;
+                const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
+                return expanded$.pipe(map((segment) => resultsThusFar.concat({ segment, outlet: getOutlet(r) })), catchError((e) => {
+                    if (e instanceof NoMatch) {
+                        return of(resultsThusFar);
+                    }
+                    throw e;
+                }));
             }));
-        }), concatAll(), first((s) => !!s), catchError((e, _) => {
+        }, of([]))
+            .pipe(
+        // Find the matched segment whose outlet matches the one we're looking for.
+        map(results => { var _a; return (_a = results.find(s => s.outlet === outlet)) === null || _a === void 0 ? void 0 : _a.segment; }), first((s) => s !== undefined), catchError((e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -2356,7 +2369,9 @@ class ApplyRedirects {
         return segments.length === 0 && !segmentGroup.children[outlet];
     }
     expandSegmentAgainstRoute(ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-        if (getOutlet(route) !== outlet) {
+        // Empty string segments are special because multiple outlets can match a single path, i.e.
+        // `[{path: '', component: B}, {path: '', loadChildren: () => {}, outlet: "about"}]`
+        if (getOutlet(route) !== outlet && route.path !== '') {
             return noMatch(segmentGroup);
         }
         if (route.redirectTo === undefined) {
@@ -5703,7 +5718,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.6+12.sha-0270020');
+const VERSION = new Version('10.1.0-next.7+2.sha-7ad3264');
 
 /**
  * @license
