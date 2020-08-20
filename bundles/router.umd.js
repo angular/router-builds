@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0-next.7+8.sha-ac461e1
+ * @license Angular v10.1.0-next.7+11.sha-4ee5e73
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2759,9 +2759,9 @@
             return new Error("Cannot match any routes. URL Segment: '" + e.segmentGroup + "'");
         };
         ApplyRedirects.prototype.createUrlTree = function (rootCandidate, queryParams, fragment) {
-            var _b;
+            var _a;
             var root = rootCandidate.segments.length > 0 ?
-                new UrlSegmentGroup([], (_b = {}, _b[PRIMARY_OUTLET] = rootCandidate, _b)) :
+                new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = rootCandidate, _a)) :
                 rootCandidate;
             return new UrlTree(root, queryParams, fragment);
         };
@@ -2779,30 +2779,17 @@
         };
         ApplyRedirects.prototype.expandSegment = function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
             var _this = this;
-            // This logic takes each route and switches to a new observable that depends on the result of
-            // the previous route expansion. In this way, we compose a list of results where each one can
-            // depend on and look at the previous to determine how to proceed with expansion of the
-            // current route.
-            return routes
-                .reduce(function (accumulatedResults, r) {
-                return accumulatedResults.pipe(operators.switchMap(function (resultsThusFar) {
-                    // If we already matched a previous `Route` with the same outlet as the current,
-                    // we should not process the current one.
-                    if (resultsThusFar.some(function (result) { return result && result.outlet === getOutlet(r); })) {
-                        return rxjs.of(resultsThusFar);
+            return rxjs.of.apply(void 0, __spread(routes)).pipe(operators.map(function (r) {
+                var expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
+                return expanded$.pipe(operators.catchError(function (e) {
+                    if (e instanceof NoMatch) {
+                        // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
+                        // talk to Jason
+                        return rxjs.of(null);
                     }
-                    var expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-                    return expanded$.pipe(operators.map(function (segment) { return resultsThusFar.concat({ segment: segment, outlet: getOutlet(r) }); }), operators.catchError(function (e) {
-                        if (e instanceof NoMatch) {
-                            return rxjs.of(resultsThusFar);
-                        }
-                        throw e;
-                    }));
+                    throw e;
                 }));
-            }, rxjs.of([]))
-                .pipe(
-            // Find the matched segment whose outlet matches the one we're looking for.
-            operators.map(function (results) { var _a; return (_a = results.find(function (s) { return s.outlet === outlet; })) === null || _a === void 0 ? void 0 : _a.segment; }), operators.first(function (s) { return s !== undefined; }), operators.catchError(function (e, _) {
+            }), operators.concatAll(), operators.first(function (s) { return !!s; }), operators.catchError(function (e, _) {
                 if (e instanceof rxjs.EmptyError || e.name === 'EmptyError') {
                     if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                         return rxjs.of(new UrlSegmentGroup([], {}));
@@ -2816,9 +2803,7 @@
             return segments.length === 0 && !segmentGroup.children[outlet];
         };
         ApplyRedirects.prototype.expandSegmentAgainstRoute = function (ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-            // Empty string segments are special because multiple outlets can match a single path, i.e.
-            // `[{path: '', component: B}, {path: '', loadChildren: () => {}, outlet: "about"}]`
-            if (getOutlet(route) !== outlet && route.path !== '') {
+            if (getOutlet(route) !== outlet) {
                 return noMatch(segmentGroup);
             }
             if (route.redirectTo === undefined) {
@@ -2848,7 +2833,7 @@
         };
         ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (ngModule, segmentGroup, routes, route, segments, outlet) {
             var _this = this;
-            var _b = match(segmentGroup, route, segments), matched = _b.matched, consumedSegments = _b.consumedSegments, lastChild = _b.lastChild, positionalParamSegments = _b.positionalParamSegments;
+            var _a = match(segmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
             if (!matched)
                 return noMatch(segmentGroup);
             var newTree = this.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
@@ -2871,7 +2856,7 @@
                 }
                 return rxjs.of(new UrlSegmentGroup(segments, {}));
             }
-            var _b = match(rawSegmentGroup, route, segments), matched = _b.matched, consumedSegments = _b.consumedSegments, lastChild = _b.lastChild;
+            var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild;
             if (!matched)
                 return noMatch(rawSegmentGroup);
             var rawSlicedSegments = segments.slice(lastChild);
@@ -2879,7 +2864,7 @@
             return childConfig$.pipe(operators.mergeMap(function (routerConfig) {
                 var childModule = routerConfig.module;
                 var childConfig = routerConfig.routes;
-                var _b = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _b.segmentGroup, slicedSegments = _b.slicedSegments;
+                var _a = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
                 if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                     var expanded$_1 = _this.expandChildren(childModule, childConfig, segmentGroup);
                     return expanded$_1.pipe(operators.map(function (children) { return new UrlSegmentGroup(consumedSegments, children); }));
@@ -3000,7 +2985,7 @@
             return pos;
         };
         ApplyRedirects.prototype.findOrReturn = function (redirectToUrlSegment, actualSegments) {
-            var e_1, _b;
+            var e_1, _a;
             var idx = 0;
             try {
                 for (var actualSegments_1 = __values(actualSegments), actualSegments_1_1 = actualSegments_1.next(); !actualSegments_1_1.done; actualSegments_1_1 = actualSegments_1.next()) {
@@ -3015,7 +3000,7 @@
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (actualSegments_1_1 && !actualSegments_1_1.done && (_b = actualSegments_1.return)) _b.call(actualSegments_1);
+                    if (actualSegments_1_1 && !actualSegments_1_1.done && (_a = actualSegments_1.return)) _a.call(actualSegments_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -3068,7 +3053,7 @@
         return s;
     }
     function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-        var e_2, _b;
+        var e_2, _a;
         var res = {};
         try {
             for (var routes_1 = __values(routes), routes_1_1 = routes_1.next(); !routes_1_1.done; routes_1_1 = routes_1.next()) {
@@ -3081,14 +3066,14 @@
         catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
-                if (routes_1_1 && !routes_1_1.done && (_b = routes_1.return)) _b.call(routes_1);
+                if (routes_1_1 && !routes_1_1.done && (_a = routes_1.return)) _a.call(routes_1);
             }
             finally { if (e_2) throw e_2.error; }
         }
         return Object.assign(Object.assign({}, children), res);
     }
     function createChildrenForEmptySegments(routes, primarySegmentGroup) {
-        var e_3, _b;
+        var e_3, _a;
         var res = {};
         res[PRIMARY_OUTLET] = primarySegmentGroup;
         try {
@@ -3102,7 +3087,7 @@
         catch (e_3_1) { e_3 = { error: e_3_1 }; }
         finally {
             try {
-                if (routes_2_1 && !routes_2_1.done && (_b = routes_2.return)) _b.call(routes_2);
+                if (routes_2_1 && !routes_2_1.done && (_a = routes_2.return)) _a.call(routes_2);
             }
             finally { if (e_3) throw e_3.error; }
         }
@@ -6313,7 +6298,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0-next.7+8.sha-ac461e1');
+    var VERSION = new core.Version('10.1.0-next.7+11.sha-4ee5e73');
 
     /**
      * @license
