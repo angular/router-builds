@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.0.14+19.sha-4e8592e
+ * @license Angular v10.0.14+21.sha-9a64980
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5582,7 +5582,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.0.14+19.sha-4e8592e');
+const VERSION = new Version('10.0.14+21.sha-9a64980');
 
 /**
  * @license
