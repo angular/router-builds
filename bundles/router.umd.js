@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+40.sha-a32a317
+ * @license Angular v11.0.0-next.0+42.sha-c880e39
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5306,8 +5306,8 @@
             this.subscription.unsubscribe();
         };
         /** @nodoc */
-        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
-            if (button !== 0 || ctrlKey || metaKey || shiftKey) {
+        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, shiftKey, altKey, metaKey) {
+            if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
                 return true;
             }
             if (typeof this.target === 'string' && this.target != '_self') {
@@ -5360,7 +5360,8 @@
         href: [{ type: core.HostBinding }],
         routerLink: [{ type: core.Input }],
         preserveQueryParams: [{ type: core.Input }],
-        onClick: [{ type: core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
+        onClick: [{ type: core.HostListener, args: ['click',
+                    ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
     };
     function attrBoolValue(s) {
         return s === '' || !!s;
@@ -6332,7 +6333,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.0-next.0+40.sha-a32a317');
+    var VERSION = new core.Version('11.0.0-next.0+42.sha-c880e39');
 
     /**
      * @license

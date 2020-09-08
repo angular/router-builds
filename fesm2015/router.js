@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+40.sha-a32a317
+ * @license Angular v11.0.0-next.0+42.sha-c880e39
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4729,8 +4729,8 @@ class RouterLinkWithHref {
         this.subscription.unsubscribe();
     }
     /** @nodoc */
-    onClick(button, ctrlKey, metaKey, shiftKey) {
-        if (button !== 0 || ctrlKey || metaKey || shiftKey) {
+    onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
+        if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
             return true;
         }
         if (typeof this.target === 'string' && this.target != '_self') {
@@ -4778,7 +4778,8 @@ RouterLinkWithHref.propDecorators = {
     href: [{ type: HostBinding }],
     routerLink: [{ type: Input }],
     preserveQueryParams: [{ type: Input }],
-    onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
+    onClick: [{ type: HostListener, args: ['click',
+                ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
 };
 function attrBoolValue(s) {
     return s === '' || !!s;
@@ -5704,7 +5705,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.0+40.sha-a32a317');
+const VERSION = new Version('11.0.0-next.0+42.sha-c880e39');
 
 /**
  * @license
