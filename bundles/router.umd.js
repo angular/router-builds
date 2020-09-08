@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+21.sha-261f689
+ * @license Angular v11.0.0-next.0+25.sha-926ffcd
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2686,6 +2686,139 @@
         });
     }
 
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
+     * This component is used internally within the router to be a placeholder when an empty
+     * router-outlet is needed. For example, with a config such as:
+     *
+     * `{path: 'parent', outlet: 'nav', children: [...]}`
+     *
+     * In order to render, there needs to be a component on this config, which will default
+     * to this `EmptyOutletComponent`.
+     */
+    var ɵEmptyOutletComponent = /** @class */ (function () {
+        function ɵEmptyOutletComponent() {
+        }
+        return ɵEmptyOutletComponent;
+    }());
+    ɵEmptyOutletComponent.decorators = [
+        { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" },] }
+    ];
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    function validateConfig(config, parentPath) {
+        if (parentPath === void 0) { parentPath = ''; }
+        // forEach doesn't iterate undefined values
+        for (var i = 0; i < config.length; i++) {
+            var route = config[i];
+            var fullPath = getFullPath(parentPath, route);
+            validateNode(route, fullPath);
+        }
+    }
+    function validateNode(route, fullPath) {
+        if (!route) {
+            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+        }
+        if (Array.isArray(route)) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
+        }
+        if (!route.component && !route.children && !route.loadChildren &&
+            (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
+        }
+        if (route.redirectTo && route.children) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
+        }
+        if (route.redirectTo && route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
+        }
+        if (route.children && route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
+        }
+        if (route.redirectTo && route.component) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
+        }
+        if (route.path && route.matcher) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
+        }
+        if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+            throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
+        }
+        if (route.path === void 0 && route.matcher === void 0) {
+            throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
+        }
+        if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+            throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
+        }
+        if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+            var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+            throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+        }
+        if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+            throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+        }
+        if (route.children) {
+            validateConfig(route.children, fullPath);
+        }
+    }
+    function getFullPath(parentPath, currentRoute) {
+        if (!currentRoute) {
+            return parentPath;
+        }
+        if (!parentPath && !currentRoute.path) {
+            return '';
+        }
+        else if (parentPath && !currentRoute.path) {
+            return parentPath + "/";
+        }
+        else if (!parentPath && currentRoute.path) {
+            return currentRoute.path;
+        }
+        else {
+            return parentPath + "/" + currentRoute.path;
+        }
+    }
+    /**
+     * Makes a copy of the config and adds any default required properties.
+     */
+    function standardizeConfig(r) {
+        var children = r.children && r.children.map(standardizeConfig);
+        var c = children ? Object.assign(Object.assign({}, r), { children: children }) : Object.assign({}, r);
+        if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
+            c.component = ɵEmptyOutletComponent;
+        }
+        return c;
+    }
+    /** Returns of `Map` of outlet names to the `Route`s for that outlet. */
+    function groupRoutesByOutlet(routes) {
+        return routes.reduce(function (map, route) {
+            var routeOutlet = getOutlet(route);
+            if (map.has(routeOutlet)) {
+                map.get(routeOutlet).push(route);
+            }
+            else {
+                map.set(routeOutlet, [route]);
+            }
+            return map;
+        }, new Map());
+    }
+    /** Returns the `route.outlet` or PRIMARY_OUTLET if none exists. */
+    function getOutlet(route) {
+        return route.outlet || PRIMARY_OUTLET;
+    }
+
     var NoMatch = /** @class */ (function () {
         function NoMatch(segmentGroup) {
             this.segmentGroup = segmentGroup || null;
@@ -2779,31 +2912,51 @@
         };
         ApplyRedirects.prototype.expandSegment = function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
             var _this = this;
-            return rxjs.of.apply(void 0, __spread(routes)).pipe(operators.map(function (r) {
-                var expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
-                return expanded$.pipe(operators.catchError(function (e) {
-                    if (e instanceof NoMatch) {
-                        // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
-                        // talk to Jason
-                        return rxjs.of(null);
+            // We need to expand each outlet group independently to ensure that we not only load modules
+            // for routes matching the given `outlet`, but also those which will be activated because
+            // their path is empty string. This can result in multiple outlets being activated at once.
+            var routesByOutlet = groupRoutesByOutlet(routes);
+            if (!routesByOutlet.has(outlet)) {
+                routesByOutlet.set(outlet, []);
+            }
+            var expandRoutes = function (routes) {
+                return rxjs.from(routes).pipe(operators.concatMap(function (r) {
+                    var expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
+                    return expanded$.pipe(operators.catchError(function (e) {
+                        if (e instanceof NoMatch) {
+                            return rxjs.of(null);
+                        }
+                        throw e;
+                    }));
+                }), operators.first(function (s) { return s !== null; }), operators.catchError(function (e) {
+                    if (e instanceof rxjs.EmptyError || e.name === 'EmptyError') {
+                        if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
+                            return rxjs.of(new UrlSegmentGroup([], {}));
+                        }
+                        throw new NoMatch(segmentGroup);
                     }
                     throw e;
                 }));
-            }), operators.concatAll(), operators.first(function (s) { return !!s; }), operators.catchError(function (e, _) {
-                if (e instanceof rxjs.EmptyError || e.name === 'EmptyError') {
-                    if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
-                        return rxjs.of(new UrlSegmentGroup([], {}));
-                    }
-                    throw new NoMatch(segmentGroup);
-                }
-                throw e;
-            }));
+            };
+            var expansions = Array.from(routesByOutlet.entries()).map(function (_a) {
+                var _b = __read(_a, 2), routeOutlet = _b[0], routes = _b[1];
+                var expanded = expandRoutes(routes);
+                // Map all results from outlets we aren't activating to `null` so they can be ignored later
+                return routeOutlet === outlet ? expanded :
+                    expanded.pipe(operators.map(function () { return null; }), operators.catchError(function () { return rxjs.of(null); }));
+            });
+            return rxjs.from(expansions)
+                .pipe(operators.combineAll(), operators.first(), 
+            // Return only the expansion for the route outlet we are trying to activate.
+            operators.map(function (results) { return results.find(function (result) { return result !== null; }); }));
         };
         ApplyRedirects.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
             return segments.length === 0 && !segmentGroup.children[outlet];
         };
         ApplyRedirects.prototype.expandSegmentAgainstRoute = function (ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-            if (getOutlet(route) !== outlet) {
+            // Empty string segments are special because multiple outlets can match a single path, i.e.
+            // `[{path: '', component: B}, {path: '', loadChildren: () => {}, outlet: "about"}]`
+            if (getOutlet(route) !== outlet && route.path !== '') {
                 return noMatch(segmentGroup);
             }
             if (route.redirectTo === undefined) {
@@ -3104,9 +3257,6 @@
             return false;
         }
         return r.path === '' && r.redirectTo !== undefined;
-    }
-    function getOutlet(route) {
-        return route.outlet || PRIMARY_OUTLET;
     }
 
     /**
@@ -3863,122 +4013,6 @@
         }
         return DefaultRouteReuseStrategy;
     }(BaseRouteReuseStrategy));
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
-     * This component is used internally within the router to be a placeholder when an empty
-     * router-outlet is needed. For example, with a config such as:
-     *
-     * `{path: 'parent', outlet: 'nav', children: [...]}`
-     *
-     * In order to render, there needs to be a component on this config, which will default
-     * to this `EmptyOutletComponent`.
-     */
-    var ɵEmptyOutletComponent = /** @class */ (function () {
-        function ɵEmptyOutletComponent() {
-        }
-        return ɵEmptyOutletComponent;
-    }());
-    ɵEmptyOutletComponent.decorators = [
-        { type: core.Component, args: [{ template: "<router-outlet></router-outlet>" },] }
-    ];
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    function validateConfig(config, parentPath) {
-        if (parentPath === void 0) { parentPath = ''; }
-        // forEach doesn't iterate undefined values
-        for (var i = 0; i < config.length; i++) {
-            var route = config[i];
-            var fullPath = getFullPath(parentPath, route);
-            validateNode(route, fullPath);
-        }
-    }
-    function validateNode(route, fullPath) {
-        if (!route) {
-            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
-        }
-        if (Array.isArray(route)) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
-        }
-        if (!route.component && !route.children && !route.loadChildren &&
-            (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
-        }
-        if (route.redirectTo && route.children) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
-        }
-        if (route.redirectTo && route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
-        }
-        if (route.children && route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
-        }
-        if (route.redirectTo && route.component) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
-        }
-        if (route.path && route.matcher) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
-        }
-        if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
-        }
-        if (route.path === void 0 && route.matcher === void 0) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
-        }
-        if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-            throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
-        }
-        if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-            var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
-            throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
-        }
-        if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-            throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
-        }
-        if (route.children) {
-            validateConfig(route.children, fullPath);
-        }
-    }
-    function getFullPath(parentPath, currentRoute) {
-        if (!currentRoute) {
-            return parentPath;
-        }
-        if (!parentPath && !currentRoute.path) {
-            return '';
-        }
-        else if (parentPath && !currentRoute.path) {
-            return parentPath + "/";
-        }
-        else if (!parentPath && currentRoute.path) {
-            return currentRoute.path;
-        }
-        else {
-            return parentPath + "/" + currentRoute.path;
-        }
-    }
-    /**
-     * Makes a copy of the config and adds any default required properties.
-     */
-    function standardizeConfig(r) {
-        var children = r.children && r.children.map(standardizeConfig);
-        var c = children ? Object.assign(Object.assign({}, r), { children: children }) : Object.assign({}, r);
-        if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-            c.component = ɵEmptyOutletComponent;
-        }
-        return c;
-    }
 
     /**
      * @license
@@ -6298,7 +6332,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.0-next.0+21.sha-261f689');
+    var VERSION = new core.Version('11.0.0-next.0+25.sha-926ffcd');
 
     /**
      * @license
