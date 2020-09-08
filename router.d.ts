@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0+26.sha-a1c34c6
+ * @license Angular v10.1.0+34.sha-190dca0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2690,7 +2690,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     /** @nodoc */
     ngOnDestroy(): any;
     /** @nodoc */
-    onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
+    onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
 }

@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0+26.sha-a1c34c6
+ * @license Angular v10.1.0+34.sha-190dca0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5272,8 +5272,8 @@
             this.subscription.unsubscribe();
         };
         /** @nodoc */
-        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
-            if (button !== 0 || ctrlKey || metaKey || shiftKey) {
+        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, shiftKey, altKey, metaKey) {
+            if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
                 return true;
             }
             if (typeof this.target === 'string' && this.target != '_self') {
@@ -5326,7 +5326,8 @@
         href: [{ type: core.HostBinding }],
         routerLink: [{ type: core.Input }],
         preserveQueryParams: [{ type: core.Input }],
-        onClick: [{ type: core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
+        onClick: [{ type: core.HostListener, args: ['click',
+                    ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
     };
     function attrBoolValue(s) {
         return s === '' || !!s;
@@ -6298,7 +6299,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.0+26.sha-a1c34c6');
+    var VERSION = new core.Version('10.1.0+34.sha-190dca0');
 
     /**
      * @license
