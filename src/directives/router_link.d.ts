@@ -265,7 +265,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     /** @nodoc */
     ngOnDestroy(): any;
     /** @nodoc */
-    onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
+    onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref, never>;

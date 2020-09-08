@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+40.sha-a32a317
+ * @license Angular v11.0.0-next.0+42.sha-c880e39
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5519,8 +5519,8 @@
             this.subscription.unsubscribe();
         };
         /** @nodoc */
-        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey, shiftKey) {
-            if (button !== 0 || ctrlKey || metaKey || shiftKey) {
+        RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, shiftKey, altKey, metaKey) {
+            if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
                 return true;
             }
             if (typeof this.target === 'string' && this.target != '_self') {
@@ -5556,7 +5556,7 @@
     RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
     RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) {
             if (rf & 1) {
-                i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.metaKey, $event.shiftKey); });
+                i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.shiftKey, $event.altKey, $event.metaKey); });
             }
             if (rf & 2) {
                 i0.ɵɵhostProperty("href", ctx.href, i0.ɵɵsanitizeUrl);
@@ -5594,7 +5594,8 @@
                     type: i0.Input
                 }], onClick: [{
                     type: i0.HostListener,
-                    args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey']]
+                    args: ['click',
+                        ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey']]
                 }] });
     })();
     function attrBoolValue(s) {
@@ -6381,7 +6382,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.0.0-next.0+40.sha-a32a317');
+    var VERSION = new i0.Version('11.0.0-next.0+42.sha-c880e39');
 
     /**
      * @license
