@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.0+36.sha-e156e29
+ * @license Angular v10.1.0+43.sha-b1398d1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5128,7 +5128,7 @@ class PreloadingStrategy {
  * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
- * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+ * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
  * @publicApi
@@ -5672,7 +5672,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0+36.sha-e156e29');
+const VERSION = new Version('10.1.0+43.sha-b1398d1');
 
 /**
  * @license
