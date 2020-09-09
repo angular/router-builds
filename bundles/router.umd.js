@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+52.sha-f645d26
+ * @license Angular v11.0.0-next.0+48.sha-d896c33
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5808,7 +5808,7 @@
      * Provides a preloading strategy that preloads all modules as quickly as possible.
      *
      * ```
-     * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+     * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
      * ```
      *
      * @publicApi
@@ -6382,7 +6382,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.0.0-next.0+52.sha-f645d26');
+    var VERSION = new i0.Version('11.0.0-next.0+48.sha-d896c33');
 
     /**
      * @license
