@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.0+51.sha-6d9bfb8
+ * @license Angular v11.0.0-next.0+46.sha-ded075a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1427,7 +1427,7 @@ export declare type Params = {
  * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
- * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+ * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
  * @publicApi
