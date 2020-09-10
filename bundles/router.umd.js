@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.1+5.sha-1373a98
+ * @license Angular v11.0.0-next.1+9.sha-281865b
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3293,11 +3293,11 @@
             var _this = this;
             if (route.path === '**') {
                 if (route.loadChildren) {
-                    return rxjs.defer(function () { return _this.configLoader.load(ngModule.injector, route)
+                    return this.configLoader.load(ngModule.injector, route)
                         .pipe(operators.map(function (cfg) {
                         route._loadedConfig = cfg;
                         return new UrlSegmentGroup(segments, {});
-                    })); });
+                    }));
                 }
                 return rxjs.of(new UrlSegmentGroup(segments, {}));
             }
@@ -6382,7 +6382,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.0.0-next.1+5.sha-1373a98');
+    var VERSION = new i0.Version('11.0.0-next.1+9.sha-281865b');
 
     /**
      * @license
