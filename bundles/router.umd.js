@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.1+9.sha-281865b
+ * @license Angular v11.0.0-next.1+11.sha-d141516
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2569,7 +2569,7 @@
                             // Otherwise it will get activated from its `ngOnInit` when instantiated
                             context.outlet.activateWith(future, cmpFactoryResolver);
                         }
-                        else if (i0.isDevMode() && console && console.warn) {
+                        else if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
                             console.warn("A router outlet has not been instantiated during routes activation. URL Segment: '" + future.snapshot._urlSegment + "'");
                         }
                         this.activateChildRoutes(futureNode, null, context.children);
@@ -3020,46 +3020,48 @@
         }
     }
     function validateNode(route, fullPath) {
-        if (!route) {
-            throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
-        }
-        if (Array.isArray(route)) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
-        }
-        if (!route.component && !route.children && !route.loadChildren &&
-            (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
-        }
-        if (route.redirectTo && route.children) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
-        }
-        if (route.redirectTo && route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
-        }
-        if (route.children && route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
-        }
-        if (route.redirectTo && route.component) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
-        }
-        if (route.path && route.matcher) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
-        }
-        if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-            throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
-        }
-        if (route.path === void 0 && route.matcher === void 0) {
-            throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
-        }
-        if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-            throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
-        }
-        if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-            var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
-            throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
-        }
-        if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-            throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (!route) {
+                throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n\n      Example:\n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+            }
+            if (Array.isArray(route)) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
+            }
+            if (!route.component && !route.children && !route.loadChildren &&
+                (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route without children or loadChildren cannot have a named outlet set");
+            }
+            if (route.redirectTo && route.children) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
+            }
+            if (route.redirectTo && route.loadChildren) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
+            }
+            if (route.children && route.loadChildren) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
+            }
+            if (route.redirectTo && route.component) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
+            }
+            if (route.path && route.matcher) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
+            }
+            if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+                throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
+            }
+            if (route.path === void 0 && route.matcher === void 0) {
+                throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
+            }
+            if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+                throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
+            }
+            if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+                var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+                throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+            }
+            if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+                throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+            }
         }
         if (route.children) {
             validateConfig(route.children, fullPath);
@@ -5002,7 +5004,8 @@
         Router.prototype.createUrlTree = function (commands, navigationExtras) {
             if (navigationExtras === void 0) { navigationExtras = {}; }
             var relativeTo = navigationExtras.relativeTo, queryParams = navigationExtras.queryParams, fragment = navigationExtras.fragment, preserveQueryParams = navigationExtras.preserveQueryParams, queryParamsHandling = navigationExtras.queryParamsHandling, preserveFragment = navigationExtras.preserveFragment;
-            if (i0.isDevMode() && preserveQueryParams && console && console.warn) {
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) && preserveQueryParams && console &&
+                console.warn) {
                 console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
             }
             var a = relativeTo || this.routerState.root;
@@ -5056,7 +5059,8 @@
          */
         Router.prototype.navigateByUrl = function (url, extras) {
             if (extras === void 0) { extras = { skipLocationChange: false }; }
-            if (i0.isDevMode() && this.isNgZoneEnabled && !i0.NgZone.isInAngularZone()) {
+            if (typeof ngDevMode === 'undefined' ||
+                ngDevMode && this.isNgZoneEnabled && !i0.NgZone.isInAngularZone()) {
                 this.console.warn("Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?");
             }
             var urlTree = isUrlTree(url) ? url : this.parseUrl(url);
@@ -5379,7 +5383,7 @@
              * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
              */
             set: function (value) {
-                if (i0.isDevMode() && console && console.warn) {
+                if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
                     console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
                 }
                 this.preserve = value;
@@ -5501,7 +5505,7 @@
              * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
              */
             set: function (value) {
-                if (i0.isDevMode() && console && console.warn) {
+                if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
                     console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
                 }
                 this.preserve = value;
@@ -6187,7 +6191,7 @@
             new i3.PathLocationStrategy(platformLocationStrategy, baseHref);
     }
     function provideForRootGuard(router) {
-        if (router) {
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && router) {
             throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
         }
         return 'guarded';
@@ -6382,7 +6386,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.0.0-next.1+9.sha-281865b');
+    var VERSION = new i0.Version('11.0.0-next.1+11.sha-d141516');
 
     /**
      * @license
