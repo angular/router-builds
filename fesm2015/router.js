@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.1+5.sha-7669bd8
+ * @license Angular v10.1.1+9.sha-edb7f90
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵisObservable, ɵisPromise, isDevMode, NgModuleRef, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, combineLatest, Observable, EmptyError, defer, EMPTY, Subject } from 'rxjs';
-import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, first, mergeMap, tap, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
+import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, concatMap, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -2332,7 +2332,7 @@ class ApplyRedirects {
         return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
     }
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        return of(...routes).pipe(map((r) => {
+        return of(...routes).pipe(concatMap((r) => {
             const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return expanded$.pipe(catchError((e) => {
                 if (e instanceof NoMatch) {
@@ -2342,7 +2342,7 @@ class ApplyRedirects {
                 }
                 throw e;
             }));
-        }), concatAll(), first((s) => !!s), catchError((e, _) => {
+        }), first((s) => !!s), catchError((e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
                 if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
@@ -2398,11 +2398,11 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return defer(() => this.configLoader.load(ngModule.injector, route)
+                return this.configLoader.load(ngModule.injector, route)
                     .pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
-                })));
+                }));
             }
             return of(new UrlSegmentGroup(segments, {}));
         }
@@ -5672,7 +5672,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.1+5.sha-7669bd8');
+const VERSION = new Version('10.1.1+9.sha-edb7f90');
 
 /**
  * @license

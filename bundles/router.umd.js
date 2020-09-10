@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.1+5.sha-7669bd8
+ * @license Angular v10.1.1+9.sha-edb7f90
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2779,7 +2779,7 @@
         };
         ApplyRedirects.prototype.expandSegment = function (ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
             var _this = this;
-            return rxjs.of.apply(void 0, __spread(routes)).pipe(operators.map(function (r) {
+            return rxjs.of.apply(void 0, __spread(routes)).pipe(operators.concatMap(function (r) {
                 var expanded$ = _this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
                 return expanded$.pipe(operators.catchError(function (e) {
                     if (e instanceof NoMatch) {
@@ -2789,7 +2789,7 @@
                     }
                     throw e;
                 }));
-            }), operators.concatAll(), operators.first(function (s) { return !!s; }), operators.catchError(function (e, _) {
+            }), operators.first(function (s) { return !!s; }), operators.catchError(function (e, _) {
                 if (e instanceof rxjs.EmptyError || e.name === 'EmptyError') {
                     if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
                         return rxjs.of(new UrlSegmentGroup([], {}));
@@ -2848,11 +2848,11 @@
             var _this = this;
             if (route.path === '**') {
                 if (route.loadChildren) {
-                    return rxjs.defer(function () { return _this.configLoader.load(ngModule.injector, route)
+                    return this.configLoader.load(ngModule.injector, route)
                         .pipe(operators.map(function (cfg) {
                         route._loadedConfig = cfg;
                         return new UrlSegmentGroup(segments, {});
-                    })); });
+                    }));
                 }
                 return rxjs.of(new UrlSegmentGroup(segments, {}));
             }
@@ -6299,7 +6299,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.1+5.sha-7669bd8');
+    var VERSION = new core.Version('10.1.1+9.sha-edb7f90');
 
     /**
      * @license
