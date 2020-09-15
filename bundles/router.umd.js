@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.1+44.sha-171a0d0
+ * @license Angular v11.0.0-next.1+45.sha-3817e5f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2124,7 +2124,7 @@
             try {
                 for (var _b = __values(prevState.children), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var p = _c.value;
-                    if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
+                    if (routeReuseStrategy.shouldReuseRoute(child.value, p.value.snapshot)) {
                         return createNode(routeReuseStrategy, child, p);
                     }
                 }
@@ -6337,7 +6337,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.0-next.1+44.sha-171a0d0');
+    var VERSION = new core.Version('11.0.0-next.1+45.sha-3817e5f');
 
     /**
      * @license

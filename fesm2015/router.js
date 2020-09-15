@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.1+44.sha-171a0d0
+ * @license Angular v11.0.0-next.1+45.sha-3817e5f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1678,7 +1678,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return curr.children.map(child => {
         for (const p of prevState.children) {
-            if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
+            if (routeReuseStrategy.shouldReuseRoute(child.value, p.value.snapshot)) {
                 return createNode(routeReuseStrategy, child, p);
             }
         }
@@ -5709,7 +5709,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.1+44.sha-171a0d0');
+const VERSION = new Version('11.0.0-next.1+45.sha-3817e5f');
 
 /**
  * @license
