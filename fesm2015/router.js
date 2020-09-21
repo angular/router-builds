@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.2+40.sha-6ae3b68
+ * @license Angular v11.0.0-next.2+47.sha-297b123
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5149,7 +5149,7 @@ RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors
         ɵɵcontentQuery(dirIndex, RouterLink, true);
         ɵɵcontentQuery(dirIndex, RouterLinkWithHref, true);
     } if (rf & 2) {
-        var _t;
+        let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.links = _t);
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.linksWithHrefs = _t);
     } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature] });
@@ -5738,7 +5738,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.2+40.sha-6ae3b68');
+const VERSION = new Version('11.0.0-next.2+47.sha-297b123');
 
 /**
  * @license
