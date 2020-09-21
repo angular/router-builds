@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.2+29.sha-d5ddb9f
+ * @license Angular v11.0.0-next.2+31.sha-e498ea9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2115,9 +2115,6 @@ class ActivateRoutes {
                         // Activate the outlet when it has already been instantiated
                         // Otherwise it will get activated from its `ngOnInit` when instantiated
                         context.outlet.activateWith(future, cmpFactoryResolver);
-                    }
-                    else if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
-                        console.warn(`A router outlet has not been instantiated during routes activation. URL Segment: '${future.snapshot._urlSegment}'`);
                     }
                     this.activateChildRoutes(futureNode, null, context.children);
                 }
@@ -5741,7 +5738,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.2+29.sha-d5ddb9f');
+const VERSION = new Version('11.0.0-next.2+31.sha-e498ea9');
 
 /**
  * @license
