@@ -1,11 +1,11 @@
 /**
- * @license Angular v10.1.2+24.sha-7d5b515
+ * @license Angular v10.1.2+33.sha-32e32e5
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, isDevMode, NgModuleRef, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, NgModuleRef, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, isDevMode, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { of, from, BehaviorSubject, combineLatest, Observable, EmptyError, defer, EMPTY, Subject } from 'rxjs';
 import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, concatMap, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -2115,9 +2115,6 @@ class ActivateRoutes {
                         // Activate the outlet when it has already been instantiated
                         // Otherwise it will get activated from its `ngOnInit` when instantiated
                         context.outlet.activateWith(future, cmpFactoryResolver);
-                    }
-                    else if (isDevMode() && console && console.warn) {
-                        console.warn(`A router outlet has not been instantiated during routes activation. URL Segment: '${future.snapshot._urlSegment}'`);
                     }
                     this.activateChildRoutes(futureNode, null, context.children);
                 }
@@ -5672,7 +5669,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.2+24.sha-7d5b515');
+const VERSION = new Version('10.1.2+33.sha-32e32e5');
 
 /**
  * @license
