@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.3+8.sha-4c87665
+ * @license Angular v11.0.0-next.3+10.sha-837889f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4506,7 +4506,7 @@
              * Enables a bug fix that corrects relative link resolution in components with empty paths.
              * @see `RouterModule`
              */
-            this.relativeLinkResolution = 'legacy';
+            this.relativeLinkResolution = 'corrected';
             var onLoadStart = function (r) { return _this.triggerEvent(new RouteConfigLoadStart(r)); };
             var onLoadEnd = function (r) { return _this.triggerEvent(new RouteConfigLoadEnd(r)); };
             this.ngModule = injector.get(i0.NgModuleRef);
@@ -6383,7 +6383,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.0.0-next.3+8.sha-4c87665');
+    var VERSION = new i0.Version('11.0.0-next.3+10.sha-837889f');
 
     /**
      * @license
