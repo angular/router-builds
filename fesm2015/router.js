@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.3+10.sha-837889f
+ * @license Angular v11.0.0-next.3+11.sha-e4f4d18
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4200,8 +4200,7 @@ class Router {
      * segments, followed by the parameters for each segment.
      * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
      * property of the options object, if supplied.
-     * @param navigationExtras Options that control the navigation strategy. This function
-     * only uses properties in `NavigationExtras` that would change the provided URL.
+     * @param navigationExtras Options that control the navigation strategy.
      * @returns The new URL tree.
      *
      * @usageNotes
@@ -4273,8 +4272,6 @@ class Router {
      * @param url An absolute path for a defined route. The function does not apply any delta to the
      *     current URL.
      * @param extras An object containing properties that modify the navigation strategy.
-     * The function ignores any properties in the `NavigationExtras` that would change the
-     * provided URL.
      *
      * @returns A Promise that resolves to 'true' when navigation succeeds,
      * to 'false' when navigation fails, or is rejected on error.
@@ -4293,7 +4290,9 @@ class Router {
      * @see [Routing and Navigation guide](guide/router)
      *
      */
-    navigateByUrl(url, extras = { skipLocationChange: false }) {
+    navigateByUrl(url, extras = {
+        skipLocationChange: false
+    }) {
         if (typeof ngDevMode === 'undefined' ||
             ngDevMode && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
             this.console.warn(`Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?`);
@@ -4557,7 +4556,7 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
- * See {@link NavigationExtras.queryParamsHandling NavigationExtras#queryParamsHandling}.
+ * See {@link UrlCreationOptions.queryParamsHandling UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
  *
@@ -5706,7 +5705,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.3+10.sha-837889f');
+const VERSION = new Version('11.0.0-next.3+11.sha-e4f4d18');
 
 /**
  * @license

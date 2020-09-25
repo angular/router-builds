@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.3+10.sha-837889f
+ * @license Angular v11.0.0-next.3+11.sha-e4f4d18
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1081,6 +1081,58 @@ export declare type Navigation = {
 };
 
 /**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the navigation should be handled.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Routing and Navigation guide](guide/router)
+ *
+ * @publicApi
+ */
+export declare interface NavigationBehaviorOptions {
+    /**
+     * When true, navigates without pushing a new state into history.
+     *
+     * ```
+     * // Navigate silently to /view
+     * this.router.navigate(['/view'], { skipLocationChange: true });
+     * ```
+     */
+    skipLocationChange?: boolean;
+    /**
+     * When true, navigates while replacing the current state in history.
+     *
+     * ```
+     * // Navigate to /view
+     * this.router.navigate(['/view'], { replaceUrl: true });
+     * ```
+     */
+    replaceUrl?: boolean;
+    /**
+     * Developer-defined state that can be passed to any navigation.
+     * Access this value through the `Navigation.extras` object
+     * returned from the [Router.getCurrentNavigation()
+     * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
+     *
+     * After a navigation completes, the router writes an object containing this
+     * value together with a `navigationId` to `history.state`.
+     * The value is written when `location.go()` or `location.replaceState()`
+     * is called before activating this route.
+     *
+     * Note that `history.state` does not pass an object equality test because
+     * the router adds the `navigationId` on each navigation.
+     *
+     */
+    state?: {
+        [k: string]: any;
+    };
+}
+
+/**
  * An event triggered when a navigation is canceled, directly or indirectly.
  * This can happen when a route guard
  * returns `false` or initiates a redirect by returning a `UrlTree`.
@@ -1162,138 +1214,12 @@ export declare class NavigationError extends RouterEvent {
  * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
  * @see [Router.createUrlTree() method](api/router/Router#createurltree)
  * @see [Routing and Navigation guide](guide/router)
+ * @see UrlCreationOptions
+ * @see NavigationBehaviorOptions
  *
  * @publicApi
  */
-export declare interface NavigationExtras {
-    /**
-     * Specifies a root URI to use for relative navigation.
-     *
-     * For example, consider the following route configuration where the parent route
-     * has two children.
-     *
-     * ```
-     * [{
-     *   path: 'parent',
-     *   component: ParentComponent,
-     *   children: [{
-     *     path: 'list',
-     *     component: ListComponent
-     *   },{
-     *     path: 'child',
-     *     component: ChildComponent
-     *   }]
-     * }]
-     * ```
-     *
-     * The following `go()` function navigates to the `list` route by
-     * interpreting the destination URI as relative to the activated `child`  route
-     *
-     * ```
-     *  @Component({...})
-     *  class ChildComponent {
-     *    constructor(private router: Router, private route: ActivatedRoute) {}
-     *
-     *    go() {
-     *      this.router.navigate(['../list'], { relativeTo: this.route });
-     *    }
-     *  }
-     * ```
-     */
-    relativeTo?: ActivatedRoute | null;
-    /**
-     * Sets query parameters to the URL.
-     *
-     * ```
-     * // Navigate to /results?page=1
-     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
-     * ```
-     */
-    queryParams?: Params | null;
-    /**
-     * Sets the hash fragment for the URL.
-     *
-     * ```
-     * // Navigate to /results#top
-     * this.router.navigate(['/results'], { fragment: 'top' });
-     * ```
-     */
-    fragment?: string;
-    /**
-     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
-     * query parameters for the next navigation.
-     *
-     * @deprecated since v4
-     */
-    preserveQueryParams?: boolean;
-    /**
-     * How to handle query parameters in the router link for the next navigation.
-     * One of:
-     * * `preserve` : Preserve current parameters.
-     * * `merge` : Merge new with current parameters.
-     *
-     * The "preserve" option discards any new query params:
-     * ```
-     * // from /view1?page=1 to/view2?page=1
-     * this.router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
-     * });
-     * ```
-     * The "merge" option appends new query params to the params from the current URL:
-     * ```
-     * // from /view1?page=1 to/view2?page=1&otherKey=2
-     * this.router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
-     * });
-     * ```
-     * In case of a key collision between current parameters and those in the `queryParams` object,
-     * the new value is used.
-     *
-     */
-    queryParamsHandling?: QueryParamsHandling | null;
-    /**
-     * When true, preserves the URL fragment for the next navigation
-     *
-     * ```
-     * // Preserve fragment from /results#top to /view#top
-     * this.router.navigate(['/view'], { preserveFragment: true });
-     * ```
-     */
-    preserveFragment?: boolean;
-    /**
-     * When true, navigates without pushing a new state into history.
-     *
-     * ```
-     * // Navigate silently to /view
-     * this.router.navigate(['/view'], { skipLocationChange: true });
-     * ```
-     */
-    skipLocationChange?: boolean;
-    /**
-     * When true, navigates while replacing the current state in history.
-     *
-     * ```
-     * // Navigate to /view
-     * this.router.navigate(['/view'], { replaceUrl: true });
-     * ```
-     */
-    replaceUrl?: boolean;
-    /**
-     * Developer-defined state that can be passed to any navigation.
-     * Access this value through the `Navigation.extras` object
-     * returned from the [Router.getCurrentNavigation()
-     * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
-     *
-     * After a navigation completes, the router writes an object containing this
-     * value together with a `navigationId` to `history.state`.
-     * The value is written when `location.go()` or `location.replaceState()`
-     * is called before activating this route.
-     *
-     * Note that `history.state` does not pass an object equality test because
-     * the router adds the `navigationId` on each navigation.
-     *
-     */
-    state?: {
-        [k: string]: any;
-    };
+export declare interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
 }
 
 /**
@@ -1480,7 +1406,7 @@ export declare function provideRoutes(routes: Routes): any;
  * - `merge` : Merge new with current parameters.
  * - `preserve` : Preserve current parameters.
  *
- * @see `NavigationExtras#queryParamsHandling`
+ * @see `UrlCreationOptions#queryParamsHandling`
  * @see `RouterLink`
  * @publicApi
  */
@@ -2166,8 +2092,7 @@ export declare class Router {
      * segments, followed by the parameters for each segment.
      * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
      * property of the options object, if supplied.
-     * @param navigationExtras Options that control the navigation strategy. This function
-     * only uses properties in `NavigationExtras` that would change the provided URL.
+     * @param navigationExtras Options that control the navigation strategy.
      * @returns The new URL tree.
      *
      * @usageNotes
@@ -2204,15 +2129,13 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *
      * @param url An absolute path for a defined route. The function does not apply any delta to the
      *     current URL.
      * @param extras An object containing properties that modify the navigation strategy.
-     * The function ignores any properties in the `NavigationExtras` that would change the
-     * provided URL.
      *
      * @returns A Promise that resolves to 'true' when navigation succeeds,
      * to 'false' when navigation fails, or is rejected on error.
@@ -2231,7 +2154,7 @@ export declare class Router {
      * @see [Routing and Navigation guide](guide/router)
      *
      */
-    navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
+    navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
     /**
      * Navigate based on the provided array of commands and a starting point.
      * If no starting route is provided, the navigation is absolute.
@@ -2417,7 +2340,7 @@ export declare class RouterEvent {
  * </a>
  * ```
  *
- * See {@link NavigationExtras.queryParamsHandling NavigationExtras#queryParamsHandling}.
+ * See {@link UrlCreationOptions.queryParamsHandling UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
  *
@@ -2451,47 +2374,54 @@ export declare class RouterLink implements OnChanges {
     private router;
     private route;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParams: {
         [k: string]: any;
     };
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     fragment: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParamsHandling: QueryParamsHandling;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     preserveFragment: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     skipLocationChange: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     replaceUrl: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#state NavigationExtras#state}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     state?: {
         [k: string]: any;
@@ -2624,47 +2554,54 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private locationStrategy;
     target: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParams: {
         [k: string]: any;
     };
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     fragment: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParamsHandling: QueryParamsHandling;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     preserveFragment: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     skipLocationChange: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     replaceUrl: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#state NavigationExtras#state}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     state?: {
         [k: string]: any;
@@ -3002,6 +2939,114 @@ export declare class Scroll {
     /** @docsNotRequired */
     anchor: string | null);
     toString(): string;
+}
+
+/**
+ * @description
+ *
+ * Options that modify the `Router` URL.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.createUrlTree() method](api/router/Router#createurltree)
+ * @see [Routing and Navigation guide](guide/router)
+ *
+ * @publicApi
+ */
+export declare interface UrlCreationOptions {
+    /**
+     * Specifies a root URI to use for relative navigation.
+     *
+     * For example, consider the following route configuration where the parent route
+     * has two children.
+     *
+     * ```
+     * [{
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
+     * ```
+     *
+     * The following `go()` function navigates to the `list` route by
+     * interpreting the destination URI as relative to the activated `child`  route
+     *
+     * ```
+     *  @Component({...})
+     *  class ChildComponent {
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
+     * ```
+     */
+    relativeTo?: ActivatedRoute | null;
+    /**
+     * Sets query parameters to the URL.
+     *
+     * ```
+     * // Navigate to /results?page=1
+     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     */
+    queryParams?: Params | null;
+    /**
+     * Sets the hash fragment for the URL.
+     *
+     * ```
+     * // Navigate to /results#top
+     * this.router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     */
+    fragment?: string;
+    /**
+     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
+     * query parameters for the next navigation.
+     *
+     * @deprecated since v4
+     */
+    preserveQueryParams?: boolean;
+    /**
+     * How to handle query parameters in the router link for the next navigation.
+     * One of:
+     * * `preserve` : Preserve current parameters.
+     * * `merge` : Merge new with current parameters.
+     *
+     * The "preserve" option discards any new query params:
+     * ```
+     * // from /view1?page=1 to/view2?page=1
+     * this.router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
+     * });
+     * ```
+     * The "merge" option appends new query params to the params from the current URL:
+     * ```
+     * // from /view1?page=1 to/view2?page=1&otherKey=2
+     * this.router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
+     * });
+     * ```
+     * In case of a key collision between current parameters and those in the `queryParams` object,
+     * the new value is used.
+     *
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
+    /**
+     * When true, preserves the URL fragment for the next navigation
+     *
+     * ```
+     * // Preserve fragment from /results#top to /view#top
+     * this.router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     */
+    preserveFragment?: boolean;
 }
 
 /**
