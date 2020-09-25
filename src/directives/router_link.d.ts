@@ -79,7 +79,7 @@ import * as i0 from "@angular/core";
  * </a>
  * ```
  *
- * See {@link NavigationExtras.queryParamsHandling NavigationExtras#queryParamsHandling}.
+ * See {@link UrlCreationOptions.queryParamsHandling UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
  *
@@ -113,47 +113,54 @@ export declare class RouterLink implements OnChanges {
     private router;
     private route;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParams: {
         [k: string]: any;
     };
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     fragment: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParamsHandling: QueryParamsHandling;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     preserveFragment: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     skipLocationChange: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     replaceUrl: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#state NavigationExtras#state}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     state?: {
         [k: string]: any;
@@ -198,47 +205,54 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private locationStrategy;
     target: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParams NavigationExtras#queryParams}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParams: {
         [k: string]: any;
     };
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#fragment NavigationExtras#fragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     fragment: string;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#queryParamsHandling NavigationExtras#queryParamsHandling}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParamsHandling: QueryParamsHandling;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#preserveFragment NavigationExtras#preserveFragment}
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     preserveFragment: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#skipLocationChange NavigationExtras#skipLocationChange}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     skipLocationChange: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#replaceUrl NavigationExtras#replaceUrl}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     replaceUrl: boolean;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the `NavigationExtras`.
-     * @see {@link NavigationExtras#state NavigationExtras#state}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
     state?: {
         [k: string]: any;

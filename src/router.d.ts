@@ -21,18 +21,17 @@ import * as i0 from "@angular/core";
 /**
  * @description
  *
- * Options that modify the `Router` navigation strategy.
+ * Options that modify the `Router` URL.
  * Supply an object containing any of these properties to a `Router` navigation function to
- * control how the target URL should be constructed or interpreted.
+ * control how the target URL should be constructed.
  *
  * @see [Router.navigate() method](api/router/Router#navigate)
- * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
  * @see [Router.createUrlTree() method](api/router/Router#createurltree)
  * @see [Routing and Navigation guide](guide/router)
  *
  * @publicApi
  */
-export interface NavigationExtras {
+export interface UrlCreationOptions {
     /**
      * Specifies a root URI to use for relative navigation.
      *
@@ -125,6 +124,21 @@ export interface NavigationExtras {
      * ```
      */
     preserveFragment?: boolean;
+}
+/**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the navigation should be handled.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Routing and Navigation guide](guide/router)
+ *
+ * @publicApi
+ */
+export interface NavigationBehaviorOptions {
     /**
      * When true, navigates without pushing a new state into history.
      *
@@ -161,6 +175,24 @@ export interface NavigationExtras {
     state?: {
         [k: string]: any;
     };
+}
+/**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed or interpreted.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Router.createUrlTree() method](api/router/Router#createurltree)
+ * @see [Routing and Navigation guide](guide/router)
+ * @see UrlCreationOptions
+ * @see NavigationBehaviorOptions
+ *
+ * @publicApi
+ */
+export interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
 }
 /**
  * Error handler that is invoked when a navigation error occurs.
@@ -418,8 +450,7 @@ export declare class Router {
      * segments, followed by the parameters for each segment.
      * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
      * property of the options object, if supplied.
-     * @param navigationExtras Options that control the navigation strategy. This function
-     * only uses properties in `NavigationExtras` that would change the provided URL.
+     * @param navigationExtras Options that control the navigation strategy.
      * @returns The new URL tree.
      *
      * @usageNotes
@@ -456,15 +487,13 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *
      * @param url An absolute path for a defined route. The function does not apply any delta to the
      *     current URL.
      * @param extras An object containing properties that modify the navigation strategy.
-     * The function ignores any properties in the `NavigationExtras` that would change the
-     * provided URL.
      *
      * @returns A Promise that resolves to 'true' when navigation succeeds,
      * to 'false' when navigation fails, or is rejected on error.
@@ -483,7 +512,7 @@ export declare class Router {
      * @see [Routing and Navigation guide](guide/router)
      *
      */
-    navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
+    navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
     /**
      * Navigate based on the provided array of commands and a starting point.
      * If no starting route is provided, the navigation is absolute.
