@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.4+10.sha-5b15e5e
+ * @license Angular v11.0.0-next.4+11.sha-ea19683
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2874,9 +2874,8 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
         else {
             getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
         }
-        if (shouldRun) {
-            const component = context && context.outlet && context.outlet.component || null;
-            checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
+        if (shouldRun && context && context.outlet && context.outlet.isActivated) {
+            checks.canDeactivateChecks.push(new CanDeactivate(context.outlet.component, curr));
         }
     }
     else {
@@ -5705,7 +5704,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.4+10.sha-5b15e5e');
+const VERSION = new Version('11.0.0-next.4+11.sha-ea19683');
 
 /**
  * @license
