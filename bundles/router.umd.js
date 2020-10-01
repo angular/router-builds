@@ -1,5 +1,5 @@
 /**
- * @license Angular v10.1.4+5.sha-5d584b7
+ * @license Angular v10.1.4+7.sha-bb11fd9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3209,9 +3209,8 @@
             else {
                 getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
             }
-            if (shouldRun) {
-                var component = context && context.outlet && context.outlet.component || null;
-                checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
+            if (shouldRun && context && context.outlet && context.outlet.isActivated) {
+                checks.canDeactivateChecks.push(new CanDeactivate(context.outlet.component, curr));
             }
         }
         else {
@@ -6296,7 +6295,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('10.1.4+5.sha-5d584b7');
+    var VERSION = new core.Version('10.1.4+7.sha-bb11fd9');
 
     /**
      * @license
