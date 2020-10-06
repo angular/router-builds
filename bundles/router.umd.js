@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.4+47.sha-faa81dc
+ * @license Angular v11.0.0-next.4+48.sha-d8c0534
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6174,12 +6174,7 @@
         if (routeReuseStrategy) {
             router.routeReuseStrategy = routeReuseStrategy;
         }
-        if (opts.errorHandler) {
-            router.errorHandler = opts.errorHandler;
-        }
-        if (opts.malformedUriErrorHandler) {
-            router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-        }
+        assignExtraOptionsToRouter(opts, router);
         if (opts.enableTracing) {
             var dom_1 = common.ɵgetDOM();
             router.events.subscribe(function (e) {
@@ -6189,19 +6184,27 @@
                 dom_1.logGroupEnd();
             });
         }
+        return router;
+    }
+    function assignExtraOptionsToRouter(opts, router) {
+        if (opts.errorHandler) {
+            router.errorHandler = opts.errorHandler;
+        }
+        if (opts.malformedUriErrorHandler) {
+            router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+        }
         if (opts.onSameUrlNavigation) {
             router.onSameUrlNavigation = opts.onSameUrlNavigation;
         }
         if (opts.paramsInheritanceStrategy) {
             router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
         }
-        if (opts.urlUpdateStrategy) {
-            router.urlUpdateStrategy = opts.urlUpdateStrategy;
-        }
         if (opts.relativeLinkResolution) {
             router.relativeLinkResolution = opts.relativeLinkResolution;
         }
-        return router;
+        if (opts.urlUpdateStrategy) {
+            router.urlUpdateStrategy = opts.urlUpdateStrategy;
+        }
     }
     function rootRoute(router) {
         return router.routerState.root;
@@ -6332,7 +6335,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.0-next.4+47.sha-faa81dc');
+    var VERSION = new core.Version('11.0.0-next.4+48.sha-d8c0534');
 
     /**
      * @license
@@ -6436,6 +6439,7 @@
     exports.ɵangular_packages_router_router_m = Tree;
     exports.ɵangular_packages_router_router_n = TreeNode;
     exports.ɵangular_packages_router_router_o = RouterScroller;
+    exports.ɵassignExtraOptionsToRouter = assignExtraOptionsToRouter;
     exports.ɵflatten = flatten;
 
     Object.defineProperty(exports, '__esModule', { value: true });

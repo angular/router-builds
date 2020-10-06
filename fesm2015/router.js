@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.4+47.sha-faa81dc
+ * @license Angular v11.0.0-next.4+48.sha-d8c0534
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5548,12 +5548,7 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
     if (routeReuseStrategy) {
         router.routeReuseStrategy = routeReuseStrategy;
     }
-    if (opts.errorHandler) {
-        router.errorHandler = opts.errorHandler;
-    }
-    if (opts.malformedUriErrorHandler) {
-        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-    }
+    assignExtraOptionsToRouter(opts, router);
     if (opts.enableTracing) {
         const dom = ɵgetDOM();
         router.events.subscribe((e) => {
@@ -5563,19 +5558,27 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
             dom.logGroupEnd();
         });
     }
+    return router;
+}
+function assignExtraOptionsToRouter(opts, router) {
+    if (opts.errorHandler) {
+        router.errorHandler = opts.errorHandler;
+    }
+    if (opts.malformedUriErrorHandler) {
+        router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
+    }
     if (opts.onSameUrlNavigation) {
         router.onSameUrlNavigation = opts.onSameUrlNavigation;
     }
     if (opts.paramsInheritanceStrategy) {
         router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
     }
-    if (opts.urlUpdateStrategy) {
-        router.urlUpdateStrategy = opts.urlUpdateStrategy;
-    }
     if (opts.relativeLinkResolution) {
         router.relativeLinkResolution = opts.relativeLinkResolution;
     }
-    return router;
+    if (opts.urlUpdateStrategy) {
+        router.urlUpdateStrategy = opts.urlUpdateStrategy;
+    }
 }
 function rootRoute(router) {
     return router.routerState.root;
@@ -5704,7 +5707,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.4+47.sha-faa81dc');
+const VERSION = new Version('11.0.0-next.4+48.sha-d8c0534');
 
 /**
  * @license
@@ -5743,5 +5746,5 @@ const VERSION = new Version('11.0.0-next.4+47.sha-faa81dc');
  * Generated bundle index. Do not edit.
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, routerNgProbeToken as ɵangular_packages_router_router_b, createRouterScroller as ɵangular_packages_router_router_c, provideLocationStrategy as ɵangular_packages_router_router_d, provideForRootGuard as ɵangular_packages_router_router_e, setupRouter as ɵangular_packages_router_router_f, rootRoute as ɵangular_packages_router_router_g, RouterInitializer as ɵangular_packages_router_router_h, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideRouterInitializer as ɵangular_packages_router_router_k, ɵEmptyOutletComponent as ɵangular_packages_router_router_l, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterScroller as ɵangular_packages_router_router_o, flatten as ɵflatten };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, routerNgProbeToken as ɵangular_packages_router_router_b, createRouterScroller as ɵangular_packages_router_router_c, provideLocationStrategy as ɵangular_packages_router_router_d, provideForRootGuard as ɵangular_packages_router_router_e, setupRouter as ɵangular_packages_router_router_f, rootRoute as ɵangular_packages_router_router_g, RouterInitializer as ɵangular_packages_router_router_h, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideRouterInitializer as ɵangular_packages_router_router_k, ɵEmptyOutletComponent as ɵangular_packages_router_router_l, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterScroller as ɵangular_packages_router_router_o, assignExtraOptionsToRouter as ɵassignExtraOptionsToRouter, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map
