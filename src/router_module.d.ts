@@ -314,6 +314,7 @@ export interface ExtraOptions {
     relativeLinkResolution?: 'legacy' | 'corrected';
 }
 export declare function setupRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function assignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
 export declare function rootRoute(router: Router): ActivatedRoute;
 /**
  * Router initialization requires two steps:

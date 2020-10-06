@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.4+47.sha-faa81dc
+ * @license Angular v11.0.0-next.4+48.sha-d8c0534
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -415,12 +415,7 @@
             }
             else {
                 // Handle ExtraOptions
-                if (opts.malformedUriErrorHandler) {
-                    router$1.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-                }
-                if (opts.paramsInheritanceStrategy) {
-                    router$1.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
-                }
+                router.ɵassignExtraOptionsToRouter(opts, router$1);
             }
         }
         if (urlHandlingStrategy) {
