@@ -10,6 +10,7 @@ import { ElementRef, OnChanges, OnDestroy, Renderer2, SimpleChanges } from '@ang
 import { QueryParamsHandling } from '../config';
 import { Router } from '../router';
 import { ActivatedRoute } from '../router_state';
+import { Params } from '../shared';
 import { UrlTree } from '../url_tree';
 import * as i0 from "@angular/core";
 /**
@@ -118,23 +119,21 @@ export declare class RouterLink implements OnChanges {
      * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    queryParams: {
-        [k: string]: any;
-    };
+    queryParams?: Params | null;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    fragment: string;
+    fragment?: string;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    queryParamsHandling: QueryParamsHandling;
+    queryParamsHandling?: QueryParamsHandling | null;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -210,23 +209,21 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    queryParams: {
-        [k: string]: any;
-    };
+    queryParams?: Params | null;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    fragment: string;
+    fragment?: string;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    queryParamsHandling: QueryParamsHandling;
+    queryParamsHandling?: QueryParamsHandling | null;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
