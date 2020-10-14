@@ -86,13 +86,6 @@ export interface UrlCreationOptions {
      */
     fragment?: string;
     /**
-     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
-     * query parameters for the next navigation.
-     *
-     * @deprecated since v4
-     */
-    preserveQueryParams?: boolean;
-    /**
      * How to handle query parameters in the router link for the next navigation.
      * One of:
      * * `preserve` : Preserve current parameters.
@@ -487,7 +480,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *

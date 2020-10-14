@@ -177,15 +177,11 @@ export declare class RouterLink implements OnChanges {
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value: boolean);
     /** @nodoc */
     onClick(): boolean;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; }, {}, never>;
 }
 /**
  * @description
@@ -267,10 +263,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value: boolean);
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): any;
     /** @nodoc */
@@ -280,5 +272,5 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; "preserveQueryParams": "preserveQueryParams"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; }, {}, never>;
 }

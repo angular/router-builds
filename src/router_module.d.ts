@@ -118,7 +118,10 @@ export declare function provideRoutes(routes: Routes): any;
  * Allowed values in an `ExtraOptions` object that configure
  * when the router performs the initial navigation operation.
  *
- * * 'enabled' - The initial navigation starts before the root component is created.
+ * * 'enabledNonBlocking' - (default) The initial navigation starts after the
+ * root component has been created. The bootstrap is not blocked on the completion of the initial
+ * navigation.
+ * * 'enabledBlocking' - The initial navigation starts before the root component is created.
  * The bootstrap is blocked until the initial navigation is complete. This value is required
  * for [server-side rendering](guide/universal) to work.
  * * 'disabled' - The initial navigation is not performed. The location listener is set up before
@@ -126,24 +129,16 @@ export declare function provideRoutes(routes: Routes): any;
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
  *
- * The following values have been [deprecated](guide/releases#deprecation-practices) since v4,
+ * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
  * and should not be used for new applications.
  *
- * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root
- * component has been created. The bootstrap is not blocked until the initial navigation is
- * complete.
- * * 'legacy_disabled'- The initial navigation is not performed. The location listener is set up
- * after the root component gets created.
- * * `true` - same as 'legacy_enabled'.
- * * `false` - same as 'legacy_disabled'.
- *
- * The 'legacy_enabled' and 'legacy_disabled' should not be used for new applications.
+ * * 'enabled' - This option is 1:1 replaceable with `enabledNonBlocking`.
  *
  * @see `forRoot()`
  *
  * @publicApi
  */
-export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
+export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
 /**
  * A set of configuration options for a router module, provided in the
  * `forRoot()` method.
@@ -165,24 +160,15 @@ export interface ExtraOptions {
      */
     useHash?: boolean;
     /**
-     * One of `enabled` or `disabled`.
-     * When set to `enabled`, the initial navigation starts before the root component is created.
-     * The bootstrap is blocked until the initial navigation is complete. This value is required for
-     * [server-side rendering](guide/universal) to work.
-     * When set to `disabled`, the initial navigation is not performed.
-     * The location listener is set up before the root component gets created.
-     * Use if there is a reason to have more control over when the router
+     * One of `enabled`, `enabledBlocking`, `enabledNonBlocking` or `disabled`.
+     * When set to `enabled` or `enabledBlocking`, the initial navigation starts before the root
+     * component is created. The bootstrap is blocked until the initial navigation is complete. This
+     * value is required for [server-side rendering](guide/universal) to work. When set to
+     * `enabledNonBlocking`, the initial navigation starts after the root component has been created.
+     * The bootstrap is not blocked on the completion of the initial navigation. When set to
+     * `disabled`, the initial navigation is not performed. The location listener is set up before the
+     * root component gets created. Use if there is a reason to have more control over when the router
      * starts its initial navigation due to some complex initialization logic.
-     *
-     * Legacy values are deprecated since v4 and should not be used for new applications:
-     *
-     * * `legacy_enabled` - Default for compatibility.
-     * The initial navigation starts after the root component has been created,
-     * but the bootstrap is not blocked until the initial navigation is complete.
-     * * `legacy_disabled` - The initial navigation is not performed.
-     * The location listener is set up after the root component gets created.
-     * * `true` - same as `legacy_enabled`.
-     * * `false` - same as `legacy_disabled`.
      */
     initialNavigation?: InitialNavigation;
     /**
@@ -334,8 +320,6 @@ export declare class RouterInitializer {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    private isLegacyEnabled;
-    private isLegacyDisabled;
     static ɵfac: i0.ɵɵFactoryDef<RouterInitializer, never>;
     static ɵprov: i0.ɵɵInjectableDef<RouterInitializer>;
 }
