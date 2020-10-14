@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.5+69.sha-c635011
+ * @license Angular v11.0.0-next.5+74.sha-0ec7043
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -751,24 +751,15 @@ export declare interface ExtraOptions {
      */
     useHash?: boolean;
     /**
-     * One of `enabled` or `disabled`.
-     * When set to `enabled`, the initial navigation starts before the root component is created.
-     * The bootstrap is blocked until the initial navigation is complete. This value is required for
-     * [server-side rendering](guide/universal) to work.
-     * When set to `disabled`, the initial navigation is not performed.
-     * The location listener is set up before the root component gets created.
-     * Use if there is a reason to have more control over when the router
+     * One of `enabled`, `enabledBlocking`, `enabledNonBlocking` or `disabled`.
+     * When set to `enabled` or `enabledBlocking`, the initial navigation starts before the root
+     * component is created. The bootstrap is blocked until the initial navigation is complete. This
+     * value is required for [server-side rendering](guide/universal) to work. When set to
+     * `enabledNonBlocking`, the initial navigation starts after the root component has been created.
+     * The bootstrap is not blocked on the completion of the initial navigation. When set to
+     * `disabled`, the initial navigation is not performed. The location listener is set up before the
+     * root component gets created. Use if there is a reason to have more control over when the router
      * starts its initial navigation due to some complex initialization logic.
-     *
-     * Legacy values are deprecated since v4 and should not be used for new applications:
-     *
-     * * `legacy_enabled` - Default for compatibility.
-     * The initial navigation starts after the root component has been created,
-     * but the bootstrap is not blocked until the initial navigation is complete.
-     * * `legacy_disabled` - The initial navigation is not performed.
-     * The location listener is set up after the root component gets created.
-     * * `true` - same as `legacy_enabled`.
-     * * `false` - same as `legacy_disabled`.
      */
     initialNavigation?: InitialNavigation;
     /**
@@ -956,7 +947,10 @@ export declare class GuardsCheckStart extends RouterEvent {
  * Allowed values in an `ExtraOptions` object that configure
  * when the router performs the initial navigation operation.
  *
- * * 'enabled' - The initial navigation starts before the root component is created.
+ * * 'enabledNonBlocking' - (default) The initial navigation starts after the
+ * root component has been created. The bootstrap is not blocked on the completion of the initial
+ * navigation.
+ * * 'enabledBlocking' - The initial navigation starts before the root component is created.
  * The bootstrap is blocked until the initial navigation is complete. This value is required
  * for [server-side rendering](guide/universal) to work.
  * * 'disabled' - The initial navigation is not performed. The location listener is set up before
@@ -964,24 +958,16 @@ export declare class GuardsCheckStart extends RouterEvent {
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
  *
- * The following values have been [deprecated](guide/releases#deprecation-practices) since v4,
+ * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
  * and should not be used for new applications.
  *
- * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root
- * component has been created. The bootstrap is not blocked until the initial navigation is
- * complete.
- * * 'legacy_disabled'- The initial navigation is not performed. The location listener is set up
- * after the root component gets created.
- * * `true` - same as 'legacy_enabled'.
- * * `false` - same as 'legacy_disabled'.
- *
- * The 'legacy_enabled' and 'legacy_disabled' should not be used for new applications.
+ * * 'enabled' - This option is 1:1 replaceable with `enabledNonBlocking`.
  *
  * @see `forRoot()`
  *
  * @publicApi
  */
-export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
+export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
 
 /**
  *
@@ -2129,7 +2115,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *
@@ -2437,10 +2423,6 @@ export declare class RouterLink implements OnChanges {
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value: boolean);
     /** @nodoc */
     onClick(): boolean;
     get urlTree(): UrlTree;
@@ -2615,10 +2597,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value: boolean);
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): any;
     /** @nodoc */
@@ -3005,13 +2983,6 @@ export declare interface UrlCreationOptions {
      */
     fragment?: string;
     /**
-     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
-     * query parameters for the next navigation.
-     *
-     * @deprecated since v4
-     */
-    preserveQueryParams?: boolean;
-    /**
      * How to handle query parameters in the router link for the next navigation.
      * One of:
      * * `preserve` : Preserve current parameters.
@@ -3292,8 +3263,6 @@ export declare class ɵangular_packages_router_router_h {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    private isLegacyEnabled;
-    private isLegacyDisabled;
 }
 
 export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): () => Promise<any>;
