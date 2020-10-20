@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.5+2.sha-a8c0972
+ * @license Angular v11.0.0-next.6+52.sha-0f1a18e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4237,28 +4237,19 @@ class Router {
      * ```
      */
     createUrlTree(commands, navigationExtras = {}) {
-        const { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = navigationExtras;
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && preserveQueryParams && console &&
-            console.warn) {
-            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
-        }
+        const { relativeTo, queryParams, fragment, queryParamsHandling, preserveFragment } = navigationExtras;
         const a = relativeTo || this.routerState.root;
         const f = preserveFragment ? this.currentUrlTree.fragment : fragment;
         let q = null;
-        if (queryParamsHandling) {
-            switch (queryParamsHandling) {
-                case 'merge':
-                    q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
-                    break;
-                case 'preserve':
-                    q = this.currentUrlTree.queryParams;
-                    break;
-                default:
-                    q = queryParams || null;
-            }
-        }
-        else {
-            q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams || null;
+        switch (queryParamsHandling) {
+            case 'merge':
+                q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
+                break;
+            case 'preserve':
+                q = this.currentUrlTree.queryParams;
+                break;
+            default:
+                q = queryParams || null;
         }
         if (q !== null) {
             q = this.removeEmptyProps(q);
@@ -4617,15 +4608,6 @@ class RouterLink {
             this.commands = [];
         }
     }
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value) {
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
-            console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
-        }
-        this.preserve = value;
-    }
     /** @nodoc */
     onClick() {
         const extras = {
@@ -4641,7 +4623,6 @@ class RouterLink {
             relativeTo: this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserve),
             queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
@@ -4666,7 +4647,6 @@ RouterLink.propDecorators = {
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
     routerLink: [{ type: Input }],
-    preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 /**
@@ -4709,15 +4689,6 @@ class RouterLinkWithHref {
             this.commands = [];
         }
     }
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value) {
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && console && console.warn) {
-            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
-        }
-        this.preserve = value;
-    }
     /** @nodoc */
     ngOnChanges(changes) {
         this.updateTargetUrlAndHref();
@@ -4751,7 +4722,6 @@ class RouterLinkWithHref {
             relativeTo: this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserve),
             queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
@@ -4776,7 +4746,6 @@ RouterLinkWithHref.propDecorators = {
     state: [{ type: Input }],
     href: [{ type: HostBinding }],
     routerLink: [{ type: Input }],
-    preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',
                 ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
 };
@@ -5607,14 +5576,13 @@ class RouterInitializer {
             const res = new Promise(r => resolve = r);
             const router = this.injector.get(Router);
             const opts = this.injector.get(ROUTER_CONFIGURATION);
-            if (this.isLegacyDisabled(opts) || this.isLegacyEnabled(opts)) {
-                resolve(true);
-            }
-            else if (opts.initialNavigation === 'disabled') {
+            if (opts.initialNavigation === 'disabled') {
                 router.setUpLocationChangeListener();
                 resolve(true);
             }
-            else if (opts.initialNavigation === 'enabled') {
+            else if (
+            // TODO: enabled is deprecated as of v11, can be removed in v13
+            opts.initialNavigation === 'enabled' || opts.initialNavigation === 'enabledBlocking') {
                 router.hooks.afterPreactivation = () => {
                     // only the initial navigation should be delayed
                     if (!this.initNavigation) {
@@ -5630,7 +5598,7 @@ class RouterInitializer {
                 router.initialNavigation();
             }
             else {
-                throw new Error(`Invalid initialNavigation options: '${opts.initialNavigation}'`);
+                resolve(true);
             }
             return res;
         });
@@ -5644,24 +5612,15 @@ class RouterInitializer {
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
-        if (this.isLegacyEnabled(opts)) {
+        // Default case
+        if (opts.initialNavigation === 'enabledNonBlocking' || opts.initialNavigation === undefined) {
             router.initialNavigation();
-        }
-        else if (this.isLegacyDisabled(opts)) {
-            router.setUpLocationChangeListener();
         }
         preloader.setUpPreloading();
         routerScroller.init();
         router.resetRootComponentType(ref.componentTypes[0]);
         this.resultOfPreactivationDone.next(null);
         this.resultOfPreactivationDone.complete();
-    }
-    isLegacyEnabled(opts) {
-        return opts.initialNavigation === 'legacy_enabled' || opts.initialNavigation === true ||
-            opts.initialNavigation === undefined;
-    }
-    isLegacyDisabled(opts) {
-        return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     }
 }
 RouterInitializer.decorators = [
@@ -5707,7 +5666,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.0-next.5+2.sha-a8c0972');
+const VERSION = new Version('11.0.0-next.6+52.sha-0f1a18e');
 
 /**
  * @license
