@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-next.6+59.sha-a7964f4
+ * @license Angular v11.0.0-next.6+60.sha-9fb7bde
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2115,7 +2115,7 @@ export declare class Router {
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *
