@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-rc.0+60.sha-366be11
+ * @license Angular v11.0.0-rc.0+70.sha-ddc070e
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -719,7 +719,7 @@ declare type ErrorHandler = (error: any) => any;
  * phase of routing successfuly.
  * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
  * activating a route's children.
- * * [ActivationEnd](api/router/ActivationStart): When the router finishes activating a route.
+ * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.
  * * [NavigationEnd](api/router/NavigationEnd): When navigation ends successfully.
  * * [NavigationCancel](api/router/NavigationCancel): When navigation is canceled.
  * * [NavigationError](api/router/NavigationError): When navigation fails
