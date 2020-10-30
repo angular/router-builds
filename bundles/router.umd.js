@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.0-rc.1+19.sha-eb625b9
+ * @license Angular v11.0.0-rc.1+21.sha-b2f3952
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2160,6 +2160,13 @@
     function isMatrixParams(command) {
         return typeof command === 'object' && command != null && !command.outlets && !command.segmentPath;
     }
+    /**
+     * Determines if a given command has an `outlets` map. When we encounter a command
+     * with an outlets k/v map, we need to apply each outlet individually to the existing segment.
+     */
+    function isCommandWithOutlets(command) {
+        return typeof command === 'object' && command != null && command.outlets;
+    }
     function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
         var qp = {};
         if (queryParams) {
@@ -2192,7 +2199,7 @@
             if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
                 throw new Error('Root segment cannot have matrix parameters');
             }
-            var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c != null && c.outlets; });
+            var cmdWithOutlet = commands.find(isCommandWithOutlets);
             if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
                 throw new Error('{outlets:{}} has to be the last command');
             }
@@ -2284,15 +2291,9 @@
         }
         return new Position(g, false, ci - dd);
     }
-    function getPath(command) {
-        if (typeof command === 'object' && command != null && command.outlets) {
-            return command.outlets[PRIMARY_OUTLET];
-        }
-        return "" + command;
-    }
     function getOutlets(commands) {
         var _a;
-        if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+        if (isCommandWithOutlets(commands[0])) {
             return commands[0].outlets;
         }
         return _a = {}, _a[PRIMARY_OUTLET] = commands, _a;
@@ -2353,7 +2354,14 @@
             if (currentCommandIndex >= commands.length)
                 return noMatch;
             var path = segmentGroup.segments[currentPathIndex];
-            var curr = getPath(commands[currentCommandIndex]);
+            var command = commands[currentCommandIndex];
+            // Do not try to consume command as part of the prefixing if it has outlets because it can
+            // contain outlets other than the one being processed. Consuming the outlets command would
+            // result in other outlets being ignored.
+            if (isCommandWithOutlets(command)) {
+                break;
+            }
+            var curr = "" + command;
             var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
             if (currentPathIndex > 0 && curr === undefined)
                 break;
@@ -2375,9 +2383,9 @@
         var paths = segmentGroup.segments.slice(0, startIndex);
         var i = 0;
         while (i < commands.length) {
-            if (typeof commands[i] === 'object' && commands[i] !== null &&
-                commands[i].outlets !== undefined) {
-                var children = createNewSegmentChildren(commands[i].outlets);
+            var command = commands[i];
+            if (isCommandWithOutlets(command)) {
+                var children = createNewSegmentChildren(command.outlets);
                 return new UrlSegmentGroup(paths, children);
             }
             // if we start with an object literal, we need to reuse the path part from the segment
@@ -2387,7 +2395,7 @@
                 i++;
                 continue;
             }
-            var curr = getPath(commands[i]);
+            var curr = isCommandWithOutlets(command) ? command.outlets[PRIMARY_OUTLET] : "" + command;
             var next = (i < commands.length - 1) ? commands[i + 1] : null;
             if (curr && next && isMatrixParams(next)) {
                 paths.push(new UrlSegment(curr, stringify(next)));
@@ -6286,7 +6294,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.0-rc.1+19.sha-eb625b9');
+    var VERSION = new core.Version('11.0.0-rc.1+21.sha-b2f3952');
 
     /**
      * @license
