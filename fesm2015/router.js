@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.2+17.sha-27152e2
+ * @license Angular v11.0.2+28.sha-50c19a2
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1884,6 +1884,9 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
         const outlets = getOutlets(commands);
         const children = {};
         forEach(outlets, (commands, outlet) => {
+            if (typeof commands === 'string') {
+                commands = [commands];
+            }
             if (commands !== null) {
                 children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
             }
@@ -1961,6 +1964,9 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
 function createNewSegmentChildren(outlets) {
     const children = {};
     forEach(outlets, (commands, outlet) => {
+        if (typeof commands === 'string') {
+            commands = [commands];
+        }
         if (commands !== null) {
             children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
         }
@@ -3280,7 +3286,7 @@ function split$1(segmentGroup, consumedSegments, slicedSegments, config, relativ
 function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
     const res = {};
     for (const r of routes) {
-        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
             const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
             if (relativeLinkResolution === 'legacy') {
@@ -3289,7 +3295,7 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedS
             else {
                 s._segmentIndexShift = consumedSegments.length;
             }
-            res[getOutlet$1(r)] = s;
+            res[getOutlet(r)] = s;
         }
     }
     return Object.assign(Object.assign({}, children), res);
@@ -3300,17 +3306,17 @@ function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, pri
     primarySegment._sourceSegment = segmentGroup;
     primarySegment._segmentIndexShift = consumedSegments.length;
     for (const r of routes) {
-        if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
+        if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
             const s = new UrlSegmentGroup([], {});
             s._sourceSegment = segmentGroup;
             s._segmentIndexShift = consumedSegments.length;
-            res[getOutlet$1(r)] = s;
+            res[getOutlet(r)] = s;
         }
     }
     return res;
 }
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET);
+    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet(r) !== PRIMARY_OUTLET);
 }
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
     return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r));
@@ -3320,9 +3326,6 @@ function emptyPathMatch(segmentGroup, slicedSegments, r) {
         return false;
     }
     return r.path === '' && r.redirectTo === undefined;
-}
-function getOutlet$1(route) {
-    return route.outlet || PRIMARY_OUTLET;
 }
 function getData(route) {
     return route.data || {};
@@ -5674,7 +5677,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.2+17.sha-27152e2');
+const VERSION = new Version('11.0.2+28.sha-50c19a2');
 
 /**
  * @license
