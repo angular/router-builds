@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.0+36.sha-fe1ada8
+ * @license Angular v11.1.0-next.0+38.sha-66d863f
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3782,7 +3782,7 @@
         try {
             for (var routes_1 = __values(routes), routes_1_1 = routes_1.next(); !routes_1_1.done; routes_1_1 = routes_1.next()) {
                 var r = routes_1_1.value;
-                if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+                if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
                     var s = new UrlSegmentGroup([], {});
                     s._sourceSegment = segmentGroup;
                     if (relativeLinkResolution === 'legacy') {
@@ -3791,7 +3791,7 @@
                     else {
                         s._segmentIndexShift = consumedSegments.length;
                     }
-                    res[getOutlet$1(r)] = s;
+                    res[getOutlet(r)] = s;
                 }
             }
         }
@@ -3813,11 +3813,11 @@
         try {
             for (var routes_2 = __values(routes), routes_2_1 = routes_2.next(); !routes_2_1.done; routes_2_1 = routes_2.next()) {
                 var r = routes_2_1.value;
-                if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
+                if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
                     var s = new UrlSegmentGroup([], {});
                     s._sourceSegment = segmentGroup;
                     s._segmentIndexShift = consumedSegments.length;
-                    res[getOutlet$1(r)] = s;
+                    res[getOutlet(r)] = s;
                 }
             }
         }
@@ -3831,7 +3831,7 @@
         return res;
     }
     function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-        return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET; });
+        return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet(r) !== PRIMARY_OUTLET; });
     }
     function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
         return routes.some(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); });
@@ -3841,9 +3841,6 @@
             return false;
         }
         return r.path === '' && r.redirectTo === undefined;
-    }
-    function getOutlet$1(route) {
-        return route.outlet || PRIMARY_OUTLET;
     }
     function getData(route) {
         return route.data || {};
@@ -6294,7 +6291,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.0+36.sha-fe1ada8');
+    var VERSION = new core.Version('11.1.0-next.0+38.sha-66d863f');
 
     /**
      * @license
