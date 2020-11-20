@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.0+39.sha-1cba56e
+ * @license Angular v11.1.0-next.0+43.sha-c33a823
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2334,6 +2334,9 @@
             var outlets_2 = getOutlets(commands);
             var children_1 = {};
             forEach(outlets_2, function (commands, outlet) {
+                if (typeof commands === 'string') {
+                    commands = [commands];
+                }
                 if (commands !== null) {
                     children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
                 }
@@ -2411,6 +2414,9 @@
     function createNewSegmentChildren(outlets) {
         var children = {};
         forEach(outlets, function (commands, outlet) {
+            if (typeof commands === 'string') {
+                commands = [commands];
+            }
             if (commands !== null) {
                 children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
             }
@@ -6291,7 +6297,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.0+39.sha-1cba56e');
+    var VERSION = new core.Version('11.1.0-next.0+43.sha-c33a823');
 
     /**
      * @license
