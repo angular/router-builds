@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+8.sha-85b07ad
+ * @license Angular v11.1.0-next.2+9.sha-1f73af7
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -391,8 +391,8 @@
     }());
     SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(i0.ɵɵinject(i0.Compiler)); };
     SpyNgModuleFactoryLoader.ɵprov = i0.ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
-    /*@__PURE__*/ (function () {
-        i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+    (function () {
+        (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
                 type: i0.Injectable
             }], function () { return [{ type: i0.Compiler }]; }, null);
     })();
@@ -478,8 +478,8 @@
             { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
         ], imports: [router.RouterModule] });
     (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] }); })();
-    /*@__PURE__*/ (function () {
-        i0.ɵsetClassMetadata(RouterTestingModule, [{
+    (function () {
+        (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterTestingModule, [{
                 type: i0.NgModule,
                 args: [{
                         exports: [router.RouterModule],

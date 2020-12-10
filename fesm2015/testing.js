@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+8.sha-85b07ad
+ * @license Angular v11.1.0-next.2+9.sha-1f73af7
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -80,7 +80,7 @@ class SpyNgModuleFactoryLoader {
 }
 SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
 SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
-/*@__PURE__*/ (function () { ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: Compiler }]; }, null); })();
 function isUrlHandlingStrategy(opts) {
@@ -162,7 +162,7 @@ RouterTestingModule.ɵinj = ɵɵdefineInjector({ factory: function RouterTesting
         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
     ], imports: [RouterModule] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
-/*@__PURE__*/ (function () { ɵsetClassMetadata(RouterTestingModule, [{
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
         args: [{
                 exports: [RouterModule],
