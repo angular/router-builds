@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+6.sha-dc6d40e
+ * @license Angular v11.1.0-next.2+7.sha-112324a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4795,6 +4795,9 @@
          *
          * // navigate to /team/44/user/22
          * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+         *
+         * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+         * tree should be created relative to the root.
          * ```
          */
         Router.prototype.createUrlTree = function (commands, navigationExtras) {
@@ -5191,7 +5194,9 @@
         Object.defineProperty(RouterLink.prototype, "urlTree", {
             get: function () {
                 return this.router.createUrlTree(this.commands, {
-                    relativeTo: this.route,
+                    // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+                    // Otherwise, we should use the value provided by the user in the input.
+                    relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     queryParamsHandling: this.queryParamsHandling,
@@ -5221,6 +5226,7 @@
         skipLocationChange: [{ type: core.Input }],
         replaceUrl: [{ type: core.Input }],
         state: [{ type: core.Input }],
+        relativeTo: [{ type: core.Input }],
         routerLink: [{ type: core.Input }],
         onClick: [{ type: core.HostListener, args: ['click',] }]
     };
@@ -5300,7 +5306,9 @@
         Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
             get: function () {
                 return this.router.createUrlTree(this.commands, {
-                    relativeTo: this.route,
+                    // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+                    // Otherwise, we should use the value provided by the user in the input.
+                    relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     queryParamsHandling: this.queryParamsHandling,
@@ -5329,6 +5337,7 @@
         skipLocationChange: [{ type: core.Input }],
         replaceUrl: [{ type: core.Input }],
         state: [{ type: core.Input }],
+        relativeTo: [{ type: core.Input }],
         href: [{ type: core.HostBinding }],
         routerLink: [{ type: core.Input }],
         onClick: [{ type: core.HostListener, args: ['click',
@@ -6297,7 +6306,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.2+6.sha-dc6d40e');
+    var VERSION = new core.Version('11.1.0-next.2+7.sha-112324a');
 
     /**
      * @license

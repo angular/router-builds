@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+6.sha-dc6d40e
+ * @license Angular v11.1.0-next.2+7.sha-112324a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2113,6 +2113,9 @@ export declare class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     *
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
      * ```
      */
     createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
@@ -2410,6 +2413,16 @@ export declare class RouterLink implements OnChanges {
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
@@ -2584,6 +2597,16 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private subscription;
     private preserve;
@@ -2962,6 +2985,9 @@ export declare interface UrlCreationOptions {
      *    }
      *  }
      * ```
+     *
+     * A value of `null` or `undefined` indicates that the navigation commands should be applied
+     * relative to the root.
      */
     relativeTo?: ActivatedRoute | null;
     /**

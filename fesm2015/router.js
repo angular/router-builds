@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+6.sha-dc6d40e
+ * @license Angular v11.1.0-next.2+7.sha-112324a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4245,6 +4245,9 @@ class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     *
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
      * ```
      */
     createUrlTree(commands, navigationExtras = {}) {
@@ -4631,7 +4634,9 @@ class RouterLink {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
             queryParamsHandling: this.queryParamsHandling,
@@ -4657,6 +4662,7 @@ RouterLink.propDecorators = {
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
+    relativeTo: [{ type: Input }],
     routerLink: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
@@ -4730,7 +4736,9 @@ class RouterLinkWithHref {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
             queryParamsHandling: this.queryParamsHandling,
@@ -4755,6 +4763,7 @@ RouterLinkWithHref.propDecorators = {
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
+    relativeTo: [{ type: Input }],
     href: [{ type: HostBinding }],
     routerLink: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',
@@ -5677,7 +5686,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.2+6.sha-dc6d40e');
+const VERSION = new Version('11.1.0-next.2+7.sha-112324a');
 
 /**
  * @license
