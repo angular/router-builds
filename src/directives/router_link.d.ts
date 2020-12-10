@@ -164,6 +164,16 @@ export declare class RouterLink implements OnChanges {
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
@@ -181,7 +191,7 @@ export declare class RouterLink implements OnChanges {
     onClick(): boolean;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }
 /**
  * @description
@@ -250,6 +260,16 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private subscription;
     private preserve;
@@ -272,5 +292,5 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree;
     static ɵfac: i0.ɵɵFactoryDef<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "routerLink": "routerLink"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }

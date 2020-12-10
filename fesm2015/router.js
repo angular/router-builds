@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+6.sha-dc6d40e
+ * @license Angular v11.1.0-next.2+7.sha-112324a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4436,6 +4436,9 @@ class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     *
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
      * ```
      */
     createUrlTree(commands, navigationExtras = {}) {
@@ -4814,7 +4817,9 @@ class RouterLink {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
             queryParamsHandling: this.queryParamsHandling,
@@ -4825,7 +4830,7 @@ class RouterLink {
 RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); };
 RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLink_click_HostBindingHandler() { return ctx.onClick(); });
-    } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
+    } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterLink, [{
         type: Directive,
         args: [{ selector: ':not(a):not(area)[routerLink]' }]
@@ -4845,6 +4850,8 @@ RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "rou
         }], replaceUrl: [{
             type: Input
         }], state: [{
+            type: Input
+        }], relativeTo: [{
             type: Input
         }], routerLink: [{
             type: Input
@@ -4922,7 +4929,9 @@ class RouterLinkWithHref {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
             queryParamsHandling: this.queryParamsHandling,
@@ -4936,7 +4945,7 @@ RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selec
     } if (rf & 2) {
         ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
         ɵɵattribute("target", ctx.target);
-    } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
+    } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
 /*@__PURE__*/ (function () { ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
         args: [{ selector: 'a[routerLink],area[routerLink]' }]
@@ -4958,6 +4967,8 @@ RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selec
         }], replaceUrl: [{
             type: Input
         }], state: [{
+            type: Input
+        }], relativeTo: [{
             type: Input
         }], href: [{
             type: HostBinding
@@ -5707,7 +5718,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.2+6.sha-dc6d40e');
+const VERSION = new Version('11.1.0-next.2+7.sha-112324a');
 
 /**
  * @license

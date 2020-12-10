@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.2+6.sha-dc6d40e
+ * @license Angular v11.1.0-next.2+7.sha-112324a
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5005,6 +5005,9 @@
          *
          * // navigate to /team/44/user/22
          * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+         *
+         * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+         * tree should be created relative to the root.
          * ```
          */
         Router.prototype.createUrlTree = function (commands, navigationExtras) {
@@ -5388,7 +5391,9 @@
         Object.defineProperty(RouterLink.prototype, "urlTree", {
             get: function () {
                 return this.router.createUrlTree(this.commands, {
-                    relativeTo: this.route,
+                    // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+                    // Otherwise, we should use the value provided by the user in the input.
+                    relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     queryParamsHandling: this.queryParamsHandling,
@@ -5405,7 +5410,7 @@
             if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLink_click_HostBindingHandler() { return ctx.onClick(); });
             }
-        }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink" }, features: [i0.ɵɵNgOnChangesFeature] });
+        }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [i0.ɵɵNgOnChangesFeature] });
     /*@__PURE__*/ (function () {
         i0.ɵsetClassMetadata(RouterLink, [{
                 type: i0.Directive,
@@ -5428,6 +5433,8 @@
                 }], replaceUrl: [{
                     type: i0.Input
                 }], state: [{
+                    type: i0.Input
+                }], relativeTo: [{
                     type: i0.Input
                 }], routerLink: [{
                     type: i0.Input
@@ -5512,7 +5519,9 @@
         Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
             get: function () {
                 return this.router.createUrlTree(this.commands, {
-                    relativeTo: this.route,
+                    // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+                    // Otherwise, we should use the value provided by the user in the input.
+                    relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
                     queryParams: this.queryParams,
                     fragment: this.fragment,
                     queryParamsHandling: this.queryParamsHandling,
@@ -5533,7 +5542,7 @@
                 i0.ɵɵhostProperty("href", ctx.href, i0.ɵɵsanitizeUrl);
                 i0.ɵɵattribute("target", ctx.target);
             }
-        }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", routerLink: "routerLink" }, features: [i0.ɵɵNgOnChangesFeature] });
+        }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [i0.ɵɵNgOnChangesFeature] });
     /*@__PURE__*/ (function () {
         i0.ɵsetClassMetadata(RouterLinkWithHref, [{
                 type: i0.Directive,
@@ -5556,6 +5565,8 @@
                 }], replaceUrl: [{
                     type: i0.Input
                 }], state: [{
+                    type: i0.Input
+                }], relativeTo: [{
                     type: i0.Input
                 }], href: [{
                     type: i0.HostBinding
@@ -6344,7 +6355,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.1.0-next.2+6.sha-dc6d40e');
+    var VERSION = new i0.Version('11.1.0-next.2+7.sha-112324a');
 
     /**
      * @license
