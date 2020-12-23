@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.3+31.sha-9186f1f
+ * @license Angular v11.1.0-next.3+32.sha-c22d005
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4188,7 +4188,7 @@ class Router {
                     // navigation completes, there will be nothing in
                     // history.state.navigationId. This can cause sync problems with AngularJS
                     // sync code which looks for a value here in order to determine whether or
-                    // not to handle a given popstate event or to leave it to the Angualr
+                    // not to handle a given popstate event or to leave it to the Angular
                     // router.
                     this.resetUrlToCurrentUrlTree();
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), `Navigation ID ${t.id} is not equal to the current navigation id ${this.navigationId}`);
@@ -5718,7 +5718,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.3+31.sha-9186f1f');
+const VERSION = new Version('11.1.0-next.3+32.sha-c22d005');
 
 /**
  * @license
