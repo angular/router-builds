@@ -28,9 +28,4 @@ export declare function and(bools: boolean[]): boolean;
 export declare function forEach<K, V>(map: {
     [key: string]: V;
 }, callback: (v: V, k: string) => void): void;
-export declare function waitForMap<A, B>(obj: {
-    [k: string]: A;
-}, fn: (k: string, a: A) => Observable<B>): Observable<{
-    [k: string]: B;
-}>;
 export declare function wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>): Observable<T>;
