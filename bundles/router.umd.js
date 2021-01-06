@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.3+73.sha-bff48a0
+ * @license Angular v11.1.0-next.4+1.sha-13020f9
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2410,13 +2410,6 @@
         return path == segment.path && shallowEqual(params, segment.parameters);
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     var activateRoutes = function (rootContexts, routeReuseStrategy, forwardEvent) { return operators.map(function (t) {
         new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent)
             .activate(rootContexts);
@@ -2492,18 +2485,30 @@
             }
         };
         ActivateRoutes.prototype.deactivateRouteAndOutlet = function (route, parentContexts) {
-            var _this = this;
+            var e_1, _a;
             var context = parentContexts.getContext(route.value.outlet);
-            if (context) {
-                var children = nodeChildrenAsMap(route);
-                var contexts_1 = route.value.component ? context.children : parentContexts;
-                forEach(children, function (v, k) { return _this.deactivateRouteAndItsChildren(v, contexts_1); });
-                if (context.outlet) {
-                    // Destroy the component
-                    context.outlet.deactivate();
-                    // Destroy the contexts for all the outlets that were in the component
-                    context.children.onOutletDeactivated();
+            // The context could be `null` if we are on a componentless route but there may still be
+            // children that need deactivating.
+            var contexts = context && route.value.component ? context.children : parentContexts;
+            var children = nodeChildrenAsMap(route);
+            try {
+                for (var _b = __values(Object.values(children)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var child = _c.value;
+                    this.deactivateRouteAndItsChildren(child, contexts);
                 }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            if (context && context.outlet) {
+                // Destroy the component
+                context.outlet.deactivate();
+                // Destroy the contexts for all the outlets that were in the component
+                context.children.onOutletDeactivated();
             }
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
@@ -6460,7 +6465,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.1.0-next.3+73.sha-bff48a0');
+    var VERSION = new i0.Version('11.1.0-next.4+1.sha-13020f9');
 
     /**
      * @license
