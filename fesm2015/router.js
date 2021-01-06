@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.5+56.sha-5b9c981
+ * @license Angular v11.0.6+5.sha-48526cc
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2042,16 +2042,18 @@ class ActivateRoutes {
     }
     deactivateRouteAndOutlet(route, parentContexts) {
         const context = parentContexts.getContext(route.value.outlet);
-        if (context) {
-            const children = nodeChildrenAsMap(route);
-            const contexts = route.value.component ? context.children : parentContexts;
-            forEach(children, (v, k) => this.deactivateRouteAndItsChildren(v, contexts));
-            if (context.outlet) {
-                // Destroy the component
-                context.outlet.deactivate();
-                // Destroy the contexts for all the outlets that were in the component
-                context.children.onOutletDeactivated();
-            }
+        // The context could be `null` if we are on a componentless route but there may still be
+        // children that need deactivating.
+        const contexts = context && route.value.component ? context.children : parentContexts;
+        const children = nodeChildrenAsMap(route);
+        for (const child of Object.values(children)) {
+            this.deactivateRouteAndItsChildren(child, contexts);
+        }
+        if (context && context.outlet) {
+            // Destroy the component
+            context.outlet.deactivate();
+            // Destroy the contexts for all the outlets that were in the component
+            context.children.onOutletDeactivated();
         }
     }
     activateChildRoutes(futureNode, currNode, contexts) {
@@ -5767,7 +5769,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.5+56.sha-5b9c981');
+const VERSION = new Version('11.0.6+5.sha-48526cc');
 
 /**
  * @license
