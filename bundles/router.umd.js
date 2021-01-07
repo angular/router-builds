@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+7.sha-1e151f9
+ * @license Angular v11.1.0-next.4+8.sha-2028a43
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3355,8 +3355,9 @@
         var e_3, _a;
         var newChildren = {};
         try {
-            for (var _b = __values(Object.entries(segmentGroup.children)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var _d = __read(_c.value, 2), childOutlet = _d[0], child = _d[1];
+            for (var _b = __values(Object.keys(segmentGroup.children)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var childOutlet = _c.value;
+                var child = segmentGroup.children[childOutlet];
                 var childCandidate = squashSegmentGroup(child);
                 // don't add empty children
                 if (childCandidate.segments.length > 0 || childCandidate.hasChildren()) {
@@ -6416,7 +6417,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.4+7.sha-1e151f9');
+    var VERSION = new core.Version('11.1.0-next.4+8.sha-2028a43');
 
     /**
      * @license
