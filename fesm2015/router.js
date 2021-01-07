@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.6+5.sha-48526cc
+ * @license Angular v11.0.6+6.sha-6429be1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2866,7 +2866,8 @@ function mergeTrivialChildren(s) {
  */
 function squashSegmentGroup(segmentGroup) {
     const newChildren = {};
-    for (const [childOutlet, child] of Object.entries(segmentGroup.children)) {
+    for (const childOutlet of Object.keys(segmentGroup.children)) {
+        const child = segmentGroup.children[childOutlet];
         const childCandidate = squashSegmentGroup(child);
         // don't add empty children
         if (childCandidate.segments.length > 0 || childCandidate.hasChildren()) {
@@ -5769,7 +5770,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.6+5.sha-48526cc');
+const VERSION = new Version('11.0.6+6.sha-6429be1');
 
 /**
  * @license
