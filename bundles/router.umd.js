@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+46.sha-6a9e328
+ * @license Angular v11.1.0-next.4+47.sha-74175f8
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2510,9 +2510,9 @@
             var contexts = context && route.value.component ? context.children : parentContexts;
             var children = nodeChildrenAsMap(route);
             try {
-                for (var _b = __values(Object.values(children)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var child = _c.value;
-                    this.deactivateRouteAndItsChildren(child, contexts);
+                for (var _b = __values(Object.keys(children)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var childOutlet = _c.value;
+                    this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -6435,7 +6435,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.4+46.sha-6a9e328');
+    var VERSION = new core.Version('11.1.0-next.4+47.sha-74175f8');
 
     /**
      * @license
