@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.7+11.sha-6ccdb2d
+ * @license Angular v11.0.7+13.sha-c44dd84
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -119,7 +119,25 @@ export declare class ActivatedRoute {
 export declare class ActivatedRouteSnapshot {
     /** The URL segments matched by this route */
     url: UrlSegment[];
-    /** The matrix parameters scoped to this route */
+    /**
+     *  The matrix parameters scoped to this route.
+     *
+     *  You can compute all params (or data) in the router state or to get params outside
+     *  of an activated component by traversing the `RouterState` tree as in the following
+     *  example:
+     *  ```
+     *  collectRouteParams(router: Router) {
+     *    let params = {};
+     *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+     *    while (stack.length > 0) {
+     *      const route = stack.pop()!;
+     *      params = {...params, ...route.params};
+     *      stack.push(...route.children);
+     *    }
+     *    return params;
+     *  }
+     *  ```
+     */
     params: Params;
     /** The query parameters shared by all the routes */
     queryParams: Params;

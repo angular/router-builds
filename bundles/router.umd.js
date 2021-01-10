@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.7+11.sha-6ccdb2d
+ * @license Angular v11.0.7+13.sha-c44dd84
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1876,7 +1876,25 @@
         function ActivatedRouteSnapshot(
         /** The URL segments matched by this route */
         url, 
-        /** The matrix parameters scoped to this route */
+        /**
+         *  The matrix parameters scoped to this route.
+         *
+         *  You can compute all params (or data) in the router state or to get params outside
+         *  of an activated component by traversing the `RouterState` tree as in the following
+         *  example:
+         *  ```
+         *  collectRouteParams(router: Router) {
+         *    let params = {};
+         *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+         *    while (stack.length > 0) {
+         *      const route = stack.pop()!;
+         *      params = {...params, ...route.params};
+         *      stack.push(...route.children);
+         *    }
+         *    return params;
+         *  }
+         *  ```
+         */
         params, 
         /** The query parameters shared by all the routes */
         queryParams, 
@@ -2492,9 +2510,9 @@
             var contexts = context && route.value.component ? context.children : parentContexts;
             var children = nodeChildrenAsMap(route);
             try {
-                for (var _b = __values(Object.values(children)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var child = _c.value;
-                    this.deactivateRouteAndItsChildren(child, contexts);
+                for (var _b = __values(Object.keys(children)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var childOutlet = _c.value;
+                    this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -6404,7 +6422,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.7+11.sha-6ccdb2d');
+    var VERSION = new core.Version('11.0.7+13.sha-c44dd84');
 
     /**
      * @license
