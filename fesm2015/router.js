@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.8+6.sha-6438a29
+ * @license Angular v11.0.8+19.sha-adf42da
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3879,7 +3879,7 @@ class Router {
         this.ngModule = injector.get(NgModuleRef);
         this.console = injector.get(ɵConsole);
         const ngZone = injector.get(NgZone);
-        this.isNgZoneEnabled = ngZone instanceof NgZone;
+        this.isNgZoneEnabled = ngZone instanceof NgZone && NgZone.isInAngularZone();
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -5788,7 +5788,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.0.8+6.sha-6438a29');
+const VERSION = new Version('11.0.8+19.sha-adf42da');
 
 /**
  * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.8+6.sha-6438a29
+ * @license Angular v11.0.8+19.sha-adf42da
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4437,7 +4437,7 @@
             this.ngModule = injector.get(core.NgModuleRef);
             this.console = injector.get(core.ɵConsole);
             var ngZone = injector.get(core.NgZone);
-            this.isNgZoneEnabled = ngZone instanceof core.NgZone;
+            this.isNgZoneEnabled = ngZone instanceof core.NgZone && core.NgZone.isInAngularZone();
             this.resetConfig(config);
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
@@ -6422,7 +6422,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.8+6.sha-6438a29');
+    var VERSION = new core.Version('11.0.8+19.sha-adf42da');
 
     /**
      * @license
