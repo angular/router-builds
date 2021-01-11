@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.8+19.sha-adf42da
+ * @license Angular v11.0.8+20.sha-f8495ca
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -902,7 +902,9 @@ export declare interface ExtraOptions {
      * ];
      * ```
      *
-     * From the `ContainerComponent`, this will not work:
+     * From the `ContainerComponent`, you should be able to navigate to `AComponent` using
+     * the following `routerLink`, but it will not work if `relativeLinkResolution` is set
+     * to `'legacy'`:
      *
      * `<a [routerLink]="['./a']">Link to A</a>`
      *
@@ -910,7 +912,8 @@ export declare interface ExtraOptions {
      *
      * `<a [routerLink]="['../a']">Link to A</a>`
      *
-     * In other words, you're required to use `../` rather than `./`.
+     * In other words, you're required to use `../` rather than `./` when the relative link
+     * resolution is set to `'legacy'`.
      *
      * The default in v11 is `corrected`.
      */
