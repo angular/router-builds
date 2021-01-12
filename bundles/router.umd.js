@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.0.8+20.sha-f8495ca
+ * @license Angular v11.0.8+30.sha-642c45b
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2667,10 +2667,18 @@
         return guard && isFunction(guard.canDeactivate);
     }
 
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var INITIAL_VALUE = Symbol('INITIAL_VALUE');
     function prioritizedGuardValue() {
         return operators.switchMap(function (obs) {
-            return rxjs.combineLatest.apply(void 0, __spread(obs.map(function (o) { return o.pipe(operators.take(1), operators.startWith(INITIAL_VALUE)); }))).pipe(operators.scan(function (acc, list) {
+            return rxjs.combineLatest(obs.map(function (o) { return o.pipe(operators.take(1), operators.startWith(INITIAL_VALUE)); }))
+                .pipe(operators.scan(function (acc, list) {
                 var isPending = false;
                 return list.reduce(function (innerAcc, val, i) {
                     if (innerAcc !== INITIAL_VALUE)
@@ -3398,10 +3406,8 @@
      * found in the LICENSE file at https://angular.io/license
      */
     function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
-        return function (source) {
-            return source.pipe(operators.switchMap(function (t) { return applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
-                .pipe(operators.map(function (urlAfterRedirects) { return (Object.assign(Object.assign({}, t), { urlAfterRedirects: urlAfterRedirects })); })); }));
-        };
+        return operators.switchMap(function (t) { return applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
+            .pipe(operators.map(function (urlAfterRedirects) { return (Object.assign(Object.assign({}, t), { urlAfterRedirects: urlAfterRedirects })); })); });
     }
 
     /**
@@ -3566,20 +3572,18 @@
      * found in the LICENSE file at https://angular.io/license
      */
     function checkGuards(moduleInjector, forwardEvent) {
-        return function (source) {
-            return source.pipe(operators.mergeMap(function (t) {
-                var targetSnapshot = t.targetSnapshot, currentSnapshot = t.currentSnapshot, _a = t.guards, canActivateChecks = _a.canActivateChecks, canDeactivateChecks = _a.canDeactivateChecks;
-                if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
-                    return rxjs.of(Object.assign(Object.assign({}, t), { guardsResult: true }));
-                }
-                return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
-                    .pipe(operators.mergeMap(function (canDeactivate) {
-                    return canDeactivate && isBoolean(canDeactivate) ?
-                        runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
-                        rxjs.of(canDeactivate);
-                }), operators.map(function (guardsResult) { return (Object.assign(Object.assign({}, t), { guardsResult: guardsResult })); }));
-            }));
-        };
+        return operators.mergeMap(function (t) {
+            var targetSnapshot = t.targetSnapshot, currentSnapshot = t.currentSnapshot, _a = t.guards, canActivateChecks = _a.canActivateChecks, canDeactivateChecks = _a.canDeactivateChecks;
+            if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
+                return rxjs.of(Object.assign(Object.assign({}, t), { guardsResult: true }));
+            }
+            return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
+                .pipe(operators.mergeMap(function (canDeactivate) {
+                return canDeactivate && isBoolean(canDeactivate) ?
+                    runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
+                    rxjs.of(canDeactivate);
+            }), operators.map(function (guardsResult) { return (Object.assign(Object.assign({}, t), { guardsResult: guardsResult })); }));
+        });
     }
     function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
         return rxjs.from(checks).pipe(operators.mergeMap(function (check) { return runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector); }), operators.first(function (result) {
@@ -3588,15 +3592,7 @@
     }
     function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
         return rxjs.from(checks).pipe(operators.concatMap(function (check) {
-            return rxjs.from([
-                fireChildActivationStart(check.route.parent, forwardEvent),
-                fireActivationStart(check.route, forwardEvent),
-                runCanActivateChild(futureSnapshot, check.path, moduleInjector),
-                runCanActivate(futureSnapshot, check.route, moduleInjector)
-            ])
-                .pipe(operators.concatAll(), operators.first(function (result) {
-                return result !== true;
-            }, true));
+            return rxjs.concat(fireChildActivationStart(check.route.parent, forwardEvent), fireActivationStart(check.route, forwardEvent), runCanActivateChild(futureSnapshot, check.path, moduleInjector), runCanActivate(futureSnapshot, check.route, moduleInjector));
         }), operators.first(function (result) {
             return result !== true;
         }, true));
@@ -3988,10 +3984,8 @@
      * found in the LICENSE file at https://angular.io/license
      */
     function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
-        return function (source) {
-            return source.pipe(operators.mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
-                .pipe(operators.map(function (targetSnapshot) { return (Object.assign(Object.assign({}, t), { targetSnapshot: targetSnapshot })); })); }));
-        };
+        return operators.mergeMap(function (t) { return recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
+            .pipe(operators.map(function (targetSnapshot) { return (Object.assign(Object.assign({}, t), { targetSnapshot: targetSnapshot })); })); });
     }
 
     /**
@@ -4002,17 +3996,15 @@
      * found in the LICENSE file at https://angular.io/license
      */
     function resolveData(paramsInheritanceStrategy, moduleInjector) {
-        return function (source) {
-            return source.pipe(operators.mergeMap(function (t) {
-                var targetSnapshot = t.targetSnapshot, canActivateChecks = t.guards.canActivateChecks;
-                if (!canActivateChecks.length) {
-                    return rxjs.of(t);
-                }
-                var canActivateChecksResolved = 0;
-                return rxjs.from(canActivateChecks)
-                    .pipe(operators.concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), operators.tap(function () { return canActivateChecksResolved++; }), operators.takeLast(1), operators.mergeMap(function (_) { return canActivateChecksResolved === canActivateChecks.length ? rxjs.of(t) : rxjs.EMPTY; }));
-            }));
-        };
+        return operators.mergeMap(function (t) {
+            var targetSnapshot = t.targetSnapshot, canActivateChecks = t.guards.canActivateChecks;
+            if (!canActivateChecks.length) {
+                return rxjs.of(t);
+            }
+            var canActivateChecksResolved = 0;
+            return rxjs.from(canActivateChecks)
+                .pipe(operators.concatMap(function (check) { return runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector); }), operators.tap(function () { return canActivateChecksResolved++; }), operators.takeLast(1), operators.mergeMap(function (_) { return canActivateChecksResolved === canActivateChecks.length ? rxjs.of(t) : rxjs.EMPTY; }));
+        });
     }
     function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjector) {
         var resolve = futureARS._resolve;
@@ -4061,15 +4053,13 @@
      * it will wait before continuing with the original value.
      */
     function switchTap(next) {
-        return function (source) {
-            return source.pipe(operators.switchMap(function (v) {
-                var nextResult = next(v);
-                if (nextResult) {
-                    return rxjs.from(nextResult).pipe(operators.map(function () { return v; }));
-                }
-                return rxjs.from([v]);
-            }));
-        };
+        return operators.switchMap(function (v) {
+            var nextResult = next(v);
+            if (nextResult) {
+                return rxjs.from(nextResult).pipe(operators.map(function () { return v; }));
+            }
+            return rxjs.of(v);
+        });
     }
 
     /**
@@ -4503,11 +4493,10 @@
                             if (transition !== _this.transitions.getValue()) {
                                 return rxjs.EMPTY;
                             }
-                            return [t];
+                            // This delay is required to match old behavior that forced
+                            // navigation to always be async
+                            return Promise.resolve(t);
                         }), 
-                        // This delay is required to match old behavior that forced navigation
-                        // to always be async
-                        operators.switchMap(function (t) { return Promise.resolve(t); }), 
                         // ApplyRedirects
                         applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                         // Update the currentNavigation
@@ -4524,9 +4513,7 @@
                                 }
                                 _this.browserUrlTree = t.urlAfterRedirects;
                             }
-                        }), 
-                        // Fire RoutesRecognized
-                        operators.tap(function (t) {
+                            // Fire RoutesRecognized
                             var routesRecognized = new RoutesRecognized(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                             eventsSubject.next(routesRecognized);
                         }));
@@ -4578,7 +4565,6 @@
                         error.url = t.guardsResult;
                         throw error;
                     }
-                }), operators.tap(function (t) {
                     var guardsEnd = new GuardsCheckEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
                     _this.triggerEvent(guardsEnd);
                 }), operators.filter(function (t) {
@@ -4711,7 +4697,7 @@
                                     skipLocationChange: t.extras.skipLocationChange,
                                     replaceUrl: _this.urlUpdateStrategy === 'eager'
                                 };
-                                return _this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
+                                _this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
                             }, 0);
                         }
                         /* All other errors should reset to the router's internal URL reference to
@@ -5544,9 +5530,7 @@
         RouterLinkActive.prototype.ngAfterContentInit = function () {
             var _this = this;
             // `of(null)` is used to force subscribe body to execute once immediately (like `startWith`).
-            rxjs.from([this.links.changes, this.linksWithHrefs.changes, rxjs.of(null)])
-                .pipe(operators.mergeAll())
-                .subscribe(function (_) {
+            rxjs.of(this.links.changes, this.linksWithHrefs.changes, rxjs.of(null)).pipe(operators.mergeAll()).subscribe(function (_) {
                 _this.update();
                 _this.subscribeToEachLinkOnChanges();
             });
@@ -6422,7 +6406,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.0.8+20.sha-f8495ca');
+    var VERSION = new core.Version('11.0.8+30.sha-642c45b');
 
     /**
      * @license
