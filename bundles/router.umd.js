@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-rc.0+12.sha-968b2bb
+ * @license Angular v11.1.0-rc.0+19.sha-63bf613
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -553,7 +553,7 @@
         return GuardsCheckEnd;
     }(RouterEvent));
     /**
-     * An event triggered at the the start of the Resolve phase of routing.
+     * An event triggered at the start of the Resolve phase of routing.
      *
      * Runs in the "resolve" phase whether or not there is anything to resolve.
      * In future, may change to only run when there are things to be resolved.
@@ -3117,7 +3117,7 @@
             return rxjs.from(childOutlets)
                 .pipe(operators.concatMap(function (childOutlet) {
                 var child = segmentGroup.children[childOutlet];
-                // Sort the routes so routes with outlets that match the the segment appear
+                // Sort the routes so routes with outlets that match the segment appear
                 // first, followed by routes for other outlets, which might match if they have an
                 // empty path.
                 var sortedRoutes = sortByMatchingOutlets(routes, childOutlet);
@@ -5471,7 +5471,7 @@
      * is active.
      *
      * Use this directive to create a visual distinction for elements associated with an active route.
-     * For example, the following code highlights the word "Bob" when the the router
+     * For example, the following code highlights the word "Bob" when the router
      * activates the associated route:
      *
      * ```
@@ -6419,7 +6419,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-rc.0+12.sha-968b2bb');
+    var VERSION = new core.Version('11.1.0-rc.0+19.sha-63bf613');
 
     /**
      * @license
