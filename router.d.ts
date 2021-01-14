@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+101.sha-9b0b2dd
+ * @license Angular v11.1.0-next.4+104.sha-cf02cf1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1568,7 +1568,7 @@ export declare class ResolveEnd extends RouterEvent {
 }
 
 /**
- * An event triggered at the the start of the Resolve phase of routing.
+ * An event triggered at the start of the Resolve phase of routing.
  *
  * Runs in the "resolve" phase whether or not there is anything to resolve.
  * In future, may change to only run when there are things to be resolved.
@@ -2479,7 +2479,7 @@ export declare class RouterLink implements OnChanges {
  * is active.
  *
  * Use this directive to create a visual distinction for elements associated with an active route.
- * For example, the following code highlights the word "Bob" when the the router
+ * For example, the following code highlights the word "Bob" when the router
  * activates the associated route:
  *
  * ```

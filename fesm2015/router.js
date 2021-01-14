@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+101.sha-9b0b2dd
+ * @license Angular v11.1.0-next.4+104.sha-cf02cf1
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -227,7 +227,7 @@ class GuardsCheckEnd extends RouterEvent {
     }
 }
 /**
- * An event triggered at the the start of the Resolve phase of routing.
+ * An event triggered at the start of the Resolve phase of routing.
  *
  * Runs in the "resolve" phase whether or not there is anything to resolve.
  * In future, may change to only run when there are things to be resolved.
@@ -2646,7 +2646,7 @@ class ApplyRedirects {
         return from(childOutlets)
             .pipe(concatMap(childOutlet => {
             const child = segmentGroup.children[childOutlet];
-            // Sort the routes so routes with outlets that match the the segment appear
+            // Sort the routes so routes with outlets that match the segment appear
             // first, followed by routes for other outlets, which might match if they have an
             // empty path.
             const sortedRoutes = sortByMatchingOutlets(routes, childOutlet);
@@ -4882,7 +4882,7 @@ function attrBoolValue(s) {
  * is active.
  *
  * Use this directive to create a visual distinction for elements associated with an active route.
- * For example, the following code highlights the word "Bob" when the the router
+ * For example, the following code highlights the word "Bob" when the router
  * activates the associated route:
  *
  * ```
@@ -5777,7 +5777,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.4+101.sha-9b0b2dd');
+const VERSION = new Version('11.1.0-next.4+104.sha-cf02cf1');
 
 /**
  * @license
