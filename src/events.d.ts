@@ -242,7 +242,7 @@ export declare class GuardsCheckEnd extends RouterEvent {
     toString(): string;
 }
 /**
- * An event triggered at the the start of the Resolve phase of routing.
+ * An event triggered at the start of the Resolve phase of routing.
  *
  * Runs in the "resolve" phase whether or not there is anything to resolve.
  * In future, may change to only run when there are things to be resolved.

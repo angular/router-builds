@@ -18,7 +18,7 @@ import * as i0 from "@angular/core";
  * is active.
  *
  * Use this directive to create a visual distinction for elements associated with an active route.
- * For example, the following code highlights the word "Bob" when the the router
+ * For example, the following code highlights the word "Bob" when the router
  * activates the associated route:
  *
  * ```
