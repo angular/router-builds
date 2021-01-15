@@ -1,11 +1,11 @@
 /**
- * @license Angular v11.1.0-next.4+111.sha-b37a9eb
+ * @license Angular v11.1.0-next.4+110.sha-96690ed
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -3882,11 +3882,7 @@ class RouterConfigLoader {
                 this.onLoadEndListener(route);
             }
             const module = factory.create(parentInjector);
-            // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
-            // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
-            // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, InjectFlags.Self | InjectFlags.Optional))
-                .map(standardizeConfig), module);
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
         }));
     }
     loadModuleFactory(loadChildren) {
@@ -5813,7 +5809,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.4+111.sha-b37a9eb');
+const VERSION = new Version('11.1.0-next.4+110.sha-96690ed');
 
 /**
  * @license
