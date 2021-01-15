@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+110.sha-96690ed
+ * @license Angular v11.1.0-next.4+113.sha-61792cc
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4465,7 +4465,11 @@
                     _this.onLoadEndListener(route);
                 }
                 var module = factory.create(parentInjector);
-                return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
+                // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
+                // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
+                // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
+                return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, i0.InjectFlags.Self | i0.InjectFlags.Optional))
+                    .map(standardizeConfig), module);
             }));
         };
         RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
@@ -6468,7 +6472,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.1.0-next.4+110.sha-96690ed');
+    var VERSION = new i0.Version('11.1.0-next.4+113.sha-61792cc');
 
     /**
      * @license
