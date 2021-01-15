@@ -1,11 +1,11 @@
 /**
- * @license Angular v11.1.0-next.4+108.sha-5457936
+ * @license Angular v11.1.0-next.4+111.sha-b37a9eb
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
 
@@ -3618,7 +3618,11 @@ class RouterConfigLoader {
                 this.onLoadEndListener(route);
             }
             const module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
+            // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
+            // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
+            // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, InjectFlags.Self | InjectFlags.Optional))
+                .map(standardizeConfig), module);
         }));
     }
     loadModuleFactory(loadChildren) {
@@ -5777,7 +5781,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.4+108.sha-5457936');
+const VERSION = new Version('11.1.0-next.4+111.sha-b37a9eb');
 
 /**
  * @license
