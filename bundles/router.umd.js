@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+145.sha-f0733d1
+ * @license Angular v11.1.0-next.4+144.sha-0e95460
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -850,10 +850,12 @@
         return true;
     }
     function shallowEqual(a, b) {
-        // While `undefined` should never be possible, it would sometimes be the case in IE 11
-        // and pre-chromium Edge. The check below accounts for this edge case.
-        var k1 = a ? Object.keys(a) : undefined;
-        var k2 = b ? Object.keys(b) : undefined;
+        // Casting Object.keys return values to include `undefined` as there are some cases
+        // in IE 11 where this can happen. Cannot provide a test because the behavior only
+        // exists in certain circumstances in IE 11, therefore doing this cast ensures the
+        // logic is correct for when this edge case is hit.
+        var k1 = Object.keys(a);
+        var k2 = Object.keys(b);
         if (!k1 || !k2 || k1.length != k2.length) {
             return false;
         }
@@ -6470,7 +6472,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.1.0-next.4+145.sha-f0733d1');
+    var VERSION = new i0.Version('11.1.0-next.4+144.sha-0e95460');
 
     /**
      * @license
