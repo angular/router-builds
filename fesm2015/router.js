@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+137.sha-315b272
+ * @license Angular v11.1.0-next.4+139.sha-3cf4e3c
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1940,7 +1940,7 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && isMatrixParams(commands[0])) {
             const p = segmentGroup.segments[startIndex];
-            paths.push(new UrlSegment(p.path, commands[0]));
+            paths.push(new UrlSegment(p.path, stringify(commands[0])));
             i++;
             continue;
         }
@@ -5781,7 +5781,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.4+137.sha-315b272');
+const VERSION = new Version('11.1.0-next.4+139.sha-3cf4e3c');
 
 /**
  * @license
