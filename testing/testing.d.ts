@@ -1,6 +1,6 @@
 /**
- * @license Angular v8.0.0-rc.0+81.sha-b46eb3c.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v11.1.0-next.4+175.sha-02ff4ed
+ * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -32,7 +32,7 @@ import { UrlSerializer } from '@angular/router';
  *
  * ```
  * beforeEach(() => {
- *   TestBed.configureTestModule({
+ *   TestBed.configureTestingModule({
  *     imports: [
  *       RouterTestingModule.withRoutes(
  *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
@@ -70,7 +70,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  * Allows to simulate the loading of ng modules in tests.
  *
  * ```
- * const loader = TestBed.get(NgModuleFactoryLoader);
+ * const loader = TestBed.inject(NgModuleFactoryLoader);
  *
  * @Component({template: 'lazy-loaded'})
  * class LazyLoadedComponent {}
@@ -102,10 +102,13 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     /**
      * @docsNotRequired
      */
+    set stubbedModules(modules: {
+        [path: string]: any;
+    });
     /**
-    * @docsNotRequired
-    */
-    stubbedModules: {
+     * @docsNotRequired
+     */
+    get stubbedModules(): {
         [path: string]: any;
     };
     constructor(compiler: Compiler);
