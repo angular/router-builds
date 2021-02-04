@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.0-next.4+241.sha-5324a62
+ * @license Angular v11.1.0-next.4+245.sha-d067dc0
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4564,6 +4564,7 @@
             this.config = config;
             this.lastSuccessfulNavigation = null;
             this.currentNavigation = null;
+            this.disposed = false;
             /**
              * Tracks the previously seen location change from the location subscription so we can compare
              * the two latest to see if they are duplicates. See setUpLocationChangeListener.
@@ -5074,10 +5075,12 @@
         };
         /** Disposes of the router. */
         Router.prototype.dispose = function () {
+            this.transitions.complete();
             if (this.locationSubscription) {
                 this.locationSubscription.unsubscribe();
                 this.locationSubscription = undefined;
             }
+            this.disposed = true;
         };
         /**
          * Appends URL segments to the current URL tree to create a new URL tree.
@@ -5266,6 +5269,9 @@
             });
         };
         Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
+            if (this.disposed) {
+                return Promise.resolve(false);
+            }
             // * Imperative navigations (router.navigate) might trigger additional navigations to the same
             //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
             //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
@@ -6470,7 +6476,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('11.1.0-next.4+241.sha-5324a62');
+    var VERSION = new i0.Version('11.1.0-next.4+245.sha-d067dc0');
 
     /**
      * @license
