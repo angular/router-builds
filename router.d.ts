@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.1.2
+ * @license Angular v11.1.2+4.sha-0fc5a16
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1974,6 +1974,7 @@ export declare class Router {
     private navigations;
     private lastSuccessfulNavigation;
     private currentNavigation;
+    private disposed;
     private locationSubscription?;
     /**
      * Tracks the previously seen location change from the location subscription so we can compare
