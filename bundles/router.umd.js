@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.0+10.sha-f72626d
+ * @license Angular v12.0.0-next.0+12.sha-fcf00de
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3484,9 +3484,8 @@
             var _this = this;
             if (route.path === '**') {
                 if (route.loadChildren) {
-                    var loaded$ = route._loadedConfig ? rxjs.of(route._loadedConfig) :
-                        this.configLoader.load(ngModule.injector, route);
-                    return loaded$.pipe(operators.map(function (cfg) {
+                    return this.configLoader.load(ngModule.injector, route)
+                        .pipe(operators.map(function (cfg) {
                         route._loadedConfig = cfg;
                         return new UrlSegmentGroup(segments, {});
                     }));
@@ -4455,32 +4454,21 @@
         }
         RouterConfigLoader.prototype.load = function (parentInjector, route) {
             var _this = this;
-            if (route._loader$) {
-                return route._loader$;
-            }
             if (this.onLoadStartListener) {
                 this.onLoadStartListener(route);
             }
             var moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-            var loadRunner = moduleFactory$.pipe(operators.map(function (factory) {
+            return moduleFactory$.pipe(operators.map(function (factory) {
                 if (_this.onLoadEndListener) {
                     _this.onLoadEndListener(route);
                 }
                 var module = factory.create(parentInjector);
-                // When loading a module that doesn't provide `RouterModule.forChild()` preloader
-                // will get stuck in an infinite loop. The child module's Injector will look to
-                // its parent `Injector` when it doesn't find any ROUTES so it will return routes
-                // for it's parent module instead.
+                // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
+                // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
+                // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
                 return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, i0.InjectFlags.Self | i0.InjectFlags.Optional))
                     .map(standardizeConfig), module);
-            }), operators.catchError(function (err) {
-                route._loader$ = undefined;
-                throw err;
             }));
-            // Use custom ConnectableObservable as share in runners pipe increasing the bundle size too much
-            route._loader$ = new rxjs.ConnectableObservable(loadRunner, function () { return new rxjs.Subject(); })
-                .pipe(operators.refCount());
-            return route._loader$;
         };
         RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
             var _this = this;
@@ -6022,8 +6010,7 @@
         RouterPreloader.prototype.preloadConfig = function (ngModule, route) {
             var _this = this;
             return this.preloadingStrategy.preload(route, function () {
-                var loaded$ = route._loadedConfig ? rxjs.of(route._loadedConfig) :
-                    _this.loader.load(ngModule.injector, route);
+                var loaded$ = _this.loader.load(ngModule.injector, route);
                 return loaded$.pipe(operators.mergeMap(function (config) {
                     route._loadedConfig = config;
                     return _this.processRoutes(config.module, config.routes);
@@ -6489,7 +6476,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.0+10.sha-f72626d');
+    var VERSION = new i0.Version('12.0.0-next.0+12.sha-fcf00de');
 
     /**
      * @license
