@@ -1,13 +1,13 @@
 /**
- * @license Angular v12.0.0-next.0+8.sha-c22ae5d
+ * @license Angular v12.0.0-next.0+9.sha-e9a19a6
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
-import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, Subject } from 'rxjs';
-import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
+import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
+import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -2717,8 +2717,9 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments, outlet) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return this.configLoader.load(ngModule.injector, route)
-                    .pipe(map((cfg) => {
+                const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                    this.configLoader.load(ngModule.injector, route);
+                return loaded$.pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 }));
@@ -3607,21 +3608,32 @@ class RouterConfigLoader {
         this.onLoadEndListener = onLoadEndListener;
     }
     load(parentInjector, route) {
+        if (route._loader$) {
+            return route._loader$;
+        }
         if (this.onLoadStartListener) {
             this.onLoadStartListener(route);
         }
         const moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-        return moduleFactory$.pipe(map((factory) => {
+        const loadRunner = moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             const module = factory.create(parentInjector);
-            // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
-            // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
-            // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
+            // When loading a module that doesn't provide `RouterModule.forChild()` preloader
+            // will get stuck in an infinite loop. The child module's Injector will look to
+            // its parent `Injector` when it doesn't find any ROUTES so it will return routes
+            // for it's parent module instead.
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, InjectFlags.Self | InjectFlags.Optional))
                 .map(standardizeConfig), module);
+        }), catchError((err) => {
+            route._loader$ = undefined;
+            throw err;
         }));
+        // Use custom ConnectableObservable as share in runners pipe increasing the bundle size too much
+        route._loader$ = new ConnectableObservable(loadRunner, () => new Subject())
+            .pipe(refCount());
+        return route._loader$;
     }
     loadModuleFactory(loadChildren) {
         if (typeof loadChildren === 'string') {
@@ -5330,7 +5342,8 @@ class RouterPreloader {
     }
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const loaded$ = this.loader.load(ngModule.injector, route);
+            const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                this.loader.load(ngModule.injector, route);
             return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
@@ -5785,7 +5798,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.0+8.sha-c22ae5d');
+const VERSION = new Version('12.0.0-next.0+9.sha-e9a19a6');
 
 /**
  * @license
