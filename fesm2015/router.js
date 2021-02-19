@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.1+14.sha-b4301c3
+ * @license Angular v12.0.0-next.1+32.sha-09e1e19
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5144,6 +5144,10 @@ class RouterOutlet {
     get isActivated() {
         return !!this.activated;
     }
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
     get component() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
@@ -5798,7 +5802,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.1+14.sha-b4301c3');
+const VERSION = new Version('12.0.0-next.1+32.sha-09e1e19');
 
 /**
  * @license

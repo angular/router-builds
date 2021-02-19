@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.1+14.sha-b4301c3
+ * @license Angular v12.0.0-next.1+32.sha-09e1e19
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5747,6 +5747,10 @@
             configurable: true
         });
         Object.defineProperty(RouterOutlet.prototype, "component", {
+            /**
+             * @returns The currently activated component instance.
+             * @throws An error if the outlet is not activated.
+             */
             get: function () {
                 if (!this.activated)
                     throw new Error('Outlet is not activated');
@@ -6440,7 +6444,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.0-next.1+14.sha-b4301c3');
+    var VERSION = new core.Version('12.0.0-next.1+32.sha-09e1e19');
 
     /**
      * @license
