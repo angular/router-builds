@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ComponentFactoryResolver, ComponentRef } from '@angular/core';
-import { RouterOutlet } from './directives/router_outlet';
+import { RouterOutletContract } from './directives/router_outlet';
 import { ActivatedRoute } from './router_state';
 /**
  * Store contextual information about a `RouterOutlet`
@@ -14,7 +14,7 @@ import { ActivatedRoute } from './router_state';
  * @publicApi
  */
 export declare class OutletContext {
-    outlet: RouterOutlet | null;
+    outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
     resolver: ComponentFactoryResolver | null;
     children: ChildrenOutletContexts;
@@ -28,7 +28,7 @@ export declare class OutletContext {
 export declare class ChildrenOutletContexts {
     private contexts;
     /** Called when a `RouterOutlet` directive is instantiated */
-    onChildOutletCreated(childName: string, outlet: RouterOutlet): void;
+    onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
     /**
      * Called when a `RouterOutlet` directive is destroyed.
      * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
