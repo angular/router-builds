@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.2+6.sha-29d8a0a
+ * @license Angular v12.0.0-next.2+7.sha-6c05c80
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -997,6 +997,54 @@ export declare class GuardsCheckStart extends RouterEvent {
  * @publicApi
  */
 export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
+
+/**
+ * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
+ * for the current router state.
+ *
+ * @publicApi
+ * @see Router.isActive
+ */
+export declare interface IsActiveMatchOptions {
+    /**
+     * Defines the strategy for comparing the matrix parameters of two `UrlTree`s.
+     *
+     * The matrix parameter matching is dependent on the strategy for matching the
+     * segments. That is, if the `paths` option is set to `'subset'`, only
+     * the matrix parameters of the matching segments will be compared.
+     *
+     * - `'exact'`: Requires that matching segments also have exact matrix parameter
+     * matches.
+     * - `'subset'`: The matching segments in the router's active `UrlTree` may contain
+     * extra matrix parameters, but those that exist in the `UrlTree` in question must match.
+     * - `'ignored'`: When comparing `UrlTree`s, matrix params will be ignored.
+     */
+    matrixParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the query parameters of two `UrlTree`s.
+     *
+     * - `'exact'`: the query parameters must match exactly.
+     * - `'subset'`: the active `UrlTree` may contain extra parameters,
+     * but must match the key and value of any that exist in the `UrlTree` in question.
+     * - `'ignored'`: When comparing `UrlTree`s, query params will be ignored.
+     */
+    queryParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the `UrlSegment`s of the `UrlTree`s.
+     *
+     * - `'exact'`: all segments in each `UrlTree` must match.
+     * - `'subset'`: a `UrlTree` will be determined to be active if it
+     * is a subtree of the active route. That is, the active route may contain extra
+     * segments, but must at least have all the segements of the `UrlTree` in question.
+     */
+    paths: 'exact' | 'subset';
+    /**
+     * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+     * - `'ignored'`: the fragments will not be compared when determining if a
+     * `UrlTree` is active.
+     */
+    fragment: 'exact' | 'ignored';
+}
 
 /**
  *
@@ -2209,8 +2257,22 @@ export declare class Router {
     serializeUrl(url: UrlTree): string;
     /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
-    /** Returns whether the url is activated */
+    /**
+     * Returns whether the url is activated.
+     *
+     * @deprecated
+     * Use `IsActiveUrlTreeOptions` instead.
+     *
+     * - The equivalent `IsActiveUrlTreeOptions` for `true` is
+     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+     * - The equivalent for `false` is
+     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+     */
     isActive(url: string | UrlTree, exact: boolean): boolean;
+    /**
+     * Returns whether the url is activated.
+     */
+    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
     private processNavigations;
     private scheduleNavigation;
@@ -2543,9 +2605,16 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private routerEventsSubscription;
     private linkInputChangesSubscription?;
     readonly isActive: boolean;
+    /**
+     * Options to configure how to determine if the router link is active.
+     *
+     * These options are passed to the `Router.isActive()` function.
+     *
+     * @see Router.isActive
+     */
     routerLinkActiveOptions: {
         exact: boolean;
-    };
+    } | IsActiveMatchOptions;
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
