@@ -15,7 +15,7 @@ import { ChildrenOutletContexts } from './router_outlet_context';
 import { ActivatedRoute, RouterState, RouterStateSnapshot } from './router_state';
 import { Params } from './shared';
 import { UrlHandlingStrategy } from './url_handling_strategy';
-import { UrlSerializer, UrlTree } from './url_tree';
+import { IsActiveMatchOptions, UrlSerializer, UrlTree } from './url_tree';
 import { Checks } from './utils/preactivation';
 import * as i0 from "@angular/core";
 /**
@@ -289,6 +289,16 @@ export declare type NavigationTransition = {
     guardsResult: boolean | UrlTree | null;
 };
 /**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = true).
+ */
+export declare const exactMatchOptions: IsActiveMatchOptions;
+/**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = false).
+ */
+export declare const subsetMatchOptions: IsActiveMatchOptions;
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -548,8 +558,22 @@ export declare class Router {
     serializeUrl(url: UrlTree): string;
     /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
-    /** Returns whether the url is activated */
+    /**
+     * Returns whether the url is activated.
+     *
+     * @deprecated
+     * Use `IsActiveUrlTreeOptions` instead.
+     *
+     * - The equivalent `IsActiveUrlTreeOptions` for `true` is
+     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+     * - The equivalent for `false` is
+     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+     */
     isActive(url: string | UrlTree, exact: boolean): boolean;
+    /**
+     * Returns whether the url is activated.
+     */
+    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
     private processNavigations;
     private scheduleNavigation;

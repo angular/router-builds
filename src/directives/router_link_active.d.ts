@@ -7,6 +7,7 @@
  */
 import { AfterContentInit, ChangeDetectorRef, ElementRef, OnChanges, OnDestroy, QueryList, Renderer2, SimpleChanges } from '@angular/core';
 import { Router } from '../router';
+import { IsActiveMatchOptions } from '../url_tree';
 import { RouterLink, RouterLinkWithHref } from './router_link';
 import * as i0 from "@angular/core";
 /**
@@ -81,9 +82,16 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private routerEventsSubscription;
     private linkInputChangesSubscription?;
     readonly isActive: boolean;
+    /**
+     * Options to configure how to determine if the router link is active.
+     *
+     * These options are passed to the `Router.isActive()` function.
+     *
+     * @see Router.isActive
+     */
     routerLinkActiveOptions: {
         exact: boolean;
-    };
+    } | IsActiveMatchOptions;
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;

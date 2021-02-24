@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.2+6.sha-29d8a0a
+ * @license Angular v12.0.0-next.2+7.sha-6c05c80
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -592,55 +592,69 @@ function wrapIntoObservable(value) {
 function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
-function containsTree(container, containee, exact) {
-    if (exact) {
-        return equalQueryParams(container.queryParams, containee.queryParams) &&
-            equalSegmentGroups(container.root, containee.root);
-    }
-    return containsQueryParams(container.queryParams, containee.queryParams) &&
-        containsSegmentGroup(container.root, containee.root);
+const pathCompareMap = {
+    'exact': equalSegmentGroups,
+    'subset': containsSegmentGroup,
+};
+const paramCompareMap = {
+    'exact': equalParams,
+    'subset': containsParams,
+    'ignored': () => true,
+};
+function containsTree(container, containee, options) {
+    return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) &&
+        paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) &&
+        !(options.fragment === 'exact' && container.fragment !== containee.fragment);
 }
-function equalQueryParams(container, containee) {
+function equalParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return shallowEqual(container, containee);
 }
-function equalSegmentGroups(container, containee) {
+function equalSegmentGroups(container, containee, matrixParams) {
     if (!equalPath(container.segments, containee.segments))
         return false;
+    if (!matrixParamsMatch(container.segments, containee.segments, matrixParams)) {
+        return false;
+    }
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (const c in containee.children) {
         if (!container.children[c])
             return false;
-        if (!equalSegmentGroups(container.children[c], containee.children[c]))
+        if (!equalSegmentGroups(container.children[c], containee.children[c], matrixParams))
             return false;
     }
     return true;
 }
-function containsQueryParams(container, containee) {
+function containsParams(container, containee) {
     return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(key => equalArraysOrString(container[key], containee[key]));
 }
-function containsSegmentGroup(container, containee) {
-    return containsSegmentGroupHelper(container, containee, containee.segments);
+function containsSegmentGroup(container, containee, matrixParams) {
+    return containsSegmentGroupHelper(container, containee, containee.segments, matrixParams);
 }
-function containsSegmentGroupHelper(container, containee, containeePaths) {
+function containsSegmentGroupHelper(container, containee, containeePaths, matrixParams) {
     if (container.segments.length > containeePaths.length) {
         const current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
             return false;
+        if (!matrixParamsMatch(current, containeePaths, matrixParams))
+            return false;
         return true;
     }
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
+        if (!matrixParamsMatch(container.segments, containeePaths, matrixParams))
+            return false;
         for (const c in containee.children) {
             if (!container.children[c])
                 return false;
-            if (!containsSegmentGroup(container.children[c], containee.children[c]))
+            if (!containsSegmentGroup(container.children[c], containee.children[c], matrixParams)) {
                 return false;
+            }
         }
         return true;
     }
@@ -649,10 +663,17 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         const next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
+        if (!matrixParamsMatch(container.segments, current, matrixParams))
+            return false;
         if (!container.children[PRIMARY_OUTLET])
             return false;
-        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next, matrixParams);
     }
+}
+function matrixParamsMatch(containerPaths, containeePaths, options) {
+    return containeePaths.every((containeeSegment, i) => {
+        return paramCompareMap[options](containerPaths[i].parameters, containeeSegment.parameters);
+    });
 }
 /**
  * @description
@@ -3971,6 +3992,26 @@ function defaultRouterHook(snapshot, runExtras) {
     return of(null);
 }
 /**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = true).
+ */
+const exactMatchOptions = {
+    paths: 'exact',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'exact'
+};
+/**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = false).
+ */
+const subsetMatchOptions = {
+    paths: 'subset',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'subset'
+};
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -4659,13 +4700,22 @@ class Router {
         }
         return urlTree;
     }
-    /** Returns whether the url is activated */
-    isActive(url, exact) {
+    isActive(url, matchOptions) {
+        let options;
+        if (matchOptions === true) {
+            options = Object.assign({}, exactMatchOptions);
+        }
+        else if (matchOptions === false) {
+            options = Object.assign({}, subsetMatchOptions);
+        }
+        else {
+            options = matchOptions;
+        }
         if (isUrlTree(url)) {
-            return containsTree(this.currentUrlTree, url, exact);
+            return containsTree(this.currentUrlTree, url, options);
         }
         const urlTree = this.parseUrl(url);
-        return containsTree(this.currentUrlTree, urlTree, exact);
+        return containsTree(this.currentUrlTree, urlTree, options);
     }
     removeEmptyProps(params) {
         return Object.keys(params).reduce((result, key) => {
@@ -5176,6 +5226,13 @@ class RouterLinkActive {
         this.linkWithHref = linkWithHref;
         this.classes = [];
         this.isActive = false;
+        /**
+         * Options to configure how to determine if the router link is active.
+         *
+         * These options are passed to the `Router.isActive()` function.
+         *
+         * @see Router.isActive
+         */
         this.routerLinkActiveOptions = { exact: false };
         this.routerEventsSubscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
@@ -5237,7 +5294,11 @@ class RouterLinkActive {
         });
     }
     isLinkActive(router) {
-        return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
+        const options = 'paths' in this.routerLinkActiveOptions ?
+            this.routerLinkActiveOptions :
+            // While the types should disallow `undefined` here, it's possible without strict inputs
+            (this.routerLinkActiveOptions.exact || false);
+        return (link) => router.isActive(link.urlTree, options);
     }
     hasActiveLinks() {
         const isActiveCheckFn = this.isLinkActive(this.router);
@@ -5834,7 +5895,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.2+6.sha-29d8a0a');
+const VERSION = new Version('12.0.0-next.2+7.sha-6c05c80');
 
 /**
  * @license

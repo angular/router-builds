@@ -7,7 +7,54 @@
  */
 import { ParamMap, Params } from './shared';
 export declare function createEmptyUrlTree(): UrlTree;
-export declare function containsTree(container: UrlTree, containee: UrlTree, exact: boolean): boolean;
+/**
+ * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
+ * for the current router state.
+ *
+ * @publicApi
+ * @see Router.isActive
+ */
+export interface IsActiveMatchOptions {
+    /**
+     * Defines the strategy for comparing the matrix parameters of two `UrlTree`s.
+     *
+     * The matrix parameter matching is dependent on the strategy for matching the
+     * segments. That is, if the `paths` option is set to `'subset'`, only
+     * the matrix parameters of the matching segments will be compared.
+     *
+     * - `'exact'`: Requires that matching segments also have exact matrix parameter
+     * matches.
+     * - `'subset'`: The matching segments in the router's active `UrlTree` may contain
+     * extra matrix parameters, but those that exist in the `UrlTree` in question must match.
+     * - `'ignored'`: When comparing `UrlTree`s, matrix params will be ignored.
+     */
+    matrixParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the query parameters of two `UrlTree`s.
+     *
+     * - `'exact'`: the query parameters must match exactly.
+     * - `'subset'`: the active `UrlTree` may contain extra parameters,
+     * but must match the key and value of any that exist in the `UrlTree` in question.
+     * - `'ignored'`: When comparing `UrlTree`s, query params will be ignored.
+     */
+    queryParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the `UrlSegment`s of the `UrlTree`s.
+     *
+     * - `'exact'`: all segments in each `UrlTree` must match.
+     * - `'subset'`: a `UrlTree` will be determined to be active if it
+     * is a subtree of the active route. That is, the active route may contain extra
+     * segments, but must at least have all the segements of the `UrlTree` in question.
+     */
+    paths: 'exact' | 'subset';
+    /**
+     * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+     * - `'ignored'`: the fragments will not be compared when determining if a
+     * `UrlTree` is active.
+     */
+    fragment: 'exact' | 'ignored';
+}
+export declare function containsTree(container: UrlTree, containee: UrlTree, options: IsActiveMatchOptions): boolean;
 /**
  * @description
  *
