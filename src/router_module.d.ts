@@ -343,22 +343,4 @@ export declare function getBootstrapListener(r: RouterInitializer): (bootstrappe
  * @publicApi
  */
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
-export declare function provideRouterInitializer(): (typeof RouterInitializer | {
-    provide: InjectionToken<(() => void)[]>;
-    multi: boolean;
-    useFactory: typeof getAppInitializer;
-    deps: (typeof RouterInitializer)[];
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: typeof getBootstrapListener;
-    deps: (typeof RouterInitializer)[];
-    multi?: undefined;
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
-    multi: boolean;
-    useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory?: undefined;
-    deps?: undefined;
-})[];
+export declare function provideRouterInitializer(): ReadonlyArray<Provider>;
