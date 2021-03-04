@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.3+11.sha-bf158e7
+ * @license Angular v12.0.0-next.3+12.sha-ca721c2
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3452,25 +3452,7 @@ export declare function ɵangular_packages_router_router_i(r: ɵangular_packages
 
 export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): (bootstrappedComponentRef: ComponentRef<any>) => void;
 
-export declare function ɵangular_packages_router_router_k(): (typeof ɵangular_packages_router_router_h | {
-    provide: InjectionToken<(() => void)[]>;
-    multi: boolean;
-    useFactory: typeof ɵangular_packages_router_router_i;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: typeof ɵangular_packages_router_router_j;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    multi?: undefined;
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
-    multi: boolean;
-    useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory?: undefined;
-    deps?: undefined;
-})[];
+export declare function ɵangular_packages_router_router_k(): ReadonlyArray<Provider>;
 
 
 export declare class ɵangular_packages_router_router_m<T> {
