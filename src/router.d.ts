@@ -289,7 +289,7 @@ export declare type NavigationTransition = {
     guardsResult: boolean | UrlTree | null;
 };
 /**
- * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
  * (exact = true).
  */
 export declare const exactMatchOptions: IsActiveMatchOptions;
