@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.3+33.sha-1735430
+ * @license Angular v12.0.0-next.3+36.sha-03d47d5
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2976,7 +2976,7 @@
         return RouterOutlet;
     }());
     RouterOutlet.ɵfac = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵɵdirectiveInject(ChildrenOutletContexts), i0.ɵɵdirectiveInject(i0.ViewContainerRef), i0.ɵɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵɵinjectAttribute('name'), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef)); };
-    RouterOutlet.ɵdir = i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    RouterOutlet.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterOutlet, [{
                 type: i0.Directive,
@@ -3034,7 +3034,7 @@
         return ɵEmptyOutletComponent;
     }());
     ɵEmptyOutletComponent.ɵfac = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
-    ɵEmptyOutletComponent.ɵcmp = i0.ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) {
+    ɵEmptyOutletComponent.ɵcmp = /*@__PURE__*/ i0.ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵelement(0, "router-outlet");
             }
@@ -5419,7 +5419,7 @@
         return Router;
     }());
     Router.ɵfac = function Router_Factory(t) { i0.ɵɵinvalidFactory(); };
-    Router.ɵprov = i0.ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
+    Router.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(Router, [{
                 type: i0.Injectable
@@ -5595,7 +5595,7 @@
         return RouterLink;
     }());
     RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵinjectAttribute('tabindex'), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ElementRef)); };
-    RouterLink.ɵdir = i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) {
+    RouterLink.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLink_click_HostBindingHandler() { return ctx.onClick(); });
             }
@@ -5723,7 +5723,7 @@
         return RouterLinkWithHref;
     }());
     RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(ActivatedRoute), i0.ɵɵdirectiveInject(i3.LocationStrategy)); };
-    RouterLinkWithHref.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) {
+    RouterLinkWithHref.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.shiftKey, $event.altKey, $event.metaKey); });
             }
@@ -5930,7 +5930,7 @@
         return RouterLinkActive;
     }());
     RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
-    RouterLinkActive.ɵdir = i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) {
+    RouterLinkActive.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) {
             if (rf & 1) {
                 i0.ɵɵcontentQuery(dirIndex, RouterLink, 1);
                 i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 1);
@@ -6097,7 +6097,7 @@
         return RouterPreloader;
     }());
     RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(i0.ɵɵinject(Router), i0.ɵɵinject(i0.NgModuleFactoryLoader), i0.ɵɵinject(i0.Compiler), i0.ɵɵinject(i0.Injector), i0.ɵɵinject(PreloadingStrategy)); };
-    RouterPreloader.ɵprov = i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
+    RouterPreloader.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterPreloader, [{
                 type: i0.Injectable
@@ -6184,7 +6184,7 @@
         return RouterScroller;
     }());
     RouterScroller.ɵfac = function RouterScroller_Factory(t) { i0.ɵɵinvalidFactory(); };
-    RouterScroller.ɵprov = i0.ɵɵdefineInjectable({ token: RouterScroller, factory: RouterScroller.ɵfac });
+    RouterScroller.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: RouterScroller, factory: RouterScroller.ɵfac });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterScroller, [{
                 type: i0.Injectable
@@ -6331,8 +6331,8 @@
         };
         return RouterModule;
     }());
-    RouterModule.ɵmod = i0.ɵɵdefineNgModule({ type: RouterModule });
-    RouterModule.ɵinj = i0.ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.ɵɵinject(ROUTER_FORROOT_GUARD, 8), i0.ɵɵinject(Router, 8)); } });
+    RouterModule.ɵmod = /*@__PURE__*/ i0.ɵɵdefineNgModule({ type: RouterModule });
+    RouterModule.ɵinj = /*@__PURE__*/ i0.ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.ɵɵinject(ROUTER_FORROOT_GUARD, 8), i0.ɵɵinject(Router, 8)); } });
     (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterModule, [{
@@ -6510,7 +6510,7 @@
         return RouterInitializer;
     }());
     RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(i0.ɵɵinject(i0.Injector)); };
-    RouterInitializer.ɵprov = i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
+    RouterInitializer.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterInitializer, [{
                 type: i0.Injectable
@@ -6553,7 +6553,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.3+33.sha-1735430');
+    var VERSION = new i0.Version('12.0.0-next.3+36.sha-03d47d5');
 
     /**
      * @license

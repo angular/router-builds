@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.3+33.sha-1735430
+ * @license Angular v12.0.0-next.3+36.sha-03d47d5
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -79,7 +79,7 @@ class SpyNgModuleFactoryLoader {
     }
 }
 SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
-SpyNgModuleFactoryLoader.ɵprov = ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
+SpyNgModuleFactoryLoader.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
         type: Injectable
     }], function () { return [{ type: Compiler }]; }, null); })();
@@ -147,8 +147,8 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵmod = ɵɵdefineNgModule({ type: RouterTestingModule });
-RouterTestingModule.ɵinj = ɵɵdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
+RouterTestingModule.ɵmod = /*@__PURE__*/ ɵɵdefineNgModule({ type: RouterTestingModule });
+RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ factory: function RouterTestingModule_Factory(t) { return new (t || RouterTestingModule)(); }, providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
         { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {

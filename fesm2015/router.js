@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.3+33.sha-1735430
+ * @license Angular v12.0.0-next.3+36.sha-03d47d5
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2499,7 +2499,7 @@ class RouterOutlet {
     }
 }
 RouterOutlet.ɵfac = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(ɵɵdirectiveInject(ChildrenOutletContexts), ɵɵdirectiveInject(ViewContainerRef), ɵɵdirectiveInject(ComponentFactoryResolver), ɵɵinjectAttribute('name'), ɵɵdirectiveInject(ChangeDetectorRef)); };
-RouterOutlet.ɵdir = ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+RouterOutlet.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterOutlet, [{
         type: Directive,
         args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
@@ -2549,7 +2549,7 @@ class OutletInjector {
 class ɵEmptyOutletComponent {
 }
 ɵEmptyOutletComponent.ɵfac = function ɵEmptyOutletComponent_Factory(t) { return new (t || ɵEmptyOutletComponent)(); };
-ɵEmptyOutletComponent.ɵcmp = ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
+ɵEmptyOutletComponent.ɵcmp = /*@__PURE__*/ ɵɵdefineComponent({ type: ɵEmptyOutletComponent, selectors: [["ng-component"]], decls: 1, vars: 0, template: function ɵEmptyOutletComponent_Template(rf, ctx) { if (rf & 1) {
         ɵɵelement(0, "router-outlet");
     } }, directives: [RouterOutlet], encapsulation: 2 });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(ɵEmptyOutletComponent, [{
@@ -4823,7 +4823,7 @@ class Router {
     }
 }
 Router.ɵfac = function Router_Factory(t) { ɵɵinvalidFactory(); };
-Router.ɵprov = ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
+Router.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(Router, [{
         type: Injectable
     }], function () { return [{ type: Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: Location }, { type: Injector }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: undefined }]; }, null); })();
@@ -4995,7 +4995,7 @@ class RouterLink {
     }
 }
 RouterLink.ɵfac = function RouterLink_Factory(t) { return new (t || RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute('tabindex'), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef)); };
-RouterLink.ɵdir = ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
+RouterLink.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLink, selectors: [["", "routerLink", "", 5, "a", 5, "area"]], hostBindings: function RouterLink_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLink_click_HostBindingHandler() { return ctx.onClick(); });
     } }, inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterLink, [{
@@ -5107,7 +5107,7 @@ class RouterLinkWithHref {
     }
 }
 RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (t || RouterLinkWithHref)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵdirectiveInject(LocationStrategy)); };
-RouterLinkWithHref.ɵdir = ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
+RouterLinkWithHref.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.shiftKey, $event.altKey, $event.metaKey); });
     } if (rf & 2) {
         ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
@@ -5308,7 +5308,7 @@ class RouterLinkActive {
     }
 }
 RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8), ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
-RouterLinkActive.ɵdir = ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
+RouterLinkActive.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
         ɵɵcontentQuery(dirIndex, RouterLink, 1);
         ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 1);
     } if (rf & 2) {
@@ -5452,7 +5452,7 @@ class RouterPreloader {
     }
 }
 RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
-RouterPreloader.ɵprov = ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
+RouterPreloader.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
     }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null); })();
@@ -5540,7 +5540,7 @@ class RouterScroller {
     }
 }
 RouterScroller.ɵfac = function RouterScroller_Factory(t) { ɵɵinvalidFactory(); };
-RouterScroller.ɵprov = ɵɵdefineInjectable({ token: RouterScroller, factory: RouterScroller.ɵfac });
+RouterScroller.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: RouterScroller, factory: RouterScroller.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterScroller, [{
         type: Injectable
     }], function () { return [{ type: Router }, { type: ViewportScroller }, { type: undefined }]; }, null); })();
@@ -5683,8 +5683,8 @@ class RouterModule {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     }
 }
-RouterModule.ɵmod = ɵɵdefineNgModule({ type: RouterModule });
-RouterModule.ɵinj = ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
+RouterModule.ɵmod = /*@__PURE__*/ ɵɵdefineNgModule({ type: RouterModule });
+RouterModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); } });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
@@ -5854,7 +5854,7 @@ class RouterInitializer {
     }
 }
 RouterInitializer.ɵfac = function RouterInitializer_Factory(t) { return new (t || RouterInitializer)(ɵɵinject(Injector)); };
-RouterInitializer.ɵprov = ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
+RouterInitializer.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: RouterInitializer, factory: RouterInitializer.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterInitializer, [{
         type: Injectable
     }], function () { return [{ type: Injector }]; }, null); })();
@@ -5895,7 +5895,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.3+33.sha-1735430');
+const VERSION = new Version('12.0.0-next.3+36.sha-03d47d5');
 
 /**
  * @license
