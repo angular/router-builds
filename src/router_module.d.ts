@@ -91,6 +91,7 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
+    static ɵfac: i0.ɵɵFactoryDef<RouterModule, [{ optional: true; }, { optional: true; }]>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDef<RouterModule>;
 }

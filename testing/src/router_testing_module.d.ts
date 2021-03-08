@@ -104,6 +104,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
+    static ɵfac: i0.ɵɵFactoryDef<RouterTestingModule, never>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
     static ɵinj: i0.ɵɵInjectorDef<RouterTestingModule>;
 }

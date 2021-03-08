@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.3+40.sha-bdf13fe
+ * @license Angular v12.0.0-next.3+42.sha-2ebe2bc
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6331,8 +6331,9 @@
         };
         return RouterModule;
     }());
+    RouterModule.ɵfac = function RouterModule_Factory(t) { return new (t || RouterModule)(i0.ɵɵinject(ROUTER_FORROOT_GUARD, 8), i0.ɵɵinject(Router, 8)); };
     RouterModule.ɵmod = /*@__PURE__*/ i0.ɵɵdefineNgModule({ type: RouterModule });
-    RouterModule.ɵinj = /*@__PURE__*/ i0.ɵɵdefineInjector({ factory: function RouterModule_Factory(t) { return new (t || RouterModule)(i0.ɵɵinject(ROUTER_FORROOT_GUARD, 8), i0.ɵɵinject(Router, 8)); } });
+    RouterModule.ɵinj = /*@__PURE__*/ i0.ɵɵdefineInjector({});
     (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterModule, [{
@@ -6553,7 +6554,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.3+40.sha-bdf13fe');
+    var VERSION = new i0.Version('12.0.0-next.3+42.sha-2ebe2bc');
 
     /**
      * @license
