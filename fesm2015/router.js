@@ -1,10 +1,10 @@
 /**
- * @license Angular v12.0.0-next.4+3.sha-4c79b8a
+ * @license Angular v12.0.0-next.4+4.sha-3c66b10
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
+import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
@@ -5716,12 +5716,14 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
     }
     assignExtraOptionsToRouter(opts, router);
     if (opts.enableTracing) {
-        const dom = ɵgetDOM();
         router.events.subscribe((e) => {
-            dom.logGroup(`Router Event: ${e.constructor.name}`);
-            dom.log(e.toString());
-            dom.log(e);
-            dom.logGroupEnd();
+            var _a, _b;
+            // tslint:disable:no-console
+            (_a = console.group) === null || _a === void 0 ? void 0 : _a.call(console, `Router Event: ${e.constructor.name}`);
+            console.log(e.toString());
+            console.log(e);
+            (_b = console.groupEnd) === null || _b === void 0 ? void 0 : _b.call(console);
+            // tslint:enable:no-console
         });
     }
     return router;
@@ -5863,7 +5865,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.4+3.sha-4c79b8a');
+const VERSION = new Version('12.0.0-next.4+4.sha-3c66b10');
 
 /**
  * @license

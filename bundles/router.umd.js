@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+3.sha-4c79b8a
+ * @license Angular v12.0.0-next.4+4.sha-3c66b10
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6355,12 +6355,14 @@
         }
         assignExtraOptionsToRouter(opts, router);
         if (opts.enableTracing) {
-            var dom_1 = common.ɵgetDOM();
             router.events.subscribe(function (e) {
-                dom_1.logGroup("Router Event: " + e.constructor.name);
-                dom_1.log(e.toString());
-                dom_1.log(e);
-                dom_1.logGroupEnd();
+                var _a, _b;
+                // tslint:disable:no-console
+                (_a = console.group) === null || _a === void 0 ? void 0 : _a.call(console, "Router Event: " + e.constructor.name);
+                console.log(e.toString());
+                console.log(e);
+                (_b = console.groupEnd) === null || _b === void 0 ? void 0 : _b.call(console);
+                // tslint:enable:no-console
             });
         }
         return router;
@@ -6504,7 +6506,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.0-next.4+3.sha-4c79b8a');
+    var VERSION = new core.Version('12.0.0-next.4+4.sha-3c66b10');
 
     /**
      * @license
