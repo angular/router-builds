@@ -166,8 +166,8 @@ export class RouterLinkActive {
 }
 RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(i1.Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(i2.RouterLink, 8), i0.ɵɵdirectiveInject(i2.RouterLinkWithHref, 8)); };
 RouterLinkActive.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
-        i0.ɵɵcontentQuery(dirIndex, RouterLink, 1);
-        i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 1);
+        i0.ɵɵcontentQuery(dirIndex, RouterLink, 5);
+        i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 5);
     } if (rf & 2) {
         let _t;
         i0.ɵɵqueryRefresh(_t = i0.ɵɵloadQuery()) && (ctx.links = _t);

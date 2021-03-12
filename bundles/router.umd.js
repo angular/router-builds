@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+11.sha-012a2b5
+ * @license Angular v12.0.0-next.4+12.sha-7096246
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5932,8 +5932,8 @@
     RouterLinkActive.ɵfac = function RouterLinkActive_Factory(t) { return new (t || RouterLinkActive)(i0.ɵɵdirectiveInject(Router), i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.Renderer2), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(RouterLink, 8), i0.ɵɵdirectiveInject(RouterLinkWithHref, 8)); };
     RouterLinkActive.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterLinkActive, selectors: [["", "routerLinkActive", ""]], contentQueries: function RouterLinkActive_ContentQueries(rf, ctx, dirIndex) {
             if (rf & 1) {
-                i0.ɵɵcontentQuery(dirIndex, RouterLink, 1);
-                i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 1);
+                i0.ɵɵcontentQuery(dirIndex, RouterLink, 5);
+                i0.ɵɵcontentQuery(dirIndex, RouterLinkWithHref, 5);
             }
             if (rf & 2) {
                 var _t = void 0;
@@ -6556,7 +6556,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.4+11.sha-012a2b5');
+    var VERSION = new i0.Version('12.0.0-next.4+12.sha-7096246');
 
     /**
      * @license
