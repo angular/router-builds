@@ -1,11 +1,11 @@
 /**
- * @license Angular v12.0.0-next.4+26.sha-cc75e1d
+ * @license Angular v12.0.0-next.4+34.sha-1a9f526
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
@@ -5686,7 +5686,6 @@ class RouterModule {
 RouterModule.ɵfac = function RouterModule_Factory(t) { return new (t || RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8), ɵɵinject(Router, 8)); };
 RouterModule.ɵmod = /*@__PURE__*/ ɵɵdefineNgModule({ type: RouterModule });
 RouterModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({});
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterModule, [{
         type: NgModule,
         args: [{
@@ -5702,6 +5701,7 @@ RouterModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({});
             }] }, { type: Router, decorators: [{
                 type: Optional
             }] }]; }, null); })();
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterModule, { declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] }); })();
 function createRouterScroller(router, viewportScroller, config) {
     if (config.scrollOffset) {
         viewportScroller.setOffset(config.scrollOffset);
@@ -5898,7 +5898,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.4+26.sha-cc75e1d');
+const VERSION = new Version('12.0.0-next.4+34.sha-1a9f526');
 
 /**
  * @license

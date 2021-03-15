@@ -1,12 +1,12 @@
 /**
- * @license Angular v12.0.0-next.4+26.sha-cc75e1d
+ * @license Angular v12.0.0-next.4+34.sha-1a9f526
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
-import { ɵɵinject, Compiler, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, ɵɵsetNgModuleScope, NgModule } from '@angular/core';
+import { ɵɵinject, Compiler, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, NgModule, ɵɵsetNgModuleScope } from '@angular/core';
 import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading, RouterModule } from '@angular/router';
 
 /**
@@ -162,7 +162,6 @@ RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [
         },
         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
     ], imports: [RouterModule] });
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterTestingModule, [{
         type: NgModule,
         args: [{
@@ -182,6 +181,7 @@ RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [
                 ]
             }]
     }], null, null); })();
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(RouterTestingModule, { exports: [RouterModule] }); })();
 
 /**
  * @license

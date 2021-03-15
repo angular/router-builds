@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+26.sha-cc75e1d
+ * @license Angular v12.0.0-next.4+34.sha-1a9f526
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -478,7 +478,6 @@
             },
             { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
         ], imports: [router.RouterModule] });
-    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] }); })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterTestingModule, [{
                 type: i0.NgModule,
@@ -500,6 +499,7 @@
                     }]
             }], null, null);
     })();
+    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(RouterTestingModule, { exports: [router.RouterModule] }); })();
 
     /**
      * @license
