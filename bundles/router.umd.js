@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+48.sha-eb74a96
+ * @license Angular v12.0.0-next.4+50.sha-fa04894
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -29,11 +29,13 @@
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
+                if (Object.prototype.hasOwnProperty.call(b, p))
                     d[p] = b[p]; };
         return extendStatics(d, b);
     };
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -176,10 +178,10 @@
             k2 = k;
         o[k2] = m[k];
     });
-    function __exportStar(m, exports) {
+    function __exportStar(m, o) {
         for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                __createBinding(exports, m, p);
+            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+                __createBinding(o, m, p);
     }
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -219,11 +221,13 @@
         }
         return ar;
     }
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++)
             s += arguments[i].length;
@@ -232,7 +236,11 @@
                 r[k] = a[j];
         return r;
     }
-    ;
+    function __spreadArray(to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
@@ -289,7 +297,7 @@
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
+                if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
                     __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
@@ -873,8 +881,8 @@
         if (Array.isArray(a) && Array.isArray(b)) {
             if (a.length !== b.length)
                 return false;
-            var aSorted = __spread(a).sort();
-            var bSorted_1 = __spread(b).sort();
+            var aSorted = __spreadArray([], __read(a)).sort();
+            var bSorted_1 = __spreadArray([], __read(b)).sort();
             return aSorted.every(function (val, index) { return bSorted_1[index] === val; });
         }
         else {
@@ -2238,14 +2246,14 @@
                     forEach(cmd.outlets, function (commands, name) {
                         outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
                     });
-                    return __spread(res, [{ outlets: outlets_1 }]);
+                    return __spreadArray(__spreadArray([], __read(res)), [{ outlets: outlets_1 }]);
                 }
                 if (cmd.segmentPath) {
-                    return __spread(res, [cmd.segmentPath]);
+                    return __spreadArray(__spreadArray([], __read(res)), [cmd.segmentPath]);
                 }
             }
             if (!(typeof cmd === 'string')) {
-                return __spread(res, [cmd]);
+                return __spreadArray(__spreadArray([], __read(res)), [cmd]);
             }
             if (cmdIdx === 0) {
                 cmd.split('/').forEach(function (urlPart, partIndex) {
@@ -2264,7 +2272,7 @@
                 });
                 return res;
             }
-            return __spread(res, [cmd]);
+            return __spreadArray(__spreadArray([], __read(res)), [cmd]);
         }, []);
         return new Navigation(isAbsolute, numberOfDoubleDots, res);
     }
@@ -3145,7 +3153,7 @@
      */
     function sortByMatchingOutlets(routes, outletName) {
         var sortedConfig = routes.filter(function (r) { return getOutlet(r) === outletName; });
-        sortedConfig.push.apply(sortedConfig, __spread(routes.filter(function (r) { return getOutlet(r) !== outletName; })));
+        sortedConfig.push.apply(sortedConfig, __spreadArray([], __read(routes.filter(function (r) { return getOutlet(r) !== outletName; }))));
         return sortedConfig;
     }
 
@@ -4105,7 +4113,7 @@
                         // outlet, return `null`.
                         return null;
                     }
-                    children.push.apply(children, __spread(outletChildren));
+                    children.push.apply(children, __spreadArray([], __read(outletChildren)));
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -4233,14 +4241,14 @@
         var e_3, _a;
         var result = [];
         var _loop_1 = function (node) {
-            var _a;
+            var _b;
             if (!hasEmptyPathConfig(node)) {
                 result.push(node);
                 return "continue";
             }
             var duplicateEmptyPathNode = result.find(function (resultNode) { return node.value.routeConfig === resultNode.value.routeConfig; });
             if (duplicateEmptyPathNode !== undefined) {
-                (_a = duplicateEmptyPathNode.children).push.apply(_a, __spread(node.children));
+                (_b = duplicateEmptyPathNode.children).push.apply(_b, __spreadArray([], __read(node.children)));
             }
             else {
                 result.push(node);
@@ -5868,7 +5876,7 @@
             var _this = this;
             var _a;
             (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
-            var allLinkChanges = __spread(this.links.toArray(), this.linksWithHrefs.toArray(), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
+            var allLinkChanges = __spreadArray(__spreadArray(__spreadArray([], __read(this.links.toArray())), __read(this.linksWithHrefs.toArray())), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
                 .map(function (link) { return link.onChanges; });
             this.linkInputChangesSubscription = rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function (link) {
                 if (_this.isActive !== _this.isLinkActive(_this.router)(link)) {
@@ -6556,7 +6564,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.4+48.sha-eb74a96');
+    var VERSION = new i0.Version('12.0.0-next.4+50.sha-fa04894');
 
     /**
      * @license
