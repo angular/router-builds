@@ -1,13 +1,13 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, isDevMode, NgModuleRef, Component, InjectionToken, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
-import { of, from, BehaviorSubject, combineLatest, Observable, EmptyError, defer, EMPTY, Subject } from 'rxjs';
-import { map, concatAll, last as last$1, switchMap, take, startWith, scan, filter, catchError, first, mergeMap, tap, concatMap, takeLast, finalize, mergeAll } from 'rxjs/operators';
+import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
+import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
+import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -227,7 +227,7 @@ class GuardsCheckEnd extends RouterEvent {
     }
 }
 /**
- * An event triggered at the the start of the Resolve phase of routing.
+ * An event triggered at the start of the Resolve phase of routing.
  *
  * Runs in the "resolve" phase whether or not there is anything to resolve.
  * In future, may change to only run when there are things to be resolved.
@@ -513,12 +513,10 @@ function shallowEqualArrays(a, b) {
     return true;
 }
 function shallowEqual(a, b) {
-    // Casting Object.keys return values to include `undefined` as there are some cases
-    // in IE 11 where this can happen. Cannot provide a test because the behavior only
-    // exists in certain circumstances in IE 11, therefore doing this cast ensures the
-    // logic is correct for when this edge case is hit.
-    const k1 = Object.keys(a);
-    const k2 = Object.keys(b);
+    // While `undefined` should never be possible, it would sometimes be the case in IE 11
+    // and pre-chromium Edge. The check below accounts for this edge case.
+    const k1 = a ? Object.keys(a) : undefined;
+    const k2 = b ? Object.keys(b) : undefined;
     if (!k1 || !k2 || k1.length != k2.length) {
         return false;
     }
@@ -571,28 +569,6 @@ function forEach(map, callback) {
         }
     }
 }
-function waitForMap(obj, fn) {
-    if (Object.keys(obj).length === 0) {
-        return of({});
-    }
-    const waitHead = [];
-    const waitTail = [];
-    const res = {};
-    forEach(obj, (a, k) => {
-        const mapped = fn(k, a).pipe(map((r) => res[k] = r));
-        if (k === PRIMARY_OUTLET) {
-            waitHead.push(mapped);
-        }
-        else {
-            waitTail.push(mapped);
-        }
-    });
-    // Closure compiler has problem with using spread operator here. So we use "Array.concat".
-    // Note that we also need to cast the new promise because TypeScript cannot infer the type
-    // when calling the "of" function through "Function.apply"
-    return of.apply(null, waitHead.concat(waitTail))
-        .pipe(concatAll(), last$1(), map(() => res));
-}
 function wrapIntoObservable(value) {
     if (ɵisObservable(value)) {
         return value;
@@ -616,55 +592,69 @@ function wrapIntoObservable(value) {
 function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
-function containsTree(container, containee, exact) {
-    if (exact) {
-        return equalQueryParams(container.queryParams, containee.queryParams) &&
-            equalSegmentGroups(container.root, containee.root);
-    }
-    return containsQueryParams(container.queryParams, containee.queryParams) &&
-        containsSegmentGroup(container.root, containee.root);
+const pathCompareMap = {
+    'exact': equalSegmentGroups,
+    'subset': containsSegmentGroup,
+};
+const paramCompareMap = {
+    'exact': equalParams,
+    'subset': containsParams,
+    'ignored': () => true,
+};
+function containsTree(container, containee, options) {
+    return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) &&
+        paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) &&
+        !(options.fragment === 'exact' && container.fragment !== containee.fragment);
 }
-function equalQueryParams(container, containee) {
+function equalParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return shallowEqual(container, containee);
 }
-function equalSegmentGroups(container, containee) {
+function equalSegmentGroups(container, containee, matrixParams) {
     if (!equalPath(container.segments, containee.segments))
         return false;
+    if (!matrixParamsMatch(container.segments, containee.segments, matrixParams)) {
+        return false;
+    }
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (const c in containee.children) {
         if (!container.children[c])
             return false;
-        if (!equalSegmentGroups(container.children[c], containee.children[c]))
+        if (!equalSegmentGroups(container.children[c], containee.children[c], matrixParams))
             return false;
     }
     return true;
 }
-function containsQueryParams(container, containee) {
+function containsParams(container, containee) {
     return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(key => equalArraysOrString(container[key], containee[key]));
 }
-function containsSegmentGroup(container, containee) {
-    return containsSegmentGroupHelper(container, containee, containee.segments);
+function containsSegmentGroup(container, containee, matrixParams) {
+    return containsSegmentGroupHelper(container, containee, containee.segments, matrixParams);
 }
-function containsSegmentGroupHelper(container, containee, containeePaths) {
+function containsSegmentGroupHelper(container, containee, containeePaths, matrixParams) {
     if (container.segments.length > containeePaths.length) {
         const current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
             return false;
+        if (!matrixParamsMatch(current, containeePaths, matrixParams))
+            return false;
         return true;
     }
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
+        if (!matrixParamsMatch(container.segments, containeePaths, matrixParams))
+            return false;
         for (const c in containee.children) {
             if (!container.children[c])
                 return false;
-            if (!containsSegmentGroup(container.children[c], containee.children[c]))
+            if (!containsSegmentGroup(container.children[c], containee.children[c], matrixParams)) {
                 return false;
+            }
         }
         return true;
     }
@@ -673,10 +663,17 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         const next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
+        if (!matrixParamsMatch(container.segments, current, matrixParams))
+            return false;
         if (!container.children[PRIMARY_OUTLET])
             return false;
-        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next, matrixParams);
     }
+}
+function matrixParamsMatch(containerPaths, containeePaths, options) {
+    return containeePaths.every((containeeSegment, i) => {
+        return paramCompareMap[options](containerPaths[i].parameters, containeeSegment.parameters);
+    });
 }
 /**
  * @description
@@ -1480,7 +1477,25 @@ class ActivatedRouteSnapshot {
     constructor(
     /** The URL segments matched by this route */
     url, 
-    /** The matrix parameters scoped to this route */
+    /**
+     *  The matrix parameters scoped to this route.
+     *
+     *  You can compute all params (or data) in the router state or to get params outside
+     *  of an activated component by traversing the `RouterState` tree as in the following
+     *  example:
+     *  ```
+     *  collectRouteParams(router: Router) {
+     *    let params = {};
+     *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+     *    while (stack.length > 0) {
+     *      const route = stack.pop()!;
+     *      params = {...params, ...route.params};
+     *      stack.push(...route.children);
+     *    }
+     *    return params;
+     *  }
+     *  ```
+     */
     params, 
     /** The query parameters shared by all the routes */
     queryParams, 
@@ -1678,7 +1693,7 @@ function setFutureSnapshotsOfActivatedRoutes(curr, result) {
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return curr.children.map(child => {
         for (const p of prevState.children) {
-            if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
+            if (routeReuseStrategy.shouldReuseRoute(child.value, p.value.snapshot)) {
                 return createNode(routeReuseStrategy, child, p);
             }
         }
@@ -1713,6 +1728,13 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
 function isMatrixParams(command) {
     return typeof command === 'object' && command != null && !command.outlets && !command.segmentPath;
 }
+/**
+ * Determines if a given command has an `outlets` map. When we encounter a command
+ * with an outlets k/v map, we need to apply each outlet individually to the existing segment.
+ */
+function isCommandWithOutlets(command) {
+    return typeof command === 'object' && command != null && command.outlets;
+}
 function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
     let qp = {};
     if (queryParams) {
@@ -1745,7 +1767,7 @@ class Navigation {
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
             throw new Error('Root segment cannot have matrix parameters');
         }
-        const cmdWithOutlet = commands.find(c => typeof c === 'object' && c != null && c.outlets);
+        const cmdWithOutlet = commands.find(isCommandWithOutlets);
         if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
             throw new Error('{outlets:{}} has to be the last command');
         }
@@ -1835,14 +1857,8 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
     }
     return new Position(g, false, ci - dd);
 }
-function getPath(command) {
-    if (typeof command === 'object' && command != null && command.outlets) {
-        return command.outlets[PRIMARY_OUTLET];
-    }
-    return `${command}`;
-}
 function getOutlets(commands) {
-    if (typeof commands[0] === 'object' && commands[0] !== null && commands[0].outlets) {
+    if (isCommandWithOutlets(commands[0])) {
         return commands[0].outlets;
     }
     return { [PRIMARY_OUTLET]: commands };
@@ -1883,6 +1899,9 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
         const outlets = getOutlets(commands);
         const children = {};
         forEach(outlets, (commands, outlet) => {
+            if (typeof commands === 'string') {
+                commands = [commands];
+            }
             if (commands !== null) {
                 children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
             }
@@ -1903,7 +1922,14 @@ function prefixedWith(segmentGroup, startIndex, commands) {
         if (currentCommandIndex >= commands.length)
             return noMatch;
         const path = segmentGroup.segments[currentPathIndex];
-        const curr = getPath(commands[currentCommandIndex]);
+        const command = commands[currentCommandIndex];
+        // Do not try to consume command as part of the prefixing if it has outlets because it can
+        // contain outlets other than the one being processed. Consuming the outlets command would
+        // result in other outlets being ignored.
+        if (isCommandWithOutlets(command)) {
+            break;
+        }
+        const curr = `${command}`;
         const next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
         if (currentPathIndex > 0 && curr === undefined)
             break;
@@ -1925,19 +1951,19 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
     const paths = segmentGroup.segments.slice(0, startIndex);
     let i = 0;
     while (i < commands.length) {
-        if (typeof commands[i] === 'object' && commands[i] !== null &&
-            commands[i].outlets !== undefined) {
-            const children = createNewSegmentChildren(commands[i].outlets);
+        const command = commands[i];
+        if (isCommandWithOutlets(command)) {
+            const children = createNewSegmentChildren(command.outlets);
             return new UrlSegmentGroup(paths, children);
         }
         // if we start with an object literal, we need to reuse the path part from the segment
         if (i === 0 && isMatrixParams(commands[0])) {
             const p = segmentGroup.segments[startIndex];
-            paths.push(new UrlSegment(p.path, commands[0]));
+            paths.push(new UrlSegment(p.path, stringify(commands[0])));
             i++;
             continue;
         }
-        const curr = getPath(commands[i]);
+        const curr = isCommandWithOutlets(command) ? command.outlets[PRIMARY_OUTLET] : `${command}`;
         const next = (i < commands.length - 1) ? commands[i + 1] : null;
         if (curr && next && isMatrixParams(next)) {
             paths.push(new UrlSegment(curr, stringify(next)));
@@ -1953,6 +1979,9 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
 function createNewSegmentChildren(outlets) {
     const children = {};
     forEach(outlets, (commands, outlet) => {
+        if (typeof commands === 'string') {
+            commands = [commands];
+        }
         if (commands !== null) {
             children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
         }
@@ -2050,16 +2079,18 @@ class ActivateRoutes {
     }
     deactivateRouteAndOutlet(route, parentContexts) {
         const context = parentContexts.getContext(route.value.outlet);
-        if (context) {
-            const children = nodeChildrenAsMap(route);
-            const contexts = route.value.component ? context.children : parentContexts;
-            forEach(children, (v, k) => this.deactivateRouteAndItsChildren(v, contexts));
-            if (context.outlet) {
-                // Destroy the component
-                context.outlet.deactivate();
-                // Destroy the contexts for all the outlets that were in the component
-                context.children.onOutletDeactivated();
-            }
+        // The context could be `null` if we are on a componentless route but there may still be
+        // children that need deactivating.
+        const contexts = context && route.value.component ? context.children : parentContexts;
+        const children = nodeChildrenAsMap(route);
+        for (const childOutlet of Object.keys(children)) {
+            this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
+        }
+        if (context && context.outlet) {
+            // Destroy the component
+            context.outlet.deactivate();
+            // Destroy the contexts for all the outlets that were in the component
+            context.children.onOutletDeactivated();
         }
     }
     activateChildRoutes(futureNode, currNode, contexts) {
@@ -2115,9 +2146,6 @@ class ActivateRoutes {
                         // Activate the outlet when it has already been instantiated
                         // Otherwise it will get activated from its `ngOnInit` when instantiated
                         context.outlet.activateWith(future, cmpFactoryResolver);
-                    }
-                    else if (isDevMode() && console && console.warn) {
-                        console.warn(`A router outlet has not been instantiated during routes activation. URL Segment: '${future.snapshot._urlSegment}'`);
                     }
                     this.activateChildRoutes(futureNode, null, context.children);
                 }
@@ -2210,7 +2238,7 @@ function isCanDeactivate(guard) {
 const INITIAL_VALUE = Symbol('INITIAL_VALUE');
 function prioritizedGuardValue() {
     return switchMap(obs => {
-        return combineLatest(...obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
+        return combineLatest(obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
             .pipe(scan((acc, list) => {
             let isPending = false;
             return list.reduce((innerAcc, val, i) => {
@@ -2246,6 +2274,288 @@ function prioritizedGuardValue() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * This component is used internally within the router to be a placeholder when an empty
+ * router-outlet is needed. For example, with a config such as:
+ *
+ * `{path: 'parent', outlet: 'nav', children: [...]}`
+ *
+ * In order to render, there needs to be a component on this config, which will default
+ * to this `EmptyOutletComponent`.
+ */
+class ɵEmptyOutletComponent {
+}
+ɵEmptyOutletComponent.decorators = [
+    { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] }
+];
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+function validateConfig(config, parentPath = '') {
+    // forEach doesn't iterate undefined values
+    for (let i = 0; i < config.length; i++) {
+        const route = config[i];
+        const fullPath = getFullPath(parentPath, route);
+        validateNode(route, fullPath);
+    }
+}
+function validateNode(route, fullPath) {
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+        if (!route) {
+            throw new Error(`
+      Invalid configuration of route '${fullPath}': Encountered undefined route.
+      The reason might be an extra comma.
+
+      Example:
+      const routes: Routes = [
+        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+        { path: 'dashboard',  component: DashboardComponent },, << two commas
+        { path: 'detail/:id', component: HeroDetailComponent }
+      ];
+    `);
+        }
+        if (Array.isArray(route)) {
+            throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
+        }
+        if (!route.component && !route.children && !route.loadChildren &&
+            (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+            throw new Error(`Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
+        }
+        if (route.redirectTo && route.children) {
+            throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
+        }
+        if (route.redirectTo && route.loadChildren) {
+            throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
+        }
+        if (route.children && route.loadChildren) {
+            throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
+        }
+        if (route.redirectTo && route.component) {
+            throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
+        }
+        if (route.redirectTo && route.canActivate) {
+            throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and canActivate cannot be used together. Redirects happen before activation ` +
+                `so canActivate will never be executed.`);
+        }
+        if (route.path && route.matcher) {
+            throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
+        }
+        if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+            throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
+        }
+        if (route.path === void 0 && route.matcher === void 0) {
+            throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
+        }
+        if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+            throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
+        }
+        if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+            const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
+            throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
+        }
+        if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+            throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
+        }
+    }
+    if (route.children) {
+        validateConfig(route.children, fullPath);
+    }
+}
+function getFullPath(parentPath, currentRoute) {
+    if (!currentRoute) {
+        return parentPath;
+    }
+    if (!parentPath && !currentRoute.path) {
+        return '';
+    }
+    else if (parentPath && !currentRoute.path) {
+        return `${parentPath}/`;
+    }
+    else if (!parentPath && currentRoute.path) {
+        return currentRoute.path;
+    }
+    else {
+        return `${parentPath}/${currentRoute.path}`;
+    }
+}
+/**
+ * Makes a copy of the config and adds any default required properties.
+ */
+function standardizeConfig(r) {
+    const children = r.children && r.children.map(standardizeConfig);
+    const c = children ? Object.assign(Object.assign({}, r), { children }) : Object.assign({}, r);
+    if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
+        c.component = ɵEmptyOutletComponent;
+    }
+    return c;
+}
+/** Returns the `route.outlet` or PRIMARY_OUTLET if none exists. */
+function getOutlet(route) {
+    return route.outlet || PRIMARY_OUTLET;
+}
+/**
+ * Sorts the `routes` such that the ones with an outlet matching `outletName` come first.
+ * The order of the configs is otherwise preserved.
+ */
+function sortByMatchingOutlets(routes, outletName) {
+    const sortedConfig = routes.filter(r => getOutlet(r) === outletName);
+    sortedConfig.push(...routes.filter(r => getOutlet(r) !== outletName));
+    return sortedConfig;
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const noMatch = {
+    matched: false,
+    consumedSegments: [],
+    lastChild: 0,
+    parameters: {},
+    positionalParamSegments: {}
+};
+function match(segmentGroup, route, segments) {
+    var _a;
+    if (route.path === '') {
+        if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
+            return Object.assign({}, noMatch);
+        }
+        return {
+            matched: true,
+            consumedSegments: [],
+            lastChild: 0,
+            parameters: {},
+            positionalParamSegments: {}
+        };
+    }
+    const matcher = route.matcher || defaultUrlMatcher;
+    const res = matcher(segments, segmentGroup, route);
+    if (!res)
+        return Object.assign({}, noMatch);
+    const posParams = {};
+    forEach(res.posParams, (v, k) => {
+        posParams[k] = v.path;
+    });
+    const parameters = res.consumed.length > 0 ? Object.assign(Object.assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
+        posParams;
+    return {
+        matched: true,
+        consumedSegments: res.consumed,
+        lastChild: res.consumed.length,
+        // TODO(atscott): investigate combining parameters and positionalParamSegments
+        parameters,
+        positionalParamSegments: (_a = res.posParams) !== null && _a !== void 0 ? _a : {}
+    };
+}
+function split(segmentGroup, consumedSegments, slicedSegments, config, relativeLinkResolution = 'corrected') {
+    if (slicedSegments.length > 0 &&
+        containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments: [] };
+    }
+    if (slicedSegments.length === 0 &&
+        containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
+        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children, relativeLinkResolution));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments };
+    }
+    const s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+    s._sourceSegment = segmentGroup;
+    s._segmentIndexShift = consumedSegments.length;
+    return { segmentGroup: s, slicedSegments };
+}
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
+    const res = {};
+    for (const r of routes) {
+        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
+            const s = new UrlSegmentGroup([], {});
+            s._sourceSegment = segmentGroup;
+            if (relativeLinkResolution === 'legacy') {
+                s._segmentIndexShift = segmentGroup.segments.length;
+            }
+            else {
+                s._segmentIndexShift = consumedSegments.length;
+            }
+            res[getOutlet(r)] = s;
+        }
+    }
+    return Object.assign(Object.assign({}, children), res);
+}
+function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
+    const res = {};
+    res[PRIMARY_OUTLET] = primarySegment;
+    primarySegment._sourceSegment = segmentGroup;
+    primarySegment._segmentIndexShift = consumedSegments.length;
+    for (const r of routes) {
+        if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
+            const s = new UrlSegmentGroup([], {});
+            s._sourceSegment = segmentGroup;
+            s._segmentIndexShift = consumedSegments.length;
+            res[getOutlet(r)] = s;
+        }
+    }
+    return res;
+}
+function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet(r) !== PRIMARY_OUTLET);
+}
+function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
+    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r));
+}
+function emptyPathMatch(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
+        return false;
+    }
+    return r.path === '';
+}
+/**
+ * Determines if `route` is a path match for the `rawSegment`, `segments`, and `outlet` without
+ * verifying that its children are a full match for the remainder of the `rawSegment` children as
+ * well.
+ */
+function isImmediateMatch(route, rawSegment, segments, outlet) {
+    // We allow matches to empty paths when the outlets differ so we can match a url like `/(b:b)` to
+    // a config like
+    // * `{path: '', children: [{path: 'b', outlet: 'b'}]}`
+    // or even
+    // * `{path: '', outlet: 'a', children: [{path: 'b', outlet: 'b'}]`
+    //
+    // The exception here is when the segment outlet is for the primary outlet. This would
+    // result in a match inside the named outlet because all children there are written as primary
+    // outlets. So we need to prevent child named outlet matches in a url like `/b` in a config like
+    // * `{path: '', outlet: 'x' children: [{path: 'b'}]}`
+    // This should only match if the url is `/(x:b)`.
+    if (getOutlet(route) !== outlet &&
+        (outlet === PRIMARY_OUTLET || !emptyPathMatch(rawSegment, segments, route))) {
+        return false;
+    }
+    if (route.path === '**') {
+        return true;
+    }
+    return match(rawSegment, route, segments).matched;
+}
+function noLeftoversInUrl(segmentGroup, segments, outlet) {
+    return segments.length === 0 && !segmentGroup.children[outlet];
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 class NoMatch {
     constructor(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
@@ -2256,7 +2566,7 @@ class AbsoluteRedirect {
         this.urlTree = urlTree;
     }
 }
-function noMatch(segmentGroup) {
+function noMatch$1(segmentGroup) {
     return new Observable((obs) => obs.error(new NoMatch(segmentGroup)));
 }
 function absoluteRedirect(newTree) {
@@ -2286,8 +2596,18 @@ class ApplyRedirects {
         this.ngModule = moduleInjector.get(NgModuleRef);
     }
     apply() {
-        const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, this.urlTree.root, PRIMARY_OUTLET);
-        const urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, this.urlTree.queryParams, this.urlTree.fragment)));
+        const splitGroup = split(this.urlTree.root, [], [], this.config).segmentGroup;
+        // TODO(atscott): creating a new segment removes the _sourceSegment _segmentIndexShift, which is
+        // only necessary to prevent failures in tests which assert exact object matches. The `split` is
+        // now shared between `applyRedirects` and `recognize` but only the `recognize` step needs these
+        // properties. Before the implementations were merged, the `applyRedirects` would not assign
+        // them. We should be able to remove this logic as a "breaking change" but should do some more
+        // investigation into the failures first.
+        const rootSegmentGroup = new UrlSegmentGroup(splitGroup.segments, splitGroup.children);
+        const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, rootSegmentGroup, PRIMARY_OUTLET);
+        const urlTrees$ = expanded$.pipe(map((rootSegmentGroup) => {
+            return this.createUrlTree(squashSegmentGroup(rootSegmentGroup), this.urlTree.queryParams, this.urlTree.fragment);
+        }));
         return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
                 // after an absolute redirect we do not apply any more redirects!
@@ -2303,7 +2623,9 @@ class ApplyRedirects {
     }
     match(tree) {
         const expanded$ = this.expandSegmentGroup(this.ngModule, this.config, tree.root, PRIMARY_OUTLET);
-        const mapped$ = expanded$.pipe(map((rootSegmentGroup) => this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment)));
+        const mapped$ = expanded$.pipe(map((rootSegmentGroup) => {
+            return this.createUrlTree(squashSegmentGroup(rootSegmentGroup), tree.queryParams, tree.fragment);
+        }));
         return mapped$.pipe(catchError((e) => {
             if (e instanceof NoMatch) {
                 throw this.noMatchError(e);
@@ -2329,22 +2651,43 @@ class ApplyRedirects {
     }
     // Recursively expand segment groups for all the child outlets
     expandChildren(ngModule, routes, segmentGroup) {
-        return waitForMap(segmentGroup.children, (childOutlet, child) => this.expandSegmentGroup(ngModule, routes, child, childOutlet));
+        // Expand outlets one at a time, starting with the primary outlet. We need to do it this way
+        // because an absolute redirect from the primary outlet takes precedence.
+        const childOutlets = [];
+        for (const child of Object.keys(segmentGroup.children)) {
+            if (child === 'primary') {
+                childOutlets.unshift(child);
+            }
+            else {
+                childOutlets.push(child);
+            }
+        }
+        return from(childOutlets)
+            .pipe(concatMap(childOutlet => {
+            const child = segmentGroup.children[childOutlet];
+            // Sort the routes so routes with outlets that match the segment appear
+            // first, followed by routes for other outlets, which might match if they have an
+            // empty path.
+            const sortedRoutes = sortByMatchingOutlets(routes, childOutlet);
+            return this.expandSegmentGroup(ngModule, sortedRoutes, child, childOutlet)
+                .pipe(map(s => ({ segment: s, outlet: childOutlet })));
+        }), scan((children, expandedChild) => {
+            children[expandedChild.outlet] = expandedChild.segment;
+            return children;
+        }, {}), last$1());
     }
     expandSegment(ngModule, segmentGroup, routes, segments, outlet, allowRedirects) {
-        return of(...routes).pipe(map((r) => {
+        return from(routes).pipe(concatMap((r) => {
             const expanded$ = this.expandSegmentAgainstRoute(ngModule, segmentGroup, routes, r, segments, outlet, allowRedirects);
             return expanded$.pipe(catchError((e) => {
                 if (e instanceof NoMatch) {
-                    // TODO(i): this return type doesn't match the declared Observable<UrlSegmentGroup> -
-                    // talk to Jason
                     return of(null);
                 }
                 throw e;
             }));
-        }), concatAll(), first((s) => !!s), catchError((e, _) => {
+        }), first((s) => !!s), catchError((e, _) => {
             if (e instanceof EmptyError || e.name === 'EmptyError') {
-                if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
+                if (noLeftoversInUrl(segmentGroup, segments, outlet)) {
                     return of(new UrlSegmentGroup([], {}));
                 }
                 throw new NoMatch(segmentGroup);
@@ -2352,20 +2695,17 @@ class ApplyRedirects {
             throw e;
         }));
     }
-    noLeftoversInUrl(segmentGroup, segments, outlet) {
-        return segments.length === 0 && !segmentGroup.children[outlet];
-    }
     expandSegmentAgainstRoute(ngModule, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-        if (getOutlet(route) !== outlet) {
-            return noMatch(segmentGroup);
+        if (!isImmediateMatch(route, segmentGroup, paths, outlet)) {
+            return noMatch$1(segmentGroup);
         }
         if (route.redirectTo === undefined) {
-            return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths);
+            return this.matchSegmentAgainstRoute(ngModule, segmentGroup, route, paths, outlet);
         }
         if (allowRedirects && this.allowRedirects) {
             return this.expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, paths, outlet);
         }
-        return noMatch(segmentGroup);
+        return noMatch$1(segmentGroup);
     }
     expandSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet) {
         if (route.path === '**') {
@@ -2386,7 +2726,7 @@ class ApplyRedirects {
     expandRegularSegmentAgainstRouteUsingRedirect(ngModule, segmentGroup, routes, route, segments, outlet) {
         const { matched, consumedSegments, lastChild, positionalParamSegments } = match(segmentGroup, route, segments);
         if (!matched)
-            return noMatch(segmentGroup);
+            return noMatch$1(segmentGroup);
         const newTree = this.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
         if (route.redirectTo.startsWith('/')) {
             return absoluteRedirect(newTree);
@@ -2395,11 +2735,12 @@ class ApplyRedirects {
             return this.expandSegment(ngModule, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
         }));
     }
-    matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments) {
+    matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments, outlet) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return this.configLoader.load(ngModule.injector, route)
-                    .pipe(map((cfg) => {
+                const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                    this.configLoader.load(ngModule.injector, route);
+                return loaded$.pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 }));
@@ -2408,13 +2749,15 @@ class ApplyRedirects {
         }
         const { matched, consumedSegments, lastChild } = match(rawSegmentGroup, route, segments);
         if (!matched)
-            return noMatch(rawSegmentGroup);
+            return noMatch$1(rawSegmentGroup);
         const rawSlicedSegments = segments.slice(lastChild);
         const childConfig$ = this.getChildConfig(ngModule, route, segments);
         return childConfig$.pipe(mergeMap((routerConfig) => {
             const childModule = routerConfig.module;
             const childConfig = routerConfig.routes;
-            const { segmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
+            const { segmentGroup: splitSegmentGroup, slicedSegments } = split(rawSegmentGroup, consumedSegments, rawSlicedSegments, childConfig);
+            // See comment on the other call to `split` about why this is necessary.
+            const segmentGroup = new UrlSegmentGroup(splitSegmentGroup.segments, splitSegmentGroup.children);
             if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
                 const expanded$ = this.expandChildren(childModule, childConfig, segmentGroup);
                 return expanded$.pipe(map((children) => new UrlSegmentGroup(consumedSegments, children)));
@@ -2422,7 +2765,8 @@ class ApplyRedirects {
             if (childConfig.length === 0 && slicedSegments.length === 0) {
                 return of(new UrlSegmentGroup(consumedSegments, {}));
             }
-            const expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            const matchedOnOutlet = getOutlet(route) === outlet;
+            const expanded$ = this.expandSegment(childModule, segmentGroup, childConfig, slicedSegments, matchedOnOutlet ? PRIMARY_OUTLET : outlet, true);
             return expanded$.pipe(map((cs) => new UrlSegmentGroup(consumedSegments.concat(cs.segments), cs.children)));
         }));
     }
@@ -2542,43 +2886,14 @@ class ApplyRedirects {
         return redirectToUrlSegment;
     }
 }
-function match(segmentGroup, route, segments) {
-    if (route.path === '') {
-        if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
-            return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
-        }
-        return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
-    }
-    const matcher = route.matcher || defaultUrlMatcher;
-    const res = matcher(segments, segmentGroup, route);
-    if (!res) {
-        return {
-            matched: false,
-            consumedSegments: [],
-            lastChild: 0,
-            positionalParamSegments: {},
-        };
-    }
-    return {
-        matched: true,
-        consumedSegments: res.consumed,
-        lastChild: res.consumed.length,
-        positionalParamSegments: res.posParams,
-    };
-}
-function split(segmentGroup, consumedSegments, slicedSegments, config) {
-    if (slicedSegments.length > 0 &&
-        containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
-        return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
-    }
-    if (slicedSegments.length === 0 &&
-        containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
-        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
-        return { segmentGroup: mergeTrivialChildren(s), slicedSegments };
-    }
-    return { segmentGroup, slicedSegments };
-}
+/**
+ * When possible, merges the primary outlet child into the parent `UrlSegmentGroup`.
+ *
+ * When a segment group has only one child which is a primary outlet, merges that child into the
+ * parent. That is, the child segment group's segments are merged into the `s` and the child's
+ * children become the children of `s`. Think of this like a 'squash', merging the child segment
+ * group into the parent.
+ */
 function mergeTrivialChildren(s) {
     if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
         const c = s.children[PRIMARY_OUTLET];
@@ -2586,39 +2901,23 @@ function mergeTrivialChildren(s) {
     }
     return s;
 }
-function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-    const res = {};
-    for (const r of routes) {
-        if (isEmptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
-            res[getOutlet(r)] = new UrlSegmentGroup([], {});
+/**
+ * Recursively merges primary segment children into their parents and also drops empty children
+ * (those which have no segments and no children themselves). The latter prevents serializing a
+ * group into something like `/a(aux:)`, where `aux` is an empty child segment.
+ */
+function squashSegmentGroup(segmentGroup) {
+    const newChildren = {};
+    for (const childOutlet of Object.keys(segmentGroup.children)) {
+        const child = segmentGroup.children[childOutlet];
+        const childCandidate = squashSegmentGroup(child);
+        // don't add empty children
+        if (childCandidate.segments.length > 0 || childCandidate.hasChildren()) {
+            newChildren[childOutlet] = childCandidate;
         }
     }
-    return Object.assign(Object.assign({}, children), res);
-}
-function createChildrenForEmptySegments(routes, primarySegmentGroup) {
-    const res = {};
-    res[PRIMARY_OUTLET] = primarySegmentGroup;
-    for (const r of routes) {
-        if (r.path === '' && getOutlet(r) !== PRIMARY_OUTLET) {
-            res[getOutlet(r)] = new UrlSegmentGroup([], {});
-        }
-    }
-    return res;
-}
-function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, segments, routes) {
-    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r) && getOutlet(r) !== PRIMARY_OUTLET);
-}
-function containsEmptyPathRedirects(segmentGroup, segments, routes) {
-    return routes.some(r => isEmptyPathRedirect(segmentGroup, segments, r));
-}
-function isEmptyPathRedirect(segmentGroup, segments, r) {
-    if ((segmentGroup.hasChildren() || segments.length > 0) && r.pathMatch === 'full') {
-        return false;
-    }
-    return r.path === '' && r.redirectTo !== undefined;
-}
-function getOutlet(route) {
-    return route.outlet || PRIMARY_OUTLET;
+    const s = new UrlSegmentGroup(segmentGroup.segments, newChildren);
+    return mergeTrivialChildren(s);
 }
 
 /**
@@ -2629,10 +2928,8 @@ function getOutlet(route) {
  * found in the LICENSE file at https://angular.io/license
  */
 function applyRedirects$1(moduleInjector, configLoader, urlSerializer, config) {
-    return function (source) {
-        return source.pipe(switchMap(t => applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
-            .pipe(map(urlAfterRedirects => (Object.assign(Object.assign({}, t), { urlAfterRedirects }))))));
-    };
+    return switchMap(t => applyRedirects(moduleInjector, configLoader, urlSerializer, t.extractedUrl, config)
+        .pipe(map(urlAfterRedirects => (Object.assign(Object.assign({}, t), { urlAfterRedirects })))));
 }
 
 /**
@@ -2720,9 +3017,8 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
         else {
             getChildRouteGuards(futureNode, currNode, parentContexts, futurePath, checks);
         }
-        if (shouldRun) {
-            const component = context && context.outlet && context.outlet.component || null;
-            checks.canDeactivateChecks.push(new CanDeactivate(component, curr));
+        if (shouldRun && context && context.outlet && context.outlet.isActivated) {
+            checks.canDeactivateChecks.push(new CanDeactivate(context.outlet.component, curr));
         }
     }
     else {
@@ -2794,20 +3090,18 @@ function deactivateRouteAndItsChildren(route, context, checks) {
  * found in the LICENSE file at https://angular.io/license
  */
 function checkGuards(moduleInjector, forwardEvent) {
-    return function (source) {
-        return source.pipe(mergeMap(t => {
-            const { targetSnapshot, currentSnapshot, guards: { canActivateChecks, canDeactivateChecks } } = t;
-            if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
-                return of(Object.assign(Object.assign({}, t), { guardsResult: true }));
-            }
-            return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
-                .pipe(mergeMap(canDeactivate => {
-                return canDeactivate && isBoolean(canDeactivate) ?
-                    runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
-                    of(canDeactivate);
-            }), map(guardsResult => (Object.assign(Object.assign({}, t), { guardsResult }))));
-        }));
-    };
+    return mergeMap(t => {
+        const { targetSnapshot, currentSnapshot, guards: { canActivateChecks, canDeactivateChecks } } = t;
+        if (canDeactivateChecks.length === 0 && canActivateChecks.length === 0) {
+            return of(Object.assign(Object.assign({}, t), { guardsResult: true }));
+        }
+        return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, moduleInjector)
+            .pipe(mergeMap(canDeactivate => {
+            return canDeactivate && isBoolean(canDeactivate) ?
+                runCanActivateChecks(targetSnapshot, canActivateChecks, moduleInjector, forwardEvent) :
+                of(canDeactivate);
+        }), map(guardsResult => (Object.assign(Object.assign({}, t), { guardsResult }))));
+    });
 }
 function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
     return from(checks).pipe(mergeMap(check => runCanDeactivate(check.component, check.route, currRSS, futureRSS, moduleInjector)), first(result => {
@@ -2816,15 +3110,7 @@ function runCanDeactivateChecks(checks, futureRSS, currRSS, moduleInjector) {
 }
 function runCanActivateChecks(futureSnapshot, checks, moduleInjector, forwardEvent) {
     return from(checks).pipe(concatMap((check) => {
-        return from([
-            fireChildActivationStart(check.route.parent, forwardEvent),
-            fireActivationStart(check.route, forwardEvent),
-            runCanActivateChild(futureSnapshot, check.path, moduleInjector),
-            runCanActivate(futureSnapshot, check.route, moduleInjector)
-        ])
-            .pipe(concatAll(), first(result => {
-            return result !== true;
-        }, true));
+        return concat(fireChildActivationStart(check.route.parent, forwardEvent), fireActivationStart(check.route, forwardEvent), runCanActivateChild(futureSnapshot, check.path, moduleInjector), runCanActivate(futureSnapshot, check.route, moduleInjector));
     }), first(result => {
         return result !== true;
     }, true));
@@ -2936,9 +3222,26 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
  */
 class NoMatch$1 {
 }
+function newObservableError(e) {
+    // TODO(atscott): This pattern is used throughout the router code and can be `throwError` instead.
+    return new Observable((obs) => obs.error(e));
+}
 function recognize(rootComponentType, config, urlTree, url, paramsInheritanceStrategy = 'emptyOnly', relativeLinkResolution = 'legacy') {
-    return new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution)
-        .recognize();
+    try {
+        const result = new Recognizer(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution)
+            .recognize();
+        if (result === null) {
+            return newObservableError(new NoMatch$1());
+        }
+        else {
+            return of(result);
+        }
+    }
+    catch (e) {
+        // Catch the potential error from recognize due to duplicate outlet matches and return as an
+        // `Observable` error instead.
+        return newObservableError(e);
+    }
 }
 class Recognizer {
     constructor(rootComponentType, config, urlTree, url, paramsInheritanceStrategy, relativeLinkResolution) {
@@ -2950,18 +3253,19 @@ class Recognizer {
         this.relativeLinkResolution = relativeLinkResolution;
     }
     recognize() {
-        try {
-            const rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config, this.relativeLinkResolution).segmentGroup;
-            const children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
-            const root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
-            const rootNode = new TreeNode(root, children);
-            const routeState = new RouterStateSnapshot(this.url, rootNode);
-            this.inheritParamsAndData(routeState._root);
-            return of(routeState);
+        const rootSegmentGroup = split(this.urlTree.root, [], [], this.config.filter(c => c.redirectTo === undefined), this.relativeLinkResolution)
+            .segmentGroup;
+        const children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
+        if (children === null) {
+            return null;
         }
-        catch (e) {
-            return new Observable((obs) => obs.error(e));
-        }
+        // Use Object.freeze to prevent readers of the Router state from modifying it outside of a
+        // navigation, resulting in the router being out of sync with the browser.
+        const root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
+        const rootNode = new TreeNode(root, children);
+        const routeState = new RouterStateSnapshot(this.url, rootNode);
+        this.inheritParamsAndData(routeState._root);
+        return routeState;
     }
     inheritParamsAndData(routeNode) {
         const route = routeNode.value;
@@ -2976,58 +3280,101 @@ class Recognizer {
         }
         return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
     }
+    /**
+     * Matches every child outlet in the `segmentGroup` to a `Route` in the config. Returns `null` if
+     * we cannot find a match for _any_ of the children.
+     *
+     * @param config - The `Routes` to match against
+     * @param segmentGroup - The `UrlSegmentGroup` whose children need to be matched against the
+     *     config.
+     */
     processChildren(config, segmentGroup) {
-        const children = mapChildrenIntoArray(segmentGroup, (child, childOutlet) => this.processSegmentGroup(config, child, childOutlet));
-        checkOutletNameUniqueness(children);
-        sortActivatedRouteSnapshots(children);
-        return children;
+        const children = [];
+        for (const childOutlet of Object.keys(segmentGroup.children)) {
+            const child = segmentGroup.children[childOutlet];
+            // Sort the config so that routes with outlets that match the one being activated appear
+            // first, followed by routes for other outlets, which might match if they have an empty path.
+            const sortedConfig = sortByMatchingOutlets(config, childOutlet);
+            const outletChildren = this.processSegmentGroup(sortedConfig, child, childOutlet);
+            if (outletChildren === null) {
+                // Configs must match all segment children so because we did not find a match for this
+                // outlet, return `null`.
+                return null;
+            }
+            children.push(...outletChildren);
+        }
+        // Because we may have matched two outlets to the same empty path segment, we can have multiple
+        // activated results for the same outlet. We should merge the children of these results so the
+        // final return value is only one `TreeNode` per outlet.
+        const mergedChildren = mergeEmptyPathMatches(children);
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            // This should really never happen - we are only taking the first match for each outlet and
+            // merge the empty path matches.
+            checkOutletNameUniqueness(mergedChildren);
+        }
+        sortActivatedRouteSnapshots(mergedChildren);
+        return mergedChildren;
     }
     processSegment(config, segmentGroup, segments, outlet) {
         for (const r of config) {
-            try {
-                return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
-            }
-            catch (e) {
-                if (!(e instanceof NoMatch$1))
-                    throw e;
+            const children = this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
+            if (children !== null) {
+                return children;
             }
         }
-        if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
+        if (noLeftoversInUrl(segmentGroup, segments, outlet)) {
             return [];
         }
-        throw new NoMatch$1();
-    }
-    noLeftoversInUrl(segmentGroup, segments, outlet) {
-        return segments.length === 0 && !segmentGroup.children[outlet];
+        return null;
     }
     processSegmentAgainstRoute(route, rawSegment, segments, outlet) {
-        if (route.redirectTo)
-            throw new NoMatch$1();
-        if ((route.outlet || PRIMARY_OUTLET) !== outlet)
-            throw new NoMatch$1();
+        if (route.redirectTo || !isImmediateMatch(route, rawSegment, segments, outlet))
+            return null;
         let snapshot;
         let consumedSegments = [];
         let rawSlicedSegments = [];
         if (route.path === '**') {
             const params = segments.length > 0 ? last(segments).parameters : {};
-            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
+            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
         }
         else {
-            const result = match$1(rawSegment, route, segments);
+            const result = match(rawSegment, route, segments);
+            if (!result.matched) {
+                return null;
+            }
             consumedSegments = result.consumedSegments;
             rawSlicedSegments = segments.slice(result.lastChild);
-            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
         }
         const childConfig = getChildConfig(route);
-        const { segmentGroup, slicedSegments } = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig, this.relativeLinkResolution);
+        const { segmentGroup, slicedSegments } = split(rawSegment, consumedSegments, rawSlicedSegments, 
+        // Filter out routes with redirectTo because we are trying to create activated route
+        // snapshots and don't handle redirects here. That should have been done in
+        // `applyRedirects`.
+        childConfig.filter(c => c.redirectTo === undefined), this.relativeLinkResolution);
         if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
             const children = this.processChildren(childConfig, segmentGroup);
+            if (children === null) {
+                return null;
+            }
             return [new TreeNode(snapshot, children)];
         }
         if (childConfig.length === 0 && slicedSegments.length === 0) {
             return [new TreeNode(snapshot, [])];
         }
-        const children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
+        const matchedOnOutlet = getOutlet(route) === outlet;
+        // If we matched a config due to empty path match on a different outlet, we need to continue
+        // passing the current outlet for the segment rather than switch to PRIMARY.
+        // Note that we switch to primary when we have a match because outlet configs look like this:
+        // {path: 'a', outlet: 'a', children: [
+        //  {path: 'b', component: B},
+        //  {path: 'c', component: C},
+        // ]}
+        // Notice that the children of the named outlet are configured with the primary outlet
+        const children = this.processSegment(childConfig, segmentGroup, slicedSegments, matchedOnOutlet ? PRIMARY_OUTLET : outlet);
+        if (children === null) {
+            return null;
+        }
         return [new TreeNode(snapshot, children)];
     }
 }
@@ -3049,24 +3396,31 @@ function getChildConfig(route) {
     }
     return [];
 }
-function match$1(segmentGroup, route, segments) {
-    if (route.path === '') {
-        if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
-            throw new NoMatch$1();
+function hasEmptyPathConfig(node) {
+    const config = node.value.routeConfig;
+    return config && config.path === '' && config.redirectTo === undefined;
+}
+/**
+ * Finds `TreeNode`s with matching empty path route configs and merges them into `TreeNode` with the
+ * children from each duplicate. This is necessary because different outlets can match a single
+ * empty path route config and the results need to then be merged.
+ */
+function mergeEmptyPathMatches(nodes) {
+    const result = [];
+    for (const node of nodes) {
+        if (!hasEmptyPathConfig(node)) {
+            result.push(node);
+            continue;
         }
-        return { consumedSegments: [], lastChild: 0, parameters: {} };
+        const duplicateEmptyPathNode = result.find(resultNode => node.value.routeConfig === resultNode.value.routeConfig);
+        if (duplicateEmptyPathNode !== undefined) {
+            duplicateEmptyPathNode.children.push(...node.children);
+        }
+        else {
+            result.push(node);
+        }
     }
-    const matcher = route.matcher || defaultUrlMatcher;
-    const res = matcher(segments, segmentGroup, route);
-    if (!res)
-        throw new NoMatch$1();
-    const posParams = {};
-    forEach(res.posParams, (v, k) => {
-        posParams[k] = v.path;
-    });
-    const parameters = res.consumed.length > 0 ? Object.assign(Object.assign({}, posParams), res.consumed[res.consumed.length - 1].parameters) :
-        posParams;
-    return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters };
+    return result;
 }
 function checkOutletNameUniqueness(nodes) {
     const names = {};
@@ -3096,73 +3450,6 @@ function getPathIndexShift(segmentGroup) {
     }
     return res - 1;
 }
-function split$1(segmentGroup, consumedSegments, slicedSegments, config, relativeLinkResolution) {
-    if (slicedSegments.length > 0 &&
-        containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-        const s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments: [] };
-    }
-    if (slicedSegments.length === 0 &&
-        containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-        const s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children, relativeLinkResolution));
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        return { segmentGroup: s, slicedSegments };
-    }
-    const s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
-    s._sourceSegment = segmentGroup;
-    s._segmentIndexShift = consumedSegments.length;
-    return { segmentGroup: s, slicedSegments };
-}
-function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children, relativeLinkResolution) {
-    const res = {};
-    for (const r of routes) {
-        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
-            const s = new UrlSegmentGroup([], {});
-            s._sourceSegment = segmentGroup;
-            if (relativeLinkResolution === 'legacy') {
-                s._segmentIndexShift = segmentGroup.segments.length;
-            }
-            else {
-                s._segmentIndexShift = consumedSegments.length;
-            }
-            res[getOutlet$1(r)] = s;
-        }
-    }
-    return Object.assign(Object.assign({}, children), res);
-}
-function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
-    const res = {};
-    res[PRIMARY_OUTLET] = primarySegment;
-    primarySegment._sourceSegment = segmentGroup;
-    primarySegment._segmentIndexShift = consumedSegments.length;
-    for (const r of routes) {
-        if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
-            const s = new UrlSegmentGroup([], {});
-            s._sourceSegment = segmentGroup;
-            s._segmentIndexShift = consumedSegments.length;
-            res[getOutlet$1(r)] = s;
-        }
-    }
-    return res;
-}
-function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET);
-}
-function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
-    return routes.some(r => emptyPathMatch(segmentGroup, slicedSegments, r));
-}
-function emptyPathMatch(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full') {
-        return false;
-    }
-    return r.path === '' && r.redirectTo === undefined;
-}
-function getOutlet$1(route) {
-    return route.outlet || PRIMARY_OUTLET;
-}
 function getData(route) {
     return route.data || {};
 }
@@ -3178,10 +3465,8 @@ function getResolve(route) {
  * found in the LICENSE file at https://angular.io/license
  */
 function recognize$1(rootComponentType, config, serializer, paramsInheritanceStrategy, relativeLinkResolution) {
-    return function (source) {
-        return source.pipe(mergeMap(t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
-            .pipe(map(targetSnapshot => (Object.assign(Object.assign({}, t), { targetSnapshot }))))));
-    };
+    return mergeMap(t => recognize(rootComponentType, config, t.urlAfterRedirects, serializer(t.urlAfterRedirects), paramsInheritanceStrategy, relativeLinkResolution)
+        .pipe(map(targetSnapshot => (Object.assign(Object.assign({}, t), { targetSnapshot })))));
 }
 
 /**
@@ -3192,17 +3477,15 @@ function recognize$1(rootComponentType, config, serializer, paramsInheritanceStr
  * found in the LICENSE file at https://angular.io/license
  */
 function resolveData(paramsInheritanceStrategy, moduleInjector) {
-    return function (source) {
-        return source.pipe(mergeMap(t => {
-            const { targetSnapshot, guards: { canActivateChecks } } = t;
-            if (!canActivateChecks.length) {
-                return of(t);
-            }
-            let canActivateChecksResolved = 0;
-            return from(canActivateChecks)
-                .pipe(concatMap(check => runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector)), tap(() => canActivateChecksResolved++), takeLast(1), mergeMap(_ => canActivateChecksResolved === canActivateChecks.length ? of(t) : EMPTY));
-        }));
-    };
+    return mergeMap(t => {
+        const { targetSnapshot, guards: { canActivateChecks } } = t;
+        if (!canActivateChecks.length) {
+            return of(t);
+        }
+        let canActivateChecksResolved = 0;
+        return from(canActivateChecks)
+            .pipe(concatMap(check => runResolve(check.route, targetSnapshot, paramsInheritanceStrategy, moduleInjector)), tap(() => canActivateChecksResolved++), takeLast(1), mergeMap(_ => canActivateChecksResolved === canActivateChecks.length ? of(t) : EMPTY));
+    });
 }
 function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, moduleInjector) {
     const resolve = futureARS._resolve;
@@ -3251,15 +3534,13 @@ function getResolver(injectionToken, futureARS, futureRSS, moduleInjector) {
  * it will wait before continuing with the original value.
  */
 function switchTap(next) {
-    return function (source) {
-        return source.pipe(switchMap(v => {
-            const nextResult = next(v);
-            if (nextResult) {
-                return from(nextResult).pipe(map(() => v));
-            }
-            return from([v]);
-        }));
-    };
+    return switchMap(v => {
+        const nextResult = next(v);
+        if (nextResult) {
+            return from(nextResult).pipe(map(() => v));
+        }
+        return of(v);
+    });
 }
 
 /**
@@ -3279,144 +3560,52 @@ function switchTap(next) {
 class RouteReuseStrategy {
 }
 /**
- * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ * @description
+ *
+ * This base route reuse strategy only reuses routes when the matched router configs are
+ * identical. This prevents components from being destroyed and recreated
+ * when just the fragment or query parameters change
+ * (that is, the existing component is _reused_).
+ *
+ * This strategy does not store any routes for later reuse.
+ *
+ * Angular uses this strategy by default.
+ *
+ *
+ * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+ * class that extends the `BaseRouteReuseStrategy` one.
+ * @publicApi
  */
-class DefaultRouteReuseStrategy {
+class BaseRouteReuseStrategy {
+    /**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for `BaseRouteReuseStrategy`.
+     * */
     shouldDetach(route) {
         return false;
     }
+    /**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */
     store(route, detachedTree) { }
+    /** Returns `false`, meaning the route (and its subtree) is never reattached */
     shouldAttach(route) {
         return false;
     }
+    /** Returns `null` because this strategy does not store routes for later re-use. */
     retrieve(route) {
         return null;
     }
+    /**
+     * Determines if a route should be reused.
+     * This strategy returns `true` when the future route config and current route config are
+     * identical.
+     */
     shouldReuseRoute(future, curr) {
         return future.routeConfig === curr.routeConfig;
     }
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * This component is used internally within the router to be a placeholder when an empty
- * router-outlet is needed. For example, with a config such as:
- *
- * `{path: 'parent', outlet: 'nav', children: [...]}`
- *
- * In order to render, there needs to be a component on this config, which will default
- * to this `EmptyOutletComponent`.
- */
-class ɵEmptyOutletComponent {
-}
-ɵEmptyOutletComponent.decorators = [
-    { type: Component, args: [{ template: `<router-outlet></router-outlet>` },] }
-];
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-function validateConfig(config, parentPath = '') {
-    // forEach doesn't iterate undefined values
-    for (let i = 0; i < config.length; i++) {
-        const route = config[i];
-        const fullPath = getFullPath(parentPath, route);
-        validateNode(route, fullPath);
-    }
-}
-function validateNode(route, fullPath) {
-    if (!route) {
-        throw new Error(`
-      Invalid configuration of route '${fullPath}': Encountered undefined route.
-      The reason might be an extra comma.
-
-      Example:
-      const routes: Routes = [
-        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        { path: 'dashboard',  component: DashboardComponent },, << two commas
-        { path: 'detail/:id', component: HeroDetailComponent }
-      ];
-    `);
-    }
-    if (Array.isArray(route)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': Array cannot be specified`);
-    }
-    if (!route.component && !route.children && !route.loadChildren &&
-        (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-        throw new Error(`Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
-    }
-    if (route.redirectTo && route.children) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
-    }
-    if (route.redirectTo && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
-    }
-    if (route.children && route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
-    }
-    if (route.redirectTo && route.component) {
-        throw new Error(`Invalid configuration of route '${fullPath}': redirectTo and component cannot be used together`);
-    }
-    if (route.path && route.matcher) {
-        throw new Error(`Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
-        throw new Error(`Invalid configuration of route '${fullPath}'. One of the following must be provided: component, redirectTo, children or loadChildren`);
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-        throw new Error(`Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-        throw new Error(`Invalid configuration of route '${fullPath}': path cannot start with a slash`);
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-        const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
-        throw new Error(`Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
-    }
-    if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-        throw new Error(`Invalid configuration of route '${fullPath}': pathMatch can only be set to 'prefix' or 'full'`);
-    }
-    if (route.children) {
-        validateConfig(route.children, fullPath);
-    }
-}
-function getFullPath(parentPath, currentRoute) {
-    if (!currentRoute) {
-        return parentPath;
-    }
-    if (!parentPath && !currentRoute.path) {
-        return '';
-    }
-    else if (parentPath && !currentRoute.path) {
-        return `${parentPath}/`;
-    }
-    else if (!parentPath && currentRoute.path) {
-        return currentRoute.path;
-    }
-    else {
-        return `${parentPath}/${currentRoute.path}`;
-    }
-}
-/**
- * Makes a copy of the config and adds any default required properties.
- */
-function standardizeConfig(r) {
-    const children = r.children && r.children.map(standardizeConfig);
-    const c = children ? Object.assign(Object.assign({}, r), { children }) : Object.assign({}, r);
-    if (!c.component && (children || c.loadChildren) && (c.outlet && c.outlet !== PRIMARY_OUTLET)) {
-        c.component = ɵEmptyOutletComponent;
-    }
-    return c;
+class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
 
 /**
@@ -3440,17 +3629,32 @@ class RouterConfigLoader {
         this.onLoadEndListener = onLoadEndListener;
     }
     load(parentInjector, route) {
+        if (route._loader$) {
+            return route._loader$;
+        }
         if (this.onLoadStartListener) {
             this.onLoadStartListener(route);
         }
         const moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-        return moduleFactory$.pipe(map((factory) => {
+        const loadRunner = moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             const module = factory.create(parentInjector);
-            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES)).map(standardizeConfig), module);
+            // When loading a module that doesn't provide `RouterModule.forChild()` preloader
+            // will get stuck in an infinite loop. The child module's Injector will look to
+            // its parent `Injector` when it doesn't find any ROUTES so it will return routes
+            // for it's parent module instead.
+            return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, InjectFlags.Self | InjectFlags.Optional))
+                .map(standardizeConfig), module);
+        }), catchError((err) => {
+            route._loader$ = undefined;
+            throw err;
         }));
+        // Use custom ConnectableObservable as share in runners pipe increasing the bundle size too much
+        route._loader$ = new ConnectableObservable(loadRunner, () => new Subject())
+            .pipe(refCount());
+        return route._loader$;
     }
     loadModuleFactory(loadChildren) {
         if (typeof loadChildren === 'string') {
@@ -3593,6 +3797,26 @@ function defaultRouterHook(snapshot, runExtras) {
     return of(null);
 }
 /**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+ * (exact = true).
+ */
+const exactMatchOptions = {
+    paths: 'exact',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'exact'
+};
+/**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = false).
+ */
+const subsetMatchOptions = {
+    paths: 'subset',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'subset'
+};
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -3617,6 +3841,7 @@ class Router {
         this.config = config;
         this.lastSuccessfulNavigation = null;
         this.currentNavigation = null;
+        this.disposed = false;
         /**
          * Tracks the previously seen location change from the location subscription so we can compare
          * the two latest to see if they are duplicates. See setUpLocationChangeListener.
@@ -3690,13 +3915,13 @@ class Router {
          * Enables a bug fix that corrects relative link resolution in components with empty paths.
          * @see `RouterModule`
          */
-        this.relativeLinkResolution = 'legacy';
+        this.relativeLinkResolution = 'corrected';
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.ngModule = injector.get(NgModuleRef);
         this.console = injector.get(ɵConsole);
         const ngZone = injector.get(NgZone);
-        this.isNgZoneEnabled = ngZone instanceof NgZone;
+        this.isNgZoneEnabled = ngZone instanceof NgZone && NgZone.isInAngularZone();
         this.resetConfig(config);
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
@@ -3761,11 +3986,10 @@ class Router {
                         if (transition !== this.transitions.getValue()) {
                             return EMPTY;
                         }
-                        return [t];
+                        // This delay is required to match old behavior that forced
+                        // navigation to always be async
+                        return Promise.resolve(t);
                     }), 
-                    // This delay is required to match old behavior that forced navigation
-                    // to always be async
-                    switchMap(t => Promise.resolve(t)), 
                     // ApplyRedirects
                     applyRedirects$1(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
                     // Update the currentNavigation
@@ -3782,9 +4006,7 @@ class Router {
                             }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
-                    }), 
-                    // Fire RoutesRecognized
-                    tap(t => {
+                        // Fire RoutesRecognized
                         const routesRecognized = new RoutesRecognized(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
                         eventsSubject.next(routesRecognized);
                     }));
@@ -3836,7 +4058,6 @@ class Router {
                     error.url = t.guardsResult;
                     throw error;
                 }
-            }), tap(t => {
                 const guardsEnd = new GuardsCheckEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
                 this.triggerEvent(guardsEnd);
             }), filter(t => {
@@ -3925,7 +4146,7 @@ class Router {
                     // navigation completes, there will be nothing in
                     // history.state.navigationId. This can cause sync problems with AngularJS
                     // sync code which looks for a value here in order to determine whether or
-                    // not to handle a given popstate event or to leave it to the Angualr
+                    // not to handle a given popstate event or to leave it to the Angular
                     // router.
                     this.resetUrlToCurrentUrlTree();
                     const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), `Navigation ID ${t.id} is not equal to the current navigation id ${this.navigationId}`);
@@ -3969,7 +4190,7 @@ class Router {
                                 skipLocationChange: t.extras.skipLocationChange,
                                 replaceUrl: this.urlUpdateStrategy === 'eager'
                             };
-                            return this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
+                            this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
                         }, 0);
                     }
                     /* All other errors should reset to the router's internal URL reference to
@@ -4038,7 +4259,15 @@ class Router {
                     // hybrid apps.
                     setTimeout(() => {
                         const { source, state, urlTree } = currentChange;
-                        this.scheduleNavigation(urlTree, source, state, { replaceUrl: true });
+                        const extras = { replaceUrl: true };
+                        if (state) {
+                            const stateCopy = Object.assign({}, state);
+                            delete stateCopy.navigationId;
+                            if (Object.keys(stateCopy).length !== 0) {
+                                extras.state = stateCopy;
+                            }
+                        }
+                        this.scheduleNavigation(urlTree, source, state, extras);
                     }, 0);
                 }
                 this.lastLocationChangeInfo = currentChange;
@@ -4111,16 +4340,18 @@ class Router {
         this.navigated = false;
         this.lastSuccessfulId = -1;
     }
-    /** @docsNotRequired */
+    /** @nodoc */
     ngOnDestroy() {
         this.dispose();
     }
     /** Disposes of the router. */
     dispose() {
+        this.transitions.complete();
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
             this.locationSubscription = undefined;
         }
+        this.disposed = true;
     }
     /**
      * Appends URL segments to the current URL tree to create a new URL tree.
@@ -4130,8 +4361,7 @@ class Router {
      * segments, followed by the parameters for each segment.
      * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
      * property of the options object, if supplied.
-     * @param navigationExtras Options that control the navigation strategy. This function
-     * only uses properties in `NavigationExtras` that would change the provided URL.
+     * @param navigationExtras Options that control the navigation strategy.
      * @returns The new URL tree.
      *
      * @usageNotes
@@ -4166,30 +4396,25 @@ class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     *
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
      * ```
      */
     createUrlTree(commands, navigationExtras = {}) {
-        const { relativeTo, queryParams, fragment, preserveQueryParams, queryParamsHandling, preserveFragment } = navigationExtras;
-        if (isDevMode() && preserveQueryParams && console && console.warn) {
-            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
-        }
+        const { relativeTo, queryParams, fragment, queryParamsHandling, preserveFragment } = navigationExtras;
         const a = relativeTo || this.routerState.root;
         const f = preserveFragment ? this.currentUrlTree.fragment : fragment;
         let q = null;
-        if (queryParamsHandling) {
-            switch (queryParamsHandling) {
-                case 'merge':
-                    q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
-                    break;
-                case 'preserve':
-                    q = this.currentUrlTree.queryParams;
-                    break;
-                default:
-                    q = queryParams || null;
-            }
-        }
-        else {
-            q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams || null;
+        switch (queryParamsHandling) {
+            case 'merge':
+                q = Object.assign(Object.assign({}, this.currentUrlTree.queryParams), queryParams);
+                break;
+            case 'preserve':
+                q = this.currentUrlTree.queryParams;
+                break;
+            default:
+                q = queryParams || null;
         }
         if (q !== null) {
             q = this.removeEmptyProps(q);
@@ -4202,8 +4427,6 @@ class Router {
      * @param url An absolute path for a defined route. The function does not apply any delta to the
      *     current URL.
      * @param extras An object containing properties that modify the navigation strategy.
-     * The function ignores any properties in the `NavigationExtras` that would change the
-     * provided URL.
      *
      * @returns A Promise that resolves to 'true' when navigation succeeds,
      * to 'false' when navigation fails, or is rejected on error.
@@ -4222,8 +4445,11 @@ class Router {
      * @see [Routing and Navigation guide](guide/router)
      *
      */
-    navigateByUrl(url, extras = { skipLocationChange: false }) {
-        if (isDevMode() && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
+    navigateByUrl(url, extras = {
+        skipLocationChange: false
+    }) {
+        if (typeof ngDevMode === 'undefined' ||
+            ngDevMode && this.isNgZoneEnabled && !NgZone.isInAngularZone()) {
             this.console.warn(`Navigation triggered outside Angular zone, did you forget to call 'ngZone.run()'?`);
         }
         const urlTree = isUrlTree(url) ? url : this.parseUrl(url);
@@ -4279,13 +4505,22 @@ class Router {
         }
         return urlTree;
     }
-    /** Returns whether the url is activated */
-    isActive(url, exact) {
+    isActive(url, matchOptions) {
+        let options;
+        if (matchOptions === true) {
+            options = Object.assign({}, exactMatchOptions);
+        }
+        else if (matchOptions === false) {
+            options = Object.assign({}, subsetMatchOptions);
+        }
+        else {
+            options = matchOptions;
+        }
         if (isUrlTree(url)) {
-            return containsTree(this.currentUrlTree, url, exact);
+            return containsTree(this.currentUrlTree, url, options);
         }
         const urlTree = this.parseUrl(url);
-        return containsTree(this.currentUrlTree, urlTree, exact);
+        return containsTree(this.currentUrlTree, urlTree, options);
     }
     removeEmptyProps(params) {
         return Object.keys(params).reduce((result, key) => {
@@ -4310,6 +4545,9 @@ class Router {
         });
     }
     scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
+        if (this.disposed) {
+            return Promise.resolve(false);
+        }
         // * Imperative navigations (router.navigate) might trigger additional navigations to the same
         //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
         //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
@@ -4485,7 +4723,7 @@ function validateCommands(commands) {
  * </a>
  * ```
  *
- * See {@link NavigationExtras.queryParamsHandling NavigationExtras#queryParamsHandling}.
+ * See {@link UrlCreationOptions.queryParamsHandling UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
  *
@@ -4520,9 +4758,17 @@ class RouterLink {
         this.router = router;
         this.route = route;
         this.commands = [];
+        /** @internal */
+        this.onChanges = new Subject();
         if (tabIndex == null) {
             renderer.setAttribute(el.nativeElement, 'tabindex', '0');
         }
+    }
+    /** @nodoc */
+    ngOnChanges(changes) {
+        // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
+        // to the RouterLinks it's tracking.
+        this.onChanges.next(this);
     }
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
@@ -4539,15 +4785,7 @@ class RouterLink {
             this.commands = [];
         }
     }
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value) {
-        if (isDevMode() && console && console.warn) {
-            console.warn('preserveQueryParams is deprecated!, use queryParamsHandling instead.');
-        }
-        this.preserve = value;
-    }
+    /** @nodoc */
     onClick() {
         const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
@@ -4559,10 +4797,11 @@ class RouterLink {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserve),
             queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
@@ -4586,8 +4825,8 @@ RouterLink.propDecorators = {
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
+    relativeTo: [{ type: Input }],
     routerLink: [{ type: Input }],
-    preserveQueryParams: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',] }]
 };
 /**
@@ -4607,6 +4846,8 @@ class RouterLinkWithHref {
         this.route = route;
         this.locationStrategy = locationStrategy;
         this.commands = [];
+        /** @internal */
+        this.onChanges = new Subject();
         this.subscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.updateTargetUrlAndHref();
@@ -4628,23 +4869,18 @@ class RouterLinkWithHref {
             this.commands = [];
         }
     }
-    /**
-     * @deprecated As of Angular v4.0 use `queryParamsHandling` instead.
-     */
-    set preserveQueryParams(value) {
-        if (isDevMode() && console && console.warn) {
-            console.warn('preserveQueryParams is deprecated, use queryParamsHandling instead.');
-        }
-        this.preserve = value;
-    }
+    /** @nodoc */
     ngOnChanges(changes) {
         this.updateTargetUrlAndHref();
+        this.onChanges.next(this);
     }
+    /** @nodoc */
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
-    onClick(button, ctrlKey, metaKey, shiftKey) {
-        if (button !== 0 || ctrlKey || metaKey || shiftKey) {
+    /** @nodoc */
+    onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
+        if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
             return true;
         }
         if (typeof this.target === 'string' && this.target != '_self') {
@@ -4663,10 +4899,11 @@ class RouterLinkWithHref {
     }
     get urlTree() {
         return this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
+            // If the `relativeTo` input is not defined, we want to use `this.route` by default.
+            // Otherwise, we should use the value provided by the user in the input.
+            relativeTo: this.relativeTo !== undefined ? this.relativeTo : this.route,
             queryParams: this.queryParams,
             fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserve),
             queryParamsHandling: this.queryParamsHandling,
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
@@ -4689,10 +4926,11 @@ RouterLinkWithHref.propDecorators = {
     skipLocationChange: [{ type: Input }],
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
+    relativeTo: [{ type: Input }],
     href: [{ type: HostBinding }],
     routerLink: [{ type: Input }],
-    preserveQueryParams: [{ type: Input }],
-    onClick: [{ type: HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'],] }]
+    onClick: [{ type: HostListener, args: ['click',
+                ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
 };
 function attrBoolValue(s) {
     return s === '' || !!s;
@@ -4714,7 +4952,7 @@ function attrBoolValue(s) {
  * is active.
  *
  * Use this directive to create a visual distinction for elements associated with an active route.
- * For example, the following code highlights the word "Bob" when the the router
+ * For example, the following code highlights the word "Bob" when the router
  * activates the associated route:
  *
  * ```
@@ -4774,27 +5012,53 @@ class RouterLinkActive {
         this.linkWithHref = linkWithHref;
         this.classes = [];
         this.isActive = false;
+        /**
+         * Options to configure how to determine if the router link is active.
+         *
+         * These options are passed to the `Router.isActive()` function.
+         *
+         * @see Router.isActive
+         */
         this.routerLinkActiveOptions = { exact: false };
-        this.subscription = router.events.subscribe((s) => {
+        this.routerEventsSubscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.update();
             }
         });
     }
+    /** @nodoc */
     ngAfterContentInit() {
-        this.links.changes.subscribe(_ => this.update());
-        this.linksWithHrefs.changes.subscribe(_ => this.update());
-        this.update();
+        // `of(null)` is used to force subscribe body to execute once immediately (like `startWith`).
+        of(this.links.changes, this.linksWithHrefs.changes, of(null)).pipe(mergeAll()).subscribe(_ => {
+            this.update();
+            this.subscribeToEachLinkOnChanges();
+        });
+    }
+    subscribeToEachLinkOnChanges() {
+        var _a;
+        (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
+        const allLinkChanges = [...this.links.toArray(), ...this.linksWithHrefs.toArray(), this.link, this.linkWithHref]
+            .filter((link) => !!link)
+            .map(link => link.onChanges);
+        this.linkInputChangesSubscription = from(allLinkChanges).pipe(mergeAll()).subscribe(link => {
+            if (this.isActive !== this.isLinkActive(this.router)(link)) {
+                this.update();
+            }
+        });
     }
     set routerLinkActive(data) {
         const classes = Array.isArray(data) ? data : data.split(' ');
         this.classes = classes.filter(c => !!c);
     }
+    /** @nodoc */
     ngOnChanges(changes) {
         this.update();
     }
+    /** @nodoc */
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        var _a;
+        this.routerEventsSubscription.unsubscribe();
+        (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
     }
     update() {
         if (!this.links || !this.linksWithHrefs || !this.router.navigated)
@@ -4816,7 +5080,11 @@ class RouterLinkActive {
         });
     }
     isLinkActive(router) {
-        return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
+        const options = 'paths' in this.routerLinkActiveOptions ?
+            this.routerLinkActiveOptions :
+            // While the types should disallow `undefined` here, it's possible without strict inputs
+            (this.routerLinkActiveOptions.exact || false);
+        return (link) => router.isActive(link.urlTree, options);
     }
     hasActiveLinks() {
         const isActiveCheckFn = this.isLinkActive(this.router);
@@ -4912,9 +5180,11 @@ class RouterOutlet {
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, this);
     }
+    /** @nodoc */
     ngOnDestroy() {
         this.parentContexts.onChildOutletDestroyed(this.name);
     }
+    /** @nodoc */
     ngOnInit() {
         if (!this.activated) {
             // If the outlet was not instantiated at the time the route got activated we need to populate
@@ -4935,6 +5205,10 @@ class RouterOutlet {
     get isActivated() {
         return !!this.activated;
     }
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
     get component() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
@@ -5051,7 +5325,7 @@ class PreloadingStrategy {
  * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
- * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+ * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
  * @publicApi
@@ -5106,6 +5380,7 @@ class RouterPreloader {
         const ngModule = this.injector.get(NgModuleRef);
         return this.processRoutes(ngModule, this.router.config);
     }
+    /** @nodoc */
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -5132,7 +5407,8 @@ class RouterPreloader {
     }
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const loaded$ = this.loader.load(ngModule.injector, route);
+            const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                this.loader.load(ngModule.injector, route);
             return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
@@ -5223,6 +5499,7 @@ class RouterScroller {
     scheduleScrollEvent(routerEvent, anchor) {
         this.router.triggerEvent(new Scroll(routerEvent, this.lastSource === 'popstate' ? this.store[this.restoredId] : null, anchor));
     }
+    /** @nodoc */
     ngOnDestroy() {
         if (this.routerEventsSubscription) {
             this.routerEventsSubscription.unsubscribe();
@@ -5402,7 +5679,7 @@ function provideLocationStrategy(platformLocationStrategy, baseHref, options = {
         new PathLocationStrategy(platformLocationStrategy, baseHref);
 }
 function provideForRootGuard(router) {
-    if (router) {
+    if ((typeof ngDevMode === 'undefined' || ngDevMode) && router) {
         throw new Error(`RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.`);
     }
     return 'guarded';
@@ -5437,20 +5714,26 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
     if (routeReuseStrategy) {
         router.routeReuseStrategy = routeReuseStrategy;
     }
+    assignExtraOptionsToRouter(opts, router);
+    if (opts.enableTracing) {
+        router.events.subscribe((e) => {
+            var _a, _b;
+            // tslint:disable:no-console
+            (_a = console.group) === null || _a === void 0 ? void 0 : _a.call(console, `Router Event: ${e.constructor.name}`);
+            console.log(e.toString());
+            console.log(e);
+            (_b = console.groupEnd) === null || _b === void 0 ? void 0 : _b.call(console);
+            // tslint:enable:no-console
+        });
+    }
+    return router;
+}
+function assignExtraOptionsToRouter(opts, router) {
     if (opts.errorHandler) {
         router.errorHandler = opts.errorHandler;
     }
     if (opts.malformedUriErrorHandler) {
         router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-    }
-    if (opts.enableTracing) {
-        const dom = ɵgetDOM();
-        router.events.subscribe((e) => {
-            dom.logGroup(`Router Event: ${e.constructor.name}`);
-            dom.log(e.toString());
-            dom.log(e);
-            dom.logGroupEnd();
-        });
     }
     if (opts.onSameUrlNavigation) {
         router.onSameUrlNavigation = opts.onSameUrlNavigation;
@@ -5458,13 +5741,12 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
     if (opts.paramsInheritanceStrategy) {
         router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
     }
-    if (opts.urlUpdateStrategy) {
-        router.urlUpdateStrategy = opts.urlUpdateStrategy;
-    }
     if (opts.relativeLinkResolution) {
         router.relativeLinkResolution = opts.relativeLinkResolution;
     }
-    return router;
+    if (opts.urlUpdateStrategy) {
+        router.urlUpdateStrategy = opts.urlUpdateStrategy;
+    }
 }
 function rootRoute(router) {
     return router.routerState.root;
@@ -5493,14 +5775,13 @@ class RouterInitializer {
             const res = new Promise(r => resolve = r);
             const router = this.injector.get(Router);
             const opts = this.injector.get(ROUTER_CONFIGURATION);
-            if (this.isLegacyDisabled(opts) || this.isLegacyEnabled(opts)) {
-                resolve(true);
-            }
-            else if (opts.initialNavigation === 'disabled') {
+            if (opts.initialNavigation === 'disabled') {
                 router.setUpLocationChangeListener();
                 resolve(true);
             }
-            else if (opts.initialNavigation === 'enabled') {
+            else if (
+            // TODO: enabled is deprecated as of v11, can be removed in v13
+            opts.initialNavigation === 'enabled' || opts.initialNavigation === 'enabledBlocking') {
                 router.hooks.afterPreactivation = () => {
                     // only the initial navigation should be delayed
                     if (!this.initNavigation) {
@@ -5516,7 +5797,7 @@ class RouterInitializer {
                 router.initialNavigation();
             }
             else {
-                throw new Error(`Invalid initialNavigation options: '${opts.initialNavigation}'`);
+                resolve(true);
             }
             return res;
         });
@@ -5530,24 +5811,15 @@ class RouterInitializer {
         if (bootstrappedComponentRef !== ref.components[0]) {
             return;
         }
-        if (this.isLegacyEnabled(opts)) {
+        // Default case
+        if (opts.initialNavigation === 'enabledNonBlocking' || opts.initialNavigation === undefined) {
             router.initialNavigation();
-        }
-        else if (this.isLegacyDisabled(opts)) {
-            router.setUpLocationChangeListener();
         }
         preloader.setUpPreloading();
         routerScroller.init();
         router.resetRootComponentType(ref.componentTypes[0]);
         this.resultOfPreactivationDone.next(null);
         this.resultOfPreactivationDone.complete();
-    }
-    isLegacyEnabled(opts) {
-        return opts.initialNavigation === 'legacy_enabled' || opts.initialNavigation === true ||
-            opts.initialNavigation === undefined;
-    }
-    isLegacyDisabled(opts) {
-        return opts.initialNavigation === 'legacy_disabled' || opts.initialNavigation === false;
     }
 }
 RouterInitializer.decorators = [
@@ -5593,7 +5865,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('10.1.0-next.4+26.sha-6248d6c');
+const VERSION = new Version('12.0.0-next.5+9.sha-bff0d8f');
 
 /**
  * @license
@@ -5632,5 +5904,5 @@ const VERSION = new Version('10.1.0-next.4+26.sha-6248d6c');
  * Generated bundle index. Do not edit.
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, routerNgProbeToken as ɵangular_packages_router_router_b, createRouterScroller as ɵangular_packages_router_router_c, provideLocationStrategy as ɵangular_packages_router_router_d, provideForRootGuard as ɵangular_packages_router_router_e, setupRouter as ɵangular_packages_router_router_f, rootRoute as ɵangular_packages_router_router_g, RouterInitializer as ɵangular_packages_router_router_h, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideRouterInitializer as ɵangular_packages_router_router_k, ɵEmptyOutletComponent as ɵangular_packages_router_router_l, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterScroller as ɵangular_packages_router_router_o, flatten as ɵflatten };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ROUTER_FORROOT_GUARD as ɵangular_packages_router_router_a, routerNgProbeToken as ɵangular_packages_router_router_b, createRouterScroller as ɵangular_packages_router_router_c, provideLocationStrategy as ɵangular_packages_router_router_d, provideForRootGuard as ɵangular_packages_router_router_e, setupRouter as ɵangular_packages_router_router_f, rootRoute as ɵangular_packages_router_router_g, RouterInitializer as ɵangular_packages_router_router_h, getAppInitializer as ɵangular_packages_router_router_i, getBootstrapListener as ɵangular_packages_router_router_j, provideRouterInitializer as ɵangular_packages_router_router_k, ɵEmptyOutletComponent as ɵangular_packages_router_router_l, Tree as ɵangular_packages_router_router_m, TreeNode as ɵangular_packages_router_router_n, RouterScroller as ɵangular_packages_router_router_o, assignExtraOptionsToRouter as ɵassignExtraOptionsToRouter, flatten as ɵflatten };
 //# sourceMappingURL=router.js.map

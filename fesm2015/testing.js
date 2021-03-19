@@ -1,13 +1,13 @@
 /**
- * @license Angular v10.1.0-next.4+26.sha-6248d6c
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.5+9.sha-bff0d8f
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import { Injectable, Compiler, NgModule, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
-import { Router, ɵflatten, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
+import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
  * @license
@@ -103,12 +103,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
         }
         else {
             // Handle ExtraOptions
-            if (opts.malformedUriErrorHandler) {
-                router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-            }
-            if (opts.paramsInheritanceStrategy) {
-                router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
-            }
+            ɵassignExtraOptionsToRouter(opts, router);
         }
     }
     if (urlHandlingStrategy) {

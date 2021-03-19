@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "10.1.0-next.4+26.sha-6248d6c",
+  "version": "12.0.0-next.5+9.sha-bff0d8f",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "peerDependencies": {
-    "@angular/core": "10.1.0-next.4+26.sha-6248d6c",
-    "@angular/common": "10.1.0-next.4+26.sha-6248d6c",
-    "@angular/platform-browser": "10.1.0-next.4+26.sha-6248d6c",
+    "@angular/core": "12.0.0-next.5+9.sha-bff0d8f",
+    "@angular/common": "12.0.0-next.5+9.sha-bff0d8f",
+    "@angular/platform-browser": "12.0.0-next.5+9.sha-bff0d8f",
     "rxjs": "^6.5.3"
   },
   "ng-update": {
@@ -39,8 +39,6 @@
       "@angular/platform-browser-dynamic",
       "@angular/forms",
       "@angular/platform-server",
-      "@angular/platform-webworker",
-      "@angular/platform-webworker-dynamic",
       "@angular/upgrade",
       "@angular/router",
       "@angular/language-service",
