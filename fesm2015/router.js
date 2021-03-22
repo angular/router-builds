@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.5+23.sha-e7b1d43
+ * @license Angular v12.0.0-next.5+24.sha-b555160
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4614,7 +4614,7 @@ class Router {
         if (q !== null) {
             q = this.removeEmptyProps(q);
         }
-        return createUrlTree(a, this.currentUrlTree, commands, q, f);
+        return createUrlTree(a, this.currentUrlTree, commands, q, f !== null && f !== void 0 ? f : null);
     }
     /**
      * Navigates to a view using an absolute route path.
@@ -5898,7 +5898,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.5+23.sha-e7b1d43');
+const VERSION = new Version('12.0.0-next.5+24.sha-b555160');
 
 /**
  * @license
