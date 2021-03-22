@@ -91,9 +91,9 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ɵfac: i0.ɵɵFactoryDef<RouterModule, [{ optional: true; }, { optional: true; }]>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
-    static ɵinj: i0.ɵɵInjectorDef<RouterModule>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }, { optional: true; }]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
 export declare function createRouterScroller(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): RouterScroller;
 export declare function provideLocationStrategy(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
@@ -332,7 +332,7 @@ export declare class RouterInitializer {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    static ɵfac: i0.ɵɵFactoryDef<RouterInitializer, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterInitializer, never>;
     static ɵprov: i0.ɵɵInjectableDef<RouterInitializer>;
 }
 export declare function getAppInitializer(r: RouterInitializer): () => Promise<any>;

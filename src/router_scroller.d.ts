@@ -30,6 +30,6 @@ export declare class RouterScroller implements OnDestroy {
     private scheduleScrollEvent;
     /** @nodoc */
     ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDef<RouterScroller, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterScroller, never>;
     static ɵprov: i0.ɵɵInjectableDef<RouterScroller>;
 }

@@ -59,7 +59,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     };
     constructor(compiler: Compiler);
     load(path: string): Promise<NgModuleFactory<any>>;
-    static ɵfac: i0.ɵɵFactoryDef<SpyNgModuleFactoryLoader, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<SpyNgModuleFactoryLoader, never>;
     static ɵprov: i0.ɵɵInjectableDef<SpyNgModuleFactoryLoader>;
 }
 /**
@@ -104,7 +104,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
-    static ɵfac: i0.ɵɵFactoryDef<RouterTestingModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
-    static ɵinj: i0.ɵɵInjectorDef<RouterTestingModule>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterTestingModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<RouterTestingModule>;
 }

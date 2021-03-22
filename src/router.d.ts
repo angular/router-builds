@@ -580,6 +580,6 @@ export declare class Router {
     private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
-    static ɵfac: i0.ɵɵFactoryDef<Router, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
     static ɵprov: i0.ɵɵInjectableDef<Router>;
 }
