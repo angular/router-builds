@@ -426,10 +426,7 @@ export declare class Router {
     private shouldScheduleNavigation;
     /** The current URL. */
     get url(): string;
-    /**
-     * Returns the current `Navigation` object when the router is navigating,
-     * and `null` when idle.
-     */
+    /** The current Navigation object if one exists */
     getCurrentNavigation(): Navigation | null;
     /**
      * Resets the route configuration used for navigation and generating links.

@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.7+25.sha-575f537
+ * @license Angular v12.0.0-next.7+22.sha-f7c294e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5104,10 +5104,7 @@
             enumerable: false,
             configurable: true
         });
-        /**
-         * Returns the current `Navigation` object when the router is navigating,
-         * and `null` when idle.
-         */
+        /** The current Navigation object if one exists */
         Router.prototype.getCurrentNavigation = function () {
             return this.currentNavigation;
         };
@@ -6567,7 +6564,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.7+25.sha-575f537');
+    var VERSION = new i0.Version('12.0.0-next.7+22.sha-f7c294e');
 
     /**
      * @license
