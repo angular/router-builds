@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.7+25.sha-575f537
+ * @license Angular v12.0.0-next.7+22.sha-f7c294e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2125,10 +2125,7 @@ export declare class Router {
     private shouldScheduleNavigation;
     /** The current URL. */
     get url(): string;
-    /**
-     * Returns the current `Navigation` object when the router is navigating,
-     * and `null` when idle.
-     */
+    /** The current Navigation object if one exists */
     getCurrentNavigation(): Navigation | null;
     /**
      * Resets the route configuration used for navigation and generating links.
