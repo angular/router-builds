@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+12.sha-0a4308f
+ * @license Angular v12.0.0-next.8+13.sha-d28a391
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2554,6 +2554,11 @@
                 context.outlet.deactivate();
                 // Destroy the contexts for all the outlets that were in the component
                 context.children.onOutletDeactivated();
+                // Clear the information about the attached component on the context but keep the reference to
+                // the outlet.
+                context.attachRef = null;
+                context.resolver = null;
+                context.route = null;
             }
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
@@ -6517,7 +6522,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.0-next.8+12.sha-0a4308f');
+    var VERSION = new core.Version('12.0.0-next.8+13.sha-d28a391');
 
     /**
      * @license
