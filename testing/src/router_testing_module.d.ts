@@ -60,7 +60,7 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     constructor(compiler: Compiler);
     load(path: string): Promise<NgModuleFactory<any>>;
     static ɵfac: i0.ɵɵFactoryDeclaration<SpyNgModuleFactoryLoader, never>;
-    static ɵprov: i0.ɵɵInjectableDef<SpyNgModuleFactoryLoader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<SpyNgModuleFactoryLoader>;
 }
 /**
  * Router setup factory function used for testing.

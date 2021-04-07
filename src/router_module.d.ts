@@ -333,7 +333,7 @@ export declare class RouterInitializer {
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterInitializer, never>;
-    static ɵprov: i0.ɵɵInjectableDef<RouterInitializer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouterInitializer>;
 }
 export declare function getAppInitializer(r: RouterInitializer): () => Promise<any>;
 export declare function getBootstrapListener(r: RouterInitializer): (bootstrappedComponentRef: ComponentRef<any>) => void;

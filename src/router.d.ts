@@ -584,5 +584,5 @@ export declare class Router {
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
-    static ɵprov: i0.ɵɵInjectableDef<Router>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
 }

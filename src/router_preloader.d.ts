@@ -72,5 +72,5 @@ export declare class RouterPreloader implements OnDestroy {
     private processRoutes;
     private preloadConfig;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterPreloader, never>;
-    static ɵprov: i0.ɵɵInjectableDef<RouterPreloader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouterPreloader>;
 }
