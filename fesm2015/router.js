@@ -1,5 +1,5 @@
 /**
- * @license Angular v11.2.9+13.sha-74d1769
+ * @license Angular v11.2.9+14.sha-e34299a
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4496,7 +4496,6 @@ class Router {
             this.events
                 .next(new NavigationEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
             this.lastSuccessfulNavigation = this.currentNavigation;
-            this.currentNavigation = null;
             t.resolve(true);
         }, e => {
             this.console.warn(`Unhandled Navigation Error: `);
@@ -5806,7 +5805,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.2.9+13.sha-74d1769');
+const VERSION = new Version('11.2.9+14.sha-e34299a');
 
 /**
  * @license
