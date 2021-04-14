@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+10.sha-69afeb3
+ * @license Angular v12.0.0-next.8+99.sha-886bf37
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2091,6 +2091,11 @@ class ActivateRoutes {
             context.outlet.deactivate();
             // Destroy the contexts for all the outlets that were in the component
             context.children.onOutletDeactivated();
+            // Clear the information about the attached component on the context but keep the reference to
+            // the outlet.
+            context.attachRef = null;
+            context.resolver = null;
+            context.route = null;
         }
     }
     activateChildRoutes(futureNode, currNode, contexts) {
@@ -4310,7 +4315,10 @@ class Router {
     get url() {
         return this.serializeUrl(this.currentUrlTree);
     }
-    /** The current Navigation object if one exists */
+    /**
+     * Returns the current `Navigation` object when the router is navigating,
+     * and `null` when idle.
+     */
     getCurrentNavigation() {
         return this.currentNavigation;
     }
@@ -4419,7 +4427,7 @@ class Router {
         if (q !== null) {
             q = this.removeEmptyProps(q);
         }
-        return createUrlTree(a, this.currentUrlTree, commands, q, f);
+        return createUrlTree(a, this.currentUrlTree, commands, q, f !== null && f !== void 0 ? f : null);
     }
     /**
      * Navigates to a view using an absolute route path.
@@ -4538,7 +4546,6 @@ class Router {
             this.events
                 .next(new NavigationEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
             this.lastSuccessfulNavigation = this.currentNavigation;
-            this.currentNavigation = null;
             t.resolve(true);
         }, e => {
             this.console.warn(`Unhandled Navigation Error: `);
@@ -5865,7 +5872,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.4+10.sha-69afeb3');
+const VERSION = new Version('12.0.0-next.8+99.sha-886bf37');
 
 /**
  * @license

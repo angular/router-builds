@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.4+10.sha-69afeb3
+ * @license Angular v12.0.0-next.8+99.sha-886bf37
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -29,11 +29,13 @@
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
+                if (Object.prototype.hasOwnProperty.call(b, p))
                     d[p] = b[p]; };
         return extendStatics(d, b);
     };
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -176,10 +178,10 @@
             k2 = k;
         o[k2] = m[k];
     });
-    function __exportStar(m, exports) {
+    function __exportStar(m, o) {
         for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                __createBinding(exports, m, p);
+            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+                __createBinding(o, m, p);
     }
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -219,11 +221,13 @@
         }
         return ar;
     }
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++)
             s += arguments[i].length;
@@ -232,7 +236,11 @@
                 r[k] = a[j];
         return r;
     }
-    ;
+    function __spreadArray(to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
@@ -289,7 +297,7 @@
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
+                if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
                     __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
@@ -297,18 +305,21 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-    function __classPrivateFieldGet(receiver, privateMap) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to get private field on non-instance");
-        }
-        return privateMap.get(receiver);
+    function __classPrivateFieldGet(receiver, state, kind, f) {
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
     }
-    function __classPrivateFieldSet(receiver, privateMap, value) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to set private field on non-instance");
-        }
-        privateMap.set(receiver, value);
-        return value;
+    function __classPrivateFieldSet(receiver, state, value, kind, f) {
+        if (kind === "m")
+            throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
     }
 
     /**
@@ -873,8 +884,8 @@
         if (Array.isArray(a) && Array.isArray(b)) {
             if (a.length !== b.length)
                 return false;
-            var aSorted = __spread(a).sort();
-            var bSorted_1 = __spread(b).sort();
+            var aSorted = __spreadArray([], __read(a)).sort();
+            var bSorted_1 = __spreadArray([], __read(b)).sort();
             return aSorted.every(function (val, index) { return bSorted_1[index] === val; });
         }
         else {
@@ -2238,14 +2249,14 @@
                     forEach(cmd.outlets, function (commands, name) {
                         outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
                     });
-                    return __spread(res, [{ outlets: outlets_1 }]);
+                    return __spreadArray(__spreadArray([], __read(res)), [{ outlets: outlets_1 }]);
                 }
                 if (cmd.segmentPath) {
-                    return __spread(res, [cmd.segmentPath]);
+                    return __spreadArray(__spreadArray([], __read(res)), [cmd.segmentPath]);
                 }
             }
             if (!(typeof cmd === 'string')) {
-                return __spread(res, [cmd]);
+                return __spreadArray(__spreadArray([], __read(res)), [cmd]);
             }
             if (cmdIdx === 0) {
                 cmd.split('/').forEach(function (urlPart, partIndex) {
@@ -2264,7 +2275,7 @@
                 });
                 return res;
             }
-            return __spread(res, [cmd]);
+            return __spreadArray(__spreadArray([], __read(res)), [cmd]);
         }, []);
         return new Navigation(isAbsolute, numberOfDoubleDots, res);
     }
@@ -2546,6 +2557,11 @@
                 context.outlet.deactivate();
                 // Destroy the contexts for all the outlets that were in the component
                 context.children.onOutletDeactivated();
+                // Clear the information about the attached component on the context but keep the reference to
+                // the outlet.
+                context.attachRef = null;
+                context.resolver = null;
+                context.route = null;
             }
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
@@ -2849,7 +2865,7 @@
      */
     function sortByMatchingOutlets(routes, outletName) {
         var sortedConfig = routes.filter(function (r) { return getOutlet(r) === outletName; });
-        sortedConfig.push.apply(sortedConfig, __spread(routes.filter(function (r) { return getOutlet(r) !== outletName; })));
+        sortedConfig.push.apply(sortedConfig, __spreadArray([], __read(routes.filter(function (r) { return getOutlet(r) !== outletName; }))));
         return sortedConfig;
     }
 
@@ -3809,7 +3825,7 @@
                         // outlet, return `null`.
                         return null;
                     }
-                    children.push.apply(children, __spread(outletChildren));
+                    children.push.apply(children, __spreadArray([], __read(outletChildren)));
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -3937,14 +3953,14 @@
         var e_3, _a;
         var result = [];
         var _loop_1 = function (node) {
-            var _a;
+            var _b;
             if (!hasEmptyPathConfig(node)) {
                 result.push(node);
                 return "continue";
             }
             var duplicateEmptyPathNode = result.find(function (resultNode) { return node.value.routeConfig === resultNode.value.routeConfig; });
             if (duplicateEmptyPathNode !== undefined) {
-                (_a = duplicateEmptyPathNode.children).push.apply(_a, __spread(node.children));
+                (_b = duplicateEmptyPathNode.children).push.apply(_b, __spreadArray([], __read(node.children)));
             }
             else {
                 result.push(node);
@@ -4882,7 +4898,10 @@
             enumerable: false,
             configurable: true
         });
-        /** The current Navigation object if one exists */
+        /**
+         * Returns the current `Navigation` object when the router is navigating,
+         * and `null` when idle.
+         */
         Router.prototype.getCurrentNavigation = function () {
             return this.currentNavigation;
         };
@@ -4992,7 +5011,7 @@
             if (q !== null) {
                 q = this.removeEmptyProps(q);
             }
-            return createUrlTree(a, this.currentUrlTree, commands, q, f);
+            return createUrlTree(a, this.currentUrlTree, commands, q, f !== null && f !== void 0 ? f : null);
         };
         /**
          * Navigates to a view using an absolute route path.
@@ -5114,7 +5133,6 @@
                 _this.events
                     .next(new NavigationEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(_this.currentUrlTree)));
                 _this.lastSuccessfulNavigation = _this.currentNavigation;
-                _this.currentNavigation = null;
                 t.resolve(true);
             }, function (e) {
                 _this.console.warn("Unhandled Navigation Error: ");
@@ -5629,7 +5647,7 @@
             var _this = this;
             var _a;
             (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
-            var allLinkChanges = __spread(this.links.toArray(), this.linksWithHrefs.toArray(), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
+            var allLinkChanges = __spreadArray(__spreadArray(__spreadArray([], __read(this.links.toArray())), __read(this.linksWithHrefs.toArray())), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
                 .map(function (link) { return link.onChanges; });
             this.linkInputChangesSubscription = rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function (link) {
                 if (_this.isActive !== _this.isLinkActive(_this.router)(link)) {
@@ -6506,7 +6524,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.0-next.4+10.sha-69afeb3');
+    var VERSION = new core.Version('12.0.0-next.8+99.sha-886bf37');
 
     /**
      * @license
