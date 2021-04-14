@@ -1,0 +1,59 @@
+{
+  "name": "@angular/router",
+  "version": "12.0.0-next.8+77.sha-0231d15",
+  "description": "Angular - the routing library",
+  "keywords": [
+    "angular",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git",
+    "directory": "packages/router"
+  },
+  "author": "angular",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
+  "dependencies": {
+    "tslib": "^2.1.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "12.0.0-next.8+77.sha-0231d15",
+    "@angular/common": "12.0.0-next.8+77.sha-0231d15",
+    "@angular/platform-browser": "12.0.0-next.8+77.sha-0231d15",
+    "rxjs": "^6.5.3"
+  },
+  "ng-update": {
+    "packageGroup": [
+      "@angular/core",
+      "@angular/bazel",
+      "@angular/common",
+      "@angular/compiler",
+      "@angular/compiler-cli",
+      "@angular/animations",
+      "@angular/elements",
+      "@angular/platform-browser",
+      "@angular/platform-browser-dynamic",
+      "@angular/forms",
+      "@angular/platform-server",
+      "@angular/upgrade",
+      "@angular/router",
+      "@angular/language-service",
+      "@angular/localize",
+      "@angular/service-worker"
+    ]
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  },
+  "main": "./bundles/router.umd.js",
+  "fesm2015": "./fesm2015/router.js",
+  "esm2015": "./esm2015/router.js",
+  "typings": "./router.d.ts",
+  "module": "./fesm2015/router.js",
+  "es2015": "./fesm2015/router.js"
+}
