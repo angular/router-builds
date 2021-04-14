@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+102.sha-1043aa4
+ * @license Angular v12.0.0-next.8+105.sha-a1b2718
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3680,6 +3680,8 @@ function hasEmptyPathConfig(node) {
  */
 function mergeEmptyPathMatches(nodes) {
     const result = [];
+    // The set of nodes which contain children that were merged from two duplicate empty path nodes.
+    const mergedNodes = new Set();
     for (const node of nodes) {
         if (!hasEmptyPathConfig(node)) {
             result.push(node);
@@ -3688,12 +3690,21 @@ function mergeEmptyPathMatches(nodes) {
         const duplicateEmptyPathNode = result.find(resultNode => node.value.routeConfig === resultNode.value.routeConfig);
         if (duplicateEmptyPathNode !== undefined) {
             duplicateEmptyPathNode.children.push(...node.children);
+            mergedNodes.add(duplicateEmptyPathNode);
         }
         else {
             result.push(node);
         }
     }
-    return result;
+    // For each node which has children from multiple sources, we need to recompute a new `TreeNode`
+    // by also merging those children. This is necessary when there are multiple empty path configs in
+    // a row. Put another way: whenever we combine children of two nodes, we need to also check if any
+    // of those children can be combined into a single node as well.
+    for (const mergedNode of mergedNodes) {
+        const mergedChildren = mergeEmptyPathMatches(mergedNode.children);
+        result.push(new TreeNode(mergedNode.value, mergedChildren));
+    }
+    return result.filter(n => !mergedNodes.has(n));
 }
 function checkOutletNameUniqueness(nodes) {
     const names = {};
@@ -5905,7 +5916,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.0-next.8+102.sha-1043aa4');
+const VERSION = new Version('12.0.0-next.8+105.sha-a1b2718');
 
 /**
  * @license
