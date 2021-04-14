@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "10.2.4+2.sha-f630f33",
+  "version": "10.2.5",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -21,9 +21,9 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "10.2.4+2.sha-f630f33",
-    "@angular/common": "10.2.4+2.sha-f630f33",
-    "@angular/platform-browser": "10.2.4+2.sha-f630f33",
+    "@angular/core": "10.2.5",
+    "@angular/common": "10.2.5",
+    "@angular/platform-browser": "10.2.5",
     "rxjs": "^6.5.3"
   },
   "ng-update": {
