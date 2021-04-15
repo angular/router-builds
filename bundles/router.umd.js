@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+111.sha-dd4c3db
+ * @license Angular v12.0.0-next.8+114.sha-6bceb70
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2116,20 +2116,20 @@
             value._futureSnapshot = curr.value;
             var children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
             return new TreeNode(value, children);
-            // retrieve an activated route that is used to be displayed, but is not currently displayed
         }
         else {
-            var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
-            if (detachedRouteHandle) {
-                var tree = detachedRouteHandle.route;
-                setFutureSnapshotsOfActivatedRoutes(curr, tree);
-                return tree;
+            if (routeReuseStrategy.shouldAttach(curr.value)) {
+                // retrieve an activated route that is used to be displayed, but is not currently displayed
+                var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
+                if (detachedRouteHandle !== null) {
+                    var tree = detachedRouteHandle.route;
+                    setFutureSnapshotsOfActivatedRoutes(curr, tree);
+                    return tree;
+                }
             }
-            else {
-                var value = createActivatedRoute(curr.value);
-                var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
-                return new TreeNode(value, children);
-            }
+            var value = createActivatedRoute(curr.value);
+            var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+            return new TreeNode(value, children);
         }
     }
     function setFutureSnapshotsOfActivatedRoutes(curr, result) {
@@ -6595,7 +6595,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.8+111.sha-dd4c3db');
+    var VERSION = new i0.Version('12.0.0-next.8+114.sha-6bceb70');
 
     /**
      * @license
