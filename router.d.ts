@@ -1,11 +1,10 @@
 /**
- * @license Angular v9.0.0-next.12+69.sha-1f498ab.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+121.sha-72c4288
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { AfterContentInit } from '@angular/core';
-import { ApplicationRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Compiler } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
@@ -41,8 +40,13 @@ import { ViewportScroller } from '@angular/common';
  * that is loaded in an outlet.
  * Use to traverse the `RouterState` tree and extract information from nodes.
  *
+ * The following example shows how to construct a component using information from a
+ * currently activated route.
+ *
  * {@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts"}
+ *
+ * @see [Getting route information](guide/router#getting-route-information)
  *
  * @publicApi
  */
@@ -54,7 +58,7 @@ export declare class ActivatedRoute {
     /** An observable of the query parameters shared by all the routes. */
     queryParams: Observable<Params>;
     /** An observable of the URL fragment shared by all the routes. */
-    fragment: Observable<string>;
+    fragment: Observable<string | null>;
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
     /** The outlet name of the route, a constant. */
@@ -64,26 +68,28 @@ export declare class ActivatedRoute {
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
     /** The configuration used to match this route. */
-    readonly routeConfig: Route | null;
+    get routeConfig(): Route | null;
     /** The root of the router state. */
-    readonly root: ActivatedRoute;
+    get root(): ActivatedRoute;
     /** The parent of this route in the router state tree. */
-    readonly parent: ActivatedRoute | null;
+    get parent(): ActivatedRoute | null;
     /** The first child of this route in the router state tree. */
-    readonly firstChild: ActivatedRoute | null;
+    get firstChild(): ActivatedRoute | null;
     /** The children of this route in the router state tree. */
-    readonly children: ActivatedRoute[];
+    get children(): ActivatedRoute[];
     /** The path from the root of the router state tree to this route. */
-    readonly pathFromRoot: ActivatedRoute[];
-    /** An Observable that contains a map of the required and optional parameters
+    get pathFromRoot(): ActivatedRoute[];
+    /**
+     * An Observable that contains a map of the required and optional parameters
      * specific to the route.
-     * The map supports retrieving single and multiple values from the same parameter. */
-    readonly paramMap: Observable<ParamMap>;
+     * The map supports retrieving single and multiple values from the same parameter.
+     */
+    get paramMap(): Observable<ParamMap>;
     /**
      * An Observable that contains a map of the query parameters available to all routes.
      * The map supports retrieving single and multiple values from the query parameter.
      */
-    readonly queryParamMap: Observable<ParamMap>;
+    get queryParamMap(): Observable<ParamMap>;
     toString(): string;
 }
 
@@ -93,6 +99,9 @@ export declare class ActivatedRoute {
  * Contains the information about a route associated with a component loaded in an
  * outlet at a particular moment in time. ActivatedRouteSnapshot can also be used to
  * traverse the router state tree.
+ *
+ * The following example initializes a component with route information extracted
+ * from the snapshot of the root node at the time of creation.
  *
  * ```
  * @Component({templateUrl:'./my-component.html'})
@@ -110,12 +119,30 @@ export declare class ActivatedRoute {
 export declare class ActivatedRouteSnapshot {
     /** The URL segments matched by this route */
     url: UrlSegment[];
-    /** The matrix parameters scoped to this route */
+    /**
+     *  The matrix parameters scoped to this route.
+     *
+     *  You can compute all params (or data) in the router state or to get params outside
+     *  of an activated component by traversing the `RouterState` tree as in the following
+     *  example:
+     *  ```
+     *  collectRouteParams(router: Router) {
+     *    let params = {};
+     *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+     *    while (stack.length > 0) {
+     *      const route = stack.pop()!;
+     *      params = {...params, ...route.params};
+     *      stack.push(...route.children);
+     *    }
+     *    return params;
+     *  }
+     *  ```
+     */
     params: Params;
     /** The query parameters shared by all the routes */
     queryParams: Params;
     /** The URL fragment shared by all the routes */
-    fragment: string;
+    fragment: string | null;
     /** The static and resolved data of this route */
     data: Data;
     /** The outlet name of the route */
@@ -125,17 +152,17 @@ export declare class ActivatedRouteSnapshot {
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /** The root of the router state */
-    readonly root: ActivatedRouteSnapshot;
+    get root(): ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
-    readonly parent: ActivatedRouteSnapshot | null;
+    get parent(): ActivatedRouteSnapshot | null;
     /** The first child of this route in the router state tree */
-    readonly firstChild: ActivatedRouteSnapshot | null;
+    get firstChild(): ActivatedRouteSnapshot | null;
     /** The children of this route in the router state tree */
-    readonly children: ActivatedRouteSnapshot[];
+    get children(): ActivatedRouteSnapshot[];
     /** The path from the root of the router state tree to this route */
-    readonly pathFromRoot: ActivatedRouteSnapshot[];
-    readonly paramMap: ParamMap;
-    readonly queryParamMap: ParamMap;
+    get pathFromRoot(): ActivatedRouteSnapshot[];
+    get paramMap(): ParamMap;
+    get queryParamMap(): ParamMap;
     toString(): string;
 }
 
@@ -159,7 +186,7 @@ export declare class ActivationEnd {
 /**
  * An event triggered at the start of the activation part
  * of the Resolve phase of routing.
- * @see ActivationEnd`
+ * @see `ActivationEnd`
  * @see `ResolveStart`
  *
  * @publicApi
@@ -176,11 +203,52 @@ export declare class ActivationStart {
 /**
  * @description
  *
+ * This base route reuse strategy only reuses routes when the matched router configs are
+ * identical. This prevents components from being destroyed and recreated
+ * when just the fragment or query parameters change
+ * (that is, the existing component is _reused_).
+ *
+ * This strategy does not store any routes for later reuse.
+ *
+ * Angular uses this strategy by default.
+ *
+ *
+ * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+ * class that extends the `BaseRouteReuseStrategy` one.
+ * @publicApi
+ */
+export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
+    /**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for `BaseRouteReuseStrategy`.
+     * */
+    shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    /**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
+    /** Returns `false`, meaning the route (and its subtree) is never reattached */
+    shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    /** Returns `null` because this strategy does not store routes for later re-use. */
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    /**
+     * Determines if a route should be reused.
+     * This strategy returns `true` when the future route config and current route config are
+     * identical.
+     */
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+}
+
+/**
+ * @description
+ *
  * Interface that a class can implement to be a guard deciding if a route can be activated.
- * If all guards return `true`, navigation will continue. If any guard returns `false`,
- * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
- * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
- * guard.
+ * If all guards return `true`, navigation continues. If any guard returns `false`,
+ * navigation is cancelled. If any guard returns a `UrlTree`, the current navigation
+ * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
+ *
+ * The following example implements a `CanActivate` function that checks whether the
+ * current user has permission to activate the requested route.
  *
  * ```
  * class UserToken {}
@@ -201,7 +269,12 @@ export declare class ActivationStart {
  *     return this.permissions.canActivate(this.currentUser, route.params.id);
  *   }
  * }
+ * ```
  *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -217,7 +290,7 @@ export declare class ActivationStart {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide a function with the `canActivate` signature:
+ * You can alternatively provide an in-line function with the `canActivate` signature:
  *
  * ```
  * @NgModule({
@@ -250,10 +323,12 @@ export declare interface CanActivate {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if a child route can be activated.
- * If all guards return `true`, navigation will continue. If any guard returns `false`,
- * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
- * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
- * guard.
+ * If all guards return `true`, navigation continues. If any guard returns `false`,
+ * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
+ * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
+ *
+ * The following example implements a `CanActivateChild` function that checks whether the
+ * current user has permission to activate the requested child route.
  *
  * ```
  * class UserToken {}
@@ -274,7 +349,12 @@ export declare interface CanActivate {
  *     return this.permissions.canActivate(this.currentUser, route.params.id);
  *   }
  * }
+ * ```
  *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -295,7 +375,7 @@ export declare interface CanActivate {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide a function with the `canActivateChild` signature:
+ * You can alternatively provide an in-line function with the `canActivateChild` signature:
  *
  * ```
  * @NgModule({
@@ -333,10 +413,12 @@ export declare interface CanActivateChild {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if a route can be deactivated.
- * If all guards return `true`, navigation will continue. If any guard returns `false`,
- * navigation will be cancelled. If any guard returns a `UrlTree`, current navigation will
- * be cancelled and a new navigation will be kicked off to the `UrlTree` returned from the
- * guard.
+ * If all guards return `true`, navigation continues. If any guard returns `false`,
+ * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
+ * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
+ *
+ * The following example implements a `CanDeactivate` function that checks whether the
+ * current user has permission to deactivate the requested route.
  *
  * ```
  * class UserToken {}
@@ -345,6 +427,12 @@ export declare interface CanActivateChild {
  *     return true;
  *   }
  * }
+ * ```
+ *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
  *
  * @Injectable()
  * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
@@ -375,7 +463,7 @@ export declare interface CanActivateChild {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide a function with the `canDeactivate` signature:
+ * You can alternatively provide an in-line function with the `canDeactivate` signature:
  *
  * ```
  * @NgModule({
@@ -409,6 +497,13 @@ export declare interface CanDeactivate<T> {
  * @description
  *
  * Interface that a class can implement to be a guard deciding if children can be loaded.
+ * If all guards return `true`, navigation continues. If any guard returns `false`,
+ * navigation is cancelled. If any guard returns a `UrlTree`, current navigation
+ * is cancelled and a new navigation starts to the `UrlTree` returned from the guard.
+ *
+ * The following example implements a `CanLoad` function that decides whether the
+ * current user has permission to load requested child routes.
+ *
  *
  * ```
  * class UserToken {}
@@ -426,6 +521,12 @@ export declare interface CanDeactivate<T> {
  *     return this.permissions.canLoadChildren(this.currentUser, route, segments);
  *   }
  * }
+ * ```
+ *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
  *
  * @NgModule({
  *   imports: [
@@ -443,7 +544,7 @@ export declare interface CanDeactivate<T> {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide a function with the `canLoad` signature:
+ * You can alternatively provide an in-line function with the `canLoad` signature:
  *
  * ```
  * @NgModule({
@@ -470,14 +571,14 @@ export declare interface CanDeactivate<T> {
  * @publicApi
  */
 export declare interface CanLoad {
-    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean;
+    canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
 
 /**
  * An event triggered at the end of the child-activation part
  * of the Resolve phase of routing.
  * @see `ChildActivationStart`
- * @see `ResolveStart` *
+ * @see `ResolveStart`
  * @publicApi
  */
 export declare class ChildActivationEnd {
@@ -514,7 +615,7 @@ export declare class ChildActivationStart {
 export declare class ChildrenOutletContexts {
     private contexts;
     /** Called when a `RouterOutlet` directive is instantiated */
-    onChildOutletCreated(childName: string, outlet: RouterOutlet): void;
+    onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
     /**
      * Called when a `RouterOutlet` directive is destroyed.
      * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
@@ -580,10 +681,11 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
 /**
  * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load.
  *
- * @see `Route#loadChildren`
+ * @see `loadChildrenCallback`
  * @publicApi
- * @deprecated the `string` form of `loadChildren` is deprecated in favor of the proposed ES dynamic
- * `import()` expression, which offers a more natural and standards-based mechanism to dynamically
+ * @deprecated The `string` form of `loadChildren` is deprecated in favor of the
+ * `LoadChildrenCallback` function which uses the ES dynamic `import()` expression.
+ * This offers a more natural and standards-based mechanism to dynamically
  * load an ES module at runtime.
  */
 export declare type DeprecatedLoadChildren = string;
@@ -603,8 +705,8 @@ export declare type DetachedRouteHandle = {};
 /**
  * Error handler that is invoked when a navigation error occurs.
  *
- * If the handler returns a value, the navigation promise is resolved with this value.
- * If the handler throws an exception, the navigation promise is rejected with
+ * If the handler returns a value, the navigation Promise is resolved with this value.
+ * If the handler throws an exception, the navigation Promise is rejected with
  * the exception.
  *
  * @publicApi
@@ -614,24 +716,33 @@ declare type ErrorHandler = (error: any) => any;
 /**
  * Router events that allow you to track the lifecycle of the router.
  *
- * The sequence of router events is as follows:
+ * The events occur in the following sequence:
  *
- * - `NavigationStart`,
- * - `RouteConfigLoadStart`,
- * - `RouteConfigLoadEnd`,
- * - `RoutesRecognized`,
- * - `GuardsCheckStart`,
- * - `ChildActivationStart`,
- * - `ActivationStart`,
- * - `GuardsCheckEnd`,
- * - `ResolveStart`,
- * - `ResolveEnd`,
- * - `ActivationEnd`
- * - `ChildActivationEnd`
- * - `NavigationEnd`,
- * - `NavigationCancel`,
- * - `NavigationError`
- * - `Scroll`
+ * * [NavigationStart](api/router/NavigationStart): Navigation starts.
+ * * [RouteConfigLoadStart](api/router/RouteConfigLoadStart): Before
+ * the router [lazy loads](/guide/router#lazy-loading) a route configuration.
+ * * [RouteConfigLoadEnd](api/router/RouteConfigLoadEnd): After a route has been lazy loaded.
+ * * [RoutesRecognized](api/router/RoutesRecognized): When the router parses the URL
+ * and the routes are recognized.
+ * * [GuardsCheckStart](api/router/GuardsCheckStart): When the router begins the *guards*
+ * phase of routing.
+ * * [ChildActivationStart](api/router/ChildActivationStart): When the router
+ * begins activating a route's children.
+ * * [ActivationStart](api/router/ActivationStart): When the router begins activating a route.
+ * * [GuardsCheckEnd](api/router/GuardsCheckEnd): When the router finishes the *guards*
+ * phase of routing successfully.
+ * * [ResolveStart](api/router/ResolveStart): When the router begins the *resolve*
+ * phase of routing.
+ * * [ResolveEnd](api/router/ResolveEnd): When the router finishes the *resolve*
+ * phase of routing successfuly.
+ * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
+ * activating a route's children.
+ * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.
+ * * [NavigationEnd](api/router/NavigationEnd): When navigation ends successfully.
+ * * [NavigationCancel](api/router/NavigationCancel): When navigation is canceled.
+ * * [NavigationError](api/router/NavigationError): When navigation fails
+ * due to an unexpected error.
+ * * [Scroll](api/router/Scroll): When the user scrolls.
  *
  * @publicApi
  */
@@ -640,6 +751,9 @@ export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoad
 /**
  * A set of configuration options for a router module, provided in the
  * `forRoot()` method.
+ *
+ * @see `forRoot()`
+ *
  *
  * @publicApi
  */
@@ -655,28 +769,22 @@ export declare interface ExtraOptions {
      */
     useHash?: boolean;
     /**
-     * One of `enabled` or `disabled`.
-     * When set to `enabled`, the initial navigation starts before the root component is created.
-     * The bootstrap is blocked until the initial navigation is complete. This value is required for
-     * [server-side rendering](guide/universal) to work.
-     * When set to `disabled`, the initial navigation is not performed.
-     * The location listener is set up before the root component gets created.
-     * Use if there is a reason to have more control over when the router
+     * One of `enabled`, `enabledBlocking`, `enabledNonBlocking` or `disabled`.
+     * When set to `enabled` or `enabledBlocking`, the initial navigation starts before the root
+     * component is created. The bootstrap is blocked until the initial navigation is complete. This
+     * value is required for [server-side rendering](guide/universal) to work. When set to
+     * `enabledNonBlocking`, the initial navigation starts after the root component has been created.
+     * The bootstrap is not blocked on the completion of the initial navigation. When set to
+     * `disabled`, the initial navigation is not performed. The location listener is set up before the
+     * root component gets created. Use if there is a reason to have more control over when the router
      * starts its initial navigation due to some complex initialization logic.
-     *
-     * Legacy values are deprecated since v4 and should not be used for new applications:
-     *
-     * * `legacy_enabled` - Default for compatibility.
-     * The initial navigation starts after the root component has been created,
-     * but the bootstrap is not blocked until the initial navigation is complete.
-     * * `legacy_disabled` - The initial navigation is not performed.
-     * The location listener is set up after the root component gets created.
-     * * `true` - same as `legacy_enabled`.
-     * * `false` - same as `legacy_disabled`.
      */
     initialNavigation?: InitialNavigation;
     /**
      * A custom error handler for failed navigations.
+     * If the handler returns a value, the navigation Promise is resolved with this value.
+     * If the handler throws an exception, the navigation Promise is rejected with the exception.
+     *
      */
     errorHandler?: ErrorHandler;
     /**
@@ -747,7 +855,15 @@ export declare interface ExtraOptions {
      * Defines how the router merges parameters, data, and resolved data from parent to child
      * routes. By default ('emptyOnly'), inherits parent parameters only for
      * path-less or component-less routes.
+     *
      * Set to 'always' to enable unconditional inheritance of parent parameters.
+     *
+     * Note that when dealing with matrix parameters, "parent" refers to the parent `Route`
+     * config which does not necessarily mean the "URL segment to the left". When the `Route` `path`
+     * contains multiple segments, the matrix parameters must appear on the last segment. For example,
+     * matrix parameters for `{path: 'a/b', component: MyComp}` should appear as `a/b;foo=bar` and not
+     * `a;foo=bar/b`.
+     *
      */
     paramsInheritanceStrategy?: 'emptyOnly' | 'always';
     /**
@@ -786,7 +902,9 @@ export declare interface ExtraOptions {
      * ];
      * ```
      *
-     * From the `ContainerComponent`, this will not work:
+     * From the `ContainerComponent`, you should be able to navigate to `AComponent` using
+     * the following `routerLink`, but it will not work if `relativeLinkResolution` is set
+     * to `'legacy'`:
      *
      * `<a [routerLink]="['./a']">Link to A</a>`
      *
@@ -794,14 +912,18 @@ export declare interface ExtraOptions {
      *
      * `<a [routerLink]="['../a']">Link to A</a>`
      *
-     * In other words, you're required to use `../` rather than `./`. This is currently the default
-     * behavior. Setting this option to `corrected` enables the fix.
+     * In other words, you're required to use `../` rather than `./` when the relative link
+     * resolution is set to `'legacy'`.
+     *
+     * The default in v11 is `corrected`.
      */
     relativeLinkResolution?: 'legacy' | 'corrected';
 }
 
 /**
  * An event triggered at the end of the Guard phase of routing.
+ *
+ * @see `GuardsCheckStart`
  *
  * @publicApi
  */
@@ -829,6 +951,8 @@ export declare class GuardsCheckEnd extends RouterEvent {
 /**
  * An event triggered at the start of the Guard phase of routing.
  *
+ * @see `GuardsCheckEnd`
+ *
  * @publicApi
  */
 export declare class GuardsCheckStart extends RouterEvent {
@@ -852,37 +976,84 @@ export declare class GuardsCheckStart extends RouterEvent {
  * Allowed values in an `ExtraOptions` object that configure
  * when the router performs the initial navigation operation.
  *
- * * 'enabled' - The initial navigation starts before the root component is created.
+ * * 'enabledNonBlocking' - (default) The initial navigation starts after the
+ * root component has been created. The bootstrap is not blocked on the completion of the initial
+ * navigation.
+ * * 'enabledBlocking' - The initial navigation starts before the root component is created.
  * The bootstrap is blocked until the initial navigation is complete. This value is required
  * for [server-side rendering](guide/universal) to work.
  * * 'disabled' - The initial navigation is not performed. The location listener is set up before
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
- * * 'legacy_enabled'- (Default, for compatibility.) The initial navigation starts after the root component has been created.
- * The bootstrap is not blocked until the initial navigation is complete. @deprecated
- * * 'legacy_disabled'- The initial navigation is not performed. The location listener is set up
- * after the root component gets created. @deprecated since v4
- * * `true` - same as 'legacy_enabled'. @deprecated since v4
- * * `false` - same as 'legacy_disabled'. @deprecated since v4
  *
- * The 'legacy_enabled' and 'legacy_disabled' should not be used for new applications.
+ * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
+ * and should not be used for new applications.
+ *
+ * * 'enabled' - This option is 1:1 replaceable with `enabledBlocking`.
  *
  * @see `forRoot()`
  *
  * @publicApi
  */
-export declare type InitialNavigation = true | false | 'enabled' | 'disabled' | 'legacy_enabled' | 'legacy_disabled';
+export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
+
+/**
+ * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
+ * for the current router state.
+ *
+ * @publicApi
+ * @see Router.isActive
+ */
+export declare interface IsActiveMatchOptions {
+    /**
+     * Defines the strategy for comparing the matrix parameters of two `UrlTree`s.
+     *
+     * The matrix parameter matching is dependent on the strategy for matching the
+     * segments. That is, if the `paths` option is set to `'subset'`, only
+     * the matrix parameters of the matching segments will be compared.
+     *
+     * - `'exact'`: Requires that matching segments also have exact matrix parameter
+     * matches.
+     * - `'subset'`: The matching segments in the router's active `UrlTree` may contain
+     * extra matrix parameters, but those that exist in the `UrlTree` in question must match.
+     * - `'ignored'`: When comparing `UrlTree`s, matrix params will be ignored.
+     */
+    matrixParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the query parameters of two `UrlTree`s.
+     *
+     * - `'exact'`: the query parameters must match exactly.
+     * - `'subset'`: the active `UrlTree` may contain extra parameters,
+     * but must match the key and value of any that exist in the `UrlTree` in question.
+     * - `'ignored'`: When comparing `UrlTree`s, query params will be ignored.
+     */
+    queryParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the `UrlSegment`s of the `UrlTree`s.
+     *
+     * - `'exact'`: all segments in each `UrlTree` must match.
+     * - `'subset'`: a `UrlTree` will be determined to be active if it
+     * is a subtree of the active route. That is, the active route may contain extra
+     * segments, but must at least have all the segements of the `UrlTree` in question.
+     */
+    paths: 'exact' | 'subset';
+    /**
+     * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+     * - `'ignored'`: the fragments will not be compared when determining if a
+     * `UrlTree` is active.
+     */
+    fragment: 'exact' | 'ignored';
+}
 
 /**
  *
- * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load,
- * or a function that returns such a set.
+ * A function that returns a set of routes to load.
  *
  * The string form of `LoadChildren` is deprecated (see `DeprecatedLoadChildren`). The function
  * form (`LoadChildrenCallback`) should be used instead.
  *
- * @see `Route#loadChildren`.
+ * @see `loadChildrenCallback`
  * @publicApi
  */
 export declare type LoadChildren = LoadChildrenCallback | DeprecatedLoadChildren;
@@ -890,8 +1061,10 @@ export declare type LoadChildren = LoadChildrenCallback | DeprecatedLoadChildren
 /**
  *
  * A function that is called to resolve a collection of lazy-loaded routes.
+ * Must be an arrow function of the following form:
+ * `() => import('...').then(mod => mod.MODULE)`
  *
- * Often this function will be implemented using an ES dynamic `import()` expression. For example:
+ * For example:
  *
  * ```
  * [{
@@ -900,23 +1073,38 @@ export declare type LoadChildren = LoadChildrenCallback | DeprecatedLoadChildren
  * }];
  * ```
  *
- * This function _must_ match the form above: an arrow function of the form
- * `() => import('...').then(mod => mod.MODULE)`.
- *
- * @see `Route#loadChildren`.
+ * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
 export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any> | any>;
 
 /**
- * Information about a navigation operation. Retrieve the most recent
- * navigation object with the `router.getCurrentNavigation()` method.
+ * Information about a navigation operation.
+ * Retrieve the most recent navigation object with the
+ * [Router.getCurrentNavigation() method](api/router/Router#getcurrentnavigation) .
+ *
+ * * *id* : The unique identifier of the current navigation.
+ * * *initialUrl* : The target URL passed into the `Router#navigateByUrl()` call before navigation.
+ * This is the value before the router has parsed or applied redirects to it.
+ * * *extractedUrl* : The initial target URL after being parsed with `UrlSerializer.extract()`.
+ * * *finalUrl* : The extracted URL after redirects have been applied.
+ * This URL may not be available immediately, therefore this property can be `undefined`.
+ * It is guaranteed to be set after the `RoutesRecognized` event fires.
+ * * *trigger* : Identifies how this navigation was triggered.
+ * -- 'imperative'--Triggered by `router.navigateByUrl` or `router.navigate`.
+ * -- 'popstate'--Triggered by a popstate event.
+ * -- 'hashchange'--Triggered by a hashchange event.
+ * * *extras* : A `NavigationExtras` options object that controlled the strategy used for this
+ * navigation.
+ * * *previousNavigation* : The previously successful `Navigation` object. Only one previous
+ * navigation is available, therefore this previous `Navigation` object has a `null` value for its
+ * own `previousNavigation`.
  *
  * @publicApi
  */
 export declare type Navigation = {
     /**
-     * The ID of the current navigation.
+     * The unique identifier of the current navigation.
      */
     id: number;
     /**
@@ -956,154 +1144,19 @@ export declare type Navigation = {
 };
 
 /**
- * An event triggered when a navigation is canceled, directly or indirectly.
- *
- * This can happen when a [route guard](guide/router#milestone-5-route-guards)
- * returns `false` or initiates a redirect by returning a `UrlTree`.
- *
- * @publicApi
- */
-export declare class NavigationCancel extends RouterEvent {
-    /** @docsNotRequired */
-    reason: string;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    reason: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-
-/**
- * An event triggered when a navigation ends successfully.
- *
- * @publicApi
- */
-export declare class NavigationEnd extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-
-/**
- * An event triggered when a navigation fails due to an unexpected error.
- *
- * @publicApi
- */
-export declare class NavigationError extends RouterEvent {
-    /** @docsNotRequired */
-    error: any;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    error: any);
-    /** @docsNotRequired */
-    toString(): string;
-}
-
-/**
  * @description
  *
- * Options that modify the navigation strategy.
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the navigation should be handled.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Routing and Navigation guide](guide/router)
  *
  * @publicApi
  */
-export declare interface NavigationExtras {
-    /**
-     * Specifies a root URI to use for relative navigation.
-     *
-     * For example, consider the following route configuration where the parent route
-     * has two children.
-     *
-     * ```
-     * [{
-    *   path: 'parent',
-    *   component: ParentComponent,
-    *   children: [{
-    *     path: 'list',
-    *     component: ListComponent
-    *   },{
-    *     path: 'child',
-    *     component: ChildComponent
-    *   }]
-    * }]
-     * ```
-     *
-     * The following `go()` function navigates to the `list` route by
-     * interpreting the destination URI as relative to the activated `child`  route
-     *
-     * ```
-     *  @Component({...})
-     *  class ChildComponent {
-    *    constructor(private router: Router, private route: ActivatedRoute) {}
-    *
-    *    go() {
-    *      this.router.navigate(['../list'], { relativeTo: this.route });
-    *    }
-    *  }
-     * ```
-     */
-    relativeTo?: ActivatedRoute | null;
-    /**
-     * Sets query parameters to the URL.
-     *
-     * ```
-     * // Navigate to /results?page=1
-     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
-     * ```
-     */
-    queryParams?: Params | null;
-    /**
-     * Sets the hash fragment for the URL.
-     *
-     * ```
-     * // Navigate to /results#top
-     * this.router.navigate(['/results'], { fragment: 'top' });
-     * ```
-     */
-    fragment?: string;
-    /**
-     * **DEPRECATED**: Use `queryParamsHandling: "preserve"` instead to preserve
-     * query parameters for the next navigation.
-     *
-     * @deprecated since v4
-     */
-    preserveQueryParams?: boolean;
-    /**
-     * How to handle query parameters in the router link for the next navigation.
-     * One of:
-     * * `merge` : Merge new with current parameters.
-     * * `preserve` : Preserve current parameters.
-     *
-     * ```
-     * // from /results?page=1 to /view?page=1&page=2
-     * this.router.navigate(['/view'], { queryParams: { page: 2 },  queryParamsHandling: "merge" });
-     * ```
-     */
-    queryParamsHandling?: QueryParamsHandling | null;
-    /**
-     * When true, preserves the URL fragment for the next navigation
-     *
-     * ```
-     * // Preserve fragment from /results#top to /view#top
-     * this.router.navigate(['/view'], { preserveFragment: true });
-     * ```
-     */
-    preserveFragment?: boolean;
+export declare interface NavigationBehaviorOptions {
     /**
      * When true, navigates without pushing a new state into history.
      *
@@ -1125,7 +1178,8 @@ export declare interface NavigationExtras {
     /**
      * Developer-defined state that can be passed to any navigation.
      * Access this value through the `Navigation.extras` object
-     * returned from `router.getCurrentNavigation()` while a navigation is executing.
+     * returned from the [Router.getCurrentNavigation()
+     * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
      *
      * After a navigation completes, the router writes an object containing this
      * value together with a `navigationId` to `history.state`.
@@ -1134,10 +1188,101 @@ export declare interface NavigationExtras {
      *
      * Note that `history.state` does not pass an object equality test because
      * the router adds the `navigationId` on each navigation.
+     *
      */
     state?: {
         [k: string]: any;
     };
+}
+
+/**
+ * An event triggered when a navigation is canceled, directly or indirectly.
+ * This can happen when a route guard
+ * returns `false` or initiates a redirect by returning a `UrlTree`.
+ *
+ * @see `NavigationStart`
+ * @see `NavigationEnd`
+ * @see `NavigationError`
+ *
+ * @publicApi
+ */
+export declare class NavigationCancel extends RouterEvent {
+    /** @docsNotRequired */
+    reason: string;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    reason: string);
+    /** @docsNotRequired */
+    toString(): string;
+}
+
+/**
+ * An event triggered when a navigation ends successfully.
+ *
+ * @see `NavigationStart`
+ * @see `NavigationCancel`
+ * @see `NavigationError`
+ *
+ * @publicApi
+ */
+export declare class NavigationEnd extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string);
+    /** @docsNotRequired */
+    toString(): string;
+}
+
+/**
+ * An event triggered when a navigation fails due to an unexpected error.
+ *
+ * @see `NavigationStart`
+ * @see `NavigationEnd`
+ * @see `NavigationCancel`
+ *
+ * @publicApi
+ */
+export declare class NavigationError extends RouterEvent {
+    /** @docsNotRequired */
+    error: any;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    error: any);
+    /** @docsNotRequired */
+    toString(): string;
+}
+
+/**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed or interpreted.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Router.createUrlTree() method](api/router/Router#createurltree)
+ * @see [Routing and Navigation guide](guide/router)
+ * @see UrlCreationOptions
+ * @see NavigationBehaviorOptions
+ *
+ * @publicApi
+ */
+export declare interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
 }
 
 /**
@@ -1150,6 +1295,9 @@ export declare class NavigationStart extends RouterEvent {
      * Identifies the call or event that triggered the navigation.
      * An `imperative` trigger is a call to `router.navigateByUrl()` or `router.navigate()`.
      *
+     * @see `NavigationEnd`
+     * @see `NavigationCancel`
+     * @see `NavigationError`
      */
     navigationTrigger?: 'imperative' | 'popstate' | 'hashchange';
     /**
@@ -1208,7 +1356,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  * @publicApi
  */
 export declare class OutletContext {
-    outlet: RouterOutlet | null;
+    outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
     resolver: ComponentFactoryResolver | null;
     children: ChildrenOutletContexts;
@@ -1269,7 +1417,7 @@ export declare type Params = {
  * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
  * ```
- * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+ * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
  * @publicApi
@@ -1321,7 +1469,7 @@ export declare function provideRoutes(routes: Routes): any;
  * - `merge` : Merge new with current parameters.
  * - `preserve` : Preserve current parameters.
  *
- * @see `NavigationExtras#queryParamsHandling`
+ * @see `UrlCreationOptions#queryParamsHandling`
  * @see `RouterLink`
  * @publicApi
  */
@@ -1332,8 +1480,11 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *
  * Interface that classes can implement to be a data provider.
  * A data provider class can be used with the router to resolve data during navigation.
- * The interface defines a `resolve()` method that will be invoked when the navigation starts.
- * The router will then wait for the data to be resolved before the route is finally activated.
+ * The interface defines a `resolve()` method that is invoked when the navigation starts.
+ * The router waits for the data to be resolved before the route is finally activated.
+ *
+ * The following example implements a `resolve()` method that retrieves the data
+ * needed to activate the requested route.
  *
  * ```
  * @Injectable({ providedIn: 'root' })
@@ -1347,7 +1498,13 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *     return this.service.getHero(route.paramMap.get('id'));
  *   }
  * }
+ * ```
  *
+ * Here, the defined `resolve()` function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
+
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -1365,7 +1522,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * export class AppRoutingModule {}
  * ```
  *
- * You can alternatively provide a function with the `resolve` signature:
+ * You can alternatively provide an in-line function with the `resolve()` signature:
  *
  * ```
  * export const myHero: Hero = {
@@ -1393,6 +1550,29 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * })
  * export class AppModule {}
  * ```
+ *
+ * @usageNotes
+ *
+ * When both guard and resolvers are specified, the resolvers are not executed until
+ * all guards have run and succeeded.
+ * For example, consider the following route configuration:
+ *
+ * ```
+ * {
+ *  path: 'base'
+ *  canActivate: [BaseGuard],
+ *  resolve: {data: BaseDataResolver}
+ *  children: [
+ *   {
+ *     path: 'child',
+ *     guards: [ChildGuard],
+ *     component: ChildComponent,
+ *     resolve: {childData: ChildDataResolver}
+ *    }
+ *  ]
+ * }
+ * ```
+ * The order of execution is: BaseGuard, ChildGuard, BaseDataResolver, ChildDataResolver.
  *
  * @publicApi
  */
@@ -1436,10 +1616,12 @@ export declare class ResolveEnd extends RouterEvent {
 }
 
 /**
- * An event triggered at the the start of the Resolve phase of routing.
+ * An event triggered at the start of the Resolve phase of routing.
  *
  * Runs in the "resolve" phase whether or not there is anything to resolve.
  * In future, may change to only run when there are things to be resolved.
+ *
+ * @see `ResolveEnd`
  *
  * @publicApi
  */
@@ -1670,7 +1852,8 @@ export declare class ResolveStart extends RouterEvent {
  *
  * Lazy loading speeds up application load time by splitting the application
  * into multiple bundles and loading them on demand.
- * To use lazy loading, provide the `loadChildren` property  instead of the `children` property.
+ * To use lazy loading, provide the `loadChildren` property in the `Route` object,
+ * instead of the `children` property.
  *
  * Given the following example route, the router will lazy load
  * the associated module on demand using the browser native import system.
@@ -1719,7 +1902,7 @@ export declare interface Route {
      */
     component?: Type<any>;
     /**
-     * A URL to which to redirect when a the path matches.
+     * A URL to redirect to when the path matches.
      * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
      * When not present, router does not redirect.
      */
@@ -1769,7 +1952,7 @@ export declare interface Route {
      */
     children?: Routes;
     /**
-     * A `LoadChildren` object specifying lazy-loaded child routes.
+     * An object specifying lazy-loaded child routes.
      */
     loadChildren?: LoadChildren;
     /**
@@ -1785,6 +1968,8 @@ export declare interface Route {
 /**
  * An event triggered when a route has been lazy loaded.
  *
+ * @see `RouteConfigLoadStart`
+ *
  * @publicApi
  */
 export declare class RouteConfigLoadEnd {
@@ -1798,6 +1983,8 @@ export declare class RouteConfigLoadEnd {
 
 /**
  * An event triggered before lazy loading a route configuration.
+ *
+ * @see `RouteConfigLoadEnd`
  *
  * @publicApi
  */
@@ -1813,7 +2000,7 @@ export declare class RouteConfigLoadStart {
 /**
  * @description
  *
- * A service that provides navigation and URL manipulation capabilities.
+ * A service that provides navigation among views and URL manipulation capabilities.
  *
  * @see `Route`.
  * @see [Routing and Navigation Guide](guide/router).
@@ -1835,7 +2022,13 @@ export declare class Router {
     private navigations;
     private lastSuccessfulNavigation;
     private currentNavigation;
-    private locationSubscription;
+    private disposed;
+    private locationSubscription?;
+    /**
+     * Tracks the previously seen location change from the location subscription so we can compare
+     * the two latest to see if they are duplicates. See setUpLocationChangeListener.
+     */
+    private lastLocationChangeInfo;
     private navigationId;
     private configLoader;
     private ngModule;
@@ -1916,15 +2109,29 @@ export declare class Router {
      */
     initialNavigation(): void;
     /**
-     * Sets up the location change listener.
+     * Sets up the location change listener. This listener detects navigations triggered from outside
+     * the Router (the browser back/forward buttons, for example) and schedules a corresponding Router
+     * navigation so that the correct events, guards, etc. are triggered.
      */
     setUpLocationChangeListener(): void;
+    /** Extracts router-related information from a `PopStateEvent`. */
+    private extractLocationChangeInfoFromEvent;
+    /**
+     * Determines whether two events triggered by the Location subscription are due to the same
+     * navigation. The location subscription can fire two events (popstate and hashchange) for a
+     * single navigation. The second one should be ignored, that is, we should not schedule another
+     * navigation in the Router.
+     */
+    private shouldScheduleNavigation;
     /** The current URL. */
-    readonly url: string;
-    /** The current Navigation object if one exists */
+    get url(): string;
+    /**
+     * Returns the current `Navigation` object when the router is navigating,
+     * and `null` when idle.
+     */
     getCurrentNavigation(): Navigation | null;
     /**
-     * Resets the configuration used for navigation and generating links.
+     * Resets the route configuration used for navigation and generating links.
      *
      * @param config The route array for the new configuration.
      *
@@ -1940,19 +2147,19 @@ export declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
-    /** @docsNotRequired */
+    /** @nodoc */
     ngOnDestroy(): void;
     /** Disposes of the router. */
     dispose(): void;
     /**
-     * Applies an array of commands to the current URL tree and creates a new URL tree.
+     * Appends URL segments to the current URL tree to create a new URL tree.
      *
-     * When given an activated route, applies the given commands starting from the route.
-     * Otherwise, applies the given command starting from the root.
-     *
-     * @param commands An array of commands to apply.
-     * @param navigationExtras Options that control the navigation strategy. This function
-     * only utilizes properties in `NavigationExtras` that would change the provided URL.
+     * @param commands An array of URL fragments with which to construct the new URL tree.
+     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+     * segments, followed by the parameters for each segment.
+     * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
+     * property of the options object, if supplied.
+     * @param navigationExtras Options that control the navigation strategy.
      * @returns The new URL tree.
      *
      * @usageNotes
@@ -1987,21 +2194,25 @@ export declare class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     *
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: NavigationExtras): UrlTree;
+    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
-     * Navigate based on the provided URL, which must be absolute.
+     * Navigates to a view using an absolute route path.
      *
-     * @param url An absolute URL. The function does not apply any delta to the current URL.
+     * @param url An absolute path for a defined route. The function does not apply any delta to the
+     *     current URL.
      * @param extras An object containing properties that modify the navigation strategy.
-     * The function ignores any properties in the `NavigationExtras` that would change the
-     * provided URL.
      *
      * @returns A Promise that resolves to 'true' when navigation succeeds,
      * to 'false' when navigation fails, or is rejected on error.
      *
      * @usageNotes
+     *
+     * The following calls request navigation to an absolute path.
      *
      * ```
      * router.navigateByUrl("/team/33/user/11");
@@ -2010,42 +2221,61 @@ export declare class Router {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
+     * @see [Routing and Navigation guide](guide/router)
+     *
      */
-    navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean>;
+    navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
     /**
      * Navigate based on the provided array of commands and a starting point.
      * If no starting route is provided, the navigation is absolute.
      *
-     * Returns a promise that:
-     * - resolves to 'true' when navigation succeeds,
-     * - resolves to 'false' when navigation fails,
-     * - is rejected when an error happens.
+     * @param commands An array of URL fragments with which to construct the target URL.
+     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+     * segments, followed by the parameters for each segment.
+     * The fragments are applied to the current URL or the one provided  in the `relativeTo` property
+     * of the options object, if supplied.
+     * @param extras An options object that determines how the URL should be constructed or
+     *     interpreted.
+     *
+     * @returns A Promise that resolves to `true` when navigation succeeds, to `false` when navigation
+     *     fails,
+     * or is rejected on error.
      *
      * @usageNotes
+     *
+     * The following calls request navigation to a dynamic route path relative to the current URL.
      *
      * ```
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
      *
-     * // Navigate without updating the URL
+     * // Navigate without updating the URL, overriding the default behavior
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * The first parameter of `navigate()` is a delta to be applied to the current URL
-     * or the one provided in the `relativeTo` property of the second parameter (the
-     * `NavigationExtras`).
+     * @see [Routing and Navigation guide](guide/router)
      *
-     * In order to affect this browser's `history.state` entry, the `state`
-     * parameter can be passed. This must be an object because the router
-     * will add the `navigationId` property to this object before creating
-     * the new history item.
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
     /** Serializes a `UrlTree` into a string */
     serializeUrl(url: UrlTree): string;
     /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
-    /** Returns whether the url is activated */
+    /**
+     * Returns whether the url is activated.
+     *
+     * @deprecated
+     * Use `IsActiveUrlTreeOptions` instead.
+     *
+     * - The equivalent `IsActiveUrlTreeOptions` for `true` is
+     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+     * - The equivalent for `false` is
+     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+     */
     isActive(url: string | UrlTree, exact: boolean): boolean;
+    /**
+     * Returns whether the url is activated.
+     */
+    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
     private processNavigations;
     private scheduleNavigation;
@@ -2097,14 +2327,14 @@ export declare abstract class RouteReuseStrategy {
  * Base for events the router goes through, as opposed to events tied to a specific
  * route. Fired one time for any given navigation.
  *
- * @usageNotes
+ * The following code shows how a class subscribes to router events.
  *
  * ```ts
  * class MyService {
  *   constructor(public router: Router, logger: Logger) {
  *     router.events.pipe(
- *       filter(e => e instanceof RouterEvent)
- *     ).subscribe(e => {
+ *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
+ *     ).subscribe((e: RouterEvent) => {
  *       logger.log(e.id, e.url);
  *     });
  *   }
@@ -2112,6 +2342,7 @@ export declare abstract class RouteReuseStrategy {
  * ```
  *
  * @see `Event`
+ * @see [Router events summary](guide/router#router-events)
  * @publicApi
  */
 export declare class RouterEvent {
@@ -2129,56 +2360,63 @@ export declare class RouterEvent {
 /**
  * @description
  *
- * Lets you link to specific routes in your app.
+ * When applied to an element in a template, makes that element a link
+ * that initiates navigation to a route. Navigation opens one or more routed components
+ * in one or more `<router-outlet>` locations on the page.
  *
- * Consider the following route configuration:
- * `[{ path: 'user/:name', component: UserCmp }]`.
- * When linking to this `user/:name` route, you use the `RouterLink` directive.
- *
- * If the link is static, you can use the directive as follows:
+ * Given a route configuration `[{ path: 'user/:name', component: UserCmp }]`,
+ * the following creates a static link to the route:
  * `<a routerLink="/user/bob">link to user component</a>`
  *
- * If you use dynamic values to generate the link, you can pass an array of path
- * segments, followed by the params for each segment.
+ * You can use dynamic values to generate the link.
+ * For a dynamic link, pass an array of path segments,
+ * followed by the params for each segment.
+ * For example, `['/team', teamId, 'user', userName, {details: true}]`
+ * generates a link to `/team/11/user/bob;details=true`.
  *
- * For instance `['/team', teamId, 'user', userName, {details: true}]`
- * means that we want to generate a link to `/team/11/user/bob;details=true`.
+ * Multiple static segments can be merged into one term and combined with dynamic segements.
+ * For example, `['/team/11/user', userName, {details: true}]`
  *
- * Multiple static segments can be merged into one
- * (e.g., `['/team/11/user', userName, {details: true}]`).
+ * The input that you provide to the link is treated as a delta to the current URL.
+ * For instance, suppose the current URL is `/user/(box//aux:team)`.
+ * The link `<a [routerLink]="['/user/jim']">Jim</a>` creates the URL
+ * `/user/(jim//aux:team)`.
+ * See {@link Router#createUrlTree createUrlTree} for more information.
  *
- * The first segment name can be prepended with `/`, `./`, or `../`:
- * * If the first segment begins with `/`, the router will look up the route from the root of the
+ * @usageNotes
+ *
+ * You can use absolute or relative paths in a link, set query parameters,
+ * control how parameters are handled, and keep a history of navigation states.
+ *
+ * ### Relative link paths
+ *
+ * The first segment name can be prepended with `/`, `./`, or `../`.
+ * * If the first segment begins with `/`, the router looks up the route from the root of the
  *   app.
- * * If the first segment begins with `./`, or doesn't begin with a slash, the router will
- *   instead look in the children of the current activated route.
- * * And if the first segment begins with `../`, the router will go up one level.
+ * * If the first segment begins with `./`, or doesn't begin with a slash, the router
+ *   looks in the children of the current activated route.
+ * * If the first segment begins with `../`, the router goes up one level in the route tree.
  *
- * You can set query params and fragment as follows:
+ * ### Setting and handling query params and fragments
+ *
+ * The following link adds a query parameter and a fragment to the generated URL:
  *
  * ```
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
  *   link to user component
  * </a>
  * ```
- * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+ * By default, the directive constructs the new URL using the given query parameters.
+ * The example generates the link: `/user/bob?debug=true#education`.
  *
- * (Deprecated in v4.0.0 use `queryParamsHandling` instead) You can also tell the
- * directive to preserve the current query params and fragment:
+ * You can instruct the directive to handle query parameters differently
+ * by specifying the `queryParamsHandling` option in the link.
+ * Allowed values are:
  *
- * ```
- * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
- *   link to user component
- * </a>
- * ```
+ *  - `'merge'`: Merge the given `queryParams` into the current query params.
+ *  - `'preserve'`: Preserve the current query params.
  *
- * You can tell the directive how to handle queryParams. Available options are:
- *  - `'merge'`: merge the queryParams into the current queryParams
- *  - `'preserve'`: preserve the current queryParams
- *  - default/`''`: use the queryParams only
- *
- * Same options for {@link NavigationExtras#queryParamsHandling
- * NavigationExtras#queryParamsHandling}.
+ * For example:
  *
  * ```
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
@@ -2186,9 +2424,13 @@ export declare class RouterEvent {
  * </a>
  * ```
  *
- * You can provide a `state` value to be persisted to the browser's History.state
- * property (See https://developer.mozilla.org/en-US/docs/Web/API/History#Properties). It's
- * used as follows:
+ * See {@link UrlCreationOptions.queryParamsHandling UrlCreationOptions#queryParamsHandling}.
+ *
+ * ### Preserving navigation history
+ *
+ * You can provide a `state` value to be persisted to the browser's
+ * [`History.state` property](https://developer.mozilla.org/en-US/docs/Web/API/History#Properties).
+ * For example:
  *
  * ```
  * <a [routerLink]="['/user/bob']" [state]="{tracingId: 123}">
@@ -2196,8 +2438,9 @@ export declare class RouterEvent {
  * </a>
  * ```
  *
- * And later the value can be read from the router through `router.getCurrentNavigation`.
- * For example, to capture the `tracingId` above during the `NavigationStart` event:
+ * Use {@link Router.getCurrentNavigation() Router#getCurrentNavigation} to retrieve a saved
+ * navigation-state value. For example, to capture the `tracingId` during the `NavigationStart`
+ * event:
  *
  * ```
  * // Get NavigationStart events
@@ -2207,87 +2450,139 @@ export declare class RouterEvent {
  * });
  * ```
  *
- * The router link directive always treats the provided input as a delta to the current url.
- *
- * For instance, if the current url is `/user/(box//aux:team)`.
- *
- * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
- * `/user/(jim//aux:team)`.
- *
- * See {@link Router#createUrlTree createUrlTree} for more information.
- *
  * @ngModule RouterModule
  *
  * @publicApi
  */
-export declare class RouterLink {
+export declare class RouterLink implements OnChanges {
     private router;
     private route;
-    queryParams: {
-        [k: string]: any;
-    };
-    fragment: string;
-    queryParamsHandling: QueryParamsHandling;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    queryParams?: Params | null;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    fragment?: string;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     preserveFragment: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     skipLocationChange: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     replaceUrl: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private preserve;
     constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
-    routerLink: any[] | string;
+    /** @nodoc */
+    ngOnChanges(changes: SimpleChanges): void;
     /**
-     * @deprecated 4.0.0 use `queryParamsHandling` instead.
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    preserveQueryParams: boolean;
+    set routerLink(commands: any[] | string | null | undefined);
+    /** @nodoc */
     onClick(): boolean;
-    readonly urlTree: UrlTree;
+    get urlTree(): UrlTree;
 }
 
 /**
  *
  * @description
  *
- * Lets you add a CSS class to an element when the link's route becomes active.
+ * Tracks whether the linked route of an element is currently active, and allows you
+ * to specify one or more CSS classes to add to the element when the linked route
+ * is active.
  *
- * This directive lets you add a CSS class to an element when the link's route
- * becomes active.
- *
- * Consider the following example:
+ * Use this directive to create a visual distinction for elements associated with an active route.
+ * For example, the following code highlights the word "Bob" when the router
+ * activates the associated route:
  *
  * ```
  * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
  * ```
  *
- * When the url is either '/user' or '/user/bob', the active-link class will
- * be added to the `a` tag. If the url changes, the class will be removed.
+ * Whenever the URL is either '/user' or '/user/bob', the "active-link" class is
+ * added to the anchor tag. If the URL changes, the class is removed.
  *
- * You can set more than one class, as follows:
+ * You can set more than one class using a space-separated string or an array.
+ * For example:
  *
  * ```
  * <a routerLink="/user/bob" routerLinkActive="class1 class2">Bob</a>
  * <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
  * ```
  *
- * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
- * only when the url matches the link exactly.
+ * To add the classes only when the URL matches the link exactly, add the option `exact: true`:
  *
  * ```
  * <a routerLink="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
  * true}">Bob</a>
  * ```
  *
- * You can assign the RouterLinkActive instance to a template variable and directly check
- * the `isActive` status.
+ * To directly check the `isActive` status of the link, assign the `RouterLinkActive`
+ * instance to a template variable.
+ * For example, the following checks the status without assigning any CSS classes:
+ *
  * ```
  * <a routerLink="/user/bob" routerLinkActive #rla="routerLinkActive">
  *   Bob {{ rla.isActive ? '(already open)' : ''}}
  * </a>
  * ```
  *
- * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
+ * You can apply the `RouterLinkActive` directive to an ancestor of linked elements.
+ * For example, the following sets the active-link class on the `<div>`  parent tag
+ * when the URL is either '/user/jim' or '/user/bob'.
  *
  * ```
  * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
@@ -2295,9 +2590,6 @@ export declare class RouterLink {
  *   <a routerLink="/user/bob">Bob</a>
  * </div>
  * ```
- *
- * This will set the active-link class on the div tag if the url is either '/user/jim' or
- * '/user/bob'.
  *
  * @ngModule RouterModule
  *
@@ -2307,20 +2599,33 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private router;
     private element;
     private renderer;
+    private readonly cdr;
     private link?;
     private linkWithHref?;
     links: QueryList<RouterLink>;
     linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
-    private subscription;
+    private routerEventsSubscription;
+    private linkInputChangesSubscription?;
     readonly isActive: boolean;
+    /**
+     * Options to configure how to determine if the router link is active.
+     *
+     * These options are passed to the `Router.isActive()` function.
+     *
+     * @see Router.isActive
+     */
     routerLinkActiveOptions: {
         exact: boolean;
-    };
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    } | IsActiveMatchOptions;
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    /** @nodoc */
     ngAfterContentInit(): void;
-    routerLinkActive: string[] | string;
+    private subscribeToEachLinkOnChanges;
+    set routerLinkActive(data: string[] | string);
+    /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;
+    /** @nodoc */
     ngOnDestroy(): void;
     private update;
     private isLinkActive;
@@ -2343,79 +2648,108 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private route;
     private locationStrategy;
     target: string;
-    queryParams: {
-        [k: string]: any;
-    };
-    fragment: string;
-    queryParamsHandling: QueryParamsHandling;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    queryParams?: Params | null;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    fragment?: string;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
     preserveFragment: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     skipLocationChange: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     replaceUrl: boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
     state?: {
         [k: string]: any;
     };
+    /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * Specify a value here when you do not want to use the default value
+     * for `routerLink`, which is the current activated route.
+     * Note that a value of `undefined` here will use the `routerLink` default.
+     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    relativeTo?: ActivatedRoute | null;
     private commands;
     private subscription;
     private preserve;
     href: string;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
-    routerLink: any[] | string;
-    preserveQueryParams: boolean;
-    ngOnChanges(changes: {}): any;
+    /**
+     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
+     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    set routerLink(commands: any[] | string | null | undefined);
+    /** @nodoc */
+    ngOnChanges(changes: SimpleChanges): any;
+    /** @nodoc */
     ngOnDestroy(): any;
-    onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean;
+    /** @nodoc */
+    onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref;
-    readonly urlTree: UrlTree;
+    get urlTree(): UrlTree;
 }
 
 /**
- * @usageNotes
- *
- * RouterModule can be imported multiple times: once per lazily-loaded bundle.
- * Since the router deals with a global shared resource--location, we cannot have
- * more than one router service active.
- *
- * That is why there are two ways to create the module: `RouterModule.forRoot` and
- * `RouterModule.forChild`.
- *
- * * `forRoot` creates a module that contains all the directives, the given routes, and the router
- *   service itself.
- * * `forChild` creates a module that contains all the directives and the given routes, but does not
- *   include the router service.
- *
- * When registered at the root, the module should be used as follows
- *
- * ```
- * @NgModule({
- *   imports: [RouterModule.forRoot(ROUTES)]
- * })
- * class MyNgModule {}
- * ```
- *
- * For submodules and lazy loaded submodules the module should be used as follows:
- *
- * ```
- * @NgModule({
- *   imports: [RouterModule.forChild(ROUTES)]
- * })
- * class MyNgModule {}
- * ```
- *
  * @description
  *
- * Adds router directives and providers.
+ * Adds directives and providers for in-app navigation among views defined in an application.
+ * Use the Angular `Router` service to declaratively specify application states and manage state
+ * transitions.
  *
- * Managing state transitions is one of the hardest parts of building applications. This is
- * especially true on the web, where you also need to ensure that the state is reflected in the URL.
- * In addition, we often want to split applications into multiple bundles and load them on demand.
- * Doing this transparently is not trivial.
+ * You can import this NgModule multiple times, once for each lazy-loaded bundle.
+ * However, only one `Router` service can be active.
+ * To ensure this, there are two ways to register routes when importing this module:
  *
- * The Angular router service solves these problems. Using the router, you can declaratively specify
- * application states, manage state transitions while taking care of the URL, and load bundles on
- * demand.
+ * * The `forRoot()` method creates an `NgModule` that contains all the directives, the given
+ * routes, and the `Router` service itself.
+ * * The `forChild()` method creates an `NgModule` that contains all the directives and the given
+ * routes, but does not include the `Router` service.
  *
- * @see [Routing and Navigation](guide/router.html) for an
- * overview of how the router service should be used.
+ * @see [Routing and Navigation guide](guide/router) for an
+ * overview of how the `Router` service should be used.
  *
  * @publicApi
  */
@@ -2425,13 +2759,36 @@ export declare class RouterModule {
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
      *
+     * When registering the NgModule at the root, import as follows:
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forRoot(ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
      * @param routes An array of `Route` objects that define the navigation paths for the application.
      * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
-     * @return The new router module.
-    */
+     * @return The new `NgModule`.
+     *
+     */
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterModule>;
     /**
-     * Creates a module with all the router directives and a provider registering routes.
+     * Creates a module with all the router directives and a provider registering routes,
+     * without creating a new Router service.
+     * When registering for submodules and lazy-loaded submodules, create the NgModule as follows:
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forChild(ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
+     * @param routes An array of `Route` objects that define the navigation paths for the submodule.
+     * @return The new NgModule.
+     *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
 }
@@ -2450,6 +2807,21 @@ export declare class RouterModule {
  * <router-outlet name='right'></router-outlet>
  * ```
  *
+ * Named outlets can be the targets of secondary routes.
+ * The `Route` object for a secondary route has an `outlet` property to identify the target outlet:
+ *
+ * `{path: <base-path>, component: <component>, outlet: <target_outlet_name>}`
+ *
+ * Using named outlets and secondary routes, you can target multiple outlets in
+ * the same `RouterLink` directive.
+ *
+ * The router keeps track of separate branches in a navigation tree for each named outlet and
+ * generates a representation of that tree in the URL.
+ * The URL for a secondary route uses the following syntax to specify both the primary and secondary
+ * routes at the same time:
+ *
+ * `http://base-path/primary-route-path(outlet-name:route-path)`
+ *
  * A router outlet emits an activate event when a new component is instantiated,
  * and a deactivate event when a component is destroyed.
  *
@@ -2458,11 +2830,16 @@ export declare class RouterModule {
  *   (activate)='onActivate($event)'
  *   (deactivate)='onDeactivate($event)'></router-outlet>
  * ```
+ *
+ * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
+ * outlet and secondary route configuration").
+ * @see `RouterLink`
+ * @see `Route`
  * @ngModule RouterModule
  *
  * @publicApi
  */
-export declare class RouterOutlet implements OnDestroy, OnInit {
+export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     private parentContexts;
     private location;
     private resolver;
@@ -2473,12 +2850,18 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
+    /** @nodoc */
     ngOnDestroy(): void;
+    /** @nodoc */
     ngOnInit(): void;
-    readonly isActivated: boolean;
-    readonly component: Object;
-    readonly activatedRoute: ActivatedRoute;
-    readonly activatedRouteData: Data;
+    get isActivated(): boolean;
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
+    get component(): Object;
+    get activatedRoute(): ActivatedRoute;
+    get activatedRouteData(): Data;
     /**
      * Called when the `RouteReuseStrategy` instructs to detach the subtree
      */
@@ -2489,6 +2872,60 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+}
+
+/**
+ * An interface that defines the contract for developing a component outlet for the `Router`.
+ *
+ * An outlet acts as a placeholder that Angular dynamically fills based on the current router state.
+ *
+ * A router outlet should register itself with the `Router` via
+ * `ChildrenOutletContexts#onChildOutletCreated` and unregister with
+ * `ChildrenOutletContexts#onChildOutletDestroyed`. When the `Router` identifies a matched `Route`,
+ * it looks for a registered outlet in the `ChildrenOutletContexts` and activates it.
+ *
+ * @see `ChildrenOutletContexts`
+ * @publicApi
+ */
+export declare interface RouterOutletContract {
+    /**
+     * Whether the given outlet is activated.
+     *
+     * An outlet is considered "activated" if it has an active component.
+     */
+    isActivated: boolean;
+    /** The instance of the activated component or `null` if the outlet is not activated. */
+    component: Object | null;
+    /**
+     * The `Data` of the `ActivatedRoute` snapshot.
+     */
+    activatedRouteData: Data;
+    /**
+     * The `ActivatedRoute` for the outlet or `null` if the outlet is not activated.
+     */
+    activatedRoute: ActivatedRoute | null;
+    /**
+     * Called by the `Router` when the outlet should activate (create a component).
+     */
+    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+    /**
+     * A request to destroy the currently activated component.
+     *
+     * When a `RouteReuseStrategy` indicates that an `ActivatedRoute` should be removed but stored for
+     * later re-use rather than destroyed, the `Router` will call `detach` instead.
+     */
+    deactivate(): void;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree.
+     *
+     * This is similar to `deactivate`, but the activated component should _not_ be destroyed.
+     * Instead, it is returned so that it can be reattached later via the `attach` method.
+     */
+    detach(): ComponentRef<unknown>;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree.
+     */
+    attach(ref: ComponentRef<unknown>, activatedRoute: ActivatedRoute): void;
 }
 
 /**
@@ -2508,10 +2945,11 @@ export declare class RouterPreloader implements OnDestroy {
     private injector;
     private preloadingStrategy;
     private loader;
-    private subscription;
+    private subscription?;
     constructor(router: Router, moduleLoader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
     setUpPreloading(): void;
     preload(): Observable<any>;
+    /** @nodoc */
     ngOnDestroy(): void;
     private processRoutes;
     private preloadConfig;
@@ -2527,7 +2965,8 @@ export declare class RouterPreloader implements OnDestroy {
  * and the resolved data.
  * Use the `ActivatedRoute` properties to traverse the tree from any node.
  *
- * ### Example
+ * The following fragment shows how a component gets the root node
+ * of the current state to establish its own route tree:
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -2543,6 +2982,7 @@ export declare class RouterPreloader implements OnDestroy {
  * ```
  *
  * @see `ActivatedRoute`
+ * @see [Getting route information](guide/router#getting-route-information)
  *
  * @publicApi
  */
@@ -2560,8 +3000,8 @@ export declare class RouterState extends ɵangular_packages_router_router_m<Acti
  * This is a tree of activated route snapshots. Every node in this tree knows about
  * the "consumed" URL segments, the extracted parameters, and the resolved data.
  *
- * @usageNotes
- * ### Example
+ * The following example shows how a component is initialized with information
+ * from the snapshot of the root node's state at the time of creation.
  *
  * ```
  * @Component({templateUrl:'template.html'})
@@ -2599,12 +3039,13 @@ export declare const ROUTES: InjectionToken<Route[][]>;
  *
  * @see `Route`
  * @see `Router`
+ * @see [Router configuration guide](guide/router#configuration)
  * @publicApi
  */
 export declare type Routes = Route[];
 
 /**
- *An event triggered when routes are recognized.
+ * An event triggered when routes are recognized.
  *
  * @publicApi
  */
@@ -2630,7 +3071,7 @@ export declare class RoutesRecognized extends RouterEvent {
  *
  * A policy for when to run guards and resolvers on a route.
  *
- * @see `Route#runGuardsAndResolvers`
+ * @see [Route.runGuardsAndResolvers](api/router/Route#runGuardsAndResolvers)
  * @publicApi
  */
 export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always' | ((from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean);
@@ -2655,6 +3096,110 @@ export declare class Scroll {
     /** @docsNotRequired */
     anchor: string | null);
     toString(): string;
+}
+
+/**
+ * @description
+ *
+ * Options that modify the `Router` URL.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.createUrlTree() method](api/router/Router#createurltree)
+ * @see [Routing and Navigation guide](guide/router)
+ *
+ * @publicApi
+ */
+export declare interface UrlCreationOptions {
+    /**
+     * Specifies a root URI to use for relative navigation.
+     *
+     * For example, consider the following route configuration where the parent route
+     * has two children.
+     *
+     * ```
+     * [{
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
+     * ```
+     *
+     * The following `go()` function navigates to the `list` route by
+     * interpreting the destination URI as relative to the activated `child`  route
+     *
+     * ```
+     *  @Component({...})
+     *  class ChildComponent {
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
+     * ```
+     *
+     * A value of `null` or `undefined` indicates that the navigation commands should be applied
+     * relative to the root.
+     */
+    relativeTo?: ActivatedRoute | null;
+    /**
+     * Sets query parameters to the URL.
+     *
+     * ```
+     * // Navigate to /results?page=1
+     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     */
+    queryParams?: Params | null;
+    /**
+     * Sets the hash fragment for the URL.
+     *
+     * ```
+     * // Navigate to /results#top
+     * this.router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     */
+    fragment?: string;
+    /**
+     * How to handle query parameters in the router link for the next navigation.
+     * One of:
+     * * `preserve` : Preserve current parameters.
+     * * `merge` : Merge new with current parameters.
+     *
+     * The "preserve" option discards any new query params:
+     * ```
+     * // from /view1?page=1 to/view2?page=1
+     * this.router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
+     * });
+     * ```
+     * The "merge" option appends new query params to the params from the current URL:
+     * ```
+     * // from /view1?page=1 to/view2?page=1&otherKey=2
+     * this.router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
+     * });
+     * ```
+     * In case of a key collision between current parameters and those in the `queryParams` object,
+     * the new value is used.
+     *
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
+    /**
+     * When true, preserves the URL fragment for the next navigation
+     *
+     * ```
+     * // Preserve fragment from /results#top to /view#top
+     * this.router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     */
+    preserveFragment?: boolean;
 }
 
 /**
@@ -2690,14 +3235,12 @@ export declare abstract class UrlHandlingStrategy {
  * for `Route.matcher` when a combination of `path` and `pathMatch`
  * is not expressive enough. Cannot be used together with `path` and `pathMatch`.
  *
- * @param segments An array of URL segments.
- * @param group A segment group.
- * @param route The route to match against.
- * @returns The match-result.
+ * The function takes the following arguments and returns a `UrlMatchResult` object.
+ * * *segments* : An array of URL segments.
+ * * *group* : A segment group.
+ * * *route* : The route to match against.
  *
- * @usageNotes
- *
- * The following matcher matches HTML files.
+ * The following example implementation matches HTML files.
  *
  * ```
  * export function htmlFiles(url: UrlSegment[]) {
@@ -2709,7 +3252,7 @@ export declare abstract class UrlHandlingStrategy {
  *
  * @publicApi
  */
-export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult;
+export declare type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult | null;
 
 /**
  * Represents the result of matching URLs with a custom matching function.
@@ -2767,7 +3310,7 @@ export declare class UrlSegment {
     parameters: {
         [name: string]: string;
     });
-    readonly parameterMap: ParamMap;
+    get parameterMap(): ParamMap;
     /** @docsNotRequired */
     toString(): string;
 }
@@ -2800,7 +3343,7 @@ export declare class UrlSegmentGroup {
     /** Whether the segment has child segments */
     hasChildren(): boolean;
     /** Number of child segments */
-    readonly numberOfChildren: number;
+    get numberOfChildren(): number;
     /** @docsNotRequired */
     toString(): string;
 }
@@ -2861,7 +3404,7 @@ export declare class UrlTree {
     queryParams: Params;
     /** The fragment of the URL */
     fragment: string | null;
-    readonly queryParamMap: ParamMap;
+    get queryParamMap(): ParamMap;
     /** @docsNotRequired */
     toString(): string;
 }
@@ -2884,7 +3427,7 @@ export declare function ɵangular_packages_router_router_d(platformLocationStrat
 
 export declare function ɵangular_packages_router_router_e(router: Router): any;
 
-export declare function ɵangular_packages_router_router_f(ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function ɵangular_packages_router_router_f(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 
 export declare function ɵangular_packages_router_router_g(router: Router): ActivatedRoute;
 
@@ -2906,38 +3449,18 @@ export declare class ɵangular_packages_router_router_h {
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    private isLegacyEnabled;
-    private isLegacyDisabled;
 }
 
 export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): () => Promise<any>;
 
 export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): (bootstrappedComponentRef: ComponentRef<any>) => void;
 
-export declare function ɵangular_packages_router_router_k(): (typeof ɵangular_packages_router_router_h | {
-    provide: InjectionToken<(() => void)[]>;
-    multi: boolean;
-    useFactory: typeof ɵangular_packages_router_router_i;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: typeof ɵangular_packages_router_router_j;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    multi?: undefined;
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
-    multi: boolean;
-    useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory?: undefined;
-    deps?: undefined;
-})[];
+export declare function ɵangular_packages_router_router_k(): ReadonlyArray<Provider>;
 
 
 export declare class ɵangular_packages_router_router_m<T> {
     constructor(root: ɵangular_packages_router_router_n<T>);
-    readonly root: T;
+    get root(): T;
 }
 
 export declare class ɵangular_packages_router_router_n<T> {
@@ -2966,8 +3489,11 @@ export declare class ɵangular_packages_router_router_o implements OnDestroy {
     private createScrollEvents;
     private consumeScrollEvents;
     private scheduleScrollEvent;
+    /** @nodoc */
     ngOnDestroy(): void;
 }
+
+export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
 
 
 /**

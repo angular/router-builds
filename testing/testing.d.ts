@@ -1,6 +1,6 @@
 /**
- * @license Angular v9.0.0-next.12+69.sha-1f498ab.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+121.sha-72c4288
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -32,7 +32,7 @@ import { UrlSerializer } from '@angular/router';
  *
  * ```
  * beforeEach(() => {
- *   TestBed.configureTestModule({
+ *   TestBed.configureTestingModule({
  *     imports: [
  *       RouterTestingModule.withRoutes(
  *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
@@ -102,10 +102,13 @@ export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
     /**
      * @docsNotRequired
      */
+    set stubbedModules(modules: {
+        [path: string]: any;
+    });
     /**
-    * @docsNotRequired
-    */
-    stubbedModules: {
+     * @docsNotRequired
+     */
+    get stubbedModules(): {
         [path: string]: any;
     };
     constructor(compiler: Compiler);

@@ -1,6 +1,6 @@
 /**
- * @license Angular v9.0.0-next.12+69.sha-1f498ab.with-local-changes
- * (c) 2010-2019 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+121.sha-72c4288
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -8,11 +8,11 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('@angular/router'), require('@angular/upgrade/static')) :
     typeof define === 'function' && define.amd ? define('@angular/router/upgrade', ['exports', '@angular/common', '@angular/core', '@angular/router', '@angular/upgrade/static'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}, global.ng.router.upgrade = {}), global.ng.common, global.ng.core, global.ng.router, global.ng.upgrade.static));
-}(this, function (exports, common, core, router, _static) { 'use strict';
+}(this, (function (exports, common, core, router, _static) { 'use strict';
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -51,7 +51,9 @@
      * @internal
      */
     function locationSyncBootstrapListener(ngUpgrade) {
-        return function () { setUpLocationSync(ngUpgrade); };
+        return function () {
+            setUpLocationSync(ngUpgrade);
+        };
     }
     /**
      * Sets up a location change listener to trigger `history.pushState`.
@@ -125,7 +127,7 @@
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -134,7 +136,7 @@
 
     /**
      * @license
-     * Copyright Google Inc. All Rights Reserved.
+     * Copyright Google LLC All Rights Reserved.
      *
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
@@ -151,5 +153,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=router-upgrade.umd.js.map
