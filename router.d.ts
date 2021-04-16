@@ -1,6 +1,6 @@
 /**
- * @license Angular v11.1.0-next.4+175.sha-02ff4ed
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+133.sha-d5b13ce
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -58,7 +58,7 @@ export declare class ActivatedRoute {
     /** An observable of the query parameters shared by all the routes. */
     queryParams: Observable<Params>;
     /** An observable of the URL fragment shared by all the routes. */
-    fragment: Observable<string>;
+    fragment: Observable<string | null>;
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
     /** The outlet name of the route, a constant. */
@@ -142,7 +142,7 @@ export declare class ActivatedRouteSnapshot {
     /** The query parameters shared by all the routes */
     queryParams: Params;
     /** The URL fragment shared by all the routes */
-    fragment: string;
+    fragment: string | null;
     /** The static and resolved data of this route */
     data: Data;
     /** The outlet name of the route */
@@ -615,7 +615,7 @@ export declare class ChildActivationStart {
 export declare class ChildrenOutletContexts {
     private contexts;
     /** Called when a `RouterOutlet` directive is instantiated */
-    onChildOutletCreated(childName: string, outlet: RouterOutlet): void;
+    onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
     /**
      * Called when a `RouterOutlet` directive is destroyed.
      * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
@@ -999,6 +999,54 @@ export declare class GuardsCheckStart extends RouterEvent {
 export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
 
 /**
+ * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
+ * for the current router state.
+ *
+ * @publicApi
+ * @see Router.isActive
+ */
+export declare interface IsActiveMatchOptions {
+    /**
+     * Defines the strategy for comparing the matrix parameters of two `UrlTree`s.
+     *
+     * The matrix parameter matching is dependent on the strategy for matching the
+     * segments. That is, if the `paths` option is set to `'subset'`, only
+     * the matrix parameters of the matching segments will be compared.
+     *
+     * - `'exact'`: Requires that matching segments also have exact matrix parameter
+     * matches.
+     * - `'subset'`: The matching segments in the router's active `UrlTree` may contain
+     * extra matrix parameters, but those that exist in the `UrlTree` in question must match.
+     * - `'ignored'`: When comparing `UrlTree`s, matrix params will be ignored.
+     */
+    matrixParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the query parameters of two `UrlTree`s.
+     *
+     * - `'exact'`: the query parameters must match exactly.
+     * - `'subset'`: the active `UrlTree` may contain extra parameters,
+     * but must match the key and value of any that exist in the `UrlTree` in question.
+     * - `'ignored'`: When comparing `UrlTree`s, query params will be ignored.
+     */
+    queryParams: 'exact' | 'subset' | 'ignored';
+    /**
+     * Defines the strategy for comparing the `UrlSegment`s of the `UrlTree`s.
+     *
+     * - `'exact'`: all segments in each `UrlTree` must match.
+     * - `'subset'`: a `UrlTree` will be determined to be active if it
+     * is a subtree of the active route. That is, the active route may contain extra
+     * segments, but must at least have all the segements of the `UrlTree` in question.
+     */
+    paths: 'exact' | 'subset';
+    /**
+     * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+     * - `'ignored'`: the fragments will not be compared when determining if a
+     * `UrlTree` is active.
+     */
+    fragment: 'exact' | 'ignored';
+}
+
+/**
  *
  * A function that returns a set of routes to load.
  *
@@ -1308,7 +1356,7 @@ export declare class NoPreloading implements PreloadingStrategy {
  * @publicApi
  */
 export declare class OutletContext {
-    outlet: RouterOutlet | null;
+    outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
     resolver: ComponentFactoryResolver | null;
     children: ChildrenOutletContexts;
@@ -1974,6 +2022,7 @@ export declare class Router {
     private navigations;
     private lastSuccessfulNavigation;
     private currentNavigation;
+    private disposed;
     private locationSubscription?;
     /**
      * Tracks the previously seen location change from the location subscription so we can compare
@@ -2076,7 +2125,10 @@ export declare class Router {
     private shouldScheduleNavigation;
     /** The current URL. */
     get url(): string;
-    /** The current Navigation object if one exists */
+    /**
+     * Returns the current `Navigation` object when the router is navigating,
+     * and `null` when idle.
+     */
     getCurrentNavigation(): Navigation | null;
     /**
      * Resets the route configuration used for navigation and generating links.
@@ -2208,8 +2260,22 @@ export declare class Router {
     serializeUrl(url: UrlTree): string;
     /** Parses a string into a `UrlTree` */
     parseUrl(url: string): UrlTree;
-    /** Returns whether the url is activated */
+    /**
+     * Returns whether the url is activated.
+     *
+     * @deprecated
+     * Use `IsActiveUrlTreeOptions` instead.
+     *
+     * - The equivalent `IsActiveUrlTreeOptions` for `true` is
+     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+     * - The equivalent for `false` is
+     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+     */
     isActive(url: string | UrlTree, exact: boolean): boolean;
+    /**
+     * Returns whether the url is activated.
+     */
+    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
     private processNavigations;
     private scheduleNavigation;
@@ -2542,9 +2608,16 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private routerEventsSubscription;
     private linkInputChangesSubscription?;
     readonly isActive: boolean;
+    /**
+     * Options to configure how to determine if the router link is active.
+     *
+     * These options are passed to the `Router.isActive()` function.
+     *
+     * @see Router.isActive
+     */
     routerLinkActiveOptions: {
         exact: boolean;
-    };
+    } | IsActiveMatchOptions;
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
@@ -2766,7 +2839,7 @@ export declare class RouterModule {
  *
  * @publicApi
  */
-export declare class RouterOutlet implements OnDestroy, OnInit {
+export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     private parentContexts;
     private location;
     private resolver;
@@ -2782,6 +2855,10 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     /** @nodoc */
     ngOnInit(): void;
     get isActivated(): boolean;
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
     get component(): Object;
     get activatedRoute(): ActivatedRoute;
     get activatedRouteData(): Data;
@@ -2795,6 +2872,60 @@ export declare class RouterOutlet implements OnDestroy, OnInit {
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+}
+
+/**
+ * An interface that defines the contract for developing a component outlet for the `Router`.
+ *
+ * An outlet acts as a placeholder that Angular dynamically fills based on the current router state.
+ *
+ * A router outlet should register itself with the `Router` via
+ * `ChildrenOutletContexts#onChildOutletCreated` and unregister with
+ * `ChildrenOutletContexts#onChildOutletDestroyed`. When the `Router` identifies a matched `Route`,
+ * it looks for a registered outlet in the `ChildrenOutletContexts` and activates it.
+ *
+ * @see `ChildrenOutletContexts`
+ * @publicApi
+ */
+export declare interface RouterOutletContract {
+    /**
+     * Whether the given outlet is activated.
+     *
+     * An outlet is considered "activated" if it has an active component.
+     */
+    isActivated: boolean;
+    /** The instance of the activated component or `null` if the outlet is not activated. */
+    component: Object | null;
+    /**
+     * The `Data` of the `ActivatedRoute` snapshot.
+     */
+    activatedRouteData: Data;
+    /**
+     * The `ActivatedRoute` for the outlet or `null` if the outlet is not activated.
+     */
+    activatedRoute: ActivatedRoute | null;
+    /**
+     * Called by the `Router` when the outlet should activate (create a component).
+     */
+    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+    /**
+     * A request to destroy the currently activated component.
+     *
+     * When a `RouteReuseStrategy` indicates that an `ActivatedRoute` should be removed but stored for
+     * later re-use rather than destroyed, the `Router` will call `detach` instead.
+     */
+    deactivate(): void;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree.
+     *
+     * This is similar to `deactivate`, but the activated component should _not_ be destroyed.
+     * Instead, it is returned so that it can be reattached later via the `attach` method.
+     */
+    detach(): ComponentRef<unknown>;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree.
+     */
+    attach(ref: ComponentRef<unknown>, activatedRoute: ActivatedRoute): void;
 }
 
 /**
@@ -3324,25 +3455,7 @@ export declare function ɵangular_packages_router_router_i(r: ɵangular_packages
 
 export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): (bootstrappedComponentRef: ComponentRef<any>) => void;
 
-export declare function ɵangular_packages_router_router_k(): (typeof ɵangular_packages_router_router_h | {
-    provide: InjectionToken<(() => void)[]>;
-    multi: boolean;
-    useFactory: typeof ɵangular_packages_router_router_i;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory: typeof ɵangular_packages_router_router_j;
-    deps: (typeof ɵangular_packages_router_router_h)[];
-    multi?: undefined;
-    useExisting?: undefined;
-} | {
-    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
-    multi: boolean;
-    useExisting: InjectionToken<(compRef: ComponentRef<any>) => void>;
-    useFactory?: undefined;
-    deps?: undefined;
-})[];
+export declare function ɵangular_packages_router_router_k(): ReadonlyArray<Provider>;
 
 
 export declare class ɵangular_packages_router_router_m<T> {

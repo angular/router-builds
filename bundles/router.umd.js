@@ -1,6 +1,6 @@
 /**
- * @license Angular v11.1.0-next.4+175.sha-02ff4ed
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+133.sha-d5b13ce
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
@@ -29,11 +29,13 @@
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
+                if (Object.prototype.hasOwnProperty.call(b, p))
                     d[p] = b[p]; };
         return extendStatics(d, b);
     };
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -176,10 +178,10 @@
             k2 = k;
         o[k2] = m[k];
     });
-    function __exportStar(m, exports) {
+    function __exportStar(m, o) {
         for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                __createBinding(exports, m, p);
+            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+                __createBinding(o, m, p);
     }
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -219,11 +221,13 @@
         }
         return ar;
     }
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++)
             s += arguments[i].length;
@@ -232,7 +236,11 @@
                 r[k] = a[j];
         return r;
     }
-    ;
+    function __spreadArray(to, from) {
+        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+            to[j] = from[i];
+        return to;
+    }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
@@ -289,7 +297,7 @@
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
+                if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
                     __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
@@ -297,18 +305,21 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-    function __classPrivateFieldGet(receiver, privateMap) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to get private field on non-instance");
-        }
-        return privateMap.get(receiver);
+    function __classPrivateFieldGet(receiver, state, kind, f) {
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
     }
-    function __classPrivateFieldSet(receiver, privateMap, value) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to set private field on non-instance");
-        }
-        privateMap.set(receiver, value);
-        return value;
+    function __classPrivateFieldSet(receiver, state, value, kind, f) {
+        if (kind === "m")
+            throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f)
+            throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+            throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
     }
 
     /**
@@ -873,8 +884,8 @@
         if (Array.isArray(a) && Array.isArray(b)) {
             if (a.length !== b.length)
                 return false;
-            var aSorted = __spread(a).sort();
-            var bSorted_1 = __spread(b).sort();
+            var aSorted = __spreadArray([], __read(a)).sort();
+            var bSorted_1 = __spreadArray([], __read(b)).sort();
             return aSorted.every(function (val, index) { return bSorted_1[index] === val; });
         }
         else {
@@ -929,55 +940,69 @@
     function createEmptyUrlTree() {
         return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
     }
-    function containsTree(container, containee, exact) {
-        if (exact) {
-            return equalQueryParams(container.queryParams, containee.queryParams) &&
-                equalSegmentGroups(container.root, containee.root);
-        }
-        return containsQueryParams(container.queryParams, containee.queryParams) &&
-            containsSegmentGroup(container.root, containee.root);
+    var pathCompareMap = {
+        'exact': equalSegmentGroups,
+        'subset': containsSegmentGroup,
+    };
+    var paramCompareMap = {
+        'exact': equalParams,
+        'subset': containsParams,
+        'ignored': function () { return true; },
+    };
+    function containsTree(container, containee, options) {
+        return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) &&
+            paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) &&
+            !(options.fragment === 'exact' && container.fragment !== containee.fragment);
     }
-    function equalQueryParams(container, containee) {
+    function equalParams(container, containee) {
         // TODO: This does not handle array params correctly.
         return shallowEqual(container, containee);
     }
-    function equalSegmentGroups(container, containee) {
+    function equalSegmentGroups(container, containee, matrixParams) {
         if (!equalPath(container.segments, containee.segments))
             return false;
+        if (!matrixParamsMatch(container.segments, containee.segments, matrixParams)) {
+            return false;
+        }
         if (container.numberOfChildren !== containee.numberOfChildren)
             return false;
         for (var c in containee.children) {
             if (!container.children[c])
                 return false;
-            if (!equalSegmentGroups(container.children[c], containee.children[c]))
+            if (!equalSegmentGroups(container.children[c], containee.children[c], matrixParams))
                 return false;
         }
         return true;
     }
-    function containsQueryParams(container, containee) {
+    function containsParams(container, containee) {
         return Object.keys(containee).length <= Object.keys(container).length &&
             Object.keys(containee).every(function (key) { return equalArraysOrString(container[key], containee[key]); });
     }
-    function containsSegmentGroup(container, containee) {
-        return containsSegmentGroupHelper(container, containee, containee.segments);
+    function containsSegmentGroup(container, containee, matrixParams) {
+        return containsSegmentGroupHelper(container, containee, containee.segments, matrixParams);
     }
-    function containsSegmentGroupHelper(container, containee, containeePaths) {
+    function containsSegmentGroupHelper(container, containee, containeePaths, matrixParams) {
         if (container.segments.length > containeePaths.length) {
             var current = container.segments.slice(0, containeePaths.length);
             if (!equalPath(current, containeePaths))
                 return false;
             if (containee.hasChildren())
                 return false;
+            if (!matrixParamsMatch(current, containeePaths, matrixParams))
+                return false;
             return true;
         }
         else if (container.segments.length === containeePaths.length) {
             if (!equalPath(container.segments, containeePaths))
                 return false;
+            if (!matrixParamsMatch(container.segments, containeePaths, matrixParams))
+                return false;
             for (var c in containee.children) {
                 if (!container.children[c])
                     return false;
-                if (!containsSegmentGroup(container.children[c], containee.children[c]))
+                if (!containsSegmentGroup(container.children[c], containee.children[c], matrixParams)) {
                     return false;
+                }
             }
             return true;
         }
@@ -986,10 +1011,17 @@
             var next = containeePaths.slice(container.segments.length);
             if (!equalPath(container.segments, current))
                 return false;
+            if (!matrixParamsMatch(container.segments, current, matrixParams))
+                return false;
             if (!container.children[PRIMARY_OUTLET])
                 return false;
-            return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+            return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next, matrixParams);
         }
+    }
+    function matrixParamsMatch(containerPaths, containeePaths, options) {
+        return containeePaths.every(function (containeeSegment, i) {
+            return paramCompareMap[options](containerPaths[i].parameters, containeeSegment.parameters);
+        });
     }
     /**
      * @description
@@ -2084,20 +2116,20 @@
             value._futureSnapshot = curr.value;
             var children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
             return new TreeNode(value, children);
-            // retrieve an activated route that is used to be displayed, but is not currently displayed
         }
         else {
-            var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
-            if (detachedRouteHandle) {
-                var tree = detachedRouteHandle.route;
-                setFutureSnapshotsOfActivatedRoutes(curr, tree);
-                return tree;
+            if (routeReuseStrategy.shouldAttach(curr.value)) {
+                // retrieve an activated route that is used to be displayed, but is not currently displayed
+                var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
+                if (detachedRouteHandle !== null) {
+                    var tree = detachedRouteHandle.route;
+                    setFutureSnapshotsOfActivatedRoutes(curr, tree);
+                    return tree;
+                }
             }
-            else {
-                var value = createActivatedRoute(curr.value);
-                var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
-                return new TreeNode(value, children);
-            }
+            var value = createActivatedRoute(curr.value);
+            var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+            return new TreeNode(value, children);
         }
     }
     function setFutureSnapshotsOfActivatedRoutes(curr, result) {
@@ -2217,14 +2249,14 @@
                     forEach(cmd.outlets, function (commands, name) {
                         outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
                     });
-                    return __spread(res, [{ outlets: outlets_1 }]);
+                    return __spreadArray(__spreadArray([], __read(res)), [{ outlets: outlets_1 }]);
                 }
                 if (cmd.segmentPath) {
-                    return __spread(res, [cmd.segmentPath]);
+                    return __spreadArray(__spreadArray([], __read(res)), [cmd.segmentPath]);
                 }
             }
             if (!(typeof cmd === 'string')) {
-                return __spread(res, [cmd]);
+                return __spreadArray(__spreadArray([], __read(res)), [cmd]);
             }
             if (cmdIdx === 0) {
                 cmd.split('/').forEach(function (urlPart, partIndex) {
@@ -2243,7 +2275,7 @@
                 });
                 return res;
             }
-            return __spread(res, [cmd]);
+            return __spreadArray(__spreadArray([], __read(res)), [cmd]);
         }, []);
         return new Navigation(isAbsolute, numberOfDoubleDots, res);
     }
@@ -2525,6 +2557,11 @@
                 context.outlet.deactivate();
                 // Destroy the contexts for all the outlets that were in the component
                 context.children.onOutletDeactivated();
+                // Clear the information about the attached component on the context but keep the reference to
+                // the outlet.
+                context.attachRef = null;
+                context.resolver = null;
+                context.route = null;
             }
         };
         ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, contexts) {
@@ -2828,7 +2865,7 @@
      */
     function sortByMatchingOutlets(routes, outletName) {
         var sortedConfig = routes.filter(function (r) { return getOutlet(r) === outletName; });
-        sortedConfig.push.apply(sortedConfig, __spread(routes.filter(function (r) { return getOutlet(r) !== outletName; })));
+        sortedConfig.push.apply(sortedConfig, __spreadArray([], __read(routes.filter(function (r) { return getOutlet(r) !== outletName; }))));
         return sortedConfig;
     }
 
@@ -3192,8 +3229,9 @@
             var _this = this;
             if (route.path === '**') {
                 if (route.loadChildren) {
-                    return this.configLoader.load(ngModule.injector, route)
-                        .pipe(operators.map(function (cfg) {
+                    var loaded$ = route._loadedConfig ? rxjs.of(route._loadedConfig) :
+                        this.configLoader.load(ngModule.injector, route);
+                    return loaded$.pipe(operators.map(function (cfg) {
                         route._loadedConfig = cfg;
                         return new UrlSegmentGroup(segments, {});
                     }));
@@ -3787,7 +3825,7 @@
                         // outlet, return `null`.
                         return null;
                     }
-                    children.push.apply(children, __spread(outletChildren));
+                    children.push.apply(children, __spreadArray([], __read(outletChildren)));
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -3912,17 +3950,20 @@
      * empty path route config and the results need to then be merged.
      */
     function mergeEmptyPathMatches(nodes) {
-        var e_3, _a;
+        var e_3, _a, e_4, _b;
         var result = [];
+        // The set of nodes which contain children that were merged from two duplicate empty path nodes.
+        var mergedNodes = new Set();
         var _loop_1 = function (node) {
-            var _a;
+            var _c;
             if (!hasEmptyPathConfig(node)) {
                 result.push(node);
                 return "continue";
             }
             var duplicateEmptyPathNode = result.find(function (resultNode) { return node.value.routeConfig === resultNode.value.routeConfig; });
             if (duplicateEmptyPathNode !== undefined) {
-                (_a = duplicateEmptyPathNode.children).push.apply(_a, __spread(node.children));
+                (_c = duplicateEmptyPathNode.children).push.apply(_c, __spreadArray([], __read(node.children)));
+                mergedNodes.add(duplicateEmptyPathNode);
             }
             else {
                 result.push(node);
@@ -3941,7 +3982,25 @@
             }
             finally { if (e_3) throw e_3.error; }
         }
-        return result;
+        try {
+            // For each node which has children from multiple sources, we need to recompute a new `TreeNode`
+            // by also merging those children. This is necessary when there are multiple empty path configs in
+            // a row. Put another way: whenever we combine children of two nodes, we need to also check if any
+            // of those children can be combined into a single node as well.
+            for (var mergedNodes_1 = __values(mergedNodes), mergedNodes_1_1 = mergedNodes_1.next(); !mergedNodes_1_1.done; mergedNodes_1_1 = mergedNodes_1.next()) {
+                var mergedNode = mergedNodes_1_1.value;
+                var mergedChildren = mergeEmptyPathMatches(mergedNode.children);
+                result.push(new TreeNode(mergedNode.value, mergedChildren));
+            }
+        }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (mergedNodes_1_1 && !mergedNodes_1_1.done && (_b = mergedNodes_1.return)) _b.call(mergedNodes_1);
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
+        return result.filter(function (n) { return !mergedNodes.has(n); });
     }
     function checkOutletNameUniqueness(nodes) {
         var names = {};
@@ -4162,21 +4221,32 @@
         }
         RouterConfigLoader.prototype.load = function (parentInjector, route) {
             var _this = this;
+            if (route._loader$) {
+                return route._loader$;
+            }
             if (this.onLoadStartListener) {
                 this.onLoadStartListener(route);
             }
             var moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-            return moduleFactory$.pipe(operators.map(function (factory) {
+            var loadRunner = moduleFactory$.pipe(operators.map(function (factory) {
                 if (_this.onLoadEndListener) {
                     _this.onLoadEndListener(route);
                 }
                 var module = factory.create(parentInjector);
-                // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
-                // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
-                // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
+                // When loading a module that doesn't provide `RouterModule.forChild()` preloader
+                // will get stuck in an infinite loop. The child module's Injector will look to
+                // its parent `Injector` when it doesn't find any ROUTES so it will return routes
+                // for it's parent module instead.
                 return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, core.InjectFlags.Self | core.InjectFlags.Optional))
                     .map(standardizeConfig), module);
+            }), operators.catchError(function (err) {
+                route._loader$ = undefined;
+                throw err;
             }));
+            // Use custom ConnectableObservable as share in runners pipe increasing the bundle size too much
+            route._loader$ = new rxjs.ConnectableObservable(loadRunner, function () { return new rxjs.Subject(); })
+                .pipe(operators.refCount());
+            return route._loader$;
         };
         RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
             var _this = this;
@@ -4329,6 +4399,26 @@
         return rxjs.of(null);
     }
     /**
+     * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+     * (exact = true).
+     */
+    var exactMatchOptions = {
+        paths: 'exact',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+        queryParams: 'exact'
+    };
+    /**
+     * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+     * (exact = false).
+     */
+    var subsetMatchOptions = {
+        paths: 'subset',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+        queryParams: 'subset'
+    };
+    /**
      * @description
      *
      * A service that provides navigation among views and URL manipulation capabilities.
@@ -4354,6 +4444,7 @@
             this.config = config;
             this.lastSuccessfulNavigation = null;
             this.currentNavigation = null;
+            this.disposed = false;
             /**
              * Tracks the previously seen location change from the location subscription so we can compare
              * the two latest to see if they are duplicates. See setUpLocationChangeListener.
@@ -4828,7 +4919,10 @@
             enumerable: false,
             configurable: true
         });
-        /** The current Navigation object if one exists */
+        /**
+         * Returns the current `Navigation` object when the router is navigating,
+         * and `null` when idle.
+         */
         Router.prototype.getCurrentNavigation = function () {
             return this.currentNavigation;
         };
@@ -4864,10 +4958,12 @@
         };
         /** Disposes of the router. */
         Router.prototype.dispose = function () {
+            this.transitions.complete();
             if (this.locationSubscription) {
                 this.locationSubscription.unsubscribe();
                 this.locationSubscription = undefined;
             }
+            this.disposed = true;
         };
         /**
          * Appends URL segments to the current URL tree to create a new URL tree.
@@ -4936,7 +5032,7 @@
             if (q !== null) {
                 q = this.removeEmptyProps(q);
             }
-            return createUrlTree(a, this.currentUrlTree, commands, q, f);
+            return createUrlTree(a, this.currentUrlTree, commands, q, f !== null && f !== void 0 ? f : null);
         };
         /**
          * Navigates to a view using an absolute route path.
@@ -5024,13 +5120,22 @@
             }
             return urlTree;
         };
-        /** Returns whether the url is activated */
-        Router.prototype.isActive = function (url, exact) {
+        Router.prototype.isActive = function (url, matchOptions) {
+            var options;
+            if (matchOptions === true) {
+                options = Object.assign({}, exactMatchOptions);
+            }
+            else if (matchOptions === false) {
+                options = Object.assign({}, subsetMatchOptions);
+            }
+            else {
+                options = matchOptions;
+            }
             if (isUrlTree(url)) {
-                return containsTree(this.currentUrlTree, url, exact);
+                return containsTree(this.currentUrlTree, url, options);
             }
             var urlTree = this.parseUrl(url);
-            return containsTree(this.currentUrlTree, urlTree, exact);
+            return containsTree(this.currentUrlTree, urlTree, options);
         };
         Router.prototype.removeEmptyProps = function (params) {
             return Object.keys(params).reduce(function (result, key) {
@@ -5049,13 +5154,15 @@
                 _this.events
                     .next(new NavigationEnd(t.id, _this.serializeUrl(t.extractedUrl), _this.serializeUrl(_this.currentUrlTree)));
                 _this.lastSuccessfulNavigation = _this.currentNavigation;
-                _this.currentNavigation = null;
                 t.resolve(true);
             }, function (e) {
                 _this.console.warn("Unhandled Navigation Error: ");
             });
         };
         Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
+            if (this.disposed) {
+                return Promise.resolve(false);
+            }
             // * Imperative navigations (router.navigate) might trigger additional navigations to the same
             //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
             //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
@@ -5534,6 +5641,13 @@
             this.linkWithHref = linkWithHref;
             this.classes = [];
             this.isActive = false;
+            /**
+             * Options to configure how to determine if the router link is active.
+             *
+             * These options are passed to the `Router.isActive()` function.
+             *
+             * @see Router.isActive
+             */
             this.routerLinkActiveOptions = { exact: false };
             this.routerEventsSubscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
@@ -5554,7 +5668,7 @@
             var _this = this;
             var _a;
             (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
-            var allLinkChanges = __spread(this.links.toArray(), this.linksWithHrefs.toArray(), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
+            var allLinkChanges = __spreadArray(__spreadArray(__spreadArray([], __read(this.links.toArray())), __read(this.linksWithHrefs.toArray())), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
                 .map(function (link) { return link.onChanges; });
             this.linkInputChangesSubscription = rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function (link) {
                 if (_this.isActive !== _this.isLinkActive(_this.router)(link)) {
@@ -5601,8 +5715,11 @@
             });
         };
         RouterLinkActive.prototype.isLinkActive = function (router) {
-            var _this = this;
-            return function (link) { return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact); };
+            var options = 'paths' in this.routerLinkActiveOptions ?
+                this.routerLinkActiveOptions :
+                // While the types should disallow `undefined` here, it's possible without strict inputs
+                (this.routerLinkActiveOptions.exact || false);
+            return function (link) { return router.isActive(link.urlTree, options); };
         };
         RouterLinkActive.prototype.hasActiveLinks = function () {
             var isActiveCheckFn = this.isLinkActive(this.router);
@@ -5729,6 +5846,10 @@
             configurable: true
         });
         Object.defineProperty(RouterOutlet.prototype, "component", {
+            /**
+             * @returns The currently activated component instance.
+             * @throws An error if the outlet is not activated.
+             */
             get: function () {
                 if (!this.activated)
                     throw new Error('Outlet is not activated');
@@ -5955,7 +6076,8 @@
         RouterPreloader.prototype.preloadConfig = function (ngModule, route) {
             var _this = this;
             return this.preloadingStrategy.preload(route, function () {
-                var loaded$ = _this.loader.load(ngModule.injector, route);
+                var loaded$ = route._loadedConfig ? rxjs.of(route._loadedConfig) :
+                    _this.loader.load(ngModule.injector, route);
                 return loaded$.pipe(operators.mergeMap(function (config) {
                     route._loadedConfig = config;
                     return _this.processRoutes(config.module, config.routes);
@@ -6272,12 +6394,14 @@
         }
         assignExtraOptionsToRouter(opts, router);
         if (opts.enableTracing) {
-            var dom_1 = common.ɵgetDOM();
             router.events.subscribe(function (e) {
-                dom_1.logGroup("Router Event: " + e.constructor.name);
-                dom_1.log(e.toString());
-                dom_1.log(e);
-                dom_1.logGroupEnd();
+                var _a, _b;
+                // tslint:disable:no-console
+                (_a = console.group) === null || _a === void 0 ? void 0 : _a.call(console, "Router Event: " + e.constructor.name);
+                console.log(e.toString());
+                console.log(e);
+                (_b = console.groupEnd) === null || _b === void 0 ? void 0 : _b.call(console);
+                // tslint:enable:no-console
             });
         }
         return router;
@@ -6421,7 +6545,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('11.1.0-next.4+175.sha-02ff4ed');
+    var VERSION = new core.Version('12.0.0-next.8+133.sha-d5b13ce');
 
     /**
      * @license

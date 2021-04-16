@@ -1,13 +1,13 @@
 /**
- * @license Angular v11.1.0-next.4+175.sha-02ff4ed
- * (c) 2010-2020 Google LLC. https://angular.io/
+ * @license Angular v12.0.0-next.8+133.sha-d5b13ce
+ * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, ɵgetDOM, LOCATION_INITIALIZED } from '@angular/common';
+import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
 import { ɵisObservable, ɵisPromise, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Directive, Attribute, Renderer2, ElementRef, Input, HostListener, HostBinding, ChangeDetectorRef, Optional, ContentChildren, EventEmitter, ViewContainerRef, ComponentFactoryResolver, Output, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, NgModule, ApplicationRef, Version } from '@angular/core';
-import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, Subject } from 'rxjs';
-import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, finalize, mergeAll } from 'rxjs/operators';
+import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
+import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
 /**
  * @license
@@ -592,55 +592,69 @@ function wrapIntoObservable(value) {
 function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
-function containsTree(container, containee, exact) {
-    if (exact) {
-        return equalQueryParams(container.queryParams, containee.queryParams) &&
-            equalSegmentGroups(container.root, containee.root);
-    }
-    return containsQueryParams(container.queryParams, containee.queryParams) &&
-        containsSegmentGroup(container.root, containee.root);
+const pathCompareMap = {
+    'exact': equalSegmentGroups,
+    'subset': containsSegmentGroup,
+};
+const paramCompareMap = {
+    'exact': equalParams,
+    'subset': containsParams,
+    'ignored': () => true,
+};
+function containsTree(container, containee, options) {
+    return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) &&
+        paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) &&
+        !(options.fragment === 'exact' && container.fragment !== containee.fragment);
 }
-function equalQueryParams(container, containee) {
+function equalParams(container, containee) {
     // TODO: This does not handle array params correctly.
     return shallowEqual(container, containee);
 }
-function equalSegmentGroups(container, containee) {
+function equalSegmentGroups(container, containee, matrixParams) {
     if (!equalPath(container.segments, containee.segments))
         return false;
+    if (!matrixParamsMatch(container.segments, containee.segments, matrixParams)) {
+        return false;
+    }
     if (container.numberOfChildren !== containee.numberOfChildren)
         return false;
     for (const c in containee.children) {
         if (!container.children[c])
             return false;
-        if (!equalSegmentGroups(container.children[c], containee.children[c]))
+        if (!equalSegmentGroups(container.children[c], containee.children[c], matrixParams))
             return false;
     }
     return true;
 }
-function containsQueryParams(container, containee) {
+function containsParams(container, containee) {
     return Object.keys(containee).length <= Object.keys(container).length &&
         Object.keys(containee).every(key => equalArraysOrString(container[key], containee[key]));
 }
-function containsSegmentGroup(container, containee) {
-    return containsSegmentGroupHelper(container, containee, containee.segments);
+function containsSegmentGroup(container, containee, matrixParams) {
+    return containsSegmentGroupHelper(container, containee, containee.segments, matrixParams);
 }
-function containsSegmentGroupHelper(container, containee, containeePaths) {
+function containsSegmentGroupHelper(container, containee, containeePaths, matrixParams) {
     if (container.segments.length > containeePaths.length) {
         const current = container.segments.slice(0, containeePaths.length);
         if (!equalPath(current, containeePaths))
             return false;
         if (containee.hasChildren())
             return false;
+        if (!matrixParamsMatch(current, containeePaths, matrixParams))
+            return false;
         return true;
     }
     else if (container.segments.length === containeePaths.length) {
         if (!equalPath(container.segments, containeePaths))
             return false;
+        if (!matrixParamsMatch(container.segments, containeePaths, matrixParams))
+            return false;
         for (const c in containee.children) {
             if (!container.children[c])
                 return false;
-            if (!containsSegmentGroup(container.children[c], containee.children[c]))
+            if (!containsSegmentGroup(container.children[c], containee.children[c], matrixParams)) {
                 return false;
+            }
         }
         return true;
     }
@@ -649,10 +663,17 @@ function containsSegmentGroupHelper(container, containee, containeePaths) {
         const next = containeePaths.slice(container.segments.length);
         if (!equalPath(container.segments, current))
             return false;
+        if (!matrixParamsMatch(container.segments, current, matrixParams))
+            return false;
         if (!container.children[PRIMARY_OUTLET])
             return false;
-        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+        return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next, matrixParams);
     }
+}
+function matrixParamsMatch(containerPaths, containeePaths, options) {
+    return containeePaths.every((containeeSegment, i) => {
+        return paramCompareMap[options](containerPaths[i].parameters, containeeSegment.parameters);
+    });
 }
 /**
  * @description
@@ -1641,20 +1662,20 @@ function createNode(routeReuseStrategy, curr, prevState) {
         value._futureSnapshot = curr.value;
         const children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
         return new TreeNode(value, children);
-        // retrieve an activated route that is used to be displayed, but is not currently displayed
     }
     else {
-        const detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
-        if (detachedRouteHandle) {
-            const tree = detachedRouteHandle.route;
-            setFutureSnapshotsOfActivatedRoutes(curr, tree);
-            return tree;
+        if (routeReuseStrategy.shouldAttach(curr.value)) {
+            // retrieve an activated route that is used to be displayed, but is not currently displayed
+            const detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
+            if (detachedRouteHandle !== null) {
+                const tree = detachedRouteHandle.route;
+                setFutureSnapshotsOfActivatedRoutes(curr, tree);
+                return tree;
+            }
         }
-        else {
-            const value = createActivatedRoute(curr.value);
-            const children = curr.children.map(c => createNode(routeReuseStrategy, c));
-            return new TreeNode(value, children);
-        }
+        const value = createActivatedRoute(curr.value);
+        const children = curr.children.map(c => createNode(routeReuseStrategy, c));
+        return new TreeNode(value, children);
     }
 }
 function setFutureSnapshotsOfActivatedRoutes(curr, result) {
@@ -2070,6 +2091,11 @@ class ActivateRoutes {
             context.outlet.deactivate();
             // Destroy the contexts for all the outlets that were in the component
             context.children.onOutletDeactivated();
+            // Clear the information about the attached component on the context but keep the reference to
+            // the outlet.
+            context.attachRef = null;
+            context.resolver = null;
+            context.route = null;
         }
     }
     activateChildRoutes(futureNode, currNode, contexts) {
@@ -2717,8 +2743,9 @@ class ApplyRedirects {
     matchSegmentAgainstRoute(ngModule, rawSegmentGroup, route, segments, outlet) {
         if (route.path === '**') {
             if (route.loadChildren) {
-                return this.configLoader.load(ngModule.injector, route)
-                    .pipe(map((cfg) => {
+                const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                    this.configLoader.load(ngModule.injector, route);
+                return loaded$.pipe(map((cfg) => {
                     route._loadedConfig = cfg;
                     return new UrlSegmentGroup(segments, {});
                 }));
@@ -3385,6 +3412,8 @@ function hasEmptyPathConfig(node) {
  */
 function mergeEmptyPathMatches(nodes) {
     const result = [];
+    // The set of nodes which contain children that were merged from two duplicate empty path nodes.
+    const mergedNodes = new Set();
     for (const node of nodes) {
         if (!hasEmptyPathConfig(node)) {
             result.push(node);
@@ -3393,12 +3422,21 @@ function mergeEmptyPathMatches(nodes) {
         const duplicateEmptyPathNode = result.find(resultNode => node.value.routeConfig === resultNode.value.routeConfig);
         if (duplicateEmptyPathNode !== undefined) {
             duplicateEmptyPathNode.children.push(...node.children);
+            mergedNodes.add(duplicateEmptyPathNode);
         }
         else {
             result.push(node);
         }
     }
-    return result;
+    // For each node which has children from multiple sources, we need to recompute a new `TreeNode`
+    // by also merging those children. This is necessary when there are multiple empty path configs in
+    // a row. Put another way: whenever we combine children of two nodes, we need to also check if any
+    // of those children can be combined into a single node as well.
+    for (const mergedNode of mergedNodes) {
+        const mergedChildren = mergeEmptyPathMatches(mergedNode.children);
+        result.push(new TreeNode(mergedNode.value, mergedChildren));
+    }
+    return result.filter(n => !mergedNodes.has(n));
 }
 function checkOutletNameUniqueness(nodes) {
     const names = {};
@@ -3607,21 +3645,32 @@ class RouterConfigLoader {
         this.onLoadEndListener = onLoadEndListener;
     }
     load(parentInjector, route) {
+        if (route._loader$) {
+            return route._loader$;
+        }
         if (this.onLoadStartListener) {
             this.onLoadStartListener(route);
         }
         const moduleFactory$ = this.loadModuleFactory(route.loadChildren);
-        return moduleFactory$.pipe(map((factory) => {
+        const loadRunner = moduleFactory$.pipe(map((factory) => {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
             const module = factory.create(parentInjector);
-            // When loading a module that doesn't provide `RouterModule.forChild()` preloader will get
-            // stuck in an infinite loop. The child module's Injector will look to its parent `Injector`
-            // when it doesn't find any ROUTES so it will return routes for it's parent module instead.
+            // When loading a module that doesn't provide `RouterModule.forChild()` preloader
+            // will get stuck in an infinite loop. The child module's Injector will look to
+            // its parent `Injector` when it doesn't find any ROUTES so it will return routes
+            // for it's parent module instead.
             return new LoadedRouterConfig(flatten(module.injector.get(ROUTES, undefined, InjectFlags.Self | InjectFlags.Optional))
                 .map(standardizeConfig), module);
+        }), catchError((err) => {
+            route._loader$ = undefined;
+            throw err;
         }));
+        // Use custom ConnectableObservable as share in runners pipe increasing the bundle size too much
+        route._loader$ = new ConnectableObservable(loadRunner, () => new Subject())
+            .pipe(refCount());
+        return route._loader$;
     }
     loadModuleFactory(loadChildren) {
         if (typeof loadChildren === 'string') {
@@ -3764,6 +3813,26 @@ function defaultRouterHook(snapshot, runExtras) {
     return of(null);
 }
 /**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+ * (exact = true).
+ */
+const exactMatchOptions = {
+    paths: 'exact',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'exact'
+};
+/**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = false).
+ */
+const subsetMatchOptions = {
+    paths: 'subset',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+    queryParams: 'subset'
+};
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -3788,6 +3857,7 @@ class Router {
         this.config = config;
         this.lastSuccessfulNavigation = null;
         this.currentNavigation = null;
+        this.disposed = false;
         /**
          * Tracks the previously seen location change from the location subscription so we can compare
          * the two latest to see if they are duplicates. See setUpLocationChangeListener.
@@ -4256,7 +4326,10 @@ class Router {
     get url() {
         return this.serializeUrl(this.currentUrlTree);
     }
-    /** The current Navigation object if one exists */
+    /**
+     * Returns the current `Navigation` object when the router is navigating,
+     * and `null` when idle.
+     */
     getCurrentNavigation() {
         return this.currentNavigation;
     }
@@ -4292,10 +4365,12 @@ class Router {
     }
     /** Disposes of the router. */
     dispose() {
+        this.transitions.complete();
         if (this.locationSubscription) {
             this.locationSubscription.unsubscribe();
             this.locationSubscription = undefined;
         }
+        this.disposed = true;
     }
     /**
      * Appends URL segments to the current URL tree to create a new URL tree.
@@ -4363,7 +4438,7 @@ class Router {
         if (q !== null) {
             q = this.removeEmptyProps(q);
         }
-        return createUrlTree(a, this.currentUrlTree, commands, q, f);
+        return createUrlTree(a, this.currentUrlTree, commands, q, f !== null && f !== void 0 ? f : null);
     }
     /**
      * Navigates to a view using an absolute route path.
@@ -4449,13 +4524,22 @@ class Router {
         }
         return urlTree;
     }
-    /** Returns whether the url is activated */
-    isActive(url, exact) {
+    isActive(url, matchOptions) {
+        let options;
+        if (matchOptions === true) {
+            options = Object.assign({}, exactMatchOptions);
+        }
+        else if (matchOptions === false) {
+            options = Object.assign({}, subsetMatchOptions);
+        }
+        else {
+            options = matchOptions;
+        }
         if (isUrlTree(url)) {
-            return containsTree(this.currentUrlTree, url, exact);
+            return containsTree(this.currentUrlTree, url, options);
         }
         const urlTree = this.parseUrl(url);
-        return containsTree(this.currentUrlTree, urlTree, exact);
+        return containsTree(this.currentUrlTree, urlTree, options);
     }
     removeEmptyProps(params) {
         return Object.keys(params).reduce((result, key) => {
@@ -4473,13 +4557,15 @@ class Router {
             this.events
                 .next(new NavigationEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
             this.lastSuccessfulNavigation = this.currentNavigation;
-            this.currentNavigation = null;
             t.resolve(true);
         }, e => {
             this.console.warn(`Unhandled Navigation Error: `);
         });
     }
     scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
+        if (this.disposed) {
+            return Promise.resolve(false);
+        }
         // * Imperative navigations (router.navigate) might trigger additional navigations to the same
         //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
         //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
@@ -4944,6 +5030,13 @@ class RouterLinkActive {
         this.linkWithHref = linkWithHref;
         this.classes = [];
         this.isActive = false;
+        /**
+         * Options to configure how to determine if the router link is active.
+         *
+         * These options are passed to the `Router.isActive()` function.
+         *
+         * @see Router.isActive
+         */
         this.routerLinkActiveOptions = { exact: false };
         this.routerEventsSubscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
@@ -5005,7 +5098,11 @@ class RouterLinkActive {
         });
     }
     isLinkActive(router) {
-        return (link) => router.isActive(link.urlTree, this.routerLinkActiveOptions.exact);
+        const options = 'paths' in this.routerLinkActiveOptions ?
+            this.routerLinkActiveOptions :
+            // While the types should disallow `undefined` here, it's possible without strict inputs
+            (this.routerLinkActiveOptions.exact || false);
+        return (link) => router.isActive(link.urlTree, options);
     }
     hasActiveLinks() {
         const isActiveCheckFn = this.isLinkActive(this.router);
@@ -5126,6 +5223,10 @@ class RouterOutlet {
     get isActivated() {
         return !!this.activated;
     }
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
     get component() {
         if (!this.activated)
             throw new Error('Outlet is not activated');
@@ -5324,7 +5425,8 @@ class RouterPreloader {
     }
     preloadConfig(ngModule, route) {
         return this.preloadingStrategy.preload(route, () => {
-            const loaded$ = this.loader.load(ngModule.injector, route);
+            const loaded$ = route._loadedConfig ? of(route._loadedConfig) :
+                this.loader.load(ngModule.injector, route);
             return loaded$.pipe(mergeMap((config) => {
                 route._loadedConfig = config;
                 return this.processRoutes(config.module, config.routes);
@@ -5632,12 +5734,14 @@ function setupRouter(urlSerializer, contexts, location, injector, loader, compil
     }
     assignExtraOptionsToRouter(opts, router);
     if (opts.enableTracing) {
-        const dom = ɵgetDOM();
         router.events.subscribe((e) => {
-            dom.logGroup(`Router Event: ${e.constructor.name}`);
-            dom.log(e.toString());
-            dom.log(e);
-            dom.logGroupEnd();
+            var _a, _b;
+            // tslint:disable:no-console
+            (_a = console.group) === null || _a === void 0 ? void 0 : _a.call(console, `Router Event: ${e.constructor.name}`);
+            console.log(e.toString());
+            console.log(e);
+            (_b = console.groupEnd) === null || _b === void 0 ? void 0 : _b.call(console);
+            // tslint:enable:no-console
         });
     }
     return router;
@@ -5779,7 +5883,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('11.1.0-next.4+175.sha-02ff4ed');
+const VERSION = new Version('12.0.0-next.8+133.sha-d5b13ce');
 
 /**
  * @license
