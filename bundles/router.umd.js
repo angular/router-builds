@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+77.sha-ac8d7f7
+ * @license Angular v12.0.0-next.8+139.sha-bc8ea2a
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2116,20 +2116,20 @@
             value._futureSnapshot = curr.value;
             var children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
             return new TreeNode(value, children);
-            // retrieve an activated route that is used to be displayed, but is not currently displayed
         }
         else {
-            var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
-            if (detachedRouteHandle) {
-                var tree = detachedRouteHandle.route;
-                setFutureSnapshotsOfActivatedRoutes(curr, tree);
-                return tree;
+            if (routeReuseStrategy.shouldAttach(curr.value)) {
+                // retrieve an activated route that is used to be displayed, but is not currently displayed
+                var detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
+                if (detachedRouteHandle !== null) {
+                    var tree = detachedRouteHandle.route;
+                    setFutureSnapshotsOfActivatedRoutes(curr, tree);
+                    return tree;
+                }
             }
-            else {
-                var value = createActivatedRoute(curr.value);
-                var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
-                return new TreeNode(value, children);
-            }
+            var value = createActivatedRoute(curr.value);
+            var children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+            return new TreeNode(value, children);
         }
     }
     function setFutureSnapshotsOfActivatedRoutes(curr, result) {
@@ -3950,17 +3950,20 @@
      * empty path route config and the results need to then be merged.
      */
     function mergeEmptyPathMatches(nodes) {
-        var e_3, _a;
+        var e_3, _a, e_4, _b;
         var result = [];
+        // The set of nodes which contain children that were merged from two duplicate empty path nodes.
+        var mergedNodes = new Set();
         var _loop_1 = function (node) {
-            var _b;
+            var _c;
             if (!hasEmptyPathConfig(node)) {
                 result.push(node);
                 return "continue";
             }
             var duplicateEmptyPathNode = result.find(function (resultNode) { return node.value.routeConfig === resultNode.value.routeConfig; });
             if (duplicateEmptyPathNode !== undefined) {
-                (_b = duplicateEmptyPathNode.children).push.apply(_b, __spreadArray([], __read(node.children)));
+                (_c = duplicateEmptyPathNode.children).push.apply(_c, __spreadArray([], __read(node.children)));
+                mergedNodes.add(duplicateEmptyPathNode);
             }
             else {
                 result.push(node);
@@ -3979,7 +3982,25 @@
             }
             finally { if (e_3) throw e_3.error; }
         }
-        return result;
+        try {
+            // For each node which has children from multiple sources, we need to recompute a new `TreeNode`
+            // by also merging those children. This is necessary when there are multiple empty path configs in
+            // a row. Put another way: whenever we combine children of two nodes, we need to also check if any
+            // of those children can be combined into a single node as well.
+            for (var mergedNodes_1 = __values(mergedNodes), mergedNodes_1_1 = mergedNodes_1.next(); !mergedNodes_1_1.done; mergedNodes_1_1 = mergedNodes_1.next()) {
+                var mergedNode = mergedNodes_1_1.value;
+                var mergedChildren = mergeEmptyPathMatches(mergedNode.children);
+                result.push(new TreeNode(mergedNode.value, mergedChildren));
+            }
+        }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (mergedNodes_1_1 && !mergedNodes_1_1.done && (_b = mergedNodes_1.return)) _b.call(mergedNodes_1);
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
+        return result.filter(function (n) { return !mergedNodes.has(n); });
     }
     function checkOutletNameUniqueness(nodes) {
         var names = {};
@@ -6524,7 +6545,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.0-next.8+77.sha-ac8d7f7');
+    var VERSION = new core.Version('12.0.0-next.8+139.sha-bc8ea2a');
 
     /**
      * @license
