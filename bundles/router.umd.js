@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0-next.8+435.sha-b7d1614
+ * @license Angular v12.0.0-next.8+437.sha-ec78e68
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -348,7 +348,7 @@
      * ```
      *
      * @see `Event`
-     * @see [Router events summary](guide/router#router-events)
+     * @see [Router events summary](guide/router-reference#router-events)
      * @publicApi
      */
     var RouterEvent = /** @class */ (function () {
@@ -6595,7 +6595,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.0.0-next.8+435.sha-b7d1614');
+    var VERSION = new i0.Version('12.0.0-next.8+437.sha-ec78e68');
 
     /**
      * @license
