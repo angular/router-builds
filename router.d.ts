@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.0+34.sha-a20ef16
+ * @license Angular v12.0.0+37.sha-aa9a86c
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2342,7 +2342,7 @@ export declare abstract class RouteReuseStrategy {
  * ```
  *
  * @see `Event`
- * @see [Router events summary](guide/router#router-events)
+ * @see [Router events summary](guide/router-reference#router-events)
  * @publicApi
  */
 export declare class RouterEvent {
@@ -3039,7 +3039,7 @@ export declare const ROUTES: InjectionToken<Route[][]>;
  *
  * @see `Route`
  * @see `Router`
- * @see [Router configuration guide](guide/router#configuration)
+ * @see [Router configuration guide](guide/router-reference#configuration)
  * @publicApi
  */
 export declare type Routes = Route[];
