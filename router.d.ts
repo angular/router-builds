@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+38.sha-12b1e87
+ * @license Angular v12.0.1+66.sha-c01da21
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1197,7 +1197,7 @@ export declare interface NavigationBehaviorOptions {
 
 /**
  * An event triggered when a navigation is canceled, directly or indirectly.
- * This can happen when a route guard
+ * This can happen for several reasons including when a route guard
  * returns `false` or initiates a redirect by returning a `UrlTree`.
  *
  * @see `NavigationStart`
