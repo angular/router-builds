@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+15.sha-99802dc
+ * @license Angular v12.0.1+38.sha-12b1e87
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1881,8 +1881,12 @@ export declare interface Route {
      * Default is 'prefix'.
      *
      * By default, the router checks URL elements from the left to see if the URL
-     * matches a given  path, and stops when there is a match. For example,
-     * '/team/11/user' matches 'team/:id'.
+     * matches a given path and stops when there is a config match. Importantly there must still be a
+     * config match for each segment of the URL. For example, '/team/11/user' matches the prefix
+     * 'team/:id' if one of the route's children matches the segment 'user'. That is, the URL
+     * '/team/11/user` matches the config
+     * `{path: 'team/:id', children: [{path: ':user', component: User}]}`
+     * but does not match when there are no children as in `{path: 'team/:id', component: Team}`.
      *
      * The path-match strategy 'full' matches against the entire URL.
      * It is important to do this when redirecting empty-path routes.
