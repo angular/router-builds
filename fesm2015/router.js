@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.2+78.sha-b0581f3
+ * @license Angular v12.1.0-next.2+80.sha-6da0c97
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2883,7 +2883,8 @@ class ApplyRedirects {
         }));
         return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
-                // after an absolute redirect we do not apply any more redirects!
+                // After an absolute redirect we do not apply any more redirects!
+                // If this implementation changes, update the documentation note in `redirectTo`.
                 this.allowRedirects = false;
                 // we need to run matching, so we can fetch all lazy-loaded modules
                 return this.match(e.urlTree);
@@ -5916,7 +5917,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.1.0-next.2+78.sha-b0581f3');
+const VERSION = new Version('12.1.0-next.2+80.sha-6da0c97');
 
 /**
  * @license
