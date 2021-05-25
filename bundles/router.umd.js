@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.2+78.sha-b0581f3
+ * @license Angular v12.1.0-next.2+80.sha-6da0c97
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3083,7 +3083,8 @@
             }));
             return urlTrees$.pipe(operators.catchError(function (e) {
                 if (e instanceof AbsoluteRedirect) {
-                    // after an absolute redirect we do not apply any more redirects!
+                    // After an absolute redirect we do not apply any more redirects!
+                    // If this implementation changes, update the documentation note in `redirectTo`.
                     _this.allowRedirects = false;
                     // we need to run matching, so we can fetch all lazy-loaded modules
                     return _this.match(e.urlTree);
@@ -6545,7 +6546,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.1.0-next.2+78.sha-b0581f3');
+    var VERSION = new core.Version('12.1.0-next.2+80.sha-6da0c97');
 
     /**
      * @license
