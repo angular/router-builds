@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.2+61.sha-2ff5bfe
+ * @license Angular v12.1.0-next.2+62.sha-ef33806
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -421,7 +421,7 @@
     }(RouterEvent));
     /**
      * An event triggered when a navigation is canceled, directly or indirectly.
-     * This can happen when a route guard
+     * This can happen for several reasons including when a route guard
      * returns `false` or initiates a redirect by returning a `UrlTree`.
      *
      * @see `NavigationStart`
@@ -6595,7 +6595,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.1.0-next.2+61.sha-2ff5bfe');
+    var VERSION = new i0.Version('12.1.0-next.2+62.sha-ef33806');
 
     /**
      * @license

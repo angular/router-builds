@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.2+61.sha-2ff5bfe
+ * @license Angular v12.1.0-next.2+62.sha-ef33806
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -99,7 +99,7 @@ class NavigationEnd extends RouterEvent {
 }
 /**
  * An event triggered when a navigation is canceled, directly or indirectly.
- * This can happen when a route guard
+ * This can happen for several reasons including when a route guard
  * returns `false` or initiates a redirect by returning a `UrlTree`.
  *
  * @see `NavigationStart`
@@ -5916,7 +5916,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.1.0-next.2+61.sha-2ff5bfe');
+const VERSION = new Version('12.1.0-next.2+62.sha-ef33806');
 
 /**
  * @license
