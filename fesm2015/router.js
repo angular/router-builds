@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1328,6 +1328,10 @@ function createEmptyStateSnapshot(urlTree, rootComponent) {
  * The following example shows how to construct a component using information from a
  * currently activated route.
  *
+ * Note: the observables in this class only emit when the current and previous values differ based
+ * on shallow equality. For example, changing deeply nested properties in resolved `data` will not
+ * cause the `ActivatedRoute.data` `Observable` to emit a new value.
+ *
  * {@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts"}
  *
@@ -2615,7 +2619,8 @@ class ApplyRedirects {
         }));
         return urlTrees$.pipe(catchError((e) => {
             if (e instanceof AbsoluteRedirect) {
-                // after an absolute redirect we do not apply any more redirects!
+                // After an absolute redirect we do not apply any more redirects!
+                // If this implementation changes, update the documentation note in `redirectTo`.
                 this.allowRedirects = false;
                 // we need to run matching, so we can fetch all lazy-loaded modules
                 return this.match(e.urlTree);
@@ -5883,7 +5888,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.1+66.sha-c01da21');
+const VERSION = new Version('12.0.1+83.sha-54b23ae');
 
 /**
  * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.1+66.sha-c01da21
+ * @license Angular v12.0.1+83.sha-54b23ae
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -42,6 +42,10 @@ import { ViewportScroller } from '@angular/common';
  *
  * The following example shows how to construct a component using information from a
  * currently activated route.
+ *
+ * Note: the observables in this class only emit when the current and previous values differ based
+ * on shallow equality. For example, changing deeply nested properties in resolved `data` will not
+ * cause the `ActivatedRoute.data` `Observable` to emit a new value.
  *
  * {@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts"}
@@ -1907,7 +1911,10 @@ export declare interface Route {
     component?: Type<any>;
     /**
      * A URL to redirect to when the path matches.
+     *
      * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
+     * Note that no further redirects are evaluated after an absolute redirect.
+     *
      * When not present, router does not redirect.
      */
     redirectTo?: string;
