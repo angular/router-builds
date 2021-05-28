@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.3+46.sha-4cd2cc4
+ * @license Angular v12.1.0-next.3+48.sha-62b5a6c
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3038,7 +3038,12 @@ export declare class RouterStateSnapshot extends ɵangular_packages_router_route
 
 /**
  * The [DI token](guide/glossary/#di-token) for a router configuration.
- * @see `ROUTES`
+ *
+ * `ROUTES` is a low level API for router configuration via dependency injection.
+ *
+ * We recommend that in almost all cases to use higher level APIs such as `RouterModule.forRoot()`,
+ * `RouterModule.forChild()`, `provideRoutes`, or `Router.resetConfig()`.
+ *
  * @publicApi
  */
 export declare const ROUTES: InjectionToken<Route[][]>;
