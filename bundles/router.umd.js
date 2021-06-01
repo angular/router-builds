@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.2+42.sha-b60c9c1
+ * @license Angular v12.0.2+62.sha-b0293c6
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4213,7 +4213,12 @@
      */
     /**
      * The [DI token](guide/glossary/#di-token) for a router configuration.
-     * @see `ROUTES`
+     *
+     * `ROUTES` is a low level API for router configuration via dependency injection.
+     *
+     * We recommend that in almost all cases to use higher level APIs such as `RouterModule.forRoot()`,
+     * `RouterModule.forChild()`, `provideRoutes`, or `Router.resetConfig()`.
+     *
      * @publicApi
      */
     var ROUTES = new core.InjectionToken('ROUTES');
@@ -6550,7 +6555,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.0.2+42.sha-b60c9c1');
+    var VERSION = new core.Version('12.0.2+62.sha-b0293c6');
 
     /**
      * @license
