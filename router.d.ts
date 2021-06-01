@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.3+63.sha-5babdb2
+ * @license Angular v12.1.0-next.3+65.sha-6a2e3e2
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1106,7 +1106,7 @@ export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any
  *
  * @publicApi
  */
-export declare type Navigation = {
+export declare interface Navigation {
     /**
      * The unique identifier of the current navigation.
      */
@@ -1145,7 +1145,7 @@ export declare type Navigation = {
      * for its own `previousNavigation`.
      */
     previousNavigation: Navigation | null;
-};
+}
 
 /**
  * @description
