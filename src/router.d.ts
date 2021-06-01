@@ -228,7 +228,7 @@ export declare type RestoredState = {
  *
  * @publicApi
  */
-export declare type Navigation = {
+export interface Navigation {
     /**
      * The unique identifier of the current navigation.
      */
@@ -267,7 +267,7 @@ export declare type Navigation = {
      * for its own `previousNavigation`.
      */
     previousNavigation: Navigation | null;
-};
+}
 export declare type NavigationTransition = {
     id: number;
     currentUrlTree: UrlTree;
