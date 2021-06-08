@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.4+76.sha-c44ab4f
+ * @license Angular v12.1.0-next.4+74.sha-4cf442c
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1339,14 +1339,12 @@
             .join('');
     }
     function serializeQueryParams(params) {
-        var strParams = Object.keys(params)
-            .map(function (name) {
+        var strParams = Object.keys(params).map(function (name) {
             var value = params[name];
             return Array.isArray(value) ?
                 value.map(function (v) { return encodeUriQuery(name) + "=" + encodeUriQuery(v); }).join('&') :
                 encodeUriQuery(name) + "=" + encodeUriQuery(value);
-        })
-            .filter(function (s) { return !!s; });
+        });
         return strParams.length ? "?" + strParams.join('&') : '';
     }
     var SEGMENT_RE = /^[^\/()?;=#]+/;
@@ -6607,7 +6605,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.1.0-next.4+76.sha-c44ab4f');
+    var VERSION = new i0.Version('12.1.0-next.4+74.sha-4cf442c');
 
     /**
      * @license
