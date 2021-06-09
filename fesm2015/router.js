@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.3+64.sha-3abf365
+ * @license Angular v12.0.3+65.sha-6203f5e
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3917,8 +3917,16 @@ class Router {
         this.routeReuseStrategy = new DefaultRouteReuseStrategy();
         /**
          * How to handle a navigation request to the current URL. One of:
+         *
          * - `'ignore'` :  The router ignores the request.
          * - `'reload'` : The router reloads the URL. Use to implement a "refresh" feature.
+         *
+         * Note that this only configures whether the Route reprocesses the URL and triggers related
+         * action and events like redirects, guards, and resolvers. By default, the router re-uses a
+         * component instance when it re-navigates to the same component type without visiting a different
+         * component first. This behavior is configured by the `RouteReuseStrategy`. In order to reload
+         * routed components on same url navigation, you need to set `onSameUrlNavigation` to `'reload'`
+         * _and_ provide a `RouteReuseStrategy` which returns `false` for `shouldReuseRoute`.
          */
         this.onSameUrlNavigation = 'ignore';
         /**
@@ -5895,7 +5903,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.0.3+64.sha-3abf365');
+const VERSION = new Version('12.0.3+65.sha-6203f5e');
 
 /**
  * @license
