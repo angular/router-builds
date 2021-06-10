@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.4+6.sha-5185795
+ * @license Angular v12.0.4+11.sha-013d1cb
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2041,6 +2041,11 @@ export declare class Router {
      */
     private lastLocationChangeInfo;
     private navigationId;
+    /**
+     * The id of the currently active page in the router.
+     * Updated to the transition's target id on a successful navigation.
+     */
+    private currentPageId;
     private configLoader;
     private ngModule;
     private console;
@@ -2301,6 +2306,15 @@ export declare class Router {
     private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
+    /**
+     * Responsible for handling the cancellation of a navigation:
+     * - performs the necessary rollback action to restore the browser URL to the
+     * state before the transition
+     * - triggers the `NavigationCancel` event
+     * - resolves the transition promise with `false`
+     */
+    private cancelNavigationTransition;
+    private generateNgRouterState;
 }
 
 /**
