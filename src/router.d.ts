@@ -203,6 +203,7 @@ export declare type ErrorHandler = (error: any) => any;
 export declare type RestoredState = {
     [k: string]: any;
     navigationId: number;
+    ɵrouterPageId?: number;
 };
 /**
  * Information about a navigation operation.
@@ -270,6 +271,7 @@ export interface Navigation {
 }
 export declare type NavigationTransition = {
     id: number;
+    targetPageId: number;
     currentUrlTree: UrlTree;
     currentRawUrl: UrlTree;
     extractedUrl: UrlTree;
@@ -331,6 +333,11 @@ export declare class Router {
      */
     private lastLocationChangeInfo;
     private navigationId;
+    /**
+     * The id of the currently active page in the router.
+     * Updated to the transition's target id on a successful navigation.
+     */
+    private currentPageId;
     private configLoader;
     private ngModule;
     private console;
@@ -591,6 +598,15 @@ export declare class Router {
     private setBrowserUrl;
     private resetStateAndUrl;
     private resetUrlToCurrentUrlTree;
+    /**
+     * Responsible for handling the cancellation of a navigation:
+     * - performs the necessary rollback action to restore the browser URL to the
+     * state before the transition
+     * - triggers the `NavigationCancel` event
+     * - resolves the transition promise with `false`
+     */
+    private cancelNavigationTransition;
+    private generateNgRouterState;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
 }
