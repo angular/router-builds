@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.6+3.sha-166e98a
+ * @license Angular v12.1.0-next.6+4.sha-07c1ddc
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5880,11 +5880,16 @@ class RouterInitializer {
     constructor(injector) {
         this.injector = injector;
         this.initNavigation = false;
+        this.destroyed = false;
         this.resultOfPreactivationDone = new Subject();
     }
     appInitializer() {
         const p = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
         return p.then(() => {
+            // If the injector was destroyed, the DI lookups below will fail.
+            if (this.destroyed) {
+                return Promise.resolve(true);
+            }
             let resolve = null;
             const res = new Promise(r => resolve = r);
             const router = this.injector.get(Router);
@@ -5935,6 +5940,9 @@ class RouterInitializer {
         this.resultOfPreactivationDone.next(null);
         this.resultOfPreactivationDone.complete();
     }
+    ngOnDestroy() {
+        this.destroyed = true;
+    }
 }
 RouterInitializer.decorators = [
     { type: Injectable }
@@ -5979,7 +5987,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.1.0-next.6+3.sha-166e98a');
+const VERSION = new Version('12.1.0-next.6+4.sha-07c1ddc');
 
 /**
  * @license
