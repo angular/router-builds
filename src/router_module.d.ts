@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HashLocationStrategy, Location, PathLocationStrategy, PlatformLocation, ViewportScroller } from '@angular/common';
-import { Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, Provider } from '@angular/core';
+import { Compiler, ComponentRef, InjectionToken, Injector, ModuleWithProviders, NgModuleFactoryLoader, NgProbeToken, OnDestroy, Provider } from '@angular/core';
 import { Route, Routes } from './config';
 import { RouteReuseStrategy } from './route_reuse_strategy';
 import { ErrorHandler, Router } from './router';
@@ -325,13 +325,15 @@ export declare function rootRoute(router: Router): ActivatedRoute;
  * The router navigation starts, reaches the point when preactivation is done, and then
  * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
-export declare class RouterInitializer {
+export declare class RouterInitializer implements OnDestroy {
     private injector;
     private initNavigation;
+    private destroyed;
     private resultOfPreactivationDone;
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
+    ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterInitializer, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouterInitializer>;
 }
