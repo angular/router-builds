@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.0.4+33.sha-7db8e1f
+ * @license Angular v12.0.5+20.sha-4112323
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3480,13 +3480,15 @@ export declare function ɵangular_packages_router_router_g(router: Router): Acti
  * The router navigation starts, reaches the point when preactivation is done, and then
  * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
  */
-export declare class ɵangular_packages_router_router_h {
+export declare class ɵangular_packages_router_router_h implements OnDestroy {
     private injector;
     private initNavigation;
+    private destroyed;
     private resultOfPreactivationDone;
     constructor(injector: Injector);
     appInitializer(): Promise<any>;
     bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
+    ngOnDestroy(): void;
 }
 
 export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): () => Promise<any>;
