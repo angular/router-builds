@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.0-next.5+49.sha-18fe044
+ * @license Angular v12.1.0-next.6+60.sha-d71d521
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -236,10 +236,16 @@
                 r[k] = a[j];
         return r;
     }
-    function __spreadArray(to, from) {
-        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-            to[j] = from[i];
-        return to;
+    function __spreadArray(to, from, pack) {
+        if (pack || arguments.length === 2)
+            for (var i = 0, l = from.length, ar; i < l; i++) {
+                if (ar || !(i in from)) {
+                    if (!ar)
+                        ar = Array.prototype.slice.call(from, 0, i);
+                    ar[i] = from[i];
+                }
+            }
+        return to.concat(ar || from);
     }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
@@ -6540,12 +6546,17 @@
         function RouterInitializer(injector) {
             this.injector = injector;
             this.initNavigation = false;
+            this.destroyed = false;
             this.resultOfPreactivationDone = new rxjs.Subject();
         }
         RouterInitializer.prototype.appInitializer = function () {
             var _this = this;
             var p = this.injector.get(common.LOCATION_INITIALIZED, Promise.resolve(null));
             return p.then(function () {
+                // If the injector was destroyed, the DI lookups below will fail.
+                if (_this.destroyed) {
+                    return Promise.resolve(true);
+                }
                 var resolve = null;
                 var res = new Promise(function (r) { return resolve = r; });
                 var router = _this.injector.get(Router);
@@ -6596,6 +6607,9 @@
             this.resultOfPreactivationDone.next(null);
             this.resultOfPreactivationDone.complete();
         };
+        RouterInitializer.prototype.ngOnDestroy = function () {
+            this.destroyed = true;
+        };
         return RouterInitializer;
     }());
     RouterInitializer.decorators = [
@@ -6641,7 +6655,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.1.0-next.5+49.sha-18fe044');
+    var VERSION = new core.Version('12.1.0-next.6+60.sha-d71d521');
 
     /**
      * @license
