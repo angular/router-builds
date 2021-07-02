@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+9.sha-e81efe6
+ * @license Angular v12.2.0-next.1+12.sha-e99af18
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -14,7 +14,7 @@ import { EventEmitter } from '@angular/core';
 import { HashLocationStrategy } from '@angular/common';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location as Location_2 } from '@angular/common';
 import { LocationStrategy } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
@@ -750,7 +750,8 @@ declare type ErrorHandler = (error: any) => any;
  *
  * @publicApi
  */
-export declare type Event = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;
+declare type Event_2 = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;
+export { Event_2 as Event }
 
 /**
  * A set of configuration options for a router module, provided in the
@@ -2053,7 +2054,7 @@ export declare class Router {
     /**
      * An event stream for routing events in this NgModule.
      */
-    readonly events: Observable<Event>;
+    readonly events: Observable<Event_2>;
     /**
      * The current state of routing in this NgModule.
      */
@@ -2124,7 +2125,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
     private setupNavigations;
     private getTransition;
     private setTransition;
@@ -3465,7 +3466,7 @@ export declare function ɵangular_packages_router_router_d(platformLocationStrat
 
 export declare function ɵangular_packages_router_router_e(router: Router): any;
 
-export declare function ɵangular_packages_router_router_f(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function ɵangular_packages_router_router_f(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 
 export declare function ɵangular_packages_router_router_g(router: Router): ActivatedRoute;
 
