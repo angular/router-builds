@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.1+7.sha-aa261e7
+ * @license Angular v12.1.1+12.sha-6da24e6
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { ChildrenOutletContexts } from '@angular/router';
 import { Compiler } from '@angular/core';
 import { ExtraOptions } from '@angular/router';
 import { Injector } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location as Location_2 } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
 import { NgModuleFactoryLoader } from '@angular/core';
@@ -53,7 +53,7 @@ export declare class RouterTestingModule {
  *
  * @publicApi
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
 
 /**
  * Router setup factory function used for testing.
@@ -62,7 +62,7 @@ export declare function setupTestingRouter(urlSerializer: UrlSerializer, context
  * `UrlHandlingStrategy`
  * @publicApi
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
 
 /**
  * @description
