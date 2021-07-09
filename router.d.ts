@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.1.1+43.sha-a8d5a31
+ * @license Angular v12.1.1+46.sha-1c31828
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2045,8 +2045,18 @@ export declare class Router {
     /**
      * The id of the currently active page in the router.
      * Updated to the transition's target id on a successful navigation.
+     *
+     * This is used to track what page the router last activated. When an attempted navigation fails,
+     * the router can then use this to compute how to restore the state back to the previously active
+     * page.
      */
     private currentPageId;
+    /**
+     * The ɵrouterPageId of whatever page is currently active in the browser history. This is
+     * important for computing the target page id for new navigations because we need to ensure each
+     * page id in the browser history is 1 more than the previous entry.
+     */
+    private get browserPageId();
     private configLoader;
     private ngModule;
     private console;
@@ -2314,6 +2324,7 @@ export declare class Router {
      * - triggers the `NavigationCancel` event
      * - resolves the transition promise with `false`
      */
+    private cancelNavigationTransitionRestoreHistory;
     private cancelNavigationTransition;
     private generateNgRouterState;
 }
