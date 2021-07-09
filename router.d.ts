@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+50.sha-3791ae0
+ * @license Angular v12.2.0-next.1+53.sha-9d58ebf
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1669,7 +1669,7 @@ export declare class ResolveStart extends RouterEvent {
  * ```
  * [{
  *   path: 'team/:id',
-  *  component: Team,
+ *  component: Team,
  *   children: [{
  *     path: 'user/:name',
  *     component: User
