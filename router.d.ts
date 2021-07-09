@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+50.sha-3791ae0
+ * @license Angular v12.2.0-next.1+53.sha-9d58ebf
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -974,30 +974,30 @@ export declare class GuardsCheckStart extends RouterEvent {
 }
 
 declare namespace i1 {
-  export {
-    RouterOutletContract,
-    RouterOutlet
-  }
+    export {
+        RouterOutletContract,
+        RouterOutlet
+    }
 }
 
 declare namespace i2 {
-  export {
-    RouterLink,
-    RouterLinkWithHref
-  }
+    export {
+        RouterLink,
+        RouterLinkWithHref
+    }
 }
 
 declare namespace i3 {
-  export {
-    RouterLinkActive
-  }
+    export {
+        RouterLinkActive
+    }
 }
 
 declare namespace i4 {
-  export {
-    ɵEmptyOutletComponent,
-    ɵEmptyOutletComponent as EmptyOutletComponent
-  }
+    export {
+        ɵEmptyOutletComponent,
+        ɵEmptyOutletComponent as EmptyOutletComponent
+    }
 }
 
 /**
@@ -1692,7 +1692,7 @@ export declare class ResolveStart extends RouterEvent {
  * ```
  * [{
  *   path: 'team/:id',
-  *  component: Team,
+ *  component: Team,
  *   children: [{
  *     path: 'user/:name',
  *     component: User
