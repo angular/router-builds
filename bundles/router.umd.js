@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+70.sha-ccbb913.with-local-changes
+ * @license Angular v12.2.0-next.1+72.sha-7313756.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -342,12 +342,14 @@
      * The following code shows how a class subscribes to router events.
      *
      * ```ts
+     * import {Event, RouterEvent, Router} from '@angular/router';
+     *
      * class MyService {
-     *   constructor(public router: Router, logger: Logger) {
+     *   constructor(public router: Router) {
      *     router.events.pipe(
      *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
      *     ).subscribe((e: RouterEvent) => {
-     *       logger.log(e.id, e.url);
+     *       // Do something
      *     });
      *   }
      * }
@@ -6745,7 +6747,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('12.2.0-next.1+70.sha-ccbb913.with-local-changes');
+    var VERSION = new i0.Version('12.2.0-next.1+72.sha-7313756.with-local-changes');
 
     /**
      * @license
