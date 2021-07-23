@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+72.sha-7313756.with-local-changes
+ * @license Angular v12.2.0-next.1+71.sha-9073633.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2400,14 +2400,12 @@ export declare abstract class RouteReuseStrategy {
  * The following code shows how a class subscribes to router events.
  *
  * ```ts
- * import {Event, RouterEvent, Router} from '@angular/router';
- *
  * class MyService {
- *   constructor(public router: Router) {
+ *   constructor(public router: Router, logger: Logger) {
  *     router.events.pipe(
  *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
  *     ).subscribe((e: RouterEvent) => {
- *       // Do something
+ *       logger.log(e.id, e.url);
  *     });
  *   }
  * }
