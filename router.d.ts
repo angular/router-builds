@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+73.sha-c74927d.with-local-changes
+ * @license Angular v12.2.0-next.1+75.sha-48c9a0d.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2315,16 +2315,13 @@ export declare class Router {
     private processNavigations;
     private scheduleNavigation;
     private setBrowserUrl;
-    private resetStateAndUrl;
-    private resetUrlToCurrentUrlTree;
     /**
-     * Responsible for handling the cancellation of a navigation:
-     * - performs the necessary rollback action to restore the browser URL to the
-     * state before the transition
-     * - triggers the `NavigationCancel` event
-     * - resolves the transition promise with `false`
+     * Performs the necessary rollback action to restore the browser URL to the
+     * state before the transition.
      */
-    private cancelNavigationTransitionRestoreHistory;
+    private restoreHistory;
+    private resetState;
+    private resetUrlToCurrentUrlTree;
     private cancelNavigationTransition;
     private generateNgRouterState;
 }
