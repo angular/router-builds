@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+79.sha-ff87da3.with-local-changes
+ * @license Angular v12.2.0-next.1+80.sha-22290af.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -423,7 +423,7 @@
      *
      * @publicApi
      */
-    function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
+    function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy) {
         var router$1 = new router.Router(null, urlSerializer, contexts, location, injector, loader, compiler, router.ɵflatten(routes));
         if (opts) {
             // Handle deprecated argument ordering.
@@ -437,6 +437,9 @@
         }
         if (urlHandlingStrategy) {
             router$1.urlHandlingStrategy = urlHandlingStrategy;
+        }
+        if (routeReuseStrategy) {
+            router$1.routeReuseStrategy = routeReuseStrategy;
         }
         return router$1;
     }
@@ -490,7 +493,8 @@
                 useFactory: setupTestingRouter,
                 deps: [
                     router.UrlSerializer, router.ChildrenOutletContexts, common.Location, i0.NgModuleFactoryLoader, i0.Compiler, i0.Injector,
-                    router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new i0.Optional()]
+                    router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new i0.Optional()],
+                    [router.RouteReuseStrategy, new i0.Optional()]
                 ]
             },
             { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
@@ -508,7 +512,8 @@
                                 useFactory: setupTestingRouter,
                                 deps: [
                                     router.UrlSerializer, router.ChildrenOutletContexts, common.Location, i0.NgModuleFactoryLoader, i0.Compiler, i0.Injector,
-                                    router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new i0.Optional()]
+                                    router.ROUTES, router.ROUTER_CONFIGURATION, [router.UrlHandlingStrategy, new i0.Optional()],
+                                    [router.RouteReuseStrategy, new i0.Optional()]
                                 ]
                             },
                             { provide: router.PreloadingStrategy, useExisting: router.NoPreloading }, router.provideRoutes([])
