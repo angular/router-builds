@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+79.sha-ff87da3.with-local-changes
+ * @license Angular v12.2.0-next.1+80.sha-22290af.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import { Injectable, Compiler, NgModule, NgModuleFactoryLoader, Injector, Optional } from '@angular/core';
-import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
+import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
  * @license
@@ -94,7 +94,7 @@ function isUrlHandlingStrategy(opts) {
  *
  * @publicApi
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy) {
+function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy) {
     const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
     if (opts) {
         // Handle deprecated argument ordering.
@@ -108,6 +108,9 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
     }
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
+    }
+    if (routeReuseStrategy) {
+        router.routeReuseStrategy = routeReuseStrategy;
     }
     return router;
 }
@@ -159,7 +162,8 @@ RouterTestingModule.decorators = [
                         useFactory: setupTestingRouter,
                         deps: [
                             UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()]
+                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+                            [RouteReuseStrategy, new Optional()]
                         ]
                     },
                     { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
