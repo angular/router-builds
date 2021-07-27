@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0-next.1+85.sha-bfc4c3c.with-local-changes
+ * @license Angular v12.2.0-next.1+86.sha-5b5868d.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2970,6 +2970,14 @@ export declare interface RouterOutletContract {
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree.
      */
     attach(ref: ComponentRef<unknown>, activatedRoute: ActivatedRoute): void;
+    /**
+     * Emits an activate event when a new component is instantiated
+     **/
+    activateEvents?: EventEmitter<unknown>;
+    /**
+     * Emits a deactivate event when a component is destroyed.
+     */
+    deactivateEvents?: EventEmitter<unknown>;
 }
 
 /**
