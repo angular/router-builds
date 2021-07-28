@@ -1,0 +1,59 @@
+{
+  "name": "@angular/router",
+  "version": "12.2.0-next.1+92.sha-867000e.with-local-changes",
+  "description": "Angular - the routing library",
+  "keywords": [
+    "angular",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git",
+    "directory": "packages/router"
+  },
+  "author": "angular",
+  "license": "MIT",
+  "engines": {
+    "node": "^12.14.1 || >=14.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "homepage": "https://github.com/angular/angular/tree/master/packages/router",
+  "dependencies": {
+    "tslib": "^2.2.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "12.2.0-next.1+92.sha-867000e.with-local-changes",
+    "@angular/common": "12.2.0-next.1+92.sha-867000e.with-local-changes",
+    "@angular/platform-browser": "12.2.0-next.1+92.sha-867000e.with-local-changes",
+    "rxjs": "^6.5.3"
+  },
+  "ng-update": {
+    "packageGroup": [
+      "@angular/core",
+      "@angular/bazel",
+      "@angular/common",
+      "@angular/compiler",
+      "@angular/compiler-cli",
+      "@angular/animations",
+      "@angular/elements",
+      "@angular/platform-browser",
+      "@angular/platform-browser-dynamic",
+      "@angular/forms",
+      "@angular/platform-server",
+      "@angular/upgrade",
+      "@angular/router",
+      "@angular/language-service",
+      "@angular/localize",
+      "@angular/service-worker"
+    ]
+  },
+  "sideEffects": false,
+  "main": "./bundles/router.umd.js",
+  "fesm2015": "./fesm2015/router.js",
+  "esm2015": "./esm2015/router.js",
+  "typings": "./router.d.ts",
+  "module": "./fesm2015/router.js",
+  "es2015": "./fesm2015/router.js"
+}
