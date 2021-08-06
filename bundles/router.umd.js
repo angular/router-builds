@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.0+5.sha-d8690d8.with-local-changes
+ * @license Angular v13.0.0-next.0+6.sha-7846715.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1368,7 +1368,7 @@
         var match = str.match(QUERY_PARAM_RE);
         return match ? match[0] : '';
     }
-    var QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
+    var QUERY_PARAM_VALUE_RE = /^[^&#]+/;
     // Return the value of the query param at the start of the string or an empty string
     function matchUrlQueryParamValue(str) {
         var match = str.match(QUERY_PARAM_VALUE_RE);
@@ -6777,7 +6777,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('13.0.0-next.0+5.sha-d8690d8.with-local-changes');
+    var VERSION = new i0.Version('13.0.0-next.0+6.sha-7846715.with-local-changes');
 
     /**
      * @license
