@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.0+8.sha-9359089.with-local-changes
+ * @license Angular v13.0.0-next.0+10.sha-bbad423.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5475,7 +5475,7 @@ class RouterLinkActive {
         });
     }
     isLinkActive(router) {
-        const options = 'paths' in this.routerLinkActiveOptions ?
+        const options = isActiveMatchOptions(this.routerLinkActiveOptions) ?
             this.routerLinkActiveOptions :
             // While the types should disallow `undefined` here, it's possible without strict inputs
             (this.routerLinkActiveOptions.exact || false);
@@ -5518,6 +5518,12 @@ RouterLinkActive.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkAct
         }], routerLinkActive: [{
             type: Input
         }] }); })();
+/**
+ * Use instead of `'paths' in options` to be compatible with property renaming
+ */
+function isActiveMatchOptions(options) {
+    return !!options.paths;
+}
 
 /**
  * @license
@@ -6087,7 +6093,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.0+8.sha-9359089.with-local-changes');
+const VERSION = new Version('13.0.0-next.0+10.sha-bbad423.with-local-changes');
 
 /**
  * @license
