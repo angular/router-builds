@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.0+7.sha-d93427b.with-local-changes
+ * @license Angular v12.2.0+8.sha-dd3abdb.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5261,7 +5261,7 @@ class RouterLinkActive {
         });
     }
     isLinkActive(router) {
-        const options = 'paths' in this.routerLinkActiveOptions ?
+        const options = isActiveMatchOptions(this.routerLinkActiveOptions) ?
             this.routerLinkActiveOptions :
             // While the types should disallow `undefined` here, it's possible without strict inputs
             (this.routerLinkActiveOptions.exact || false);
@@ -5294,6 +5294,12 @@ RouterLinkActive.propDecorators = {
     routerLinkActiveOptions: [{ type: Input }],
     routerLinkActive: [{ type: Input }]
 };
+/**
+ * Use instead of `'paths' in options` to be compatible with property renaming
+ */
+function isActiveMatchOptions(options) {
+    return !!options.paths;
+}
 
 /**
  * @license
@@ -6054,7 +6060,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.2.0+7.sha-d93427b.with-local-changes');
+const VERSION = new Version('12.2.0+8.sha-dd3abdb.with-local-changes');
 
 /**
  * @license
