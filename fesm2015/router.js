@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.1+4.sha-19fd2f4.with-local-changes
+ * @license Angular v12.2.1+9.sha-e0a8ca7.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4052,6 +4052,11 @@ class Router {
                     t.extractedUrl.toString() !== this.browserUrlTree.toString();
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
+                // If the source of the navigation is from a browser event, the URL is
+                // already updated. We already need to sync the internal state.
+                if (isBrowserTriggeredNavigation(t.source)) {
+                    this.browserUrlTree = t.rawUrl;
+                }
                 if (processCurrentUrl) {
                     return of(t).pipe(
                     // Fire NavigationStart event
@@ -4283,7 +4288,12 @@ class Router {
                             const mergedTree = this.urlHandlingStrategy.merge(e.url, this.rawUrlTree);
                             const extras = {
                                 skipLocationChange: t.extras.skipLocationChange,
-                                replaceUrl: this.urlUpdateStrategy === 'eager'
+                                // The URL is already updated at this point if we have 'eager' URL
+                                // updates or if the navigation was triggered by the browser (back
+                                // button, URL bar, etc). We want to replace that item in history if
+                                // the navigation is rejected.
+                                replaceUrl: this.urlUpdateStrategy === 'eager' ||
+                                    isBrowserTriggeredNavigation(t.source)
                             };
                             this.scheduleNavigation(mergedTree, 'imperative', null, extras, { resolve: t.resolve, reject: t.reject, promise: t.promise });
                         }, 0);
@@ -4660,7 +4670,8 @@ class Router {
         const lastNavigation = this.getTransition();
         // We don't want to skip duplicate successful navs if they're imperative because
         // onSameUrlNavigation could be 'reload' (so the duplicate is intended).
-        const browserNavPrecededByRouterNav = source !== 'imperative' && (lastNavigation === null || lastNavigation === void 0 ? void 0 : lastNavigation.source) === 'imperative';
+        const browserNavPrecededByRouterNav = isBrowserTriggeredNavigation(source) && lastNavigation &&
+            !isBrowserTriggeredNavigation(lastNavigation.source);
         const lastNavigationSucceeded = this.lastSuccessfulId === lastNavigation.id;
         // If the last navigation succeeded or is in flight, we can use the rawUrl as the comparison.
         // However, if it failed, we should compare to the final result (urlAfterRedirects).
@@ -4828,6 +4839,9 @@ function validateCommands(commands) {
             throw new Error(`The requested path contains ${cmd} segment at index ${i}`);
         }
     }
+}
+function isBrowserTriggeredNavigation(source) {
+    return source !== 'imperative';
 }
 
 /**
@@ -6060,7 +6074,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.2.1+4.sha-19fd2f4.with-local-changes');
+const VERSION = new Version('12.2.1+9.sha-e0a8ca7.with-local-changes');
 
 /**
  * @license
