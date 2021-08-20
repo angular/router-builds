@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.2+8.sha-c389052.with-local-changes
+ * @license Angular v13.0.0-next.2+9.sha-ccb09b4.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4949,14 +4949,32 @@ function isBrowserTriggeredNavigation(source) {
  * @publicApi
  */
 class RouterLink {
-    constructor(router, route, tabIndex, renderer, el) {
+    constructor(router, route, tabIndexAttribute, renderer, el) {
         this.router = router;
         this.route = route;
-        this.commands = [];
+        this.tabIndexAttribute = tabIndexAttribute;
+        this.renderer = renderer;
+        this.el = el;
+        this.commands = null;
         /** @internal */
         this.onChanges = new Subject();
-        if (tabIndex == null) {
-            renderer.setAttribute(el.nativeElement, 'tabindex', '0');
+        this.setTabIndexIfNotOnNativeEl('0');
+    }
+    /**
+     * Modifies the tab index if there was not a tabindex attribute on the element during
+     * instantiation.
+     */
+    setTabIndexIfNotOnNativeEl(newTabIndex) {
+        if (this.tabIndexAttribute != null /* both `null` and `undefined` */) {
+            return;
+        }
+        const renderer = this.renderer;
+        const nativeElement = this.el.nativeElement;
+        if (newTabIndex !== null) {
+            renderer.setAttribute(nativeElement, 'tabindex', newTabIndex);
+        }
+        else {
+            renderer.removeAttribute(nativeElement, 'tabindex');
         }
     }
     /** @nodoc */
@@ -4969,19 +4987,24 @@ class RouterLink {
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands) {
         if (commands != null) {
             this.commands = Array.isArray(commands) ? commands : [commands];
+            this.setTabIndexIfNotOnNativeEl('0');
         }
         else {
-            this.commands = [];
+            this.commands = null;
+            this.setTabIndexIfNotOnNativeEl(null);
         }
     }
     /** @nodoc */
     onClick() {
+        if (this.urlTree === null) {
+            return true;
+        }
         const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
@@ -4991,6 +5014,9 @@ class RouterLink {
         return true;
     }
     get urlTree() {
+        if (this.commands === null) {
+            return null;
+        }
         return this.router.createUrlTree(this.commands, {
             // If the `relativeTo` input is not defined, we want to use `this.route` by default.
             // Otherwise, we should use the value provided by the user in the input.
@@ -5008,7 +5034,7 @@ RouterLink.decorators = [
 RouterLink.ctorParameters = () => [
     { type: Router },
     { type: ActivatedRoute },
-    { type: String, decorators: [{ type: Attribute, args: ['tabindex',] }] },
+    { type: undefined, decorators: [{ type: Attribute, args: ['tabindex',] }] },
     { type: Renderer2 },
     { type: ElementRef }
 ];
@@ -5040,7 +5066,11 @@ class RouterLinkWithHref {
         this.router = router;
         this.route = route;
         this.locationStrategy = locationStrategy;
-        this.commands = [];
+        this.commands = null;
+        // the url displayed on the anchor element.
+        // @HostBinding('attr.href') is used rather than @HostBinding() because it removes the
+        // href attribute when it becomes `null`.
+        this.href = null;
         /** @internal */
         this.onChanges = new Subject();
         this.subscription = router.events.subscribe((s) => {
@@ -5053,7 +5083,7 @@ class RouterLinkWithHref {
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: Disables the link by removing the `href`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands) {
@@ -5061,7 +5091,7 @@ class RouterLinkWithHref {
             this.commands = Array.isArray(commands) ? commands : [commands];
         }
         else {
-            this.commands = [];
+            this.commands = null;
         }
     }
     /** @nodoc */
@@ -5078,7 +5108,7 @@ class RouterLinkWithHref {
         if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
             return true;
         }
-        if (typeof this.target === 'string' && this.target != '_self') {
+        if (typeof this.target === 'string' && this.target != '_self' || this.urlTree === null) {
             return true;
         }
         const extras = {
@@ -5090,9 +5120,14 @@ class RouterLinkWithHref {
         return false;
     }
     updateTargetUrlAndHref() {
-        this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+        this.href = this.urlTree !== null ?
+            this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree)) :
+            null;
     }
     get urlTree() {
+        if (this.commands === null) {
+            return null;
+        }
         return this.router.createUrlTree(this.commands, {
             // If the `relativeTo` input is not defined, we want to use `this.route` by default.
             // Otherwise, we should use the value provided by the user in the input.
@@ -5122,7 +5157,7 @@ RouterLinkWithHref.propDecorators = {
     replaceUrl: [{ type: Input }],
     state: [{ type: Input }],
     relativeTo: [{ type: Input }],
-    href: [{ type: HostBinding }],
+    href: [{ type: HostBinding, args: ['attr.href',] }],
     routerLink: [{ type: Input }],
     onClick: [{ type: HostListener, args: ['click',
                 ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
@@ -5279,7 +5314,7 @@ class RouterLinkActive {
             this.routerLinkActiveOptions :
             // While the types should disallow `undefined` here, it's possible without strict inputs
             (this.routerLinkActiveOptions.exact || false);
-        return (link) => router.isActive(link.urlTree, options);
+        return (link) => link.urlTree ? router.isActive(link.urlTree, options) : false;
     }
     hasActiveLinks() {
         const isActiveCheckFn = this.isLinkActive(this.router);
@@ -6074,7 +6109,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.2+8.sha-c389052.with-local-changes');
+const VERSION = new Version('13.0.0-next.2+9.sha-ccb09b4.with-local-changes');
 
 /**
  * @license

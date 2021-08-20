@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.2+8.sha-c389052.with-local-changes
+ * @license Angular v13.0.0-next.2+9.sha-ccb09b4.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5558,16 +5558,34 @@
      * @publicApi
      */
     var RouterLink = /** @class */ (function () {
-        function RouterLink(router, route, tabIndex, renderer, el) {
+        function RouterLink(router, route, tabIndexAttribute, renderer, el) {
             this.router = router;
             this.route = route;
-            this.commands = [];
+            this.tabIndexAttribute = tabIndexAttribute;
+            this.renderer = renderer;
+            this.el = el;
+            this.commands = null;
             /** @internal */
             this.onChanges = new rxjs.Subject();
-            if (tabIndex == null) {
-                renderer.setAttribute(el.nativeElement, 'tabindex', '0');
-            }
+            this.setTabIndexIfNotOnNativeEl('0');
         }
+        /**
+         * Modifies the tab index if there was not a tabindex attribute on the element during
+         * instantiation.
+         */
+        RouterLink.prototype.setTabIndexIfNotOnNativeEl = function (newTabIndex) {
+            if (this.tabIndexAttribute != null /* both `null` and `undefined` */) {
+                return;
+            }
+            var renderer = this.renderer;
+            var nativeElement = this.el.nativeElement;
+            if (newTabIndex !== null) {
+                renderer.setAttribute(nativeElement, 'tabindex', newTabIndex);
+            }
+            else {
+                renderer.removeAttribute(nativeElement, 'tabindex');
+            }
+        };
         /** @nodoc */
         RouterLink.prototype.ngOnChanges = function (changes) {
             // This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
@@ -5579,15 +5597,17 @@
              * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-             *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+             *   - **null|undefined**: effectively disables the `routerLink`
              * @see {@link Router#createUrlTree Router#createUrlTree}
              */
             set: function (commands) {
                 if (commands != null) {
                     this.commands = Array.isArray(commands) ? commands : [commands];
+                    this.setTabIndexIfNotOnNativeEl('0');
                 }
                 else {
-                    this.commands = [];
+                    this.commands = null;
+                    this.setTabIndexIfNotOnNativeEl(null);
                 }
             },
             enumerable: false,
@@ -5595,6 +5615,9 @@
         });
         /** @nodoc */
         RouterLink.prototype.onClick = function () {
+            if (this.urlTree === null) {
+                return true;
+            }
             var extras = {
                 skipLocationChange: attrBoolValue(this.skipLocationChange),
                 replaceUrl: attrBoolValue(this.replaceUrl),
@@ -5605,6 +5628,9 @@
         };
         Object.defineProperty(RouterLink.prototype, "urlTree", {
             get: function () {
+                if (this.commands === null) {
+                    return null;
+                }
                 return this.router.createUrlTree(this.commands, {
                     // If the `relativeTo` input is not defined, we want to use `this.route` by default.
                     // Otherwise, we should use the value provided by the user in the input.
@@ -5626,7 +5652,7 @@
     RouterLink.ctorParameters = function () { return [
         { type: Router },
         { type: ActivatedRoute },
-        { type: String, decorators: [{ type: core.Attribute, args: ['tabindex',] }] },
+        { type: undefined, decorators: [{ type: core.Attribute, args: ['tabindex',] }] },
         { type: core.Renderer2 },
         { type: core.ElementRef }
     ]; };
@@ -5659,7 +5685,11 @@
             this.router = router;
             this.route = route;
             this.locationStrategy = locationStrategy;
-            this.commands = [];
+            this.commands = null;
+            // the url displayed on the anchor element.
+            // @HostBinding('attr.href') is used rather than @HostBinding() because it removes the
+            // href attribute when it becomes `null`.
+            this.href = null;
             /** @internal */
             this.onChanges = new rxjs.Subject();
             this.subscription = router.events.subscribe(function (s) {
@@ -5673,7 +5703,7 @@
              * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
              *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-             *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+             *   - **null|undefined**: Disables the link by removing the `href`
              * @see {@link Router#createUrlTree Router#createUrlTree}
              */
             set: function (commands) {
@@ -5681,7 +5711,7 @@
                     this.commands = Array.isArray(commands) ? commands : [commands];
                 }
                 else {
-                    this.commands = [];
+                    this.commands = null;
                 }
             },
             enumerable: false,
@@ -5701,7 +5731,7 @@
             if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
                 return true;
             }
-            if (typeof this.target === 'string' && this.target != '_self') {
+            if (typeof this.target === 'string' && this.target != '_self' || this.urlTree === null) {
                 return true;
             }
             var extras = {
@@ -5713,10 +5743,15 @@
             return false;
         };
         RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
-            this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+            this.href = this.urlTree !== null ?
+                this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree)) :
+                null;
         };
         Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
             get: function () {
+                if (this.commands === null) {
+                    return null;
+                }
                 return this.router.createUrlTree(this.commands, {
                     // If the `relativeTo` input is not defined, we want to use `this.route` by default.
                     // Otherwise, we should use the value provided by the user in the input.
@@ -5750,7 +5785,7 @@
         replaceUrl: [{ type: core.Input }],
         state: [{ type: core.Input }],
         relativeTo: [{ type: core.Input }],
-        href: [{ type: core.HostBinding }],
+        href: [{ type: core.HostBinding, args: ['attr.href',] }],
         routerLink: [{ type: core.Input }],
         onClick: [{ type: core.HostListener, args: ['click',
                     ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'],] }]
@@ -5907,7 +5942,7 @@
                 this.routerLinkActiveOptions :
                 // While the types should disallow `undefined` here, it's possible without strict inputs
                 (this.routerLinkActiveOptions.exact || false);
-            return function (link) { return router.isActive(link.urlTree, options); };
+            return function (link) { return link.urlTree ? router.isActive(link.urlTree, options) : false; };
         };
         RouterLinkActive.prototype.hasActiveLinks = function () {
             var isActiveCheckFn = this.isLinkActive(this.router);
@@ -6747,7 +6782,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.2+8.sha-c389052.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.2+9.sha-ccb09b4.with-local-changes');
 
     /**
      * @license
