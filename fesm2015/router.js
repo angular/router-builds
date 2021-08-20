@@ -1,11 +1,11 @@
 /**
- * @license Angular v13.0.0-next.2+8.sha-c389052.with-local-changes
+ * @license Angular v13.0.0-next.2+9.sha-ccb09b4.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵhostProperty, ɵɵsanitizeUrl, ɵɵattribute, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵattribute, ɵɵsanitizeUrl, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
@@ -5136,14 +5136,32 @@ function isBrowserTriggeredNavigation(source) {
  * @publicApi
  */
 class RouterLink {
-    constructor(router, route, tabIndex, renderer, el) {
+    constructor(router, route, tabIndexAttribute, renderer, el) {
         this.router = router;
         this.route = route;
-        this.commands = [];
+        this.tabIndexAttribute = tabIndexAttribute;
+        this.renderer = renderer;
+        this.el = el;
+        this.commands = null;
         /** @internal */
         this.onChanges = new Subject();
-        if (tabIndex == null) {
-            renderer.setAttribute(el.nativeElement, 'tabindex', '0');
+        this.setTabIndexIfNotOnNativeEl('0');
+    }
+    /**
+     * Modifies the tab index if there was not a tabindex attribute on the element during
+     * instantiation.
+     */
+    setTabIndexIfNotOnNativeEl(newTabIndex) {
+        if (this.tabIndexAttribute != null /* both `null` and `undefined` */) {
+            return;
+        }
+        const renderer = this.renderer;
+        const nativeElement = this.el.nativeElement;
+        if (newTabIndex !== null) {
+            renderer.setAttribute(nativeElement, 'tabindex', newTabIndex);
+        }
+        else {
+            renderer.removeAttribute(nativeElement, 'tabindex');
         }
     }
     /** @nodoc */
@@ -5156,19 +5174,24 @@ class RouterLink {
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands) {
         if (commands != null) {
             this.commands = Array.isArray(commands) ? commands : [commands];
+            this.setTabIndexIfNotOnNativeEl('0');
         }
         else {
-            this.commands = [];
+            this.commands = null;
+            this.setTabIndexIfNotOnNativeEl(null);
         }
     }
     /** @nodoc */
     onClick() {
+        if (this.urlTree === null) {
+            return true;
+        }
         const extras = {
             skipLocationChange: attrBoolValue(this.skipLocationChange),
             replaceUrl: attrBoolValue(this.replaceUrl),
@@ -5178,6 +5201,9 @@ class RouterLink {
         return true;
     }
     get urlTree() {
+        if (this.commands === null) {
+            return null;
+        }
         return this.router.createUrlTree(this.commands, {
             // If the `relativeTo` input is not defined, we want to use `this.route` by default.
             // Otherwise, we should use the value provided by the user in the input.
@@ -5237,7 +5263,11 @@ class RouterLinkWithHref {
         this.router = router;
         this.route = route;
         this.locationStrategy = locationStrategy;
-        this.commands = [];
+        this.commands = null;
+        // the url displayed on the anchor element.
+        // @HostBinding('attr.href') is used rather than @HostBinding() because it removes the
+        // href attribute when it becomes `null`.
+        this.href = null;
         /** @internal */
         this.onChanges = new Subject();
         this.subscription = router.events.subscribe((s) => {
@@ -5250,7 +5280,7 @@ class RouterLinkWithHref {
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: Disables the link by removing the `href`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands) {
@@ -5258,7 +5288,7 @@ class RouterLinkWithHref {
             this.commands = Array.isArray(commands) ? commands : [commands];
         }
         else {
-            this.commands = [];
+            this.commands = null;
         }
     }
     /** @nodoc */
@@ -5275,7 +5305,7 @@ class RouterLinkWithHref {
         if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
             return true;
         }
-        if (typeof this.target === 'string' && this.target != '_self') {
+        if (typeof this.target === 'string' && this.target != '_self' || this.urlTree === null) {
             return true;
         }
         const extras = {
@@ -5287,9 +5317,14 @@ class RouterLinkWithHref {
         return false;
     }
     updateTargetUrlAndHref() {
-        this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+        this.href = this.urlTree !== null ?
+            this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree)) :
+            null;
     }
     get urlTree() {
+        if (this.commands === null) {
+            return null;
+        }
         return this.router.createUrlTree(this.commands, {
             // If the `relativeTo` input is not defined, we want to use `this.route` by default.
             // Otherwise, we should use the value provided by the user in the input.
@@ -5305,8 +5340,7 @@ RouterLinkWithHref.ɵfac = function RouterLinkWithHref_Factory(t) { return new (
 RouterLinkWithHref.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkWithHref, selectors: [["a", "routerLink", ""], ["area", "routerLink", ""]], hostVars: 2, hostBindings: function RouterLinkWithHref_HostBindings(rf, ctx) { if (rf & 1) {
         ɵɵlistener("click", function RouterLinkWithHref_click_HostBindingHandler($event) { return ctx.onClick($event.button, $event.ctrlKey, $event.shiftKey, $event.altKey, $event.metaKey); });
     } if (rf & 2) {
-        ɵɵhostProperty("href", ctx.href, ɵɵsanitizeUrl);
-        ɵɵattribute("target", ctx.target);
+        ɵɵattribute("target", ctx.target)("href", ctx.href, ɵɵsanitizeUrl);
     } }, inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, features: [ɵɵNgOnChangesFeature] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterLinkWithHref, [{
         type: Directive,
@@ -5333,7 +5367,8 @@ RouterLinkWithHref.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkW
         }], relativeTo: [{
             type: Input
         }], href: [{
-            type: HostBinding
+            type: HostBinding,
+            args: ['attr.href']
         }], routerLink: [{
             type: Input
         }], onClick: [{
@@ -5493,7 +5528,7 @@ class RouterLinkActive {
             this.routerLinkActiveOptions :
             // While the types should disallow `undefined` here, it's possible without strict inputs
             (this.routerLinkActiveOptions.exact || false);
-        return (link) => router.isActive(link.urlTree, options);
+        return (link) => link.urlTree ? router.isActive(link.urlTree, options) : false;
     }
     hasActiveLinks() {
         const isActiveCheckFn = this.isLinkActive(this.router);
@@ -6107,7 +6142,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.2+8.sha-c389052.with-local-changes');
+const VERSION = new Version('13.0.0-next.2+9.sha-ccb09b4.with-local-changes');
 
 /**
  * @license

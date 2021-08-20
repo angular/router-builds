@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.2+8.sha-c389052.with-local-changes
+ * @license Angular v13.0.0-next.2+9.sha-ccb09b4.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2526,6 +2526,9 @@ export declare class RouterEvent {
 export declare class RouterLink implements OnChanges {
     private router;
     private route;
+    private readonly tabIndexAttribute;
+    private readonly renderer;
+    private readonly el;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -2588,21 +2591,25 @@ export declare class RouterLink implements OnChanges {
      */
     relativeTo?: ActivatedRoute | null;
     private commands;
-    private preserve;
-    constructor(router: Router, route: ActivatedRoute, tabIndex: string, renderer: Renderer2, el: ElementRef);
+    constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef);
+    /**
+     * Modifies the tab index if there was not a tabindex attribute on the element during
+     * instantiation.
+     */
+    private setTabIndexIfNotOnNativeEl;
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
     /** @nodoc */
     onClick(): boolean;
-    get urlTree(): UrlTree;
+    get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }
@@ -2784,14 +2791,13 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     relativeTo?: ActivatedRoute | null;
     private commands;
     private subscription;
-    private preserve;
-    href: string;
+    href: string | null;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: shorthand for an empty array of commands, i.e. `[]`
+     *   - **null|undefined**: Disables the link by removing the `href`
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     set routerLink(commands: any[] | string | null | undefined);
@@ -2802,7 +2808,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     /** @nodoc */
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref;
-    get urlTree(): UrlTree;
+    get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }
