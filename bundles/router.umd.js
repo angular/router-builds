@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.3+3.sha-fb64f71.with-local-changes
+ * @license Angular v12.2.3+5.sha-fdcb420.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4419,7 +4419,7 @@
         return rxjs.of(null);
     }
     /**
-     * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+     * The equivalent `IsActiveMatchOptions` options for `Router.isActive` is called with `true`
      * (exact = true).
      */
     var exactMatchOptions = {
@@ -4429,7 +4429,7 @@
         queryParams: 'exact'
     };
     /**
-     * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+     * The equivalent `IsActiveMatchOptions` options for `Router.isActive` is called with `false`
      * (exact = false).
      */
     var subsetMatchOptions = {
@@ -6747,7 +6747,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.2.3+3.sha-fb64f71.with-local-changes');
+    var VERSION = new core.Version('12.2.3+5.sha-fdcb420.with-local-changes');
 
     /**
      * @license
