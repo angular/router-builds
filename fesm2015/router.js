@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.3+7.sha-c396804.with-local-changes
+ * @license Angular v13.0.0-next.3+8.sha-78690ee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4022,7 +4022,7 @@ function defaultRouterHook(snapshot, runExtras) {
     return of(null);
 }
 /**
- * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+ * The equivalent `IsActiveMatchOptions` options for `Router.isActive` is called with `true`
  * (exact = true).
  */
 const exactMatchOptions = {
@@ -4032,7 +4032,7 @@ const exactMatchOptions = {
     queryParams: 'exact'
 };
 /**
- * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * The equivalent `IsActiveMatchOptions` options for `Router.isActive` is called with `false`
  * (exact = false).
  */
 const subsetMatchOptions = {
@@ -6142,7 +6142,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.3+7.sha-c396804.with-local-changes');
+const VERSION = new Version('13.0.0-next.3+8.sha-78690ee.with-local-changes');
 
 /**
  * @license
