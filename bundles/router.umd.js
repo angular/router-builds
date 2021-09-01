@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.3+17.sha-caecd18.with-local-changes
+ * @license Angular v12.2.4+1.sha-a0bd6e9.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5257,7 +5257,7 @@
                 _this.lastSuccessfulNavigation = _this.currentNavigation;
                 t.resolve(true);
             }, function (e) {
-                _this.console.warn("Unhandled Navigation Error: ");
+                _this.console.warn("Unhandled Navigation Error: " + e);
             });
         };
         Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
@@ -6747,7 +6747,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.2.3+17.sha-caecd18.with-local-changes');
+    var VERSION = new core.Version('12.2.4+1.sha-a0bd6e9.with-local-changes');
 
     /**
      * @license
