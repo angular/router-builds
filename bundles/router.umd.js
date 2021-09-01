@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.3+19.sha-dcfabf0.with-local-changes
+ * @license Angular v13.0.0-next.3+20.sha-faf9f5a.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6111,6 +6111,23 @@
              * @see Router.isActive
              */
             this.routerLinkActiveOptions = { exact: false };
+            /**
+             *
+             * You can use the output `isActiveChange` to get notified each time the link becomes
+             * active or inactive.
+             *
+             * Emits:
+             * true  -> Route is active
+             * false -> Route is inactive
+             *
+             * ```
+             * <a
+             *  routerLink="/user/bob"
+             *  routerLinkActive="active-link"
+             *  (isActiveChange)="this.onRouterLinkActive($event)">Bob</a>
+             * ```
+             */
+            this.isActiveChange = new i0.EventEmitter();
             this.routerEventsSubscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
                     _this.update();
@@ -6173,6 +6190,8 @@
                             _this.renderer.removeClass(_this.element.nativeElement, c);
                         }
                     });
+                    // Emit on isActiveChange after classes are updated
+                    _this.isActiveChange.emit(hasActiveLinks);
                 }
             });
         };
@@ -6202,7 +6221,7 @@
                 i0.ɵɵqueryRefresh(_t = i0.ɵɵloadQuery()) && (ctx.links = _t);
                 i0.ɵɵqueryRefresh(_t = i0.ɵɵloadQuery()) && (ctx.linksWithHrefs = _t);
             }
-        }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [i0.ɵɵNgOnChangesFeature] });
+        }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, exportAs: ["routerLinkActive"], features: [i0.ɵɵNgOnChangesFeature] });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterLinkActive, [{
                 type: i0.Directive,
@@ -6224,6 +6243,8 @@
                     args: [RouterLinkWithHref, { descendants: true }]
                 }], routerLinkActiveOptions: [{
                     type: i0.Input
+                }], isActiveChange: [{
+                    type: i0.Output
                 }], routerLinkActive: [{
                     type: i0.Input
                 }] });
@@ -6832,7 +6853,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('13.0.0-next.3+19.sha-dcfabf0.with-local-changes');
+    var VERSION = new i0.Version('13.0.0-next.3+20.sha-faf9f5a.with-local-changes');
 
     /**
      * @license

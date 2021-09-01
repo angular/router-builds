@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.3+19.sha-dcfabf0.with-local-changes
+ * @license Angular v13.0.0-next.3+20.sha-faf9f5a.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5464,6 +5464,23 @@ class RouterLinkActive {
          * @see Router.isActive
          */
         this.routerLinkActiveOptions = { exact: false };
+        /**
+         *
+         * You can use the output `isActiveChange` to get notified each time the link becomes
+         * active or inactive.
+         *
+         * Emits:
+         * true  -> Route is active
+         * false -> Route is inactive
+         *
+         * ```
+         * <a
+         *  routerLink="/user/bob"
+         *  routerLinkActive="active-link"
+         *  (isActiveChange)="this.onRouterLinkActive($event)">Bob</a>
+         * ```
+         */
+        this.isActiveChange = new EventEmitter();
         this.routerEventsSubscription = router.events.subscribe((s) => {
             if (s instanceof NavigationEnd) {
                 this.update();
@@ -5520,6 +5537,8 @@ class RouterLinkActive {
                         this.renderer.removeClass(this.element.nativeElement, c);
                     }
                 });
+                // Emit on isActiveChange after classes are updated
+                this.isActiveChange.emit(hasActiveLinks);
             }
         });
     }
@@ -5545,7 +5564,7 @@ RouterLinkActive.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkAct
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.links = _t);
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.linksWithHrefs = _t);
-    } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature] });
+    } }, inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, exportAs: ["routerLinkActive"], features: [ɵɵNgOnChangesFeature] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterLinkActive, [{
         type: Directive,
         args: [{
@@ -5564,6 +5583,8 @@ RouterLinkActive.ɵdir = /*@__PURE__*/ ɵɵdefineDirective({ type: RouterLinkAct
             args: [RouterLinkWithHref, { descendants: true }]
         }], routerLinkActiveOptions: [{
             type: Input
+        }], isActiveChange: [{
+            type: Output
         }], routerLinkActive: [{
             type: Input
         }] }); })();
@@ -6142,7 +6163,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.3+19.sha-dcfabf0.with-local-changes');
+const VERSION = new Version('13.0.0-next.3+20.sha-faf9f5a.with-local-changes');
 
 /**
  * @license
