@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.3+19.sha-dcfabf0.with-local-changes
+ * @license Angular v13.0.0-next.3+20.sha-faf9f5a.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5872,6 +5872,23 @@
              * @see Router.isActive
              */
             this.routerLinkActiveOptions = { exact: false };
+            /**
+             *
+             * You can use the output `isActiveChange` to get notified each time the link becomes
+             * active or inactive.
+             *
+             * Emits:
+             * true  -> Route is active
+             * false -> Route is inactive
+             *
+             * ```
+             * <a
+             *  routerLink="/user/bob"
+             *  routerLinkActive="active-link"
+             *  (isActiveChange)="this.onRouterLinkActive($event)">Bob</a>
+             * ```
+             */
+            this.isActiveChange = new core.EventEmitter();
             this.routerEventsSubscription = router.events.subscribe(function (s) {
                 if (s instanceof NavigationEnd) {
                     _this.update();
@@ -5934,6 +5951,8 @@
                             _this.renderer.removeClass(_this.element.nativeElement, c);
                         }
                     });
+                    // Emit on isActiveChange after classes are updated
+                    _this.isActiveChange.emit(hasActiveLinks);
                 }
             });
         };
@@ -5970,6 +5989,7 @@
         links: [{ type: core.ContentChildren, args: [RouterLink, { descendants: true },] }],
         linksWithHrefs: [{ type: core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] }],
         routerLinkActiveOptions: [{ type: core.Input }],
+        isActiveChange: [{ type: core.Output }],
         routerLinkActive: [{ type: core.Input }]
     };
     /**
@@ -6782,7 +6802,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.3+19.sha-dcfabf0.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.3+20.sha-faf9f5a.with-local-changes');
 
     /**
      * @license

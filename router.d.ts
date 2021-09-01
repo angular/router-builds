@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.3+19.sha-dcfabf0.with-local-changes
+ * @license Angular v13.0.0-next.3+20.sha-faf9f5a.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2669,6 +2669,23 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     routerLinkActiveOptions: {
         exact: boolean;
     } | IsActiveMatchOptions;
+    /**
+     *
+     * You can use the output `isActiveChange` to get notified each time the link becomes
+     * active or inactive.
+     *
+     * Emits:
+     * true  -> Route is active
+     * false -> Route is inactive
+     *
+     * ```
+     * <a
+     *  routerLink="/user/bob"
+     *  routerLinkActive="active-link"
+     *  (isActiveChange)="this.onRouterLinkActive($event)">Bob</a>
+     * ```
+     */
+    readonly isActiveChange: EventEmitter<boolean>;
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
