@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.4+12.sha-c6a9300.with-local-changes
+ * @license Angular v13.0.0-next.4+15.sha-5472c28.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4162,19 +4162,20 @@ class Router {
          * Configures how the Router attempts to restore state when a navigation is cancelled.
          *
          * 'replace' - Always uses `location.replaceState` to set the browser state to the state of the
-         * router before the navigation started.
+         * router before the navigation started. This means that if the URL of the browser is updated
+         * _before_ the navigation is canceled, the Router will simply replace the item in history rather
+         * than trying to restore to the previous location in the session history. This happens most
+         * frequently with `urlUpdateStrategy: 'eager'` and navigations with the browser back/forward
+         * buttons.
          *
-         * 'computed' - Will always return to the same state that corresponds to the actual Angular route
-         * when the navigation gets cancelled right after triggering a `popstate` event.
+         * 'computed' - Will attempt to return to the same index in the session history that corresponds
+         * to the Angular route when the navigation gets cancelled. For example, if the browser back
+         * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
+         * and vice versa.
          *
-         * The default value is `replace`
+         * The default value is `replace`.
          *
-         * @internal
          */
-        // TODO(atscott): Determine how/when/if to make this public API
-        // This shouldn’t be an option at all but may need to be in order to allow migration without a
-        // breaking change. We need to determine if it should be made into public api (or if we forgo
-        // the option and release as a breaking change bug fix in a major version).
         this.canceledNavigationResolution = 'replace';
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
@@ -6163,7 +6164,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.4+12.sha-c6a9300.with-local-changes');
+const VERSION = new Version('13.0.0-next.4+15.sha-5472c28.with-local-changes');
 
 /**
  * @license
