@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.4+29.sha-93c9932.with-local-changes
+ * @license Angular v13.0.0-next.5+1.sha-9e039ca.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2059,11 +2059,6 @@ export declare class Router {
     private currentNavigation;
     private disposed;
     private locationSubscription?;
-    /**
-     * Tracks the previously seen location change from the location subscription so we can compare
-     * the two latest to see if they are duplicates. See setUpLocationChangeListener.
-     */
-    private lastLocationChangeInfo;
     private navigationId;
     /**
      * The id of the currently active page in the router.
@@ -2191,15 +2186,6 @@ export declare class Router {
      * navigation so that the correct events, guards, etc. are triggered.
      */
     setUpLocationChangeListener(): void;
-    /** Extracts router-related information from a `PopStateEvent`. */
-    private extractLocationChangeInfoFromEvent;
-    /**
-     * Determines whether two events triggered by the Location subscription are due to the same
-     * navigation. The location subscription can fire two events (popstate and hashchange) for a
-     * single navigation. The second one should be ignored, that is, we should not schedule another
-     * navigation in the Router.
-     */
-    private shouldScheduleNavigation;
     /** The current URL. */
     get url(): string;
     /**
