@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+24.sha-012209f.with-local-changes
+ * @license Angular v13.0.0-next.5+26.sha-7c2434d.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4241,11 +4241,20 @@ class Router {
             }), switchMap(t => {
                 const urlTransition = !this.navigated ||
                     t.extractedUrl.toString() !== this.browserUrlTree.toString();
+                /* || this.browserUrlTree.toString() !== this.currentUrlTree.toString() */
+                // TODO(atscott): Run TGP to see if the above change can be made. There are
+                // situations where a navigation is canceled _after_ browserUrlTree is
+                // updated. For example, urlUpdateStrategy === 'eager': if a new
+                // navigation happens (i.e. in a guard), this would cause the router to
+                // be in an invalid state of tracking.
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                 // If the source of the navigation is from a browser event, the URL is
                 // already updated. We already need to sync the internal state.
                 if (isBrowserTriggeredNavigation(t.source)) {
+                    // TODO(atscott): this should be `t.extractedUrl`. The `browserUrlTree`
+                    // should only be the part of the URL that is handled by the router. In
+                    // addition, this should only be done if we process the current url.
                     this.browserUrlTree = t.rawUrl;
                 }
                 if (processCurrentUrl) {
@@ -4274,6 +4283,13 @@ class Router {
                         if (this.urlUpdateStrategy === 'eager') {
                             if (!t.extras.skipLocationChange) {
                                 this.setBrowserUrl(t.urlAfterRedirects, t);
+                                // TODO(atscott): The above line is incorrect. It sets the url to
+                                // only the part that is handled by the router. It should merge
+                                // that with the rawUrl so the url includes segments not handled
+                                // by the router:
+                                //  const rawUrl = this.urlHandlingStrategy.merge(
+                                //      t.urlAfterRedirects, t.rawUrl);
+                                //  this.setBrowserUrl(rawUrl, t);
                             }
                             this.browserUrlTree = t.urlAfterRedirects;
                         }
@@ -4385,7 +4401,7 @@ class Router {
             tap((t) => {
                 this.currentUrlTree = t.urlAfterRedirects;
                 this.rawUrlTree =
-                    this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
+                    this.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
                 this.routerState = t.targetRouterState;
                 if (this.urlUpdateStrategy === 'deferred') {
                     if (!t.extras.skipLocationChange) {
@@ -4520,6 +4536,12 @@ class Router {
     }
     getTransition() {
         const transition = this.transitions.value;
+        // TODO(atscott): This comment doesn't make it clear why this value needs to be set. In the case
+        // described below (where we don't handle previous or current url), the `browserUrlTree` is set
+        // to the `urlAfterRedirects` value. However, these values *are already the same* because of the
+        // line below. So it seems that we should be able to remove the line below and the line where
+        // `browserUrlTree` is updated when we aren't handling any part of the navigation url.
+        // Run TGP to confirm that this can be done.
         // This value needs to be set. Other values such as extractedUrl are set on initial navigation
         // but the urlAfterRedirects may not get set if we aren't processing the new URL *and* not
         // processing the previous URL.
@@ -6130,7 +6152,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.5+24.sha-012209f.with-local-changes');
+const VERSION = new Version('13.0.0-next.5+26.sha-7c2434d.with-local-changes');
 
 /**
  * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+24.sha-012209f.with-local-changes
+ * @license Angular v13.0.0-next.5+26.sha-7c2434d.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2050,8 +2050,42 @@ export declare class Router {
     private rootContexts;
     private location;
     config: Routes;
+    /**
+     * Represents the activated `UrlTree` that the `Router` is configured to handle (through
+     * `UrlHandlingStrategy`). That is, after we find the route config tree that we're going to
+     * activate, run guards, and are just about to activate the route, we set the currentUrlTree.
+     *
+     * This should match the `browserUrlTree` when a navigation succeeds. If the
+     * `UrlHandlingStrategy.shouldProcessUrl` is `false`, only the `browserUrlTree` is updated.
+     */
     private currentUrlTree;
+    /**
+     * Meant to represent the entire browser url after a successful navigation. In the life of a
+     * navigation transition:
+     * 1. The rawUrl represents the full URL that's being navigated to
+     * 2. We apply redirects, which might only apply to _part_ of the URL (due to
+     * `UrlHandlingStrategy`).
+     * 3. Right before activation (because we assume activation will succeed), we update the
+     * rawUrlTree to be a combination of the urlAfterRedirects (again, this might only apply to part
+     * of the initial url) and the rawUrl of the transition (which was the original navigation url in
+     * its full form).
+     */
     private rawUrlTree;
+    /**
+     * Meant to represent the part of the browser url that the `Router` is set up to handle (via the
+     * `UrlHandlingStrategy`). This value is updated immediately after the browser url is updated (or
+     * the browser url update is skipped via `skipLocationChange`). With that, note that
+     * `browserUrlTree` _may not_ reflect the actual browser URL for two reasons:
+     *
+     * 1. `UrlHandlingStrategy` only handles part of the URL
+     * 2. `skipLocationChange` does not update the browser url.
+     *
+     * So to reiterate, `browserUrlTree` only represents the Router's internal understanding of the
+     * current route, either before guards with `urlUpdateStrategy === 'eager'` or right before
+     * activation with `'deferred'`.
+     *
+     * This should match the `currentUrlTree` when the navigation succeeds.
+     */
     private browserUrlTree;
     private readonly transitions;
     private navigations;
