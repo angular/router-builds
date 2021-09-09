@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.5+8.sha-8cc93b7.with-local-changes
+ * @license Angular v12.2.5+9.sha-134e4f5.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4825,11 +4825,20 @@
                             // AngularJS sync code which looks for a value here in order to determine
                             // whether or not to handle a given popstate event or to leave it to the
                             // Angular router.
-                            _this.resetUrlToCurrentUrlTree();
+                            _this.restoreHistory(t);
+                            _this.cancelNavigationTransition(t, cancelationReason);
                         }
-                        // Note: Other `canceledNavigationResolution` strategies will not support
-                        // the AngularJS use-case that's mentioned above.
-                        _this.cancelNavigationTransition(t, cancelationReason);
+                        else {
+                            // We cannot trigger a `location.historyGo` if the
+                            // cancellation was due to a new navigation before the previous could
+                            // complete. This is because `location.historyGo` triggers a `popstate`
+                            // which would also trigger another navigation. Instead, treat this as a
+                            // redirect and do not reset the state.
+                            _this.cancelNavigationTransition(t, cancelationReason);
+                            // TODO(atscott): The same problem happens here with a fresh page load
+                            // and a new navigation before that completes where we won't set a page
+                            // id.
+                        }
                     }
                     // currentNavigation should always be reset to null here. If navigation was
                     // successful, lastSuccessfulTransition will have already been set. Therefore
@@ -4859,7 +4868,7 @@
                             // This is only applicable with initial navigation, so setting
                             // `navigated` only when not redirecting resolves this scenario.
                             _this.navigated = true;
-                            _this.restoreHistory(t);
+                            _this.restoreHistory(t, true);
                         }
                         var navCancel = new NavigationCancel(t.id, _this.serializeUrl(t.extractedUrl), e.message);
                         eventsSubject.next(navCancel);
@@ -4891,7 +4900,7 @@
                          * the pre-error state. */
                     }
                     else {
-                        _this.restoreHistory(t);
+                        _this.restoreHistory(t, true);
                         var navError = new NavigationError(t.id, _this.serializeUrl(t.extractedUrl), e);
                         eventsSubject.next(navError);
                         try {
@@ -5357,7 +5366,8 @@
          * Performs the necessary rollback action to restore the browser URL to the
          * state before the transition.
          */
-        Router.prototype.restoreHistory = function (t) {
+        Router.prototype.restoreHistory = function (t, restoringFromCaughtError) {
+            if (restoringFromCaughtError === void 0) { restoringFromCaughtError = false; }
             var _a, _b;
             if (this.canceledNavigationResolution === 'computed') {
                 var targetPagePosition = this.currentPageId - t.targetPageId;
@@ -5387,7 +5397,13 @@
                 }
             }
             else if (this.canceledNavigationResolution === 'replace') {
-                this.resetState(t);
+                // TODO(atscott): It seems like we should _always_ reset the state here. It would be a no-op
+                // for `deferred` navigations that haven't change the internal state yet because guards
+                // reject. For 'eager' navigations, it seems like we also really should reset the state
+                // because the navigation was cancelled. Investigate if this can be done by running TGP.
+                if (restoringFromCaughtError) {
+                    this.resetState(t);
+                }
                 this.resetUrlToCurrentUrlTree();
             }
         };
@@ -6731,7 +6747,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.2.5+8.sha-8cc93b7.with-local-changes');
+    var VERSION = new core.Version('12.2.5+9.sha-134e4f5.with-local-changes');
 
     /**
      * @license
