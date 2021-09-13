@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+32.sha-59353c6.with-local-changes
+ * @license Angular v13.0.0-next.5+33.sha-79eee55.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4566,6 +4566,10 @@
              * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
              * and vice versa.
              *
+             * Note: the 'computed' option is incompatible with any `UrlHandlingStrategy` which only
+             * handles a portion of the URL because the history restoration navigates to the previous place in
+             * the browser history rather than simply resetting a portion of the URL.
+             *
              * The default value is `replace`.
              *
              */
@@ -5399,6 +5403,11 @@
         Router.prototype.resetState = function (t) {
             this.routerState = t.currentRouterState;
             this.currentUrlTree = t.currentUrlTree;
+            // Note here that we use the urlHandlingStrategy to get the reset `rawUrlTree` because it may be
+            // configured to handle only part of the navigation URL. This means we would only want to reset
+            // the part of the navigation handled by the Angular router rather than the whole URL. In
+            // addition, the URLHandlingStrategy may be configured to specifically preserve parts of the URL
+            // when merging, such as the query params so they are not lost on a refresh.
             this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, t.rawUrl);
         };
         Router.prototype.resetUrlToCurrentUrlTree = function () {
@@ -6791,7 +6800,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.5+32.sha-59353c6.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.5+33.sha-79eee55.with-local-changes');
 
     /**
      * @license
