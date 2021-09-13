@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.5+23.sha-c817935.with-local-changes
+ * @license Angular v12.2.5+25.sha-52c320f.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -245,7 +245,7 @@
                     ar[i] = from[i];
                 }
             }
-        return to.concat(ar || from);
+        return to.concat(ar || Array.prototype.slice.call(from));
     }
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
