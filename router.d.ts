@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+32.sha-59353c6.with-local-changes
+ * @license Angular v13.0.0-next.5+33.sha-79eee55.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2198,6 +2198,10 @@ export declare class Router {
      * to the Angular route when the navigation gets cancelled. For example, if the browser back
      * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
      * and vice versa.
+     *
+     * Note: the 'computed' option is incompatible with any `UrlHandlingStrategy` which only
+     * handles a portion of the URL because the history restoration navigates to the previous place in
+     * the browser history rather than simply resetting a portion of the URL.
      *
      * The default value is `replace`.
      *
