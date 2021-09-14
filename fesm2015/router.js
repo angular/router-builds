@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+45.sha-71e4323.with-local-changes
+ * @license Angular v13.0.0-next.5+47.sha-3ec9ee6.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4253,15 +4253,12 @@ class Router {
                     browserUrlTree !== this.currentUrlTree.toString();
                 const processCurrentUrl = (this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                     this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
-                // If the source of the navigation is from a browser event, the URL is
-                // already updated. We already need to sync the internal state.
-                if (isBrowserTriggeredNavigation(t.source)) {
-                    // TODO(atscott): this should be `t.extractedUrl`. The `browserUrlTree`
-                    // should only be the part of the URL that is handled by the router. In
-                    // addition, this should only be done if we process the current url.
-                    this.browserUrlTree = t.rawUrl;
-                }
                 if (processCurrentUrl) {
+                    // If the source of the navigation is from a browser event, the URL is
+                    // already updated. We already need to sync the internal state.
+                    if (isBrowserTriggeredNavigation(t.source)) {
+                        this.browserUrlTree = t.extractedUrl;
+                    }
                     return of(t).pipe(
                     // Fire NavigationStart event
                     switchMap(t => {
@@ -6155,7 +6152,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.5+45.sha-71e4323.with-local-changes');
+const VERSION = new Version('13.0.0-next.5+47.sha-3ec9ee6.with-local-changes');
 
 /**
  * @license
