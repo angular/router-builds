@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+43.sha-e8e41ef.with-local-changes
+ * @license Angular v13.0.0-next.5+44.sha-796da64.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4903,14 +4903,8 @@
                         operators.tap(function (t) {
                             if (_this.urlUpdateStrategy === 'eager') {
                                 if (!t.extras.skipLocationChange) {
-                                    _this.setBrowserUrl(t.urlAfterRedirects, t);
-                                    // TODO(atscott): The above line is incorrect. It sets the url to
-                                    // only the part that is handled by the router. It should merge
-                                    // that with the rawUrl so the url includes segments not handled
-                                    // by the router:
-                                    //  const rawUrl = this.urlHandlingStrategy.merge(
-                                    //      t.urlAfterRedirects, t.rawUrl);
-                                    //  this.setBrowserUrl(rawUrl, t);
+                                    var rawUrl = _this.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
+                                    _this.setBrowserUrl(rawUrl, t);
                                 }
                                 _this.browserUrlTree = t.urlAfterRedirects;
                             }
@@ -6851,7 +6845,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('13.0.0-next.5+43.sha-e8e41ef.with-local-changes');
+    var VERSION = new i0.Version('13.0.0-next.5+44.sha-796da64.with-local-changes');
 
     /**
      * @license
