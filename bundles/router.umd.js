@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.5+47.sha-3ec9ee6.with-local-changes
+ * @license Angular v13.0.0-next.5+46.sha-5163999.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4656,12 +4656,15 @@
                         browserUrlTree !== _this.currentUrlTree.toString();
                     var processCurrentUrl = (_this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                         _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
+                    // If the source of the navigation is from a browser event, the URL is
+                    // already updated. We already need to sync the internal state.
+                    if (isBrowserTriggeredNavigation(t.source)) {
+                        // TODO(atscott): this should be `t.extractedUrl`. The `browserUrlTree`
+                        // should only be the part of the URL that is handled by the router. In
+                        // addition, this should only be done if we process the current url.
+                        _this.browserUrlTree = t.rawUrl;
+                    }
                     if (processCurrentUrl) {
-                        // If the source of the navigation is from a browser event, the URL is
-                        // already updated. We already need to sync the internal state.
-                        if (isBrowserTriggeredNavigation(t.source)) {
-                            _this.browserUrlTree = t.extractedUrl;
-                        }
                         return rxjs.of(t).pipe(
                         // Fire NavigationStart event
                         operators.switchMap(function (t) {
@@ -6791,7 +6794,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.5+47.sha-3ec9ee6.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.5+46.sha-5163999.with-local-changes');
 
     /**
      * @license
