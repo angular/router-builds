@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.5+25.sha-52c320f.with-local-changes
+ * @license Angular v12.2.5+28.sha-4034f25.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4646,14 +4646,14 @@
                             null
                     };
                 }), operators.switchMap(function (t) {
+                    var browserUrlTree = _this.browserUrlTree.toString();
                     var urlTransition = !_this.navigated ||
-                        t.extractedUrl.toString() !== _this.browserUrlTree.toString();
-                    /* || this.browserUrlTree.toString() !== this.currentUrlTree.toString() */
-                    // TODO(atscott): Run TGP to see if the above change can be made. There are
-                    // situations where a navigation is canceled _after_ browserUrlTree is
-                    // updated. For example, urlUpdateStrategy === 'eager': if a new
-                    // navigation happens (i.e. in a guard), this would cause the router to
-                    // be in an invalid state of tracking.
+                        t.extractedUrl.toString() !== browserUrlTree ||
+                        // Navigations which succeed or ones which fail and are cleaned up
+                        // correctly should result in `browserUrlTree` and `currentUrlTree`
+                        // matching. If this is not the case, assume something went wrong and try
+                        // processing the URL again.
+                        browserUrlTree !== _this.currentUrlTree.toString();
                     var processCurrentUrl = (_this.onSameUrlNavigation === 'reload' ? true : urlTransition) &&
                         _this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl);
                     // If the source of the navigation is from a browser event, the URL is
@@ -6769,7 +6769,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('12.2.5+25.sha-52c320f.with-local-changes');
+    var VERSION = new core.Version('12.2.5+28.sha-4034f25.with-local-changes');
 
     /**
      * @license
