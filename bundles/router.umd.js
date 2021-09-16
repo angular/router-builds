@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.6+27.sha-e55d052.with-local-changes
+ * @license Angular v13.0.0-next.6+28.sha-7970082.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4677,6 +4677,7 @@
                         // ApplyRedirects
                         applyRedirects$1(_this.ngModule.injector, _this.configLoader, _this.urlSerializer, _this.config), 
                         // Update the currentNavigation
+                        // `urlAfterRedirects` is guaranteed to be set after this point
                         operators.tap(function (t) {
                             _this.currentNavigation = Object.assign(Object.assign({}, _this.currentNavigation), { finalUrl: t.urlAfterRedirects });
                         }), 
@@ -4716,7 +4717,6 @@
                              * in the browser.
                              */
                             _this.rawUrlTree = t.rawUrl;
-                            _this.browserUrlTree = t.urlAfterRedirects;
                             t.resolve(null);
                             return rxjs.EMPTY;
                         }
@@ -4724,7 +4724,7 @@
                 }), 
                 // Before Preactivation
                 switchTap(function (t) {
-                    var targetSnapshot = t.targetSnapshot, navigationId = t.id, appliedUrlTree = t.extractedUrl, rawUrlTree = t.rawUrl, _c = t.extras, skipLocationChange = _c.skipLocationChange, replaceUrl = _c.replaceUrl;
+                    var targetSnapshot = t.targetSnapshot, navigationId = t.id, appliedUrlTree = t.extractedUrl, rawUrlTree = t.rawUrl, _d = t.extras, skipLocationChange = _d.skipLocationChange, replaceUrl = _d.replaceUrl;
                     return _this.hooks.beforePreactivation(targetSnapshot, {
                         navigationId: navigationId,
                         appliedUrlTree: appliedUrlTree,
@@ -4779,7 +4779,7 @@
                 }), 
                 // --- AFTER PREACTIVATION ---
                 switchTap(function (t) {
-                    var targetSnapshot = t.targetSnapshot, navigationId = t.id, appliedUrlTree = t.extractedUrl, rawUrlTree = t.rawUrl, _c = t.extras, skipLocationChange = _c.skipLocationChange, replaceUrl = _c.replaceUrl;
+                    var targetSnapshot = t.targetSnapshot, navigationId = t.id, appliedUrlTree = t.extractedUrl, rawUrlTree = t.rawUrl, _d = t.extras, skipLocationChange = _d.skipLocationChange, replaceUrl = _d.replaceUrl;
                     return _this.hooks.afterPreactivation(targetSnapshot, {
                         navigationId: navigationId,
                         appliedUrlTree: appliedUrlTree,
@@ -4932,22 +4932,8 @@
             // this will simplify the lifecycle of the router.
             this.routerState.root.component = this.rootComponentType;
         };
-        Router.prototype.getTransition = function () {
-            var transition = this.transitions.value;
-            // TODO(atscott): This comment doesn't make it clear why this value needs to be set. In the case
-            // described below (where we don't handle previous or current url), the `browserUrlTree` is set
-            // to the `urlAfterRedirects` value. However, these values *are already the same* because of the
-            // line below. So it seems that we should be able to remove the line below and the line where
-            // `browserUrlTree` is updated when we aren't handling any part of the navigation url.
-            // Run TGP to confirm that this can be done.
-            // This value needs to be set. Other values such as extractedUrl are set on initial navigation
-            // but the urlAfterRedirects may not get set if we aren't processing the new URL *and* not
-            // processing the previous URL.
-            transition.urlAfterRedirects = this.browserUrlTree;
-            return transition;
-        };
         Router.prototype.setTransition = function (t) {
-            this.transitions.next(Object.assign(Object.assign({}, this.getTransition()), t));
+            this.transitions.next(Object.assign(Object.assign({}, this.transitions.value), t));
         };
         /**
          * Sets up the location change listener and performs the initial navigation.
@@ -5245,20 +5231,18 @@
             });
         };
         Router.prototype.scheduleNavigation = function (rawUrl, source, restoredState, extras, priorPromise) {
-            var _a, _b;
+            var _a, _b, _c;
             if (this.disposed) {
                 return Promise.resolve(false);
             }
-            // * Imperative navigations (router.navigate) might trigger additional navigations to the same
-            //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
-            //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router
-            //   states.
+            // * Duplicate navigations may also be triggered by attempts to sync AngularJS and Angular
+            // router states.
             // * Imperative navigations can be cancelled by router guards, meaning the URL won't change. If
             //   the user follows that with a navigation using the back/forward button or manual URL change,
             //   the destination may be the same as the previous imperative attempt. We should not skip
             //   these navigations because it's a separate case from the one above -- it's not a duplicate
             //   navigation.
-            var lastNavigation = this.getTransition();
+            var lastNavigation = this.transitions.value;
             // We don't want to skip duplicate successful navs if they're imperative because
             // onSameUrlNavigation could be 'reload' (so the duplicate is intended).
             var browserNavPrecededByRouterNav = isBrowserTriggeredNavigation(source) && lastNavigation &&
@@ -5268,7 +5252,7 @@
             // However, if it failed, we should compare to the final result (urlAfterRedirects).
             var lastNavigationUrl = (lastNavigationSucceeded || this.currentNavigation) ?
                 lastNavigation.rawUrl :
-                lastNavigation.urlAfterRedirects;
+                ((_a = lastNavigation.urlAfterRedirects) !== null && _a !== void 0 ? _a : this.browserUrlTree);
             var duplicateNav = lastNavigationUrl.toString() === rawUrl.toString();
             if (browserNavPrecededByRouterNav && duplicateNav) {
                 return Promise.resolve(true); // return value is not used
@@ -5304,10 +5288,10 @@
                     // If we're replacing the URL or doing a silent navigation, we do not want to increment the
                     // page id because we aren't pushing a new entry to history.
                     if (extras.replaceUrl || extras.skipLocationChange) {
-                        targetPageId = (_a = this.browserPageId) !== null && _a !== void 0 ? _a : 0;
+                        targetPageId = (_b = this.browserPageId) !== null && _b !== void 0 ? _b : 0;
                     }
                     else {
-                        targetPageId = ((_b = this.browserPageId) !== null && _b !== void 0 ? _b : 0) + 1;
+                        targetPageId = ((_c = this.browserPageId) !== null && _c !== void 0 ? _c : 0) + 1;
                     }
                 }
             }
@@ -6791,7 +6775,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.6+27.sha-e55d052.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.6+28.sha-7970082.with-local-changes');
 
     /**
      * @license

@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.6+27.sha-e55d052.with-local-changes
+ * @license Angular v13.0.0-next.6+28.sha-7970082.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2189,7 +2189,6 @@ export declare class Router {
      */
     constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
     private setupNavigations;
-    private getTransition;
     private setTransition;
     /**
      * Sets up the location change listener and performs the initial navigation.
