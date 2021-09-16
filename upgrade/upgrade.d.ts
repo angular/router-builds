@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.6+15.sha-def6315.with-local-changes
+ * @license Angular v12.2.6+21.sha-b43f21b.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
