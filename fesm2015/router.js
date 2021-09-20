@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.6+43.sha-9470f56.with-local-changes
+ * @license Angular v13.0.0-next.6+44.sha-c5d0bd4.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4421,28 +4421,7 @@ class Router {
                  * means. */
                 if (!completed && !errored) {
                     const cancelationReason = `Navigation ID ${t.id} is not equal to the current navigation id ${this.navigationId}`;
-                    if (this.canceledNavigationResolution === 'replace') {
-                        // Must reset to current URL tree here to ensure history.state is set. On
-                        // a fresh page load, if a new navigation comes in before a successful
-                        // navigation completes, there will be nothing in
-                        // history.state.navigationId. This can cause sync problems with
-                        // AngularJS sync code which looks for a value here in order to determine
-                        // whether or not to handle a given popstate event or to leave it to the
-                        // Angular router.
-                        this.restoreHistory(t);
-                        this.cancelNavigationTransition(t, cancelationReason);
-                    }
-                    else {
-                        // We cannot trigger a `location.historyGo` if the
-                        // cancellation was due to a new navigation before the previous could
-                        // complete. This is because `location.historyGo` triggers a `popstate`
-                        // which would also trigger another navigation. Instead, treat this as a
-                        // redirect and do not reset the state.
-                        this.cancelNavigationTransition(t, cancelationReason);
-                        // TODO(atscott): The same problem happens here with a fresh page load
-                        // and a new navigation before that completes where we won't set a page
-                        // id.
-                    }
+                    this.cancelNavigationTransition(t, cancelationReason);
                 }
                 // currentNavigation should always be reset to null here. If navigation was
                 // successful, lastSuccessfulTransition will have already been set. Therefore
@@ -6136,7 +6115,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.6+43.sha-9470f56.with-local-changes');
+const VERSION = new Version('13.0.0-next.6+44.sha-c5d0bd4.with-local-changes');
 
 /**
  * @license
