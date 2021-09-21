@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.6+56.sha-77bd253.with-local-changes
+ * @license Angular v13.0.0-next.6+57.sha-2028c39.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -6805,7 +6805,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('13.0.0-next.6+56.sha-77bd253.with-local-changes');
+    var VERSION = new i0.Version('13.0.0-next.6+57.sha-2028c39.with-local-changes');
 
     /**
      * @license
