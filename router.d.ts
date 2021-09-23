@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.6+58.sha-dad213e.with-local-changes
+ * @license Angular v12.2.7+9.sha-2306a32.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -738,7 +738,7 @@ declare type ErrorHandler = (error: any) => any;
  * * [ResolveStart](api/router/ResolveStart): When the router begins the *resolve*
  * phase of routing.
  * * [ResolveEnd](api/router/ResolveEnd): When the router finishes the *resolve*
- * phase of routing successfuly.
+ * phase of routing successfully.
  * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
  * activating a route's children.
  * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.
