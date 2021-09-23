@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.7+10.sha-cc427d1.with-local-changes
+ * @license Angular v13.0.0-next.7+11.sha-ea61ec2.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -892,8 +892,8 @@
         if (Array.isArray(a) && Array.isArray(b)) {
             if (a.length !== b.length)
                 return false;
-            var aSorted = __spreadArray([], __read(a)).sort();
-            var bSorted_1 = __spreadArray([], __read(b)).sort();
+            var aSorted = __spreadArray([], __read(a), false).sort();
+            var bSorted_1 = __spreadArray([], __read(b), false).sort();
             return aSorted.every(function (val, index) { return bSorted_1[index] === val; });
         }
         else {
@@ -2263,14 +2263,14 @@
                     forEach(cmd.outlets, function (commands, name) {
                         outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
                     });
-                    return __spreadArray(__spreadArray([], __read(res)), [{ outlets: outlets_1 }]);
+                    return __spreadArray(__spreadArray([], __read(res), false), [{ outlets: outlets_1 }], false);
                 }
                 if (cmd.segmentPath) {
-                    return __spreadArray(__spreadArray([], __read(res)), [cmd.segmentPath]);
+                    return __spreadArray(__spreadArray([], __read(res), false), [cmd.segmentPath], false);
                 }
             }
             if (!(typeof cmd === 'string')) {
-                return __spreadArray(__spreadArray([], __read(res)), [cmd]);
+                return __spreadArray(__spreadArray([], __read(res), false), [cmd], false);
             }
             if (cmdIdx === 0) {
                 cmd.split('/').forEach(function (urlPart, partIndex) {
@@ -2289,7 +2289,7 @@
                 });
                 return res;
             }
-            return __spreadArray(__spreadArray([], __read(res)), [cmd]);
+            return __spreadArray(__spreadArray([], __read(res), false), [cmd], false);
         }, []);
         return new Navigation(isAbsolute, numberOfDoubleDots, res);
     }
@@ -2879,7 +2879,7 @@
      */
     function sortByMatchingOutlets(routes, outletName) {
         var sortedConfig = routes.filter(function (r) { return getOutlet(r) === outletName; });
-        sortedConfig.push.apply(sortedConfig, __spreadArray([], __read(routes.filter(function (r) { return getOutlet(r) !== outletName; }))));
+        sortedConfig.push.apply(sortedConfig, __spreadArray([], __read(routes.filter(function (r) { return getOutlet(r) !== outletName; })), false));
         return sortedConfig;
     }
 
@@ -3840,7 +3840,7 @@
                         // outlet, return `null`.
                         return null;
                     }
-                    children.push.apply(children, __spreadArray([], __read(outletChildren)));
+                    children.push.apply(children, __spreadArray([], __read(outletChildren), false));
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -3977,7 +3977,7 @@
             }
             var duplicateEmptyPathNode = result.find(function (resultNode) { return node.value.routeConfig === resultNode.value.routeConfig; });
             if (duplicateEmptyPathNode !== undefined) {
-                (_c = duplicateEmptyPathNode.children).push.apply(_c, __spreadArray([], __read(node.children)));
+                (_c = duplicateEmptyPathNode.children).push.apply(_c, __spreadArray([], __read(node.children), false));
                 mergedNodes.add(duplicateEmptyPathNode);
             }
             else {
@@ -5860,7 +5860,7 @@
             var _this = this;
             var _a;
             (_a = this.linkInputChangesSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
-            var allLinkChanges = __spreadArray(__spreadArray(__spreadArray([], __read(this.links.toArray())), __read(this.linksWithHrefs.toArray())), [this.link, this.linkWithHref]).filter(function (link) { return !!link; })
+            var allLinkChanges = __spreadArray(__spreadArray(__spreadArray([], __read(this.links.toArray()), false), __read(this.linksWithHrefs.toArray()), false), [this.link, this.linkWithHref], false).filter(function (link) { return !!link; })
                 .map(function (link) { return link.onChanges; });
             this.linkInputChangesSubscription = rxjs.from(allLinkChanges).pipe(operators.mergeAll()).subscribe(function (link) {
                 if (_this.isActive !== _this.isLinkActive(_this.router)(link)) {
@@ -6754,7 +6754,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.7+10.sha-cc427d1.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.7+11.sha-ea61ec2.with-local-changes');
 
     /**
      * @license
