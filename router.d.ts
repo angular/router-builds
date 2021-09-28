@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+13.sha-8d2b6af.with-local-changes
+ * @license Angular v13.0.0-next.8+14.sha-4f3beff.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2932,12 +2932,17 @@ export declare class RouterModule {
  * `http://base-path/primary-route-path(outlet-name:route-path)`
  *
  * A router outlet emits an activate event when a new component is instantiated,
- * and a deactivate event when a component is destroyed.
+ * deactivate event when a component is destroyed.
+ * An attached event emits when the `RouteReuseStrategy` instructs the outlet to reattach the
+ * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
+ * detach the subtree.
  *
  * ```
  * <router-outlet
  *   (activate)='onActivate($event)'
- *   (deactivate)='onDeactivate($event)'></router-outlet>
+ *   (deactivate)='onDeactivate($event)'
+ *   (attach)='onAttach($event)'
+ *   (detach)='onDetach($event)'></router-outlet>
  * ```
  *
  * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
@@ -2958,6 +2963,16 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     private name;
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
+    /**
+     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+     * previously detached subtree.
+     **/
+    attachEvents: EventEmitter<unknown>;
+    /**
+     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+     * subtree.
+     */
+    detachEvents: EventEmitter<unknown>;
     constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
     /** @nodoc */
     ngOnDestroy(): void;
@@ -3043,6 +3058,16 @@ export declare interface RouterOutletContract {
      * Emits a deactivate event when a component is destroyed.
      */
     deactivateEvents?: EventEmitter<unknown>;
+    /**
+     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+     * previously detached subtree.
+     **/
+    attachEvents?: EventEmitter<unknown>;
+    /**
+     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+     * subtree.
+     */
+    detachEvents?: EventEmitter<unknown>;
 }
 
 /**

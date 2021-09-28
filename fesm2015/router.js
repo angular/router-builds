@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+13.sha-8d2b6af.with-local-changes
+ * @license Angular v13.0.0-next.8+14.sha-4f3beff.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -5359,12 +5359,17 @@ function isActiveMatchOptions(options) {
  * `http://base-path/primary-route-path(outlet-name:route-path)`
  *
  * A router outlet emits an activate event when a new component is instantiated,
- * and a deactivate event when a component is destroyed.
+ * deactivate event when a component is destroyed.
+ * An attached event emits when the `RouteReuseStrategy` instructs the outlet to reattach the
+ * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
+ * detach the subtree.
  *
  * ```
  * <router-outlet
  *   (activate)='onActivate($event)'
- *   (deactivate)='onDeactivate($event)'></router-outlet>
+ *   (deactivate)='onDeactivate($event)'
+ *   (attach)='onAttach($event)'
+ *   (detach)='onDetach($event)'></router-outlet>
  * ```
  *
  * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
@@ -5385,6 +5390,16 @@ class RouterOutlet {
         this._activatedRoute = null;
         this.activateEvents = new EventEmitter();
         this.deactivateEvents = new EventEmitter();
+        /**
+         * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+         * previously detached subtree.
+         **/
+        this.attachEvents = new EventEmitter();
+        /**
+         * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+         * subtree.
+         */
+        this.detachEvents = new EventEmitter();
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, this);
     }
@@ -5443,6 +5458,7 @@ class RouterOutlet {
         const cmp = this.activated;
         this.activated = null;
         this._activatedRoute = null;
+        this.detachEvents.emit(cmp.instance);
         return cmp;
     }
     /**
@@ -5452,6 +5468,7 @@ class RouterOutlet {
         this.activated = ref;
         this._activatedRoute = activatedRoute;
         this.location.insert(ref.hostView);
+        this.attachEvents.emit(ref.instance);
     }
     deactivate() {
         if (this.activated) {
@@ -5492,7 +5509,9 @@ RouterOutlet.ctorParameters = () => [
 ];
 RouterOutlet.propDecorators = {
     activateEvents: [{ type: Output, args: ['activate',] }],
-    deactivateEvents: [{ type: Output, args: ['deactivate',] }]
+    deactivateEvents: [{ type: Output, args: ['deactivate',] }],
+    attachEvents: [{ type: Output, args: ['attach',] }],
+    detachEvents: [{ type: Output, args: ['detach',] }]
 };
 class OutletInjector {
     constructor(route, childContexts, parent) {
@@ -6081,7 +6100,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.8+13.sha-8d2b6af.with-local-changes');
+const VERSION = new Version('13.0.0-next.8+14.sha-4f3beff.with-local-changes');
 
 /**
  * @license
