@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+13.sha-8d2b6af.with-local-changes
+ * @license Angular v13.0.0-next.8+14.sha-4f3beff.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2867,12 +2867,17 @@
      * `http://base-path/primary-route-path(outlet-name:route-path)`
      *
      * A router outlet emits an activate event when a new component is instantiated,
-     * and a deactivate event when a component is destroyed.
+     * deactivate event when a component is destroyed.
+     * An attached event emits when the `RouteReuseStrategy` instructs the outlet to reattach the
+     * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
+     * detach the subtree.
      *
      * ```
      * <router-outlet
      *   (activate)='onActivate($event)'
-     *   (deactivate)='onDeactivate($event)'></router-outlet>
+     *   (deactivate)='onDeactivate($event)'
+     *   (attach)='onAttach($event)'
+     *   (detach)='onDetach($event)'></router-outlet>
      * ```
      *
      * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
@@ -2893,6 +2898,16 @@
             this._activatedRoute = null;
             this.activateEvents = new i0.EventEmitter();
             this.deactivateEvents = new i0.EventEmitter();
+            /**
+             * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+             * previously detached subtree.
+             **/
+            this.attachEvents = new i0.EventEmitter();
+            /**
+             * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+             * subtree.
+             */
+            this.detachEvents = new i0.EventEmitter();
             this.name = name || PRIMARY_OUTLET;
             parentContexts.onChildOutletCreated(this.name, this);
         }
@@ -2967,6 +2982,7 @@
             var cmp = this.activated;
             this.activated = null;
             this._activatedRoute = null;
+            this.detachEvents.emit(cmp.instance);
             return cmp;
         };
         /**
@@ -2976,6 +2992,7 @@
             this.activated = ref;
             this._activatedRoute = activatedRoute;
             this.location.insert(ref.hostView);
+            this.attachEvents.emit(ref.instance);
         };
         RouterOutlet.prototype.deactivate = function () {
             if (this.activated) {
@@ -3006,7 +3023,7 @@
         return RouterOutlet;
     }());
     RouterOutlet.ɵfac = function RouterOutlet_Factory(t) { return new (t || RouterOutlet)(i0.ɵɵdirectiveInject(ChildrenOutletContexts), i0.ɵɵdirectiveInject(i0.ViewContainerRef), i0.ɵɵdirectiveInject(i0.ComponentFactoryResolver), i0.ɵɵinjectAttribute('name'), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef)); };
-    RouterOutlet.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate" }, exportAs: ["outlet"] });
+    RouterOutlet.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: RouterOutlet, selectors: [["router-outlet"]], outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"] });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(RouterOutlet, [{
                 type: i0.Directive,
@@ -3022,6 +3039,12 @@
                 }], deactivateEvents: [{
                     type: i0.Output,
                     args: ['deactivate']
+                }], attachEvents: [{
+                    type: i0.Output,
+                    args: ['attach']
+                }], detachEvents: [{
+                    type: i0.Output,
+                    args: ['detach']
                 }] });
     })();
     var OutletInjector = /** @class */ (function () {
@@ -6805,7 +6828,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new i0.Version('13.0.0-next.8+13.sha-8d2b6af.with-local-changes');
+    var VERSION = new i0.Version('13.0.0-next.8+14.sha-4f3beff.with-local-changes');
 
     /**
      * @license
