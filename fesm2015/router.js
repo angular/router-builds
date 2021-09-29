@@ -1,11 +1,11 @@
 /**
- * @license Angular v13.0.0-next.8+31.sha-7dccbdd.with-local-changes
+ * @license Angular v13.0.0-next.8+34.sha-94c6dee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy, ViewportScroller, PlatformLocation, APP_BASE_HREF, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
-import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, NgModuleFactoryLoader, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵattribute, ɵɵsanitizeUrl, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, SystemJsNgModuleLoader, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope, ApplicationRef, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, EventEmitter, ɵɵdirectiveInject, ViewContainerRef, ComponentFactoryResolver, ɵɵinjectAttribute, ChangeDetectorRef, ɵɵdefineDirective, ɵsetClassMetadata, Directive, Attribute, Output, ɵɵdefineComponent, ɵɵelement, Component, NgModuleRef, InjectionToken, InjectFlags, NgModuleFactory, ɵConsole, NgZone, ɵɵinvalidFactory, ɵɵdefineInjectable, Injectable, Type, Injector, Compiler, Renderer2, ElementRef, ɵɵlistener, ɵɵNgOnChangesFeature, Input, HostListener, ɵɵattribute, ɵɵsanitizeUrl, HostBinding, ɵɵcontentQuery, ɵɵqueryRefresh, ɵɵloadQuery, Optional, ContentChildren, ɵɵinject, NgProbeToken, ANALYZE_FOR_ENTRY_COMPONENTS, SkipSelf, Inject, APP_INITIALIZER, APP_BOOTSTRAP_LISTENER, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope, ApplicationRef, Version } from '@angular/core';
 import { from, of, BehaviorSubject, combineLatest, Observable, EmptyError, concat, defer, EMPTY, ConnectableObservable, Subject } from 'rxjs';
 import { map, switchMap, take, startWith, scan, filter, catchError, concatMap, last as last$1, first, mergeMap, tap, takeLast, refCount, finalize, mergeAll } from 'rxjs/operators';
 
@@ -3943,8 +3943,8 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
  */
 const ROUTES = new InjectionToken('ROUTES');
 class RouterConfigLoader {
-    constructor(loader, compiler, onLoadStartListener, onLoadEndListener) {
-        this.loader = loader;
+    constructor(injector, compiler, onLoadStartListener, onLoadEndListener) {
+        this.injector = injector;
         this.compiler = compiler;
         this.onLoadStartListener = onLoadStartListener;
         this.onLoadEndListener = onLoadEndListener;
@@ -3978,19 +3978,14 @@ class RouterConfigLoader {
         return route._loader$;
     }
     loadModuleFactory(loadChildren) {
-        if (typeof loadChildren === 'string') {
-            return from(this.loader.load(loadChildren));
-        }
-        else {
-            return wrapIntoObservable(loadChildren()).pipe(mergeMap((t) => {
-                if (t instanceof NgModuleFactory) {
-                    return of(t);
-                }
-                else {
-                    return from(this.compiler.compileModuleAsync(t));
-                }
-            }));
-        }
+        return wrapIntoObservable(loadChildren()).pipe(mergeMap((t) => {
+            if (t instanceof NgModuleFactory) {
+                return of(t);
+            }
+            else {
+                return from(this.compiler.compileModuleAsync(t));
+            }
+        }));
     }
 }
 
@@ -4081,7 +4076,7 @@ class Router {
      * Creates the router service.
      */
     // TODO: vsavkin make internal after the final is out.
-    constructor(rootComponentType, urlSerializer, rootContexts, location, injector, loader, compiler, config) {
+    constructor(rootComponentType, urlSerializer, rootContexts, location, injector, compiler, config) {
         this.rootComponentType = rootComponentType;
         this.urlSerializer = urlSerializer;
         this.rootContexts = rootContexts;
@@ -4209,7 +4204,7 @@ class Router {
         this.currentUrlTree = createEmptyUrlTree();
         this.rawUrlTree = this.currentUrlTree;
         this.browserUrlTree = this.currentUrlTree;
-        this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
+        this.configLoader = new RouterConfigLoader(injector, compiler, onLoadStart, onLoadEnd);
         this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         this.transitions = new BehaviorSubject({
             id: 0,
@@ -4993,7 +4988,7 @@ Router.ɵfac = function Router_Factory(t) { ɵɵinvalidFactory(); };
 Router.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: Router, factory: Router.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(Router, [{
         type: Injectable
-    }], function () { return [{ type: Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: Location }, { type: Injector }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: undefined }]; }, null); })();
+    }], function () { return [{ type: Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: Location }, { type: Injector }, { type: Compiler }, { type: undefined }]; }, null); })();
 function validateCommands(commands) {
     for (let i = 0; i < commands.length; i++) {
         const cmd = commands[i];
@@ -5629,13 +5624,13 @@ class NoPreloading {
  * @publicApi
  */
 class RouterPreloader {
-    constructor(router, moduleLoader, compiler, injector, preloadingStrategy) {
+    constructor(router, compiler, injector, preloadingStrategy) {
         this.router = router;
         this.injector = injector;
         this.preloadingStrategy = preloadingStrategy;
         const onStartLoad = (r) => router.triggerEvent(new RouteConfigLoadStart(r));
         const onEndLoad = (r) => router.triggerEvent(new RouteConfigLoadEnd(r));
-        this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
+        this.loader = new RouterConfigLoader(injector, compiler, onStartLoad, onEndLoad);
     }
     setUpPreloading() {
         this.subscription =
@@ -5683,11 +5678,11 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(NgModuleFactoryLoader), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
+RouterPreloader.ɵfac = function RouterPreloader_Factory(t) { return new (t || RouterPreloader)(ɵɵinject(Router), ɵɵinject(Compiler), ɵɵinject(Injector), ɵɵinject(PreloadingStrategy)); };
 RouterPreloader.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: RouterPreloader, factory: RouterPreloader.ɵfac });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(RouterPreloader, [{
         type: Injectable
-    }], function () { return [{ type: Router }, { type: NgModuleFactoryLoader }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null); })();
+    }], function () { return [{ type: Router }, { type: Compiler }, { type: Injector }, { type: PreloadingStrategy }]; }, null); })();
 
 /**
  * @license
@@ -5805,14 +5800,13 @@ const ROUTER_PROVIDERS = [
         provide: Router,
         useFactory: setupRouter,
         deps: [
-            UrlSerializer, ChildrenOutletContexts, Location, Injector, NgModuleFactoryLoader, Compiler,
-            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+            UrlSerializer, ChildrenOutletContexts, Location, Injector, Compiler, ROUTES,
+            ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
             [RouteReuseStrategy, new Optional()]
         ]
     },
     ChildrenOutletContexts,
     { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-    { provide: NgModuleFactoryLoader, useClass: SystemJsNgModuleLoader },
     RouterPreloader,
     NoPreloading,
     PreloadAllModules,
@@ -5972,8 +5966,8 @@ function provideRoutes(routes) {
         { provide: ROUTES, multi: true, useValue: routes },
     ];
 }
-function setupRouter(urlSerializer, contexts, location, injector, loader, compiler, config, opts = {}, urlHandlingStrategy, routeReuseStrategy) {
-    const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
+function setupRouter(urlSerializer, contexts, location, injector, compiler, config, opts = {}, urlHandlingStrategy, routeReuseStrategy) {
+    const router = new Router(null, urlSerializer, contexts, location, injector, compiler, flatten(config));
     if (urlHandlingStrategy) {
         router.urlHandlingStrategy = urlHandlingStrategy;
     }
@@ -6138,7 +6132,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('13.0.0-next.8+31.sha-7dccbdd.with-local-changes');
+const VERSION = new Version('13.0.0-next.8+34.sha-94c6dee.with-local-changes');
 
 /**
  * @license

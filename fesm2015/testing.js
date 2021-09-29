@@ -1,12 +1,12 @@
 /**
- * @license Angular v13.0.0-next.8+31.sha-7dccbdd.with-local-changes
+ * @license Angular v13.0.0-next.8+34.sha-94c6dee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
-import { ɵɵinject, Compiler, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineNgModule, ɵɵdefineInjector, NgModuleFactoryLoader, Injector, Optional, NgModule, ɵɵsetNgModuleScope } from '@angular/core';
+import { ɵɵdefineNgModule, ɵɵdefineInjector, Compiler, Injector, Optional, ɵsetClassMetadata, NgModule, ɵɵsetNgModuleScope } from '@angular/core';
 import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, PreloadingStrategy, NoPreloading, RouterModule } from '@angular/router';
 
 /**
@@ -16,73 +16,6 @@ import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * @description
- *
- * Allows to simulate the loading of ng modules in tests.
- *
- * ```
- * const loader = TestBed.inject(NgModuleFactoryLoader);
- *
- * @Component({template: 'lazy-loaded'})
- * class LazyLoadedComponent {}
- * @NgModule({
- *   declarations: [LazyLoadedComponent],
- *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
- * })
- *
- * class LoadedModule {}
- *
- * // sets up stubbedModules
- * loader.stubbedModules = {lazyModule: LoadedModule};
- *
- * router.resetConfig([
- *   {path: 'lazy', loadChildren: 'lazyModule'},
- * ]);
- *
- * router.navigateByUrl('/lazy/loaded');
- * ```
- *
- * @publicApi
- */
-class SpyNgModuleFactoryLoader {
-    constructor(compiler) {
-        this.compiler = compiler;
-        /**
-         * @docsNotRequired
-         */
-        this._stubbedModules = {};
-    }
-    /**
-     * @docsNotRequired
-     */
-    set stubbedModules(modules) {
-        const res = {};
-        for (const t of Object.keys(modules)) {
-            res[t] = this.compiler.compileModuleAsync(modules[t]);
-        }
-        this._stubbedModules = res;
-    }
-    /**
-     * @docsNotRequired
-     */
-    get stubbedModules() {
-        return this._stubbedModules;
-    }
-    load(path) {
-        if (this._stubbedModules[path]) {
-            return this._stubbedModules[path];
-        }
-        else {
-            return Promise.reject(new Error(`Cannot find module ${path}`));
-        }
-    }
-}
-SpyNgModuleFactoryLoader.ɵfac = function SpyNgModuleFactoryLoader_Factory(t) { return new (t || SpyNgModuleFactoryLoader)(ɵɵinject(Compiler)); };
-SpyNgModuleFactoryLoader.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: SpyNgModuleFactoryLoader, factory: SpyNgModuleFactoryLoader.ɵfac });
-(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(SpyNgModuleFactoryLoader, [{
-        type: Injectable
-    }], function () { return [{ type: Compiler }]; }, null); })();
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
@@ -93,8 +26,8 @@ function isUrlHandlingStrategy(opts) {
  *
  * @publicApi
  */
-function setupTestingRouter(urlSerializer, contexts, location, loader, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy) {
-    const router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, ɵflatten(routes));
+function setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy) {
+    const router = new Router(null, urlSerializer, contexts, location, injector, compiler, ɵflatten(routes));
     if (opts) {
         // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
@@ -119,8 +52,7 @@ function setupTestingRouter(urlSerializer, contexts, location, loader, compiler,
  * Sets up the router to be used for testing.
  *
  * The modules sets up the router to be used for testing.
- * It provides spy implementations of `Location`, `LocationStrategy`, and {@link
- * NgModuleFactoryLoader}.
+ * It provides spy implementations of `Location` and `LocationStrategy`.
  *
  * @usageNotes
  * ### Example
@@ -154,13 +86,12 @@ RouterTestingModule.ɵfac = function RouterTestingModule_Factory(t) { return new
 RouterTestingModule.ɵmod = /*@__PURE__*/ ɵɵdefineNgModule({ type: RouterTestingModule });
 RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-        { provide: LocationStrategy, useClass: MockLocationStrategy },
-        { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+        { provide: LocationStrategy, useClass: MockLocationStrategy }, {
             provide: Router,
             useFactory: setupTestingRouter,
             deps: [
-                UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+                UrlSerializer, ChildrenOutletContexts, Location, Compiler, Injector, ROUTES,
+                ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
                 [RouteReuseStrategy, new Optional()]
             ]
         },
@@ -172,13 +103,12 @@ RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [
                 exports: [RouterModule],
                 providers: [
                     ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                    { provide: LocationStrategy, useClass: MockLocationStrategy },
-                    { provide: NgModuleFactoryLoader, useClass: SpyNgModuleFactoryLoader }, {
+                    { provide: LocationStrategy, useClass: MockLocationStrategy }, {
                         provide: Router,
                         useFactory: setupTestingRouter,
                         deps: [
-                            UrlSerializer, ChildrenOutletContexts, Location, NgModuleFactoryLoader, Compiler, Injector,
-                            ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+                            UrlSerializer, ChildrenOutletContexts, Location, Compiler, Injector, ROUTES,
+                            ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
                             [RouteReuseStrategy, new Optional()]
                         ]
                     },
@@ -217,5 +147,5 @@ RouterTestingModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [
  * Generated bundle index. Do not edit.
  */
 
-export { RouterTestingModule, SpyNgModuleFactoryLoader, setupTestingRouter };
+export { RouterTestingModule, setupTestingRouter };
 //# sourceMappingURL=testing.js.map

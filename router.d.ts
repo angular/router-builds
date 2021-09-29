@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+31.sha-7dccbdd.with-local-changes
+ * @license Angular v13.0.0-next.8+34.sha-94c6dee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -18,7 +18,6 @@ import { Location as Location_2 } from '@angular/common';
 import { LocationStrategy } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
-import { NgModuleFactoryLoader } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -534,7 +533,7 @@ export declare interface CanDeactivate<T> {
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         loadChildren: 'team.js',
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
  *         canLoad: [CanLoadTeamSection]
  *       }
  *     ])
@@ -553,7 +552,7 @@ export declare interface CanDeactivate<T> {
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         loadChildren: 'team.js',
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
  *         canLoad: ['canLoadTeamSection']
  *       }
  *     ])
@@ -677,18 +676,6 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
     /** Converts a `UrlTree` into a url */
     serialize(tree: UrlTree): string;
 }
-
-/**
- * A string of the form `path/to/file#exportName` that acts as a URL for a set of routes to load.
- *
- * @see `loadChildrenCallback`
- * @publicApi
- * @deprecated The `string` form of `loadChildren` is deprecated in favor of the
- * `LoadChildrenCallback` function which uses the ES dynamic `import()` expression.
- * This offers a more natural and standards-based mechanism to dynamically
- * load an ES module at runtime.
- */
-export declare type DeprecatedLoadChildren = string;
 
 /**
  * @description
@@ -1078,13 +1065,10 @@ export declare interface IsActiveMatchOptions {
  *
  * A function that returns a set of routes to load.
  *
- * The string form of `LoadChildren` is deprecated (see `DeprecatedLoadChildren`). The function
- * form (`LoadChildrenCallback`) should be used instead.
- *
- * @see `loadChildrenCallback`
+ * @see `LoadChildrenCallback`
  * @publicApi
  */
-export declare type LoadChildren = LoadChildrenCallback | DeprecatedLoadChildren;
+export declare type LoadChildren = LoadChildrenCallback;
 
 /**
  *
@@ -2210,7 +2194,7 @@ export declare class Router {
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, loader: NgModuleFactoryLoader, compiler: Compiler, config: Routes);
+    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
     private setupNavigations;
     private setTransition;
     /**
@@ -3124,7 +3108,7 @@ export declare class RouterPreloader implements OnDestroy {
     private preloadingStrategy;
     private loader;
     private subscription?;
-    constructor(router: Router, moduleLoader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
+    constructor(router: Router, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
     setUpPreloading(): void;
     preload(): Observable<any>;
     /** @nodoc */
