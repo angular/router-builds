@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+31.sha-7dccbdd.with-local-changes
+ * @license Angular v13.0.0-next.8+34.sha-94c6dee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4233,8 +4233,8 @@
      */
     var ROUTES = new core.InjectionToken('ROUTES');
     var RouterConfigLoader = /** @class */ (function () {
-        function RouterConfigLoader(loader, compiler, onLoadStartListener, onLoadEndListener) {
-            this.loader = loader;
+        function RouterConfigLoader(injector, compiler, onLoadStartListener, onLoadEndListener) {
+            this.injector = injector;
             this.compiler = compiler;
             this.onLoadStartListener = onLoadStartListener;
             this.onLoadEndListener = onLoadEndListener;
@@ -4270,19 +4270,14 @@
         };
         RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
             var _this = this;
-            if (typeof loadChildren === 'string') {
-                return rxjs.from(this.loader.load(loadChildren));
-            }
-            else {
-                return wrapIntoObservable(loadChildren()).pipe(operators.mergeMap(function (t) {
-                    if (t instanceof core.NgModuleFactory) {
-                        return rxjs.of(t);
-                    }
-                    else {
-                        return rxjs.from(_this.compiler.compileModuleAsync(t));
-                    }
-                }));
-            }
+            return wrapIntoObservable(loadChildren()).pipe(operators.mergeMap(function (t) {
+                if (t instanceof core.NgModuleFactory) {
+                    return rxjs.of(t);
+                }
+                else {
+                    return rxjs.from(_this.compiler.compileModuleAsync(t));
+                }
+            }));
         };
         return RouterConfigLoader;
     }());
@@ -4455,7 +4450,7 @@
          * Creates the router service.
          */
         // TODO: vsavkin make internal after the final is out.
-        function Router(rootComponentType, urlSerializer, rootContexts, location, injector, loader, compiler, config) {
+        function Router(rootComponentType, urlSerializer, rootContexts, location, injector, compiler, config) {
             var _this = this;
             this.rootComponentType = rootComponentType;
             this.urlSerializer = urlSerializer;
@@ -4584,7 +4579,7 @@
             this.currentUrlTree = createEmptyUrlTree();
             this.rawUrlTree = this.currentUrlTree;
             this.browserUrlTree = this.currentUrlTree;
-            this.configLoader = new RouterConfigLoader(loader, compiler, onLoadStart, onLoadEnd);
+            this.configLoader = new RouterConfigLoader(injector, compiler, onLoadStart, onLoadEnd);
             this.routerState = createEmptyState(this.currentUrlTree, this.rootComponentType);
             this.transitions = new rxjs.BehaviorSubject({
                 id: 0,
@@ -5389,7 +5384,6 @@
         { type: ChildrenOutletContexts },
         { type: common.Location },
         { type: core.Injector },
-        { type: core.NgModuleFactoryLoader },
         { type: core.Compiler },
         { type: undefined }
     ]; };
@@ -6238,13 +6232,13 @@
      * @publicApi
      */
     var RouterPreloader = /** @class */ (function () {
-        function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
+        function RouterPreloader(router, compiler, injector, preloadingStrategy) {
             this.router = router;
             this.injector = injector;
             this.preloadingStrategy = preloadingStrategy;
             var onStartLoad = function (r) { return router.triggerEvent(new RouteConfigLoadStart(r)); };
             var onEndLoad = function (r) { return router.triggerEvent(new RouteConfigLoadEnd(r)); };
-            this.loader = new RouterConfigLoader(moduleLoader, compiler, onStartLoad, onEndLoad);
+            this.loader = new RouterConfigLoader(injector, compiler, onStartLoad, onEndLoad);
         }
         RouterPreloader.prototype.setUpPreloading = function () {
             var _this = this;
@@ -6311,7 +6305,6 @@
     ];
     RouterPreloader.ctorParameters = function () { return [
         { type: Router },
-        { type: core.NgModuleFactoryLoader },
         { type: core.Compiler },
         { type: core.Injector },
         { type: PreloadingStrategy }
@@ -6441,14 +6434,13 @@
             provide: Router,
             useFactory: setupRouter,
             deps: [
-                UrlSerializer, ChildrenOutletContexts, common.Location, core.Injector, core.NgModuleFactoryLoader, core.Compiler,
-                ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new core.Optional()],
+                UrlSerializer, ChildrenOutletContexts, common.Location, core.Injector, core.Compiler, ROUTES,
+                ROUTER_CONFIGURATION, [UrlHandlingStrategy, new core.Optional()],
                 [RouteReuseStrategy, new core.Optional()]
             ]
         },
         ChildrenOutletContexts,
         { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-        { provide: core.NgModuleFactoryLoader, useClass: core.SystemJsNgModuleLoader },
         RouterPreloader,
         NoPreloading,
         PreloadAllModules,
@@ -6603,9 +6595,9 @@
             { provide: ROUTES, multi: true, useValue: routes },
         ];
     }
-    function setupRouter(urlSerializer, contexts, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+    function setupRouter(urlSerializer, contexts, location, injector, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
         if (opts === void 0) { opts = {}; }
-        var router = new Router(null, urlSerializer, contexts, location, injector, loader, compiler, flatten(config));
+        var router = new Router(null, urlSerializer, contexts, location, injector, compiler, flatten(config));
         if (urlHandlingStrategy) {
             router.urlHandlingStrategy = urlHandlingStrategy;
         }
@@ -6773,7 +6765,7 @@
     /**
      * @publicApi
      */
-    var VERSION = new core.Version('13.0.0-next.8+31.sha-7dccbdd.with-local-changes');
+    var VERSION = new core.Version('13.0.0-next.8+34.sha-94c6dee.with-local-changes');
 
     /**
      * @license

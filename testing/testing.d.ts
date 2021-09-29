@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.8+31.sha-7dccbdd.with-local-changes
+ * @license Angular v13.0.0-next.8+34.sha-94c6dee.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,10 +10,9 @@ import { ExtraOptions } from '@angular/router';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
-import { NgModuleFactory } from '@angular/core';
-import { NgModuleFactoryLoader } from '@angular/core';
 import { Route } from '@angular/router';
 import { Router } from '@angular/router';
+import { RouteReuseStrategy } from '@angular/router';
 import { Routes } from '@angular/router';
 import { UrlHandlingStrategy } from '@angular/router';
 import { UrlSerializer } from '@angular/router';
@@ -24,8 +23,7 @@ import { UrlSerializer } from '@angular/router';
  * Sets up the router to be used for testing.
  *
  * The modules sets up the router to be used for testing.
- * It provides spy implementations of `Location`, `LocationStrategy`, and {@link
- * NgModuleFactoryLoader}.
+ * It provides spy implementations of `Location` and `LocationStrategy`.
  *
  * @usageNotes
  * ### Example
@@ -53,66 +51,6 @@ export declare class RouterTestingModule {
  *
  * @publicApi
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy): Router;
-
-/**
- * Router setup factory function used for testing.
- *
- * @deprecated As of v5.2. The 2nd-to-last argument should be `ExtraOptions`, not
- * `UrlHandlingStrategy`
- * @publicApi
- */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][], urlHandlingStrategy?: UrlHandlingStrategy): Router;
-
-/**
- * @description
- *
- * Allows to simulate the loading of ng modules in tests.
- *
- * ```
- * const loader = TestBed.inject(NgModuleFactoryLoader);
- *
- * @Component({template: 'lazy-loaded'})
- * class LazyLoadedComponent {}
- * @NgModule({
- *   declarations: [LazyLoadedComponent],
- *   imports: [RouterModule.forChild([{path: 'loaded', component: LazyLoadedComponent}])]
- * })
- *
- * class LoadedModule {}
- *
- * // sets up stubbedModules
- * loader.stubbedModules = {lazyModule: LoadedModule};
- *
- * router.resetConfig([
- *   {path: 'lazy', loadChildren: 'lazyModule'},
- * ]);
- *
- * router.navigateByUrl('/lazy/loaded');
- * ```
- *
- * @publicApi
- */
-export declare class SpyNgModuleFactoryLoader implements NgModuleFactoryLoader {
-    private compiler;
-    /**
-     * @docsNotRequired
-     */
-    private _stubbedModules;
-    /**
-     * @docsNotRequired
-     */
-    set stubbedModules(modules: {
-        [path: string]: any;
-    });
-    /**
-     * @docsNotRequired
-     */
-    get stubbedModules(): {
-        [path: string]: any;
-    };
-    constructor(compiler: Compiler);
-    load(path: string): Promise<NgModuleFactory<any>>;
-}
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
 
 export { }
