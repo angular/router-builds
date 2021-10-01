@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.9+10.sha-9eba260.with-local-changes
+ * @license Angular v13.0.0-next.9+84.sha-c15b8c7.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,6 +7,8 @@
 import { ChildrenOutletContexts } from '@angular/router';
 import { Compiler } from '@angular/core';
 import { ExtraOptions } from '@angular/router';
+import * as i0 from '@angular/core';
+import * as i1 from '@angular/router';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
@@ -44,6 +46,9 @@ import { UrlSerializer } from '@angular/router';
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterTestingModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<RouterTestingModule>;
 }
 
 /**

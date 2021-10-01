@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
+  "version": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
-    "@angular/common": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
-    "@angular/platform-browser": "13.0.0-next.9+10.sha-9eba260.with-local-changes",
+    "@angular/core": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
+    "@angular/common": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
+    "@angular/platform-browser": "13.0.0-next.9+84.sha-c15b8c7.with-local-changes",
     "rxjs": "^6.5.3 || ^7.0.0"
   },
   "ng-update": {
@@ -50,10 +50,34 @@
     ]
   },
   "sideEffects": false,
-  "main": "./bundles/router.umd.js",
-  "fesm2015": "./fesm2015/router.js",
-  "esm2015": "./esm2015/router.js",
+  "fesm2020": "./fesm2020/router.mjs",
+  "fesm2015": "./fesm2015/router.mjs",
+  "esm2020": "./esm2020/router.mjs",
   "typings": "./router.d.ts",
-  "module": "./fesm2015/router.js",
-  "es2015": "./fesm2015/router.js"
+  "module": "./fesm2015/router.mjs",
+  "es2020": "./fesm2020/router.mjs",
+  "type": "module",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./router.d.ts",
+      "es2015": "./fesm2015/router.mjs",
+      "node": "./fesm2015/router.mjs",
+      "default": "./fesm2020/router.mjs"
+    },
+    "./testing": {
+      "types": "./testing/testing.d.ts",
+      "es2015": "./fesm2015/testing.mjs",
+      "node": "./fesm2015/testing.mjs",
+      "default": "./fesm2020/testing.mjs"
+    },
+    "./upgrade": {
+      "types": "./upgrade/upgrade.d.ts",
+      "es2015": "./fesm2015/upgrade.mjs",
+      "node": "./fesm2015/upgrade.mjs",
+      "default": "./fesm2020/upgrade.mjs"
+    }
+  }
 }

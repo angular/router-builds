@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.9+10.sha-9eba260.with-local-changes
+ * @license Angular v13.0.0-next.9+84.sha-c15b8c7.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -11,20 +11,17 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { HashLocationStrategy } from '@angular/common';
+import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
 import { LocationStrategy } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
-import { NgProbeToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { PathLocationStrategy } from '@angular/common';
-import { PlatformLocation } from '@angular/common';
 import { Provider } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
@@ -32,7 +29,6 @@ import { SimpleChanges } from '@angular/core';
 import { Type } from '@angular/core';
 import { Version } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
 
 /**
  * Provides access to information about a route associated with a component
@@ -962,6 +958,33 @@ export declare class GuardsCheckStart extends RouterEvent {
     /** @docsNotRequired */
     state: RouterStateSnapshot);
     toString(): string;
+}
+
+declare namespace i1 {
+    export {
+        RouterOutletContract,
+        RouterOutlet
+    }
+}
+
+declare namespace i2 {
+    export {
+        RouterLink,
+        RouterLinkWithHref
+    }
+}
+
+declare namespace i3 {
+    export {
+        RouterLinkActive
+    }
+}
+
+declare namespace i4 {
+    export {
+        ɵEmptyOutletComponent,
+        ɵEmptyOutletComponent as EmptyOutletComponent
+    }
 }
 
 /**
@@ -2350,6 +2373,8 @@ export declare class Router {
     private resetUrlToCurrentUrlTree;
     private cancelNavigationTransition;
     private generateNgRouterState;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
 }
 
 /**
@@ -2611,6 +2636,8 @@ export declare class RouterLink implements OnChanges {
     /** @nodoc */
     onClick(): boolean;
     get urlTree(): UrlTree | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }
 
 /**
@@ -2724,6 +2751,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private update;
     private isLinkActive;
     private hasActiveLinks;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"]>;
 }
 
 /**
@@ -2823,6 +2852,8 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never>;
 }
 
 /**
@@ -2884,6 +2915,9 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }, { optional: true; }]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
 
 /**
@@ -2980,6 +3014,8 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, [null, null, null, { attribute: "name"; }, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never>;
 }
 
 /**
@@ -3079,6 +3115,8 @@ export declare class RouterPreloader implements OnDestroy {
     ngOnDestroy(): void;
     private processRoutes;
     private preloadConfig;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterPreloader, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouterPreloader>;
 }
 
 /**
@@ -3112,7 +3150,7 @@ export declare class RouterPreloader implements OnDestroy {
  *
  * @publicApi
  */
-export declare class RouterState extends ɵangular_packages_router_router_m<ActivatedRoute> {
+export declare class RouterState extends Tree<ActivatedRoute> {
     /** The current snapshot of the router state */
     snapshot: RouterStateSnapshot;
     toString(): string;
@@ -3145,7 +3183,7 @@ export declare class RouterState extends ɵangular_packages_router_router_m<Acti
  *
  * @publicApi
  */
-export declare class RouterStateSnapshot extends ɵangular_packages_router_router_m<ActivatedRouteSnapshot> {
+export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
     /** The url from which this snapshot was created */
     url: string;
     toString(): string;
@@ -3226,6 +3264,19 @@ export declare class Scroll {
     position: [number, number] | null, 
     /** @docsNotRequired */
     anchor: string | null);
+    toString(): string;
+}
+
+
+declare class Tree<T> {
+    constructor(root: TreeNode<T>);
+    get root(): T;
+}
+
+declare class TreeNode<T> {
+    value: T;
+    children: TreeNode<T>[];
+    constructor(value: T, children: TreeNode<T>[]);
     toString(): string;
 }
 
@@ -3545,89 +3596,7 @@ export declare class UrlTree {
  */
 export declare const VERSION: Version;
 
-/**
- * @docsNotRequired
- */
-export declare const ɵangular_packages_router_router_a: InjectionToken<void>;
-
-export declare function ɵangular_packages_router_router_b(): NgProbeToken;
-
-export declare function ɵangular_packages_router_router_c(router: Router, viewportScroller: ViewportScroller, config: ExtraOptions): ɵangular_packages_router_router_o;
-
-export declare function ɵangular_packages_router_router_d(platformLocationStrategy: PlatformLocation, baseHref: string, options?: ExtraOptions): HashLocationStrategy | PathLocationStrategy;
-
-export declare function ɵangular_packages_router_router_e(router: Router): any;
-
-export declare function ɵangular_packages_router_router_f(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, injector: Injector, compiler: Compiler, config: Route[][], opts?: ExtraOptions, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
-
-export declare function ɵangular_packages_router_router_g(router: Router): ActivatedRoute;
-
-/**
- * Router initialization requires two steps:
- *
- * First, we start the navigation in a `APP_INITIALIZER` to block the bootstrap if
- * a resolver or a guard executes asynchronously.
- *
- * Next, we actually run activation in a `BOOTSTRAP_LISTENER`, using the
- * `afterPreactivation` hook provided by the router.
- * The router navigation starts, reaches the point when preactivation is done, and then
- * pauses. It waits for the hook to be resolved. We then resolve it only in a bootstrap listener.
- */
-export declare class ɵangular_packages_router_router_h implements OnDestroy {
-    private injector;
-    private initNavigation;
-    private destroyed;
-    private resultOfPreactivationDone;
-    constructor(injector: Injector);
-    appInitializer(): Promise<any>;
-    bootstrapListener(bootstrappedComponentRef: ComponentRef<any>): void;
-    ngOnDestroy(): void;
-}
-
-export declare function ɵangular_packages_router_router_i(r: ɵangular_packages_router_router_h): () => Promise<any>;
-
-export declare function ɵangular_packages_router_router_j(r: ɵangular_packages_router_router_h): (bootstrappedComponentRef: ComponentRef<any>) => void;
-
-export declare function ɵangular_packages_router_router_k(): ReadonlyArray<Provider>;
-
-
-export declare class ɵangular_packages_router_router_m<T> {
-    constructor(root: ɵangular_packages_router_router_n<T>);
-    get root(): T;
-}
-
-export declare class ɵangular_packages_router_router_n<T> {
-    value: T;
-    children: ɵangular_packages_router_router_n<T>[];
-    constructor(value: T, children: ɵangular_packages_router_router_n<T>[]);
-    toString(): string;
-}
-
-export declare class ɵangular_packages_router_router_o implements OnDestroy {
-    private router;
-    /** @docsNotRequired */ readonly viewportScroller: ViewportScroller;
-    private options;
-    private routerEventsSubscription;
-    private scrollEventsSubscription;
-    private lastId;
-    private lastSource;
-    private restoredId;
-    private store;
-    constructor(router: Router, 
-    /** @docsNotRequired */ viewportScroller: ViewportScroller, options?: {
-        scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
-        anchorScrolling?: 'disabled' | 'enabled';
-    });
-    init(): void;
-    private createScrollEvents;
-    private consumeScrollEvents;
-    private scheduleScrollEvent;
-    /** @nodoc */
-    ngOnDestroy(): void;
-}
-
 export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
-
 
 /**
  * This component is used internally within the router to be a placeholder when an empty
@@ -3638,10 +3607,10 @@ export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router:
  * In order to render, there needs to be a component on this config, which will default
  * to this `EmptyOutletComponent`.
  */
-declare class ɵEmptyOutletComponent {
+export declare class ɵEmptyOutletComponent {
+    static ɵfac: i0.ɵɵFactoryDeclaration<ɵEmptyOutletComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never>;
 }
-export { ɵEmptyOutletComponent }
-export { ɵEmptyOutletComponent as ɵangular_packages_router_router_l }
 
 /**
  * Flattens single-level nested arrays.
