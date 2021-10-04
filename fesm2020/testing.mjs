@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.9+85.sha-c721135.with-local-changes
+ * @license Angular v13.0.0-next.10+1.sha-b64f796.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -83,9 +83,9 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.9+85.sha-c721135.with-local-changes", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.0.0-next.9+85.sha-c721135.with-local-changes", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.9+85.sha-c721135.with-local-changes", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.10+1.sha-b64f796.with-local-changes", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.0.0-next.10+1.sha-b64f796.with-local-changes", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.10+1.sha-b64f796.with-local-changes", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy }, {
             provide: Router,
@@ -98,7 +98,7 @@ RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", ver
         },
         { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.9+85.sha-c721135.with-local-changes", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.10+1.sha-b64f796.with-local-changes", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
