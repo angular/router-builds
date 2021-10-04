@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.0.0-next.10+2.sha-d04b550.with-local-changes
+ * @license Angular v13.0.0-next.10+3.sha-f513b17.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,6 +9,16 @@ import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import * as i0 from '@angular/core';
 import { Compiler, Injector, Optional, NgModule } from '@angular/core';
 import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+// This file exists to easily patch the SpyNgModuleFactoryLoader into g3
+const EXTRA_ROUTER_TESTING_PROVIDERS = [];
 
 /**
  * @license
@@ -83,11 +93,14 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.10+2.sha-d04b550.with-local-changes", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.0.0-next.10+2.sha-d04b550.with-local-changes", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.10+2.sha-d04b550.with-local-changes", ngImport: i0, type: RouterTestingModule, providers: [
-        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-        { provide: LocationStrategy, useClass: MockLocationStrategy }, {
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.10+3.sha-f513b17.with-local-changes", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.0.0-next.10+3.sha-f513b17.with-local-changes", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.10+3.sha-f513b17.with-local-changes", ngImport: i0, type: RouterTestingModule, providers: [
+        ɵROUTER_PROVIDERS,
+        EXTRA_ROUTER_TESTING_PROVIDERS,
+        { provide: Location, useClass: SpyLocation },
+        { provide: LocationStrategy, useClass: MockLocationStrategy },
+        {
             provide: Router,
             useFactory: setupTestingRouter,
             deps: [
@@ -96,15 +109,19 @@ RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", ver
                 [RouteReuseStrategy, new Optional()]
             ]
         },
-        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+        { provide: PreloadingStrategy, useExisting: NoPreloading },
+        provideRoutes([]),
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.10+2.sha-d04b550.with-local-changes", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.10+3.sha-f513b17.with-local-changes", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
                     providers: [
-                        ɵROUTER_PROVIDERS, { provide: Location, useClass: SpyLocation },
-                        { provide: LocationStrategy, useClass: MockLocationStrategy }, {
+                        ɵROUTER_PROVIDERS,
+                        EXTRA_ROUTER_TESTING_PROVIDERS,
+                        { provide: Location, useClass: SpyLocation },
+                        { provide: LocationStrategy, useClass: MockLocationStrategy },
+                        {
                             provide: Router,
                             useFactory: setupTestingRouter,
                             deps: [
@@ -113,10 +130,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.10+2
                                 [RouteReuseStrategy, new Optional()]
                             ]
                         },
-                        { provide: PreloadingStrategy, useExisting: NoPreloading }, provideRoutes([])
+                        { provide: PreloadingStrategy, useExisting: NoPreloading },
+                        provideRoutes([]),
                     ]
                 }]
         }] });
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+// This file exists for easily patching SpyNgModuleFactoryLoader in g3
+var spy_ng_module_factory_loader = {};
 
 /**
  * @license
