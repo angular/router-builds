@@ -1,5 +1,5 @@
 /**
- * @license Angular v12.2.9+17.sha-c7c285c.with-local-changes
+ * @license Angular v12.2.10+15.sha-9f350a8.with-local-changes
  * (c) 2010-2021 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4224,6 +4224,7 @@ class Router {
                     completed = true;
                 }
             }), finalize(() => {
+                var _a;
                 /* When the navigation stream finishes either through error or success, we
                  * set the `completed` or `errored` flag. However, there are some situations
                  * where we could get here without either of those being set. For instance, a
@@ -4256,10 +4257,11 @@ class Router {
                         // id.
                     }
                 }
-                // currentNavigation should always be reset to null here. If navigation was
-                // successful, lastSuccessfulTransition will have already been set. Therefore
-                // we can safely set currentNavigation to null here.
-                this.currentNavigation = null;
+                // Only clear current navigation if it is still set to the one that
+                // finalized.
+                if (((_a = this.currentNavigation) === null || _a === void 0 ? void 0 : _a.id) === t.id) {
+                    this.currentNavigation = null;
+                }
             }), catchError((e) => {
                 // TODO(atscott): The NavigationTransition `t` used here does not accurately
                 // reflect the current state of the whole transition because some operations
@@ -6094,7 +6096,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('12.2.9+17.sha-c7c285c.with-local-changes');
+const VERSION = new Version('12.2.10+15.sha-9f350a8.with-local-changes');
 
 /**
  * @license
