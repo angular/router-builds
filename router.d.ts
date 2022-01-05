@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.1+51.sha-7278a9c.with-local-changes
+ * @license Angular v13.2.0-next.1+59.sha-12e0424.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1076,7 +1076,7 @@ export declare interface IsActiveMatchOptions {
      */
     paths: 'exact' | 'subset';
     /**
-     * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+     * - `'exact'`: indicates that the `UrlTree` fragments must be equal.
      * - `'ignored'`: the fragments will not be compared when determining if a
      * `UrlTree` is active.
      */
