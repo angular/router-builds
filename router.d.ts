@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0-next.2+54.sha-ec2e6f6.with-local-changes
+ * @license Angular v13.2.0-next.2+55.sha-8363db4.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1918,7 +1918,7 @@ export declare interface Route {
      * matches a given path and stops when there is a config match. Importantly there must still be a
      * config match for each segment of the URL. For example, '/team/11/user' matches the prefix
      * 'team/:id' if one of the route's children matches the segment 'user'. That is, the URL
-     * '/team/11/user` matches the config
+     * '/team/11/user' matches the config
      * `{path: 'team/:id', children: [{path: ':user', component: User}]}`
      * but does not match when there are no children as in `{path: 'team/:id', component: Team}`.
      *
