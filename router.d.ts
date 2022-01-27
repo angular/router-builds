@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1027.sha-7b7d644.with-local-changes
+ * @license Angular v14.0.0-next.0+1029.sha-910de8b.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -26,6 +26,7 @@ import { Provider } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Type } from '@angular/core';
 import { Version } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
@@ -651,6 +652,22 @@ export declare function convertToParamMap(params: Params): ParamMap;
 export declare type Data = {
     [key: string | symbol]: any;
 };
+
+/**
+ * The default `TitleStrategy` used by the router that updates the title using the `Title` service.
+ */
+export declare class DefaultTitleStrategy extends TitleStrategy {
+    readonly title: Title;
+    constructor(title: Title);
+    /**
+     * Sets the title of the browser to the given value.
+     *
+     * @param title The `pageTitle` from the deepest primary route.
+     */
+    updateTitle(snapshot: RouterStateSnapshot): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DefaultTitleStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<DefaultTitleStrategy>;
+}
 
 /**
  * @description
@@ -1903,6 +1920,13 @@ export declare class ResolveStart extends RouterEvent {
  */
 export declare interface Route {
     /**
+     * Used to define a page title for the route. This can be a static string or an `Injectable` that
+     * implements `Resolve`.
+     *
+     * @see `PageTitleStrategy`
+     */
+    title?: string | unknown;
+    /**
      * The path to match against. Cannot be used together with a custom `matcher` function.
      * A URL string that uses router matching notation.
      * Can be a wild card (`**`) that matches any URL (see Usage Notes below).
@@ -2154,6 +2178,10 @@ export declare class Router {
      */
     routeReuseStrategy: RouteReuseStrategy;
     /**
+     * A strategy for setting the title based on the `routerState`.
+     */
+    titleStrategy?: TitleStrategy;
+    /**
      * How to handle a navigation request to the current URL. One of:
      *
      * - `'ignore'` :  The router ignores the request.
@@ -2168,7 +2196,7 @@ export declare class Router {
      */
     onSameUrlNavigation: 'reload' | 'ignore';
     /**
-     * How to merge parameters, data, and resolved data from parent to child
+     * How to merge parameters, data, resolved data, and title from parent to child
      * routes. One of:
      *
      * - `'emptyOnly'` : Inherit parent parameters, data, and resolved data
@@ -3287,6 +3315,43 @@ export declare class Scroll {
     /** @docsNotRequired */
     anchor: string | null);
     toString(): string;
+}
+
+/**
+ * Provides a strategy for setting the page title after a router navigation.
+ *
+ * The built-in implementation traverses the router state snapshot and finds the deepest primary
+ * outlet with `title` property. Given the `Routes` below, navigating to
+ * `/base/child(popup:aux)` would result in the document title being set to "child".
+ * ```
+ * [
+ *   {path: 'base', title: 'base', children: [
+ *     {path: 'child', title: 'child'},
+ *   ],
+ *   {path: 'aux', outlet: 'popup', title: 'popupTitle'}
+ * ]
+ * ```
+ *
+ * This class can be used as a base class for custom title strategies. That is, you can create your
+ * own class that extends the `TitleStrategy`. Note that in the above example, the `title`
+ * from the named outlet is never used. However, a custom strategy might be implemented to
+ * incorporate titles in named outlets.
+ *
+ * @publicApi
+ * @see [Page title guide](guide/router#setting-the-page-title)
+ */
+export declare abstract class TitleStrategy {
+    /** Performs the application title update. */
+    abstract updateTitle(snapshot: RouterStateSnapshot): void;
+    /**
+     * @returns The `title` of the deepest primary route.
+     */
+    buildTitle(snapshot: RouterStateSnapshot): string | undefined;
+    /**
+     * Given an `ActivatedRouteSnapshot`, returns the final value of the
+     * `Route.title` property, which can either be a static string or a resolved value.
+     */
+    getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): any;
 }
 
 

@@ -1,11 +1,12 @@
 /**
- * @license Angular v14.0.0-next.0+1027.sha-7b7d644.with-local-changes
+ * @license Angular v14.0.0-next.0+1029.sha-910de8b.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { ChildrenOutletContexts } from '@angular/router';
 import { Compiler } from '@angular/core';
+import { DefaultTitleStrategy } from '@angular/router';
 import { ExtraOptions } from '@angular/router';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/router';
@@ -16,6 +17,7 @@ import { Route } from '@angular/router';
 import { Router } from '@angular/router';
 import { RouteReuseStrategy } from '@angular/router';
 import { Routes } from '@angular/router';
+import { TitleStrategy } from '@angular/router';
 import { UrlHandlingStrategy } from '@angular/router';
 import { UrlSerializer } from '@angular/router';
 
@@ -56,6 +58,12 @@ export declare class RouterTestingModule {
  *
  * @publicApi
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy): Router;
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, titleStrategy?: TitleStrategy): Router;
+
+/**
+ * Router setup factory function used for testing. Only used internally to keep the factory that's
+ * marked as publicApi cleaner (i.e. not having _both_ `TitleStrategy` and `DefaultTitleStrategy`).
+ */
+export declare function setupTestingRouterInternal(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, defaultTitleStrategy?: DefaultTitleStrategy, titleStrategy?: TitleStrategy): Router;
 
 export { }
