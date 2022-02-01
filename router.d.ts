@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.0+1081.sha-d41dedb.with-local-changes
+ * @license Angular v14.0.0-next.0+1084.sha-03ab705.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1545,7 +1545,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *   resolve(
  *     route: ActivatedRouteSnapshot,
  *     state: RouterStateSnapshot
- *   ): Observable<any>|Promise<any>|any {
+ *   ): Observable<Hero>|Promise<Hero>|Hero {
  *     return this.service.getHero(route.paramMap.get('id'));
  *   }
  * }
