@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0+58.sha-7924a2e.with-local-changes
+ * @license Angular v13.2.1+3.sha-b9aab0c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -75,15 +75,26 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
     const router = ngUpgrade.injector.get(Router);
     const location = ngUpgrade.injector.get(Location);
     ngUpgrade.$injector.get('$rootScope')
-        .$on('$locationChangeStart', (_, next, __) => {
+        .$on('$locationChangeStart', (event, newUrl, oldUrl, newState, oldState) => {
+        var _a;
+        // Navigations coming from Angular router have a navigationId state
+        // property. Don't trigger Angular router navigation again if it is
+        // caused by a URL change from the current Angular router
+        // navigation.
+        const currentNavigationId = (_a = router.getCurrentNavigation()) === null || _a === void 0 ? void 0 : _a.id;
+        const newStateNavigationId = newState === null || newState === void 0 ? void 0 : newState.navigationId;
+        if (newStateNavigationId !== undefined &&
+            newStateNavigationId === currentNavigationId) {
+            return;
+        }
         let url;
         if (urlType === 'path') {
-            url = resolveUrl(next);
+            url = resolveUrl(newUrl);
         }
         else if (urlType === 'hash') {
             // Remove the first hash from the URL
-            const hashIdx = next.indexOf('#');
-            url = resolveUrl(next.substring(0, hashIdx) + next.substring(hashIdx + 1));
+            const hashIdx = newUrl.indexOf('#');
+            url = resolveUrl(newUrl.substring(0, hashIdx) + newUrl.substring(hashIdx + 1));
         }
         else {
             throw 'Invalid URLType passed to setUpLocationSync: ' + urlType;

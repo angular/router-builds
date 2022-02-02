@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.0+58.sha-7924a2e.with-local-changes
+ * @license Angular v13.2.1+3.sha-b9aab0c.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3638,6 +3638,12 @@ export declare class ɵEmptyOutletComponent {
  * Flattens single-level nested arrays.
  */
 export declare function ɵflatten<T>(arr: T[][]): T[];
+
+export declare type ɵRestoredState = {
+    [k: string]: any;
+    navigationId: number;
+    ɵrouterPageId?: number;
+};
 
 export declare const ɵROUTER_PROVIDERS: Provider[];
 
