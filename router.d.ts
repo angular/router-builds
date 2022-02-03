@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.1+13.sha-db27677.with-local-changes
+ * @license Angular v14.0.0-next.1+18.sha-f7ea275.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1925,7 +1925,7 @@ export declare interface Route {
      *
      * @see `PageTitleStrategy`
      */
-    title?: string | unknown;
+    title?: string | Type<Resolve<string>>;
     /**
      * The path to match against. Cannot be used together with a custom `matcher` function.
      * A URL string that uses router matching notation.
