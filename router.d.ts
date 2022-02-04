@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.1+27.sha-e46b379.with-local-changes
+ * @license Angular v14.0.0-next.1+28.sha-64f837d.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1162,7 +1162,7 @@ export declare interface Navigation {
      * The target URL passed into the `Router#navigateByUrl()` call before navigation. This is
      * the value before the router has parsed or applied redirects to it.
      */
-    initialUrl: string | UrlTree;
+    initialUrl: UrlTree;
     /**
      * The initial target URL after being parsed with `UrlSerializer.extract()`.
      */
