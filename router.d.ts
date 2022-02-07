@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.1+36.sha-2cda6cf.with-local-changes
+ * @license Angular v14.0.0-next.1+37.sha-33df840.with-local-changes
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1531,8 +1531,8 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *
  * Interface that classes can implement to be a data provider.
  * A data provider class can be used with the router to resolve data during navigation.
- * The interface defines a `resolve()` method that is invoked when the navigation starts.
- * The router waits for the data to be resolved before the route is finally activated.
+ * The interface defines a `resolve()` method that is invoked right after the `ResolveStart`
+ * router event. The router waits for the data to be resolved before the route is finally activated.
  *
  * The following example implements a `resolve()` method that retrieves the data
  * needed to activate the requested route.
