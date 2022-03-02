@@ -991,9 +991,9 @@ export class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.4+42.sha-05d50b8", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.4+42.sha-05d50b8", ngImport: i0, type: Router });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.4+42.sha-05d50b8", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.4+43.sha-69018c9", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.4+43.sha-69018c9", ngImport: i0, type: Router });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.4+43.sha-69018c9", ngImport: i0, type: Router, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Type }, { type: i1.UrlSerializer }, { type: i2.ChildrenOutletContexts }, { type: i3.Location }, { type: i0.Injector }, { type: i0.Compiler }, { type: undefined }]; } });
 function validateCommands(commands) {
