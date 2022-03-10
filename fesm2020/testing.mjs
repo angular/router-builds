@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.2.6+4.sha-0f8e748
+ * @license Angular v13.3.0-rc.0+1.sha-b839aeb
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -93,9 +93,9 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.6+4.sha-0f8e748", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.6+4.sha-0f8e748", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.6+4.sha-0f8e748", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.3.0-rc.0+1.sha-b839aeb", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.3.0-rc.0+1.sha-b839aeb", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.3.0-rc.0+1.sha-b839aeb", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         EXTRA_ROUTER_TESTING_PROVIDERS,
         { provide: Location, useClass: SpyLocation },
@@ -112,7 +112,7 @@ RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", ver
         { provide: PreloadingStrategy, useExisting: NoPreloading },
         provideRoutes([]),
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.6+4.sha-0f8e748", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.3.0-rc.0+1.sha-b839aeb", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
