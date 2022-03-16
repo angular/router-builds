@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.7+1.sha-9d5ad67
+ * @license Angular v14.0.0-next.7+2.sha-59a5b54
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1600,6 +1600,26 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *   ]
  * })
  * export class AppModule {}
+ * ```
+ *
+ * And you can access to your resolved data from `HeroComponent`:
+ *
+ * ```
+ * @Component({
+ *  selector: "app-hero",
+ *  templateUrl: "hero.component.html",
+ * })
+ * export class HeroComponent {
+ *
+ *  constructor(private activatedRoute: ActivatedRoute) {}
+ *
+ *  ngOnInit() {
+ *    this.activatedRoute.data.subscribe(({ hero }) => {
+ *      // do something with your resolved data ...
+ *    })
+ *  }
+ *
+ * }
  * ```
  *
  * @usageNotes
