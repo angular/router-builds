@@ -1,5 +1,5 @@
 /**
- * @license Angular v13.3.0+6.sha-ee20410
+ * @license Angular v13.3.0+11.sha-b481eab
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1072,7 +1072,7 @@ export declare interface IsActiveMatchOptions {
      * - `'exact'`: all segments in each `UrlTree` must match.
      * - `'subset'`: a `UrlTree` will be determined to be active if it
      * is a subtree of the active route. That is, the active route may contain extra
-     * segments, but must at least have all the segements of the `UrlTree` in question.
+     * segments, but must at least have all the segments of the `UrlTree` in question.
      */
     paths: 'exact' | 'subset';
     /**
@@ -2491,7 +2491,7 @@ export declare class RouterEvent {
  * For example, `['/team', teamId, 'user', userName, {details: true}]`
  * generates a link to `/team/11/user/bob;details=true`.
  *
- * Multiple static segments can be merged into one term and combined with dynamic segements.
+ * Multiple static segments can be merged into one term and combined with dynamic segments.
  * For example, `['/team/11/user', userName, {details: true}]`
  *
  * The input that you provide to the link is treated as a delta to the current URL.
