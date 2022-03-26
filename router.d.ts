@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.9+3.sha-3143494
+ * @license Angular v14.0.0-next.9+4.sha-96c7cc9
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -921,6 +921,8 @@ export declare interface ExtraOptions {
      * resolution is set to `'legacy'`.
      *
      * The default in v11 is `corrected`.
+     *
+     * @deprecated
      */
     relativeLinkResolution?: 'legacy' | 'corrected';
     /**
@@ -2236,6 +2238,8 @@ export declare class Router {
     /**
      * Enables a bug fix that corrects relative link resolution in components with empty paths.
      * @see `RouterModule`
+     *
+     * @deprecated
      */
     relativeLinkResolution: 'legacy' | 'corrected';
     /**
