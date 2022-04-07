@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.11+5.sha-f8f3ab3
+ * @license Angular v14.0.0-next.11+4.sha-5adfe8e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1129,7 +1129,7 @@ export declare type LoadChildren = LoadChildrenCallback;
  * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any> | any>;
 
 /**
  * Information about a navigation operation.
