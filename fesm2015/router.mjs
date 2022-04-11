@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.11+23.sha-f1630bb
+ * @license Angular v14.0.0-next.11+30.sha-0facba5
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1518,7 +1518,7 @@ class ActivatedRouteSnapshot {
     /** The outlet name of the route */
     outlet, 
     /** The component of the route */
-    component, routeConfig, urlSegment, lastPathIndex, resolve) {
+    component, routeConfig, urlSegment, lastPathIndex, resolve, correctedLastPathIndex) {
         this.url = url;
         this.params = params;
         this.queryParams = queryParams;
@@ -1529,6 +1529,7 @@ class ActivatedRouteSnapshot {
         this.routeConfig = routeConfig;
         this._urlSegment = urlSegment;
         this._lastPathIndex = lastPathIndex;
+        this._correctedLastPathIndex = correctedLastPathIndex !== null && correctedLastPathIndex !== void 0 ? correctedLastPathIndex : lastPathIndex;
         this._resolve = resolve;
     }
     /** The root of the router state */
@@ -1720,11 +1721,22 @@ function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     if (nav.toRoot()) {
         return tree(urlTree.root, urlTree.root, new UrlSegmentGroup([], {}), queryParams, fragment);
     }
-    const startingPosition = findStartingPosition(nav, urlTree, route);
-    const segmentGroup = startingPosition.processChildren ?
-        updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, nav.commands) :
-        updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
-    return tree(urlTree.root, startingPosition.segmentGroup, segmentGroup, queryParams, fragment);
+    function createTreeUsingPathIndex(lastPathIndex) {
+        const startingPosition = findStartingPosition(nav, urlTree, route.snapshot._urlSegment, lastPathIndex);
+        const segmentGroup = startingPosition.processChildren ?
+            updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, nav.commands) :
+            updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
+        return tree(urlTree.root, startingPosition.segmentGroup, segmentGroup, queryParams, fragment);
+    }
+    const result = createTreeUsingPathIndex(route.snapshot._lastPathIndex);
+    // Check if application is relying on `relativeLinkResolution: 'legacy'`
+    if (typeof ngDevMode === 'undefined' || !!ngDevMode) {
+        const correctedResult = createTreeUsingPathIndex(route.snapshot._correctedLastPathIndex);
+        if (correctedResult.toString() !== result.toString()) {
+            console.warn(`relativeLinkResolution: 'legacy' is deprecated and will be removed in a future version of Angular. The link to ${result.toString()} will change to ${correctedResult.toString()} if the code is not updated before then.`);
+        }
+    }
+    return result;
 }
 function isMatrixParams(command) {
     return typeof command === 'object' && command != null && !command.outlets && !command.segmentPath;
@@ -1829,12 +1841,11 @@ class Position {
         this.index = index;
     }
 }
-function findStartingPosition(nav, tree, route) {
+function findStartingPosition(nav, tree, segmentGroup, lastPathIndex) {
     if (nav.isAbsolute) {
         return new Position(tree.root, true, 0);
     }
-    if (route.snapshot._lastPathIndex === -1) {
-        const segmentGroup = route.snapshot._urlSegment;
+    if (lastPathIndex === -1) {
         // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
         // see issue #26224, #13011, #35687
         // However, if the ActivatedRoute is the root we should process children like above.
@@ -1842,8 +1853,8 @@ function findStartingPosition(nav, tree, route) {
         return new Position(segmentGroup, processChildren, 0);
     }
     const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
-    const index = route.snapshot._lastPathIndex + modifier;
-    return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
+    const index = lastPathIndex + modifier;
+    return createPositionApplyingDoubleDots(segmentGroup, index, nav.numberOfDoubleDots);
 }
 function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
     let g = group;
@@ -2527,9 +2538,9 @@ class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: i0.ComponentFactoryResolver }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: i0.ComponentFactoryResolver }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
         }], ctorParameters: function () {
@@ -2585,9 +2596,9 @@ class OutletInjector {
  */
 class ɵEmptyOutletComponent {
 }
-ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, directives: [{ type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
+ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, directives: [{ type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
             type: Component,
             args: [{ template: `<router-outlet></router-outlet>` }]
         }] });
@@ -2783,6 +2794,9 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedS
             s._sourceSegment = segmentGroup;
             if (relativeLinkResolution === 'legacy') {
                 s._segmentIndexShift = segmentGroup.segments.length;
+                if (typeof ngDevMode === 'undefined' || !!ngDevMode) {
+                    s._segmentIndexShiftCorrected = consumedSegments.length;
+                }
             }
             else {
                 s._segmentIndexShift = consumedSegments.length;
@@ -3520,6 +3534,7 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
 class NoMatch {
 }
 function newObservableError(e) {
@@ -3635,7 +3650,13 @@ class Recognizer {
         let remainingSegments = [];
         if (route.path === '**') {
             const params = segments.length > 0 ? last(segments).parameters : {};
-            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
+            const pathIndexShift = getPathIndexShift(rawSegment) + segments.length;
+            snapshot = new ActivatedRouteSnapshot(segments, params, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), pathIndexShift, getResolve(route), 
+            // NG_DEV_MODE is used to prevent the getCorrectedPathIndexShift function from affecting
+            // production bundle size. This value is intended only to surface a warning to users
+            // depending on `relativeLinkResolution: 'legacy'` in dev mode.
+            (NG_DEV_MODE ? getCorrectedPathIndexShift(rawSegment) + segments.length :
+                pathIndexShift));
         }
         else {
             const result = match(rawSegment, route, segments);
@@ -3644,7 +3665,9 @@ class Recognizer {
             }
             consumedSegments = result.consumedSegments;
             remainingSegments = result.remainingSegments;
-            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+            const pathIndexShift = getPathIndexShift(rawSegment) + consumedSegments.length;
+            snapshot = new ActivatedRouteSnapshot(consumedSegments, result.parameters, Object.freeze(Object.assign({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component, route, getSourceSegmentGroup(rawSegment), pathIndexShift, getResolve(route), (NG_DEV_MODE ? getCorrectedPathIndexShift(rawSegment) + consumedSegments.length :
+                pathIndexShift));
         }
         const childConfig = getChildConfig(route);
         const { segmentGroup, slicedSegments } = split(rawSegment, consumedSegments, remainingSegments, 
@@ -3753,11 +3776,22 @@ function getSourceSegmentGroup(segmentGroup) {
     return s;
 }
 function getPathIndexShift(segmentGroup) {
+    var _a, _b;
     let s = segmentGroup;
-    let res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    let res = (_a = s._segmentIndexShift) !== null && _a !== void 0 ? _a : 0;
     while (s._sourceSegment) {
         s = s._sourceSegment;
-        res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
+        res += (_b = s._segmentIndexShift) !== null && _b !== void 0 ? _b : 0;
+    }
+    return res - 1;
+}
+function getCorrectedPathIndexShift(segmentGroup) {
+    var _a, _b, _c, _d;
+    let s = segmentGroup;
+    let res = (_b = (_a = s._segmentIndexShiftCorrected) !== null && _a !== void 0 ? _a : s._segmentIndexShift) !== null && _b !== void 0 ? _b : 0;
+    while (s._sourceSegment) {
+        s = s._sourceSegment;
+        res += (_d = (_c = s._segmentIndexShiftCorrected) !== null && _c !== void 0 ? _c : s._segmentIndexShift) !== null && _d !== void 0 ? _d : 0;
     }
     return res - 1;
 }
@@ -4975,9 +5009,9 @@ class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: Router });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: Router });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: Router, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: i3.Location }, { type: i0.Injector }, { type: i0.Compiler }, { type: undefined }]; } });
 function validateCommands(commands) {
@@ -5169,9 +5203,9 @@ class RouterLink {
         });
     }
 }
-RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLink, decorators: [{
+RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{ selector: ':not(a):not(area)[routerLink]' }]
         }], ctorParameters: function () {
@@ -5290,9 +5324,9 @@ class RouterLinkWithHref {
         });
     }
 }
-RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLinkWithHref, decorators: [{
+RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLinkWithHref, decorators: [{
             type: Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, propDecorators: { target: [{
@@ -5503,9 +5537,9 @@ class RouterLinkActive {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterLinkActive, decorators: [{
+RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -5609,9 +5643,9 @@ class DefaultTitleStrategy extends TitleStrategy {
         }
     }
 }
-DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
+DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Title }]; } });
@@ -5729,9 +5763,9 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.Injector }, { token: PreloadingStrategy }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterPreloader });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterPreloader, decorators: [{
+RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.Injector }, { token: PreloadingStrategy }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterPreloader });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; } });
 
@@ -5810,9 +5844,9 @@ class RouterScroller {
         }
     }
 }
-RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterScroller });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterScroller, decorators: [{
+RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterScroller });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i3.ViewportScroller }, { type: undefined }]; } });
 
@@ -5953,10 +5987,10 @@ class RouterModule {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     }
 }
-RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterModule, decorators: [{
+RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
+RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: ROUTER_DIRECTIVES,
@@ -6138,9 +6172,9 @@ class RouterInitializer {
         this.destroyed = true;
     }
 }
-RouterInitializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterInitializer, deps: [{ token: i0.Injector }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterInitializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterInitializer });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+23.sha-f1630bb", ngImport: i0, type: RouterInitializer, decorators: [{
+RouterInitializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterInitializer, deps: [{ token: i0.Injector }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterInitializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterInitializer });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.11+30.sha-0facba5", ngImport: i0, type: RouterInitializer, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Injector }]; } });
 function getAppInitializer(r) {
@@ -6180,7 +6214,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('14.0.0-next.11+23.sha-f1630bb');
+const VERSION = new Version('14.0.0-next.11+30.sha-0facba5');
 
 /**
  * @license
