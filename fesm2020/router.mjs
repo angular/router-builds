@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+1.sha-e250db4
+ * @license Angular v14.0.0-next.13+2.sha-000363e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2020,285 +2020,6 @@ function compare(path, params, segment) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent) => map(t => {
-    new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent)
-        .activate(rootContexts);
-    return t;
-});
-class ActivateRoutes {
-    constructor(routeReuseStrategy, futureState, currState, forwardEvent) {
-        this.routeReuseStrategy = routeReuseStrategy;
-        this.futureState = futureState;
-        this.currState = currState;
-        this.forwardEvent = forwardEvent;
-    }
-    activate(parentContexts) {
-        const futureRoot = this.futureState._root;
-        const currRoot = this.currState ? this.currState._root : null;
-        this.deactivateChildRoutes(futureRoot, currRoot, parentContexts);
-        advanceActivatedRoute(this.futureState.root);
-        this.activateChildRoutes(futureRoot, currRoot, parentContexts);
-    }
-    // De-activate the child route that are not re-used for the future state
-    deactivateChildRoutes(futureNode, currNode, contexts) {
-        const children = nodeChildrenAsMap(currNode);
-        // Recurse on the routes active in the future state to de-activate deeper children
-        futureNode.children.forEach(futureChild => {
-            const childOutletName = futureChild.value.outlet;
-            this.deactivateRoutes(futureChild, children[childOutletName], contexts);
-            delete children[childOutletName];
-        });
-        // De-activate the routes that will not be re-used
-        forEach(children, (v, childName) => {
-            this.deactivateRouteAndItsChildren(v, contexts);
-        });
-    }
-    deactivateRoutes(futureNode, currNode, parentContext) {
-        const future = futureNode.value;
-        const curr = currNode ? currNode.value : null;
-        if (future === curr) {
-            // Reusing the node, check to see if the children need to be de-activated
-            if (future.component) {
-                // If we have a normal route, we need to go through an outlet.
-                const context = parentContext.getContext(future.outlet);
-                if (context) {
-                    this.deactivateChildRoutes(futureNode, currNode, context.children);
-                }
-            }
-            else {
-                // if we have a componentless route, we recurse but keep the same outlet map.
-                this.deactivateChildRoutes(futureNode, currNode, parentContext);
-            }
-        }
-        else {
-            if (curr) {
-                // Deactivate the current route which will not be re-used
-                this.deactivateRouteAndItsChildren(currNode, parentContext);
-            }
-        }
-    }
-    deactivateRouteAndItsChildren(route, parentContexts) {
-        // If there is no component, the Route is never attached to an outlet (because there is no
-        // component to attach).
-        if (route.value.component && this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
-            this.detachAndStoreRouteSubtree(route, parentContexts);
-        }
-        else {
-            this.deactivateRouteAndOutlet(route, parentContexts);
-        }
-    }
-    detachAndStoreRouteSubtree(route, parentContexts) {
-        const context = parentContexts.getContext(route.value.outlet);
-        const contexts = context && route.value.component ? context.children : parentContexts;
-        const children = nodeChildrenAsMap(route);
-        for (const childOutlet of Object.keys(children)) {
-            this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
-        }
-        if (context && context.outlet) {
-            const componentRef = context.outlet.detach();
-            const contexts = context.children.onOutletDeactivated();
-            this.routeReuseStrategy.store(route.value.snapshot, { componentRef, route, contexts });
-        }
-    }
-    deactivateRouteAndOutlet(route, parentContexts) {
-        const context = parentContexts.getContext(route.value.outlet);
-        // The context could be `null` if we are on a componentless route but there may still be
-        // children that need deactivating.
-        const contexts = context && route.value.component ? context.children : parentContexts;
-        const children = nodeChildrenAsMap(route);
-        for (const childOutlet of Object.keys(children)) {
-            this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
-        }
-        if (context && context.outlet) {
-            // Destroy the component
-            context.outlet.deactivate();
-            // Destroy the contexts for all the outlets that were in the component
-            context.children.onOutletDeactivated();
-            // Clear the information about the attached component on the context but keep the reference to
-            // the outlet.
-            context.attachRef = null;
-            context.resolver = null;
-            context.route = null;
-        }
-    }
-    activateChildRoutes(futureNode, currNode, contexts) {
-        const children = nodeChildrenAsMap(currNode);
-        futureNode.children.forEach(c => {
-            this.activateRoutes(c, children[c.value.outlet], contexts);
-            this.forwardEvent(new ActivationEnd(c.value.snapshot));
-        });
-        if (futureNode.children.length) {
-            this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
-        }
-    }
-    activateRoutes(futureNode, currNode, parentContexts) {
-        const future = futureNode.value;
-        const curr = currNode ? currNode.value : null;
-        advanceActivatedRoute(future);
-        // reusing the node
-        if (future === curr) {
-            if (future.component) {
-                // If we have a normal route, we need to go through an outlet.
-                const context = parentContexts.getOrCreateContext(future.outlet);
-                this.activateChildRoutes(futureNode, currNode, context.children);
-            }
-            else {
-                // if we have a componentless route, we recurse but keep the same outlet map.
-                this.activateChildRoutes(futureNode, currNode, parentContexts);
-            }
-        }
-        else {
-            if (future.component) {
-                // if we have a normal route, we need to place the component into the outlet and recurse.
-                const context = parentContexts.getOrCreateContext(future.outlet);
-                if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
-                    const stored = this.routeReuseStrategy.retrieve(future.snapshot);
-                    this.routeReuseStrategy.store(future.snapshot, null);
-                    context.children.onOutletReAttached(stored.contexts);
-                    context.attachRef = stored.componentRef;
-                    context.route = stored.route.value;
-                    if (context.outlet) {
-                        // Attach right away when the outlet has already been instantiated
-                        // Otherwise attach from `RouterOutlet.ngOnInit` when it is instantiated
-                        context.outlet.attach(stored.componentRef, stored.route.value);
-                    }
-                    advanceActivatedRoute(stored.route.value);
-                    this.activateChildRoutes(futureNode, null, context.children);
-                }
-                else {
-                    const config = parentLoadedConfig(future.snapshot);
-                    const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
-                    context.attachRef = null;
-                    context.route = future;
-                    context.resolver = cmpFactoryResolver;
-                    if (context.outlet) {
-                        // Activate the outlet when it has already been instantiated
-                        // Otherwise it will get activated from its `ngOnInit` when instantiated
-                        context.outlet.activateWith(future, cmpFactoryResolver);
-                    }
-                    this.activateChildRoutes(futureNode, null, context.children);
-                }
-            }
-            else {
-                // if we have a componentless route, we recurse but keep the same outlet map.
-                this.activateChildRoutes(futureNode, null, parentContexts);
-            }
-        }
-    }
-}
-function parentLoadedConfig(snapshot) {
-    for (let s = snapshot.parent; s; s = s.parent) {
-        const route = s.routeConfig;
-        if (route && route._loadedConfig)
-            return route._loadedConfig;
-        if (route && route.component)
-            return null;
-    }
-    return null;
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-class LoadedRouterConfig {
-    constructor(routes, module) {
-        this.routes = routes;
-        this.module = module;
-    }
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Simple function check, but generic so type inference will flow. Example:
- *
- * function product(a: number, b: number) {
- *   return a * b;
- * }
- *
- * if (isFunction<product>(fn)) {
- *   return fn(1, 2);
- * } else {
- *   throw "Must provide the `product` function";
- * }
- */
-function isFunction(v) {
-    return typeof v === 'function';
-}
-function isBoolean(v) {
-    return typeof v === 'boolean';
-}
-function isUrlTree(v) {
-    return v instanceof UrlTree;
-}
-function isCanLoad(guard) {
-    return guard && isFunction(guard.canLoad);
-}
-function isCanActivate(guard) {
-    return guard && isFunction(guard.canActivate);
-}
-function isCanActivateChild(guard) {
-    return guard && isFunction(guard.canActivateChild);
-}
-function isCanDeactivate(guard) {
-    return guard && isFunction(guard.canDeactivate);
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-const INITIAL_VALUE = Symbol('INITIAL_VALUE');
-function prioritizedGuardValue() {
-    return switchMap(obs => {
-        return combineLatest(obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
-            .pipe(scan((acc, list) => {
-            let isPending = false;
-            return list.reduce((innerAcc, val, i) => {
-                if (innerAcc !== INITIAL_VALUE)
-                    return innerAcc;
-                // Toggle pending flag if any values haven't been set yet
-                if (val === INITIAL_VALUE)
-                    isPending = true;
-                // Any other return values are only valid if we haven't yet hit a pending
-                // call. This guarantees that in the case of a guard at the bottom of the
-                // tree that returns a redirect, we will wait for the higher priority
-                // guard at the top to finish before performing the redirect.
-                if (!isPending) {
-                    // Early return when we hit a `false` value as that should always
-                    // cancel navigation
-                    if (val === false)
-                        return val;
-                    if (i === list.length - 1 || isUrlTree(val)) {
-                        return val;
-                    }
-                }
-                return innerAcc;
-            }, acc);
-        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
-        take(1));
-    });
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Store contextual information about a `RouterOutlet`
  *
@@ -2541,9 +2262,9 @@ class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: i0.ComponentFactoryResolver }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: i0.ComponentFactoryResolver }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
         }], ctorParameters: function () { return [{ type: ChildrenOutletContexts }, { type: i0.ViewContainerRef }, { type: i0.ComponentFactoryResolver }, { type: undefined, decorators: [{
@@ -2597,9 +2318,9 @@ class OutletInjector {
  */
 class ɵEmptyOutletComponent {
 }
-ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, directives: [{ type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
+ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, directives: [{ type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
             type: Component,
             args: [{ template: `<router-outlet></router-outlet>` }]
         }] });
@@ -2718,6 +2439,293 @@ function sortByMatchingOutlets(routes, outletName) {
     const sortedConfig = routes.filter(r => getOutlet(r) === outletName);
     sortedConfig.push(...routes.filter(r => getOutlet(r) !== outletName));
     return sortedConfig;
+}
+/**
+ * Gets the first loaded config in the snapshot's parent tree.
+ *
+ * Returns `null` if there is no parent lazy loaded config.
+ *
+ * Generally used for retrieving the injector to use for getting tokens for guards/resolvers and
+ * also used for getting the correct injector to use for creating components.
+ */
+function getClosestLoadedConfig(snapshot) {
+    if (!snapshot)
+        return null;
+    for (let s = snapshot.parent; s; s = s.parent) {
+        const route = s.routeConfig;
+        if (route && route._loadedConfig)
+            return route._loadedConfig;
+    }
+    return null;
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent) => map(t => {
+    new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent)
+        .activate(rootContexts);
+    return t;
+});
+class ActivateRoutes {
+    constructor(routeReuseStrategy, futureState, currState, forwardEvent) {
+        this.routeReuseStrategy = routeReuseStrategy;
+        this.futureState = futureState;
+        this.currState = currState;
+        this.forwardEvent = forwardEvent;
+    }
+    activate(parentContexts) {
+        const futureRoot = this.futureState._root;
+        const currRoot = this.currState ? this.currState._root : null;
+        this.deactivateChildRoutes(futureRoot, currRoot, parentContexts);
+        advanceActivatedRoute(this.futureState.root);
+        this.activateChildRoutes(futureRoot, currRoot, parentContexts);
+    }
+    // De-activate the child route that are not re-used for the future state
+    deactivateChildRoutes(futureNode, currNode, contexts) {
+        const children = nodeChildrenAsMap(currNode);
+        // Recurse on the routes active in the future state to de-activate deeper children
+        futureNode.children.forEach(futureChild => {
+            const childOutletName = futureChild.value.outlet;
+            this.deactivateRoutes(futureChild, children[childOutletName], contexts);
+            delete children[childOutletName];
+        });
+        // De-activate the routes that will not be re-used
+        forEach(children, (v, childName) => {
+            this.deactivateRouteAndItsChildren(v, contexts);
+        });
+    }
+    deactivateRoutes(futureNode, currNode, parentContext) {
+        const future = futureNode.value;
+        const curr = currNode ? currNode.value : null;
+        if (future === curr) {
+            // Reusing the node, check to see if the children need to be de-activated
+            if (future.component) {
+                // If we have a normal route, we need to go through an outlet.
+                const context = parentContext.getContext(future.outlet);
+                if (context) {
+                    this.deactivateChildRoutes(futureNode, currNode, context.children);
+                }
+            }
+            else {
+                // if we have a componentless route, we recurse but keep the same outlet map.
+                this.deactivateChildRoutes(futureNode, currNode, parentContext);
+            }
+        }
+        else {
+            if (curr) {
+                // Deactivate the current route which will not be re-used
+                this.deactivateRouteAndItsChildren(currNode, parentContext);
+            }
+        }
+    }
+    deactivateRouteAndItsChildren(route, parentContexts) {
+        // If there is no component, the Route is never attached to an outlet (because there is no
+        // component to attach).
+        if (route.value.component && this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
+            this.detachAndStoreRouteSubtree(route, parentContexts);
+        }
+        else {
+            this.deactivateRouteAndOutlet(route, parentContexts);
+        }
+    }
+    detachAndStoreRouteSubtree(route, parentContexts) {
+        const context = parentContexts.getContext(route.value.outlet);
+        const contexts = context && route.value.component ? context.children : parentContexts;
+        const children = nodeChildrenAsMap(route);
+        for (const childOutlet of Object.keys(children)) {
+            this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
+        }
+        if (context && context.outlet) {
+            const componentRef = context.outlet.detach();
+            const contexts = context.children.onOutletDeactivated();
+            this.routeReuseStrategy.store(route.value.snapshot, { componentRef, route, contexts });
+        }
+    }
+    deactivateRouteAndOutlet(route, parentContexts) {
+        const context = parentContexts.getContext(route.value.outlet);
+        // The context could be `null` if we are on a componentless route but there may still be
+        // children that need deactivating.
+        const contexts = context && route.value.component ? context.children : parentContexts;
+        const children = nodeChildrenAsMap(route);
+        for (const childOutlet of Object.keys(children)) {
+            this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
+        }
+        if (context && context.outlet) {
+            // Destroy the component
+            context.outlet.deactivate();
+            // Destroy the contexts for all the outlets that were in the component
+            context.children.onOutletDeactivated();
+            // Clear the information about the attached component on the context but keep the reference to
+            // the outlet.
+            context.attachRef = null;
+            context.resolver = null;
+            context.route = null;
+        }
+    }
+    activateChildRoutes(futureNode, currNode, contexts) {
+        const children = nodeChildrenAsMap(currNode);
+        futureNode.children.forEach(c => {
+            this.activateRoutes(c, children[c.value.outlet], contexts);
+            this.forwardEvent(new ActivationEnd(c.value.snapshot));
+        });
+        if (futureNode.children.length) {
+            this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
+        }
+    }
+    activateRoutes(futureNode, currNode, parentContexts) {
+        const future = futureNode.value;
+        const curr = currNode ? currNode.value : null;
+        advanceActivatedRoute(future);
+        // reusing the node
+        if (future === curr) {
+            if (future.component) {
+                // If we have a normal route, we need to go through an outlet.
+                const context = parentContexts.getOrCreateContext(future.outlet);
+                this.activateChildRoutes(futureNode, currNode, context.children);
+            }
+            else {
+                // if we have a componentless route, we recurse but keep the same outlet map.
+                this.activateChildRoutes(futureNode, currNode, parentContexts);
+            }
+        }
+        else {
+            if (future.component) {
+                // if we have a normal route, we need to place the component into the outlet and recurse.
+                const context = parentContexts.getOrCreateContext(future.outlet);
+                if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
+                    const stored = this.routeReuseStrategy.retrieve(future.snapshot);
+                    this.routeReuseStrategy.store(future.snapshot, null);
+                    context.children.onOutletReAttached(stored.contexts);
+                    context.attachRef = stored.componentRef;
+                    context.route = stored.route.value;
+                    if (context.outlet) {
+                        // Attach right away when the outlet has already been instantiated
+                        // Otherwise attach from `RouterOutlet.ngOnInit` when it is instantiated
+                        context.outlet.attach(stored.componentRef, stored.route.value);
+                    }
+                    advanceActivatedRoute(stored.route.value);
+                    this.activateChildRoutes(futureNode, null, context.children);
+                }
+                else {
+                    const config = getClosestLoadedConfig(future.snapshot);
+                    const cmpFactoryResolver = config ? config.module.componentFactoryResolver : null;
+                    context.attachRef = null;
+                    context.route = future;
+                    context.resolver = cmpFactoryResolver;
+                    if (context.outlet) {
+                        // Activate the outlet when it has already been instantiated
+                        // Otherwise it will get activated from its `ngOnInit` when instantiated
+                        context.outlet.activateWith(future, cmpFactoryResolver);
+                    }
+                    this.activateChildRoutes(futureNode, null, context.children);
+                }
+            }
+            else {
+                // if we have a componentless route, we recurse but keep the same outlet map.
+                this.activateChildRoutes(futureNode, null, parentContexts);
+            }
+        }
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+class LoadedRouterConfig {
+    constructor(routes, module) {
+        this.routes = routes;
+        this.module = module;
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Simple function check, but generic so type inference will flow. Example:
+ *
+ * function product(a: number, b: number) {
+ *   return a * b;
+ * }
+ *
+ * if (isFunction<product>(fn)) {
+ *   return fn(1, 2);
+ * } else {
+ *   throw "Must provide the `product` function";
+ * }
+ */
+function isFunction(v) {
+    return typeof v === 'function';
+}
+function isBoolean(v) {
+    return typeof v === 'boolean';
+}
+function isUrlTree(v) {
+    return v instanceof UrlTree;
+}
+function isCanLoad(guard) {
+    return guard && isFunction(guard.canLoad);
+}
+function isCanActivate(guard) {
+    return guard && isFunction(guard.canActivate);
+}
+function isCanActivateChild(guard) {
+    return guard && isFunction(guard.canActivateChild);
+}
+function isCanDeactivate(guard) {
+    return guard && isFunction(guard.canDeactivate);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const INITIAL_VALUE = Symbol('INITIAL_VALUE');
+function prioritizedGuardValue() {
+    return switchMap(obs => {
+        return combineLatest(obs.map(o => o.pipe(take(1), startWith(INITIAL_VALUE))))
+            .pipe(scan((acc, list) => {
+            let isPending = false;
+            return list.reduce((innerAcc, val, i) => {
+                if (innerAcc !== INITIAL_VALUE)
+                    return innerAcc;
+                // Toggle pending flag if any values haven't been set yet
+                if (val === INITIAL_VALUE)
+                    isPending = true;
+                // Any other return values are only valid if we haven't yet hit a pending
+                // call. This guarantees that in the case of a guard at the bottom of the
+                // tree that returns a redirect, we will wait for the higher priority
+                // guard at the top to finish before performing the redirect.
+                if (!isPending) {
+                    // Early return when we hit a `false` value as that should always
+                    // cancel navigation
+                    if (val === false)
+                        return val;
+                    if (i === list.length - 1 || isUrlTree(val)) {
+                        return val;
+                    }
+                }
+                return innerAcc;
+            }, acc);
+        }, INITIAL_VALUE), filter(item => item !== INITIAL_VALUE), map(item => isUrlTree(item) ? item : item === true), //
+        take(1));
+    });
 }
 
 /**
@@ -3281,16 +3289,6 @@ function getToken(token, snapshot, moduleInjector) {
     const config = getClosestLoadedConfig(snapshot);
     const injector = config ? config.module.injector : moduleInjector;
     return injector.get(token);
-}
-function getClosestLoadedConfig(snapshot) {
-    if (!snapshot)
-        return null;
-    for (let s = snapshot.parent; s; s = s.parent) {
-        const route = s.routeConfig;
-        if (route && route._loadedConfig)
-            return route._loadedConfig;
-    }
-    return null;
 }
 function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks = {
     canDeactivateChecks: [],
@@ -5021,9 +5019,9 @@ class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: Router });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: Router });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: Router, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: i3.Location }, { type: i0.Injector }, { type: i0.Compiler }, { type: undefined }]; } });
 function validateCommands(commands) {
@@ -5222,9 +5220,9 @@ class RouterLink {
         });
     }
 }
-RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLink, decorators: [{
+RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{ selector: ':not(a):not(area)[routerLink]' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: ActivatedRoute }, { type: undefined, decorators: [{
@@ -5341,9 +5339,9 @@ class RouterLinkWithHref {
         });
     }
 }
-RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLinkWithHref, decorators: [{
+RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLinkWithHref, decorators: [{
             type: Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, propDecorators: { target: [{
@@ -5552,9 +5550,9 @@ class RouterLinkActive {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterLinkActive, decorators: [{
+RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -5655,9 +5653,9 @@ class DefaultTitleStrategy extends TitleStrategy {
         }
     }
 }
-DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
+DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Title }]; } });
@@ -5775,9 +5773,9 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.Injector }, { token: PreloadingStrategy }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterPreloader });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterPreloader, decorators: [{
+RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.Injector }, { token: PreloadingStrategy }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterPreloader });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i0.Compiler }, { type: i0.Injector }, { type: PreloadingStrategy }]; } });
 
@@ -5863,9 +5861,9 @@ class RouterScroller {
         }
     }
 }
-RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterScroller });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterScroller, decorators: [{
+RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterScroller });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i3.ViewportScroller }, { type: undefined }]; } });
 
@@ -6006,10 +6004,10 @@ class RouterModule {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     }
 }
-RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterModule, decorators: [{
+RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
+RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: ROUTER_DIRECTIVES,
@@ -6188,9 +6186,9 @@ class RouterInitializer {
         this.destroyed = true;
     }
 }
-RouterInitializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterInitializer, deps: [{ token: i0.Injector }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterInitializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterInitializer });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+1.sha-e250db4", ngImport: i0, type: RouterInitializer, decorators: [{
+RouterInitializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterInitializer, deps: [{ token: i0.Injector }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterInitializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterInitializer });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+2.sha-000363e", ngImport: i0, type: RouterInitializer, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Injector }]; } });
 function getAppInitializer(r) {
@@ -6230,7 +6228,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('14.0.0-next.13+1.sha-e250db4');
+const VERSION = new Version('14.0.0-next.13+2.sha-000363e');
 
 /**
  * @license
