@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+30.sha-aa966fd
+ * @license Angular v14.0.0-next.13+34.sha-ea8256f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -10,6 +10,7 @@ import { Compiler } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { EnvironmentInjector } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
@@ -1130,6 +1131,11 @@ export declare type LoadChildren = LoadChildrenCallback;
  * @publicApi
  */
 export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any>>;
+
+declare interface LoadedRouterConfig {
+    routes: Route[];
+    injector: EnvironmentInjector | undefined;
+}
 
 /**
  * Information about a navigation operation.
@@ -2466,6 +2472,19 @@ export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
  */
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
+declare class RouterConfigLoader {
+    private injector;
+    private compiler;
+    private routeLoaders;
+    onLoadStartListener?: (r: Route) => void;
+    onLoadEndListener?: (r: Route) => void;
+    constructor(injector: Injector, compiler: Compiler);
+    load(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
+    private loadModuleFactory;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
+}
+
 /**
  * @description
  *
@@ -3182,7 +3201,7 @@ export declare class RouterPreloader implements OnDestroy {
     private preloadingStrategy;
     private loader;
     private subscription?;
-    constructor(router: Router, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy);
+    constructor(router: Router, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy, loader: RouterConfigLoader);
     setUpPreloading(): void;
     preload(): Observable<any>;
     /** @nodoc */
