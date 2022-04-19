@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+38.sha-ceffded
+ * @license Angular v14.0.0-next.13+39.sha-5d15595
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -101,9 +101,9 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+38.sha-ceffded", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.13+38.sha-ceffded", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.13+38.sha-ceffded", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.13+39.sha-5d15595", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.13+39.sha-5d15595", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.13+39.sha-5d15595", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         EXTRA_ROUTER_TESTING_PROVIDERS,
         { provide: Location, useClass: SpyLocation },
@@ -128,7 +128,7 @@ RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", ver
         { provide: PreloadingStrategy, useExisting: NoPreloading },
         provideRoutes([]),
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+38.sha-ceffded", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.13+39.sha-5d15595", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
