@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+60.sha-4e0957a
+ * @license Angular v14.0.0-next.13+62.sha-1d2f5c1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1417,7 +1417,12 @@ export declare class NoPreloading implements PreloadingStrategy {
 export declare class OutletContext {
     outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
+    /**
+     * @deprecated Passing a resolver to retrieve a component factory is not required and is
+     *     deprecated since v14.
+     */
     resolver: ComponentFactoryResolver | null;
+    injector: EnvironmentInjector | null;
     children: ChildrenOutletContexts;
     attachRef: ComponentRef<any> | null;
 }
@@ -3076,8 +3081,8 @@ export declare class RouterModule {
 export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     private parentContexts;
     private location;
-    private resolver;
     private changeDetector;
+    private environmentInjector;
     private activated;
     private _activatedRoute;
     private name;
@@ -3093,7 +3098,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      * subtree.
      */
     detachEvents: EventEmitter<unknown>;
-    constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, resolver: ComponentFactoryResolver, name: string, changeDetector: ChangeDetectorRef);
+    constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, name: string, changeDetector: ChangeDetectorRef, environmentInjector: EnvironmentInjector);
     /** @nodoc */
     ngOnDestroy(): void;
     /** @nodoc */
@@ -3115,8 +3120,8 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
-    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, [null, null, null, { attribute: "name"; }, null]>;
+    activateWith(activatedRoute: ActivatedRoute, resolverOrInjector?: ComponentFactoryResolver | EnvironmentInjector | null): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, [null, null, { attribute: "name"; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, false>;
 }
 
@@ -3152,6 +3157,13 @@ export declare interface RouterOutletContract {
     activatedRoute: ActivatedRoute | null;
     /**
      * Called by the `Router` when the outlet should activate (create a component).
+     */
+    activateWith(activatedRoute: ActivatedRoute, environmnetInjector: EnvironmentInjector | null): void;
+    /**
+     * Called by the `Router` when the outlet should activate (create a component).
+     *
+     * @deprecated Passing a resolver to retrieve a component factory is not required and is
+     *     deprecated since v14.
      */
     activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
     /**
