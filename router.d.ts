@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+43.sha-4ad7c2e
+ * @license Angular v14.0.0-next.13+44.sha-989e840
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -65,7 +65,7 @@ export declare class ActivatedRoute {
     /** The outlet name of the route, a constant. */
     outlet: string;
     /** The component of the route, a constant. */
-    component: Type<any> | string | null;
+    component: Type<any> | null;
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
     /** The configuration used to match this route. */
@@ -149,7 +149,7 @@ export declare class ActivatedRouteSnapshot {
     /** The outlet name of the route */
     outlet: string;
     /** The component of the route */
-    component: Type<any> | string | null;
+    component: Type<any> | null;
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /** The root of the router state */
