@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+59.sha-ba45428
+ * @license Angular v14.0.0-next.13+60.sha-4e0957a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2056,6 +2056,15 @@ export declare interface Route {
      * parameters of the route change.
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
+    /**
+     * A `Provider` array to use for this `Route` and its `children`.
+     *
+     * The `Router` will create a new `EnvironmentInjector` for this
+     * `Route` and use it for this `Route` and its `children`. If this
+     * route also has a `loadChildren` function which returns an `NgModuleRef`, this injector will be
+     * used as the parent of the lazy loaded module.
+     */
+    providers?: Provider[];
 }
 
 /**
@@ -3201,7 +3210,7 @@ export declare class RouterPreloader implements OnDestroy {
     private preloadingStrategy;
     private loader;
     private subscription?;
-    constructor(router: Router, compiler: Compiler, injector: Injector, preloadingStrategy: PreloadingStrategy, loader: RouterConfigLoader);
+    constructor(router: Router, compiler: Compiler, injector: EnvironmentInjector, preloadingStrategy: PreloadingStrategy, loader: RouterConfigLoader);
     setUpPreloading(): void;
     preload(): Observable<any>;
     /** @nodoc */
