@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.13+62.sha-1d2f5c1
+ * @license Angular v14.0.0-next.14+7.sha-9e4c4bc
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2802,6 +2802,16 @@ export declare class RouterLink implements OnChanges {
  * </div>
  * ```
  *
+ * The `RouterLinkActive` directive can also be used to set the aria-current attribute
+ * to provide an alternative distinction for active elements to visually impaired users.
+ *
+ * For example, the following code adds the 'active' class to the Home Page link when it is
+ * indeed active and in such case also sets its aria-current attribute to 'page':
+ *
+ * ```
+ * <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home Page</a>
+ * ```
+ *
  * @ngModule RouterModule
  *
  * @publicApi
@@ -2829,6 +2839,14 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     routerLinkActiveOptions: {
         exact: boolean;
     } | IsActiveMatchOptions;
+    /**
+     * Aria-current attribute to apply when the router link is active.
+     *
+     * Possible values: `'page'` | `'step'` | `'location'` | `'date'` | `'time'` | `true` | `false`.
+     *
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-current}
+     */
+    ariaCurrentWhenActive?: 'page' | 'step' | 'location' | 'date' | 'time' | true | false;
     /**
      *
      * You can use the output `isActiveChange` to get notified each time the link becomes
@@ -2859,7 +2877,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private isLinkActive;
     private hasActiveLinks;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "ariaCurrentWhenActive": "ariaCurrentWhenActive"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"], never, false>;
 }
 
 /**
