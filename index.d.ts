@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.14+18.sha-3e46a42
+ * @license Angular v14.0.0-next.14+19.sha-4962a4a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1118,6 +1118,8 @@ export declare type LoadChildren = LoadChildrenCallback;
  * A function that is called to resolve a collection of lazy-loaded routes.
  * Must be an arrow function of the following form:
  * `() => import('...').then(mod => mod.MODULE)`
+ * or
+ * `() => import('...').then(mod => mod.ROUTES)`
  *
  * For example:
  *
@@ -1127,11 +1129,18 @@ export declare type LoadChildren = LoadChildrenCallback;
  *   loadChildren: () => import('./lazy-route/lazy.module').then(mod => mod.LazyModule),
  * }];
  * ```
+ * or
+ * ```
+ * [{
+ *   path: 'lazy',
+ *   loadChildren: () => import('./lazy-route/lazy.routes').then(mod => mod.ROUTES),
+ * }];
+ * ```
  *
  * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Observable<Type<any>> | Promise<NgModuleFactory<any> | Type<any>>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Routes | Observable<Type<any> | Routes> | Promise<NgModuleFactory<any> | Type<any> | Routes>;
 
 declare interface LoadedRouterConfig {
     routes: Route[];
@@ -2494,8 +2503,8 @@ declare class RouterConfigLoader {
     onLoadStartListener?: (r: Route) => void;
     onLoadEndListener?: (r: Route) => void;
     constructor(injector: Injector, compiler: Compiler);
-    load(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
-    private loadModuleFactory;
+    load(parentInjector: EnvironmentInjector, route: Route): Observable<LoadedRouterConfig>;
+    private loadModuleFactoryOrRoutes;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
 }
