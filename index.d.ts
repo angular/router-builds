@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.14+20.sha-970a3b5
+ * @license Angular v14.0.0-next.14+22.sha-31d7c3b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2007,6 +2007,10 @@ export declare interface Route {
      */
     component?: Type<any>;
     /**
+     * An object specifying a lazy-loaded component.
+     */
+    loadComponent?: () => Type<unknown> | Observable<Type<unknown>> | Promise<Type<unknown>>;
+    /**
      * A URL to redirect to when the path matches.
      *
      * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
@@ -2499,11 +2503,13 @@ export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<a
 declare class RouterConfigLoader {
     private injector;
     private compiler;
-    private routeLoaders;
+    private componentLoaders;
+    private childrenLoaders;
     onLoadStartListener?: (r: Route) => void;
     onLoadEndListener?: (r: Route) => void;
     constructor(injector: Injector, compiler: Compiler);
-    load(parentInjector: EnvironmentInjector, route: Route): Observable<LoadedRouterConfig>;
+    loadComponent(route: Route): Observable<Type<unknown>>;
+    loadChildren(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
     private loadModuleFactoryOrRoutes;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
