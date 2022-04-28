@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-3a60063
+ * @license Angular v14.0.0-next.15+sha-d4fc12f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1048,13 +1048,11 @@ declare namespace i4 {
  * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
  * and should not be used for new applications.
  *
- * * 'enabled' - This option is 1:1 replaceable with `enabledBlocking`.
- *
  * @see `forRoot()`
  *
  * @publicApi
  */
-export declare type InitialNavigation = 'disabled' | 'enabled' | 'enabledBlocking' | 'enabledNonBlocking';
+export declare type InitialNavigation = 'disabled' | 'enabledBlocking' | 'enabledNonBlocking';
 
 /**
  * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
