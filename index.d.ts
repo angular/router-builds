@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-a521571
+ * @license Angular v14.0.0-next.15+sha-d322052
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -14,6 +14,7 @@ import { ElementRef } from '@angular/core';
 import { EnvironmentInjector } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
+import { ImportedNgModuleProviders } from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
@@ -2081,7 +2082,7 @@ export declare interface Route {
      * route also has a `loadChildren` function which returns an `NgModuleRef`, this injector will be
      * used as the parent of the lazy loaded module.
      */
-    providers?: Provider[];
+    providers?: Array<Provider | ImportedNgModuleProviders>;
 }
 
 /**
