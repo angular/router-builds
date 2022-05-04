@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-next.15+sha-ea2b3a9
+ * @license Angular v14.0.0-next.15+sha-41e2a68
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -180,6 +180,7 @@ export declare class ActivatedRouteSnapshot {
 export declare class ActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ActivationEnd;
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
@@ -197,6 +198,7 @@ export declare class ActivationEnd {
 export declare class ActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ActivationStart;
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
@@ -587,6 +589,7 @@ export declare interface CanLoad {
 export declare class ChildActivationEnd {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ChildActivationEnd;
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
@@ -604,6 +607,7 @@ export declare class ChildActivationEnd {
 export declare class ChildActivationStart {
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ChildActivationStart;
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
@@ -753,8 +757,32 @@ declare type ErrorHandler = (error: any) => any;
  *
  * @publicApi
  */
-declare type Event_2 = RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll;
+declare type Event_2 = RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd;
 export { Event_2 as Event }
+
+/**
+ * Identifies the type of a router event.
+ *
+ * @publicApi
+ */
+export declare const enum EventType {
+    NavigationStart = 0,
+    NavigationEnd = 1,
+    NavigationCancel = 2,
+    NavigationError = 3,
+    RoutesRecognized = 4,
+    ResolveStart = 5,
+    ResolveEnd = 6,
+    GuardsCheckStart = 7,
+    GuardsCheckEnd = 8,
+    RouteConfigLoadStart = 9,
+    RouteConfigLoadEnd = 10,
+    ChildActivationStart = 11,
+    ChildActivationEnd = 12,
+    ActivationStart = 13,
+    ActivationEnd = 14,
+    Scroll = 15
+}
 
 /**
  * A set of configuration options for a router module, provided in the
@@ -966,6 +994,7 @@ export declare class GuardsCheckEnd extends RouterEvent {
     state: RouterStateSnapshot;
     /** @docsNotRequired */
     shouldActivate: boolean;
+    readonly type = EventType.GuardsCheckEnd;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -992,6 +1021,7 @@ export declare class GuardsCheckStart extends RouterEvent {
     urlAfterRedirects: string;
     /** @docsNotRequired */
     state: RouterStateSnapshot;
+    readonly type = EventType.GuardsCheckStart;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -1277,6 +1307,7 @@ export declare interface NavigationBehaviorOptions {
 export declare class NavigationCancel extends RouterEvent {
     /** @docsNotRequired */
     reason: string;
+    readonly type = EventType.NavigationCancel;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -1300,6 +1331,7 @@ export declare class NavigationCancel extends RouterEvent {
 export declare class NavigationEnd extends RouterEvent {
     /** @docsNotRequired */
     urlAfterRedirects: string;
+    readonly type = EventType.NavigationEnd;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -1323,6 +1355,7 @@ export declare class NavigationEnd extends RouterEvent {
 export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
+    readonly type = EventType.NavigationError;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -1359,6 +1392,7 @@ export declare interface NavigationExtras extends UrlCreationOptions, Navigation
  * @publicApi
  */
 export declare class NavigationStart extends RouterEvent {
+    readonly type = EventType.NavigationStart;
     /**
      * Identifies the call or event that triggered the navigation.
      * An `imperative` trigger is a call to `router.navigateByUrl()` or `router.navigate()`.
@@ -1367,7 +1401,7 @@ export declare class NavigationStart extends RouterEvent {
      * @see `NavigationCancel`
      * @see `NavigationError`
      */
-    navigationTrigger?: 'imperative' | 'popstate' | 'hashchange';
+    navigationTrigger?: NavigationTrigger;
     /**
      * The navigation state that was previously supplied to the `pushState` call,
      * when the navigation is triggered by a `popstate` event. Otherwise null.
@@ -1395,7 +1429,7 @@ export declare class NavigationStart extends RouterEvent {
     /** @docsNotRequired */
     url: string, 
     /** @docsNotRequired */
-    navigationTrigger?: 'imperative' | 'popstate' | 'hashchange', 
+    navigationTrigger?: NavigationTrigger, 
     /** @docsNotRequired */
     restoredState?: {
         [k: string]: any;
@@ -1404,6 +1438,17 @@ export declare class NavigationStart extends RouterEvent {
     /** @docsNotRequired */
     toString(): string;
 }
+
+/**
+ * Identifies the call or event that triggered a navigation.
+ *
+ * * 'imperative': Triggered by `router.navigateByUrl()` or `router.navigate()`.
+ * * 'popstate' : Triggered by a `popstate` event.
+ * * 'hashchange'-: Triggered by a `hashchange` event.
+ *
+ * @publicApi
+ */
+declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
 
 /**
  * @description
@@ -1696,6 +1741,7 @@ export declare class ResolveEnd extends RouterEvent {
     urlAfterRedirects: string;
     /** @docsNotRequired */
     state: RouterStateSnapshot;
+    readonly type = EventType.ResolveEnd;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -1723,6 +1769,7 @@ export declare class ResolveStart extends RouterEvent {
     urlAfterRedirects: string;
     /** @docsNotRequired */
     state: RouterStateSnapshot;
+    readonly type = EventType.ResolveStart;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -2095,6 +2142,7 @@ export declare interface Route {
 export declare class RouteConfigLoadEnd {
     /** @docsNotRequired */
     route: Route;
+    readonly type = EventType.RouteConfigLoadEnd;
     constructor(
     /** @docsNotRequired */
     route: Route);
@@ -2111,6 +2159,7 @@ export declare class RouteConfigLoadEnd {
 export declare class RouteConfigLoadStart {
     /** @docsNotRequired */
     route: Route;
+    readonly type = EventType.RouteConfigLoadStart;
     constructor(
     /** @docsNotRequired */
     route: Route);
@@ -3370,6 +3419,7 @@ export declare class RoutesRecognized extends RouterEvent {
     urlAfterRedirects: string;
     /** @docsNotRequired */
     state: RouterStateSnapshot;
+    readonly type = EventType.RoutesRecognized;
     constructor(
     /** @docsNotRequired */
     id: number, 
@@ -3404,6 +3454,7 @@ export declare class Scroll {
     readonly position: [number, number] | null;
     /** @docsNotRequired */
     readonly anchor: string | null;
+    readonly type = EventType.Scroll;
     constructor(
     /** @docsNotRequired */
     routerEvent: NavigationEnd, 
