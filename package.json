@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "14.1.0-next.0+sha-8629f2d",
+  "version": "13.3.9+18.sha-3e3f8fc",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -14,7 +14,7 @@
   "author": "angular",
   "license": "MIT",
   "engines": {
-    "node": "^14.15.0 || >=16.10.0"
+    "node": "^12.20.0 || ^14.15.0 || >=16.10.0"
   },
   "bugs": {
     "url": "https://github.com/angular/angular/issues"
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "14.1.0-next.0+sha-8629f2d",
-    "@angular/common": "14.1.0-next.0+sha-8629f2d",
-    "@angular/platform-browser": "14.1.0-next.0+sha-8629f2d",
+    "@angular/core": "13.3.9+18.sha-3e3f8fc",
+    "@angular/common": "13.3.9+18.sha-3e3f8fc",
+    "@angular/platform-browser": "13.3.9+18.sha-3e3f8fc",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
@@ -53,7 +53,7 @@
   "fesm2020": "./fesm2020/router.mjs",
   "fesm2015": "./fesm2015/router.mjs",
   "esm2020": "./esm2020/router.mjs",
-  "typings": "./index.d.ts",
+  "typings": "./router.d.ts",
   "module": "./fesm2015/router.mjs",
   "es2020": "./fesm2020/router.mjs",
   "type": "module",
@@ -62,7 +62,7 @@
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.ts",
+      "types": "./router.d.ts",
       "esm2020": "./esm2020/router.mjs",
       "es2020": "./fesm2020/router.mjs",
       "es2015": "./fesm2015/router.mjs",
@@ -70,7 +70,7 @@
       "default": "./fesm2020/router.mjs"
     },
     "./testing": {
-      "types": "./testing/index.d.ts",
+      "types": "./testing/testing.d.ts",
       "esm2020": "./esm2020/testing/testing.mjs",
       "es2020": "./fesm2020/testing.mjs",
       "es2015": "./fesm2015/testing.mjs",
@@ -78,7 +78,7 @@
       "default": "./fesm2020/testing.mjs"
     },
     "./upgrade": {
-      "types": "./upgrade/index.d.ts",
+      "types": "./upgrade/upgrade.d.ts",
       "esm2020": "./esm2020/upgrade/upgrade.mjs",
       "es2020": "./fesm2020/upgrade.mjs",
       "es2015": "./fesm2015/upgrade.mjs",

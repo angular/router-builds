@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-8629f2d
+ * @license Angular v13.3.9+18.sha-3e3f8fc
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import * as i0 from '@angular/core';
 import { Compiler, Injector, Optional, NgModule } from '@angular/core';
-import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, DefaultTitleStrategy, TitleStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
+import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
 
 /**
  * @license
@@ -33,18 +33,11 @@ function isUrlHandlingStrategy(opts) {
     return 'shouldProcessUrl' in opts;
 }
 /**
- * Router setup factory function used for testing. Only used internally to keep the factory that's
- * marked as publicApi cleaner (i.e. not having _both_ `TitleStrategy` and `DefaultTitleStrategy`).
- */
-function setupTestingRouterInternal(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy, defaultTitleStrategy, titleStrategy) {
-    return setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy, titleStrategy !== null && titleStrategy !== void 0 ? titleStrategy : defaultTitleStrategy);
-}
-/**
  * Router setup factory function used for testing.
  *
  * @publicApi
  */
-function setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy, titleStrategy) {
+function setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy) {
     const router = new Router(null, urlSerializer, contexts, location, injector, compiler, ɵflatten(routes));
     if (opts) {
         // Handle deprecated argument ordering.
@@ -62,7 +55,6 @@ function setupTestingRouter(urlSerializer, contexts, location, compiler, injecto
     if (routeReuseStrategy) {
         router.routeReuseStrategy = routeReuseStrategy;
     }
-    router.titleStrategy = titleStrategy;
     return router;
 }
 /**
@@ -101,34 +93,26 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-8629f2d", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.1.0-next.0+sha-8629f2d", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-8629f2d", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.3.9+18.sha-3e3f8fc", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.3.9+18.sha-3e3f8fc", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.3.9+18.sha-3e3f8fc", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         EXTRA_ROUTER_TESTING_PROVIDERS,
         { provide: Location, useClass: SpyLocation },
         { provide: LocationStrategy, useClass: MockLocationStrategy },
         {
             provide: Router,
-            useFactory: setupTestingRouterInternal,
+            useFactory: setupTestingRouter,
             deps: [
-                UrlSerializer,
-                ChildrenOutletContexts,
-                Location,
-                Compiler,
-                Injector,
-                ROUTES,
-                ROUTER_CONFIGURATION,
-                [UrlHandlingStrategy, new Optional()],
-                [RouteReuseStrategy, new Optional()],
-                [DefaultTitleStrategy, new Optional()],
-                [TitleStrategy, new Optional()],
+                UrlSerializer, ChildrenOutletContexts, Location, Compiler, Injector, ROUTES,
+                ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+                [RouteReuseStrategy, new Optional()]
             ]
         },
         { provide: PreloadingStrategy, useExisting: NoPreloading },
         provideRoutes([]),
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.0+sha-8629f2d", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.3.9+18.sha-3e3f8fc", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -139,19 +123,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.1.0-next.0+sh
                         { provide: LocationStrategy, useClass: MockLocationStrategy },
                         {
                             provide: Router,
-                            useFactory: setupTestingRouterInternal,
+                            useFactory: setupTestingRouter,
                             deps: [
-                                UrlSerializer,
-                                ChildrenOutletContexts,
-                                Location,
-                                Compiler,
-                                Injector,
-                                ROUTES,
-                                ROUTER_CONFIGURATION,
-                                [UrlHandlingStrategy, new Optional()],
-                                [RouteReuseStrategy, new Optional()],
-                                [DefaultTitleStrategy, new Optional()],
-                                [TitleStrategy, new Optional()],
+                                UrlSerializer, ChildrenOutletContexts, Location, Compiler, Injector, ROUTES,
+                                ROUTER_CONFIGURATION, [UrlHandlingStrategy, new Optional()],
+                                [RouteReuseStrategy, new Optional()]
                             ]
                         },
                         { provide: PreloadingStrategy, useExisting: NoPreloading },
@@ -199,5 +175,5 @@ var spy_ng_module_factory_loader = {};
  * Generated bundle index. Do not edit.
  */
 
-export { RouterTestingModule, setupTestingRouter, setupTestingRouterInternal };
+export { RouterTestingModule, setupTestingRouter };
 //# sourceMappingURL=testing.mjs.map
