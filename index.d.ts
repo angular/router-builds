@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.0-rc.3+sha-763c5f8
+ * @license Angular v14.0.0-rc.3+sha-536939e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -849,21 +849,22 @@ export declare interface ExtraOptions {
      * in the following example.
      *
      * ```typescript
-     * class AppModule {
-     *   constructor(router: Router, viewportScroller: ViewportScroller) {
-     *     router.events.pipe(
-     *       filter((e: Event): e is Scroll => e instanceof Scroll)
+     * class AppComponent {
+     *   movieData: any;
+     *
+     *   constructor(private router: Router, private viewportScroller: ViewportScroller,
+     * changeDetectorRef: ChangeDetectorRef) {
+     *   router.events.pipe(filter((event: Event): event is Scroll => event instanceof Scroll)
      *     ).subscribe(e => {
-     *       if (e.position) {
-     *         // backward navigation
-     *         viewportScroller.scrollToPosition(e.position);
-     *       } else if (e.anchor) {
-     *         // anchor navigation
-     *         viewportScroller.scrollToAnchor(e.anchor);
-     *       } else {
-     *         // forward navigation
-     *         viewportScroller.scrollToPosition([0, 0]);
-     *       }
+     *       fetch('http://example.com/movies.json').then(response => {
+     *         this.movieData = response.json();
+     *         // update the template with the data before restoring scroll
+     *         changeDetectorRef.detectChanges();
+     *
+     *         if (e.position) {
+     *           viewportScroller.scrollToPosition(e.position);
+     *         }
+     *       });
      *     });
      *   }
      * }
