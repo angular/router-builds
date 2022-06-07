@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-7b9569d
+ * @license Angular v14.1.0-next.0+sha-7173711
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -649,6 +649,59 @@ export declare class ChildrenOutletContexts {
 export declare function convertToParamMap(params: Params): ParamMap;
 
 /**
+ * Creates a `UrlTree` relative to an `ActivatedRouteSnapshot`.
+ *
+ * @publicApi
+ *
+ *
+ * @param relativeTo The `ActivatedRouteSnapshot` to apply the commands to
+ * @param commands An array of URL fragments with which to construct the new URL tree.
+ * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+ * segments, followed by the parameters for each segment.
+ * The fragments are applied to the one provided in the `relativeTo` parameter.
+ * @param queryParams The query parameters for the `UrlTree`. `null` if the `UrlTree` does not have
+ *     any query parameters.
+ * @param fragment The fragment for the `UrlTree`. `null` if the `UrlTree` does not have a fragment.
+ *
+ * @usageNotes
+ *
+ * ```
+ * // create /team/33/user/11
+ * createUrlTreeFromSnapshot(snapshot, ['/team', 33, 'user', 11]);
+ *
+ * // create /team/33;expand=true/user/11
+ * createUrlTreeFromSnapshot(snapshot, ['/team', 33, {expand: true}, 'user', 11]);
+ *
+ * // you can collapse static segments like this (this works only with the first passed-in value):
+ * createUrlTreeFromSnapshot(snapshot, ['/team/33/user', userId]);
+ *
+ * // If the first segment can contain slashes, and you do not want the router to split it,
+ * // you can do the following:
+ * createUrlTreeFromSnapshot(snapshot, [{segmentPath: '/one/two'}]);
+ *
+ * // create /team/33/(user/11//right:chat)
+ * createUrlTreeFromSnapshot(snapshot, ['/team', 33, {outlets: {primary: 'user/11', right:
+ * 'chat'}}], null, null);
+ *
+ * // remove the right secondary node
+ * createUrlTreeFromSnapshot(snapshot, ['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+ *
+ * // For the examples below, assume the current URL is for the `/team/33/user/11` and the
+ * `ActivatedRouteSnapshot` points to `user/11`:
+ *
+ * // navigate to /team/33/user/11/details
+ * createUrlTreeFromSnapshot(snapshot, ['details']);
+ *
+ * // navigate to /team/33/user/22
+ * createUrlTreeFromSnapshot(snapshot, ['../22']);
+ *
+ * // navigate to /team/44/user/22
+ * createUrlTreeFromSnapshot(snapshot, ['../../team/44/user/22']);
+ * ```
+ */
+export declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: any[], queryParams?: Params | null, fragment?: string | null): UrlTree;
+
+/**
  *
  * Represents static data associated with a particular route.
  *
@@ -849,21 +902,22 @@ export declare interface ExtraOptions {
      * in the following example.
      *
      * ```typescript
-     * class AppModule {
-     *   constructor(router: Router, viewportScroller: ViewportScroller) {
-     *     router.events.pipe(
-     *       filter((e: Event): e is Scroll => e instanceof Scroll)
+     * class AppComponent {
+     *   movieData: any;
+     *
+     *   constructor(private router: Router, private viewportScroller: ViewportScroller,
+     * changeDetectorRef: ChangeDetectorRef) {
+     *   router.events.pipe(filter((event: Event): event is Scroll => event instanceof Scroll)
      *     ).subscribe(e => {
-     *       if (e.position) {
-     *         // backward navigation
-     *         viewportScroller.scrollToPosition(e.position);
-     *       } else if (e.anchor) {
-     *         // anchor navigation
-     *         viewportScroller.scrollToAnchor(e.anchor);
-     *       } else {
-     *         // forward navigation
-     *         viewportScroller.scrollToPosition([0, 0]);
-     *       }
+     *       fetch('http://example.com/movies.json').then(response => {
+     *         this.movieData = response.json();
+     *         // update the template with the data before restoring scroll
+     *         changeDetectorRef.detectChanges();
+     *
+     *         if (e.position) {
+     *           viewportScroller.scrollToPosition(e.position);
+     *         }
+     *       });
      *     });
      *   }
      * }
