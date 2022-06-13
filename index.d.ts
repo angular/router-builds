@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-9ab3261
+ * @license Angular v14.1.0-next.0+sha-72e6a94
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -578,6 +578,101 @@ export declare interface CanDeactivate<T> {
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
+
+/**
+ * @description
+ *
+ * Interface that a class can implement to be a guard deciding if a `Route` can be matched.
+ * If all guards return `true`, navigation continues and the `Router` will use the `Route` during
+ * activation. If any guard returns `false`, the `Route` is skipped for matching and other `Route`
+ * configurations are processed instead.
+ *
+ * The following example implements a `CanMatch` function that decides whether the
+ * current user has permission to access the users page.
+ *
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canAccess(user: UserToken, id: string, segments: UrlSegment[]): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * @Injectable()
+ * class CanMatchTeamSection implements CanMatch {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canAccess(this.currentUser, route, segments);
+ *   }
+ * }
+ * ```
+ *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
+ *
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: [CanMatchTeamSection]
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanMatchTeamSection, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * If the `CanMatchTeamSection` were to return `false`, the router would continue navigating to the
+ * `team/:id` URL, but would load the `NotFoundComponent` because the `Route` for `'team/:id'`
+ * could not be used for a URL match but the catch-all `**` `Route` did instead.
+ *
+ * You can alternatively provide an in-line function with the `canMatch` signature:
+ *
+ * ```
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: ['canMatchTeamSection']
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: 'canMatchTeamSection',
+ *       useValue: (route: Route, segments: UrlSegment[]) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * @publicApi
+ */
+export declare interface CanMatch {
+    canMatch(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+}
+
+declare type CanMatchFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean;
 
 /**
  * An event triggered at the end of the child-activation part
@@ -2131,6 +2226,12 @@ export declare interface Route {
      * activate the component. By default, any user can activate.
      */
     canActivate?: any[];
+    /**
+     * An array of DI tokens used to look up `CanMatch()`
+     * handlers, in order to determine if the current user is allowed to
+     * match the `Route`. By default, any route can match.
+     */
+    canMatch?: Array<Type<CanMatch> | InjectionToken<CanMatchFn>>;
     /**
      * An array of DI tokens used to look up `CanActivateChild()` handlers,
      * in order to determine if the current user is allowed to activate
