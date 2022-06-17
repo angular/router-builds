@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.1+sha-bb7c804
+ * @license Angular v14.1.0-next.1+sha-f94c6f4
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -674,7 +674,14 @@ export declare interface CanMatch {
     canMatch(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
 
-declare type CanMatchFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean;
+/**
+ * The signature of a function used as a `CanMatch` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanMatch`
+ * @see `Route`
+ */
+export declare type CanMatchFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean;
 
 /**
  * An event triggered at the end of the child-activation part
