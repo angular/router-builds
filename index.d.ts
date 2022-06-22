@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.1+sha-abe3759
+ * @license Angular v14.1.0-next.1+sha-2d713f5
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1619,6 +1619,8 @@ declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
  */
 export declare class NoPreloading implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NoPreloading, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<NoPreloading>;
 }
 
 /**
@@ -1700,6 +1702,8 @@ export declare type Params = {
  */
 export declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<PreloadAllModules, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<PreloadAllModules>;
 }
 
 /**
@@ -4016,6 +4020,8 @@ export declare class ɵEmptyOutletComponent {
  * Flattens single-level nested arrays.
  */
 export declare function ɵflatten<T>(arr: T[][]): T[];
+
+export declare function ɵprovidePreloading(preloadingStrategy: Type<PreloadingStrategy>): Provider[];
 
 export declare type ɵRestoredState = {
     [k: string]: any;
