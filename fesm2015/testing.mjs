@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.3+sha-e9e1d85
+ * @license Angular v14.0.3+sha-9c81746
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { Location, LocationStrategy } from '@angular/common';
 import { SpyLocation, MockLocationStrategy } from '@angular/common/testing';
 import * as i0 from '@angular/core';
 import { Compiler, Injector, Optional, NgModule } from '@angular/core';
-import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, DefaultTitleStrategy, TitleStrategy, PreloadingStrategy, NoPreloading } from '@angular/router';
+import { Router, ɵflatten, ɵassignExtraOptionsToRouter, provideRoutes, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, RouteReuseStrategy, DefaultTitleStrategy, TitleStrategy, ɵprovidePreloading, NoPreloading } from '@angular/router';
 
 /**
  * @license
@@ -101,9 +101,9 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.3+sha-e9e1d85", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.3+sha-e9e1d85", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.3+sha-e9e1d85", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.3+sha-9c81746", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.3+sha-9c81746", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.3+sha-9c81746", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         EXTRA_ROUTER_TESTING_PROVIDERS,
         { provide: Location, useClass: SpyLocation },
@@ -125,10 +125,10 @@ RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", ver
                 [TitleStrategy, new Optional()],
             ]
         },
-        { provide: PreloadingStrategy, useExisting: NoPreloading },
+        ɵprovidePreloading(NoPreloading),
         provideRoutes([]),
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.3+sha-e9e1d85", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.3+sha-9c81746", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -154,7 +154,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.3+sha-e9e1d
                                 [TitleStrategy, new Optional()],
                             ]
                         },
-                        { provide: PreloadingStrategy, useExisting: NoPreloading },
+                        ɵprovidePreloading(NoPreloading),
                         provideRoutes([]),
                     ]
                 }]

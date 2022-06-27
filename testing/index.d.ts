@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.3+sha-e9e1d85
+ * @license Angular v14.0.3+sha-9c81746
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -59,7 +59,7 @@ export declare class RouterTestingModule {
  *
  * @publicApi
  */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, titleStrategy?: TitleStrategy): Router;
+export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy | null, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, titleStrategy?: TitleStrategy): Router;
 
 /**
  * Router setup factory function used for testing. Only used internally to keep the factory that's
