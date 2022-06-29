@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.3+sha-598239c
+ * @license Angular v14.1.0-next.3+sha-e8c7dd1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2396,7 +2396,6 @@ export declare class Router {
     private currentNavigation;
     private disposed;
     private locationSubscription?;
-    private navigationId;
     /**
      * The id of the currently active page in the router.
      * Updated to the transition's target id on a successful navigation.
