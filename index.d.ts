@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.4+sha-7fe81a9
+ * @license Angular v14.0.4+sha-853b1c1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2125,6 +2125,8 @@ export declare interface Route {
      * - `always` : Run on every execution.
      * By default, guards and resolvers run only when the matrix
      * parameters of the route change.
+     *
+     * @see RunGuardsAndResolvers
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
     /**
@@ -3439,8 +3441,19 @@ export declare class RoutesRecognized extends RouterEvent {
 }
 
 /**
- *
  * A policy for when to run guards and resolvers on a route.
+ *
+ * Guards and/or resolvers will always run when a route is activated or deactivated. When a route is
+ * unchanged, the default behavior is the same as `paramsChange`.
+ *
+ * `paramsChange` : Rerun the guards and resolvers when path or
+ * path param changes. This does not include query parameters. This option is the default.
+ * - `always` : Run on every execution.
+ * - `pathParamsChange` : Rerun guards and resolvers when the path params
+ * change. This does not compare matrix or query parameters.
+ * - `paramsOrQueryParamsChange` : Run when path, matrix, or query parameters change.
+ * - `pathParamsOrQueryParamsChange` : Rerun guards and resolvers when the path params
+ * change or query params have changed. This does not include matrix parameters.
  *
  * @see [Route.runGuardsAndResolvers](api/router/Route#runGuardsAndResolvers)
  * @publicApi
