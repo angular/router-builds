@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.3+sha-e96ece9
+ * @license Angular v14.1.0-next.3+sha-6c1357d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1463,18 +1463,61 @@ export declare interface NavigationBehaviorOptions {
  * @publicApi
  */
 export declare class NavigationCancel extends RouterEvent {
-    /** @docsNotRequired */
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
     reason: string;
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    readonly code?: NavigationCancellationCode | undefined;
     readonly type = EventType.NavigationCancel;
     constructor(
     /** @docsNotRequired */
     id: number, 
     /** @docsNotRequired */
     url: string, 
-    /** @docsNotRequired */
-    reason: string);
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
+    reason: string, 
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    code?: NavigationCancellationCode | undefined);
     /** @docsNotRequired */
     toString(): string;
+}
+
+/**
+ * A code for the `NavigationCancel` event of the `Router` to indicate the
+ * reason a navigation failed.
+ *
+ * @publicApi
+ */
+export declare const enum NavigationCancellationCode {
+    /**
+     * A navigation failed because a guard returned a `UrlTree` to redirect.
+     */
+    Redirect = 0,
+    /**
+     * A navigation failed because a more recent navigation started.
+     */
+    SupersededByNewNavigation = 1,
+    /**
+     * A navigation failed because one of the resolvers completed without emiting a value.
+     */
+    NoDataFromResolver = 2,
+    /**
+     * A navigation failed because a guard returned `false`.
+     */
+    GuardRejected = 3
 }
 
 /**
@@ -2398,6 +2441,7 @@ export declare class Router {
     private currentNavigation;
     private disposed;
     private locationSubscription?;
+    private navigationId;
     /**
      * The id of the currently active page in the router.
      * Updated to the transition's target id on a successful navigation.
