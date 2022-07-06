@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.0.4+sha-853b1c1
+ * @license Angular v14.0.4+sha-5001a7f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -652,7 +652,7 @@ function wrapIntoObservable(value) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$8 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
 function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
@@ -1117,7 +1117,7 @@ class UrlParser {
     parseSegment() {
         const path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
-            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$8 && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
+            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$7 && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
         }
         this.capture(path);
         return new UrlSegment(decode(path), this.parseMatrixParams());
@@ -1186,7 +1186,7 @@ class UrlParser {
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
             if (next !== '/' && next !== ')' && next !== ';') {
-                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$8 && `Cannot parse url '${this.url}'`);
+                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$7 && `Cannot parse url '${this.url}'`);
             }
             let outletName = undefined;
             if (path.indexOf(':') > -1) {
@@ -1217,7 +1217,7 @@ class UrlParser {
     }
     capture(str) {
         if (!this.consumeOptional(str)) {
-            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$8 && `Expected "${str}".`);
+            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$7 && `Expected "${str}".`);
         }
     }
 }
@@ -1771,7 +1771,7 @@ function createActivatedRoute(c) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || ngDevMode;
 function createUrlTree(route, urlTree, commands, queryParams, fragment) {
     var _a, _b;
     if (commands.length === 0) {
@@ -1844,11 +1844,11 @@ class Navigation {
         this.numberOfDoubleDots = numberOfDoubleDots;
         this.commands = commands;
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
-            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$7 && 'Root segment cannot have matrix parameters');
+            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$6 && 'Root segment cannot have matrix parameters');
         }
         const cmdWithOutlet = commands.find(isCommandWithOutlets);
         if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
-            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$7 && '{outlets:{}} has to be the last command');
+            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$6 && '{outlets:{}} has to be the last command');
         }
     }
     toRoot() {
@@ -1929,7 +1929,7 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
         dd -= ci;
         g = g.parent;
         if (!g) {
-            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$7 && 'Invalid number of \'../\'');
+            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$6 && 'Invalid number of \'../\'');
         }
         ci = g.segments.length;
     }
@@ -2161,7 +2161,7 @@ class ChildrenOutletContexts {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
  * @description
  *
@@ -2271,12 +2271,12 @@ class RouterOutlet {
      */
     get component() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$5 && 'Outlet is not activated');
         return this.activated.instance;
     }
     get activatedRoute() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$5 && 'Outlet is not activated');
         return this._activatedRoute;
     }
     get activatedRouteData() {
@@ -2290,7 +2290,7 @@ class RouterOutlet {
      */
     detach() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$5 && 'Outlet is not activated');
         this.location.detach();
         const cmp = this.activated;
         this.activated = null;
@@ -2318,7 +2318,7 @@ class RouterOutlet {
     }
     activateWith(activatedRoute, resolverOrInjector) {
         if (this.isActivated) {
-            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$6 && 'Cannot activate an already activated outlet');
+            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$5 && 'Cannot activate an already activated outlet');
         }
         this._activatedRoute = activatedRoute;
         const location = this.location;
@@ -2340,9 +2340,9 @@ class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", type: RouterOutlet, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{ selector: 'router-outlet', exportAs: 'outlet' }]
         }], ctorParameters: function () {
@@ -2401,9 +2401,9 @@ function isComponentFactoryResolver(item) {
  */
 class ɵEmptyOutletComponent {
 }
-ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
+ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", type: ɵEmptyOutletComponent, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
             type: Component,
             args: [{ template: `<router-outlet></router-outlet>` }]
         }] });
@@ -2453,13 +2453,13 @@ function validateConfig(config, parentPath = '', requireStandaloneComponents = f
 }
 function assertStandalone(fullPath, component) {
     if (component && !ɵisStandalone(component)) {
-        throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}'. The component must be standalone.`);
+        throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}'. The component must be standalone.`);
     }
 }
 function validateNode(route, fullPath, requireStandaloneComponents) {
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
         if (!route) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `
       Invalid configuration of route '${fullPath}': Encountered undefined route.
       The reason might be an extra comma.
 
@@ -2472,47 +2472,47 @@ function validateNode(route, fullPath, requireStandaloneComponents) {
     `);
         }
         if (Array.isArray(route)) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': Array cannot be specified`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': Array cannot be specified`);
         }
         if (!route.component && !route.loadComponent && !route.children && !route.loadChildren &&
             (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
         }
         if (route.redirectTo && route.children) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
         }
         if (route.redirectTo && route.loadChildren) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
         }
         if (route.children && route.loadChildren) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
         }
         if (route.redirectTo && (route.component || route.loadComponent)) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and component/loadComponent cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and component/loadComponent cannot be used together`);
         }
         if (route.component && route.loadComponent) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': component and loadComponent cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': component and loadComponent cannot be used together`);
         }
         if (route.redirectTo && route.canActivate) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and canActivate cannot be used together. Redirects happen before activation ` +
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': redirectTo and canActivate cannot be used together. Redirects happen before activation ` +
                 `so canActivate will never be executed.`);
         }
         if (route.path && route.matcher) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
         }
         if (route.redirectTo === void 0 && !route.component && !route.loadComponent &&
             !route.children && !route.loadChildren) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}'. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}'. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren`);
         }
         if (route.path === void 0 && route.matcher === void 0) {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
         }
         if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': path cannot start with a slash`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '${fullPath}': path cannot start with a slash`);
         }
         if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
             const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
-            throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
+            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_ROUTE_CONFIG */, `Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
         }
         if (requireStandaloneComponents) {
             assertStandalone(fullPath, route.component);
@@ -3008,7 +3008,7 @@ function noLeftoversInUrl(segmentGroup, segments, outlet) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$4 = typeof ngDevMode === 'undefined' || ngDevMode;
 class NoMatch$1 {
     constructor(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
@@ -3026,11 +3026,11 @@ function absoluteRedirect(newTree) {
     return throwError(new AbsoluteRedirect(newTree));
 }
 function namedOutletsRedirect(redirectTo) {
-    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$5 &&
+    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$4 &&
         `Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`));
 }
 function canLoadFails(route) {
-    return throwError(navigationCancelingError(NG_DEV_MODE$5 &&
+    return throwError(navigationCancelingError(NG_DEV_MODE$4 &&
         `Cannot load children because the guard of the route "path: '${route.path}'" returned false`));
 }
 /**
@@ -3090,7 +3090,7 @@ class ApplyRedirects {
         }));
     }
     noMatchError(e) {
-        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$5 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
+        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$4 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
     }
     createUrlTree(rootCandidate, queryParams, fragment) {
         const root = rootCandidate.segments.length > 0 ?
@@ -3262,16 +3262,7 @@ class ApplyRedirects {
             return of(true);
         const canLoadObservables = canLoad.map((injectionToken) => {
             const guard = injector.get(injectionToken);
-            let guardVal;
-            if (isCanLoad(guard)) {
-                guardVal = guard.canLoad(route, segments);
-            }
-            else if (isFunction(guard)) {
-                guardVal = guard(route, segments);
-            }
-            else {
-                throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_GUARD */, NG_DEV_MODE$5 && 'Invalid CanLoad guard');
-            }
+            const guardVal = isCanLoad(guard) ? guard.canLoad(route, segments) : guard(route, segments);
             return wrapIntoObservable(guardVal);
         });
         return of(canLoadObservables)
@@ -3333,7 +3324,7 @@ class ApplyRedirects {
     findPosParam(redirectTo, redirectToUrlSegment, posParams) {
         const pos = posParams[redirectToUrlSegment.path.substring(1)];
         if (!pos)
-            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$5 &&
+            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$4 &&
                 `Cannot redirect to '${redirectTo}'. Cannot find '${redirectToUrlSegment.path}'.`);
         return pos;
     }
@@ -3542,7 +3533,6 @@ function deactivateRouteAndItsChildren(route, context, checks) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$4 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 function checkGuards(moduleInjector, forwardEvent) {
     return mergeMap(t => {
         const { targetSnapshot, currentSnapshot, guards: { canActivateChecks, canDeactivateChecks } } = t;
@@ -3604,17 +3594,9 @@ function runCanActivate(futureRSS, futureARS, moduleInjector) {
     const canActivateObservables = canActivate.map((c) => {
         return defer(() => {
             const guard = getToken(c, futureARS, moduleInjector);
-            let observable;
-            if (isCanActivate(guard)) {
-                observable = wrapIntoObservable(guard.canActivate(futureARS, futureRSS));
-            }
-            else if (isFunction(guard)) {
-                observable = wrapIntoObservable(guard(futureARS, futureRSS));
-            }
-            else {
-                throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_GUARD */, NG_DEV_MODE$4 && 'Invalid CanActivate guard');
-            }
-            return observable.pipe(first());
+            const guardVal = isCanActivate(guard) ? guard.canActivate(futureARS, futureRSS) :
+                guard(futureARS, futureRSS);
+            return wrapIntoObservable(guardVal).pipe(first());
         });
     });
     return of(canActivateObservables).pipe(prioritizedGuardValue());
@@ -3629,17 +3611,9 @@ function runCanActivateChild(futureRSS, path, moduleInjector) {
         return defer(() => {
             const guardsMapped = d.guards.map((c) => {
                 const guard = getToken(c, d.node, moduleInjector);
-                let observable;
-                if (isCanActivateChild(guard)) {
-                    observable = wrapIntoObservable(guard.canActivateChild(futureARS, futureRSS));
-                }
-                else if (isFunction(guard)) {
-                    observable = wrapIntoObservable(guard(futureARS, futureRSS));
-                }
-                else {
-                    throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_GUARD */, NG_DEV_MODE$4 && 'Invalid CanActivateChild guard');
-                }
-                return observable.pipe(first());
+                const guardVal = isCanActivateChild(guard) ? guard.canActivateChild(futureARS, futureRSS) :
+                    guard(futureARS, futureRSS);
+                return wrapIntoObservable(guardVal).pipe(first());
             });
             return of(guardsMapped).pipe(prioritizedGuardValue());
         });
@@ -3652,17 +3626,10 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, moduleInjector
         return of(true);
     const canDeactivateObservables = canDeactivate.map((c) => {
         const guard = getToken(c, currARS, moduleInjector);
-        let observable;
-        if (isCanDeactivate(guard)) {
-            observable = wrapIntoObservable(guard.canDeactivate(component, currARS, currRSS, futureRSS));
-        }
-        else if (isFunction(guard)) {
-            observable = wrapIntoObservable(guard(component, currARS, currRSS, futureRSS));
-        }
-        else {
-            throw new ɵRuntimeError(4014 /* RuntimeErrorCode.INVALID_GUARD */, NG_DEV_MODE$4 && 'Invalid CanDeactivate guard');
-        }
-        return observable.pipe(first());
+        const guardVal = isCanDeactivate(guard) ?
+            guard.canDeactivate(component, currARS, currRSS, futureRSS) :
+            guard(component, currARS, currRSS, futureRSS);
+        return wrapIntoObservable(guardVal).pipe(first());
     });
     return of(canDeactivateObservables).pipe(prioritizedGuardValue());
 }
@@ -4213,9 +4180,9 @@ class RouterConfigLoader {
         }));
     }
 }
-RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterConfigLoader });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterConfigLoader, decorators: [{
+RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterConfigLoader });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterConfigLoader, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Injector }, { type: i0.Compiler }]; } });
 
@@ -5181,9 +5148,9 @@ class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: Router });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: Router });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: Router, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.Type }, { type: UrlSerializer }, { type: ChildrenOutletContexts }, { type: i3.Location }, { type: i0.Injector }, { type: i0.Compiler }, { type: undefined }]; } });
 function validateCommands(commands) {
@@ -5375,9 +5342,9 @@ class RouterLink {
         });
     }
 }
-RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLink, decorators: [{
+RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", type: RouterLink, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{ selector: ':not(a):not(area)[routerLink]' }]
         }], ctorParameters: function () {
@@ -5496,9 +5463,9 @@ class RouterLinkWithHref {
         });
     }
 }
-RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLinkWithHref, decorators: [{
+RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", type: RouterLinkWithHref, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", state: "state", relativeTo: "relativeTo", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLinkWithHref, decorators: [{
             type: Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, propDecorators: { target: [{
@@ -5725,9 +5692,9 @@ class RouterLinkActive {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterLinkActive, decorators: [{
+RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", type: RouterLinkActive, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -5833,9 +5800,9 @@ class DefaultTitleStrategy extends TitleStrategy {
         }
     }
 }
-DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
+DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Title }]; } });
@@ -5872,9 +5839,9 @@ class PreloadAllModules {
         return fn().pipe(catchError(() => of(null)));
     }
 }
-PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: PreloadAllModules, decorators: [{
+PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: PreloadAllModules, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -5892,9 +5859,9 @@ class NoPreloading {
         return of(null);
     }
 }
-NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: NoPreloading, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: NoPreloading, decorators: [{
+NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: NoPreloading, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: NoPreloading, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -5982,9 +5949,9 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterPreloader });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterPreloader, decorators: [{
+RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterPreloader });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i0.Compiler }, { type: i0.EnvironmentInjector }, { type: PreloadingStrategy }, { type: RouterConfigLoader }]; } });
 
@@ -6064,9 +6031,9 @@ class RouterScroller {
         }
     }
 }
-RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterScroller });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterScroller, decorators: [{
+RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterScroller });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i3.ViewportScroller }, { type: undefined }]; } });
 
@@ -6199,10 +6166,10 @@ class RouterModule {
         return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
     }
 }
-RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-853b1c1", ngImport: i0, type: RouterModule, decorators: [{
+RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }, { token: Router, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterModule, declarations: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
+RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.4+sha-5001a7f", ngImport: i0, type: RouterModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: ROUTER_DIRECTIVES,
@@ -6486,7 +6453,7 @@ function providePreloading(preloadingStrategy) {
 /**
  * @publicApi
  */
-const VERSION = new Version('14.0.4+sha-853b1c1');
+const VERSION = new Version('14.0.4+sha-5001a7f');
 
 /**
  * @license
