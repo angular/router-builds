@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.4+sha-350e364
+ * @license Angular v14.1.0-next.4+sha-bd92723
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1556,6 +1556,13 @@ export declare class NavigationEnd extends RouterEvent {
 export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    readonly target?: RouterStateSnapshot | undefined;
     readonly type = EventType.NavigationError;
     constructor(
     /** @docsNotRequired */
@@ -1563,7 +1570,14 @@ export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     url: string, 
     /** @docsNotRequired */
-    error: any);
+    error: any, 
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    target?: RouterStateSnapshot | undefined);
     /** @docsNotRequired */
     toString(): string;
 }
