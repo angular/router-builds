@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.4+sha-cee207e
+ * @license Angular v14.1.0-next.4+sha-c14c701
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3468,7 +3468,7 @@ export declare interface RouterOutletContract {
     /**
      * Called by the `Router` when the outlet should activate (create a component).
      */
-    activateWith(activatedRoute: ActivatedRoute, environmnetInjector: EnvironmentInjector | null): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector | null): void;
     /**
      * Called by the `Router` when the outlet should activate (create a component).
      *
