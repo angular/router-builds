@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-65a28a9
+ * @license Angular v14.2.0-next.0+sha-bde925b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3741,6 +3741,8 @@ export declare abstract class TitleStrategy {
      * `Route.title` property, which can either be a static string or a resolved value.
      */
     getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): any;
+    static ɵfac: i0.ɵɵFactoryDeclaration<TitleStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<TitleStrategy>;
 }
 
 
