@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0-next.0+sha-1314b1c
+ * @license Angular v14.2.0-next.0+sha-186245a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -580,6 +580,110 @@ export declare interface CanLoad {
 }
 
 /**
+ * @description
+ *
+ * Interface that a class can implement to be a guard deciding if a `Route` can be matched.
+ * If all guards return `true`, navigation continues and the `Router` will use the `Route` during
+ * activation. If any guard returns `false`, the `Route` is skipped for matching and other `Route`
+ * configurations are processed instead.
+ *
+ * The following example implements a `CanMatch` function that decides whether the
+ * current user has permission to access the users page.
+ *
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canAccess(user: UserToken, id: string, segments: UrlSegment[]): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * @Injectable()
+ * class CanMatchTeamSection implements CanMatch {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canMatch(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canAccess(this.currentUser, route, segments);
+ *   }
+ * }
+ * ```
+ *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
+ *
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: [CanMatchTeamSection]
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanMatchTeamSection, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * If the `CanMatchTeamSection` were to return `false`, the router would continue navigating to the
+ * `team/:id` URL, but would load the `NotFoundComponent` because the `Route` for `'team/:id'`
+ * could not be used for a URL match but the catch-all `**` `Route` did instead.
+ *
+ * You can alternatively provide an in-line function with the `canMatch` signature:
+ *
+ * ```
+ * const CAN_MATCH_TEAM_SECTION = new InjectionToken('CanMatchTeamSection');
+ *
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: [CAN_MATCH_TEAM_SECTION]
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ *   providers: [
+ *     {
+ *       provide: CAN_MATCH_TEAM_SECTION,
+ *       useValue: (route: Route, segments: UrlSegment[]) => true
+ *     }
+ *   ]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * @publicApi
+ */
+export declare interface CanMatch {
+    canMatch(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+}
+
+/**
+ * The signature of a function used as a `CanMatch` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanMatch`
+ * @see `Route`
+ */
+export declare type CanMatchFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+
+/**
  * An event triggered at the end of the child-activation part
  * of the Resolve phase of routing.
  * @see `ChildActivationStart`
@@ -637,6 +741,8 @@ export declare class ChildrenOutletContexts {
     onOutletReAttached(contexts: Map<string, OutletContext>): void;
     getOrCreateContext(childName: string): OutletContext;
     getContext(childName: string): OutletContext | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
 }
 
 /**
@@ -1359,18 +1465,61 @@ export declare interface NavigationBehaviorOptions {
  * @publicApi
  */
 export declare class NavigationCancel extends RouterEvent {
-    /** @docsNotRequired */
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
     reason: string;
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    readonly code?: NavigationCancellationCode | undefined;
     readonly type = EventType.NavigationCancel;
     constructor(
     /** @docsNotRequired */
     id: number, 
     /** @docsNotRequired */
     url: string, 
-    /** @docsNotRequired */
-    reason: string);
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
+    reason: string, 
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    code?: NavigationCancellationCode | undefined);
     /** @docsNotRequired */
     toString(): string;
+}
+
+/**
+ * A code for the `NavigationCancel` event of the `Router` to indicate the
+ * reason a navigation failed.
+ *
+ * @publicApi
+ */
+export declare const enum NavigationCancellationCode {
+    /**
+     * A navigation failed because a guard returned a `UrlTree` to redirect.
+     */
+    Redirect = 0,
+    /**
+     * A navigation failed because a more recent navigation started.
+     */
+    SupersededByNewNavigation = 1,
+    /**
+     * A navigation failed because one of the resolvers completed without emiting a value.
+     */
+    NoDataFromResolver = 2,
+    /**
+     * A navigation failed because a guard returned `false`.
+     */
+    GuardRejected = 3
 }
 
 /**
@@ -1409,6 +1558,13 @@ export declare class NavigationEnd extends RouterEvent {
 export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     error: any;
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    readonly target?: RouterStateSnapshot | undefined;
     readonly type = EventType.NavigationError;
     constructor(
     /** @docsNotRequired */
@@ -1416,7 +1572,14 @@ export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     url: string, 
     /** @docsNotRequired */
-    error: any);
+    error: any, 
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    target?: RouterStateSnapshot | undefined);
     /** @docsNotRequired */
     toString(): string;
 }
@@ -1515,6 +1678,8 @@ declare type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
  */
 export declare class NoPreloading implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NoPreloading, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<NoPreloading>;
 }
 
 /**
@@ -1596,6 +1761,8 @@ export declare type Params = {
  */
 export declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<PreloadAllModules, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<PreloadAllModules>;
 }
 
 /**
@@ -1638,8 +1805,9 @@ export declare function provideRoutes(routes: Routes): any;
  *
  * How to handle query parameters in a router link.
  * One of:
- * - `merge` : Merge new with current parameters.
- * - `preserve` : Preserve current parameters.
+ * - `"merge"` : Merge new parameters with current parameters.
+ * - `"preserve"` : Preserve current parameters.
+ * - `""` : Replace current parameters with new parameters. This is the default behavior.
  *
  * @see `UrlCreationOptions#queryParamsHandling`
  * @see `RouterLink`
@@ -2131,6 +2299,12 @@ export declare interface Route {
      */
     canActivate?: any[];
     /**
+     * An array of DI tokens used to look up `CanMatch()`
+     * handlers, in order to determine if the current user is allowed to
+     * match the `Route`. By default, any route can match.
+     */
+    canMatch?: Array<Type<CanMatch> | InjectionToken<CanMatchFn>>;
+    /**
      * An array of DI tokens used to look up `CanActivateChild()` handlers,
      * in order to determine if the current user is allowed to activate
      * a child of the component. By default, any user can activate a child.
@@ -2173,6 +2347,8 @@ export declare interface Route {
      * - `always` : Run on every execution.
      * By default, guards and resolvers run only when the matrix
      * parameters of the route change.
+     *
+     * @see RunGuardsAndResolvers
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
     /**
@@ -2862,7 +3038,7 @@ export declare class RouterLink implements OnChanges {
     onClick(): boolean;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, true>;
 }
 
 /**
@@ -2995,7 +3171,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private isLinkActive;
     private hasActiveLinks;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "ariaCurrentWhenActive": "ariaCurrentWhenActive"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "ariaCurrentWhenActive": "ariaCurrentWhenActive"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"], never, true>;
 }
 
 /**
@@ -3096,7 +3272,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, true>;
 }
 
 /**
@@ -3159,7 +3335,7 @@ export declare class RouterModule {
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }, { optional: true; }]>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
 
@@ -3258,7 +3434,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolverOrInjector?: ComponentFactoryResolver | EnvironmentInjector | null): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, [null, null, { attribute: "name"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true>;
 }
 
 /**
@@ -3294,7 +3470,7 @@ export declare interface RouterOutletContract {
     /**
      * Called by the `Router` when the outlet should activate (create a component).
      */
-    activateWith(activatedRoute: ActivatedRoute, environmnetInjector: EnvironmentInjector | null): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector | null): void;
     /**
      * Called by the `Router` when the outlet should activate (create a component).
      *
@@ -3488,8 +3664,19 @@ export declare class RoutesRecognized extends RouterEvent {
 }
 
 /**
- *
  * A policy for when to run guards and resolvers on a route.
+ *
+ * Guards and/or resolvers will always run when a route is activated or deactivated. When a route is
+ * unchanged, the default behavior is the same as `paramsChange`.
+ *
+ * `paramsChange` : Rerun the guards and resolvers when path or
+ * path param changes. This does not include query parameters. This option is the default.
+ * - `always` : Run on every execution.
+ * - `pathParamsChange` : Rerun guards and resolvers when the path params
+ * change. This does not compare matrix or query parameters.
+ * - `paramsOrQueryParamsChange` : Run when path, matrix, or query parameters change.
+ * - `pathParamsOrQueryParamsChange` : Rerun guards and resolvers when the path params
+ * change or query params have changed. This does not include matrix parameters.
  *
  * @see [Route.runGuardsAndResolvers](api/router/Route#runGuardsAndResolvers)
  * @publicApi
@@ -3554,6 +3741,8 @@ export declare abstract class TitleStrategy {
      * `Route.title` property, which can either be a static string or a resolved value.
      */
     getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): any;
+    static ɵfac: i0.ɵɵFactoryDeclaration<TitleStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<TitleStrategy>;
 }
 
 
@@ -3836,6 +4025,8 @@ export declare abstract class UrlSerializer {
     abstract parse(url: string): UrlTree;
     /** Converts a `UrlTree` into a url */
     abstract serialize(tree: UrlTree): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UrlSerializer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UrlSerializer>;
 }
 
 /**
@@ -3898,13 +4089,15 @@ export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router:
  */
 export declare class ɵEmptyOutletComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<ɵEmptyOutletComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never, true>;
 }
 
 /**
  * Flattens single-level nested arrays.
  */
 export declare function ɵflatten<T>(arr: T[][]): T[];
+
+export declare function ɵprovidePreloading(preloadingStrategy: Type<PreloadingStrategy>): Provider[];
 
 export declare type ɵRestoredState = {
     [k: string]: any;
