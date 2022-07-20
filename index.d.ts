@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.0+sha-a8e9247
+ * @license Angular v14.1.0+sha-0cbbd6a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3295,7 +3295,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
  * @publicApi
  */
 export declare class RouterModule {
-    constructor(guard: any, router: Router);
+    constructor(guard: any);
     /**
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
@@ -3332,7 +3332,7 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }]>;
     static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
