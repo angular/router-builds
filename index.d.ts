@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-76790a6
+ * @license Angular v14.2.0-next.0+sha-10289f1
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -70,6 +70,8 @@ export declare class ActivatedRoute {
     component: Type<any> | null;
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
+    /** An Observable of the resolved route title */
+    readonly title: Observable<string | undefined>;
     /** The configuration used to match this route. */
     get routeConfig(): Route | null;
     /** The root of the router state. */
@@ -154,6 +156,8 @@ export declare class ActivatedRouteSnapshot {
     component: Type<any> | null;
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
+    /** The resolved route title */
+    readonly title?: string;
     /** The root of the router state */
     get root(): ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
