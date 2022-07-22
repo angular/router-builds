@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-f434836
+ * @license Angular v14.2.0-next.0+sha-8ac45a6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1239,6 +1239,9 @@ declare namespace i4 {
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
+ *
+ * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
+ * and should not be used for new applications.
  *
  * @see `forRoot()`
  *
