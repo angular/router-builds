@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-55febc1
+ * @license Angular v14.2.0-next.0+sha-f364378
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -838,6 +838,23 @@ export declare class DefaultTitleStrategy extends TitleStrategy {
     static ɵfac: i0.ɵɵFactoryDeclaration<DefaultTitleStrategy, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<DefaultTitleStrategy>;
 }
+
+/**
+ * Matches the route configuration (`route`) against the actual URL (`segments`).
+ *
+ * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
+ *
+ * @param segments The remaining unmatched segments in the current navigation
+ * @param segmentGroup The current segment group being matched
+ * @param route The `Route` to match against.
+ *
+ * @see UrlMatchResult
+ * @see Route
+ *
+ * @returns The resulting match information or `null` if the `route` should not match.
+ * @publicApi
+ */
+export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
 
 /**
  * @description
@@ -1800,7 +1817,7 @@ export declare const PRIMARY_OUTLET = "primary";
  *
  * @publicApi
  */
-export declare function provideRoutes(routes: Routes): any;
+export declare function provideRoutes(routes: Routes): Provider[];
 
 /**
  *
