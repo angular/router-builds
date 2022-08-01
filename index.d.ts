@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-f364378
+ * @license Angular v14.2.0-next.0+sha-8600732
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1817,7 +1817,7 @@ export declare const PRIMARY_OUTLET = "primary";
  *
  * @publicApi
  */
-export declare function provideRoutes(routes: Routes): Provider[];
+export declare function provideRoutes(routes: Routes): any;
 
 /**
  *
