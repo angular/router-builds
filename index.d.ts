@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-65fd757
+ * @license Angular v14.2.0-next.0+sha-37ce31f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -70,6 +70,8 @@ export declare class ActivatedRoute {
     component: Type<any> | null;
     /** The current snapshot of this route */
     snapshot: ActivatedRouteSnapshot;
+    /** An Observable of the resolved route title */
+    readonly title: Observable<string | undefined>;
     /** The configuration used to match this route. */
     get routeConfig(): Route | null;
     /** The root of the router state. */
@@ -154,6 +156,8 @@ export declare class ActivatedRouteSnapshot {
     component: Type<any> | null;
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
+    /** The resolved route title */
+    readonly title?: string;
     /** The root of the router state */
     get root(): ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
@@ -836,6 +840,23 @@ export declare class DefaultTitleStrategy extends TitleStrategy {
 }
 
 /**
+ * Matches the route configuration (`route`) against the actual URL (`segments`).
+ *
+ * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
+ *
+ * @param segments The remaining unmatched segments in the current navigation
+ * @param segmentGroup The current segment group being matched
+ * @param route The `Route` to match against.
+ *
+ * @see UrlMatchResult
+ * @see Route
+ *
+ * @returns The resulting match information or `null` if the `route` should not match.
+ * @publicApi
+ */
+export declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
+
+/**
  * @description
  *
  * A default implementation of the `UrlSerializer`.
@@ -1235,9 +1256,6 @@ declare namespace i4 {
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
- *
- * The following values have been [deprecated](guide/releases#deprecation-practices) since v11,
- * and should not be used for new applications.
  *
  * @see `forRoot()`
  *
@@ -1799,7 +1817,7 @@ export declare const PRIMARY_OUTLET = "primary";
  *
  * @publicApi
  */
-export declare function provideRoutes(routes: Routes): any;
+export declare function provideRoutes(routes: Routes): Provider[];
 
 /**
  *
@@ -3297,7 +3315,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
  * @publicApi
  */
 export declare class RouterModule {
-    constructor(guard: any, router: Router);
+    constructor(guard: any);
     /**
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
@@ -3334,7 +3352,7 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }]>;
     static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
