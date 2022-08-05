@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.0+sha-0920a15
+ * @license Angular v14.2.0-next.0+sha-0abb67a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -262,7 +262,7 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * ```
  * class UserToken {}
  * class Permissions {
- *   canActivate(user: UserToken, id: string): boolean {
+ *   canActivate(): boolean {
  *     return true;
  *   }
  * }
@@ -299,7 +299,7 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivate` signature:
+ * You can alternatively provide an in-line function with the `CanActivateFn` signature:
  *
  * ```
  * @NgModule({
@@ -308,16 +308,10 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         canActivate: ['canActivateTeam']
+ *         canActivate: [(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -384,7 +378,7 @@ export declare interface CanActivate {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivateChild` signature:
+ * You can alternatively provide an in-line function with the `CanActivateChildFn` signature:
  *
  * ```
  * @NgModule({
@@ -392,7 +386,7 @@ export declare interface CanActivate {
  *     RouterModule.forRoot([
  *       {
  *         path: 'root',
- *         canActivateChild: ['canActivateTeam'],
+ *         canActivateChild: [(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true],
  *         children: [
  *           {
  *             path: 'team/:id',
@@ -402,12 +396,6 @@ export declare interface CanActivate {
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -417,6 +405,24 @@ export declare interface CanActivate {
 export declare interface CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
+
+/**
+ * The signature of a function used as a `canActivateChild` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanActivateChild`
+ * @see `Route`
+ */
+export declare type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+
+/**
+ * The signature of a function used as a `canActivate` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanActivate`
+ * @see `Route`
+ */
+export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
 /**
  * @description
@@ -472,7 +478,7 @@ export declare interface CanActivateChild {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canDeactivate` signature:
+ * You can alternatively provide an in-line function with the `CanDeactivateFn` signature:
  *
  * ```
  * @NgModule({
@@ -481,17 +487,11 @@ export declare interface CanActivateChild {
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         canDeactivate: ['canDeactivateTeam']
+ *         canDeactivate: [(component: TeamComponent, currentRoute: ActivatedRouteSnapshot,
+ * currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canDeactivateTeam',
- *       useValue: (component: TeamComponent, currentRoute: ActivatedRouteSnapshot, currentState:
- * RouterStateSnapshot, nextState: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -501,6 +501,15 @@ export declare interface CanActivateChild {
 export declare interface CanDeactivate<T> {
     canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
+
+/**
+ * The signature of a function used as a `canDeactivate` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanDeactivate`
+ * @see `Route`
+ */
+export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
 /**
  * @description
@@ -553,7 +562,7 @@ export declare interface CanDeactivate<T> {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canLoad` signature:
+ * You can alternatively provide an in-line function with the `CanLoadFn` signature:
  *
  * ```
  * @NgModule({
@@ -563,16 +572,10 @@ export declare interface CanDeactivate<T> {
  *         path: 'team/:id',
  *         component: TeamComponent,
  *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
- *         canLoad: ['canLoadTeamSection']
+ *         canLoad: [(route: Route, segments: UrlSegment[]) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canLoadTeamSection',
- *       useValue: (route: Route, segments: UrlSegment[]) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -582,6 +585,15 @@ export declare interface CanDeactivate<T> {
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
+
+/**
+ * The signature of a function used as a `canLoad` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanLoad`
+ * @see `Route`
+ */
+export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
 /**
  * @description
@@ -642,11 +654,9 @@ export declare interface CanLoad {
  * `team/:id` URL, but would load the `NotFoundComponent` because the `Route` for `'team/:id'`
  * could not be used for a URL match but the catch-all `**` `Route` did instead.
  *
- * You can alternatively provide an in-line function with the `canMatch` signature:
+ * You can alternatively provide an in-line function with the `CanMatchFn` signature:
  *
  * ```
- * const CAN_MATCH_TEAM_SECTION = new InjectionToken('CanMatchTeamSection');
- *
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -654,7 +664,7 @@ export declare interface CanLoad {
  *         path: 'team/:id',
  *         component: TeamComponent,
  *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
- *         canMatch: [CAN_MATCH_TEAM_SECTION]
+ *         canMatch: [(route: Route, segments: UrlSegment[]) => true]
  *       },
  *       {
  *         path: '**',
@@ -662,12 +672,6 @@ export declare interface CanLoad {
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: CAN_MATCH_TEAM_SECTION,
- *       useValue: (route: Route, segments: UrlSegment[]) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -1880,7 +1884,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * export class AppRoutingModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `resolve()` signature:
+ * You can alternatively provide an in-line function with the `ResolveFn` signature:
  *
  * ```
  * export const myHero: Hero = {
@@ -1894,17 +1898,11 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  *         path: 'detail/:id',
  *         component: HeroComponent,
  *         resolve: {
- *           hero: 'heroResolver'
+ *           hero: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
  *         }
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'heroResolver',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
- *     }
- *   ]
  * })
  * export class AppModule {}
  * ```
@@ -1967,7 +1965,7 @@ export declare interface Resolve<T> {
  * @publicApi
  */
 export declare type ResolveData = {
-    [key: string | symbol]: any;
+    [key: string | symbol]: any | ResolveFn<unknown>;
 };
 
 /**
@@ -1993,6 +1991,14 @@ export declare class ResolveEnd extends RouterEvent {
     state: RouterStateSnapshot);
     toString(): string;
 }
+
+/**
+ * Function type definition for a data provider.
+ *
+ * @see `Route#resolve`.
+ * @publicApi
+ */
+export declare type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<T> | Promise<T> | T;
 
 /**
  * An event triggered at the start of the Resolve phase of routing.
@@ -2254,7 +2260,7 @@ export declare interface Route {
      *
      * @see `PageTitleStrategy`
      */
-    title?: string | Type<Resolve<string>>;
+    title?: string | Type<Resolve<string>> | ResolveFn<string>;
     /**
      * The path to match against. Cannot be used together with a custom `matcher` function.
      * A URL string that uses router matching notation.
@@ -2311,36 +2317,50 @@ export declare interface Route {
      */
     outlet?: string;
     /**
-     * An array of dependency-injection tokens used to look up `CanActivate()`
+     * An array of `CanActivateFn` or DI tokens used to look up `CanActivate()`
      * handlers, in order to determine if the current user is allowed to
      * activate the component. By default, any user can activate.
+     *
+     * When using a function rather than DI tokens, the function can call `inject` to get any required
+     * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canActivate?: any[];
+    canActivate?: Array<CanActivateFn | any>;
     /**
-     * An array of DI tokens used to look up `CanMatch()`
+     * An array of `CanMatchFn` or DI tokens used to look up `CanMatch()`
      * handlers, in order to determine if the current user is allowed to
      * match the `Route`. By default, any route can match.
+     *
+     * When using a function rather than DI tokens, the function can call `inject` to get any required
+     * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canMatch?: Array<Type<CanMatch> | InjectionToken<CanMatchFn>>;
+    canMatch?: Array<Type<CanMatch> | InjectionToken<CanMatchFn> | CanMatchFn>;
     /**
-     * An array of DI tokens used to look up `CanActivateChild()` handlers,
+     * An array of `CanActivateChildFn` or DI tokens used to look up `CanActivateChild()` handlers,
      * in order to determine if the current user is allowed to activate
      * a child of the component. By default, any user can activate a child.
+     *
+     * When using a function rather than DI tokens, the function can call `inject` to get any required
+     * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canActivateChild?: any[];
+    canActivateChild?: Array<CanActivateChildFn | any>;
     /**
-     * An array of DI tokens used to look up `CanDeactivate()`
+     * An array of `CanDeactivateFn` or DI tokens used to look up `CanDeactivate()`
      * handlers, in order to determine if the current user is allowed to
      * deactivate the component. By default, any user can deactivate.
      *
+     * When using a function rather than DI tokens, the function can call `inject` to get any required
+     * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canDeactivate?: any[];
+    canDeactivate?: Array<CanDeactivateFn<any> | any>;
     /**
-     * An array of DI tokens used to look up `CanLoad()`
+     * An array of `CanLoadFn` or DI tokens used to look up `CanLoad()`
      * handlers, in order to determine if the current user is allowed to
      * load the component. By default, any user can load.
+     *
+     * When using a function rather than DI tokens, the function can call `inject` to get any required
+     * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canLoad?: any[];
+    canLoad?: Array<CanLoadFn | any>;
     /**
      * Additional developer-defined data provided to the component via
      * `ActivatedRoute`. By default, no additional data is passed.
