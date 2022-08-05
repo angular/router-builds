@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.1.1+sha-1d39ab6
+ * @license Angular v14.1.1+sha-c7fed38
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -741,6 +741,8 @@ export declare class ChildrenOutletContexts {
     onOutletReAttached(contexts: Map<string, OutletContext>): void;
     getOrCreateContext(childName: string): OutletContext;
     getContext(childName: string): OutletContext | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
 }
 
 /**
@@ -4020,6 +4022,8 @@ export declare abstract class UrlSerializer {
     abstract parse(url: string): UrlTree;
     /** Converts a `UrlTree` into a url */
     abstract serialize(tree: UrlTree): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UrlSerializer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UrlSerializer>;
 }
 
 /**
