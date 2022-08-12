@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.1+sha-93289f9
+ * @license Angular v14.2.0-next.1+sha-422323c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2994,6 +2994,9 @@ export declare class RouterLink implements OnChanges {
     private readonly tabIndexAttribute;
     private readonly renderer;
     private readonly el;
+    private _preserveFragment;
+    private _skipLocationChange;
+    private _replaceUrl;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -3016,27 +3019,6 @@ export declare class RouterLink implements OnChanges {
      */
     queryParamsHandling?: QueryParamsHandling | null;
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    preserveFragment: boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    skipLocationChange: boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    replaceUrl: boolean;
-    /**
      * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
@@ -3058,6 +3040,30 @@ export declare class RouterLink implements OnChanges {
     private commands;
     constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef);
     /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    set preserveFragment(preserveFragment: boolean | string | null | undefined);
+    get preserveFragment(): boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
+    set skipLocationChange(skipLocationChange: boolean | string | null | undefined);
+    get skipLocationChange(): boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
+    set replaceUrl(replaceUrl: boolean | string | null | undefined);
+    get replaceUrl(): boolean;
+    /**
      * Modifies the tab index if there was not a tabindex attribute on the element during
      * instantiation.
      */
@@ -3076,7 +3082,7 @@ export declare class RouterLink implements OnChanges {
     onClick(): boolean;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, true>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true>;
 }
 
 /**
@@ -3227,6 +3233,9 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private router;
     private route;
     private locationStrategy;
+    private _preserveFragment;
+    private _skipLocationChange;
+    private _replaceUrl;
     target: string;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
@@ -3249,27 +3258,6 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
     queryParamsHandling?: QueryParamsHandling | null;
-    /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    preserveFragment: boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    skipLocationChange: boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    replaceUrl: boolean;
     /**
      * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
@@ -3294,6 +3282,30 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     href: string | null;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     /**
+     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
+     * `UrlCreationOptions`.
+     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
+     * @see {@link Router#createUrlTree Router#createUrlTree}
+     */
+    set preserveFragment(preserveFragment: boolean | string | null | undefined);
+    get preserveFragment(): boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
+    set skipLocationChange(skipLocationChange: boolean | string | null | undefined);
+    get skipLocationChange(): boolean;
+    /**
+     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
+     * @see {@link Router#navigateByUrl Router#navigateByUrl}
+     */
+    set replaceUrl(replaceUrl: boolean | string | null | undefined);
+    get replaceUrl(): boolean;
+    /**
      * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
@@ -3310,7 +3322,7 @@ export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
     private updateTargetUrlAndHref;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "state": "state"; "relativeTo": "relativeTo"; "routerLink": "routerLink"; }, {}, never, never, true>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true>;
 }
 
 /**
