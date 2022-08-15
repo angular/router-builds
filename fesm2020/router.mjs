@@ -1,14 +1,14 @@
 /**
- * @license Angular v14.2.0-next.1+sha-8d4bc83
+ * @license Angular v14.2.0-next.1+sha-75df404
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { ɵisObservable, ɵisPromise, Injectable, ɵRuntimeError, EventEmitter, Directive, Attribute, Output, Component, createEnvironmentInjector, ɵisStandalone, ComponentFactoryResolver, ɵisInjectable, inject, InjectionToken, InjectFlags, NgModuleFactory, Injector, Compiler, NgModuleRef, ɵConsole, NgZone, ɵcoerceToBoolean, Input, HostListener, HostBinding, Optional, ContentChildren, NgProbeToken, SkipSelf, NgModule, Inject, ApplicationRef, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ENVIRONMENT_INITIALIZER, Version } from '@angular/core';
+import { ɵisObservable, ɵisPromise, Injectable, ɵRuntimeError, EventEmitter, Directive, Attribute, Output, Component, createEnvironmentInjector, ɵisStandalone, ComponentFactoryResolver, ɵisInjectable, inject, InjectionToken, InjectFlags, NgModuleFactory, Injector, Compiler, NgModuleRef, ɵConsole, NgZone, ɵcoerceToBoolean, Input, HostListener, HostBinding, Optional, ContentChildren, APP_BOOTSTRAP_LISTENER, ApplicationRef, APP_INITIALIZER, ENVIRONMENT_INITIALIZER, NgProbeToken, SkipSelf, NgModule, Inject, Version } from '@angular/core';
 import { from, of, BehaviorSubject, EmptyError, combineLatest, concat, defer, pipe, throwError, Observable, EMPTY, ConnectableObservable, Subject } from 'rxjs';
 import * as i3 from '@angular/common';
-import { Location, ViewportScroller, LocationStrategy, HashLocationStrategy, PathLocationStrategy, LOCATION_INITIALIZED } from '@angular/common';
+import { Location, ViewportScroller, LOCATION_INITIALIZED, LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 import { map, switchMap, take, startWith, filter, mergeMap, first, concatMap, tap, catchError, scan, last as last$1, takeWhile, defaultIfEmpty, takeLast, mapTo, finalize, refCount, mergeAll } from 'rxjs/operators';
 import * as i1 from '@angular/platform-browser';
 
@@ -202,7 +202,7 @@ function wrapIntoObservable(value) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$8 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$9 = typeof ngDevMode === 'undefined' || ngDevMode;
 function createEmptyUrlTree() {
     return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 }
@@ -459,9 +459,9 @@ function mapChildrenIntoArray(segment, fn) {
  */
 class UrlSerializer {
 }
-UrlSerializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: UrlSerializer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-UrlSerializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: UrlSerializer, providedIn: 'root', useFactory: () => new DefaultUrlSerializer() });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: UrlSerializer, decorators: [{
+UrlSerializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: UrlSerializer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+UrlSerializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: UrlSerializer, providedIn: 'root', useFactory: () => new DefaultUrlSerializer() });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: UrlSerializer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => new DefaultUrlSerializer() }]
         }] });
@@ -673,7 +673,7 @@ class UrlParser {
     parseSegment() {
         const path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
-            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$8 && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
+            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$9 && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
         }
         this.capture(path);
         return new UrlSegment(decode(path), this.parseMatrixParams());
@@ -742,7 +742,7 @@ class UrlParser {
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
             if (next !== '/' && next !== ')' && next !== ';') {
-                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$8 && `Cannot parse url '${this.url}'`);
+                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$9 && `Cannot parse url '${this.url}'`);
             }
             let outletName = undefined;
             if (path.indexOf(':') > -1) {
@@ -773,7 +773,7 @@ class UrlParser {
     }
     capture(str) {
         if (!this.consumeOptional(str)) {
-            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$8 && `Expected "${str}".`);
+            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$9 && `Expected "${str}".`);
         }
     }
 }
@@ -826,7 +826,7 @@ function isUrlTree(v) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$8 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
  * Creates a `UrlTree` relative to an `ActivatedRouteSnapshot`.
  *
@@ -1002,11 +1002,11 @@ class Navigation {
         this.numberOfDoubleDots = numberOfDoubleDots;
         this.commands = commands;
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
-            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$7 && 'Root segment cannot have matrix parameters');
+            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$8 && 'Root segment cannot have matrix parameters');
         }
         const cmdWithOutlet = commands.find(isCommandWithOutlets);
         if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
-            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$7 && '{outlets:{}} has to be the last command');
+            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$8 && '{outlets:{}} has to be the last command');
         }
     }
     toRoot() {
@@ -1105,7 +1105,7 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
         dd -= ci;
         g = g.parent;
         if (!g) {
-            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$7 && 'Invalid number of \'../\'');
+            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$8 && 'Invalid number of \'../\'');
         }
         ci = g.segments.length;
     }
@@ -2382,9 +2382,9 @@ class ChildrenOutletContexts {
         return this.contexts.get(childName) || null;
     }
 }
-ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
+ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -2396,7 +2396,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sh
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
  * @description
  *
@@ -2505,12 +2505,12 @@ class RouterOutlet {
      */
     get component() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
         return this.activated.instance;
     }
     get activatedRoute() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
         return this._activatedRoute;
     }
     get activatedRouteData() {
@@ -2524,7 +2524,7 @@ class RouterOutlet {
      */
     detach() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$6 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
         this.location.detach();
         const cmp = this.activated;
         this.activated = null;
@@ -2552,7 +2552,7 @@ class RouterOutlet {
     }
     activateWith(activatedRoute, resolverOrInjector) {
         if (this.isActivated) {
-            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$6 && 'Cannot activate an already activated outlet');
+            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$7 && 'Cannot activate an already activated outlet');
         }
         this._activatedRoute = activatedRoute;
         const location = this.location;
@@ -2574,9 +2574,9 @@ class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", type: RouterOutlet, isStandalone: true, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterOutlet, deps: [{ token: ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", type: RouterOutlet, isStandalone: true, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{
                     selector: 'router-outlet',
@@ -2637,9 +2637,9 @@ function isComponentFactoryResolver(item) {
  */
 class ɵEmptyOutletComponent {
 }
-ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", type: ɵEmptyOutletComponent, isStandalone: true, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
+ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", type: ɵEmptyOutletComponent, isStandalone: true, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
             type: Component,
             args: [{
                     template: `<router-outlet></router-outlet>`,
@@ -3559,7 +3559,7 @@ function noLeftoversInUrl(segmentGroup, segments, outlet) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || ngDevMode;
 class NoMatch$1 {
     constructor(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
@@ -3577,11 +3577,11 @@ function absoluteRedirect(newTree) {
     return throwError(new AbsoluteRedirect(newTree));
 }
 function namedOutletsRedirect(redirectTo) {
-    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$5 &&
+    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$6 &&
         `Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`));
 }
 function canLoadFails(route) {
-    return throwError(navigationCancelingError(NG_DEV_MODE$5 &&
+    return throwError(navigationCancelingError(NG_DEV_MODE$6 &&
         `Cannot load children because the guard of the route "path: '${route.path}'" returned false`, 3 /* NavigationCancellationCode.GuardRejected */));
 }
 /**
@@ -3641,7 +3641,7 @@ class ApplyRedirects {
         }));
     }
     noMatchError(e) {
-        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$5 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
+        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$6 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
     }
     createUrlTree(rootCandidate, queryParams, fragment) {
         const root = createRoot(rootCandidate);
@@ -3856,7 +3856,7 @@ class ApplyRedirects {
     findPosParam(redirectTo, redirectToUrlSegment, posParams) {
         const pos = posParams[redirectToUrlSegment.path.substring(1)];
         if (!pos)
-            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$5 &&
+            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$6 &&
                 `Cannot redirect to '${redirectTo}'. Cannot find '${redirectToUrlSegment.path}'.`);
         return pos;
     }
@@ -3892,7 +3892,7 @@ function applyRedirects(environmentInjector, configLoader, urlSerializer, config
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$4 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 class NoMatch {
 }
 function newObservableError(e) {
@@ -3981,7 +3981,7 @@ class Recognizer {
             // multiple activated results for the same outlet. We should merge the children of
             // these results so the final return value is only one `TreeNode` per outlet.
             const mergedChildren = mergeEmptyPathMatches(children);
-            if (NG_DEV_MODE$4) {
+            if (NG_DEV_MODE$5) {
                 // This should really never happen - we are only taking the first match for each
                 // outlet and merge the empty path matches.
                 checkOutletNameUniqueness(mergedChildren);
@@ -4014,7 +4014,7 @@ class Recognizer {
             // NG_DEV_MODE is used to prevent the getCorrectedPathIndexShift function from affecting
             // production bundle size. This value is intended only to surface a warning to users
             // depending on `relativeLinkResolution: 'legacy'` in dev mode.
-            (NG_DEV_MODE$4 ? getCorrectedPathIndexShift(rawSegment) + segments.length :
+            (NG_DEV_MODE$5 ? getCorrectedPathIndexShift(rawSegment) + segments.length :
                 pathIndexShift));
             matchResult = of({
                 snapshot,
@@ -4030,7 +4030,7 @@ class Recognizer {
                         return null;
                     }
                     const pathIndexShift = getPathIndexShift(rawSegment) + consumedSegments.length;
-                    const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze({ ...this.urlTree.queryParams }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getSourceSegmentGroup(rawSegment), pathIndexShift, getResolve(route), (NG_DEV_MODE$4 ?
+                    const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze({ ...this.urlTree.queryParams }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getSourceSegmentGroup(rawSegment), pathIndexShift, getResolve(route), (NG_DEV_MODE$5 ?
                         getCorrectedPathIndexShift(rawSegment) + consumedSegments.length :
                         pathIndexShift));
                     return { snapshot, consumedSegments, remainingSegments };
@@ -4143,7 +4143,7 @@ function checkOutletNameUniqueness(nodes) {
         if (routeWithSameOutletName) {
             const p = routeWithSameOutletName.url.map(s => s.toString()).join('/');
             const c = n.value.url.map(s => s.toString()).join('/');
-            throw new ɵRuntimeError(4006 /* RuntimeErrorCode.TWO_SEGMENTS_WITH_SAME_OUTLET */, NG_DEV_MODE$4 && `Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
+            throw new ɵRuntimeError(4006 /* RuntimeErrorCode.TWO_SEGMENTS_WITH_SAME_OUTLET */, NG_DEV_MODE$5 && `Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
         }
         names[n.value.outlet] = n.value;
     });
@@ -4325,9 +4325,9 @@ class TitleStrategy {
         return snapshot.data[RouteTitleKey];
     }
 }
-TitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: TitleStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-TitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: TitleStrategy, providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: TitleStrategy, decorators: [{
+TitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: TitleStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+TitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: TitleStrategy, providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: TitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) }]
         }] });
@@ -4351,9 +4351,9 @@ class DefaultTitleStrategy extends TitleStrategy {
         }
     }
 }
-DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
+DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Title }]; } });
@@ -4442,13 +4442,13 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$3 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const NG_DEV_MODE$4 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 /**
  * A [DI token](guide/glossary/#di-token) for the router service.
  *
  * @publicApi
  */
-const ROUTER_CONFIGURATION = new InjectionToken(NG_DEV_MODE$3 ? 'router config' : '', {
+const ROUTER_CONFIGURATION = new InjectionToken(NG_DEV_MODE$4 ? 'router config' : '', {
     providedIn: 'root',
     factory: () => ({}),
 });
@@ -4460,7 +4460,7 @@ const ROUTER_CONFIGURATION = new InjectionToken(NG_DEV_MODE$3 ? 'router config' 
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$2 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const NG_DEV_MODE$3 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 /**
  * The [DI token](guide/glossary/#di-token) for a router configuration.
  *
@@ -4494,7 +4494,7 @@ class RouterConfigLoader {
             if (this.onLoadEndListener) {
                 this.onLoadEndListener(route);
             }
-            NG_DEV_MODE$2 && assertStandalone(route.path ?? '', component);
+            NG_DEV_MODE$3 && assertStandalone(route.path ?? '', component);
             route._loadedComponent = component;
         }), finalize(() => {
             this.componentLoaders.delete(route);
@@ -4537,7 +4537,7 @@ class RouterConfigLoader {
                 rawRoutes = flatten(injector.get(ROUTES, [], InjectFlags.Self | InjectFlags.Optional));
             }
             const routes = rawRoutes.map(standardizeConfig);
-            NG_DEV_MODE$2 && validateConfig(routes, route.path, requireStandaloneComponents);
+            NG_DEV_MODE$3 && validateConfig(routes, route.path, requireStandaloneComponents);
             return { routes, injector };
         }), finalize(() => {
             this.childrenLoaders.delete(route);
@@ -4559,9 +4559,9 @@ class RouterConfigLoader {
         }));
     }
 }
-RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterConfigLoader, decorators: [{
+RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterConfigLoader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i0.Injector }, { type: i0.Compiler }]; } });
@@ -4604,7 +4604,7 @@ class DefaultUrlHandlingStrategy {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$1 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const NG_DEV_MODE$2 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 function defaultErrorHandler(error) {
     throw error;
 }
@@ -5009,7 +5009,7 @@ class Router {
                             complete: () => {
                                 if (!dataResolved) {
                                     this.restoreHistory(t);
-                                    this.cancelNavigationTransition(t, NG_DEV_MODE$1 ?
+                                    this.cancelNavigationTransition(t, NG_DEV_MODE$2 ?
                                         `At least one route resolver didn't emit any value.` :
                                         '', 2 /* NavigationCancellationCode.NoDataFromResolver */);
                                 }
@@ -5076,7 +5076,7 @@ class Router {
                  * catch-all to make sure the NavigationCancel event is fired when a
                  * navigation gets cancelled but not caught by other means. */
                 if (!completed && !errored) {
-                    const cancelationReason = NG_DEV_MODE$1 ?
+                    const cancelationReason = NG_DEV_MODE$2 ?
                         `Navigation ID ${overallTransitionState
                             .id} is not equal to the current navigation id ${this.navigationId}` :
                         '';
@@ -5234,7 +5234,7 @@ class Router {
      * ```
      */
     resetConfig(config) {
-        NG_DEV_MODE$1 && validateConfig(config);
+        NG_DEV_MODE$2 && validateConfig(config);
         this.config = config.map(standardizeConfig);
         this.navigated = false;
         this.lastSuccessfulId = -1;
@@ -5589,9 +5589,9 @@ class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: Router, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root',
@@ -5602,7 +5602,7 @@ function validateCommands(commands) {
     for (let i = 0; i < commands.length; i++) {
         const cmd = commands[i];
         if (cmd == null) {
-            throw new ɵRuntimeError(4008 /* RuntimeErrorCode.NULLISH_COMMAND */, NG_DEV_MODE$1 && `The requested path contains ${cmd} segment at index ${i}`);
+            throw new ɵRuntimeError(4008 /* RuntimeErrorCode.NULLISH_COMMAND */, NG_DEV_MODE$2 && `The requested path contains ${cmd} segment at index ${i}`);
         }
     }
 }
@@ -5833,9 +5833,9 @@ class RouterLink {
         });
     }
 }
-RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", type: RouterLink, isStandalone: true, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLink, decorators: [{
+RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", type: RouterLink, isStandalone: true, selector: ":not(a):not(area)[routerLink]", inputs: { queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick()" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{
                     selector: ':not(a):not(area)[routerLink]',
@@ -5994,9 +5994,9 @@ class RouterLinkWithHref {
         });
     }
 }
-RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", type: RouterLinkWithHref, isStandalone: true, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLinkWithHref, decorators: [{
+RouterLinkWithHref.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLinkWithHref, deps: [{ token: Router }, { token: ActivatedRoute }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkWithHref.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", type: RouterLinkWithHref, isStandalone: true, selector: "a[routerLink],area[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target", "attr.href": "this.href" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLinkWithHref, decorators: [{
             type: Directive,
             args: [{ selector: 'a[routerLink],area[routerLink]', standalone: true }]
         }], ctorParameters: function () { return [{ type: Router }, { type: ActivatedRoute }, { type: i3.LocationStrategy }]; }, propDecorators: { target: [{
@@ -6221,9 +6221,9 @@ class RouterLinkActive {
             this.links.some(isActiveCheckFn) || this.linksWithHrefs.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterLinkActive, decorators: [{
+RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }, { token: RouterLinkWithHref, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }, { propertyName: "linksWithHrefs", predicate: RouterLinkWithHref, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -6288,9 +6288,9 @@ class PreloadAllModules {
         return fn().pipe(catchError(() => of(null)));
     }
 }
-PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: PreloadAllModules, decorators: [{
+PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: PreloadAllModules, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -6308,9 +6308,9 @@ class NoPreloading {
         return of(null);
     }
 }
-NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: NoPreloading, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: NoPreloading, decorators: [{
+NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: NoPreloading, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: NoPreloading, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -6404,10 +6404,11 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterPreloader });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterPreloader, decorators: [{
-            type: Injectable
+RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterPreloader, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterPreloader, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: i0.Compiler }, { type: i0.EnvironmentInjector }, { type: PreloadingStrategy }, { type: RouterConfigLoader }]; } });
 
 /**
@@ -6493,9 +6494,9 @@ class RouterScroller {
         }
     }
 }
-RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterScroller });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterScroller, decorators: [{
+RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterScroller });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i3.ViewportScroller }, { type: undefined }]; } });
 
@@ -6506,158 +6507,63 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sh
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$1 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
- * The directives defined in the `RouterModule`.
+ * Sets up providers necessary to enable `Router` functionality for the application.
+ * Allows to configure a set of routes as well as extra features that should be enabled.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can add a Router to your application:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent, {
+ *   providers: [provideRouter(appRoutes)]
+ * });
+ * ```
+ *
+ * You can also enable optional features in the Router by adding functions from the `RouterFeatures`
+ * type:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes,
+ *         withDebugTracing(),
+ *         withRouterConfig({paramsInheritanceStrategy: 'always'}))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `RouterFeatures`
+ *
+ * @publicApi
+ * @developerPreview
+ * @param routes A set of `Route`s to use for the application routing table.
+ * @param features Optional features to configure additional router behaviors.
+ * @returns A set of providers to setup a Router.
  */
-const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
-/**
- * @docsNotRequired
- */
-const ROUTER_FORROOT_GUARD = new InjectionToken(NG_DEV_MODE ? 'router duplicate forRoot guard' : 'ROUTER_FORROOT_GUARD');
-const ROUTER_PRELOADER = new InjectionToken(NG_DEV_MODE ? 'router preloader' : '');
-// TODO(atscott): All of these except `ActivatedRoute` are `providedIn: 'root'`. They are only kept
-// here to avoid a breaking change whereby the provider order matters based on where the
-// `RouterModule`/`RouterTestingModule` is imported. These can/should be removed as a "breaking"
-// change in a major version.
-const ROUTER_PROVIDERS = [
-    Location,
-    { provide: UrlSerializer, useClass: DefaultUrlSerializer },
-    { provide: Router, useFactory: setupRouter },
-    ChildrenOutletContexts,
-    { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
-    RouterConfigLoader,
-];
+function provideRouter(routes, ...features) {
+    return [
+        provideRoutes(routes), { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
+        { provide: APP_BOOTSTRAP_LISTENER, multi: true, useFactory: getBootstrapListener },
+        features.map(feature => feature.ɵproviders),
+        // TODO: All options used by the `assignExtraOptionsToRouter` factory need to be reviewed for
+        // how we want them to be configured. This API doesn't currently have a way to configure them
+        // and we should decide what the _best_ way to do that is rather than just sticking with the
+        // status quo of how it's done today.
+    ];
+}
 function rootRoute(router) {
     return router.routerState.root;
 }
-function routerNgProbeToken() {
-    return new NgProbeToken('Router', Router);
-}
 /**
- * @description
- *
- * Adds directives and providers for in-app navigation among views defined in an application.
- * Use the Angular `Router` service to declaratively specify application states and manage state
- * transitions.
- *
- * You can import this NgModule multiple times, once for each lazy-loaded bundle.
- * However, only one `Router` service can be active.
- * To ensure this, there are two ways to register routes when importing this module:
- *
- * * The `forRoot()` method creates an `NgModule` that contains all the directives, the given
- * routes, and the `Router` service itself.
- * * The `forChild()` method creates an `NgModule` that contains all the directives and the given
- * routes, but does not include the `Router` service.
- *
- * @see [Routing and Navigation guide](guide/router) for an
- * overview of how the `Router` service should be used.
- *
- * @publicApi
+ * Helper function to create an object that represents a Router feature.
  */
-class RouterModule {
-    constructor(guard) { }
-    /**
-     * Creates and configures a module with all the router providers and directives.
-     * Optionally sets up an application listener to perform an initial navigation.
-     *
-     * When registering the NgModule at the root, import as follows:
-     *
-     * ```
-     * @NgModule({
-     *   imports: [RouterModule.forRoot(ROUTES)]
-     * })
-     * class MyNgModule {}
-     * ```
-     *
-     * @param routes An array of `Route` objects that define the navigation paths for the application.
-     * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
-     * @return The new `NgModule`.
-     *
-     */
-    static forRoot(routes, config) {
-        return {
-            ngModule: RouterModule,
-            providers: [
-                ROUTER_PROVIDERS,
-                NG_DEV_MODE ? (config?.enableTracing ? provideTracing() : []) : [],
-                provideRoutes(routes),
-                {
-                    provide: ROUTER_FORROOT_GUARD,
-                    useFactory: provideForRootGuard,
-                    deps: [[Router, new Optional(), new SkipSelf()]]
-                },
-                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
-                config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(),
-                provideRouterScroller(),
-                config?.preloadingStrategy ? providePreloading(config.preloadingStrategy) : [],
-                { provide: NgProbeToken, multi: true, useFactory: routerNgProbeToken },
-                config?.initialNavigation ? provideInitialNavigation(config) : [],
-                provideRouterInitializer(),
-            ],
-        };
-    }
-    /**
-     * Creates a module with all the router directives and a provider registering routes,
-     * without creating a new Router service.
-     * When registering for submodules and lazy-loaded submodules, create the NgModule as follows:
-     *
-     * ```
-     * @NgModule({
-     *   imports: [RouterModule.forChild(ROUTES)]
-     * })
-     * class MyNgModule {}
-     * ```
-     *
-     * @param routes An array of `Route` objects that define the navigation paths for the submodule.
-     * @return The new NgModule.
-     *
-     */
-    static forChild(routes) {
-        return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
-    }
-}
-RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
-RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterModule, imports: [ɵEmptyOutletComponent] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-8d4bc83", ngImport: i0, type: RouterModule, decorators: [{
-            type: NgModule,
-            args: [{
-                    imports: ROUTER_DIRECTIVES,
-                    exports: ROUTER_DIRECTIVES,
-                }]
-        }], ctorParameters: function () { return [{ type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [ROUTER_FORROOT_GUARD]
-                }] }]; } });
-function provideRouterScroller() {
-    return {
-        provide: ROUTER_SCROLLER,
-        useFactory: () => {
-            const router = inject(Router);
-            const viewportScroller = inject(ViewportScroller);
-            const config = inject(ROUTER_CONFIGURATION);
-            if (config.scrollOffset) {
-                viewportScroller.setOffset(config.scrollOffset);
-            }
-            return new RouterScroller(router, viewportScroller, config);
-        },
-    };
-}
-function provideHashLocationStrategy() {
-    return { provide: LocationStrategy, useClass: HashLocationStrategy };
-}
-function providePathLocationStrategy() {
-    return { provide: LocationStrategy, useClass: PathLocationStrategy };
-}
-function provideForRootGuard(router) {
-    if (NG_DEV_MODE && router) {
-        throw new ɵRuntimeError(4007 /* RuntimeErrorCode.FOR_ROOT_CALLED_TWICE */, `The Router was provided more than once. This can happen if 'forRoot' is used outside of the root injector.` +
-            ` Lazy loaded modules should use RouterModule.forChild() instead.`);
-    }
-    return 'guarded';
+function routerFeature(kind, providers) {
+    return { ɵkind: kind, ɵproviders: providers };
 }
 /**
  * Registers a [DI provider](guide/glossary#provider) for a set of routes.
@@ -6667,10 +6573,9 @@ function provideForRootGuard(router) {
  *
  * ```
  * @NgModule({
- *   imports: [RouterModule.forChild(ROUTES)],
- *   providers: [provideRoutes(EXTRA_ROUTES)]
+ *   providers: [provideRoutes(ROUTES)]
  * })
- * class MyNgModule {}
+ * class LazyLoadedChildModule {}
  * ```
  *
  * @publicApi
@@ -6679,6 +6584,43 @@ function provideRoutes(routes) {
     return [
         { provide: ROUTES, multi: true, useValue: routes },
     ];
+}
+/**
+ * Enables customizable scrolling behavior for router navigations.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable scrolling feature:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withInMemoryScrolling())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ * @see `ViewportScroller`
+ *
+ * @publicApi
+ * @developerPreview
+ * @param options Set of configuration parameters to customize scrolling behavior, see
+ *     `InMemoryScrollingOptions` for additional information.
+ * @returns A set of providers for use with `provideRouter`.
+ */
+function withInMemoryScrolling(options = {}) {
+    const providers = [{
+            provide: ROUTER_SCROLLER,
+            useFactory: () => {
+                const router = inject(Router);
+                const viewportScroller = inject(ViewportScroller);
+                return new RouterScroller(router, viewportScroller, options);
+            },
+        }];
+    return routerFeature(4 /* RouterFeatureKind.InMemoryScrollingFeature */, providers);
 }
 function getBootstrapListener() {
     const injector = inject(Injector);
@@ -6699,40 +6641,45 @@ function getBootstrapListener() {
         bootstrapDone.complete();
     };
 }
-// TODO(atscott): This should not be in the public API
-/**
- * A [DI token](guide/glossary/#di-token) for the router initializer that
- * is called after the app is bootstrapped.
- *
- * @publicApi
- */
-const ROUTER_INITIALIZER = new InjectionToken(NG_DEV_MODE ? 'Router Initializer' : '');
-function provideInitialNavigation(config) {
-    return [
-        config.initialNavigation === 'disabled' ? provideDisabledInitialNavigation() : [],
-        config.initialNavigation === 'enabledBlocking' ? provideEnabledBlockingInitialNavigation() : [],
-    ];
-}
-function provideRouterInitializer() {
-    return [
-        // ROUTER_INITIALIZER token should be removed. It's public API but shouldn't be. We can just
-        // have `getBootstrapListener` directly attached to APP_BOOTSTRAP_LISTENER.
-        { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener },
-        { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
-    ];
-}
 /**
  * A subject used to indicate that the bootstrapping phase is done. When initial navigation is
  * `enabledBlocking`, the first navigation waits until bootstrapping is finished before continuing
  * to the activation phase.
  */
-const BOOTSTRAP_DONE = new InjectionToken(NG_DEV_MODE ? 'bootstrap done indicator' : '', {
+const BOOTSTRAP_DONE = new InjectionToken(NG_DEV_MODE$1 ? 'bootstrap done indicator' : '', {
     factory: () => {
         return new Subject();
     }
 });
-function provideEnabledBlockingInitialNavigation() {
-    return [
+const INITIAL_NAVIGATION = new InjectionToken(NG_DEV_MODE$1 ? 'initial navigation' : '', { providedIn: 'root', factory: () => 1 /* InitialNavigation.EnabledNonBlocking */ });
+/**
+ * Configures initial navigation to start before the root component is created.
+ *
+ * The bootstrap is blocked until the initial navigation is complete. This value is required for
+ * [server-side rendering](guide/universal) to work.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable this navigation behavior:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withEnabledBlockingInitialNavigation())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ * @returns A set of providers for use with `provideRouter`.
+ */
+function withEnabledBlockingInitialNavigation() {
+    const providers = [
         { provide: INITIAL_NAVIGATION, useValue: 0 /* InitialNavigation.EnabledBlocking */ },
         {
             provide: APP_INITIALIZER,
@@ -6798,10 +6745,37 @@ function provideEnabledBlockingInitialNavigation() {
             }
         },
     ];
+    return routerFeature(2 /* RouterFeatureKind.EnabledBlockingInitialNavigationFeature */, providers);
 }
-const INITIAL_NAVIGATION = new InjectionToken(NG_DEV_MODE ? 'initial navigation' : '', { providedIn: 'root', factory: () => 1 /* InitialNavigation.EnabledNonBlocking */ });
-function provideDisabledInitialNavigation() {
-    return [
+/**
+ * Disables initial navigation.
+ *
+ * Use if there is a reason to have more control over when the router starts its initial navigation
+ * due to some complex initialization logic.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can disable initial navigation:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withDisabledInitialNavigation())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+function withDisabledInitialNavigation() {
+    const providers = [
         {
             provide: APP_INITIALIZER,
             multi: true,
@@ -6814,10 +6788,37 @@ function provideDisabledInitialNavigation() {
         },
         { provide: INITIAL_NAVIGATION, useValue: 2 /* InitialNavigation.Disabled */ }
     ];
+    return routerFeature(3 /* RouterFeatureKind.DisabledInitialNavigationFeature */, providers);
 }
-function provideTracing() {
-    if (NG_DEV_MODE) {
-        return [{
+/**
+ * Enables logging of all internal navigation events to the console.
+ * Extra logging might be useful for debugging purposes to inspect Router event sequence.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable debug tracing:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withDebugTracing())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+function withDebugTracing() {
+    let providers = [];
+    if (NG_DEV_MODE$1) {
+        providers = [{
                 provide: ENVIRONMENT_INITIALIZER,
                 multi: true,
                 useFactory: () => {
@@ -6834,14 +6835,268 @@ function provideTracing() {
             }];
     }
     else {
-        return [];
+        providers = [];
     }
+    return routerFeature(1 /* RouterFeatureKind.DebugTracingFeature */, providers);
 }
-function providePreloading(preloadingStrategy) {
-    return [
-        RouterPreloader,
+const ROUTER_PRELOADER = new InjectionToken(NG_DEV_MODE$1 ? 'router preloader' : '');
+/**
+ * Allows to configure a preloading strategy to use. The strategy is configured by providing a
+ * reference to a class that implements a `PreloadingStrategy`.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can configure preloading:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withPreloading(PreloadAllModules))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @param preloadingStrategy A reference to a class that implements a `PreloadingStrategy` that
+ *     should be used.
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+function withPreloading(preloadingStrategy) {
+    const providers = [
         { provide: ROUTER_PRELOADER, useExisting: RouterPreloader },
         { provide: PreloadingStrategy, useExisting: preloadingStrategy },
+    ];
+    return routerFeature(0 /* RouterFeatureKind.PreloadingFeature */, providers);
+}
+/**
+ * Allows to provide extra parameters to configure Router.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can provide extra configuration options:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withRouterConfig({
+ *          onSameUrlNavigation: 'reload'
+ *       }))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @param options A set of parameters to configure Router, see `RouterConfigOptions` for
+ *     additional information.
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+function withRouterConfig(options) {
+    const providers = [
+        { provide: ROUTER_CONFIGURATION, useValue: options },
+    ];
+    return routerFeature(5 /* RouterFeatureKind.RouterConfigurationFeature */, providers);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+const NG_DEV_MODE = typeof ngDevMode === 'undefined' || ngDevMode;
+/**
+ * The directives defined in the `RouterModule`.
+ */
+const ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent];
+/**
+ * @docsNotRequired
+ */
+const ROUTER_FORROOT_GUARD = new InjectionToken(NG_DEV_MODE ? 'router duplicate forRoot guard' : 'ROUTER_FORROOT_GUARD');
+// TODO(atscott): All of these except `ActivatedRoute` are `providedIn: 'root'`. They are only kept
+// here to avoid a breaking change whereby the provider order matters based on where the
+// `RouterModule`/`RouterTestingModule` is imported. These can/should be removed as a "breaking"
+// change in a major version.
+const ROUTER_PROVIDERS = [
+    Location,
+    { provide: UrlSerializer, useClass: DefaultUrlSerializer },
+    { provide: Router, useFactory: setupRouter },
+    ChildrenOutletContexts,
+    { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
+    RouterConfigLoader,
+];
+function routerNgProbeToken() {
+    return new NgProbeToken('Router', Router);
+}
+/**
+ * @description
+ *
+ * Adds directives and providers for in-app navigation among views defined in an application.
+ * Use the Angular `Router` service to declaratively specify application states and manage state
+ * transitions.
+ *
+ * You can import this NgModule multiple times, once for each lazy-loaded bundle.
+ * However, only one `Router` service can be active.
+ * To ensure this, there are two ways to register routes when importing this module:
+ *
+ * * The `forRoot()` method creates an `NgModule` that contains all the directives, the given
+ * routes, and the `Router` service itself.
+ * * The `forChild()` method creates an `NgModule` that contains all the directives and the given
+ * routes, but does not include the `Router` service.
+ *
+ * @see [Routing and Navigation guide](guide/router) for an
+ * overview of how the `Router` service should be used.
+ *
+ * @publicApi
+ */
+class RouterModule {
+    constructor(guard) { }
+    /**
+     * Creates and configures a module with all the router providers and directives.
+     * Optionally sets up an application listener to perform an initial navigation.
+     *
+     * When registering the NgModule at the root, import as follows:
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forRoot(ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
+     * @param routes An array of `Route` objects that define the navigation paths for the application.
+     * @param config An `ExtraOptions` configuration object that controls how navigation is performed.
+     * @return The new `NgModule`.
+     *
+     */
+    static forRoot(routes, config) {
+        return {
+            ngModule: RouterModule,
+            providers: [
+                ROUTER_PROVIDERS,
+                NG_DEV_MODE ? (config?.enableTracing ? withDebugTracing().ɵproviders : []) : [],
+                provideRoutes(routes),
+                {
+                    provide: ROUTER_FORROOT_GUARD,
+                    useFactory: provideForRootGuard,
+                    deps: [[Router, new Optional(), new SkipSelf()]]
+                },
+                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
+                config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(),
+                provideRouterScroller(),
+                config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [],
+                { provide: NgProbeToken, multi: true, useFactory: routerNgProbeToken },
+                config?.initialNavigation ? provideInitialNavigation(config) : [],
+                provideRouterInitializer(),
+            ],
+        };
+    }
+    /**
+     * Creates a module with all the router directives and a provider registering routes,
+     * without creating a new Router service.
+     * When registering for submodules and lazy-loaded submodules, create the NgModule as follows:
+     *
+     * ```
+     * @NgModule({
+     *   imports: [RouterModule.forChild(ROUTES)]
+     * })
+     * class MyNgModule {}
+     * ```
+     *
+     * @param routes An array of `Route` objects that define the navigation paths for the submodule.
+     * @return The new NgModule.
+     *
+     */
+    static forChild(routes) {
+        return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
+    }
+}
+RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive, ɵEmptyOutletComponent] });
+RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterModule, imports: [ɵEmptyOutletComponent] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-next.1+sha-75df404", ngImport: i0, type: RouterModule, decorators: [{
+            type: NgModule,
+            args: [{
+                    imports: ROUTER_DIRECTIVES,
+                    exports: ROUTER_DIRECTIVES,
+                }]
+        }], ctorParameters: function () { return [{ type: undefined, decorators: [{
+                    type: Optional
+                }, {
+                    type: Inject,
+                    args: [ROUTER_FORROOT_GUARD]
+                }] }]; } });
+/**
+ * For internal use by `RouterModule` only. Note that this differs from `withInMemoryRouterScroller`
+ * because it reads from the `ExtraOptions` which should not be used in the standalone world.
+ */
+function provideRouterScroller() {
+    return {
+        provide: ROUTER_SCROLLER,
+        useFactory: () => {
+            const router = inject(Router);
+            const viewportScroller = inject(ViewportScroller);
+            const config = inject(ROUTER_CONFIGURATION);
+            if (config.scrollOffset) {
+                viewportScroller.setOffset(config.scrollOffset);
+            }
+            return new RouterScroller(router, viewportScroller, config);
+        },
+    };
+}
+// Note: For internal use only with `RouterModule`. Standalone setup via `provideRouter` should
+// provide hash location directly via `{provide: LocationStrategy, useClass: HashLocationStrategy}`.
+function provideHashLocationStrategy() {
+    return { provide: LocationStrategy, useClass: HashLocationStrategy };
+}
+// Note: For internal use only with `RouterModule`. Standalone setup via `provideRouter` does not
+// need this at all because `PathLocationStrategy` is the default factory for `LocationStrategy`.
+function providePathLocationStrategy() {
+    return { provide: LocationStrategy, useClass: PathLocationStrategy };
+}
+function provideForRootGuard(router) {
+    if (NG_DEV_MODE && router) {
+        throw new ɵRuntimeError(4007 /* RuntimeErrorCode.FOR_ROOT_CALLED_TWICE */, `The Router was provided more than once. This can happen if 'forRoot' is used outside of the root injector.` +
+            ` Lazy loaded modules should use RouterModule.forChild() instead.`);
+    }
+    return 'guarded';
+}
+// Note: For internal use only with `RouterModule`. Standalone router setup with `provideRouter`
+// users call `withXInitialNavigation` directly.
+function provideInitialNavigation(config) {
+    return [
+        config.initialNavigation === 'disabled' ? withDisabledInitialNavigation().ɵproviders : [],
+        config.initialNavigation === 'enabledBlocking' ?
+            withEnabledBlockingInitialNavigation().ɵproviders :
+            [],
+    ];
+}
+// TODO(atscott): This should not be in the public API
+/**
+ * A [DI token](guide/glossary/#di-token) for the router initializer that
+ * is called after the app is bootstrapped.
+ *
+ * @publicApi
+ */
+const ROUTER_INITIALIZER = new InjectionToken(NG_DEV_MODE ? 'Router Initializer' : '');
+function provideRouterInitializer() {
+    return [
+        // ROUTER_INITIALIZER token should be removed. It's public API but shouldn't be. We can just
+        // have `getBootstrapListener` directly attached to APP_BOOTSTRAP_LISTENER.
+        { provide: ROUTER_INITIALIZER, useFactory: getBootstrapListener },
+        { provide: APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
     ];
 }
 
@@ -6855,7 +7110,7 @@ function providePreloading(preloadingStrategy) {
 /**
  * @publicApi
  */
-const VERSION = new Version('14.2.0-next.1+sha-8d4bc83');
+const VERSION = new Version('14.2.0-next.1+sha-75df404');
 
 /**
  * @license
@@ -6894,5 +7149,5 @@ const VERSION = new Version('14.2.0-next.1+sha-8d4bc83');
  * Generated bundle index. Do not edit.
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, provideRoutes, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, assignExtraOptionsToRouter as ɵassignExtraOptionsToRouter, flatten as ɵflatten, providePreloading as ɵprovidePreloading };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTES, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, provideRouter, provideRoutes, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withInMemoryScrolling, withPreloading, withRouterConfig, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, assignExtraOptionsToRouter as ɵassignExtraOptionsToRouter, flatten as ɵflatten, withPreloading as ɵwithPreloading };
 //# sourceMappingURL=router.mjs.map

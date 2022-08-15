@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.2.0-next.1+sha-8d4bc83
+ * @license Angular v14.2.0-next.1+sha-75df404
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -828,6 +828,17 @@ export declare type Data = {
 };
 
 /**
+ * A type alias for providers returned by `withDebugTracing` for use with `provideRouter`.
+ *
+ * @see `withDebugTracing`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type DebugTracingFeature = RouterFeature<RouterFeatureKind.DebugTracingFeature>;
+
+/**
  * The default `TitleStrategy` used by the router that updates the title using the `Title` service.
  */
 export declare class DefaultTitleStrategy extends TitleStrategy {
@@ -896,6 +907,30 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
  * @publicApi
  */
 export declare type DetachedRouteHandle = {};
+
+/**
+ * A type alias for providers returned by `withDisabledInitialNavigation` for use with
+ * `provideRouter`.
+ *
+ * @see `withDisabledInitialNavigation`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type DisabledInitialNavigationFeature = RouterFeature<RouterFeatureKind.DisabledInitialNavigationFeature>;
+
+/**
+ * A type alias for providers returned by `withEnabledBlockingInitialNavigation` for use with
+ * `provideRouter`.
+ *
+ * @see `withEnabledBlockingInitialNavigation`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type EnabledBlockingInitialNavigationFeature = RouterFeature<RouterFeatureKind.EnabledBlockingInitialNavigationFeature>;
 
 /**
  * Error handler that is invoked when a navigation error occurs.
@@ -977,7 +1012,7 @@ export declare const enum EventType {
  *
  * @publicApi
  */
-export declare interface ExtraOptions {
+export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions {
     /**
      * When true, log all internal navigation events to the console.
      * Use for debugging.
@@ -1013,57 +1048,6 @@ export declare interface ExtraOptions {
      */
     preloadingStrategy?: any;
     /**
-     * Define what the router should do if it receives a navigation request to the current URL.
-     * Default is `ignore`, which causes the router ignores the navigation.
-     * This can disable features such as a "refresh" button.
-     * Use this option to configure the behavior when navigating to the
-     * current URL. Default is 'ignore'.
-     */
-    onSameUrlNavigation?: 'reload' | 'ignore';
-    /**
-     * Configures if the scroll position needs to be restored when navigating back.
-     *
-     * * 'disabled'- (Default) Does nothing. Scroll position is maintained on navigation.
-     * * 'top'- Sets the scroll position to x = 0, y = 0 on all navigation.
-     * * 'enabled'- Restores the previous scroll position on backward navigation, else sets the
-     * position to the anchor if one is provided, or sets the scroll position to [0, 0] (forward
-     * navigation). This option will be the default in the future.
-     *
-     * You can implement custom scroll restoration behavior by adapting the enabled behavior as
-     * in the following example.
-     *
-     * ```typescript
-     * class AppComponent {
-     *   movieData: any;
-     *
-     *   constructor(private router: Router, private viewportScroller: ViewportScroller,
-     * changeDetectorRef: ChangeDetectorRef) {
-     *   router.events.pipe(filter((event: Event): event is Scroll => event instanceof Scroll)
-     *     ).subscribe(e => {
-     *       fetch('http://example.com/movies.json').then(response => {
-     *         this.movieData = response.json();
-     *         // update the template with the data before restoring scroll
-     *         changeDetectorRef.detectChanges();
-     *
-     *         if (e.position) {
-     *           viewportScroller.scrollToPosition(e.position);
-     *         }
-     *       });
-     *     });
-     *   }
-     * }
-     * ```
-     */
-    scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
-    /**
-     * When set to 'enabled', scrolls to the anchor element when the URL has a fragment.
-     * Anchor scrolling is disabled by default.
-     *
-     * Anchor scrolling does not happen on 'popstate'. Instead, we restore the position
-     * that we stored or scroll to the top.
-     */
-    anchorScrolling?: 'disabled' | 'enabled';
-    /**
      * Configures the scroll offset the router will use when scrolling to an element.
      *
      * When given a tuple with x and y position value,
@@ -1072,21 +1056,6 @@ export declare interface ExtraOptions {
      * it restores scroll position.
      */
     scrollOffset?: [number, number] | (() => [number, number]);
-    /**
-     * Defines how the router merges parameters, data, and resolved data from parent to child
-     * routes. By default ('emptyOnly'), inherits parent parameters only for
-     * path-less or component-less routes.
-     *
-     * Set to 'always' to enable unconditional inheritance of parent parameters.
-     *
-     * Note that when dealing with matrix parameters, "parent" refers to the parent `Route`
-     * config which does not necessarily mean the "URL segment to the left". When the `Route` `path`
-     * contains multiple segments, the matrix parameters must appear on the last segment. For example,
-     * matrix parameters for `{path: 'a/b', component: MyComp}` should appear as `a/b;foo=bar` and not
-     * `a;foo=bar/b`.
-     *
-     */
-    paramsInheritanceStrategy?: 'emptyOnly' | 'always';
     /**
      * A custom handler for malformed URI errors. The handler is invoked when `encodedURI` contains
      * invalid character sequences.
@@ -1098,14 +1067,6 @@ export declare interface ExtraOptions {
      * - `'url'` -  The malformed URL that caused the URIError
      * */
     malformedUriErrorHandler?: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
-    /**
-     * Defines when the router updates the browser URL. By default ('deferred'),
-     * update after successful navigation.
-     * Set to 'eager' if prefer to update the URL at the beginning of navigation.
-     * Updating the URL early allows you to handle a failure of navigation by
-     * showing an error message with the URL that failed.
-     */
-    urlUpdateStrategy?: 'deferred' | 'eager';
     /**
      * Enables a bug fix that corrects relative link resolution in components with empty paths.
      * Example:
@@ -1141,28 +1102,6 @@ export declare interface ExtraOptions {
      * @deprecated
      */
     relativeLinkResolution?: 'legacy' | 'corrected';
-    /**
-     * Configures how the Router attempts to restore state when a navigation is cancelled.
-     *
-     * 'replace' - Always uses `location.replaceState` to set the browser state to the state of the
-     * router before the navigation started. This means that if the URL of the browser is updated
-     * _before_ the navigation is canceled, the Router will simply replace the item in history rather
-     * than trying to restore to the previous location in the session history. This happens most
-     * frequently with `urlUpdateStrategy: 'eager'` and navigations with the browser back/forward
-     * buttons.
-     *
-     * 'computed' - Will attempt to return to the same index in the session history that corresponds
-     * to the Angular route when the navigation gets cancelled. For example, if the browser back
-     * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
-     * and vice versa.
-     *
-     * Note: the 'computed' option is incompatible with any `UrlHandlingStrategy` which only
-     * handles a portion of the URL because the history restoration navigates to the previous place in
-     * the browser history rather than simply resetting a portion of the URL.
-     *
-     * The default value is `replace` when not set.
-     */
-    canceledNavigationResolution?: 'replace' | 'computed';
 }
 
 /**
@@ -1266,6 +1205,83 @@ declare namespace i4 {
  * @publicApi
  */
 export declare type InitialNavigation = 'disabled' | 'enabledBlocking' | 'enabledNonBlocking';
+
+/**
+ * A type alias for providers returned by `withEnabledBlockingInitialNavigation` or
+ * `withDisabledInitialNavigation` functions for use with `provideRouter`.
+ *
+ * @see `withEnabledBlockingInitialNavigation`
+ * @see `withDisabledInitialNavigation`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type InitialNavigationFeature = EnabledBlockingInitialNavigationFeature | DisabledInitialNavigationFeature;
+
+/**
+ * A type alias for providers returned by `withInMemoryScrolling` for use with `provideRouter`.
+ *
+ * @see `withInMemoryScrolling`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type InMemoryScrollingFeature = RouterFeature<RouterFeatureKind.InMemoryScrollingFeature>;
+
+/**
+ * Configuration options for the scrolling feature which can be used with `withInMemoryScrolling`
+ * function.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare interface InMemoryScrollingOptions {
+    /**
+     * When set to 'enabled', scrolls to the anchor element when the URL has a fragment.
+     * Anchor scrolling is disabled by default.
+     *
+     * Anchor scrolling does not happen on 'popstate'. Instead, we restore the position
+     * that we stored or scroll to the top.
+     */
+    anchorScrolling?: 'disabled' | 'enabled';
+    /**
+     * Configures if the scroll position needs to be restored when navigating back.
+     *
+     * * 'disabled'- (Default) Does nothing. Scroll position is maintained on navigation.
+     * * 'top'- Sets the scroll position to x = 0, y = 0 on all navigation.
+     * * 'enabled'- Restores the previous scroll position on backward navigation, else sets the
+     * position to the anchor if one is provided, or sets the scroll position to [0, 0] (forward
+     * navigation). This option will be the default in the future.
+     *
+     * You can implement custom scroll restoration behavior by adapting the enabled behavior as
+     * in the following example.
+     *
+     * ```typescript
+     * class AppComponent {
+     *   movieData: any;
+     *
+     *   constructor(private router: Router, private viewportScroller: ViewportScroller,
+     * changeDetectorRef: ChangeDetectorRef) {
+     *   router.events.pipe(filter((event: Event): event is Scroll => event instanceof Scroll)
+     *     ).subscribe(e => {
+     *       fetch('http://example.com/movies.json').then(response => {
+     *         this.movieData = response.json();
+     *         // update the template with the data before restoring scroll
+     *         changeDetectorRef.detectChanges();
+     *
+     *         if (e.position) {
+     *           viewportScroller.scrollToPosition(e.position);
+     *         }
+     *       });
+     *     });
+     *   }
+     * }
+     * ```
+     */
+    scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
+}
 
 /**
  * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
@@ -1788,6 +1804,18 @@ export declare class PreloadAllModules implements PreloadingStrategy {
 }
 
 /**
+ * A type alias that represents a feature which enables preloading in Router.
+ * The type is used to describe the return value of the `withPreloading` function.
+ *
+ * @see `withPreloading`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type PreloadingFeature = RouterFeature<RouterFeatureKind.PreloadingFeature>;
+
+/**
  * @description
  *
  * Provides a preloading strategy.
@@ -1806,6 +1834,45 @@ export declare abstract class PreloadingStrategy {
 export declare const PRIMARY_OUTLET = "primary";
 
 /**
+ * Sets up providers necessary to enable `Router` functionality for the application.
+ * Allows to configure a set of routes as well as extra features that should be enabled.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can add a Router to your application:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent, {
+ *   providers: [provideRouter(appRoutes)]
+ * });
+ * ```
+ *
+ * You can also enable optional features in the Router by adding functions from the `RouterFeatures`
+ * type:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes,
+ *         withDebugTracing(),
+ *         withRouterConfig({paramsInheritanceStrategy: 'always'}))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `RouterFeatures`
+ *
+ * @publicApi
+ * @developerPreview
+ * @param routes A set of `Route`s to use for the application routing table.
+ * @param features Optional features to configure additional router behaviors.
+ * @returns A set of providers to setup a Router.
+ */
+export declare function provideRouter(routes: Routes, ...features: RouterFeatures[]): Provider[];
+
+/**
  * Registers a [DI provider](guide/glossary#provider) for a set of routes.
  * @param routes The route configuration to provide.
  *
@@ -1813,10 +1880,9 @@ export declare const PRIMARY_OUTLET = "primary";
  *
  * ```
  * @NgModule({
- *   imports: [RouterModule.forChild(ROUTES)],
- *   providers: [provideRoutes(EXTRA_ROUTES)]
+ *   providers: [provideRoutes(ROUTES)]
  * })
- * class MyNgModule {}
+ * class LazyLoadedChildModule {}
  * ```
  *
  * @publicApi
@@ -2832,6 +2898,79 @@ declare class RouterConfigLoader {
 }
 
 /**
+ * Extra configuration options that can be used with the `withRouterConfig` function.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare interface RouterConfigOptions {
+    /**
+     * Configures how the Router attempts to restore state when a navigation is cancelled.
+     *
+     * 'replace' - Always uses `location.replaceState` to set the browser state to the state of the
+     * router before the navigation started. This means that if the URL of the browser is updated
+     * _before_ the navigation is canceled, the Router will simply replace the item in history rather
+     * than trying to restore to the previous location in the session history. This happens most
+     * frequently with `urlUpdateStrategy: 'eager'` and navigations with the browser back/forward
+     * buttons.
+     *
+     * 'computed' - Will attempt to return to the same index in the session history that corresponds
+     * to the Angular route when the navigation gets cancelled. For example, if the browser back
+     * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
+     * and vice versa.
+     *
+     * Note: the 'computed' option is incompatible with any `UrlHandlingStrategy` which only
+     * handles a portion of the URL because the history restoration navigates to the previous place in
+     * the browser history rather than simply resetting a portion of the URL.
+     *
+     * The default value is `replace` when not set.
+     */
+    canceledNavigationResolution?: 'replace' | 'computed';
+    /**
+     * Define what the router should do if it receives a navigation request to the current URL.
+     * Default is `ignore`, which causes the router ignores the navigation.
+     * This can disable features such as a "refresh" button.
+     * Use this option to configure the behavior when navigating to the
+     * current URL. Default is 'ignore'.
+     */
+    onSameUrlNavigation?: 'reload' | 'ignore';
+    /**
+     * Defines how the router merges parameters, data, and resolved data from parent to child
+     * routes. By default ('emptyOnly'), inherits parent parameters only for
+     * path-less or component-less routes.
+     *
+     * Set to 'always' to enable unconditional inheritance of parent parameters.
+     *
+     * Note that when dealing with matrix parameters, "parent" refers to the parent `Route`
+     * config which does not necessarily mean the "URL segment to the left". When the `Route` `path`
+     * contains multiple segments, the matrix parameters must appear on the last segment. For example,
+     * matrix parameters for `{path: 'a/b', component: MyComp}` should appear as `a/b;foo=bar` and not
+     * `a;foo=bar/b`.
+     *
+     */
+    paramsInheritanceStrategy?: 'emptyOnly' | 'always';
+    /**
+     * Defines when the router updates the browser URL. By default ('deferred'),
+     * update after successful navigation.
+     * Set to 'eager' if prefer to update the URL at the beginning of navigation.
+     * Updating the URL early allows you to handle a failure of navigation by
+     * showing an error message with the URL that failed.
+     */
+    urlUpdateStrategy?: 'deferred' | 'eager';
+}
+
+/**
+ * A type alias for providers returned by `withRouterConfig` for use with `provideRouter`.
+ *
+ * @see `withRouterConfig`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type RouterConfigurationFeature = RouterFeature<RouterFeatureKind.RouterConfigurationFeature>;
+
+/**
  * @description
  *
  * Provides a way to customize when activated routes get reused.
@@ -2890,6 +3029,42 @@ export declare class RouterEvent {
     /** The URL that is the destination for this navigation. */
     url: string);
 }
+
+/**
+ * Helper type to represent a Router feature.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare interface RouterFeature<FeatureKind extends RouterFeatureKind> {
+    ɵkind: FeatureKind;
+    ɵproviders: Provider[];
+}
+
+/**
+ * The list of features as an enum to uniquely type each feature.
+ */
+declare const enum RouterFeatureKind {
+    PreloadingFeature = 0,
+    DebugTracingFeature = 1,
+    EnabledBlockingInitialNavigationFeature = 2,
+    DisabledInitialNavigationFeature = 3,
+    InMemoryScrollingFeature = 4,
+    RouterConfigurationFeature = 5
+}
+
+/**
+ * A type alias that represents all Router features available for use with `provideRouter`.
+ * Features can be enabled by adding special functions to the `provideRouter` call.
+ * See documentation for each symbol to find corresponding function name. See also `provideRouter`
+ * documentation on how to use those functions.
+ *
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature;
 
 /**
  * @description
@@ -4126,6 +4301,179 @@ export declare class UrlTree {
  */
 export declare const VERSION: Version;
 
+/**
+ * Enables logging of all internal navigation events to the console.
+ * Extra logging might be useful for debugging purposes to inspect Router event sequence.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable debug tracing:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withDebugTracing())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare function withDebugTracing(): DebugTracingFeature;
+
+/**
+ * Disables initial navigation.
+ *
+ * Use if there is a reason to have more control over when the router starts its initial navigation
+ * due to some complex initialization logic.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can disable initial navigation:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withDisabledInitialNavigation())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare function withDisabledInitialNavigation(): DisabledInitialNavigationFeature;
+
+/**
+ * Configures initial navigation to start before the root component is created.
+ *
+ * The bootstrap is blocked until the initial navigation is complete. This value is required for
+ * [server-side rendering](guide/universal) to work.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable this navigation behavior:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withEnabledBlockingInitialNavigation())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @publicApi
+ * @developerPreview
+ * @returns A set of providers for use with `provideRouter`.
+ */
+export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingInitialNavigationFeature;
+
+/**
+ * Enables customizable scrolling behavior for router navigations.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable scrolling feature:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withInMemoryScrolling())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ * @see `ViewportScroller`
+ *
+ * @publicApi
+ * @developerPreview
+ * @param options Set of configuration parameters to customize scrolling behavior, see
+ *     `InMemoryScrollingOptions` for additional information.
+ * @returns A set of providers for use with `provideRouter`.
+ */
+export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions): InMemoryScrollingFeature;
+
+/**
+ * Allows to configure a preloading strategy to use. The strategy is configured by providing a
+ * reference to a class that implements a `PreloadingStrategy`.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can configure preloading:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withPreloading(PreloadAllModules))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @param preloadingStrategy A reference to a class that implements a `PreloadingStrategy` that
+ *     should be used.
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+declare function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature;
+export { withPreloading }
+export { withPreloading as ɵwithPreloading }
+
+/**
+ * Allows to provide extra parameters to configure Router.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can provide extra configuration options:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withRouterConfig({
+ *          onSameUrlNavigation: 'reload'
+ *       }))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ *
+ * @param options A set of parameters to configure Router, see `RouterConfigOptions` for
+ *     additional information.
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ * @developerPreview
+ */
+export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
+
 export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
 
 /**
@@ -4146,8 +4494,6 @@ export declare class ɵEmptyOutletComponent {
  * Flattens single-level nested arrays.
  */
 export declare function ɵflatten<T>(arr: T[][]): T[];
-
-export declare function ɵprovidePreloading(preloadingStrategy: Type<PreloadingStrategy>): Provider[];
 
 export declare type ɵRestoredState = {
     [k: string]: any;
