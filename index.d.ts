@@ -1,5 +1,5 @@
 /**
- * @license Angular v14.3.0-next.0+sha-daac137
+ * @license Angular v14.3.0-next.0+sha-5163e3d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4291,6 +4291,13 @@ export declare class UrlTree {
     queryParams: Params;
     /** The fragment of the URL */
     fragment: string | null;
+    constructor(
+    /** The root segment group of the URL tree */
+    root?: UrlSegmentGroup, 
+    /** The query params of the URL */
+    queryParams?: Params, 
+    /** The fragment of the URL */
+    fragment?: string | null);
     get queryParamMap(): ParamMap;
     /** @docsNotRequired */
     toString(): string;
