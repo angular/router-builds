@@ -1020,9 +1020,9 @@ export class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.3+sha-7e7769f", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.3+sha-7e7769f", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.3+sha-7e7769f", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.3+sha-2c3e2d6", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.2.3+sha-2c3e2d6", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.3+sha-2c3e2d6", ngImport: i0, type: Router, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root',
