@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.3+sha-002ee32
+ * @license Angular v15.0.0-next.3+sha-2d35395
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -157,7 +157,7 @@ export declare class ActivatedRouteSnapshot {
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /** The resolved route title */
-    readonly title?: string;
+    get title(): string | undefined;
     /** The root of the router state */
     get root(): ActivatedRouteSnapshot;
     /** The parent of this route in the router state tree */
