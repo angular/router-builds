@@ -189,9 +189,9 @@ export class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.4+sha-c8d891e", ngImport: i0, type: RouterOutlet, deps: [{ token: i1.ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.4+sha-c8d891e", type: RouterOutlet, isStandalone: true, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.4+sha-c8d891e", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.4+sha-98d8423", ngImport: i0, type: RouterOutlet, deps: [{ token: i1.ChildrenOutletContexts }, { token: i0.ViewContainerRef }, { token: 'name', attribute: true }, { token: i0.ChangeDetectorRef }, { token: i0.EnvironmentInjector }], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.4+sha-98d8423", type: RouterOutlet, isStandalone: true, selector: "router-outlet", outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.4+sha-98d8423", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{
                     selector: 'router-outlet',
