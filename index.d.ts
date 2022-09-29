@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.4+sha-bcc4a95
+ * @license Angular v15.0.0-next.4+sha-5a17858
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3163,15 +3163,27 @@ export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | I
  *
  * @publicApi
  */
-export declare class RouterLink implements OnChanges {
+export declare class RouterLink implements OnChanges, OnDestroy {
     private router;
     private route;
     private readonly tabIndexAttribute;
     private readonly renderer;
     private readonly el;
+    private locationStrategy?;
     private _preserveFragment;
     private _skipLocationChange;
     private _replaceUrl;
+    /**
+     * Base class property that represents an `href` attribute binding on
+     * an `<a>` element. The property is overridden by the `RouterLinkWithHref`
+     * class using a @HostBinding.
+     */
+    href: string | null;
+    /**
+     * Represents the `target` attribute on a host element.
+     * This is only used when the host element is an `<a>` tag.
+     */
+    target?: string;
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -3213,7 +3225,10 @@ export declare class RouterLink implements OnChanges {
      */
     relativeTo?: ActivatedRoute | null;
     private commands;
-    constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef);
+    /** Whether a host element is an `<a>` tag. */
+    private isAnchorElement;
+    private subscription?;
+    constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef, locationStrategy?: LocationStrategy | undefined);
     /**
      * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -3254,10 +3269,13 @@ export declare class RouterLink implements OnChanges {
      */
     set routerLink(commands: any[] | string | null | undefined);
     /** @nodoc */
-    onClick(): boolean;
+    onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
+    /** @nodoc */
+    ngOnDestroy(): any;
+    private updateTargetUrlAndHref;
     get urlTree(): UrlTree | null;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
 }
 
 /**
@@ -3404,100 +3422,20 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
  *
  * @publicApi
  */
-export declare class RouterLinkWithHref implements OnChanges, OnDestroy {
-    private router;
-    private route;
-    private locationStrategy;
-    private _preserveFragment;
-    private _skipLocationChange;
-    private _replaceUrl;
-    target: string;
+export declare class RouterLinkWithHref extends RouterLink {
     /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#queryParams UrlCreationOptions#queryParams}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
+     * The url displayed on the anchor element.
+     * @HostBinding('attr.href') is used rather than @HostBinding() because
+     * it removes the href attribute when it becomes `null`.
+     *
+     * Note: this host binding is retained in the `RouterLinkWithHref` to
+     * make sure the right security context is selected (which also takes
+     * into account an element name from the selector).
      */
-    queryParams?: Params | null;
-    /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#fragment UrlCreationOptions#fragment}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    fragment?: string;
-    /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#queryParamsHandling UrlCreationOptions#queryParamsHandling}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    queryParamsHandling?: QueryParamsHandling | null;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#state NavigationBehaviorOptions#state}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    state?: {
-        [k: string]: any;
-    };
-    /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * Specify a value here when you do not want to use the default value
-     * for `routerLink`, which is the current activated route.
-     * Note that a value of `undefined` here will use the `routerLink` default.
-     * @see {@link UrlCreationOptions#relativeTo UrlCreationOptions#relativeTo}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    relativeTo?: ActivatedRoute | null;
-    private commands;
-    private subscription;
     href: string | null;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
-    /**
-     * Passed to {@link Router#createUrlTree Router#createUrlTree} as part of the
-     * `UrlCreationOptions`.
-     * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    set preserveFragment(preserveFragment: boolean | string | null | undefined);
-    get preserveFragment(): boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    set skipLocationChange(skipLocationChange: boolean | string | null | undefined);
-    get skipLocationChange(): boolean;
-    /**
-     * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
-     * `NavigationBehaviorOptions`.
-     * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
-     * @see {@link Router#navigateByUrl Router#navigateByUrl}
-     */
-    set replaceUrl(replaceUrl: boolean | string | null | undefined);
-    get replaceUrl(): boolean;
-    /**
-     * Commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
-     *   - **array**: commands to pass to {@link Router#createUrlTree Router#createUrlTree}.
-     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **null|undefined**: Disables the link by removing the `href`
-     * @see {@link Router#createUrlTree Router#createUrlTree}
-     */
-    set routerLink(commands: any[] | string | null | undefined);
-    /** @nodoc */
-    ngOnChanges(changes: SimpleChanges): any;
-    /** @nodoc */
-    ngOnDestroy(): any;
-    /** @nodoc */
-    onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
-    private updateTargetUrlAndHref;
-    get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, {}, {}, never, never, true, never>;
 }
 
 /**
