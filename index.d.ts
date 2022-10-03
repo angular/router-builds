@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.4+sha-ce59f1a
+ * @license Angular v15.0.0-next.4+sha-9eb3891
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3174,9 +3174,8 @@ export declare class RouterLink implements OnChanges, OnDestroy {
     private _skipLocationChange;
     private _replaceUrl;
     /**
-     * Base class property that represents an `href` attribute binding on
-     * an `<a>` element. The property is overridden by the `RouterLinkWithHref`
-     * class using a @HostBinding.
+     * Represents an `href` attribute value applied to a host element,
+     * when a host element is `<a>`. For other tags, the value is `null`.
      */
     href: string | null;
     /**
@@ -3272,7 +3271,8 @@ export declare class RouterLink implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     /** @nodoc */
     ngOnDestroy(): any;
-    private updateTargetUrlAndHref;
+    private updateHref;
+    private applyAttributeValue;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
@@ -3423,16 +3423,6 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
  * @publicApi
  */
 export declare class RouterLinkWithHref extends RouterLink {
-    /**
-     * The url displayed on the anchor element.
-     * @HostBinding('attr.href') is used rather than @HostBinding() because
-     * it removes the href attribute when it becomes `null`.
-     *
-     * Note: this host binding is retained in the `RouterLinkWithHref` to
-     * make sure the right security context is selected (which also takes
-     * into account an element name from the selector).
-     */
-    href: string | null;
     constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, {}, {}, never, never, true, never>;
