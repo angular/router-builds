@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.4+sha-2919463
+ * @license Angular v15.0.0-next.4+sha-ab4ef26
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -838,6 +838,22 @@ export declare type Data = {
 export declare type DebugTracingFeature = RouterFeature<RouterFeatureKind.DebugTracingFeature>;
 
 /**
+ * An ES Module object with a default export of the given type.
+ *
+ * @see `Route#loadComponent`
+ * @see `LoadChildrenCallback`
+ *
+ * @publicApi
+ */
+export declare interface DefaultExport<T> {
+    /**
+     * Default exports are bound under the name `"default"`, per the ES Module spec:
+     * https://tc39.es/ecma262/#table-export-forms-mapping-to-exportentry-records
+     */
+    default: T;
+}
+
+/**
  * The default `TitleStrategy` used by the router that updates the title using the `Title` service.
  */
 export declare class DefaultTitleStrategy extends TitleStrategy {
@@ -1337,7 +1353,7 @@ export declare interface IsActiveMatchOptions {
  * @see `LoadChildrenCallback`
  * @publicApi
  */
-export declare type LoadChildren = LoadChildrenCallback;
+export declare type LoadChildren = LoadChildrenCallback | ɵDeprecatedLoadChildren;
 
 /**
  *
@@ -1363,10 +1379,17 @@ export declare type LoadChildren = LoadChildrenCallback;
  * }];
  * ```
  *
+ * If the lazy-loaded routes are exported via a `default` export, the `.then` can be omitted:
+ * ```
+ * [{
+ *   path: 'lazy',
+ *   loadChildren: () => import('./lazy-route/lazy.routes'),
+ * }];
+ *
  * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
-export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Routes | Observable<Type<any> | Routes> | Promise<NgModuleFactory<any> | Type<any> | Routes>;
+export declare type LoadChildrenCallback = () => Type<any> | NgModuleFactory<any> | Routes | Observable<Type<any> | Routes | DefaultExport<Type<any>> | DefaultExport<Routes>> | Promise<NgModuleFactory<any> | Type<any> | Routes | DefaultExport<Type<any>> | DefaultExport<Routes>>;
 
 declare interface LoadedRouterConfig {
     routes: Route[];
@@ -2366,7 +2389,7 @@ export declare interface Route {
     /**
      * An object specifying a lazy-loaded component.
      */
-    loadComponent?: () => Type<unknown> | Observable<Type<unknown>> | Promise<Type<unknown>>;
+    loadComponent?: () => Type<unknown> | Observable<Type<unknown> | DefaultExport<Type<unknown>>> | Promise<Type<unknown> | DefaultExport<Type<unknown>>>;
     /**
      * A URL to redirect to when the path matches.
      *
@@ -3422,7 +3445,6 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
  * @publicApi
  */
 export declare class RouterLinkWithHref extends RouterLink {
-    constructor(router: Router, route: ActivatedRoute, locationStrategy: LocationStrategy);
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, {}, {}, never, never, true, never>;
 }
@@ -4417,6 +4439,14 @@ export { withPreloading as ɵwithPreloading }
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
 
 export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
+
+/**
+ * Deprecated `loadChildren` value types.
+ *
+ * @publicApi
+ * @deprecated represents the deprecated type side of `LoadChildren`.
+ */
+export declare type ɵDeprecatedLoadChildren = never;
 
 /**
  * This component is used internally within the router to be a placeholder when an empty
