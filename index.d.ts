@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.4+sha-07d9a27
+ * @license Angular v15.0.0-next.4+sha-c3f8579
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -32,7 +32,6 @@ import { SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Type } from '@angular/core';
 import { Version } from '@angular/core';
-import { ViewContainerRef } from '@angular/core';
 
 /**
  * Provides access to information about a route associated with a component
@@ -3544,13 +3543,14 @@ export declare class RouterModule {
  * @publicApi
  */
 export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
-    private parentContexts;
-    private location;
-    private changeDetector;
-    private environmentInjector;
     private activated;
     private _activatedRoute;
-    private name;
+    /**
+     * The name of the outlet
+     *
+     * @see [named outlets](guide/router-tutorial-toh#displaying-multiple-routes-in-named-outlets)
+     */
+    name: string;
     activateEvents: EventEmitter<any>;
     deactivateEvents: EventEmitter<any>;
     /**
@@ -3563,11 +3563,18 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      * subtree.
      */
     detachEvents: EventEmitter<unknown>;
-    constructor(parentContexts: ChildrenOutletContexts, location: ViewContainerRef, name: string, changeDetector: ChangeDetectorRef, environmentInjector: EnvironmentInjector);
+    private parentContexts;
+    private location;
+    private changeDetector;
+    private environmentInjector;
+    /** @nodoc */
+    ngOnChanges(changes: SimpleChanges): void;
     /** @nodoc */
     ngOnDestroy(): void;
+    private isTrackedInParentContexts;
     /** @nodoc */
     ngOnInit(): void;
+    private initializeOutletWithName;
     get isActivated(): boolean;
     /**
      * @returns The currently activated component instance.
@@ -3586,8 +3593,8 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, resolverOrInjector?: ComponentFactoryResolver | EnvironmentInjector | null): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, [null, null, { attribute: "name"; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], {}, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": "name"; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
 }
 
 /**
