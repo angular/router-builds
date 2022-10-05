@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.5+sha-2cdf128
+ * @license Angular v15.0.0-next.5+sha-7b89d95
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1027,7 +1027,7 @@ export declare const enum EventType {
  *
  * @publicApi
  */
-export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions {
+export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions, InternalExtraOptions {
     /**
      * When true, log all internal navigation events to the console.
      * Use for debugging.
@@ -1082,41 +1082,6 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * - `'url'` -  The malformed URL that caused the URIError
      * */
     malformedUriErrorHandler?: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
-    /**
-     * Enables a bug fix that corrects relative link resolution in components with empty paths.
-     * Example:
-     *
-     * ```
-     * const routes = [
-     *   {
-     *     path: '',
-     *     component: ContainerComponent,
-     *     children: [
-     *       { path: 'a', component: AComponent },
-     *       { path: 'b', component: BComponent },
-     *     ]
-     *   }
-     * ];
-     * ```
-     *
-     * From the `ContainerComponent`, you should be able to navigate to `AComponent` using
-     * the following `routerLink`, but it will not work if `relativeLinkResolution` is set
-     * to `'legacy'`:
-     *
-     * `<a [routerLink]="['./a']">Link to A</a>`
-     *
-     * However, this will work:
-     *
-     * `<a [routerLink]="['../a']">Link to A</a>`
-     *
-     * In other words, you're required to use `../` rather than `./` when the relative link
-     * resolution is set to `'legacy'`.
-     *
-     * The default in v11 is `corrected`.
-     *
-     * @deprecated
-     */
-    relativeLinkResolution?: 'legacy' | 'corrected';
 }
 
 /**
@@ -1296,6 +1261,9 @@ export declare interface InMemoryScrollingOptions {
      * ```
      */
     scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
+}
+
+declare interface InternalExtraOptions {
 }
 
 /**
@@ -2673,13 +2641,6 @@ export declare class Router {
      * you can show an error message with the URL that failed.
      */
     urlUpdateStrategy: 'deferred' | 'eager';
-    /**
-     * Enables a bug fix that corrects relative link resolution in components with empty paths.
-     * @see `RouterModule`
-     *
-     * @deprecated
-     */
-    relativeLinkResolution: 'legacy' | 'corrected';
     /**
      * Configures how the Router attempts to restore state when a navigation is cancelled.
      *
