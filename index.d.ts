@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.5+sha-8df8c77
+ * @license Angular v15.0.0-next.5+sha-f73ef21
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1148,7 +1148,7 @@ declare namespace i1 {
 declare namespace i2 {
     export {
         RouterLink,
-        RouterLinkWithHref
+        RouterLink as RouterLinkWithHref
     }
 }
 
@@ -3146,7 +3146,7 @@ export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | I
  *
  * @publicApi
  */
-export declare class RouterLink implements OnChanges, OnDestroy {
+declare class RouterLink implements OnChanges, OnDestroy {
     private router;
     private route;
     private readonly tabIndexAttribute;
@@ -3258,8 +3258,10 @@ export declare class RouterLink implements OnChanges, OnDestroy {
     private applyAttributeValue;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink],a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
 }
+export { RouterLink }
+export { RouterLink as RouterLinkWithHref }
 
 /**
  *
@@ -3336,9 +3338,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private renderer;
     private readonly cdr;
     private link?;
-    private linkWithHref?;
     links: QueryList<RouterLink>;
-    linksWithHrefs: QueryList<RouterLinkWithHref>;
     private classes;
     private routerEventsSubscription;
     private linkInputChangesSubscription?;
@@ -3378,7 +3378,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
      * ```
      */
     readonly isActiveChange: EventEmitter<boolean>;
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined, linkWithHref?: RouterLinkWithHref | undefined);
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined);
     /** @nodoc */
     ngAfterContentInit(): void;
     private subscribeToEachLinkOnChanges;
@@ -3390,24 +3390,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private update;
     private isLinkActive;
     private hasActiveLinks;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "ariaCurrentWhenActive": "ariaCurrentWhenActive"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links", "linksWithHrefs"], never, true, never>;
-}
-
-/**
- * @description
- *
- * Lets you link to specific routes in your app.
- *
- * See `RouterLink` for more information.
- *
- * @ngModule RouterModule
- *
- * @publicApi
- */
-export declare class RouterLinkWithHref extends RouterLink {
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkWithHref, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkWithHref, "a[routerLink],area[routerLink]", never, {}, {}, never, never, true, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": "routerLinkActiveOptions"; "ariaCurrentWhenActive": "ariaCurrentWhenActive"; "routerLinkActive": "routerLinkActive"; }, { "isActiveChange": "isActiveChange"; }, ["links"], never, true, never>;
 }
 
 /**
@@ -3470,7 +3454,7 @@ export declare class RouterModule {
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }]>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i2.RouterLinkWithHref, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
 
