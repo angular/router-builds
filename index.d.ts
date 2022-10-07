@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.5+sha-deb4cab
+ * @license Angular v15.0.0-next.5+sha-07017a7
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -12,9 +12,9 @@ import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EnvironmentInjector } from '@angular/core';
+import { EnvironmentProviders } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import { ImportedNgModuleProviders } from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
@@ -1860,7 +1860,7 @@ export declare const PRIMARY_OUTLET = "primary";
  * @param features Optional features to configure additional router behaviors.
  * @returns A set of providers to setup a Router.
  */
-export declare function provideRouter(routes: Routes, ...features: RouterFeatures[]): Provider[];
+export declare function provideRouter(routes: Routes, ...features: RouterFeatures[]): EnvironmentProviders;
 
 /**
  * Registers a [DI provider](guide/glossary#provider) for a set of routes.
@@ -2453,7 +2453,7 @@ export declare interface Route {
      * route also has a `loadChildren` function which returns an `NgModuleRef`, this injector will be
      * used as the parent of the lazy loaded module.
      */
-    providers?: Array<Provider | ImportedNgModuleProviders>;
+    providers?: Array<Provider | EnvironmentProviders>;
 }
 
 /**
