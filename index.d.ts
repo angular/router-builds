@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.6+sha-b6fd814
+ * @license Angular v15.0.0-next.6+sha-420d6b3
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -833,7 +833,6 @@ export declare type Data = {
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type DebugTracingFeature = RouterFeature<RouterFeatureKind.DebugTracingFeature>;
 
@@ -931,7 +930,6 @@ export declare type DetachedRouteHandle = {};
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type DisabledInitialNavigationFeature = RouterFeature<RouterFeatureKind.DisabledInitialNavigationFeature>;
 
@@ -943,7 +941,6 @@ export declare type DisabledInitialNavigationFeature = RouterFeature<RouterFeatu
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type EnabledBlockingInitialNavigationFeature = RouterFeature<RouterFeatureKind.EnabledBlockingInitialNavigationFeature>;
 
@@ -1195,7 +1192,6 @@ export declare type InitialNavigation = 'disabled' | 'enabledBlocking' | 'enable
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type InitialNavigationFeature = EnabledBlockingInitialNavigationFeature | DisabledInitialNavigationFeature;
 
@@ -1206,7 +1202,6 @@ export declare type InitialNavigationFeature = EnabledBlockingInitialNavigationF
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type InMemoryScrollingFeature = RouterFeature<RouterFeatureKind.InMemoryScrollingFeature>;
 
@@ -1215,7 +1210,6 @@ export declare type InMemoryScrollingFeature = RouterFeature<RouterFeatureKind.I
  * function.
  *
  * @publicApi
- * @developerPreview
  */
 export declare interface InMemoryScrollingOptions {
     /**
@@ -1801,7 +1795,6 @@ export declare class PreloadAllModules implements PreloadingStrategy {
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type PreloadingFeature = RouterFeature<RouterFeatureKind.PreloadingFeature>;
 
@@ -1855,7 +1848,6 @@ export declare const PRIMARY_OUTLET = "primary";
  * @see `RouterFeatures`
  *
  * @publicApi
- * @developerPreview
  * @param routes A set of `Route`s to use for the application routing table.
  * @param features Optional features to configure additional router behaviors.
  * @returns A set of providers to setup a Router.
@@ -2884,7 +2876,6 @@ declare class RouterConfigLoader {
  * Extra configuration options that can be used with the `withRouterConfig` function.
  *
  * @publicApi
- * @developerPreview
  */
 export declare interface RouterConfigOptions {
     /**
@@ -2949,7 +2940,6 @@ export declare interface RouterConfigOptions {
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type RouterConfigurationFeature = RouterFeature<RouterFeatureKind.RouterConfigurationFeature>;
 
@@ -3017,7 +3007,6 @@ export declare class RouterEvent {
  * Helper type to represent a Router feature.
  *
  * @publicApi
- * @developerPreview
  */
 export declare interface RouterFeature<FeatureKind extends RouterFeatureKind> {
     ɵkind: FeatureKind;
@@ -3045,7 +3034,6 @@ declare const enum RouterFeatureKind {
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  */
 export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature;
 
@@ -4233,7 +4221,6 @@ export declare const VERSION: Version;
  * @returns A set of providers for use with `provideRouter`.
  *
  * @publicApi
- * @developerPreview
  */
 export declare function withDebugTracing(): DebugTracingFeature;
 
@@ -4262,7 +4249,6 @@ export declare function withDebugTracing(): DebugTracingFeature;
  * @returns A set of providers for use with `provideRouter`.
  *
  * @publicApi
- * @developerPreview
  */
 export declare function withDisabledInitialNavigation(): DisabledInitialNavigationFeature;
 
@@ -4289,7 +4275,6 @@ export declare function withDisabledInitialNavigation(): DisabledInitialNavigati
  * @see `provideRouter`
  *
  * @publicApi
- * @developerPreview
  * @returns A set of providers for use with `provideRouter`.
  */
 export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingInitialNavigationFeature;
@@ -4315,7 +4300,6 @@ export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingI
  * @see `ViewportScroller`
  *
  * @publicApi
- * @developerPreview
  * @param options Set of configuration parameters to customize scrolling behavior, see
  *     `InMemoryScrollingOptions` for additional information.
  * @returns A set of providers for use with `provideRouter`.
@@ -4347,7 +4331,6 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  * @returns A set of providers for use with `provideRouter`.
  *
  * @publicApi
- * @developerPreview
  */
 declare function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature;
 export { withPreloading }
@@ -4379,7 +4362,6 @@ export { withPreloading as ɵwithPreloading }
  * @returns A set of providers for use with `provideRouter`.
  *
  * @publicApi
- * @developerPreview
  */
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
 
