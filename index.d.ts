@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-next.6+sha-420d6b3
+ * @license Angular v15.0.0-next.6+sha-716352c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -213,7 +213,7 @@ export declare class ActivationStart {
  *
  * This base route reuse strategy only reuses routes when the matched router configs are
  * identical. This prevents components from being destroyed and recreated
- * when just the fragment or query parameters change
+ * when just the route parameters, query parameters or fragment change
  * (that is, the existing component is _reused_).
  *
  * This strategy does not store any routes for later reuse.
