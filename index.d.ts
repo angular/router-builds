@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0-rc.2+sha-e7b48da
+ * @license Angular v15.0.0-rc.2+sha-b8a6f74
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1867,6 +1867,8 @@ export declare function provideRouter(routes: Routes, ...features: RouterFeature
  * class LazyLoadedChildModule {}
  * ```
  *
+ * @deprecated If necessary, provide routes using the `ROUTES` `InjectionToken`.
+ * @see `ROUTES`
  * @publicApi
  */
 export declare function provideRoutes(routes: Routes): Provider[];
