@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-64d6db6
+ * @license Angular v15.1.0-next.0+sha-ea3374c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1024,7 +1024,7 @@ export declare const enum EventType {
  *
  * @publicApi
  */
-export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions, InternalExtraOptions {
+export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions {
     /**
      * When true, log all internal navigation events to the console.
      * Use for debugging.
@@ -1255,9 +1255,6 @@ export declare interface InMemoryScrollingOptions {
      * ```
      */
     scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
-}
-
-declare interface InternalExtraOptions {
 }
 
 /**
@@ -3248,7 +3245,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
     private applyAttributeValue;
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, ":not(a):not(area)[routerLink],a[routerLink],area[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": "target"; "queryParams": "queryParams"; "fragment": "fragment"; "queryParamsHandling": "queryParamsHandling"; "state": "state"; "relativeTo": "relativeTo"; "preserveFragment": "preserveFragment"; "skipLocationChange": "skipLocationChange"; "replaceUrl": "replaceUrl"; "routerLink": "routerLink"; }, {}, never, never, true, never>;
 }
 export { RouterLink }
 export { RouterLink as RouterLinkWithHref }
