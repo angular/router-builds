@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-046ce43
+ * @license Angular v15.1.0-next.0+sha-f5d0c80
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1390,7 +1390,7 @@ export declare interface Navigation {
      */
     initialUrl: UrlTree;
     /**
-     * The initial target URL after being parsed with `UrlSerializer.extract()`.
+     * The initial target URL after being parsed with `UrlHandlingStrategy.extract()`.
      */
     extractedUrl: UrlTree;
     /**
