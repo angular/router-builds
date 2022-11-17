@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0+sha-b342e55
+ * @license Angular v15.0.0+sha-0c3389e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2518,6 +2518,21 @@ export declare class Router {
      * rawUrlTree to be a combination of the urlAfterRedirects (again, this might only apply to part
      * of the initial url) and the rawUrl of the transition (which was the original navigation url in
      * its full form).
+     *
+     * Note that this is _only_ here to support `UrlHandlingStrategy.extract` and
+     * `UrlHandlingStrategy.shouldProcessUrl`. If those didn't exist, we could get by with
+     * `currentUrlTree` alone. If a new Router were to be provided (i.e. one that works with the
+     * browser navigation API), we should think about whether this complexity should be carried over.
+     *
+     * - extract: `rawUrlTree` is needed because `extract` may only return part
+     * of the navigation URL. Thus, `currentUrlTree` may only represent _part_ of the browser URL.
+     * When a navigation gets cancelled and we need to reset the URL or a new navigation occurs, we
+     * need to know the _whole_ browser URL, not just the part handled by UrlHandlingStrategy.
+     * - shouldProcessUrl: When this returns `false`, the router just ignores the navigation but still
+     * updates the `rawUrlTree` with the assumption that the navigation was caused by the location
+     * change listener due to a URL update by the AngularJS router. In this case, we still need to
+     * know what the browser's URL is for future navigations.
+     *
      */
     private rawUrlTree;
     /**
