@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.0+sha-2551c78
+ * @license Angular v15.0.0+sha-b342e55
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -498,7 +498,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * @publicApi
  */
 export declare interface CanDeactivate<T> {
-    canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+    canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
 
 /**
@@ -508,7 +508,7 @@ export declare interface CanDeactivate<T> {
  * @see `CanDeactivate`
  * @see `Route`
  */
-export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
 /**
  * @description
@@ -2964,6 +2964,8 @@ export declare abstract class RouteReuseStrategy {
     abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
     /** Determines if a route should be reused */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
 }
 
 /**
@@ -4002,6 +4004,8 @@ export declare abstract class UrlHandlingStrategy {
      * Merges the URL fragment with the rest of the URL.
      */
     abstract merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UrlHandlingStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UrlHandlingStrategy>;
 }
 
 /**
