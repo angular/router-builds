@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-6732618
+ * @license Angular v15.1.0-next.0+sha-0a8b8a6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2572,6 +2572,8 @@ export declare class Router {
     readonly routerState: RouterState;
     /**
      * A handler for navigation errors in this NgModule.
+     *
+     * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
      */
     errorHandler: ErrorHandler;
     /**
@@ -2579,6 +2581,10 @@ export declare class Router {
      * when `url` contains an invalid character.
      * The most common case is a `%` sign
      * that's not encoded and is not part of a percent encoded sequence.
+     *
+     * @deprecated Configure this through `RouterModule.forRoot` instead:
+     *   `RouterModule.forRoot(routes, {malformedUriErrorHandler: myHandler})`
+     * @see `RouterModule`
      */
     malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
     /**
@@ -2590,14 +2596,23 @@ export declare class Router {
     /**
      * A strategy for extracting and merging URLs.
      * Used for AngularJS to Angular migrations.
+     *
+     * @deprecated Configure using `providers` instead:
+     *   `{provide: UrlHandlingStrategy, useClass: MyStrategy}`.
      */
     urlHandlingStrategy: UrlHandlingStrategy;
     /**
      * A strategy for re-using routes.
+     *
+     * @deprecated Configure using `providers` instead:
+     *   `{provide: RouteReuseStrategy, useClass: MyStrategy}`.
      */
     routeReuseStrategy: RouteReuseStrategy;
     /**
      * A strategy for setting the title based on the `routerState`.
+     *
+     * @deprecated Configure using `providers` instead:
+     *   `{provide: TitleStrategy, useClass: MyStrategy}`.
      */
     titleStrategy?: TitleStrategy;
     /**
@@ -2612,6 +2627,11 @@ export declare class Router {
      * component first. This behavior is configured by the `RouteReuseStrategy`. In order to reload
      * routed components on same url navigation, you need to set `onSameUrlNavigation` to `'reload'`
      * _and_ provide a `RouteReuseStrategy` which returns `false` for `shouldReuseRoute`.
+     *
+     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
+     * @see `withRouterConfig`
+     * @see `provideRouter`
+     * @see `RouterModule`
      */
     onSameUrlNavigation: 'reload' | 'ignore';
     /**
@@ -2622,6 +2642,11 @@ export declare class Router {
      * for path-less or component-less routes.
      * - `'always'` : Inherit parent parameters, data, and resolved data
      * for all child routes.
+     *
+     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
+     * @see `withRouterConfig`
+     * @see `provideRouter`
+     * @see `RouterModule`
      */
     paramsInheritanceStrategy: 'emptyOnly' | 'always';
     /**
@@ -2630,6 +2655,11 @@ export declare class Router {
      * Set to `'eager'` to update the browser URL at the beginning of navigation.
      * You can choose to update early so that, if navigation fails,
      * you can show an error message with the URL that failed.
+     *
+     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
+     * @see `withRouterConfig`
+     * @see `provideRouter`
+     * @see `RouterModule`
      */
     urlUpdateStrategy: 'deferred' | 'eager';
     /**
@@ -2653,6 +2683,10 @@ export declare class Router {
      *
      * The default value is `replace`.
      *
+     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
+     * @see `withRouterConfig`
+     * @see `provideRouter`
+     * @see `RouterModule`
      */
     canceledNavigationResolution: 'replace' | 'computed';
     /**
@@ -2964,6 +2998,8 @@ export declare abstract class RouteReuseStrategy {
     abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
     /** Determines if a route should be reused */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
 }
 
 /**
@@ -4002,6 +4038,8 @@ export declare abstract class UrlHandlingStrategy {
      * Merges the URL fragment with the rest of the URL.
      */
     abstract merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UrlHandlingStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UrlHandlingStrategy>;
 }
 
 /**
