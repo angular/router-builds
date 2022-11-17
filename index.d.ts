@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-192207e
+ * @license Angular v15.1.0-next.0+sha-02b18dc
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2964,6 +2964,8 @@ export declare abstract class RouteReuseStrategy {
     abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
     /** Determines if a route should be reused */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
 }
 
 /**
@@ -4002,6 +4004,8 @@ export declare abstract class UrlHandlingStrategy {
      * Merges the URL fragment with the rest of the URL.
      */
     abstract merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UrlHandlingStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UrlHandlingStrategy>;
 }
 
 /**
