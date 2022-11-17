@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-b592cda
+ * @license Angular v15.1.0-next.0+sha-b51929a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -498,7 +498,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * @publicApi
  */
 export declare interface CanDeactivate<T> {
-    canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+    canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
 
 /**
@@ -508,7 +508,7 @@ export declare interface CanDeactivate<T> {
  * @see `CanDeactivate`
  * @see `Route`
  */
-export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
+export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
 /**
  * @description
