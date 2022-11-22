@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-ffc427b
+ * @license Angular v15.1.0-next.0+sha-73f03ad
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -988,7 +988,7 @@ declare type ErrorHandler = (error: any) => any;
  *
  * @publicApi
  */
-declare type Event_2 = RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd;
+declare type Event_2 = RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
 export { Event_2 as Event }
 
 /**
@@ -1012,7 +1012,8 @@ export declare const enum EventType {
     ChildActivationEnd = 12,
     ActivationStart = 13,
     ActivationEnd = 14,
-    Scroll = 15
+    Scroll = 15,
+    NavigationSkipped = 16
 }
 
 /**
@@ -1620,6 +1621,65 @@ export declare class NavigationError extends RouterEvent {
  * @publicApi
  */
 export declare interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
+}
+
+/**
+ * An event triggered when a navigation is skipped.
+ * This can happen for a couple reasons including onSameUrlHandling
+ * is set to `ignore` and the navigation URL is not different than the
+ * current state.
+ *
+ * @publicApi
+ */
+export declare class NavigationSkipped extends RouterEvent {
+    /**
+     * A description of why the navigation was skipped. For debug purposes only. Use `code`
+     * instead for a stable skipped reason that can be used in production.
+     */
+    reason: string;
+    /**
+     * A code to indicate why the navigation was skipped. This code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    readonly code?: NavigationSkippedCode | undefined;
+    readonly type = EventType.NavigationSkipped;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /**
+     * A description of why the navigation was skipped. For debug purposes only. Use `code`
+     * instead for a stable skipped reason that can be used in production.
+     */
+    reason: string, 
+    /**
+     * A code to indicate why the navigation was skipped. This code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    code?: NavigationSkippedCode | undefined);
+}
+
+/**
+ * A code for the `NavigationSkipped` event of the `Router` to indicate the
+ * reason a navigation was skipped.
+ *
+ * @publicApi
+ */
+export declare const enum NavigationSkippedCode {
+    /**
+     * A navigation was skipped because the navigation URL was the same as the current Router URL.
+     */
+    IgnoredSameUrlNavigation = 0,
+    /**
+     * A navigation was skipped because the configured `UrlHandlingStrategy` return `false` for both
+     * the current Router URL and the target of the navigation.
+     *
+     * @see UrlHandlingStrategy
+     */
+    IgnoredByUrlHandlingStrategy = 1
 }
 
 /**
