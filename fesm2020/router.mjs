@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-28079b9
+ * @license Angular v15.1.0-next.0+sha-3c6a439
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -202,7 +202,7 @@ function wrapIntoObservable(value) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$9 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$a = typeof ngDevMode === 'undefined' || ngDevMode;
 const pathCompareMap = {
     'exact': equalSegmentGroups,
     'subset': containsSegmentGroup,
@@ -327,7 +327,7 @@ class UrlTree {
         this.root = root;
         this.queryParams = queryParams;
         this.fragment = fragment;
-        if (NG_DEV_MODE$9) {
+        if (NG_DEV_MODE$a) {
             if (root.segments.length > 0) {
                 throw new ɵRuntimeError(4015 /* RuntimeErrorCode.INVALID_ROOT_URL_SEGMENT */, 'The root `UrlSegmentGroup` should not contain `segments`. ' +
                     'Instead, these segments belong in the `children` so they can be associated with a named outlet.');
@@ -461,9 +461,9 @@ function mapChildrenIntoArray(segment, fn) {
  */
 class UrlSerializer {
 }
-UrlSerializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlSerializer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-UrlSerializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlSerializer, providedIn: 'root', useFactory: () => new DefaultUrlSerializer() });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlSerializer, decorators: [{
+UrlSerializer.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlSerializer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+UrlSerializer.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlSerializer, providedIn: 'root', useFactory: () => new DefaultUrlSerializer() });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlSerializer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => new DefaultUrlSerializer() }]
         }] });
@@ -675,7 +675,7 @@ class UrlParser {
     parseSegment() {
         const path = matchSegments(this.remaining);
         if (path === '' && this.peekStartsWith(';')) {
-            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$9 && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
+            throw new ɵRuntimeError(4009 /* RuntimeErrorCode.EMPTY_PATH_WITH_PARAMS */, NG_DEV_MODE$a && `Empty path url segment cannot have parameters: '${this.remaining}'.`);
         }
         this.capture(path);
         return new UrlSegment(decode(path), this.parseMatrixParams());
@@ -744,7 +744,7 @@ class UrlParser {
             // if is is not one of these characters, then the segment was unescaped
             // or the group was not closed
             if (next !== '/' && next !== ')' && next !== ';') {
-                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$9 && `Cannot parse url '${this.url}'`);
+                throw new ɵRuntimeError(4010 /* RuntimeErrorCode.UNPARSABLE_URL */, NG_DEV_MODE$a && `Cannot parse url '${this.url}'`);
             }
             let outletName = undefined;
             if (path.indexOf(':') > -1) {
@@ -775,7 +775,7 @@ class UrlParser {
     }
     capture(str) {
         if (!this.consumeOptional(str)) {
-            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$9 && `Expected "${str}".`);
+            throw new ɵRuntimeError(4011 /* RuntimeErrorCode.UNEXPECTED_VALUE_IN_URL */, NG_DEV_MODE$a && `Expected "${str}".`);
         }
     }
 }
@@ -828,7 +828,7 @@ function isUrlTree(v) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$8 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$9 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
  * Creates a `UrlTree` relative to an `ActivatedRouteSnapshot`.
  *
@@ -997,11 +997,11 @@ class Navigation {
         this.numberOfDoubleDots = numberOfDoubleDots;
         this.commands = commands;
         if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
-            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$8 && 'Root segment cannot have matrix parameters');
+            throw new ɵRuntimeError(4003 /* RuntimeErrorCode.ROOT_SEGMENT_MATRIX_PARAMS */, NG_DEV_MODE$9 && 'Root segment cannot have matrix parameters');
         }
         const cmdWithOutlet = commands.find(isCommandWithOutlets);
         if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
-            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$8 && '{outlets:{}} has to be the last command');
+            throw new ɵRuntimeError(4004 /* RuntimeErrorCode.MISPLACED_OUTLETS_COMMAND */, NG_DEV_MODE$9 && '{outlets:{}} has to be the last command');
         }
     }
     toRoot() {
@@ -1100,7 +1100,7 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
         dd -= ci;
         g = g.parent;
         if (!g) {
-            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$8 && 'Invalid number of \'../\'');
+            throw new ɵRuntimeError(4005 /* RuntimeErrorCode.INVALID_DOUBLE_DOTS */, NG_DEV_MODE$9 && 'Invalid number of \'../\'');
         }
         ci = g.segments.length;
     }
@@ -2413,9 +2413,9 @@ class ChildrenOutletContexts {
         return this.contexts.get(childName) || null;
     }
 }
-ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
+ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -2427,7 +2427,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sh
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$8 = typeof ngDevMode === 'undefined' || ngDevMode;
 /**
  * @description
  *
@@ -2566,12 +2566,12 @@ class RouterOutlet {
      */
     get component() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$8 && 'Outlet is not activated');
         return this.activated.instance;
     }
     get activatedRoute() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$8 && 'Outlet is not activated');
         return this._activatedRoute;
     }
     get activatedRouteData() {
@@ -2585,7 +2585,7 @@ class RouterOutlet {
      */
     detach() {
         if (!this.activated)
-            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$7 && 'Outlet is not activated');
+            throw new ɵRuntimeError(4012 /* RuntimeErrorCode.OUTLET_NOT_ACTIVATED */, NG_DEV_MODE$8 && 'Outlet is not activated');
         this.location.detach();
         const cmp = this.activated;
         this.activated = null;
@@ -2613,7 +2613,7 @@ class RouterOutlet {
     }
     activateWith(activatedRoute, resolverOrInjector) {
         if (this.isActivated) {
-            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$7 && 'Cannot activate an already activated outlet');
+            throw new ɵRuntimeError(4013 /* RuntimeErrorCode.OUTLET_ALREADY_ACTIVATED */, NG_DEV_MODE$8 && 'Cannot activate an already activated outlet');
         }
         this._activatedRoute = activatedRoute;
         const location = this.location;
@@ -2635,9 +2635,9 @@ class RouterOutlet {
         this.activateEvents.emit(this.activated.instance);
     }
 }
-RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-28079b9", type: RouterOutlet, isStandalone: true, selector: "router-outlet", inputs: { name: "name" }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterOutlet, decorators: [{
+RouterOutlet.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+RouterOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-3c6a439", type: RouterOutlet, isStandalone: true, selector: "router-outlet", inputs: { name: "name" }, outputs: { activateEvents: "activate", deactivateEvents: "deactivate", attachEvents: "attach", detachEvents: "detach" }, exportAs: ["outlet"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterOutlet, decorators: [{
             type: Directive,
             args: [{
                     selector: 'router-outlet',
@@ -2697,9 +2697,9 @@ function isComponentFactoryResolver(item) {
  */
 class ɵEmptyOutletComponent {
 }
-ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-28079b9", type: ɵEmptyOutletComponent, isStandalone: true, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
+ɵEmptyOutletComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: ɵEmptyOutletComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+ɵEmptyOutletComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-3c6a439", type: ɵEmptyOutletComponent, isStandalone: true, selector: "ng-component", ngImport: i0, template: `<router-outlet></router-outlet>`, isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: ɵEmptyOutletComponent, decorators: [{
             type: Component,
             args: [{
                     template: `<router-outlet></router-outlet>`,
@@ -3611,7 +3611,7 @@ function noLeftoversInUrl(segmentGroup, segments, outlet) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || ngDevMode;
+const NG_DEV_MODE$7 = typeof ngDevMode === 'undefined' || ngDevMode;
 class NoMatch$1 {
     constructor(segmentGroup) {
         this.segmentGroup = segmentGroup || null;
@@ -3629,11 +3629,11 @@ function absoluteRedirect(newTree) {
     return throwError(new AbsoluteRedirect(newTree));
 }
 function namedOutletsRedirect(redirectTo) {
-    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$6 &&
+    return throwError(new ɵRuntimeError(4000 /* RuntimeErrorCode.NAMED_OUTLET_REDIRECT */, NG_DEV_MODE$7 &&
         `Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`));
 }
 function canLoadFails(route) {
-    return throwError(navigationCancelingError(NG_DEV_MODE$6 &&
+    return throwError(navigationCancelingError(NG_DEV_MODE$7 &&
         `Cannot load children because the guard of the route "path: '${route.path}'" returned false`, 3 /* NavigationCancellationCode.GuardRejected */));
 }
 /**
@@ -3693,7 +3693,7 @@ class ApplyRedirects {
         }));
     }
     noMatchError(e) {
-        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$6 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
+        return new ɵRuntimeError(4002 /* RuntimeErrorCode.NO_MATCH */, NG_DEV_MODE$7 && `Cannot match any routes. URL Segment: '${e.segmentGroup}'`);
     }
     createUrlTree(rootCandidate, queryParams, fragment) {
         const root = createRoot(rootCandidate);
@@ -3908,7 +3908,7 @@ class ApplyRedirects {
     findPosParam(redirectTo, redirectToUrlSegment, posParams) {
         const pos = posParams[redirectToUrlSegment.path.substring(1)];
         if (!pos)
-            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$6 &&
+            throw new ɵRuntimeError(4001 /* RuntimeErrorCode.MISSING_REDIRECT */, NG_DEV_MODE$7 &&
                 `Cannot redirect to '${redirectTo}'. Cannot find '${redirectToUrlSegment.path}'.`);
         return pos;
     }
@@ -3944,7 +3944,7 @@ function applyRedirects(environmentInjector, configLoader, urlSerializer, config
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+const NG_DEV_MODE$6 = typeof ngDevMode === 'undefined' || !!ngDevMode;
 class NoMatch {
 }
 function newObservableError(e) {
@@ -4032,7 +4032,7 @@ class Recognizer {
             // multiple activated results for the same outlet. We should merge the children of
             // these results so the final return value is only one `TreeNode` per outlet.
             const mergedChildren = mergeEmptyPathMatches(children);
-            if (NG_DEV_MODE$5) {
+            if (NG_DEV_MODE$6) {
                 // This should really never happen - we are only taking the first match for each
                 // outlet and merge the empty path matches.
                 checkOutletNameUniqueness(mergedChildren);
@@ -4187,7 +4187,7 @@ function checkOutletNameUniqueness(nodes) {
         if (routeWithSameOutletName) {
             const p = routeWithSameOutletName.url.map(s => s.toString()).join('/');
             const c = n.value.url.map(s => s.toString()).join('/');
-            throw new ɵRuntimeError(4006 /* RuntimeErrorCode.TWO_SEGMENTS_WITH_SAME_OUTLET */, NG_DEV_MODE$5 && `Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
+            throw new ɵRuntimeError(4006 /* RuntimeErrorCode.TWO_SEGMENTS_WITH_SAME_OUTLET */, NG_DEV_MODE$6 && `Two segments cannot have the same outlet name: '${p}' and '${c}'.`);
         }
         names[n.value.outlet] = n.value;
     });
@@ -4325,6 +4325,320 @@ function switchTap(next) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const NG_DEV_MODE$5 = typeof ngDevMode === 'undefined' || !!ngDevMode;
+class NavigationTransitions {
+    constructor(router) {
+        this.router = router;
+        this.currentNavigation = null;
+    }
+    setupNavigations(transitions) {
+        const eventsSubject = this.router.events;
+        return transitions.pipe(filter(t => t.id !== 0), 
+        // Extract URL
+        map(t => ({ ...t, extractedUrl: this.router.urlHandlingStrategy.extract(t.rawUrl) })), 
+        // Using switchMap so we cancel executing navigations when a new one comes in
+        switchMap(overallTransitionState => {
+            let completed = false;
+            let errored = false;
+            return of(overallTransitionState)
+                .pipe(
+            // Store the Navigation object
+            tap(t => {
+                this.currentNavigation = {
+                    id: t.id,
+                    initialUrl: t.rawUrl,
+                    extractedUrl: t.extractedUrl,
+                    trigger: t.source,
+                    extras: t.extras,
+                    previousNavigation: !this.router.lastSuccessfulNavigation ? null : {
+                        ...this.router.lastSuccessfulNavigation,
+                        previousNavigation: null,
+                    },
+                };
+            }), switchMap(t => {
+                const browserUrlTree = this.router.browserUrlTree.toString();
+                const urlTransition = !this.router.navigated ||
+                    t.extractedUrl.toString() !== browserUrlTree ||
+                    // Navigations which succeed or ones which fail and are cleaned up
+                    // correctly should result in `browserUrlTree` and `currentUrlTree`
+                    // matching. If this is not the case, assume something went wrong and
+                    // try processing the URL again.
+                    browserUrlTree !== this.router.currentUrlTree.toString();
+                if (!urlTransition && this.router.onSameUrlNavigation !== 'reload') {
+                    const reason = NG_DEV_MODE$5 ?
+                        `Navigation to ${t.rawUrl} was ignored because it is the same as the current Router URL.` :
+                        '';
+                    this.router.triggerEvent(new NavigationSkipped(t.id, this.router.serializeUrl(overallTransitionState.rawUrl), reason, 0 /* NavigationSkippedCode.IgnoredSameUrlNavigation */));
+                    this.router.rawUrlTree = t.rawUrl;
+                    t.resolve(null);
+                    return EMPTY;
+                }
+                if (this.router.urlHandlingStrategy.shouldProcessUrl(t.rawUrl)) {
+                    // If the source of the navigation is from a browser event, the URL is
+                    // already updated. We already need to sync the internal state.
+                    if (isBrowserTriggeredNavigation(t.source)) {
+                        this.router.browserUrlTree = t.extractedUrl;
+                    }
+                    return of(t).pipe(
+                    // Fire NavigationStart event
+                    switchMap(t => {
+                        const transition = this.router.transitions.getValue();
+                        eventsSubject.next(new NavigationStart(t.id, this.router.serializeUrl(t.extractedUrl), t.source, t.restoredState));
+                        if (transition !== this.router.transitions.getValue()) {
+                            return EMPTY;
+                        }
+                        // This delay is required to match old behavior that forced
+                        // navigation to always be async
+                        return Promise.resolve(t);
+                    }), 
+                    // ApplyRedirects
+                    applyRedirects(this.router.ngModule.injector, this.router.configLoader, this.router.urlSerializer, this.router.config), 
+                    // Update the currentNavigation
+                    // `urlAfterRedirects` is guaranteed to be set after this point
+                    tap(t => {
+                        this.currentNavigation = {
+                            ...this.currentNavigation,
+                            finalUrl: t.urlAfterRedirects
+                        };
+                        overallTransitionState.urlAfterRedirects = t.urlAfterRedirects;
+                    }), 
+                    // Recognize
+                    recognize(this.router.ngModule.injector, this.router.rootComponentType, this.router.config, this.router.urlSerializer, this.router.paramsInheritanceStrategy), 
+                    // Update URL if in `eager` update mode
+                    tap(t => {
+                        overallTransitionState.targetSnapshot = t.targetSnapshot;
+                        if (this.router.urlUpdateStrategy === 'eager') {
+                            if (!t.extras.skipLocationChange) {
+                                const rawUrl = this.router.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
+                                this.router.setBrowserUrl(rawUrl, t);
+                            }
+                            this.router.browserUrlTree = t.urlAfterRedirects;
+                        }
+                        // Fire RoutesRecognized
+                        const routesRecognized = new RoutesRecognized(t.id, this.router.serializeUrl(t.extractedUrl), this.router.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
+                        eventsSubject.next(routesRecognized);
+                    }));
+                }
+                else if (urlTransition &&
+                    this.router.urlHandlingStrategy.shouldProcessUrl(this.router.rawUrlTree)) {
+                    // When the current URL shouldn't be processed, but the previous one
+                    // was, we handle this by navigating from the current URL to an empty
+                    // state so deactivate guards can run.
+                    const { id, extractedUrl, source, restoredState, extras } = t;
+                    const navStart = new NavigationStart(id, this.router.serializeUrl(extractedUrl), source, restoredState);
+                    eventsSubject.next(navStart);
+                    const targetSnapshot = createEmptyState(extractedUrl, this.router.rootComponentType)
+                        .snapshot;
+                    overallTransitionState = {
+                        ...t,
+                        targetSnapshot,
+                        urlAfterRedirects: extractedUrl,
+                        extras: { ...extras, skipLocationChange: false, replaceUrl: false },
+                    };
+                    return of(overallTransitionState);
+                }
+                else {
+                    /* When neither the current or previous URL can be processed, do
+                     * nothing other than update router's internal reference to the
+                     * current "settled" URL. This way the next navigation will be coming
+                     * from the current URL in the browser.
+                     */
+                    const reason = NG_DEV_MODE$5 ?
+                        `Navigation was ignored because the UrlHandlingStrategy` +
+                            ` indicated neither the current URL ${this.router.rawUrlTree} nor target URL ${t.rawUrl} should be processed.` :
+                        '';
+                    this.router.triggerEvent(new NavigationSkipped(t.id, this.router.serializeUrl(overallTransitionState.extractedUrl), reason, 1 /* NavigationSkippedCode.IgnoredByUrlHandlingStrategy */));
+                    this.router.rawUrlTree = t.rawUrl;
+                    t.resolve(null);
+                    return EMPTY;
+                }
+            }), 
+            // --- GUARDS ---
+            tap(t => {
+                const guardsStart = new GuardsCheckStart(t.id, this.router.serializeUrl(t.extractedUrl), this.router.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
+                this.router.triggerEvent(guardsStart);
+            }), map(t => {
+                overallTransitionState = {
+                    ...t,
+                    guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, this.router.rootContexts)
+                };
+                return overallTransitionState;
+            }), checkGuards(this.router.ngModule.injector, (evt) => this.router.triggerEvent(evt)), tap(t => {
+                overallTransitionState.guardsResult = t.guardsResult;
+                if (isUrlTree(t.guardsResult)) {
+                    throw redirectingNavigationError(this.router.urlSerializer, t.guardsResult);
+                }
+                const guardsEnd = new GuardsCheckEnd(t.id, this.router.serializeUrl(t.extractedUrl), this.router.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
+                this.router.triggerEvent(guardsEnd);
+            }), filter(t => {
+                if (!t.guardsResult) {
+                    this.router.restoreHistory(t);
+                    this.router.cancelNavigationTransition(t, '', 3 /* NavigationCancellationCode.GuardRejected */);
+                    return false;
+                }
+                return true;
+            }), 
+            // --- RESOLVE ---
+            switchTap(t => {
+                if (t.guards.canActivateChecks.length) {
+                    return of(t).pipe(tap(t => {
+                        const resolveStart = new ResolveStart(t.id, this.router.serializeUrl(t.extractedUrl), this.router.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
+                        this.router.triggerEvent(resolveStart);
+                    }), switchMap(t => {
+                        let dataResolved = false;
+                        return of(t).pipe(resolveData(this.router.paramsInheritanceStrategy, this.router.ngModule.injector), tap({
+                            next: () => dataResolved = true,
+                            complete: () => {
+                                if (!dataResolved) {
+                                    this.router.restoreHistory(t);
+                                    this.router.cancelNavigationTransition(t, NG_DEV_MODE$5 ?
+                                        `At least one route resolver didn't emit any value.` :
+                                        '', 2 /* NavigationCancellationCode.NoDataFromResolver */);
+                                }
+                            }
+                        }));
+                    }), tap(t => {
+                        const resolveEnd = new ResolveEnd(t.id, this.router.serializeUrl(t.extractedUrl), this.router.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
+                        this.router.triggerEvent(resolveEnd);
+                    }));
+                }
+                return undefined;
+            }), 
+            // --- LOAD COMPONENTS ---
+            switchTap((t) => {
+                const loadComponents = (route) => {
+                    const loaders = [];
+                    if (route.routeConfig?.loadComponent &&
+                        !route.routeConfig._loadedComponent) {
+                        loaders.push(this.router.configLoader.loadComponent(route.routeConfig)
+                            .pipe(tap(loadedComponent => {
+                            route.component = loadedComponent;
+                        }), map(() => void 0)));
+                    }
+                    for (const child of route.children) {
+                        loaders.push(...loadComponents(child));
+                    }
+                    return loaders;
+                };
+                return combineLatest(loadComponents(t.targetSnapshot.root))
+                    .pipe(defaultIfEmpty(), take(1));
+            }), switchTap(() => this.router.afterPreactivation()), map((t) => {
+                const targetRouterState = createRouterState(this.router.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
+                overallTransitionState = { ...t, targetRouterState };
+                return (overallTransitionState);
+            }), 
+            /* Once here, we are about to activate synchronously. The assumption is
+               this will succeed, and user code may read from the Router service.
+               Therefore before activation, we need to update router properties storing
+               the current URL and the RouterState, as well as updated the browser URL.
+               All this should happen *before* activating. */
+            tap((t) => {
+                this.router.currentUrlTree = t.urlAfterRedirects;
+                this.router.rawUrlTree = this.router.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
+                this.router.routerState =
+                    t.targetRouterState;
+                if (this.router.urlUpdateStrategy === 'deferred') {
+                    if (!t.extras.skipLocationChange) {
+                        this.router.setBrowserUrl(this.router.rawUrlTree, t);
+                    }
+                    this.router.browserUrlTree = t.urlAfterRedirects;
+                }
+            }), activateRoutes(this.router.rootContexts, this.router.routeReuseStrategy, (evt) => this.router.triggerEvent(evt)), tap({
+                next() {
+                    completed = true;
+                },
+                complete() {
+                    completed = true;
+                }
+            }), finalize(() => {
+                /* When the navigation stream finishes either through error or success,
+                 * we set the `completed` or `errored` flag. However, there are some
+                 * situations where we could get here without either of those being set.
+                 * For instance, a redirect during NavigationStart. Therefore, this is a
+                 * catch-all to make sure the NavigationCancel event is fired when a
+                 * navigation gets cancelled but not caught by other means. */
+                if (!completed && !errored) {
+                    const cancelationReason = NG_DEV_MODE$5 ?
+                        `Navigation ID ${overallTransitionState
+                            .id} is not equal to the current navigation id ${this.router.navigationId}` :
+                        '';
+                    this.router.cancelNavigationTransition(overallTransitionState, cancelationReason, 1 /* NavigationCancellationCode.SupersededByNewNavigation */);
+                }
+                // Only clear current navigation if it is still set to the one that
+                // finalized.
+                if (this.currentNavigation?.id === overallTransitionState.id) {
+                    this.currentNavigation = null;
+                }
+            }), catchError((e) => {
+                errored = true;
+                /* This error type is issued during Redirect, and is handled as a
+                 * cancellation rather than an error. */
+                if (isNavigationCancelingError$1(e)) {
+                    if (!isRedirectingNavigationCancelingError$1(e)) {
+                        // Set property only if we're not redirecting. If we landed on a page
+                        // and redirect to `/` route, the new navigation is going to see the
+                        // `/` isn't a change from the default currentUrlTree and won't
+                        // navigate. This is only applicable with initial navigation, so
+                        // setting `navigated` only when not redirecting resolves this
+                        // scenario.
+                        this.router.navigated = true;
+                        this.router.restoreHistory(overallTransitionState, true);
+                    }
+                    const navCancel = new NavigationCancel(overallTransitionState.id, this.router.serializeUrl(overallTransitionState.extractedUrl), e.message, e.cancellationCode);
+                    eventsSubject.next(navCancel);
+                    // When redirecting, we need to delay resolving the navigation
+                    // promise and push it to the redirect navigation
+                    if (!isRedirectingNavigationCancelingError$1(e)) {
+                        overallTransitionState.resolve(false);
+                    }
+                    else {
+                        const mergedTree = this.router.urlHandlingStrategy.merge(e.url, this.router.rawUrlTree);
+                        const extras = {
+                            skipLocationChange: overallTransitionState.extras.skipLocationChange,
+                            // The URL is already updated at this point if we have 'eager' URL
+                            // updates or if the navigation was triggered by the browser (back
+                            // button, URL bar, etc). We want to replace that item in history
+                            // if the navigation is rejected.
+                            replaceUrl: this.router.urlUpdateStrategy === 'eager' ||
+                                isBrowserTriggeredNavigation(overallTransitionState.source)
+                        };
+                        this.router.scheduleNavigation(mergedTree, 'imperative', null, extras, {
+                            resolve: overallTransitionState.resolve,
+                            reject: overallTransitionState.reject,
+                            promise: overallTransitionState.promise
+                        });
+                    }
+                    /* All other errors should reset to the router's internal URL reference
+                     * to the pre-error state. */
+                }
+                else {
+                    this.router.restoreHistory(overallTransitionState, true);
+                    const navError = new NavigationError(overallTransitionState.id, this.router.serializeUrl(overallTransitionState.extractedUrl), e, overallTransitionState.targetSnapshot ?? undefined);
+                    eventsSubject.next(navError);
+                    try {
+                        overallTransitionState.resolve(this.router.errorHandler(e));
+                    }
+                    catch (ee) {
+                        overallTransitionState.reject(ee);
+                    }
+                }
+                return EMPTY;
+            }));
+            // TODO(jasonaden): remove cast once g3 is on updated TypeScript
+        }));
+    }
+}
+function isBrowserTriggeredNavigation(source) {
+    return source !== 'imperative';
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * Provides a strategy for setting the page title after a router navigation.
  *
@@ -4369,9 +4683,9 @@ class TitleStrategy {
         return snapshot.data[RouteTitleKey];
     }
 }
-TitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: TitleStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-TitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: TitleStrategy, providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: TitleStrategy, decorators: [{
+TitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: TitleStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+TitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: TitleStrategy, providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: TitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(DefaultTitleStrategy) }]
         }] });
@@ -4395,9 +4709,9 @@ class DefaultTitleStrategy extends TitleStrategy {
         }
     }
 }
-DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
+DefaultTitleStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultTitleStrategy, deps: [{ token: i1.Title }], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultTitleStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultTitleStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultTitleStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Title }]; } });
@@ -4418,9 +4732,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sh
  */
 class RouteReuseStrategy {
 }
-RouteReuseStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouteReuseStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-RouteReuseStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouteReuseStrategy, providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouteReuseStrategy, decorators: [{
+RouteReuseStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouteReuseStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+RouteReuseStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouteReuseStrategy, providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouteReuseStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) }]
         }] });
@@ -4472,9 +4786,9 @@ class BaseRouteReuseStrategy {
 }
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
-DefaultRouteReuseStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultRouteReuseStrategy, deps: null, target: i0.ɵɵFactoryTarget.Injectable });
-DefaultRouteReuseStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultRouteReuseStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultRouteReuseStrategy, decorators: [{
+DefaultRouteReuseStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultRouteReuseStrategy, deps: null, target: i0.ɵɵFactoryTarget.Injectable });
+DefaultRouteReuseStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultRouteReuseStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultRouteReuseStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -4619,9 +4933,9 @@ class RouterConfigLoader {
         }));
     }
 }
-RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterConfigLoader, decorators: [{
+RouterConfigLoader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterConfigLoader, deps: [{ token: i0.Injector }, { token: i0.Compiler }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterConfigLoader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterConfigLoader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i0.Injector }, { type: i0.Compiler }]; } });
@@ -4653,9 +4967,9 @@ function maybeUnwrapDefaultExport(input) {
  */
 class UrlHandlingStrategy {
 }
-UrlHandlingStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlHandlingStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-UrlHandlingStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlHandlingStrategy, providedIn: 'root', useFactory: () => inject(DefaultUrlHandlingStrategy) });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: UrlHandlingStrategy, decorators: [{
+UrlHandlingStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlHandlingStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+UrlHandlingStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlHandlingStrategy, providedIn: 'root', useFactory: () => inject(DefaultUrlHandlingStrategy) });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: UrlHandlingStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(DefaultUrlHandlingStrategy) }]
         }] });
@@ -4673,9 +4987,9 @@ class DefaultUrlHandlingStrategy {
         return newUrlPart;
     }
 }
-DefaultUrlHandlingStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultUrlHandlingStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-DefaultUrlHandlingStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultUrlHandlingStrategy, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: DefaultUrlHandlingStrategy, decorators: [{
+DefaultUrlHandlingStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultUrlHandlingStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+DefaultUrlHandlingStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultUrlHandlingStrategy, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: DefaultUrlHandlingStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -4763,15 +5077,24 @@ class Router {
      * Creates the router service.
      */
     // TODO: vsavkin make internal after the final is out.
-    constructor(rootComponentType, urlSerializer, rootContexts, location, injector, compiler, config) {
+    constructor(
+    /** @internal */
+    rootComponentType, 
+    /** @internal */
+    urlSerializer, 
+    /** @internal */
+    rootContexts, 
+    /** @internal */
+    location, injector, compiler, config) {
         this.rootComponentType = rootComponentType;
         this.urlSerializer = urlSerializer;
         this.rootContexts = rootContexts;
         this.location = location;
         this.config = config;
+        /** @internal */
         this.lastSuccessfulNavigation = null;
-        this.currentNavigation = null;
         this.disposed = false;
+        /** @internal */
         this.navigationId = 0;
         /**
          * The id of the currently active page in the router.
@@ -4913,6 +5236,7 @@ class Router {
          * @see `RouterModule`
          */
         this.canceledNavigationResolution = 'replace';
+        this.navigationTransitions = new NavigationTransitions(this);
         const onLoadStart = (r) => this.triggerEvent(new RouteConfigLoadStart(r));
         const onLoadEnd = (r) => this.triggerEvent(new RouteConfigLoadEnd(r));
         this.configLoader = injector.get(RouterConfigLoader);
@@ -4947,7 +5271,7 @@ class Router {
             guards: { canActivateChecks: [], canDeactivateChecks: [] },
             guardsResult: null,
         });
-        this.navigations = this.setupNavigations(this.transitions);
+        this.navigations = this.navigationTransitions.setupNavigations(this.transitions);
         this.processNavigations();
     }
     /**
@@ -4957,300 +5281,6 @@ class Router {
      */
     get browserPageId() {
         return this.location.getState()?.ɵrouterPageId;
-    }
-    setupNavigations(transitions) {
-        const eventsSubject = this.events;
-        return transitions.pipe(filter(t => t.id !== 0), 
-        // Extract URL
-        map(t => ({ ...t, extractedUrl: this.urlHandlingStrategy.extract(t.rawUrl) })), 
-        // Using switchMap so we cancel executing navigations when a new one comes in
-        switchMap(overallTransitionState => {
-            let completed = false;
-            let errored = false;
-            return of(overallTransitionState)
-                .pipe(
-            // Store the Navigation object
-            tap(t => {
-                this.currentNavigation = {
-                    id: t.id,
-                    initialUrl: t.rawUrl,
-                    extractedUrl: t.extractedUrl,
-                    trigger: t.source,
-                    extras: t.extras,
-                    previousNavigation: this.lastSuccessfulNavigation ?
-                        { ...this.lastSuccessfulNavigation, previousNavigation: null } :
-                        null
-                };
-            }), switchMap(t => {
-                const browserUrlTree = this.browserUrlTree.toString();
-                const urlTransition = !this.navigated ||
-                    t.extractedUrl.toString() !== browserUrlTree ||
-                    // Navigations which succeed or ones which fail and are cleaned up
-                    // correctly should result in `browserUrlTree` and `currentUrlTree`
-                    // matching. If this is not the case, assume something went wrong and
-                    // try processing the URL again.
-                    browserUrlTree !== this.currentUrlTree.toString();
-                if (!urlTransition && this.onSameUrlNavigation !== 'reload') {
-                    const reason = NG_DEV_MODE$2 ?
-                        `Navigation to ${t.rawUrl} was ignored because it is the same as the current Router URL.` :
-                        '';
-                    this.triggerEvent(new NavigationSkipped(t.id, this.serializeUrl(overallTransitionState.rawUrl), reason, 0 /* NavigationSkippedCode.IgnoredSameUrlNavigation */));
-                    this.rawUrlTree = t.rawUrl;
-                    t.resolve(null);
-                    return EMPTY;
-                }
-                if (this.urlHandlingStrategy.shouldProcessUrl(t.rawUrl)) {
-                    // If the source of the navigation is from a browser event, the URL is
-                    // already updated. We already need to sync the internal state.
-                    if (isBrowserTriggeredNavigation(t.source)) {
-                        this.browserUrlTree = t.extractedUrl;
-                    }
-                    return of(t).pipe(
-                    // Fire NavigationStart event
-                    switchMap(t => {
-                        const transition = this.transitions.getValue();
-                        eventsSubject.next(new NavigationStart(t.id, this.serializeUrl(t.extractedUrl), t.source, t.restoredState));
-                        if (transition !== this.transitions.getValue()) {
-                            return EMPTY;
-                        }
-                        // This delay is required to match old behavior that forced
-                        // navigation to always be async
-                        return Promise.resolve(t);
-                    }), 
-                    // ApplyRedirects
-                    applyRedirects(this.ngModule.injector, this.configLoader, this.urlSerializer, this.config), 
-                    // Update the currentNavigation
-                    // `urlAfterRedirects` is guaranteed to be set after this point
-                    tap(t => {
-                        this.currentNavigation = {
-                            ...this.currentNavigation,
-                            finalUrl: t.urlAfterRedirects
-                        };
-                        overallTransitionState.urlAfterRedirects = t.urlAfterRedirects;
-                    }), 
-                    // Recognize
-                    recognize(this.ngModule.injector, this.rootComponentType, this.config, this.urlSerializer, this.paramsInheritanceStrategy), 
-                    // Update URL if in `eager` update mode
-                    tap(t => {
-                        overallTransitionState.targetSnapshot = t.targetSnapshot;
-                        if (this.urlUpdateStrategy === 'eager') {
-                            if (!t.extras.skipLocationChange) {
-                                const rawUrl = this.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
-                                this.setBrowserUrl(rawUrl, t);
-                            }
-                            this.browserUrlTree = t.urlAfterRedirects;
-                        }
-                        // Fire RoutesRecognized
-                        const routesRecognized = new RoutesRecognized(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
-                        eventsSubject.next(routesRecognized);
-                    }));
-                }
-                else if (urlTransition &&
-                    this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
-                    // When the current URL shouldn't be processed, but the previous one
-                    // was, we handle this by navigating from the current URL to an empty
-                    // state so deactivate guards can run.
-                    const { id, extractedUrl, source, restoredState, extras } = t;
-                    const navStart = new NavigationStart(id, this.serializeUrl(extractedUrl), source, restoredState);
-                    eventsSubject.next(navStart);
-                    const targetSnapshot = createEmptyState(extractedUrl, this.rootComponentType).snapshot;
-                    overallTransitionState = {
-                        ...t,
-                        targetSnapshot,
-                        urlAfterRedirects: extractedUrl,
-                        extras: { ...extras, skipLocationChange: false, replaceUrl: false },
-                    };
-                    return of(overallTransitionState);
-                }
-                else {
-                    /* When neither the current or previous URL can be processed, do
-                     * nothing other than update router's internal reference to the
-                     * current "settled" URL. This way the next navigation will be coming
-                     * from the current URL in the browser.
-                     */
-                    const reason = NG_DEV_MODE$2 ?
-                        `Navigation was ignored because the UrlHandlingStrategy` +
-                            ` indicated neither the current URL ${this.rawUrlTree} nor target URL ${t.rawUrl} should be processed.` :
-                        '';
-                    this.triggerEvent(new NavigationSkipped(t.id, this.serializeUrl(overallTransitionState.extractedUrl), reason, 1 /* NavigationSkippedCode.IgnoredByUrlHandlingStrategy */));
-                    this.rawUrlTree = t.rawUrl;
-                    t.resolve(null);
-                    return EMPTY;
-                }
-            }), 
-            // --- GUARDS ---
-            tap(t => {
-                const guardsStart = new GuardsCheckStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
-                this.triggerEvent(guardsStart);
-            }), map(t => {
-                overallTransitionState = {
-                    ...t,
-                    guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, this.rootContexts)
-                };
-                return overallTransitionState;
-            }), checkGuards(this.ngModule.injector, (evt) => this.triggerEvent(evt)), tap(t => {
-                overallTransitionState.guardsResult = t.guardsResult;
-                if (isUrlTree(t.guardsResult)) {
-                    throw redirectingNavigationError(this.urlSerializer, t.guardsResult);
-                }
-                const guardsEnd = new GuardsCheckEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot, !!t.guardsResult);
-                this.triggerEvent(guardsEnd);
-            }), filter(t => {
-                if (!t.guardsResult) {
-                    this.restoreHistory(t);
-                    this.cancelNavigationTransition(t, '', 3 /* NavigationCancellationCode.GuardRejected */);
-                    return false;
-                }
-                return true;
-            }), 
-            // --- RESOLVE ---
-            switchTap(t => {
-                if (t.guards.canActivateChecks.length) {
-                    return of(t).pipe(tap(t => {
-                        const resolveStart = new ResolveStart(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
-                        this.triggerEvent(resolveStart);
-                    }), switchMap(t => {
-                        let dataResolved = false;
-                        return of(t).pipe(resolveData(this.paramsInheritanceStrategy, this.ngModule.injector), tap({
-                            next: () => dataResolved = true,
-                            complete: () => {
-                                if (!dataResolved) {
-                                    this.restoreHistory(t);
-                                    this.cancelNavigationTransition(t, NG_DEV_MODE$2 ?
-                                        `At least one route resolver didn't emit any value.` :
-                                        '', 2 /* NavigationCancellationCode.NoDataFromResolver */);
-                                }
-                            }
-                        }));
-                    }), tap(t => {
-                        const resolveEnd = new ResolveEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot);
-                        this.triggerEvent(resolveEnd);
-                    }));
-                }
-                return undefined;
-            }), 
-            // --- LOAD COMPONENTS ---
-            switchTap((t) => {
-                const loadComponents = (route) => {
-                    const loaders = [];
-                    if (route.routeConfig?.loadComponent &&
-                        !route.routeConfig._loadedComponent) {
-                        loaders.push(this.configLoader.loadComponent(route.routeConfig)
-                            .pipe(tap(loadedComponent => {
-                            route.component = loadedComponent;
-                        }), map(() => void 0)));
-                    }
-                    for (const child of route.children) {
-                        loaders.push(...loadComponents(child));
-                    }
-                    return loaders;
-                };
-                return combineLatest(loadComponents(t.targetSnapshot.root))
-                    .pipe(defaultIfEmpty(), take(1));
-            }), switchTap(() => this.afterPreactivation()), map((t) => {
-                const targetRouterState = createRouterState(this.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
-                overallTransitionState = { ...t, targetRouterState };
-                return (overallTransitionState);
-            }), 
-            /* Once here, we are about to activate synchronously. The assumption is
-               this will succeed, and user code may read from the Router service.
-               Therefore before activation, we need to update router properties storing
-               the current URL and the RouterState, as well as updated the browser URL.
-               All this should happen *before* activating. */
-            tap((t) => {
-                this.currentUrlTree = t.urlAfterRedirects;
-                this.rawUrlTree =
-                    this.urlHandlingStrategy.merge(t.urlAfterRedirects, t.rawUrl);
-                this.routerState = t.targetRouterState;
-                if (this.urlUpdateStrategy === 'deferred') {
-                    if (!t.extras.skipLocationChange) {
-                        this.setBrowserUrl(this.rawUrlTree, t);
-                    }
-                    this.browserUrlTree = t.urlAfterRedirects;
-                }
-            }), activateRoutes(this.rootContexts, this.routeReuseStrategy, (evt) => this.triggerEvent(evt)), tap({
-                next() {
-                    completed = true;
-                },
-                complete() {
-                    completed = true;
-                }
-            }), finalize(() => {
-                /* When the navigation stream finishes either through error or success,
-                 * we set the `completed` or `errored` flag. However, there are some
-                 * situations where we could get here without either of those being set.
-                 * For instance, a redirect during NavigationStart. Therefore, this is a
-                 * catch-all to make sure the NavigationCancel event is fired when a
-                 * navigation gets cancelled but not caught by other means. */
-                if (!completed && !errored) {
-                    const cancelationReason = NG_DEV_MODE$2 ?
-                        `Navigation ID ${overallTransitionState
-                            .id} is not equal to the current navigation id ${this.navigationId}` :
-                        '';
-                    this.cancelNavigationTransition(overallTransitionState, cancelationReason, 1 /* NavigationCancellationCode.SupersededByNewNavigation */);
-                }
-                // Only clear current navigation if it is still set to the one that
-                // finalized.
-                if (this.currentNavigation?.id === overallTransitionState.id) {
-                    this.currentNavigation = null;
-                }
-            }), catchError((e) => {
-                errored = true;
-                /* This error type is issued during Redirect, and is handled as a
-                 * cancellation rather than an error. */
-                if (isNavigationCancelingError$1(e)) {
-                    if (!isRedirectingNavigationCancelingError$1(e)) {
-                        // Set property only if we're not redirecting. If we landed on a page
-                        // and redirect to `/` route, the new navigation is going to see the
-                        // `/` isn't a change from the default currentUrlTree and won't
-                        // navigate. This is only applicable with initial navigation, so
-                        // setting `navigated` only when not redirecting resolves this
-                        // scenario.
-                        this.navigated = true;
-                        this.restoreHistory(overallTransitionState, true);
-                    }
-                    const navCancel = new NavigationCancel(overallTransitionState.id, this.serializeUrl(overallTransitionState.extractedUrl), e.message, e.cancellationCode);
-                    eventsSubject.next(navCancel);
-                    // When redirecting, we need to delay resolving the navigation
-                    // promise and push it to the redirect navigation
-                    if (!isRedirectingNavigationCancelingError$1(e)) {
-                        overallTransitionState.resolve(false);
-                    }
-                    else {
-                        const mergedTree = this.urlHandlingStrategy.merge(e.url, this.rawUrlTree);
-                        const extras = {
-                            skipLocationChange: overallTransitionState.extras.skipLocationChange,
-                            // The URL is already updated at this point if we have 'eager' URL
-                            // updates or if the navigation was triggered by the browser (back
-                            // button, URL bar, etc). We want to replace that item in history
-                            // if the navigation is rejected.
-                            replaceUrl: this.urlUpdateStrategy === 'eager' ||
-                                isBrowserTriggeredNavigation(overallTransitionState.source)
-                        };
-                        this.scheduleNavigation(mergedTree, 'imperative', null, extras, {
-                            resolve: overallTransitionState.resolve,
-                            reject: overallTransitionState.reject,
-                            promise: overallTransitionState.promise
-                        });
-                    }
-                    /* All other errors should reset to the router's internal URL reference
-                     * to the pre-error state. */
-                }
-                else {
-                    this.restoreHistory(overallTransitionState, true);
-                    const navError = new NavigationError(overallTransitionState.id, this.serializeUrl(overallTransitionState.extractedUrl), e, overallTransitionState.targetSnapshot ?? undefined);
-                    eventsSubject.next(navError);
-                    try {
-                        overallTransitionState.resolve(this.errorHandler(e));
-                    }
-                    catch (ee) {
-                        overallTransitionState.reject(ee);
-                    }
-                }
-                return EMPTY;
-            }));
-            // TODO(jasonaden): remove cast once g3 is on updated TypeScript
-        }));
     }
     /**
      * @internal
@@ -5325,7 +5355,7 @@ class Router {
      * and `null` when idle.
      */
     getCurrentNavigation() {
-        return this.currentNavigation;
+        return this.navigationTransitions.currentNavigation;
     }
     /** @internal */
     triggerEvent(event) {
@@ -5551,13 +5581,14 @@ class Router {
             this.currentPageId = t.targetPageId;
             this.events
                 .next(new NavigationEnd(t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
-            this.lastSuccessfulNavigation = this.currentNavigation;
+            this.lastSuccessfulNavigation = this.getCurrentNavigation();
             this.titleStrategy?.updateTitle(this.routerState.snapshot);
             t.resolve(true);
         }, e => {
             this.console.warn(`Unhandled Navigation Error: ${e}`);
         });
     }
+    /** @internal */
     scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
         if (this.disposed) {
             return Promise.resolve(false);
@@ -5624,10 +5655,14 @@ class Router {
             return Promise.reject(e);
         });
     }
-    setBrowserUrl(url, t) {
+    /** @internal */
+    setBrowserUrl(url, transition) {
         const path = this.urlSerializer.serialize(url);
-        const state = { ...t.extras.state, ...this.generateNgRouterState(t.id, t.targetPageId) };
-        if (this.location.isCurrentPathEqualTo(path) || !!t.extras.replaceUrl) {
+        const state = {
+            ...transition.extras.state,
+            ...this.generateNgRouterState(transition.id, transition.targetPageId)
+        };
+        if (this.location.isCurrentPathEqualTo(path) || !!transition.extras.replaceUrl) {
             this.location.replaceState(path, '', state);
         }
         else {
@@ -5637,28 +5672,30 @@ class Router {
     /**
      * Performs the necessary rollback action to restore the browser URL to the
      * state before the transition.
+     * @internal
      */
-    restoreHistory(t, restoringFromCaughtError = false) {
+    restoreHistory(transition, restoringFromCaughtError = false) {
         if (this.canceledNavigationResolution === 'computed') {
-            const targetPagePosition = this.currentPageId - t.targetPageId;
+            const targetPagePosition = this.currentPageId - transition.targetPageId;
             // The navigator change the location before triggered the browser event,
             // so we need to go back to the current url if the navigation is canceled.
             // Also, when navigation gets cancelled while using url update strategy eager, then we need to
             // go back. Because, when `urlUpdateStrategy` is `eager`; `setBrowserUrl` method is called
             // before any verification.
-            const browserUrlUpdateOccurred = (t.source === 'popstate' || this.urlUpdateStrategy === 'eager' ||
-                this.currentUrlTree === this.currentNavigation?.finalUrl);
+            const browserUrlUpdateOccurred = (transition.source === 'popstate' || this.urlUpdateStrategy === 'eager' ||
+                this.currentUrlTree === this.getCurrentNavigation()?.finalUrl);
             if (browserUrlUpdateOccurred && targetPagePosition !== 0) {
                 this.location.historyGo(targetPagePosition);
             }
-            else if (this.currentUrlTree === this.currentNavigation?.finalUrl && targetPagePosition === 0) {
+            else if (this.currentUrlTree === this.getCurrentNavigation()?.finalUrl &&
+                targetPagePosition === 0) {
                 // We got to the activation stage (where currentUrlTree is set to the navigation's
                 // finalUrl), but we weren't moving anywhere in history (skipLocationChange or replaceUrl).
                 // We still need to reset the router state back to what it was when the navigation started.
-                this.resetState(t);
+                this.resetState(transition);
                 // TODO(atscott): resetting the `browserUrlTree` should really be done in `resetState`.
                 // Investigate if this can be done by running TGP.
-                this.browserUrlTree = t.currentUrlTree;
+                this.browserUrlTree = transition.currentUrlTree;
                 this.resetUrlToCurrentUrlTree();
             }
             else {
@@ -5672,7 +5709,7 @@ class Router {
             // reject. For 'eager' navigations, it seems like we also really should reset the state
             // because the navigation was cancelled. Investigate if this can be done by running TGP.
             if (restoringFromCaughtError) {
-                this.resetState(t);
+                this.resetState(transition);
             }
             this.resetUrlToCurrentUrlTree();
         }
@@ -5690,10 +5727,11 @@ class Router {
     resetUrlToCurrentUrlTree() {
         this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), '', this.generateNgRouterState(this.lastSuccessfulId, this.currentPageId));
     }
-    cancelNavigationTransition(t, reason, code) {
-        const navCancel = new NavigationCancel(t.id, this.serializeUrl(t.extractedUrl), reason, code);
+    /** @internal */
+    cancelNavigationTransition(transition, reason, code) {
+        const navCancel = new NavigationCancel(transition.id, this.serializeUrl(transition.extractedUrl), reason, code);
         this.triggerEvent(navCancel);
-        t.resolve(false);
+        transition.resolve(false);
     }
     generateNgRouterState(navigationId, routerPageId) {
         if (this.canceledNavigationResolution === 'computed') {
@@ -5702,9 +5740,9 @@ class Router {
         return { navigationId };
     }
 }
-Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: Router, decorators: [{
+Router.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: Router, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+Router.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: Router, providedIn: 'root', useFactory: setupRouter });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: Router, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root',
@@ -5718,9 +5756,6 @@ function validateCommands(commands) {
             throw new ɵRuntimeError(4008 /* RuntimeErrorCode.NULLISH_COMMAND */, NG_DEV_MODE$2 && `The requested path contains ${cmd} segment at index ${i}`);
         }
     }
-}
-function isBrowserTriggeredNavigation(source) {
-    return source !== 'imperative';
 }
 
 /**
@@ -6003,9 +6038,9 @@ class RouterLink {
         });
     }
 }
-RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-28079b9", type: RouterLink, isStandalone: true, selector: "[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target" } }, usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterLink, decorators: [{
+RouterLink.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLink.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-3c6a439", type: RouterLink, isStandalone: true, selector: "[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", relativeTo: "relativeTo", preserveFragment: "preserveFragment", skipLocationChange: "skipLocationChange", replaceUrl: "replaceUrl", routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.target": "this.target" } }, usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLink]',
@@ -6230,9 +6265,9 @@ class RouterLinkActive {
         return this.link && isActiveCheckFn(this.link) || this.links.some(isActiveCheckFn);
     }
 }
-RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-28079b9", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterLinkActive, decorators: [{
+RouterLinkActive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+RouterLinkActive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-3c6a439", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -6292,9 +6327,9 @@ class PreloadAllModules {
         return fn().pipe(catchError(() => of(null)));
     }
 }
-PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: PreloadAllModules, decorators: [{
+PreloadAllModules.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+PreloadAllModules.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: PreloadAllModules, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -6312,9 +6347,9 @@ class NoPreloading {
         return of(null);
     }
 }
-NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: NoPreloading, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: NoPreloading, decorators: [{
+NoPreloading.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+NoPreloading.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: NoPreloading, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: NoPreloading, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -6408,9 +6443,9 @@ class RouterPreloader {
         });
     }
 }
-RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
-RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterPreloader, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterPreloader, decorators: [{
+RouterPreloader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
+RouterPreloader.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterPreloader, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: Router }, { type: i0.Compiler }, { type: i0.EnvironmentInjector }, { type: PreloadingStrategy }, { type: RouterConfigLoader }]; } });
@@ -6508,9 +6543,9 @@ class RouterScroller {
         }
     }
 }
-RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterScroller });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterScroller, decorators: [{
+RouterScroller.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+RouterScroller.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterScroller });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: Router }, { type: i3.ViewportScroller }, { type: i0.NgZone }, { type: undefined }]; } });
 
@@ -7052,10 +7087,10 @@ class RouterModule {
         };
     }
 }
-RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent] });
-RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterModule, imports: [ɵEmptyOutletComponent] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-28079b9", ngImport: i0, type: RouterModule, decorators: [{
+RouterModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterModule, deps: [{ token: ROUTER_FORROOT_GUARD, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+RouterModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent] });
+RouterModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterModule, imports: [ɵEmptyOutletComponent] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.0+sha-3c6a439", ngImport: i0, type: RouterModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: ROUTER_DIRECTIVES,
@@ -7140,7 +7175,7 @@ function provideRouterInitializer() {
 /**
  * @publicApi
  */
-const VERSION = new Version('15.1.0-next.0+sha-28079b9');
+const VERSION = new Version('15.1.0-next.0+sha-3c6a439');
 
 /**
  * @license

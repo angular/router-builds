@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-28079b9
+ * @license Angular v15.1.0-next.0+sha-3c6a439
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2554,70 +2554,10 @@ export declare class RouteConfigLoadStart {
  * @publicApi
  */
 export declare class Router {
-    private rootComponentType;
-    private urlSerializer;
-    private rootContexts;
-    private location;
     config: Routes;
-    /**
-     * Represents the activated `UrlTree` that the `Router` is configured to handle (through
-     * `UrlHandlingStrategy`). That is, after we find the route config tree that we're going to
-     * activate, run guards, and are just about to activate the route, we set the currentUrlTree.
-     *
-     * This should match the `browserUrlTree` when a navigation succeeds. If the
-     * `UrlHandlingStrategy.shouldProcessUrl` is `false`, only the `browserUrlTree` is updated.
-     */
-    private currentUrlTree;
-    /**
-     * Meant to represent the entire browser url after a successful navigation. In the life of a
-     * navigation transition:
-     * 1. The rawUrl represents the full URL that's being navigated to
-     * 2. We apply redirects, which might only apply to _part_ of the URL (due to
-     * `UrlHandlingStrategy`).
-     * 3. Right before activation (because we assume activation will succeed), we update the
-     * rawUrlTree to be a combination of the urlAfterRedirects (again, this might only apply to part
-     * of the initial url) and the rawUrl of the transition (which was the original navigation url in
-     * its full form).
-     *
-     * Note that this is _only_ here to support `UrlHandlingStrategy.extract` and
-     * `UrlHandlingStrategy.shouldProcessUrl`. If those didn't exist, we could get by with
-     * `currentUrlTree` alone. If a new Router were to be provided (i.e. one that works with the
-     * browser navigation API), we should think about whether this complexity should be carried over.
-     *
-     * - extract: `rawUrlTree` is needed because `extract` may only return part
-     * of the navigation URL. Thus, `currentUrlTree` may only represent _part_ of the browser URL.
-     * When a navigation gets cancelled and we need to reset the URL or a new navigation occurs, we
-     * need to know the _whole_ browser URL, not just the part handled by UrlHandlingStrategy.
-     * - shouldProcessUrl: When this returns `false`, the router just ignores the navigation but still
-     * updates the `rawUrlTree` with the assumption that the navigation was caused by the location
-     * change listener due to a URL update by the AngularJS router. In this case, we still need to
-     * know what the browser's URL is for future navigations.
-     *
-     */
-    private rawUrlTree;
-    /**
-     * Meant to represent the part of the browser url that the `Router` is set up to handle (via the
-     * `UrlHandlingStrategy`). This value is updated immediately after the browser url is updated (or
-     * the browser url update is skipped via `skipLocationChange`). With that, note that
-     * `browserUrlTree` _may not_ reflect the actual browser URL for two reasons:
-     *
-     * 1. `UrlHandlingStrategy` only handles part of the URL
-     * 2. `skipLocationChange` does not update the browser url.
-     *
-     * So to reiterate, `browserUrlTree` only represents the Router's internal understanding of the
-     * current route, either before guards with `urlUpdateStrategy === 'eager'` or right before
-     * activation with `'deferred'`.
-     *
-     * This should match the `currentUrlTree` when the navigation succeeds.
-     */
-    private browserUrlTree;
-    private readonly transitions;
     private navigations;
-    private lastSuccessfulNavigation;
-    private currentNavigation;
     private disposed;
     private locationSubscription?;
-    private navigationId;
     /**
      * The id of the currently active page in the router.
      * Updated to the transition's target id on a successful navigation.
@@ -2633,8 +2573,6 @@ export declare class Router {
      * page id in the browser history is 1 more than the previous entry.
      */
     private get browserPageId();
-    private configLoader;
-    private ngModule;
     private console;
     private isNgZoneEnabled;
     /**
@@ -2764,11 +2702,19 @@ export declare class Router {
      * @see `RouterModule`
      */
     canceledNavigationResolution: 'replace' | 'computed';
+    private readonly navigationTransitions;
     /**
      * Creates the router service.
      */
-    constructor(rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
-    private setupNavigations;
+    constructor(
+    /** @internal */
+    rootComponentType: Type<any> | null, 
+    /** @internal */
+    urlSerializer: UrlSerializer, 
+    /** @internal */
+    rootContexts: ChildrenOutletContexts, 
+    /** @internal */
+    location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
     private setTransition;
     /**
      * Sets up the location change listener and performs the initial navigation.
@@ -2935,16 +2881,8 @@ export declare class Router {
     isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
     private processNavigations;
-    private scheduleNavigation;
-    private setBrowserUrl;
-    /**
-     * Performs the necessary rollback action to restore the browser URL to the
-     * state before the transition.
-     */
-    private restoreHistory;
     private resetState;
     private resetUrlToCurrentUrlTree;
-    private cancelNavigationTransition;
     private generateNgRouterState;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
