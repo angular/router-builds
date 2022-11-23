@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-6a8ab30
+ * @license Angular v15.1.0-next.0+sha-332461b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1436,6 +1436,16 @@ export declare interface Navigation {
  */
 export declare interface NavigationBehaviorOptions {
     /**
+     * How to handle a navigation request to the current URL.
+     *
+     * This value is a subset of the options available in `OnSameUrlNavigation` and
+     * will take precedence over the default value set for the `Router`.
+     *
+     * @see `OnSameUrlNavigation`
+     * @see `RouterConfigOptions`
+     */
+    onSameUrlNavigation?: Extract<OnSameUrlNavigation, 'reload'>;
+    /**
      * When true, navigates without pushing a new state into history.
      *
      * ```
@@ -1760,6 +1770,32 @@ export declare class NoPreloading implements PreloadingStrategy {
     static ɵfac: i0.ɵɵFactoryDeclaration<NoPreloading, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<NoPreloading>;
 }
+
+/**
+ * How to handle a navigation request to the current URL. One of:
+ *
+ * - `'ignore'` :  The router ignores the request it is the same as the current state.
+ * - `'reload'` : The router processes the URL even if it is not different from the current state.
+ * One example of when you might want this option is if a `canMatch` guard depends on
+ * application state and initially rejects navigation to a route. After fixing the state, you want
+ * to re-navigate to the same URL so the route with the `canMatch` guard can activate.
+ *
+ * Note that this only configures whether the Route reprocesses the URL and triggers related
+ * action and events like redirects, guards, and resolvers. By default, the router re-uses a
+ * component instance when it re-navigates to the same component type without visiting a different
+ * component first. This behavior is configured by the `RouteReuseStrategy`. In order to reload
+ * routed components on same url navigation, you need to set `onSameUrlNavigation` to `'reload'`
+ * _and_ provide a `RouteReuseStrategy` which returns `false` for `shouldReuseRoute`. Additionally,
+ * resolvers and most guards for routes do not run unless the path or path params changed
+ * (configured by `runGuardsAndResolvers`).
+ *
+ * @publicApi
+ * @see RouteReuseStrategy
+ * @see RunGuardsAndResolvers
+ * @see NavigationBehaviorOptions
+ * @see RouterConfigOptions
+ */
+export declare type OnSameUrlNavigation = 'reload' | 'ignore';
 
 /**
  * Store contextual information about a `RouterOutlet`
@@ -2487,11 +2523,19 @@ export declare interface Route {
      */
     loadChildren?: LoadChildren;
     /**
-     * Defines when guards and resolvers will be run. One of
-     * - `paramsOrQueryParamsChange` : Run when query parameters change.
+     * A policy for when to run guards and resolvers on a route.
+     *
+     * Guards and/or resolvers will always run when a route is activated or deactivated. When a route
+     * is unchanged, the default behavior is the same as `paramsChange`.
+     *
+     * `paramsChange` : Rerun the guards and resolvers when path or
+     * path param changes. This does not include query parameters. This option is the default.
      * - `always` : Run on every execution.
-     * By default, guards and resolvers run only when the matrix
-     * parameters of the route change.
+     * - `pathParamsChange` : Rerun guards and resolvers when the path params
+     * change. This does not compare matrix or query parameters.
+     * - `paramsOrQueryParamsChange` : Run when path, matrix, or query parameters change.
+     * - `pathParamsOrQueryParamsChange` : Rerun guards and resolvers when the path params
+     * change or query params have changed. This does not include matrix parameters.
      *
      * @see RunGuardsAndResolvers
      */
@@ -2629,24 +2673,15 @@ export declare class Router {
      */
     titleStrategy?: TitleStrategy;
     /**
-     * How to handle a navigation request to the current URL. One of:
+     * How to handle a navigation request to the current URL.
      *
-     * - `'ignore'` :  The router ignores the request.
-     * - `'reload'` : The router reloads the URL. Use to implement a "refresh" feature.
-     *
-     * Note that this only configures whether the Route reprocesses the URL and triggers related
-     * action and events like redirects, guards, and resolvers. By default, the router re-uses a
-     * component instance when it re-navigates to the same component type without visiting a different
-     * component first. This behavior is configured by the `RouteReuseStrategy`. In order to reload
-     * routed components on same url navigation, you need to set `onSameUrlNavigation` to `'reload'`
-     * _and_ provide a `RouteReuseStrategy` which returns `false` for `shouldReuseRoute`.
      *
      * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
      * @see `withRouterConfig`
      * @see `provideRouter`
      * @see `RouterModule`
      */
-    onSameUrlNavigation: 'reload' | 'ignore';
+    onSameUrlNavigation: OnSameUrlNavigation;
     /**
      * How to merge parameters, data, resolved data, and title from parent to child
      * routes. One of:
@@ -2947,13 +2982,13 @@ export declare interface RouterConfigOptions {
      */
     canceledNavigationResolution?: 'replace' | 'computed';
     /**
-     * Define what the router should do if it receives a navigation request to the current URL.
-     * Default is `ignore`, which causes the router ignores the navigation.
-     * This can disable features such as a "refresh" button.
-     * Use this option to configure the behavior when navigating to the
-     * current URL. Default is 'ignore'.
+     * Configures the default for handling a navigation request to the current URL.
+     *
+     * If unset, the `Router` will use `'ignore'`.
+     *
+     * @see `OnSameUrlNavigation`
      */
-    onSameUrlNavigation?: 'reload' | 'ignore';
+    onSameUrlNavigation?: OnSameUrlNavigation;
     /**
      * Defines how the router merges parameters, data, and resolved data from parent to child
      * routes. By default ('emptyOnly'), inherits parent parameters only for
