@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.0+sha-12db492
+ * @license Angular v15.1.0-next.0+sha-228e992
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -580,6 +580,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * ```
  *
  * @publicApi
+ * @deprecated Use `CanMatch` instead
  */
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -591,6 +592,8 @@ export declare interface CanLoad {
  * @publicApi
  * @see `CanLoad`
  * @see `Route`
+ * @see `CanMatchFn`
+ * @deprecated Use `Route.canMatch` and `CanMatchFn` instead
  */
 export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 
@@ -2502,6 +2505,7 @@ export declare interface Route {
      *
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
+     * @deprecated Use `canMatch` instead
      */
     canLoad?: Array<CanLoadFn | any>;
     /**
