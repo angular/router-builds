@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.1+sha-2067643
+ * @license Angular v15.0.1+sha-82756e8
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2494,10 +2494,13 @@ export declare class RouteConfigLoadStart {
  * @publicApi
  */
 export declare class Router {
+    private readonly urlSerializer;
+    private readonly rootContexts;
+    private readonly location;
     config: Routes;
-    private navigations;
     private disposed;
     private locationSubscription?;
+    private get navigationId();
     /**
      * The id of the currently active page in the router.
      * Updated to the transition's target id on a successful navigation.
@@ -2516,9 +2519,9 @@ export declare class Router {
     private console;
     private isNgZoneEnabled;
     /**
-     * An event stream for routing events in this NgModule.
+     * An event stream for routing events.
      */
-    readonly events: Observable<Event_2>;
+    get events(): Observable<Event_2>;
     /**
      * The current state of routing in this NgModule.
      */
@@ -2614,14 +2617,7 @@ export declare class Router {
      */
     constructor(
     /** @internal */
-    rootComponentType: Type<any> | null, 
-    /** @internal */
-    urlSerializer: UrlSerializer, 
-    /** @internal */
-    rootContexts: ChildrenOutletContexts, 
-    /** @internal */
-    location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
-    private setTransition;
+    rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
@@ -2786,7 +2782,6 @@ export declare class Router {
      */
     isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
-    private processNavigations;
     private resetState;
     private resetUrlToCurrentUrlTree;
     private generateNgRouterState;
@@ -3870,7 +3865,7 @@ export declare interface UrlCreationOptions {
      *    constructor(private router: Router, private route: ActivatedRoute) {}
      *
      *    go() {
-     *      this.router.navigate(['../list'], { relativeTo: this.route });
+     *      router.navigate(['../list'], { relativeTo: this.route });
      *    }
      *  }
      * ```
@@ -3884,7 +3879,7 @@ export declare interface UrlCreationOptions {
      *
      * ```
      * // Navigate to /results?page=1
-     * this.router.navigate(['/results'], { queryParams: { page: 1 } });
+     * router.navigate(['/results'], { queryParams: { page: 1 } });
      * ```
      */
     queryParams?: Params | null;
@@ -3893,7 +3888,7 @@ export declare interface UrlCreationOptions {
      *
      * ```
      * // Navigate to /results#top
-     * this.router.navigate(['/results'], { fragment: 'top' });
+     * router.navigate(['/results'], { fragment: 'top' });
      * ```
      */
     fragment?: string;
@@ -3906,13 +3901,13 @@ export declare interface UrlCreationOptions {
      * The "preserve" option discards any new query params:
      * ```
      * // from /view1?page=1 to/view2?page=1
-     * this.router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
+     * router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
      * });
      * ```
      * The "merge" option appends new query params to the params from the current URL:
      * ```
      * // from /view1?page=1 to/view2?page=1&otherKey=2
-     * this.router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
+     * router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
      * });
      * ```
      * In case of a key collision between current parameters and those in the `queryParams` object,
@@ -3925,7 +3920,7 @@ export declare interface UrlCreationOptions {
      *
      * ```
      * // Preserve fragment from /results#top to /view#top
-     * this.router.navigate(['/view'], { preserveFragment: true });
+     * router.navigate(['/view'], { preserveFragment: true });
      * ```
      */
     preserveFragment?: boolean;
