@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.1+sha-82756e8
+ * @license Angular v15.0.1+sha-2a44592
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1312,7 +1312,7 @@ export declare interface IsActiveMatchOptions {
  * @see `LoadChildrenCallback`
  * @publicApi
  */
-export declare type LoadChildren = LoadChildrenCallback | ɵDeprecatedLoadChildren;
+export declare type LoadChildren = LoadChildrenCallback;
 
 /**
  *
@@ -4317,14 +4317,6 @@ export { withPreloading as ɵwithPreloading }
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
 
 export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
-
-/**
- * Deprecated `loadChildren` value types.
- *
- * @publicApi
- * @deprecated represents the deprecated type side of `LoadChildren`.
- */
-export declare type ɵDeprecatedLoadChildren = never;
 
 /**
  * This component is used internally within the router to be a placeholder when an empty
