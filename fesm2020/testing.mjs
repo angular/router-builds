@@ -1,13 +1,14 @@
 /**
- * @license Angular v15.1.0-next.1+sha-4d398a0
+ * @license Angular v15.1.0-next.1+sha-8029734
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
+import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import * as i0 from '@angular/core';
-import { NgModule } from '@angular/core';
-import { Router, ɵflatten, ɵassignExtraOptionsToRouter, ROUTES, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, ɵwithPreloading, NoPreloading } from '@angular/router';
+import { inject, Compiler, Injector, NgModule } from '@angular/core';
+import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, ɵwithPreloading, NoPreloading } from '@angular/router';
 
 /**
  * @license
@@ -19,10 +20,21 @@ import { Router, ɵflatten, ɵassignExtraOptionsToRouter, ROUTES, ROUTER_CONFIGU
 // This file exists to easily patch the SpyNgModuleFactoryLoader into g3
 const EXTRA_ROUTER_TESTING_PROVIDERS = [];
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
     // runtime.
     return 'shouldProcessUrl' in opts;
+}
+function throwInvalidConfigError(parameter) {
+    throw new Error(`Parameter ${parameter} does not match the one available in the injector. ` +
+        '`setupTestingRouter` is meant to be used as a factory function with dependencies coming from DI.');
 }
 /**
  * Router setup factory function used for testing.
@@ -31,25 +43,52 @@ function isUrlHandlingStrategy(opts) {
  * @deprecated Use `provideRouter` or `RouterTestingModule` instead.
  */
 function setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy, titleStrategy) {
-    const router = new Router(null, urlSerializer, contexts, location, injector, compiler, ɵflatten(routes));
+    // Note: The checks below are to detect misconfigured providers and invalid uses of
+    // `setupTestingRouter`. This function is not used internally (neither in router code or anywhere
+    // in g3). It appears this function was exposed as publicApi by mistake and should not be used
+    // externally either. However, if it is, the documented intent is to be used as a factory function
+    // and parameter values should always match what's available in DI.
+    if (urlSerializer !== inject(UrlSerializer)) {
+        throwInvalidConfigError('urlSerializer');
+    }
+    if (contexts !== inject(ChildrenOutletContexts)) {
+        throwInvalidConfigError('contexts');
+    }
+    if (location !== inject(Location)) {
+        throwInvalidConfigError('location');
+    }
+    if (compiler !== inject(Compiler)) {
+        throwInvalidConfigError('compiler');
+    }
+    if (injector !== inject(Injector)) {
+        throwInvalidConfigError('injector');
+    }
+    if (routes !== inject(ROUTES)) {
+        throwInvalidConfigError('routes');
+    }
     if (opts) {
         // Handle deprecated argument ordering.
         if (isUrlHandlingStrategy(opts)) {
-            router.urlHandlingStrategy = opts;
+            if (opts !== inject(UrlHandlingStrategy)) {
+                throwInvalidConfigError('opts (UrlHandlingStrategy)');
+            }
         }
         else {
-            // Handle ExtraOptions
-            ɵassignExtraOptionsToRouter(opts, router);
+            if (opts !== inject(ROUTER_CONFIGURATION)) {
+                throwInvalidConfigError('opts (ROUTER_CONFIGURATION)');
+            }
         }
     }
-    if (urlHandlingStrategy) {
-        router.urlHandlingStrategy = urlHandlingStrategy;
+    if (urlHandlingStrategy !== inject(UrlHandlingStrategy)) {
+        throwInvalidConfigError('urlHandlingStrategy');
     }
-    if (routeReuseStrategy) {
-        router.routeReuseStrategy = routeReuseStrategy;
+    if (routeReuseStrategy !== inject(RouteReuseStrategy)) {
+        throwInvalidConfigError('routeReuseStrategy');
     }
-    router.titleStrategy = titleStrategy;
-    return router;
+    if (titleStrategy !== inject(TitleStrategy)) {
+        throwInvalidConfigError('titleStrategy');
+    }
+    return new Router();
 }
 /**
  * @description
@@ -87,16 +126,16 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-4d398a0", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.1+sha-4d398a0", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-4d398a0", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8029734", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.1+sha-8029734", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8029734", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         EXTRA_ROUTER_TESTING_PROVIDERS,
         provideLocationMocks(),
         ɵwithPreloading(NoPreloading).ɵproviders,
         { provide: ROUTES, multi: true, useValue: [] },
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-4d398a0", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.1+sha-8029734", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],

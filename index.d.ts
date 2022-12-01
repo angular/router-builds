@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.1+sha-4d398a0
+ * @license Angular v15.1.0-next.1+sha-8029734
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -17,7 +17,6 @@ import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
-import { Location as Location_2 } from '@angular/common';
 import { LocationStrategy } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
@@ -2602,10 +2601,6 @@ export declare class RouteConfigLoadStart {
  * @publicApi
  */
 export declare class Router {
-    private readonly urlSerializer;
-    private readonly rootContexts;
-    private readonly location;
-    config: Routes;
     private disposed;
     private locationSubscription?;
     private get navigationId();
@@ -2634,6 +2629,7 @@ export declare class Router {
      * The current state of routing in this NgModule.
      */
     readonly routerState: RouterState;
+    private options;
     /**
      * A handler for navigation errors in this NgModule.
      *
@@ -2744,13 +2740,11 @@ export declare class Router {
      * @see `RouterModule`
      */
     canceledNavigationResolution: 'replace' | 'computed';
+    config: Routes;
     private readonly navigationTransitions;
-    /**
-     * Creates the router service.
-     */
-    constructor(
-    /** @internal */
-    rootComponentType: Type<any> | null, urlSerializer: UrlSerializer, rootContexts: ChildrenOutletContexts, location: Location_2, injector: Injector, compiler: Compiler, config: Routes);
+    private readonly urlSerializer;
+    private readonly location;
+    constructor();
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
@@ -4448,8 +4442,6 @@ export { withPreloading as ɵwithPreloading }
  * @publicApi
  */
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
-
-export declare function ɵassignExtraOptionsToRouter(opts: ExtraOptions, router: Router): void;
 
 /**
  * This component is used internally within the router to be a placeholder when an empty
