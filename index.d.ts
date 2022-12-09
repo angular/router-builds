@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.2+sha-bbaa850
+ * @license Angular v15.1.0-next.2+sha-0fa70df
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3406,7 +3406,8 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
     private classes;
     private routerEventsSubscription;
     private linkInputChangesSubscription?;
-    readonly isActive: boolean;
+    private _isActive;
+    get isActive(): boolean;
     /**
      * Options to configure how to determine if the router link is active.
      *
