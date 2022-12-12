@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.0.3+sha-6279fec
+ * @license Angular v15.0.3+sha-f30d18a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3679,7 +3679,7 @@ export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * `ROUTES` is a low level API for router configuration via dependency injection.
  *
  * We recommend that in almost all cases to use higher level APIs such as `RouterModule.forRoot()`,
- * `RouterModule.forChild()`, `provideRoutes`, or `Router.resetConfig()`.
+ * `provideRouter`, or `Router.resetConfig()`.
  *
  * @publicApi
  */
