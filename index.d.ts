@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.2+sha-abd11a6
+ * @license Angular v15.1.0-next.2+sha-f58ad86
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3098,7 +3098,8 @@ declare const enum RouterFeatureKind {
     EnabledBlockingInitialNavigationFeature = 2,
     DisabledInitialNavigationFeature = 3,
     InMemoryScrollingFeature = 4,
-    RouterConfigurationFeature = 5
+    RouterConfigurationFeature = 5,
+    RouterHashLocationFeature = 6
 }
 
 /**
@@ -3112,6 +3113,16 @@ declare const enum RouterFeatureKind {
  * @publicApi
  */
 export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature;
+
+/**
+ * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
+ *
+ * @see `withHashLocation`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ */
+export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.RouterHashLocationFeature>;
 
 /**
  * @description
@@ -4357,6 +4368,32 @@ export declare function withDisabledInitialNavigation(): DisabledInitialNavigati
  * @returns A set of providers for use with `provideRouter`.
  */
 export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingInitialNavigationFeature;
+
+/**
+ * Provides the location strategy that uses the URL fragment instead of the history API.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can use the hash location option:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withHashLocation()
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `provideRouter`
+ * @see `HashLocationStrategy`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ */
+export declare function withHashLocation(): RouterConfigurationFeature;
 
 /**
  * Enables customizable scrolling behavior for router navigations.
