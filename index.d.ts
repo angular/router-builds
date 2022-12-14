@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-next.2+sha-cf7e4e4
+ * @license Angular v15.1.0-next.2+sha-81203c6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2668,6 +2668,8 @@ export declare class Router {
      *   `{provide: RouteReuseStrategy, useClass: MyStrategy}`.
      */
     routeReuseStrategy: RouteReuseStrategy;
+    /** Strategy used to create a UrlTree. */
+    private readonly urlCreationStrategy;
     /**
      * A strategy for setting the title based on the `routerState`.
      *
