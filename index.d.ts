@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.0+sha-d887d69
+ * @license Angular v15.2.0-next.0+sha-43ced45
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -947,17 +947,6 @@ export declare type DisabledInitialNavigationFeature = RouterFeature<RouterFeatu
 export declare type EnabledBlockingInitialNavigationFeature = RouterFeature<RouterFeatureKind.EnabledBlockingInitialNavigationFeature>;
 
 /**
- * Error handler that is invoked when a navigation error occurs.
- *
- * If the handler returns a value, the navigation Promise is resolved with this value.
- * If the handler throws an exception, the navigation Promise is rejected with
- * the exception.
- *
- * @publicApi
- */
-declare type ErrorHandler = (error: any) => any;
-
-/**
  * Router events that allow you to track the lifecycle of the router.
  *
  * The events occur in the following sequence:
@@ -1055,8 +1044,9 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * If the handler returns a value, the navigation Promise is resolved with this value.
      * If the handler throws an exception, the navigation Promise is rejected with the exception.
      *
+     * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
      */
-    errorHandler?: ErrorHandler;
+    errorHandler?: (error: any) => any;
     /**
      * Configures a preloading strategy.
      * One of `PreloadAllModules` or `NoPreloading` (the default).
@@ -1080,6 +1070,8 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * - `'URIError'` - Error thrown when parsing a bad URL.
      * - `'UrlSerializer'` - UrlSerializer that’s configured with the router.
      * - `'url'` -  The malformed URL that caused the URIError
+     *
+     * @deprecated URI parsing errors should be handled in the `UrlSerializer` instead.
      * */
     malformedUriErrorHandler?: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
 }
@@ -1615,6 +1607,16 @@ export declare class NavigationError extends RouterEvent {
     /** @docsNotRequired */
     toString(): string;
 }
+
+/**
+ * A type alias for providers returned by `withNavigationErrorHandler` for use with `provideRouter`.
+ *
+ * @see `withNavigationErrorHandler`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ */
+export declare type NavigationErrorHandlerFeature = RouterFeature<RouterFeatureKind.NavigationErrorHandlerFeature>;
 
 /**
  * @description
@@ -2634,16 +2636,18 @@ export declare class Router {
      * A handler for navigation errors in this NgModule.
      *
      * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
+     *   `provideRouter` has the `withErrorHandler` feature to make this easier.
+     * @see `withErrorHandler`
      */
-    errorHandler: ErrorHandler;
+    errorHandler: (error: any) => any;
     /**
      * A handler for errors thrown by `Router.parseUrl(url)`
      * when `url` contains an invalid character.
      * The most common case is a `%` sign
      * that's not encoded and is not part of a percent encoded sequence.
      *
-     * @deprecated Configure this through `RouterModule.forRoot` instead:
-     *   `RouterModule.forRoot(routes, {malformedUriErrorHandler: myHandler})`
+     * @deprecated URI parsing errors should be handled in the `UrlSerializer`.
+     *
      * @see `RouterModule`
      */
     malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
@@ -3101,7 +3105,8 @@ declare const enum RouterFeatureKind {
     DisabledInitialNavigationFeature = 3,
     InMemoryScrollingFeature = 4,
     RouterConfigurationFeature = 5,
-    RouterHashLocationFeature = 6
+    RouterHashLocationFeature = 6,
+    NavigationErrorHandlerFeature = 7
 }
 
 /**
@@ -3114,7 +3119,7 @@ declare const enum RouterFeatureKind {
  *
  * @publicApi
  */
-export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature;
+export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature;
 
 /**
  * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
@@ -4423,6 +4428,37 @@ export declare function withHashLocation(): RouterConfigurationFeature;
  * @returns A set of providers for use with `provideRouter`.
  */
 export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions): InMemoryScrollingFeature;
+
+/**
+ * Subscribes to the Router's navigation events and calls the given function when a
+ * `NavigationError` happens.
+ *
+ * This function is run inside application's injection context so you can use the `inject` function.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can use the error handler option:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withNavigationErrorHandler((e: NavigationError) =>
+ * inject(MyErrorTracker).trackError(e))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @see `NavigationError`
+ * @see `inject`
+ * @see `EnvironmentInjector#runInContext`
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ *
+ * @publicApi
+ */
+export declare function withNavigationErrorHandler(fn: (error: NavigationError) => void): NavigationErrorHandlerFeature;
 
 /**
  * Allows to configure a preloading strategy to use. The strategy is configured by providing a
