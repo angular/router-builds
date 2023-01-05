@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.1.0-rc.0+sha-28ea114
+ * @license Angular v15.1.0-rc.0+sha-61fc474
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2757,6 +2757,14 @@ export declare class Router {
      * navigation so that the correct events, guards, etc. are triggered.
      */
     setUpLocationChangeListener(): void;
+    /**
+     * Schedules a router navigation to synchronize Router state with the browser state.
+     *
+     * This is done as a response to a popstate event and the initial navigation. These
+     * two scenarios represent times when the browser URL/state has been updated and
+     * the Router needs to respond to ensure its internal state matches.
+     */
+    private navigateToSyncWithBrowser;
     /** The current URL. */
     get url(): string;
     /**
