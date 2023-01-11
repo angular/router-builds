@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.0+sha-7f68a70
+ * @license Angular v15.2.0-next.0+sha-926c35f
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -25,6 +25,7 @@ import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Provider } from '@angular/core';
+import { ProviderToken } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
@@ -315,6 +316,8 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * ```
  *
  * @publicApi
+ * @deprecated Use plain JavaScript functions instead.
+ * @see CanActivateFn
  */
 export declare interface CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -399,6 +402,8 @@ export declare interface CanActivate {
  * ```
  *
  * @publicApi
+ * @deprecated Use plain JavaScript functions instead.
+ * @see CanActivateChildFn
  */
 export declare interface CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -495,6 +500,8 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * ```
  *
  * @publicApi
+ * @deprecated Use plain JavaScript functions instead.
+ * @see CanDeactivateFn
  */
 export declare interface CanDeactivate<T> {
     canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -579,7 +586,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * ```
  *
  * @publicApi
- * @deprecated Use `CanMatch` instead
+ * @deprecated Use `CanMatchFn` instead
  */
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -678,6 +685,8 @@ export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observ
  * ```
  *
  * @publicApi
+ * @deprecated Use plain JavaScript functions instead.
+ * @see CanMatchFn
  */
 export declare interface CanMatch {
     canMatch(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -911,6 +920,23 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
     /** Converts a `UrlTree` into a url */
     serialize(tree: UrlTree): string;
 }
+
+/**
+ * The `InjectionToken` and `@Injectable` classes for guards and resolvers are deprecated in favor
+ * of plain JavaScript functions instead.. Dependency injection can still be achieved using the
+ * `inject` function from `@angular/core`.
+ *
+ * @deprecated
+ * @see CanMatchFn
+ * @see CanLoadFn
+ * @see CanActivateFn
+ * @see CanActivateChildFn
+ * @see CanDeactivateFn
+ * @see ResolveFn
+ * @see inject
+ * @publicApi
+ */
+export declare type DeprecatedGuard = ProviderToken<any> | any;
 
 /**
  * @description
@@ -2098,6 +2124,8 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * The order of execution is: BaseGuard, ChildGuard, BaseDataResolver, ChildDataResolver.
  *
  * @publicApi
+ * @deprecated Use plain JavaScript functions instead.
+ * @see ResolveFn
  */
 export declare interface Resolve<T> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Promise<T> | T;
@@ -2112,7 +2140,7 @@ export declare interface Resolve<T> {
  * @publicApi
  */
 export declare type ResolveData = {
-    [key: string | symbol]: any | ResolveFn<unknown>;
+    [key: string | symbol]: ResolveFn<unknown> | DeprecatedGuard;
 };
 
 /**
@@ -2471,7 +2499,7 @@ export declare interface Route {
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canActivate?: Array<CanActivateFn | any>;
+    canActivate?: Array<CanActivateFn | DeprecatedGuard>;
     /**
      * An array of `CanMatchFn` or DI tokens used to look up `CanMatch()`
      * handlers, in order to determine if the current user is allowed to
@@ -2480,7 +2508,7 @@ export declare interface Route {
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canMatch?: Array<Type<CanMatch> | InjectionToken<CanMatchFn> | CanMatchFn>;
+    canMatch?: Array<CanMatchFn | DeprecatedGuard>;
     /**
      * An array of `CanActivateChildFn` or DI tokens used to look up `CanActivateChild()` handlers,
      * in order to determine if the current user is allowed to activate
@@ -2489,7 +2517,7 @@ export declare interface Route {
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canActivateChild?: Array<CanActivateChildFn | any>;
+    canActivateChild?: Array<CanActivateChildFn | DeprecatedGuard>;
     /**
      * An array of `CanDeactivateFn` or DI tokens used to look up `CanDeactivate()`
      * handlers, in order to determine if the current user is allowed to
@@ -2498,7 +2526,7 @@ export declare interface Route {
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
      */
-    canDeactivate?: Array<CanDeactivateFn<any> | any>;
+    canDeactivate?: Array<CanDeactivateFn<any> | DeprecatedGuard>;
     /**
      * An array of `CanLoadFn` or DI tokens used to look up `CanLoad()`
      * handlers, in order to determine if the current user is allowed to
@@ -2508,7 +2536,7 @@ export declare interface Route {
      * dependencies. This `inject` call must be done in a synchronous context.
      * @deprecated Use `canMatch` instead
      */
-    canLoad?: Array<CanLoadFn | any>;
+    canLoad?: Array<CanLoadFn | DeprecatedGuard>;
     /**
      * Additional developer-defined data provided to the component via
      * `ActivatedRoute`. By default, no additional data is passed.
