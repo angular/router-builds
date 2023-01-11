@@ -15,9 +15,9 @@ export class LegacyCreateUrlTree {
         return createUrlTree(a, currentUrlTree, commands, queryParams, fragment);
     }
 }
-LegacyCreateUrlTree.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: LegacyCreateUrlTree, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-LegacyCreateUrlTree.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: LegacyCreateUrlTree });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: LegacyCreateUrlTree, decorators: [{
+LegacyCreateUrlTree.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: LegacyCreateUrlTree, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+LegacyCreateUrlTree.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: LegacyCreateUrlTree });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: LegacyCreateUrlTree, decorators: [{
             type: Injectable
         }] });
 export class CreateUrlTreeUsingSnapshot {
@@ -51,16 +51,16 @@ export class CreateUrlTreeUsingSnapshot {
         return createUrlTreeFromSegmentGroup(relativeToUrlSegmentGroup, commands, queryParams, fragment);
     }
 }
-CreateUrlTreeUsingSnapshot.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeUsingSnapshot, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-CreateUrlTreeUsingSnapshot.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeUsingSnapshot });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeUsingSnapshot, decorators: [{
+CreateUrlTreeUsingSnapshot.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeUsingSnapshot, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+CreateUrlTreeUsingSnapshot.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeUsingSnapshot });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeUsingSnapshot, decorators: [{
             type: Injectable
         }] });
 export class CreateUrlTreeStrategy {
 }
-CreateUrlTreeStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-CreateUrlTreeStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeStrategy, providedIn: 'root', useClass: LegacyCreateUrlTree });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-2b83986", ngImport: i0, type: CreateUrlTreeStrategy, decorators: [{
+CreateUrlTreeStrategy.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+CreateUrlTreeStrategy.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeStrategy, providedIn: 'root', useClass: LegacyCreateUrlTree });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.0+sha-7cfe97c", ngImport: i0, type: CreateUrlTreeStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useClass: LegacyCreateUrlTree }]
         }] });
