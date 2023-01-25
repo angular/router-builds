@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.2+sha-a055196
+ * @license Angular v15.2.0-next.2+sha-dedac8d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4554,6 +4554,17 @@ export { withPreloading as ɵwithPreloading }
  * @publicApi
  */
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
+
+/**
+ * Performs the given action once the router finishes its next/current navigation.
+ *
+ * The navigation is considered complete under the following conditions:
+ * - `NavigationCancel` event emits and the code is not `NavigationCancellationCode.Redirect` or
+ * `NavigationCancellationCode.SupersededByNewNavigation`. In these cases, the
+ * redirecting/superseding navigation must finish.
+ * - `NavigationError`, `NavigationEnd`, or `NavigationSkipped` event emits
+ */
+export declare function ɵafterNextNavigation(router: Router, action: () => void): void;
 
 /**
  * This component is used internally within the router to be a placeholder when an empty

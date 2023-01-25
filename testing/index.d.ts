@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.2+sha-a055196
+ * @license Angular v15.2.0-next.2+sha-dedac8d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,6 +7,7 @@
 
 import { ChildrenOutletContexts } from '@angular/router';
 import { Compiler } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { ExtraOptions } from '@angular/router';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/router';
@@ -18,8 +19,75 @@ import { Router } from '@angular/router';
 import { RouteReuseStrategy } from '@angular/router';
 import { Routes } from '@angular/router';
 import { TitleStrategy } from '@angular/router';
+import { Type } from '@angular/core';
 import { UrlHandlingStrategy } from '@angular/router';
 import { UrlSerializer } from '@angular/router';
+
+/**
+ * A testing harness for the `Router` to reduce the boilerplate needed to test routes and routed
+ * components.
+ *
+ * @publicApi
+ */
+export declare class RouterTestingHarness {
+    private readonly fixture;
+    /**
+     * Creates a `RouterTestingHarness` instance.
+     *
+     * The `RouterTestingHarness` also creates its own root component with a `RouterOutlet` for the
+     * purposes of rendering route components.
+     *
+     * Throws an error if an instance has already been created.
+     * Use of this harness also requires `destroyAfterEach: true` in the `ModuleTeardownOptions`
+     *
+     * @param initialUrl The target of navigation to trigger before returning the harness.
+     */
+    static create(initialUrl?: string): Promise<RouterTestingHarness>;
+    /** Instructs the root fixture to run change detection. */
+    detectChanges(): void;
+    /** The `DebugElement` of the `RouterOutlet` component. `null` if the outlet is not activated. */
+    get routeDebugElement(): DebugElement | null;
+    /** The native element of the `RouterOutlet` component. `null` if the outlet is not activated. */
+    get routeNativeElement(): HTMLElement | null;
+    /**
+     * Triggers a `Router` navigation and waits for it to complete.
+     *
+     * The root component with a `RouterOutlet` created for the harness is used to render `Route`
+     * components. The root component is reused within the same test in subsequent calls to
+     * `navigateForTest`.
+     *
+     * When testing `Routes` with a guards that reject the navigation, the `RouterOutlet` might not be
+     * activated and the `activatedComponent` may be `null`.
+     *
+     * {@example router/testing/test/router_testing_harness_examples.spec.ts region='Guard'}
+     *
+     * @param url The target of the navigation. Passed to `Router.navigateByUrl`.
+     * @returns The activated component instance of the `RouterOutlet` after navigation completes
+     *     (`null` if the outlet does not get activated).
+     */
+    navigateByUrl(url: string): Promise<null | {}>;
+    /**
+     * Triggers a router navigation and waits for it to complete.
+     *
+     * The root component with a `RouterOutlet` created for the harness is used to render `Route`
+     * components.
+     *
+     * {@example router/testing/test/router_testing_harness_examples.spec.ts region='RoutedComponent'}
+     *
+     * The root component is reused within the same test in subsequent calls to `navigateByUrl`.
+     *
+     * This function also makes it easier to test components that depend on `ActivatedRoute` data.
+     *
+     * {@example router/testing/test/router_testing_harness_examples.spec.ts region='ActivatedRoute'}
+     *
+     * @param url The target of the navigation. Passed to `Router.navigateByUrl`.
+     * @param requiredRoutedComponentType After navigation completes, the required type for the
+     *     activated component of the `RouterOutlet`. If the outlet is not activated or a different
+     *     component is activated, this function will throw an error.
+     * @returns The activated component instance of the `RouterOutlet` after navigation completes.
+     */
+    navigateByUrl<T>(url: string, requiredRoutedComponentType: Type<T>): Promise<T>;
+}
 
 /**
  * @description

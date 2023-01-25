@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.2+sha-a055196
+ * @license Angular v15.2.0-next.2+sha-dedac8d
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,8 +7,9 @@
 import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import * as i0 from '@angular/core';
-import { inject, Compiler, Injector, NgModule } from '@angular/core';
-import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, ɵwithPreloading, NoPreloading } from '@angular/router';
+import { inject, Compiler, Injector, NgModule, Injectable, Component, ViewChild } from '@angular/core';
+import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, ɵwithPreloading, NoPreloading, RouterOutlet, ɵafterNextNavigation } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
 
 function isUrlHandlingStrategy(opts) {
     // This property check is needed because UrlHandlingStrategy is an interface and doesn't exist at
@@ -109,15 +110,15 @@ class RouterTestingModule {
         };
     }
 }
-RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-a055196", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.2.0-next.2+sha-a055196", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-a055196", ngImport: i0, type: RouterTestingModule, providers: [
+RouterTestingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+RouterTestingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+RouterTestingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RouterTestingModule, providers: [
         ɵROUTER_PROVIDERS,
         provideLocationMocks(),
         ɵwithPreloading(NoPreloading).ɵproviders,
         { provide: ROUTES, multi: true, useValue: [] },
     ], imports: [RouterModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-a055196", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -129,6 +130,116 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sh
                     ]
                 }]
         }] });
+
+class RootFixtureService {
+    createHarness() {
+        if (this.harness) {
+            throw new Error('Only one harness should be created per test.');
+        }
+        this.harness = new RouterTestingHarness(this.getRootFixture());
+        return this.harness;
+    }
+    getRootFixture() {
+        if (this.fixture !== undefined) {
+            return this.fixture;
+        }
+        this.fixture = TestBed.createComponent(RootCmp);
+        this.fixture.detectChanges();
+        return this.fixture;
+    }
+}
+RootFixtureService.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+RootFixtureService.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RootFixtureService, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RootFixtureService, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }] });
+class RootCmp {
+}
+RootCmp.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component });
+RootCmp.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.2.0-next.2+sha-dedac8d", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sha-dedac8d", ngImport: i0, type: RootCmp, decorators: [{
+            type: Component,
+            args: [{
+                    standalone: true,
+                    template: '<router-outlet></router-outlet>',
+                    imports: [RouterOutlet],
+                }]
+        }], propDecorators: { outlet: [{
+                type: ViewChild,
+                args: [RouterOutlet]
+            }] } });
+/**
+ * A testing harness for the `Router` to reduce the boilerplate needed to test routes and routed
+ * components.
+ *
+ * @publicApi
+ */
+class RouterTestingHarness {
+    /**
+     * Creates a `RouterTestingHarness` instance.
+     *
+     * The `RouterTestingHarness` also creates its own root component with a `RouterOutlet` for the
+     * purposes of rendering route components.
+     *
+     * Throws an error if an instance has already been created.
+     * Use of this harness also requires `destroyAfterEach: true` in the `ModuleTeardownOptions`
+     *
+     * @param initialUrl The target of navigation to trigger before returning the harness.
+     */
+    static async create(initialUrl) {
+        const harness = TestBed.inject(RootFixtureService).createHarness();
+        if (initialUrl !== undefined) {
+            await harness.navigateByUrl(initialUrl);
+        }
+        return harness;
+    }
+    /** @internal */
+    constructor(fixture) {
+        this.fixture = fixture;
+    }
+    /** Instructs the root fixture to run change detection. */
+    detectChanges() {
+        this.fixture.detectChanges();
+    }
+    /** The `DebugElement` of the `RouterOutlet` component. `null` if the outlet is not activated. */
+    get routeDebugElement() {
+        const outlet = this.fixture.componentInstance.outlet;
+        if (!outlet || !outlet.isActivated) {
+            return null;
+        }
+        return this.fixture.debugElement.query(v => v.componentInstance === outlet.component);
+    }
+    /** The native element of the `RouterOutlet` component. `null` if the outlet is not activated. */
+    get routeNativeElement() {
+        return this.routeDebugElement?.nativeElement ?? null;
+    }
+    async navigateByUrl(url, requiredRoutedComponentType) {
+        const router = TestBed.inject(Router);
+        let resolveFn;
+        const redirectTrackingPromise = new Promise(resolve => {
+            resolveFn = resolve;
+        });
+        ɵafterNextNavigation(TestBed.inject(Router), resolveFn);
+        await router.navigateByUrl(url);
+        await redirectTrackingPromise;
+        this.fixture.detectChanges();
+        const outlet = this.fixture.componentInstance.outlet;
+        // The outlet might not be activated if the user is testing a navigation for a guard that
+        // rejects
+        if (outlet && outlet.isActivated && outlet.activatedRoute.component) {
+            const activatedComponent = outlet.component;
+            if (requiredRoutedComponentType !== undefined &&
+                !(activatedComponent instanceof requiredRoutedComponentType)) {
+                throw new Error(`Unexpected routed component type. Expected ${requiredRoutedComponentType.name} but got ${activatedComponent.constructor.name}`);
+            }
+            return activatedComponent;
+        }
+        else {
+            return null;
+        }
+    }
+}
 
 /**
  * @module
@@ -149,5 +260,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.0-next.2+sh
  * Generated bundle index. Do not edit.
  */
 
-export { RouterTestingModule, setupTestingRouter };
+export { RouterTestingHarness, RouterTestingModule, setupTestingRouter };
 //# sourceMappingURL=testing.mjs.map
