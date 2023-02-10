@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.4+sha-865e67f
+ * @license Angular v15.2.0-next.4+sha-a28cf24
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2625,8 +2625,8 @@ export declare class Router {
      * A handler for navigation errors in this NgModule.
      *
      * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
-     *   `provideRouter` has the `withErrorHandler` feature to make this easier.
-     * @see `withErrorHandler`
+     *   `provideRouter` has the `withNavigationErrorHandler` feature to make this easier.
+     * @see `withNavigationErrorHandler`
      */
     errorHandler: (error: any) => any;
     /**
