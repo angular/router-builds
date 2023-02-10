@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0-next.4+sha-a28cf24
+ * @license Angular v15.2.0-next.4+sha-84ad4d0
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4441,7 +4441,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  *   {
  *     providers: [
  *       provideRouter(appRoutes, withNavigationErrorHandler((e: NavigationError) =>
- * inject(MyErrorTracker).trackError(e))
+ * inject(MyErrorTracker).trackError(e)))
  *     ]
  *   }
  * );
