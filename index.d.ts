@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.0+sha-48aa96e
+ * @license Angular v16.0.0-next.0+sha-1f055b9
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3897,7 +3897,7 @@ export declare type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQu
  */
 export declare class Scroll {
     /** @docsNotRequired */
-    readonly routerEvent: NavigationEnd;
+    readonly routerEvent: NavigationEnd | NavigationSkipped;
     /** @docsNotRequired */
     readonly position: [number, number] | null;
     /** @docsNotRequired */
@@ -3905,7 +3905,7 @@ export declare class Scroll {
     readonly type = EventType.Scroll;
     constructor(
     /** @docsNotRequired */
-    routerEvent: NavigationEnd, 
+    routerEvent: NavigationEnd | NavigationSkipped, 
     /** @docsNotRequired */
     position: [number, number] | null, 
     /** @docsNotRequired */
