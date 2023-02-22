@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.0+sha-02cd490
+ * @license Angular v16.0.0-next.0+sha-5dce2a5
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -952,7 +952,7 @@ export declare type EnabledBlockingInitialNavigationFeature = RouterFeature<Rout
  *
  * @publicApi
  */
-declare type Event_2 = RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
+declare type Event_2 = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
 export { Event_2 as Event }
 
 /**
