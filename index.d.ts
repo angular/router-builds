@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.0+sha-7e35a91
+ * @license Angular v16.0.0-next.0+sha-455c728
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1323,6 +1323,71 @@ declare interface LoadedRouterConfig {
     routes: Route[];
     injector: EnvironmentInjector | undefined;
 }
+
+/**
+ * Maps an array of injectable classes with canActivate functions to an array of equivalent
+ * `CanActivateFn` for use in a `Route` definition.
+ *
+ * Usage {@example router/utils/functional_guards.ts region='CanActivate'}
+ *
+ * @publicApi
+ * @see Route
+ */
+export declare function mapToCanActivate(providers: Array<Type<{
+    canActivate: CanActivateFn;
+}>>): CanActivateFn[];
+
+/**
+ * Maps an array of injectable classes with canActivateChild functions to an array of equivalent
+ * `CanActivateChildFn` for use in a `Route` definition.
+ *
+ * Usage {@example router/utils/functional_guards.ts region='CanActivate'}
+ *
+ * @publicApi
+ * @see Route
+ */
+export declare function mapToCanActivateChild(providers: Array<Type<{
+    canActivateChild: CanActivateChildFn;
+}>>): CanActivateChildFn[];
+
+/**
+ * Maps an array of injectable classes with canDeactivate functions to an array of equivalent
+ * `CanDeactivateFn` for use in a `Route` definition.
+ *
+ * Usage {@example router/utils/functional_guards.ts region='CanActivate'}
+ *
+ * @publicApi
+ * @see Route
+ */
+export declare function mapToCanDeactivate<T = unknown>(providers: Array<Type<{
+    canDeactivate: CanDeactivateFn<T>;
+}>>): CanDeactivateFn<T>[];
+
+/**
+ * Maps an array of injectable classes with canMatch functions to an array of equivalent
+ * `CanMatchFn` for use in a `Route` definition.
+ *
+ * Usage {@example router/utils/functional_guards.ts region='CanActivate'}
+ *
+ * @publicApi
+ * @see Route
+ */
+export declare function mapToCanMatch(providers: Array<Type<{
+    canMatch: CanMatchFn;
+}>>): CanMatchFn[];
+
+/**
+ * Maps an injectable class with a resolve function to an equivalent `ResolveFn`
+ * for use in a `Route` definition.
+ *
+ * Usage {@example router/utils/functional_guards.ts region='Resolve'}
+ *
+ * @publicApi
+ * @see Route
+ */
+export declare function mapToResolve<T>(provider: Type<{
+    resolve: ResolveFn<T>;
+}>): ResolveFn<T>;
 
 /**
  * Information about a navigation operation.
