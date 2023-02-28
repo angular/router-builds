@@ -1,5 +1,5 @@
 /**
- * @license Angular v15.2.0+sha-19a4cde
+ * @license Angular v15.2.0+sha-6d6b76c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -299,8 +299,10 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * ```
  *
  * @publicApi
- * @deprecated Use plain JavaScript functions instead.
- * @see CanActivateFn
+ * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
+ *     injectable class can be used as a functional guard using the `inject` function:
+ *     `canActivate: [() => inject(myGuard).canActivate()]`.
+ * @see `CanActivateFn`
  */
 export declare interface CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -366,7 +368,7 @@ export declare interface CanActivate {
  * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
  *     injectable class can be used as a functional guard using the `inject` function:
  *     `canActivateChild: [() => inject(myGuard).canActivateChild()]`.
- * @see CanActivateChildFn
+ * @see `CanActivateChildFn`
  */
 export declare interface CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -469,7 +471,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
  *     injectable class can be used as a functional guard using the `inject` function:
  *     `canDeactivate: [() => inject(myGuard).canDeactivate()]`.
- * @see CanDeactivateFn
+ * @see `CanDeactivateFn`
  */
 export declare interface CanDeactivate<T> {
     canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -544,7 +546,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * ```
  *
  * @publicApi
- * @deprecated Use `CanMatchFn` instead
+ * @deprecated Use {@link CanMatchFn} instead
  */
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -624,7 +626,7 @@ export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => Observ
  * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
  *     injectable class can be used as a functional guard using the `inject` function:
  *     `canMatch: [() => inject(myGuard).canMatch()]`.
- * @see CanMatchFn
+ * @see `CanMatchFn`
  */
 export declare interface CanMatch {
     canMatch(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
@@ -874,13 +876,13 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
  * using `inject`: `canActivate: [() => inject(myGuard).canActivate()]`.
  *
  * @deprecated
- * @see CanMatchFn
- * @see CanLoadFn
- * @see CanActivateFn
- * @see CanActivateChildFn
- * @see CanDeactivateFn
- * @see ResolveFn
- * @see inject
+ * @see `CanMatchFn`
+ * @see `CanLoadFn`
+ * @see `CanActivateFn`
+ * @see `CanActivateChildFn`
+ * @see `CanDeactivateFn`
+ * @see `ResolveFn`
+ * @see `inject`
  * @publicApi
  */
 export declare type DeprecatedGuard = ProviderToken<any> | any;
@@ -1768,10 +1770,10 @@ export declare class NoPreloading implements PreloadingStrategy {
  * (configured by `runGuardsAndResolvers`).
  *
  * @publicApi
- * @see RouteReuseStrategy
- * @see RunGuardsAndResolvers
- * @see NavigationBehaviorOptions
- * @see RouterConfigOptions
+ * @see `RouteReuseStrategy`
+ * @see `RunGuardsAndResolvers`
+ * @see `NavigationBehaviorOptions`
+ * @see `RouterConfigOptions`
  */
 export declare type OnSameUrlNavigation = 'reload' | 'ignore';
 
@@ -2052,7 +2054,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * @deprecated Class-based `Route` resolvers are deprecated in favor of functional resolvers. An
  * injectable class can be used as a functional guard using the `inject` function: `resolve:
  * {'user': () => inject(UserResolver).resolve()}`.
- * @see ResolveFn
+ * @see `ResolveFn`
  */
 export declare interface Resolve<T> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<T> | Promise<T> | T;
@@ -2133,7 +2135,7 @@ export declare class ResolveEnd extends RouterEvent {
  * The order of execution is: baseGuard, childGuard, baseDataResolver, childDataResolver.
  *
  * @publicApi
- * @see Route
+ * @see `Route`
  */
 export declare type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<T> | Promise<T> | T;
 
@@ -2532,7 +2534,7 @@ export declare interface Route {
      * - `pathParamsOrQueryParamsChange` : Rerun guards and resolvers when the path params
      * change or query params have changed. This does not include matrix parameters.
      *
-     * @see RunGuardsAndResolvers
+     * @see `RunGuardsAndResolvers`
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
     /**
