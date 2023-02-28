@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "16.0.0-next.0+sha-0c805f1",
+  "version": "16.0.0-next.0+sha-f594725",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -14,7 +14,7 @@
   "author": "angular",
   "license": "MIT",
   "engines": {
-    "node": "^14.20.0 || ^16.13.0 || >=18.10.0"
+    "node": "^16.13.0 || >=18.10.0"
   },
   "bugs": {
     "url": "https://github.com/angular/angular/issues"
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "16.0.0-next.0+sha-0c805f1",
-    "@angular/common": "16.0.0-next.0+sha-0c805f1",
-    "@angular/platform-browser": "16.0.0-next.0+sha-0c805f1",
+    "@angular/core": "16.0.0-next.0+sha-f594725",
+    "@angular/common": "16.0.0-next.0+sha-f594725",
+    "@angular/platform-browser": "16.0.0-next.0+sha-f594725",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
