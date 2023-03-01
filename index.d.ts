@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.1+sha-b5278cc
+ * @license Angular v16.0.0-next.1+sha-6d9e979
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4608,11 +4608,6 @@ export declare class ɵEmptyOutletComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<ɵEmptyOutletComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never, true, never>;
 }
-
-/**
- * Flattens single-level nested arrays.
- */
-export declare function ɵflatten<T>(arr: T[][]): T[];
 
 export declare type ɵRestoredState = {
     [k: string]: any;
