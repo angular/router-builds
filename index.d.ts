@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.1+sha-10c8eae
+ * @license Angular v16.0.0-next.1+sha-ea32c32
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2833,6 +2833,11 @@ export declare class Router {
      * and `null` when idle.
      */
     getCurrentNavigation(): Navigation | null;
+    /**
+     * The `Navigation` object of the most recent navigation to succeed and `null` if there
+     *     has not been a successful navigation yet.
+     */
+    get lastSuccessfulNavigation(): Navigation | null;
     /**
      * Resets the route configuration used for navigation and generating links.
      *
