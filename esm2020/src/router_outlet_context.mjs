@@ -78,10 +78,10 @@ class ChildrenOutletContexts {
         return this.contexts.get(childName) || null;
     }
 }
-ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-7749b19", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-7749b19", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
+ChildrenOutletContexts.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-50a1f80", ngImport: i0, type: ChildrenOutletContexts, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+ChildrenOutletContexts.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-50a1f80", ngImport: i0, type: ChildrenOutletContexts, providedIn: 'root' });
 export { ChildrenOutletContexts };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-7749b19", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.1+sha-50a1f80", ngImport: i0, type: ChildrenOutletContexts, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
