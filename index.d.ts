@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.2+sha-f07533f
+ * @license Angular v16.0.0-next.2+sha-ed110a0
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,6 @@
 import { AfterContentInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Compiler } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EnvironmentInjector } from '@angular/core';
@@ -1850,11 +1849,6 @@ export declare type OnSameUrlNavigation = 'reload' | 'ignore';
 export declare class OutletContext {
     outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
-    /**
-     * @deprecated Passing a resolver to retrieve a component factory is not required and is
-     *     deprecated since v14.
-     */
-    resolver: ComponentFactoryResolver | null;
     injector: EnvironmentInjector | null;
     children: ChildrenOutletContexts;
     attachRef: ComponentRef<any> | null;
@@ -3712,7 +3706,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
-    activateWith(activatedRoute: ActivatedRoute, resolverOrInjector?: ComponentFactoryResolver | EnvironmentInjector | null): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector?: EnvironmentInjector | null): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": "name"; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
 }
@@ -3751,13 +3745,6 @@ export declare interface RouterOutletContract {
      * Called by the `Router` when the outlet should activate (create a component).
      */
     activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector | null): void;
-    /**
-     * Called by the `Router` when the outlet should activate (create a component).
-     *
-     * @deprecated Passing a resolver to retrieve a component factory is not required and is
-     *     deprecated since v14.
-     */
-    activateWith(activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver | null): void;
     /**
      * A request to destroy the currently activated component.
      *
