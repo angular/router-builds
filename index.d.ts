@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.3+sha-83f53ac
+ * @license Angular v16.0.0-next.3+sha-69a6e09
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3002,13 +3002,11 @@ export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
 declare class RouterConfigLoader {
-    private injector;
-    private compiler;
     private componentLoaders;
     private childrenLoaders;
     onLoadStartListener?: (r: Route) => void;
     onLoadEndListener?: (r: Route) => void;
-    constructor(injector: Injector, compiler: Compiler);
+    private readonly compiler;
     loadComponent(route: Route): Observable<Type<unknown>>;
     loadChildren(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
     private loadModuleFactoryOrRoutes;
