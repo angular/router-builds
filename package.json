@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "16.0.0-next.4+sha-0dd5c47",
+  "version": "16.0.0-next.4+sha-132c00c",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "16.0.0-next.4+sha-0dd5c47",
-    "@angular/common": "16.0.0-next.4+sha-0dd5c47",
-    "@angular/platform-browser": "16.0.0-next.4+sha-0dd5c47",
+    "@angular/core": "16.0.0-next.4+sha-132c00c",
+    "@angular/common": "16.0.0-next.4+sha-132c00c",
+    "@angular/platform-browser": "16.0.0-next.4+sha-132c00c",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
@@ -50,12 +50,8 @@
     ]
   },
   "sideEffects": false,
-  "fesm2020": "./fesm2020/router.mjs",
-  "fesm2015": "./fesm2015/router.mjs",
-  "esm2020": "./esm2020/router.mjs",
+  "module": "./fesm2022/router.mjs",
   "typings": "./index.d.ts",
-  "module": "./fesm2015/router.mjs",
-  "es2020": "./fesm2020/router.mjs",
   "type": "module",
   "exports": {
     "./package.json": {
@@ -63,27 +59,21 @@
     },
     ".": {
       "types": "./index.d.ts",
-      "esm2020": "./esm2020/router.mjs",
-      "es2020": "./fesm2020/router.mjs",
-      "es2015": "./fesm2015/router.mjs",
-      "node": "./fesm2015/router.mjs",
-      "default": "./fesm2020/router.mjs"
+      "esm2022": "./esm2022/router.mjs",
+      "esm": "./esm2022/router.mjs",
+      "default": "./fesm2022/router.mjs"
     },
     "./testing": {
       "types": "./testing/index.d.ts",
-      "esm2020": "./esm2020/testing/testing.mjs",
-      "es2020": "./fesm2020/testing.mjs",
-      "es2015": "./fesm2015/testing.mjs",
-      "node": "./fesm2015/testing.mjs",
-      "default": "./fesm2020/testing.mjs"
+      "esm2022": "./esm2022/testing/testing.mjs",
+      "esm": "./esm2022/testing/testing.mjs",
+      "default": "./fesm2022/testing.mjs"
     },
     "./upgrade": {
       "types": "./upgrade/index.d.ts",
-      "esm2020": "./esm2020/upgrade/upgrade.mjs",
-      "es2020": "./fesm2020/upgrade.mjs",
-      "es2015": "./fesm2015/upgrade.mjs",
-      "node": "./fesm2015/upgrade.mjs",
-      "default": "./fesm2020/upgrade.mjs"
+      "esm2022": "./esm2022/upgrade/upgrade.mjs",
+      "esm": "./esm2022/upgrade/upgrade.mjs",
+      "default": "./fesm2022/upgrade.mjs"
     }
   }
 }
