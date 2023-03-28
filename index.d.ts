@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.4+sha-1600687
+ * @license Angular v16.0.0-next.4+sha-478c5ac
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2683,6 +2683,7 @@ export declare class Router {
      */
     readonly routerState: RouterState;
     private options;
+    private pendingTasks;
     /**
      * A handler for navigation errors in this NgModule.
      *
@@ -4581,7 +4582,9 @@ export declare function withRouterConfig(options: RouterConfigOptions): RouterCo
  * redirecting/superseding navigation must finish.
  * - `NavigationError`, `NavigationEnd`, or `NavigationSkipped` event emits
  */
-export declare function ɵafterNextNavigation(router: Router, action: () => void): void;
+export declare function ɵafterNextNavigation(router: {
+    events: Observable<Event_2>;
+}, action: () => void): void;
 
 /**
  * This component is used internally within the router to be a placeholder when an empty
