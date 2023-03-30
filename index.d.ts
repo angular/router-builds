@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.5+sha-e9dd7f0
+ * @license Angular v16.0.0-next.5+sha-1dc8480
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -711,6 +711,16 @@ export declare class ChildrenOutletContexts {
 }
 
 /**
+ * A type alias for providers returned by `withComponentInputBinding` for use with `provideRouter`.
+ *
+ * @see `withComponentInputBinding`
+ * @see `provideRouter`
+ *
+ * @publicApi
+ */
+declare type ComponentInputBindingFeature = RouterFeature<RouterFeatureKind.ComponentInputBindingFeature>;
+
+/**
  * Converts a `Params` instance to a `ParamMap`.
  * @param params The instance to convert.
  * @returns The new map instance.
@@ -1014,6 +1024,11 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      */
     initialNavigation?: InitialNavigation;
     /**
+     * When true, enables binding information from the `Router` state directly to the inputs of the
+     * component in `Route` configurations.
+     */
+    bindToComponentInputs?: boolean;
+    /**
      * A custom error handler for failed navigations.
      * If the handler returns a value, the navigation Promise is resolved with this value.
      * If the handler throws an exception, the navigation Promise is rejected with the exception.
@@ -1107,7 +1122,9 @@ export declare class GuardsCheckStart extends RouterEvent {
 declare namespace i1 {
     export {
         RouterOutletContract,
-        RouterOutlet
+        RouterOutlet,
+        INPUT_BINDER,
+        RoutedComponentInputBinder
     }
 }
 
@@ -1225,6 +1242,8 @@ export declare interface InMemoryScrollingOptions {
      */
     scrollPositionRestoration?: 'disabled' | 'enabled' | 'top';
 }
+
+declare const INPUT_BINDER: InjectionToken<RoutedComponentInputBinder>;
 
 /**
  * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
@@ -2642,6 +2661,29 @@ export declare class RouteConfigLoadStart {
 }
 
 /**
+ * Injectable used as a tree-shakable provider for opting in to binding router data to component
+ * inputs.
+ *
+ * The RouterOutlet registers itself with this service when an `ActivatedRoute` is attached or
+ * activated. When this happens, the service subscribes to the `ActivatedRoute` observables (params,
+ * queryParams, data) and sets the inputs of the component using `ComponentRef.setInput`.
+ * Importantly, when an input does not have an item in the route data with a matching key, this
+ * input is set to `undefined`. If it were not done this way, the previous information would be
+ * retained if the data got removed from the route (i.e. if a query parameter is removed).
+ *
+ * The `RouterOutlet` should unregister itself when destroyed via `unsubscribeFromRouteData` so that
+ * the subscriptions are cleaned up.
+ */
+declare class RoutedComponentInputBinder {
+    private outletDataSubscriptions;
+    bindActivatedRouteToOutletComponent(outlet: RouterOutlet): void;
+    unsubscribeFromRouteData(outlet: RouterOutlet): void;
+    private subscribeToRouteData;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RoutedComponentInputBinder, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RoutedComponentInputBinder>;
+}
+
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -2800,6 +2842,13 @@ export declare class Router {
     private readonly navigationTransitions;
     private readonly urlSerializer;
     private readonly location;
+    /**
+     * Indicates whether the the application has opted in to binding Router data to component inputs.
+     *
+     * This option is enabled by the `withComponentInputBinding` feature of `provideRouter` or
+     * `bindToComponentInputs` in the `ExtraOptions` of `RouterModule.forRoot`.
+     */
+    readonly componentInputBindingEnabled: boolean;
     constructor();
     /**
      * Sets up the location change listener and performs the initial navigation.
@@ -3167,7 +3216,8 @@ declare const enum RouterFeatureKind {
     InMemoryScrollingFeature = 4,
     RouterConfigurationFeature = 5,
     RouterHashLocationFeature = 6,
-    NavigationErrorHandlerFeature = 7
+    NavigationErrorHandlerFeature = 7,
+    ComponentInputBindingFeature = 8
 }
 
 /**
@@ -3180,7 +3230,7 @@ declare const enum RouterFeatureKind {
  *
  * @publicApi
  */
-export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature;
+export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature;
 
 /**
  * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
@@ -3678,6 +3728,9 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     private location;
     private changeDetector;
     private environmentInjector;
+    private inputBinder;
+    /** @nodoc */
+    readonly supportsBindingToComponentInputs = true;
     /** @nodoc */
     ngOnChanges(changes: SimpleChanges): void;
     /** @nodoc */
@@ -3778,6 +3831,15 @@ export declare interface RouterOutletContract {
      * subtree.
      */
     detachEvents?: EventEmitter<unknown>;
+    /**
+     * Used to indicate that the outlet is able to bind data from the `Router` to the outlet
+     * component's inputs.
+     *
+     * When this is `undefined` or `false` and the developer has opted in to the
+     * feature using `withComponentInputBinding`, a warning will be logged in dev mode if this outlet
+     * is used in the application.
+     */
+    readonly supportsBindingToComponentInputs?: true;
 }
 
 /**
@@ -4348,6 +4410,28 @@ export declare class UrlTree {
  * @publicApi
  */
 export declare const VERSION: Version;
+
+/**
+ * Enables binding information from the `Router` state directly to the inputs of the component in
+ * `Route` configurations.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable the feature:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withComponentInputBinding())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ */
+export declare function withComponentInputBinding(): ComponentInputBindingFeature;
 
 /**
  * Enables logging of all internal navigation events to the console.
