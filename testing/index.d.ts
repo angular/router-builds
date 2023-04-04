@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.0-next.6+sha-1f3f564
+ * @license Angular v16.0.0-next.6+sha-1aef29c
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -104,7 +104,7 @@ export declare class RouterTestingHarness {
  * beforeEach(() => {
  *   TestBed.configureTestingModule({
  *     imports: [
- *       RouterTestingModule.withRoutes(
+ *       RouterModule.forRoot(
  *         [{path: '', component: BlankCmp}, {path: 'simple', component: SimpleCmp}]
  *       )
  *     ]
@@ -125,7 +125,7 @@ export declare class RouterTestingModule {
  * Router setup factory function used for testing.
  *
  * @publicApi
- * @deprecated Use `provideRouter` or `RouterTestingModule` instead.
+ * @deprecated Use `provideRouter` or `RouterModule` instead.
  */
 export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy | null, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, titleStrategy?: TitleStrategy): Router;
 
