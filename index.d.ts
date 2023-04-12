@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0-next.0+sha-c190fbb
+ * @license Angular v16.1.0-next.0+sha-d966fdd
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -52,6 +52,14 @@ import { Version } from '@angular/core';
  * @publicApi
  */
 export declare class ActivatedRoute {
+    /** The outlet name of the route, a constant. */
+    outlet: string;
+    /** The component of the route, a constant. */
+    component: Type<any> | null;
+    /** The current snapshot of this route */
+    snapshot: ActivatedRouteSnapshot;
+    /** An Observable of the resolved route title */
+    readonly title: Observable<string | undefined>;
     /** An observable of the URL segments matched by this route. */
     url: Observable<UrlSegment[]>;
     /** An observable of the matrix parameters scoped to this route. */
@@ -62,14 +70,6 @@ export declare class ActivatedRoute {
     fragment: Observable<string | null>;
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
-    /** The outlet name of the route, a constant. */
-    outlet: string;
-    /** The component of the route, a constant. */
-    component: Type<any> | null;
-    /** The current snapshot of this route */
-    snapshot: ActivatedRouteSnapshot;
-    /** An Observable of the resolved route title */
-    readonly title: Observable<string | undefined>;
     /** The configuration used to match this route. */
     get routeConfig(): Route | null;
     /** The root of the router state. */
