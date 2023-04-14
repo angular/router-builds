@@ -108,9 +108,9 @@ class RouterTestingModule {
             ]
         };
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-cbca581", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-cbca581", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-cbca581", ngImport: i0, type: RouterTestingModule, providers: [
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-9e9b424", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-9e9b424", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-9e9b424", ngImport: i0, type: RouterTestingModule, providers: [
             ROUTER_PROVIDERS,
             provideLocationMocks(),
             withPreloading(NoPreloading).ɵproviders,
@@ -118,7 +118,7 @@ class RouterTestingModule {
         ], imports: [RouterModule] }); }
 }
 export { RouterTestingModule };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-cbca581", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-9e9b424", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
