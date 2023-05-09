@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0-next.0+sha-a1dc3bb
+ * @license Angular v16.1.0-next.0+sha-7ac8f09
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4624,9 +4624,7 @@ export declare function withNavigationErrorHandler(fn: (error: NavigationError) 
  *
  * @publicApi
  */
-declare function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature;
-export { withPreloading }
-export { withPreloading as ɵwithPreloading }
+export declare function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature;
 
 /**
  * Allows to provide extra parameters to configure Router.
