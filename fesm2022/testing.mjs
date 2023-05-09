@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0-next.0+sha-4e99439
+ * @license Angular v16.1.0-next.0+sha-69dadd2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import * as i0 from '@angular/core';
 import { inject, Compiler, Injector, NgModule, Injectable, Component, ViewChild } from '@angular/core';
-import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, withPreloading, NoPreloading, RouterOutlet, ɵafterNextNavigation } from '@angular/router';
+import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, ɵwithPreloading, NoPreloading, RouterOutlet, ɵafterNextNavigation } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 
 function isUrlHandlingStrategy(opts) {
@@ -109,23 +109,23 @@ class RouterTestingModule {
             ]
         };
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RouterTestingModule, providers: [
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RouterTestingModule, providers: [
             ɵROUTER_PROVIDERS,
             provideLocationMocks(),
-            withPreloading(NoPreloading).ɵproviders,
+            ɵwithPreloading(NoPreloading).ɵproviders,
             { provide: ROUTES, multi: true, useValue: [] },
         ], imports: [RouterModule] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
                     providers: [
                         ɵROUTER_PROVIDERS,
                         provideLocationMocks(),
-                        withPreloading(NoPreloading).ɵproviders,
+                        ɵwithPreloading(NoPreloading).ɵproviders,
                         { provide: ROUTES, multi: true, useValue: [] },
                     ]
                 }]
@@ -147,18 +147,18 @@ class RootFixtureService {
         this.fixture.detectChanges();
         return this.fixture;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RootFixtureService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RootFixtureService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RootFixtureService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RootFixtureService, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 class RootCmp {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-4e99439", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.0-next.0+sha-69dadd2", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-4e99439", ngImport: i0, type: RootCmp, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.0+sha-69dadd2", ngImport: i0, type: RootCmp, decorators: [{
             type: Component,
             args: [{
                     standalone: true,
