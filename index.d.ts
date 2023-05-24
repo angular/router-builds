@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.0.2+sha-ac0150f
+ * @license Angular v16.0.2+sha-98e8fdf
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1596,7 +1596,7 @@ export declare const enum NavigationCancellationCode {
      */
     SupersededByNewNavigation = 1,
     /**
-     * A navigation failed because one of the resolvers completed without emiting a value.
+     * A navigation failed because one of the resolvers completed without emitting a value.
      */
     NoDataFromResolver = 2,
     /**
