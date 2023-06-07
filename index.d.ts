@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0-next.3+sha-b3d2295
+ * @license Angular v16.1.0-next.3+sha-0875b51
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3346,9 +3346,6 @@ declare class RouterLink implements OnChanges, OnDestroy {
     private readonly renderer;
     private readonly el;
     private locationStrategy?;
-    private _preserveFragment;
-    private _skipLocationChange;
-    private _replaceUrl;
     /**
      * Represents an `href` attribute value applied to a host element,
      * when a host element is `<a>`. For other tags, the value is `null`.
@@ -3410,24 +3407,21 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * @see {@link UrlCreationOptions#preserveFragment UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree Router#createUrlTree}
      */
-    set preserveFragment(preserveFragment: boolean | string | null | undefined);
-    get preserveFragment(): boolean;
+    preserveFragment: boolean;
     /**
      * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#skipLocationChange NavigationBehaviorOptions#skipLocationChange}
      * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
-    set skipLocationChange(skipLocationChange: boolean | string | null | undefined);
-    get skipLocationChange(): boolean;
+    skipLocationChange: boolean;
     /**
      * Passed to {@link Router#navigateByUrl Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#replaceUrl NavigationBehaviorOptions#replaceUrl}
      * @see {@link Router#navigateByUrl Router#navigateByUrl}
      */
-    set replaceUrl(replaceUrl: boolean | string | null | undefined);
-    get replaceUrl(): boolean;
+    replaceUrl: boolean;
     /**
      * Modifies the tab index if there was not a tabindex attribute on the element during
      * instantiation.
@@ -3452,6 +3446,9 @@ declare class RouterLink implements OnChanges, OnDestroy {
     get urlTree(): UrlTree | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never, false>;
+    static ngAcceptInputType_preserveFragment: unknown;
+    static ngAcceptInputType_skipLocationChange: unknown;
+    static ngAcceptInputType_replaceUrl: unknown;
 }
 export { RouterLink }
 export { RouterLink as RouterLinkWithHref }
