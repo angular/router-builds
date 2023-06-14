@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.0+sha-f48c0bc
+ * @license Angular v16.1.0+sha-0a72df6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -46,8 +46,8 @@ export declare const RouterUpgradeInitializer: {
  *
  * @param ngUpgrade The upgrade NgModule.
  * @param urlType The location strategy.
- * @see `HashLocationStrategy`
- * @see `PathLocationStrategy`
+ * @see {@link HashLocationStrategy}
+ * @see {@link PathLocationStrategy}
  *
  * @publicApi
  */
