@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.2.0-next.0+sha-0b14e4e
+ * @license Angular v16.2.0-next.0+sha-82adc86
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,6 @@
 
 import { ChildrenOutletContexts } from '@angular/router';
 import { Compiler } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { ExtraOptions } from '@angular/router';
 import * as i0 from '@angular/core';
@@ -31,6 +30,7 @@ import { UrlSerializer } from '@angular/router';
  * @publicApi
  */
 export declare class RouterTestingHarness {
+    private readonly fixture;
     /**
      * Creates a `RouterTestingHarness` instance.
      *
@@ -43,10 +43,6 @@ export declare class RouterTestingHarness {
      * @param initialUrl The target of navigation to trigger before returning the harness.
      */
     static create(initialUrl?: string): Promise<RouterTestingHarness>;
-    /**
-     * Fixture of the root component of the RouterTestingHarness
-     */
-    readonly fixture: ComponentFixture<unknown>;
     /** Instructs the root fixture to run change detection. */
     detectChanges(): void;
     /** The `DebugElement` of the `RouterOutlet` component. `null` if the outlet is not activated. */
