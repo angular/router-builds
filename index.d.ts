@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.6+sha-7cfc365
+ * @license Angular v16.1.6+sha-de0d3d7
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2144,7 +2144,7 @@ export declare interface Resolve<T> {
  *
  * Represents the resolved data associated with a particular route.
  *
- * @see {@link Route#resolve}.
+ * @see {@link Route#resolve}
  *
  * @publicApi
  */
@@ -2154,7 +2154,7 @@ export declare type ResolveData = {
 
 /**
  * An event triggered at the end of the Resolve phase of routing.
- * @see {@link ResolveStart}.
+ * @see {@link ResolveStart}
  *
  * @publicApi
  */
@@ -2690,7 +2690,7 @@ declare class RoutedComponentInputBinder {
  *
  * A service that provides navigation among views and URL manipulation capabilities.
  *
- * @see {@link Route}.
+ * @see {@link Route}
  * @see [Routing and Navigation Guide](guide/router).
  *
  * @ngModule RouterModule
