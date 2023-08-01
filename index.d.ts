@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.1.7+sha-db0f653
+ * @license Angular v16.1.7+sha-7d579b9
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2845,7 +2845,7 @@ export declare class Router {
     private readonly urlSerializer;
     private readonly location;
     /**
-     * Indicates whether the the application has opted in to binding Router data to component inputs.
+     * Indicates whether the application has opted in to binding Router data to component inputs.
      *
      * This option is enabled by the `withComponentInputBinding` feature of `provideRouter` or
      * `bindToComponentInputs` in the `ExtraOptions` of `RouterModule.forRoot`.
