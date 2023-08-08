@@ -1,5 +1,5 @@
 /**
- * @license Angular v16.3.0-next.0+sha-6a7c1ab
+ * @license Angular v16.3.0-next.0+sha-3a647a5
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -397,7 +397,7 @@ export declare type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, st
  * navigation is cancelled. If any guard returns a `UrlTree`, the current navigation
  * is cancelled and a new navigation begins to the `UrlTree` returned from the guard.
  *
- * The following example implements and uses a `CanActivateChildFn` that checks whether the
+ * The following example implements and uses a `CanActivateFn` that checks whether the
  * current user has permission to activate the requested route.
  *
  * {@example router/route_functional_guards.ts region="CanActivateFn"}
