@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.0+sha-93675dc
+ * @license Angular v17.0.0-next.0+sha-be3edad
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -33,7 +33,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * @publicApi
  */
 export declare const RouterUpgradeInitializer: {
-    provide: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
+    provide: InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useFactory: (ngUpgrade: UpgradeModule) => () => void;
     deps: (typeof UpgradeModule)[];
