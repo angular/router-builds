@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.0+sha-5fb5f08
+ * @license Angular v17.0.0-next.0+sha-e650393
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1251,7 +1251,7 @@ declare const INPUT_BINDER: InjectionToken<RoutedComponentInputBinder>;
  * for the current router state.
  *
  * @publicApi
- * @see Router.isActive
+ * @see {@link Router#isActive}
  */
 export declare interface IsActiveMatchOptions {
     /**
@@ -3541,7 +3541,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
      *
      * These options are passed to the `Router.isActive()` function.
      *
-     * @see Router.isActive
+     * @see {@link Router#isActive}
      */
     routerLinkActiveOptions: {
         exact: boolean;
