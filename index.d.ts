@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.0+sha-bd150a2
+ * @license Angular v17.0.0-next.0+sha-2aae92b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2719,6 +2719,12 @@ export declare class Router {
     private console;
     private isNgZoneEnabled;
     /**
+     * The private `Subject` type for the public events exposed in the getter. This is used internally
+     * to push events to. The separate field allows us to expose separate types in the public API
+     * (i.e., an Observable rather than the Subject).
+     */
+    private _events;
+    /**
      * An event stream for routing events.
      */
     get events(): Observable<Event_2>;
@@ -2852,6 +2858,8 @@ export declare class Router {
      */
     readonly componentInputBindingEnabled: boolean;
     constructor();
+    private eventsSubscription;
+    private subscribeToNavigationEvents;
     /**
      * Sets up the location change listener and performs the initial navigation.
      */
