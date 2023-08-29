@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.1+sha-6fff65c
+ * @license Angular v17.0.0-next.1+sha-c62e680
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2748,11 +2748,9 @@ export declare class Router {
      * The most common case is a `%` sign
      * that's not encoded and is not part of a percent encoded sequence.
      *
-     * @deprecated URI parsing errors should be handled in the `UrlSerializer`.
-     *
      * @see {@link RouterModule}
      */
-    malformedUriErrorHandler: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
+    private malformedUriErrorHandler;
     /**
      * True if at least one navigation event has occurred,
      * false otherwise.
@@ -2775,13 +2773,6 @@ export declare class Router {
      */
     routeReuseStrategy: RouteReuseStrategy;
     /**
-     * A strategy for setting the title based on the `routerState`.
-     *
-     * @deprecated Configure using `providers` instead:
-     *   `{provide: TitleStrategy, useClass: MyStrategy}`.
-     */
-    titleStrategy?: TitleStrategy;
-    /**
      * How to handle a navigation request to the current URL.
      *
      *
@@ -2791,34 +2782,7 @@ export declare class Router {
      * @see {@link RouterModule}
      */
     onSameUrlNavigation: OnSameUrlNavigation;
-    /**
-     * How to merge parameters, data, resolved data, and title from parent to child
-     * routes. One of:
-     *
-     * - `'emptyOnly'` : Inherit parent parameters, data, and resolved data
-     * for path-less or component-less routes.
-     * - `'always'` : Inherit parent parameters, data, and resolved data
-     * for all child routes.
-     *
-     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
-     * @see {@link withRouterConfig}
-     * @see {@link provideRouter}
-     * @see {@link RouterModule}
-     */
-    paramsInheritanceStrategy: 'emptyOnly' | 'always';
-    /**
-     * Determines when the router updates the browser URL.
-     * By default (`"deferred"`), updates the browser URL after navigation has finished.
-     * Set to `'eager'` to update the browser URL at the beginning of navigation.
-     * You can choose to update early so that, if navigation fails,
-     * you can show an error message with the URL that failed.
-     *
-     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
-     * @see {@link withRouterConfig}
-     * @see {@link provideRouter}
-     * @see {@link RouterModule}
-     */
-    urlUpdateStrategy: 'deferred' | 'eager';
+    private urlUpdateStrategy;
     /**
      * Configures how the Router attempts to restore state when a navigation is cancelled.
      *
@@ -2840,12 +2804,11 @@ export declare class Router {
      *
      * The default value is `replace`.
      *
-     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
      * @see {@link withRouterConfig}
      * @see {@link provideRouter}
      * @see {@link RouterModule}
      */
-    canceledNavigationResolution: 'replace' | 'computed';
+    private canceledNavigationResolution;
     config: Routes;
     private readonly navigationTransitions;
     private readonly urlSerializer;
