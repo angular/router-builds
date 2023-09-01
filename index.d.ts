@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.2+sha-0907f39
+ * @license Angular v17.0.0-next.2+sha-4555290
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -27,6 +27,7 @@ import { Provider } from '@angular/core';
 import { ProviderToken } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
+import { RouterState as RouterState_2 } from '@angular/router';
 import { SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Type } from '@angular/core';
@@ -2698,26 +2699,20 @@ declare class RoutedComponentInputBinder {
  * @publicApi
  */
 export declare class Router {
+    private get currentUrlTree();
+    private get rawUrlTree();
+    private get browserUrlTree();
     private disposed;
     private locationSubscription?;
-    private get navigationId();
-    /**
-     * The id of the currently active page in the router.
-     * Updated to the transition's target id on a successful navigation.
-     *
-     * This is used to track what page the router last activated. When an attempted navigation fails,
-     * the router can then use this to compute how to restore the state back to the previously active
-     * page.
-     */
-    private currentPageId;
-    /**
-     * The ɵrouterPageId of whatever page is currently active in the browser history. This is
-     * important for computing the target page id for new navigations because we need to ensure each
-     * page id in the browser history is 1 more than the previous entry.
-     */
-    private get browserPageId();
-    private console;
     private isNgZoneEnabled;
+    private readonly console;
+    private readonly stateManager;
+    private readonly options;
+    private readonly pendingTasks;
+    private readonly urlUpdateStrategy;
+    private readonly navigationTransitions;
+    private readonly urlSerializer;
+    private readonly location;
     /**
      * The private `Subject` type for the public events exposed in the getter. This is used internally
      * to push events to. The separate field allows us to expose separate types in the public API
@@ -2731,9 +2726,7 @@ export declare class Router {
     /**
      * The current state of routing in this NgModule.
      */
-    readonly routerState: RouterState;
-    private options;
-    private pendingTasks;
+    get routerState(): RouterState_2;
     /**
      * A handler for navigation errors in this NgModule.
      *
@@ -2756,7 +2749,6 @@ export declare class Router {
      * false otherwise.
      */
     navigated: boolean;
-    private lastSuccessfulId;
     /**
      * A strategy for extracting and merging URLs.
      * Used for AngularJS to Angular migrations.
@@ -2764,7 +2756,12 @@ export declare class Router {
      * @deprecated Configure using `providers` instead:
      *   `{provide: UrlHandlingStrategy, useClass: MyStrategy}`.
      */
-    urlHandlingStrategy: UrlHandlingStrategy;
+    get urlHandlingStrategy(): UrlHandlingStrategy;
+    /**
+     * @deprecated Configure using `providers` instead:
+     *   `{provide: UrlHandlingStrategy, useClass: MyStrategy}`.
+     */
+    set urlHandlingStrategy(value: UrlHandlingStrategy);
     /**
      * A strategy for re-using routes.
      *
@@ -2782,37 +2779,7 @@ export declare class Router {
      * @see {@link RouterModule}
      */
     onSameUrlNavigation: OnSameUrlNavigation;
-    private urlUpdateStrategy;
-    /**
-     * Configures how the Router attempts to restore state when a navigation is cancelled.
-     *
-     * 'replace' - Always uses `location.replaceState` to set the browser state to the state of the
-     * router before the navigation started. This means that if the URL of the browser is updated
-     * _before_ the navigation is canceled, the Router will simply replace the item in history rather
-     * than trying to restore to the previous location in the session history. This happens most
-     * frequently with `urlUpdateStrategy: 'eager'` and navigations with the browser back/forward
-     * buttons.
-     *
-     * 'computed' - Will attempt to return to the same index in the session history that corresponds
-     * to the Angular route when the navigation gets cancelled. For example, if the browser back
-     * button is clicked and the navigation is cancelled, the Router will trigger a forward navigation
-     * and vice versa.
-     *
-     * Note: the 'computed' option is incompatible with any `UrlHandlingStrategy` which only
-     * handles a portion of the URL because the history restoration navigates to the previous place in
-     * the browser history rather than simply resetting a portion of the URL.
-     *
-     * The default value is `replace`.
-     *
-     * @see {@link withRouterConfig}
-     * @see {@link provideRouter}
-     * @see {@link RouterModule}
-     */
-    private canceledNavigationResolution;
     config: Routes;
-    private readonly navigationTransitions;
-    private readonly urlSerializer;
-    private readonly location;
     /**
      * Indicates whether the application has opted in to binding Router data to component inputs.
      *
@@ -3000,9 +2967,7 @@ export declare class Router {
      */
     isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
     private removeEmptyProps;
-    private resetState;
-    private resetUrlToCurrentUrlTree;
-    private generateNgRouterState;
+    private scheduleNavigation;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
 }
