@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.2+sha-3c0c53d
+ * @license Angular v17.0.0-next.2+sha-b2aff43
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2713,6 +2713,7 @@ export declare class Router {
     private readonly navigationTransitions;
     private readonly urlSerializer;
     private readonly location;
+    private readonly urlHandlingStrategy;
     /**
      * The private `Subject` type for the public events exposed in the getter. This is used internally
      * to push events to. The separate field allows us to expose separate types in the public API
@@ -2749,19 +2750,6 @@ export declare class Router {
      * false otherwise.
      */
     navigated: boolean;
-    /**
-     * A strategy for extracting and merging URLs.
-     * Used for AngularJS to Angular migrations.
-     *
-     * @deprecated Configure using `providers` instead:
-     *   `{provide: UrlHandlingStrategy, useClass: MyStrategy}`.
-     */
-    get urlHandlingStrategy(): UrlHandlingStrategy;
-    /**
-     * @deprecated Configure using `providers` instead:
-     *   `{provide: UrlHandlingStrategy, useClass: MyStrategy}`.
-     */
-    set urlHandlingStrategy(value: UrlHandlingStrategy);
     /**
      * A strategy for re-using routes.
      *
