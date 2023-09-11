@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.3+sha-ac56efa
+ * @license Angular v17.0.0-next.3+sha-73e4bf2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1030,6 +1030,15 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * component in `Route` configurations.
      */
     bindToComponentInputs?: boolean;
+    /**
+     * When true, enables view transitions in the Router by running the route activation and
+     * deactivation inside of `document.startViewTransition`.
+     *
+     * @see https://developer.chrome.com/docs/web-platform/view-transitions/
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+     * @experimental
+     */
+    enableViewTransitions?: boolean;
     /**
      * A custom error handler for failed navigations.
      * If the handler returns a value, the navigation Promise is resolved with this value.
@@ -3143,7 +3152,8 @@ declare const enum RouterFeatureKind {
     RouterConfigurationFeature = 5,
     RouterHashLocationFeature = 6,
     NavigationErrorHandlerFeature = 7,
-    ComponentInputBindingFeature = 8
+    ComponentInputBindingFeature = 8,
+    ViewTransitionsFeature = 9
 }
 
 /**
@@ -3156,7 +3166,7 @@ declare const enum RouterFeatureKind {
  *
  * @publicApi
  */
-export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature;
+export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature;
 
 /**
  * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
@@ -4335,6 +4345,16 @@ export declare class UrlTree {
 export declare const VERSION: Version;
 
 /**
+ * A type alias for providers returned by `withViewTransitions` for use with `provideRouter`.
+ *
+ * @see {@link withViewTransitions}
+ * @see {@link provideRouter}
+ *
+ * @publicApi
+ */
+export declare type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
+
+/**
  * Enables binding information from the `Router` state directly to the inputs of the component in
  * `Route` configurations.
  *
@@ -4578,6 +4598,35 @@ export declare function withPreloading(preloadingStrategy: Type<PreloadingStrate
  * @publicApi
  */
 export declare function withRouterConfig(options: RouterConfigOptions): RouterConfigurationFeature;
+
+/**
+ * Enables view transitions in the Router by running the route activation and deactivation inside of
+ * `document.startViewTransition`.
+ *
+ * Note: The View Transitions API is not available in all browsers. If the browser does not support
+ * view transitions, the Router will not attempt to start a view transition and continue processing
+ * the navigation as usual.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable the feature:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withViewTransitions())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ * @see https://developer.chrome.com/docs/web-platform/view-transitions/
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+ * @experimental
+ */
+export declare function withViewTransitions(): ViewTransitionsFeature;
 
 /**
  * Performs the given action once the router finishes its next/current navigation.

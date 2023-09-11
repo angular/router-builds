@@ -1,0 +1,42 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/// <reference types="@types/dom-view-transitions" />
+import { afterNextRender, InjectionToken, NgZone } from '@angular/core';
+export const CREATE_VIEW_TRANSITION = new InjectionToken(ngDevMode ? 'view transition helper' : '');
+/**
+ * A helper function for using browser view transitions. This function skips the call to
+ * `startViewTransition` if the browser does not support it.
+ *
+ * @returns A Promise that resolves when the view transition callback begins.
+ */
+export function createViewTransition(injector) {
+    // Create promises outside the Angular zone to avoid causing extra change detections
+    return injector.get(NgZone).runOutsideAngular(() => {
+        if (!document.startViewTransition) {
+            return Promise.resolve();
+        }
+        let resolveViewTransitionStarted;
+        const viewTransitionStarted = new Promise((resolve) => {
+            resolveViewTransitionStarted = resolve;
+        });
+        document.startViewTransition(() => {
+            resolveViewTransitionStarted();
+            return createRenderPromise(injector);
+        });
+        return viewTransitionStarted;
+    });
+}
+/**
+ * Creates a promise that resolves after next render.
+ */
+function createRenderPromise(injector) {
+    return new Promise(resolve => {
+        afterNextRender(resolve, { injector });
+    });
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmlld190cmFuc2l0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvcm91dGVyL3NyYy91dGlscy92aWV3X3RyYW5zaXRpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgscURBQXFEO0FBRXJELE9BQU8sRUFBQyxlQUFlLEVBQUUsY0FBYyxFQUFZLE1BQU0sRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUVoRixNQUFNLENBQUMsTUFBTSxzQkFBc0IsR0FDL0IsSUFBSSxjQUFjLENBQThCLFNBQVMsQ0FBQyxDQUFDLENBQUMsd0JBQXdCLENBQUMsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDO0FBRS9GOzs7OztHQUtHO0FBQ0gsTUFBTSxVQUFVLG9CQUFvQixDQUFDLFFBQWtCO0lBQ3JELG9GQUFvRjtJQUNwRixPQUFPLFFBQVEsQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLENBQUMsaUJBQWlCLENBQUMsR0FBRyxFQUFFO1FBQ2pELElBQUksQ0FBQyxRQUFRLENBQUMsbUJBQW1CLEVBQUU7WUFDakMsT0FBTyxPQUFPLENBQUMsT0FBTyxFQUFFLENBQUM7U0FDMUI7UUFFRCxJQUFJLDRCQUF3QyxDQUFDO1FBQzdDLE1BQU0scUJBQXFCLEdBQUcsSUFBSSxPQUFPLENBQU8sQ0FBQyxPQUFPLEVBQUUsRUFBRTtZQUMxRCw0QkFBNEIsR0FBRyxPQUFPLENBQUM7UUFDekMsQ0FBQyxDQUFDLENBQUM7UUFDSCxRQUFRLENBQUMsbUJBQW1CLENBQUMsR0FBRyxFQUFFO1lBQ2hDLDRCQUE0QixFQUFFLENBQUM7WUFDL0IsT0FBTyxtQkFBbUIsQ0FBQyxRQUFRLENBQUMsQ0FBQztRQUN2QyxDQUFDLENBQUMsQ0FBQztRQUNILE9BQU8scUJBQXFCLENBQUM7SUFDL0IsQ0FBQyxDQUFDLENBQUM7QUFDTCxDQUFDO0FBRUQ7O0dBRUc7QUFDSCxTQUFTLG1CQUFtQixDQUFDLFFBQWtCO0lBQzdDLE9BQU8sSUFBSSxPQUFPLENBQU8sT0FBTyxDQUFDLEVBQUU7UUFDakMsZUFBZSxDQUFDLE9BQU8sRUFBRSxFQUFDLFFBQVEsRUFBQyxDQUFDLENBQUM7SUFDdkMsQ0FBQyxDQUFDLENBQUM7QUFDTCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbi8vLyA8cmVmZXJlbmNlIHR5cGVzPVwiQHR5cGVzL2RvbS12aWV3LXRyYW5zaXRpb25zXCIgLz5cblxuaW1wb3J0IHthZnRlck5leHRSZW5kZXIsIEluamVjdGlvblRva2VuLCBJbmplY3RvciwgTmdab25lfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuZXhwb3J0IGNvbnN0IENSRUFURV9WSUVXX1RSQU5TSVRJT04gPVxuICAgIG5ldyBJbmplY3Rpb25Ub2tlbjx0eXBlb2YgY3JlYXRlVmlld1RyYW5zaXRpb24+KG5nRGV2TW9kZSA/ICd2aWV3IHRyYW5zaXRpb24gaGVscGVyJyA6ICcnKTtcblxuLyoqXG4gKiBBIGhlbHBlciBmdW5jdGlvbiBmb3IgdXNpbmcgYnJvd3NlciB2aWV3IHRyYW5zaXRpb25zLiBUaGlzIGZ1bmN0aW9uIHNraXBzIHRoZSBjYWxsIHRvXG4gKiBgc3RhcnRWaWV3VHJhbnNpdGlvbmAgaWYgdGhlIGJyb3dzZXIgZG9lcyBub3Qgc3VwcG9ydCBpdC5cbiAqXG4gKiBAcmV0dXJucyBBIFByb21pc2UgdGhhdCByZXNvbHZlcyB3aGVuIHRoZSB2aWV3IHRyYW5zaXRpb24gY2FsbGJhY2sgYmVnaW5zLlxuICovXG5leHBvcnQgZnVuY3Rpb24gY3JlYXRlVmlld1RyYW5zaXRpb24oaW5qZWN0b3I6IEluamVjdG9yKTogUHJvbWlzZTx2b2lkPiB7XG4gIC8vIENyZWF0ZSBwcm9taXNlcyBvdXRzaWRlIHRoZSBBbmd1bGFyIHpvbmUgdG8gYXZvaWQgY2F1c2luZyBleHRyYSBjaGFuZ2UgZGV0ZWN0aW9uc1xuICByZXR1cm4gaW5qZWN0b3IuZ2V0KE5nWm9uZSkucnVuT3V0c2lkZUFuZ3VsYXIoKCkgPT4ge1xuICAgIGlmICghZG9jdW1lbnQuc3RhcnRWaWV3VHJhbnNpdGlvbikge1xuICAgICAgcmV0dXJuIFByb21pc2UucmVzb2x2ZSgpO1xuICAgIH1cblxuICAgIGxldCByZXNvbHZlVmlld1RyYW5zaXRpb25TdGFydGVkOiAoKSA9PiB2b2lkO1xuICAgIGNvbnN0IHZpZXdUcmFuc2l0aW9uU3RhcnRlZCA9IG5ldyBQcm9taXNlPHZvaWQ+KChyZXNvbHZlKSA9PiB7XG4gICAgICByZXNvbHZlVmlld1RyYW5zaXRpb25TdGFydGVkID0gcmVzb2x2ZTtcbiAgICB9KTtcbiAgICBkb2N1bWVudC5zdGFydFZpZXdUcmFuc2l0aW9uKCgpID0+IHtcbiAgICAgIHJlc29sdmVWaWV3VHJhbnNpdGlvblN0YXJ0ZWQoKTtcbiAgICAgIHJldHVybiBjcmVhdGVSZW5kZXJQcm9taXNlKGluamVjdG9yKTtcbiAgICB9KTtcbiAgICByZXR1cm4gdmlld1RyYW5zaXRpb25TdGFydGVkO1xuICB9KTtcbn1cblxuLyoqXG4gKiBDcmVhdGVzIGEgcHJvbWlzZSB0aGF0IHJlc29sdmVzIGFmdGVyIG5leHQgcmVuZGVyLlxuICovXG5mdW5jdGlvbiBjcmVhdGVSZW5kZXJQcm9taXNlKGluamVjdG9yOiBJbmplY3Rvcikge1xuICByZXR1cm4gbmV3IFByb21pc2U8dm9pZD4ocmVzb2x2ZSA9PiB7XG4gICAgYWZ0ZXJOZXh0UmVuZGVyKHJlc29sdmUsIHtpbmplY3Rvcn0pO1xuICB9KTtcbn1cbiJdfQ==
