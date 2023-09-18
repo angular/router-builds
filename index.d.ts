@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.4+sha-873e80b
+ * @license Angular v17.0.0-next.4+sha-0b3e6a4
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1061,19 +1061,6 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * it restores scroll position.
      */
     scrollOffset?: [number, number] | (() => [number, number]);
-    /**
-     * A custom handler for malformed URI errors. The handler is invoked when `encodedURI` contains
-     * invalid character sequences.
-     * The default implementation is to redirect to the root URL, dropping
-     * any path or parameter information. The function takes three parameters:
-     *
-     * - `'URIError'` - Error thrown when parsing a bad URL.
-     * - `'UrlSerializer'` - UrlSerializer that’s configured with the router.
-     * - `'url'` -  The malformed URL that caused the URIError
-     *
-     * @deprecated URI parsing errors should be handled in the `UrlSerializer` instead.
-     * */
-    malformedUriErrorHandler?: (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
 }
 
 /**
@@ -2745,15 +2732,6 @@ export declare class Router {
      * @see {@link withNavigationErrorHandler}
      */
     errorHandler: (error: any) => any;
-    /**
-     * A handler for errors thrown by `Router.parseUrl(url)`
-     * when `url` contains an invalid character.
-     * The most common case is a `%` sign
-     * that's not encoded and is not part of a percent encoded sequence.
-     *
-     * @see {@link RouterModule}
-     */
-    private malformedUriErrorHandler;
     /**
      * True if at least one navigation event has occurred,
      * false otherwise.
