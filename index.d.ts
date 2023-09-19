@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.4+sha-396e064
+ * @license Angular v17.0.0-next.4+sha-ad61bf6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2697,7 +2697,6 @@ declare class RoutedComponentInputBinder {
 export declare class Router {
     private get currentUrlTree();
     private get rawUrlTree();
-    private get browserUrlTree();
     private disposed;
     private locationSubscription?;
     private isNgZoneEnabled;
