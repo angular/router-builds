@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.4+sha-e353229
+ * @license Angular v17.0.0-next.4+sha-2c09d51
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2969,7 +2969,6 @@ declare class RouterConfigLoader {
     private readonly compiler;
     loadComponent(route: Route): Observable<Type<unknown>>;
     loadChildren(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
-    private loadModuleFactoryOrRoutes;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
 }
@@ -4631,6 +4630,16 @@ export declare class ɵEmptyOutletComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<ɵEmptyOutletComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never, true, never>;
 }
+
+/**
+ * Executes a `route.loadChildren` callback and converts the result to an array of child routes and
+ * an injector if that callback returned a module.
+ *
+ * This function is used for the route discovery during prerendering
+ * in @angular-devkit/build-angular. If there are any updates to the contract here, it will require
+ * an update to the extractor.
+ */
+export declare function ɵloadChildren(route: Route, compiler: Compiler, parentInjector: Injector, onLoadEndListener?: (r: Route) => void): Observable<LoadedRouterConfig>;
 
 export declare type ɵRestoredState = {
     [k: string]: any;
