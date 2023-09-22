@@ -1,28 +1,18 @@
 /**
- * @license Angular v17.0.0-next.5+sha-917203d
+ * @license Angular v17.0.0-next.5+sha-86e9146
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
 
-import { ChildrenOutletContexts } from '@angular/router';
-import { Compiler } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { ExtraOptions } from '@angular/router';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/router';
-import { Injector } from '@angular/core';
-import { Location as Location_2 } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
-import { Route } from '@angular/router';
-import { Router } from '@angular/router';
-import { RouteReuseStrategy } from '@angular/router';
 import { Routes } from '@angular/router';
-import { TitleStrategy } from '@angular/router';
 import { Type } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { UrlSerializer } from '@angular/router';
 
 /**
  * A testing harness for the `Router` to reduce the boilerplate needed to test routes and routed
@@ -124,13 +114,5 @@ export declare class RouterTestingModule {
     static ɵmod: i0.ɵɵNgModuleDeclaration<RouterTestingModule, never, never, [typeof i1.RouterModule]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterTestingModule>;
 }
-
-/**
- * Router setup factory function used for testing.
- *
- * @publicApi
- * @deprecated Use `provideRouter` or `RouterModule` instead.
- */
-export declare function setupTestingRouter(urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts, location: Location_2, compiler: Compiler, injector: Injector, routes: Route[][], opts?: ExtraOptions | UrlHandlingStrategy | null, urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy, titleStrategy?: TitleStrategy): Router;
 
 export { }

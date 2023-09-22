@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.5+sha-917203d
+ * @license Angular v17.0.0-next.5+sha-86e9146
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4331,6 +4331,21 @@ export declare const VERSION: Version;
 export declare type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
 
 /**
+ * Options to configure the View Transitions integration in the Router.
+ *
+ * @experimental
+ * @publicApi
+ * @see withViewTransitions
+ */
+declare interface ViewTransitionsFeatureOptions {
+    /**
+     * Skips the very first call to `startViewTransition`. This can be useful for disabling the
+     * animation during the application's initial loading phase.
+     */
+    skipInitialTransition?: boolean;
+}
+
+/**
  * Enables binding information from the `Router` state directly to the inputs of the component in
  * `Route` configurations.
  *
@@ -4602,7 +4617,7 @@ export declare function withRouterConfig(options: RouterConfigOptions): RouterCo
  * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
  * @experimental
  */
-export declare function withViewTransitions(): ViewTransitionsFeature;
+export declare function withViewTransitions(options?: ViewTransitionsFeatureOptions): ViewTransitionsFeature;
 
 /**
  * Performs the given action once the router finishes its next/current navigation.

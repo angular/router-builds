@@ -1,14 +1,13 @@
 /**
- * @license Angular v17.0.0-next.5+sha-917203d
+ * @license Angular v17.0.0-next.5+sha-86e9146
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import * as i0 from '@angular/core';
-import { inject, Compiler, Injector, NgModule, Injectable, Component, ViewChild } from '@angular/core';
-import { UrlSerializer, ChildrenOutletContexts, ROUTES, UrlHandlingStrategy, ROUTER_CONFIGURATION, RouteReuseStrategy, TitleStrategy, Router, RouterModule, ɵROUTER_PROVIDERS, withPreloading, NoPreloading, RouterOutlet, ɵafterNextNavigation } from '@angular/router';
+import { NgModule, Injectable, Component, ViewChild } from '@angular/core';
+import { ROUTES, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, withPreloading, NoPreloading, RouterOutlet, Router, ɵafterNextNavigation } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 
 function isUrlHandlingStrategy(opts) {
@@ -19,60 +18,6 @@ function isUrlHandlingStrategy(opts) {
 function throwInvalidConfigError(parameter) {
     throw new Error(`Parameter ${parameter} does not match the one available in the injector. ` +
         '`setupTestingRouter` is meant to be used as a factory function with dependencies coming from DI.');
-}
-/**
- * Router setup factory function used for testing.
- *
- * @publicApi
- * @deprecated Use `provideRouter` or `RouterModule` instead.
- */
-function setupTestingRouter(urlSerializer, contexts, location, compiler, injector, routes, opts, urlHandlingStrategy, routeReuseStrategy, titleStrategy) {
-    // Note: The checks below are to detect misconfigured providers and invalid uses of
-    // `setupTestingRouter`. This function is not used internally (neither in router code or anywhere
-    // in g3). It appears this function was exposed as publicApi by mistake and should not be used
-    // externally either. However, if it is, the documented intent is to be used as a factory function
-    // and parameter values should always match what's available in DI.
-    if (urlSerializer !== inject(UrlSerializer)) {
-        throwInvalidConfigError('urlSerializer');
-    }
-    if (contexts !== inject(ChildrenOutletContexts)) {
-        throwInvalidConfigError('contexts');
-    }
-    if (location !== inject(Location)) {
-        throwInvalidConfigError('location');
-    }
-    if (compiler !== inject(Compiler)) {
-        throwInvalidConfigError('compiler');
-    }
-    if (injector !== inject(Injector)) {
-        throwInvalidConfigError('injector');
-    }
-    if (routes !== inject(ROUTES)) {
-        throwInvalidConfigError('routes');
-    }
-    if (opts) {
-        // Handle deprecated argument ordering.
-        if (isUrlHandlingStrategy(opts)) {
-            if (opts !== inject(UrlHandlingStrategy)) {
-                throwInvalidConfigError('opts (UrlHandlingStrategy)');
-            }
-        }
-        else {
-            if (opts !== inject(ROUTER_CONFIGURATION)) {
-                throwInvalidConfigError('opts (ROUTER_CONFIGURATION)');
-            }
-        }
-    }
-    if (urlHandlingStrategy !== inject(UrlHandlingStrategy)) {
-        throwInvalidConfigError('urlHandlingStrategy');
-    }
-    if (routeReuseStrategy !== inject(RouteReuseStrategy)) {
-        throwInvalidConfigError('routeReuseStrategy');
-    }
-    if (titleStrategy !== inject(TitleStrategy)) {
-        throwInvalidConfigError('titleStrategy');
-    }
-    return new Router();
 }
 /**
  * @description
@@ -109,16 +54,16 @@ class RouterTestingModule {
             ]
         };
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RouterTestingModule, providers: [
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RouterTestingModule, providers: [
             ɵROUTER_PROVIDERS,
             provideLocationMocks(),
             withPreloading(NoPreloading).ɵproviders,
             { provide: ROUTES, multi: true, useValue: [] },
         ], imports: [RouterModule] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -147,18 +92,18 @@ class RootFixtureService {
         this.fixture.detectChanges();
         return this.fixture;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RootFixtureService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RootFixtureService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RootFixtureService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RootFixtureService, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 class RootCmp {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.0-next.5+sha-917203d", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.0-next.5+sha-86e9146", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-917203d", ngImport: i0, type: RootCmp, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-next.5+sha-86e9146", ngImport: i0, type: RootCmp, decorators: [{
             type: Component,
             args: [{
                     standalone: true,
@@ -260,5 +205,5 @@ class RouterTestingHarness {
  * Generated bundle index. Do not edit.
  */
 
-export { RouterTestingHarness, RouterTestingModule, setupTestingRouter };
+export { RouterTestingHarness, RouterTestingModule };
 //# sourceMappingURL=testing.mjs.map
