@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.5+sha-c3cb265
+ * @license Angular v17.0.0-next.5+sha-ce1b915
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2522,7 +2522,6 @@ export declare interface Route {
      * A URL to redirect to when the path matches.
      *
      * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
-     * Note that no further redirects are evaluated after an absolute redirect.
      *
      * When not present, router does not redirect.
      */
