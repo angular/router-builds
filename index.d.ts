@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.7+sha-2da3551
+ * @license Angular v17.0.0-next.7+sha-ced66d4
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2697,7 +2697,7 @@ export declare class Router {
     private get currentUrlTree();
     private get rawUrlTree();
     private disposed;
-    private locationSubscription?;
+    private nonRouterCurrentEntryChangeSubscription?;
     private isNgZoneEnabled;
     private readonly console;
     private readonly stateManager;
