@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.7+sha-753eb24
+ * @license Angular v17.0.0-next.7+sha-e25006b
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3141,7 +3141,7 @@ declare const enum RouterFeatureKind {
  *
  * @publicApi
  */
-export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature;
+export declare type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | RouterHashLocationFeature;
 
 /**
  * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
@@ -4471,7 +4471,7 @@ export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingI
  *
  * @publicApi
  */
-export declare function withHashLocation(): RouterConfigurationFeature;
+export declare function withHashLocation(): RouterHashLocationFeature;
 
 /**
  * Enables customizable scrolling behavior for router navigations.
