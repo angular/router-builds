@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.7+sha-5a4ccdf
+ * @license Angular v17.0.0-next.7+sha-9bf6495
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4320,6 +4320,46 @@ export declare class UrlTree {
 export declare const VERSION: Version;
 
 /**
+ * The information passed to the `onViewTransitionCreated` function provided in the
+ * `withViewTransitions` feature options.
+ *
+ * @publicApi
+ * @experimental
+ */
+export declare interface ViewTransitionInfo {
+    /**
+     * The `ViewTransition` returned by the call to `startViewTransition`.
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition
+     */
+    transition: {
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/finished
+         */
+        finished: Promise<void>;
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/ready
+         */
+        ready: Promise<void>;
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/updateCallbackDone
+         */
+        updateCallbackDone: Promise<void>;
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/skipTransition
+         */
+        skipTransition(): void;
+    };
+    /**
+     * The `ActivatedRouteSnapshot` that the navigation is transitioning from.
+     */
+    from: ActivatedRouteSnapshot;
+    /**
+     * The `ActivatedRouteSnapshot` that the navigation is transitioning to.
+     */
+    to: ActivatedRouteSnapshot;
+}
+
+/**
  * A type alias for providers returned by `withViewTransitions` for use with `provideRouter`.
  *
  * @see {@link withViewTransitions}
@@ -4336,12 +4376,18 @@ export declare type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.Vie
  * @publicApi
  * @see withViewTransitions
  */
-declare interface ViewTransitionsFeatureOptions {
+export declare interface ViewTransitionsFeatureOptions {
     /**
      * Skips the very first call to `startViewTransition`. This can be useful for disabling the
      * animation during the application's initial loading phase.
      */
     skipInitialTransition?: boolean;
+    /**
+     * A function to run after the `ViewTransition` is created.
+     *
+     * This function is run in an injection context and can use `inject`.
+     */
+    onViewTransitionCreated?: (transitionInfo: ViewTransitionInfo) => void;
 }
 
 /**
