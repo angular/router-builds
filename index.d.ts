@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-next.8+sha-99e7629
+ * @license Angular v17.0.0-next.8+sha-e90f5e5
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3010,8 +3010,11 @@ export declare interface RouterConfigOptions {
     onSameUrlNavigation?: OnSameUrlNavigation;
     /**
      * Defines how the router merges parameters, data, and resolved data from parent to child
-     * routes. By default ('emptyOnly'), inherits parent parameters only for
-     * path-less or component-less routes.
+     * routes.
+     *
+     * By default ('emptyOnly'), a route inherits the parent route's parameters when the route itself
+     * has an empty path (meaning its configured with path: '') or when the parent route doesn't have
+     * any component set.
      *
      * Set to 'always' to enable unconditional inheritance of parent parameters.
      *
