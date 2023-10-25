@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-9692aeb
+ * @license Angular v17.1.0-next.0+sha-ebbc7a2
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -973,7 +973,7 @@ export { Event_2 as Event }
  *
  * @publicApi
  */
-export declare const enum EventType {
+export declare enum EventType {
     NavigationStart = 0,
     NavigationEnd = 1,
     NavigationCancel = 2,
@@ -1584,7 +1584,7 @@ export declare class NavigationCancel extends RouterEvent {
  *
  * @publicApi
  */
-export declare const enum NavigationCancellationCode {
+export declare enum NavigationCancellationCode {
     /**
      * A navigation failed because a guard returned a `UrlTree` to redirect.
      */
@@ -1739,7 +1739,7 @@ export declare class NavigationSkipped extends RouterEvent {
  *
  * @publicApi
  */
-export declare const enum NavigationSkippedCode {
+export declare enum NavigationSkippedCode {
     /**
      * A navigation was skipped because the navigation URL was the same as the current Router URL.
      */
