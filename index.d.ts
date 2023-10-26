@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.0.0-rc.1+sha-6a01d62
+ * @license Angular v17.0.0-rc.1+sha-da1b71e
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1017,7 +1017,7 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * One of `enabled`, `enabledBlocking`, `enabledNonBlocking` or `disabled`.
      * When set to `enabled` or `enabledBlocking`, the initial navigation starts before the root
      * component is created. The bootstrap is blocked until the initial navigation is complete. This
-     * value is required for [server-side rendering](guide/universal) to work. When set to
+     * value is required for [server-side rendering](guide/ssr) to work. When set to
      * `enabledNonBlocking`, the initial navigation starts after the root component has been created.
      * The bootstrap is not blocked on the completion of the initial navigation. When set to
      * `disabled`, the initial navigation is not performed. The location listener is set up before the
@@ -1155,7 +1155,7 @@ declare namespace i4 {
  * navigation.
  * * 'enabledBlocking' - The initial navigation starts before the root component is created.
  * The bootstrap is blocked until the initial navigation is complete. This value is required
- * for [server-side rendering](guide/universal) to work.
+ * for [server-side rendering](guide/ssr) to work.
  * * 'disabled' - The initial navigation is not performed. The location listener is set up before
  * the root component gets created. Use if there is a reason to have
  * more control over when the router starts its initial navigation due to some complex
@@ -4473,7 +4473,7 @@ export declare function withDisabledInitialNavigation(): DisabledInitialNavigati
  * Configures initial navigation to start before the root component is created.
  *
  * The bootstrap is blocked until the initial navigation is complete. This value is required for
- * [server-side rendering](guide/universal) to work.
+ * [server-side rendering](guide/ssr) to work.
  *
  * @usageNotes
  *
