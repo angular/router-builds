@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.0+sha-9135dba
+ * @license Angular v17.1.0-next.0+sha-726530a
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1495,7 +1495,7 @@ export declare interface NavigationBehaviorOptions {
      * @see {@link OnSameUrlNavigation}
      * @see {@link RouterConfigOptions}
      */
-    onSameUrlNavigation?: Extract<OnSameUrlNavigation, 'reload'>;
+    onSameUrlNavigation?: OnSameUrlNavigation;
     /**
      * When true, navigates without pushing a new state into history.
      *
