@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.1.0-next.2+sha-12dfa9b
+ * @license Angular v17.1.0-next.2+sha-1e3bcfe
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1045,6 +1045,10 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * If the handler throws an exception, the navigation Promise is rejected with the exception.
      *
      * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
+     *   If the ErrorHandler is used to prevent unhandled promise rejections when navigation
+     *   errors occur, use the `resolveNavigationPromiseOnError` option instead.
+     *
+     * @see RouterConfigOptions
      */
     errorHandler?: (error: any) => any;
     /**
@@ -2900,9 +2904,9 @@ export declare class Router {
      * @param extras An options object that determines how the URL should be constructed or
      *     interpreted.
      *
-     * @returns A Promise that resolves to `true` when navigation succeeds, to `false` when navigation
-     *     fails,
-     * or is rejected on error.
+     * @returns A Promise that resolves to `true` when navigation succeeds, or `false` when navigation
+     *     fails. The Promise is rejected when an error occurs if `resolveNavigationPromiseOnError` is
+     * not `true`.
      *
      * @usageNotes
      *
@@ -3034,6 +3038,14 @@ export declare interface RouterConfigOptions {
      * showing an error message with the URL that failed.
      */
     urlUpdateStrategy?: 'deferred' | 'eager';
+    /**
+     * When `true`, the `Promise` will instead resolve with `false`, as it does with other failed
+     * navigations (for example, when guards are rejected).
+
+     * Otherwise the `Promise` returned by the Router's navigation with be rejected
+     * if an error occurs.
+     */
+    resolveNavigationPromiseOnError?: boolean;
 }
 
 /**
