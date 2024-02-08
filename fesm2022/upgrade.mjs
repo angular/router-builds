@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.3.0-next.0+sha-d02fcb1
+ * @license Angular v17.3.0-next.0+sha-153fc61
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -36,7 +36,7 @@ const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: locationSyncBootstrapListener,
-    deps: [UpgradeModule]
+    deps: [UpgradeModule],
 };
 /**
  * @internal
@@ -67,7 +67,8 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
     }
     const router = ngUpgrade.injector.get(Router);
     const location = ngUpgrade.injector.get(Location);
-    ngUpgrade.$injector.get('$rootScope')
+    ngUpgrade.$injector
+        .get('$rootScope')
         .$on('$locationChangeStart', (event, newUrl, oldUrl, newState, oldState) => {
         // Navigations coming from Angular router have a navigationId state
         // property. Don't trigger Angular router navigation again if it is
@@ -75,8 +76,7 @@ function setUpLocationSync(ngUpgrade, urlType = 'path') {
         // navigation.
         const currentNavigationId = router.getCurrentNavigation()?.id;
         const newStateNavigationId = newState?.navigationId;
-        if (newStateNavigationId !== undefined &&
-            newStateNavigationId === currentNavigationId) {
+        if (newStateNavigationId !== undefined && newStateNavigationId === currentNavigationId) {
             return;
         }
         let url;
@@ -122,7 +122,7 @@ function resolveUrl(url) {
         // IE does not start `pathname` with `/` like other browsers.
         pathname: `/${anchor.pathname.replace(/^\//, '')}`,
         search: anchor.search,
-        hash: anchor.hash
+        hash: anchor.hash,
     };
 }
 
