@@ -1,5 +1,5 @@
 /**
- * @license Angular v17.3.0-next.0+sha-70345b1
+ * @license Angular v17.3.0-next.0+sha-a9741e6
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -107,6 +107,11 @@ export declare class RouterTestingHarness {
  * ```
  *
  * @publicApi
+ * @deprecated Use `provideRouter` or `RouterModule`/`RouterModule.forRoot` instead.
+ * This module was previously used to provide a helpful collection of test fakes,
+ * most notably those for `Location` and `LocationStrategy`.  These are generally not
+ * required anymore, as `MockPlatformLocation` is provided in `TestBed` by default.
+ * However, you can use them directly with `provideLocationMocks`.
  */
 export declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
