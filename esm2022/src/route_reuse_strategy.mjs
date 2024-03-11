@@ -15,10 +15,10 @@ import * as i0 from "@angular/core";
  * @publicApi
  */
 export class RouteReuseStrategy {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: RouteReuseStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: RouteReuseStrategy, providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: RouteReuseStrategy, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: RouteReuseStrategy, providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: RouteReuseStrategy, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: RouteReuseStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root', useFactory: () => inject(DefaultRouteReuseStrategy) }]
         }] });
@@ -69,10 +69,10 @@ export class BaseRouteReuseStrategy {
     }
 }
 export class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: DefaultRouteReuseStrategy, deps: null, target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: DefaultRouteReuseStrategy, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: DefaultRouteReuseStrategy, deps: null, target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: DefaultRouteReuseStrategy, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.4+sha-67bc88f", ngImport: i0, type: DefaultRouteReuseStrategy, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.4+sha-4799a3b", ngImport: i0, type: DefaultRouteReuseStrategy, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
