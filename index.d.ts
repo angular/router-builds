@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.0+sha-018f826
+ * @license Angular v18.0.0-next.0+sha-8735af0
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1073,7 +1073,7 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
  * @see [Routing tutorial](guide/router-tutorial-toh#milestone-5-route-guards)
  * @publicApi
  */
-export declare type GuardResult = boolean | UrlTree;
+export declare type GuardResult = boolean | UrlTree | RedirectCommand;
 
 /**
  * An event triggered at the end of the Guard phase of routing.
@@ -2079,6 +2079,21 @@ export declare function provideRoutes(routes: Routes): Provider[];
  * @publicApi
  */
 export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
+
+/**
+ * Can be returned by a `Router` guard to instruct the `Router` to redirect rather than continue
+ * processing the path of the in-flight navigation. The `redirectTo` indicates _where_ the new
+ * navigation should go to and the optional `navigationBehaviorOptions` can provide more information
+ * about _how_ to perform the navigation.
+ *
+ * @see [Routing tutorial](guide/router-tutorial-toh#milestone-5-route-guards)
+ * @publicApi
+ */
+export declare class RedirectCommand {
+    readonly redirectTo: UrlTree;
+    readonly navigationBehaviorOptions?: NavigationBehaviorOptions | undefined;
+    constructor(redirectTo: UrlTree, navigationBehaviorOptions?: NavigationBehaviorOptions | undefined);
+}
 
 /**
  * @description
