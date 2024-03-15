@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.0+sha-3691570
+ * @license Angular v18.0.0-next.0+sha-5a63a47
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -690,10 +690,7 @@ export declare class ChildActivationStart {
  * @publicApi
  */
 export declare class ChildrenOutletContexts {
-    private parentInjector;
     private contexts;
-    /** @nodoc */
-    constructor(parentInjector: EnvironmentInjector);
     /** Called when a `RouterOutlet` directive is instantiated */
     onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
     /**
@@ -1911,12 +1908,11 @@ export declare type OnSameUrlNavigation = 'reload' | 'ignore';
  * @publicApi
  */
 export declare class OutletContext {
-    injector: EnvironmentInjector;
     outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
+    injector: EnvironmentInjector | null;
     children: ChildrenOutletContexts;
     attachRef: ComponentRef<any> | null;
-    constructor(injector: EnvironmentInjector);
 }
 
 /**
@@ -3737,6 +3733,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     private parentContexts;
     private location;
     private changeDetector;
+    private environmentInjector;
     private inputBinder;
     /** @nodoc */
     readonly supportsBindingToComponentInputs = true;
@@ -3765,7 +3762,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
     deactivate(): void;
-    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector?: EnvironmentInjector | null): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
 }
@@ -3803,7 +3800,7 @@ export declare interface RouterOutletContract {
     /**
      * Called by the `Router` when the outlet should activate (create a component).
      */
-    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector | null): void;
     /**
      * A request to destroy the currently activated component.
      *
