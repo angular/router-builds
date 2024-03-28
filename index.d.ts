@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.2+sha-914e453
+ * @license Angular v18.0.0-next.2+sha-b87b2fc
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2048,7 +2048,7 @@ export declare const PRIMARY_OUTLET = "primary";
 export declare function provideRouter(routes: Routes, ...features: RouterFeatures[]): EnvironmentProviders;
 
 /**
- * Registers a [DI provider](guide/glossary#provider) for a set of routes.
+ * Registers a DI provider for a set of routes.
  * @param routes The route configuration to provide.
  *
  * @usageNotes
@@ -3026,14 +3026,14 @@ export declare class Router {
 }
 
 /**
- * A [DI token](guide/glossary/#di-token) for the router service.
+ * A DI token for the router service.
  *
  * @publicApi
  */
 export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
 
 /**
- * A [DI token](guide/glossary/#di-token) for the router initializer that
+ * A DI token for the router initializer that
  * is called after the app is bootstrapped.
  *
  * @publicApi
@@ -3948,7 +3948,7 @@ export declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
 }
 
 /**
- * The [DI token](guide/glossary/#di-token) for a router configuration.
+ * The DI token for a router configuration.
  *
  * `ROUTES` is a low level API for router configuration via dependency injection.
  *
