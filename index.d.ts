@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.2+sha-0b450ff
+ * @license Angular v18.0.0-next.2+sha-1c5f158
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4645,8 +4645,7 @@ export declare function withHashLocation(): RouterHashLocationFeature;
 export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions): InMemoryScrollingFeature;
 
 /**
- * Subscribes to the Router's navigation events and calls the given function when a
- * `NavigationError` happens.
+ * Provides a function which is called when a navigation error occurs.
  *
  * This function is run inside application's [injection context](guide/dependency-injection-context)
  * so you can use the [`inject`](api/core/inject) function.
@@ -4674,7 +4673,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  *
  * @publicApi
  */
-export declare function withNavigationErrorHandler(fn: (error: NavigationError) => void): NavigationErrorHandlerFeature;
+export declare function withNavigationErrorHandler(handler: (error: NavigationError) => void): NavigationErrorHandlerFeature;
 
 /**
  * Allows to configure a preloading strategy to use. The strategy is configured by providing a
