@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.2+sha-8a8181a
+ * @license Angular v18.0.0-next.2+sha-87f3f27
  * (c) 2010-2022 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2217,6 +2217,11 @@ export declare interface Resolve<T> {
  *
  * Represents the resolved data associated with a particular route.
  *
+ * Returning a `RedirectCommand` directs the router to cancel the current navigation and redirect to
+ * the location provided in the `RedirectCommand`. Note that there are no ordering guarantees when
+ * resolvers execute. If multiple resolvers would return a `RedirectCommand`, only the first one
+ * returned will be used.
+ *
  * @see {@link Route#resolve}
  *
  * @publicApi
@@ -2290,7 +2295,7 @@ export declare class ResolveEnd extends RouterEvent {
  * @publicApi
  * @see {@link Route}
  */
-export declare type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => MaybeAsync<T>;
+export declare type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => MaybeAsync<T | RedirectCommand>;
 
 /**
  * An event triggered at the start of the Resolve phase of routing.
