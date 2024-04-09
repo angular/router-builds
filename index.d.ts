@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.3+sha-216199d
+ * @license Angular v18.0.0-next.3+sha-1c6553e
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -48,7 +48,7 @@ import { Version } from '@angular/core';
  * {@example router/activated-route/module.ts region="activated-route"
  *     header="activated-route.component.ts"}
  *
- * @see [Getting route information](guide/router#getting-route-information)
+ * @see [Getting route information](guide/routing/common-router-tasks#getting-route-information)
  *
  * @publicApi
  */
@@ -942,7 +942,7 @@ export declare type EnabledBlockingInitialNavigationFeature = RouterFeature<Rout
  *
  * * [NavigationStart](api/router/NavigationStart): Navigation starts.
  * * [RouteConfigLoadStart](api/router/RouteConfigLoadStart): Before
- * the router [lazy loads](/guide/router#lazy-loading) a route configuration.
+ * the router [lazy loads](guide/routing/common-router-tasks#lazy-loading) a route configuration.
  * * [RouteConfigLoadEnd](api/router/RouteConfigLoadEnd): After a route has been lazy loaded.
  * * [RoutesRecognized](api/router/RoutesRecognized): When the router parses the URL
  * and the routes are recognized.
@@ -1073,7 +1073,7 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
 /**
  * The supported types that can be returned from a `Router` guard.
  *
- * @see [Routing tutorial](guide/router-tutorial-toh#milestone-5-route-guards)
+ * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
  * @publicApi
  */
 export declare type GuardResult = boolean | UrlTree | RedirectCommand;
@@ -1503,7 +1503,7 @@ export declare interface Navigation {
  *
  * @see {@link Router#navigate}
  * @see {@link Router#navigateByUrl}
- * @see [Routing and Navigation guide](guide/router)
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
  *
  * @publicApi
  */
@@ -1732,7 +1732,7 @@ export declare type NavigationErrorHandlerFeature = RouterFeature<RouterFeatureK
  * @see {@link Router#navigate}
  * @see {@link Router#navigateByUrl}
  * @see {@link Router#createurltree}
- * @see [Routing and Navigation guide](guide/router)
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
  * @see {@link UrlCreationOptions}
  * @see {@link NavigationBehaviorOptions}
  *
@@ -2090,7 +2090,7 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * navigation should go to and the optional `navigationBehaviorOptions` can provide more information
  * about _how_ to perform the navigation.
  *
- * @see [Routing tutorial](guide/router-tutorial-toh#milestone-5-route-guards)
+ * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
  * @publicApi
  */
 export declare class RedirectCommand {
@@ -2338,7 +2338,7 @@ export declare class ResolveStart extends RouterEvent {
  * Supports static, parameterized, redirect, and wildcard routes, as well as
  * custom route data and resolve methods.
  *
- * For detailed usage information, see the [Routing Guide](guide/router).
+ * For detailed usage information, see the [Routing Guide](guide/routing/common-router-tasks).
  *
  * @usageNotes
  *
@@ -2776,7 +2776,7 @@ declare class RoutedComponentInputBinder {
  * A service that provides navigation among views and URL manipulation capabilities.
  *
  * @see {@link Route}
- * @see [Routing and Navigation Guide](guide/router).
+ * @see [Routing and Navigation Guide](guide/routing/common-router-tasks).
  *
  * @ngModule RouterModule
  *
@@ -2973,7 +2973,7 @@ export declare class Router {
      * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
      * ```
      *
-     * @see [Routing and Navigation guide](guide/router)
+     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
      *
      */
     navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
@@ -3004,7 +3004,7 @@ export declare class Router {
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
      * ```
      *
-     * @see [Routing and Navigation guide](guide/router)
+     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
      *
      */
     navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
@@ -3190,7 +3190,7 @@ export declare abstract class RouteReuseStrategy {
  * ```
  *
  * @see {@link Event}
- * @see [Router events summary](guide/router-reference#router-events)
+ * @see [Router events summary](guide/routing/router-reference#router-events)
  * @publicApi
  */
 export declare class RouterEvent {
@@ -3619,7 +3619,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
  * * The `forChild()` method creates an `NgModule` that contains all the directives and the given
  * routes, but does not include the `Router` service.
  *
- * @see [Routing and Navigation guide](guide/router) for an
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks) for an
  * overview of how the `Router` service should be used.
  *
  * @publicApi
@@ -3710,8 +3710,6 @@ export declare class RouterModule {
  *   (detach)='onDetach($event)'></router-outlet>
  * ```
  *
- * @see [Routing tutorial](guide/router-tutorial-toh#named-outlets "Example of a named
- * outlet and secondary route configuration").
  * @see {@link RouterLink}
  * @see {@link Route}
  * @ngModule RouterModule
@@ -3724,7 +3722,6 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     /**
      * The name of the outlet
      *
-     * @see [named outlets](guide/router-tutorial-toh#displaying-multiple-routes-in-named-outlets)
      */
     name: string;
     activateEvents: EventEmitter<any>;
@@ -3912,7 +3909,7 @@ export declare class RouterPreloader implements OnDestroy {
  * ```
  *
  * @see {@link ActivatedRoute}
- * @see [Getting route information](guide/router#getting-route-information)
+ * @see [Getting route information](guide/routing/common-router-tasks#getting-route-information)
  *
  * @publicApi
  */
@@ -3974,7 +3971,7 @@ export declare const ROUTES: InjectionToken<Route[][]>;
  *
  * @see {@link Route}
  * @see {@link Router}
- * @see [Router configuration guide](guide/router-reference#configuration)
+ * @see [Router configuration guide](guide/routing/router-reference#configuration)
  * @publicApi
  */
 export declare type Routes = Route[];
@@ -4067,7 +4064,7 @@ export declare class Scroll {
  * incorporate titles in named outlets.
  *
  * @publicApi
- * @see [Page title guide](guide/router#setting-the-page-title)
+ * @see [Page title guide](guide/routing/common-router-tasks#setting-the-page-title)
  */
 export declare abstract class TitleStrategy {
     /** Performs the application title update. */
@@ -4107,7 +4104,7 @@ declare class TreeNode<T> {
  *
  * @see {@link Router#navigate}
  * @see {@link Router#createUrlTree}
- * @see [Routing and Navigation guide](guide/router)
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
  *
  * @publicApi
  */
@@ -4655,7 +4652,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
 /**
  * Provides a function which is called when a navigation error occurs.
  *
- * This function is run inside application's [injection context](guide/dependency-injection-context)
+ * This function is run inside application's [injection context](guide/di/dependency-injection-context)
  * so you can use the [`inject`](api/core/inject) function.
  *
  * @usageNotes
