@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.4+sha-f947dd5
+ * @license Angular v18.0.0-next.4+sha-11523c1
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -401,12 +401,44 @@ export declare type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, st
  * The following example implements and uses a `CanActivateFn` that checks whether the
  * current user has permission to activate the requested route.
  *
- * {@example router/route_functional_guards.ts region="CanActivateFn"}
-
+ * ```ts
+ * @Injectable()
+ * class UserToken {}
+ *
+ * @Injectable()
+ * class PermissionsService {
+ *   canActivate(currentUser: UserToken, userId: string): boolean {
+ *     return true;
+ *   }
+ *   canMatch(currentUser: UserToken): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * const canActivateTeam: CanActivateFn = (
+ *   route: ActivatedRouteSnapshot,
+ *   state: RouterStateSnapshot,
+ * ) => {
+ *   return inject(PermissionsService).canActivate(inject(UserToken), route.params['id']);
+ * };
+ * ```
+ *
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
-
- * {@example router/route_functional_guards.ts region="CanActivateFnInRoute"}
+ *
+ * ```ts
+ * bootstrapApplication(App, {
+ *    providers: [
+ *      provideRouter([
+ *        {
+ *          path: 'team/:id',
+ *          component: TeamComponent,
+ *          canActivate: [canActivateTeam],
+ *        },
+ *      ]),
+ *    ],
+ *  });
+ * ```
  *
  * @publicApi
  * @see {@link Route}
@@ -2090,7 +2122,29 @@ export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
  * navigation should go to and the optional `navigationBehaviorOptions` can provide more information
  * about _how_ to perform the navigation.
  *
+ * ```ts
+ * const route: Route = {
+ *   path: "user/:userId",
+ *   component: User,
+ *   canActivate: [
+ *     () => {
+ *       const router = inject(Router);
+ *       const authService = inject(AuthenticationService);
+ *
+ *       if (!authService.isLoggedIn()) {
+ *         const loginPath = router.parseUrl("/login");
+ *         return new RedirectCommand(loginPath, {
+ *           skipLocationChange: "true",
+ *         });
+ *       }
+ *
+ *       return true;
+ *     },
+ *   ],
+ * };
+ * ```
  * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
+ *
  * @publicApi
  */
 export declare class RedirectCommand {
@@ -2260,20 +2314,81 @@ export declare class ResolveEnd extends RouterEvent {
 
 /**
  * Function type definition for a data provider.
-
+ *
  * A data provider can be used with the router to resolve data during navigation.
  * The router waits for the data to be resolved before the route is finally activated.
+ *
+ * A resolver can also redirect a `RedirectCommand` and the Angular router will use
+ * it to redirect the current navigation to the new destination.
+ *
+ * @usageNotes
  *
  * The following example implements a function that retrieves the data
  * needed to activate the requested route.
  *
- * {@example router/route_functional_guards.ts region="ResolveFn"}
+ * ```ts
+ * interface Hero {
+ *   name: string;
+ * }
+ * @Injectable()
+ * export class HeroService {
+ *   getHero(id: string) {
+ *     return {name: `Superman-${id}`};
+ *   }
+ * }
+ *
+ * export const heroResolver: ResolveFn<Hero> = (
+ *   route: ActivatedRouteSnapshot,
+ *   state: RouterStateSnapshot,
+ * ) => {
+ *   return inject(HeroService).getHero(route.paramMap.get('id')!);
+ * };
+ *
+ * bootstrapApplication(App, {
+ *   providers: [
+ *     provideRouter([
+ *       {
+ *         path: 'detail/:id',
+ *         component: HeroDetailComponent,
+ *         resolve: {hero: heroResolver},
+ *       },
+ *     ]),
+ *   ],
+ * });
+ * ```
  *
  * And you can access to your resolved data from `HeroComponent`:
  *
- * {@example router/route_functional_guards.ts region="ResolveDataUse"}
+ * ```ts
+ * @Component({template: ''})
+ * export class HeroDetailComponent {
+ *   private activatedRoute = inject(ActivatedRoute);
  *
- * @usageNotes
+ *   ngOnInit() {
+ *     this.activatedRoute.data.subscribe(({hero}) => {
+ *       // do something with your resolved data ...
+ *     });
+ *   }
+ * }
+ * ```
+ *
+ * If resolved data cannot be retrieved, you may want to redirect the user
+ * to a new page instead:
+ *
+ * ```ts
+ * export const heroResolver: ResolveFn<Hero> = async (
+ *   route: ActivatedRouteSnapshot,
+ *   state: RouterStateSnapshot,
+ * ) => {
+ *   const router = inject(Router);
+ *   const heroService = inject(HeroService);
+ *   try {
+ *     return await heroService.getHero(route.paramMap.get('id')!);
+ *   } catch {
+ *     return new RedirectCommand(router.parseUrl('/404'));
+ *   }
+ * };
+ * ```
  *
  * When both guard and resolvers are specified, the resolvers are not executed until
  * all guards have run and succeeded.
