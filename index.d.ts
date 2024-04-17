@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.5+sha-e1eae84
+ * @license Angular v18.0.0-next.5+sha-a5b5b7d
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4769,6 +4769,12 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  * This function is run inside application's [injection context](guide/di/dependency-injection-context)
  * so you can use the [`inject`](api/core/inject) function.
  *
+ * This function can return a `RedirectCommand` to convert the error to a redirect, similar to returning
+ * a `UrlTree` or `RedirectCommand` from a guard. This will also prevent the `Router` from emitting
+ * `NavigationError`; it will instead emit `NavigationCancel` with code NavigationCancellationCode.Redirect.
+ * Return values other than `RedirectCommand` are ignored and do not change any behavior with respect to
+ * how the `Router` handles the error.
+ *
  * @usageNotes
  *
  * Basic example of how you can use the error handler option:
@@ -4792,7 +4798,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  *
  * @publicApi
  */
-export declare function withNavigationErrorHandler(handler: (error: NavigationError) => void): NavigationErrorHandlerFeature;
+export declare function withNavigationErrorHandler(handler: (error: NavigationError) => unknown | RedirectCommand): NavigationErrorHandlerFeature;
 
 /**
  * Allows to configure a preloading strategy to use. The strategy is configured by providing a
