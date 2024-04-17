@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.0-next.4+sha-a5623dc
+ * @license Angular v18.0.0-next.4+sha-de7447d
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2902,7 +2902,6 @@ export declare class Router {
     private get rawUrlTree();
     private disposed;
     private nonRouterCurrentEntryChangeSubscription?;
-    private isNgZoneEnabled;
     private readonly console;
     private readonly stateManager;
     private readonly options;
