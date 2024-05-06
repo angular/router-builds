@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.0+sha-8f273ce
+ * @license Angular v18.1.0-next.0+sha-aea3b57
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2154,7 +2154,7 @@ export declare class RedirectCommand {
 }
 
 /**
- * The type for the function that can be used to handle redirects when the path matches a `Route` config.
+ * The type for the function that returns a used to handle redirects when the path matches a `Route` config.
  *
  * The `RedirectFunction` does have access to the full
  * `ActivatedRouteSnapshot` interface. Some data are not accurately known
