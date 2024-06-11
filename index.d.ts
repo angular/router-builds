@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.0+sha-1360110
+ * @license Angular v18.1.0-next.1+sha-567c2f6
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3434,6 +3434,9 @@ export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.
  * </a>
  * ```
  *
+ * `queryParams`, `fragment`, `queryParamsHandling`, `preserveFragment`, and `relativeTo`
+ * cannot be used when the `routerLink` input is a `UrlTree`.
+ *
  * See {@link UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
@@ -3528,7 +3531,6 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * @see {@link Router#createUrlTree}
      */
     relativeTo?: ActivatedRoute | null;
-    private commands;
     /** Whether a host element is an `<a>` tag. */
     private isAnchorElement;
     private subscription?;
@@ -3560,15 +3562,18 @@ declare class RouterLink implements OnChanges, OnDestroy {
      */
     private setTabIndexIfNotOnNativeEl;
     /** @nodoc */
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(): void;
+    private routerLinkInput;
     /**
-     * Commands to pass to {@link Router#createUrlTree}.
+     * Commands to pass to {@link Router#createUrlTree} or a `UrlTree`.
      *   - **array**: commands to pass to {@link Router#createUrlTree}.
      *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
+     *   - **UrlTree**: a `UrlTree` for this link rather than creating one from the commands
+     *     and other inputs that correspond to properties of `UrlCreationOptions`.
      *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree}
      */
-    set routerLink(commands: any[] | string | null | undefined);
+    set routerLink(commandsOrUrlTree: any[] | string | UrlTree | null | undefined);
     /** @nodoc */
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     /** @nodoc */
