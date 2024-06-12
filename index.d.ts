@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.1+sha-567c2f6
+ * @license Angular v18.1.0-next.1+sha-96d3ed8
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3562,7 +3562,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
      */
     private setTabIndexIfNotOnNativeEl;
     /** @nodoc */
-    ngOnChanges(): void;
+    ngOnChanges(changes?: SimpleChanges): void;
     private routerLinkInput;
     /**
      * Commands to pass to {@link Router#createUrlTree} or a `UrlTree`.
