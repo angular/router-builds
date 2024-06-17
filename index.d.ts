@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.1.0-next.2+sha-ee8ecfa
+ * @license Angular v18.1.0-next.2+sha-89ec195
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -299,10 +299,6 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * ```
  *
  * @publicApi
- * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
- *     injectable class can be used as a functional guard using the [`inject`](api/core/inject)
- * function: `canActivate: [() => inject(myGuard).canActivate()]`.
- * @see {@link CanActivateFn}
  */
 export declare interface CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult>;
@@ -365,10 +361,6 @@ export declare interface CanActivate {
  * ```
  *
  * @publicApi
- * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
- *     injectable class can be used as a functional guard using the [`inject`](api/core/inject)
- * function: `canActivateChild: [() => inject(myGuard).canActivateChild()]`.
- * @see {@link CanActivateChildFn}
  */
 export declare interface CanActivateChild {
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult>;
@@ -500,10 +492,6 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * ```
  *
  * @publicApi
- * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
- *     injectable class can be used as a functional guard using the [`inject`](api/core/inject)
- * function: `canDeactivate: [() => inject(myGuard).canDeactivate()]`.
- * @see {@link CanDeactivateFn}
  */
 export declare interface CanDeactivate<T> {
     canDeactivate(component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): MaybeAsync<GuardResult>;
@@ -578,7 +566,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * ```
  *
  * @publicApi
- * @deprecated Use {@link CanMatchFn} instead
+ * @deprecated Use {@link CanMatch} instead
  */
 export declare interface CanLoad {
     canLoad(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>;
@@ -590,7 +578,7 @@ export declare interface CanLoad {
  * @publicApi
  * @see {@link CanLoad}
  * @see {@link Route}
- * @see {@link CanMatchFn}
+ * @see {@link CanMatch}
  * @deprecated Use `Route.canMatch` and `CanMatchFn` instead
  */
 export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<GuardResult>;
@@ -655,10 +643,6 @@ export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => MaybeA
  * could not be used for a URL match but the catch-all `**` `Route` did instead.
  *
  * @publicApi
- * @deprecated Class-based `Route` guards are deprecated in favor of functional guards. An
- *     injectable class can be used as a functional guard using the [`inject`](api/core/inject)
- * function: `canMatch: [() => inject(myGuard).canMatch()]`.
- * @see {@link CanMatchFn}
  */
 export declare interface CanMatch {
     canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>;
@@ -1398,9 +1382,7 @@ declare interface LoadedRouterConfig {
  * @publicApi
  * @see {@link Route}
  */
-export declare function mapToCanActivate(providers: Array<Type<{
-    canActivate: CanActivateFn;
-}>>): CanActivateFn[];
+export declare function mapToCanActivate(providers: Array<Type<CanActivate>>): CanActivateFn[];
 
 /**
  * Maps an array of injectable classes with canActivateChild functions to an array of equivalent
@@ -1411,9 +1393,7 @@ export declare function mapToCanActivate(providers: Array<Type<{
  * @publicApi
  * @see {@link Route}
  */
-export declare function mapToCanActivateChild(providers: Array<Type<{
-    canActivateChild: CanActivateChildFn;
-}>>): CanActivateChildFn[];
+export declare function mapToCanActivateChild(providers: Array<Type<CanActivateChild>>): CanActivateChildFn[];
 
 /**
  * Maps an array of injectable classes with canDeactivate functions to an array of equivalent
@@ -1424,9 +1404,7 @@ export declare function mapToCanActivateChild(providers: Array<Type<{
  * @publicApi
  * @see {@link Route}
  */
-export declare function mapToCanDeactivate<T = unknown>(providers: Array<Type<{
-    canDeactivate: CanDeactivateFn<T>;
-}>>): CanDeactivateFn<T>[];
+export declare function mapToCanDeactivate<T = unknown>(providers: Array<Type<CanDeactivate<T>>>): CanDeactivateFn<T>[];
 
 /**
  * Maps an array of injectable classes with canMatch functions to an array of equivalent
@@ -1437,9 +1415,7 @@ export declare function mapToCanDeactivate<T = unknown>(providers: Array<Type<{
  * @publicApi
  * @see {@link Route}
  */
-export declare function mapToCanMatch(providers: Array<Type<{
-    canMatch: CanMatchFn;
-}>>): CanMatchFn[];
+export declare function mapToCanMatch(providers: Array<Type<CanMatch>>): CanMatchFn[];
 
 /**
  * Maps an injectable class with a resolve function to an equivalent `ResolveFn`
@@ -1450,9 +1426,7 @@ export declare function mapToCanMatch(providers: Array<Type<{
  * @publicApi
  * @see {@link Route}
  */
-export declare function mapToResolve<T>(provider: Type<{
-    resolve: ResolveFn<T>;
-}>): ResolveFn<T>;
+export declare function mapToResolve<T>(provider: Type<Resolve<T>>): ResolveFn<T>;
 
 /**
  * Type used to represent a value which may be synchronous or async.
@@ -2295,10 +2269,6 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  * The order of execution is: BaseGuard, ChildGuard, BaseDataResolver, ChildDataResolver.
  *
  * @publicApi
- * @deprecated Class-based `Route` resolvers are deprecated in favor of functional resolvers. An
- * injectable class can be used as a functional guard using the [`inject`](api/core/inject)
- function: `resolve:
- * {'user': () => inject(UserResolver).resolve()}`.
  * @see {@link ResolveFn}
  */
 export declare interface Resolve<T> {
