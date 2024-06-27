@@ -72,10 +72,10 @@ export class RouterConfigLoader {
         this.childrenLoaders.set(route, loader);
         return loader;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.5+sha-a59496c", ngImport: i0, type: RouterConfigLoader, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.5+sha-a59496c", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.5+sha-aaa00b3", ngImport: i0, type: RouterConfigLoader, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.5+sha-aaa00b3", ngImport: i0, type: RouterConfigLoader, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.5+sha-a59496c", ngImport: i0, type: RouterConfigLoader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.5+sha-aaa00b3", ngImport: i0, type: RouterConfigLoader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
