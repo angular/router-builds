@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.0.5+sha-445dd96
+ * @license Angular v18.0.5+sha-b7d3ecc
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -706,10 +706,10 @@ export declare class ChildActivationStart {
  * @publicApi
  */
 export declare class ChildrenOutletContexts {
-    private parentInjector;
+    private rootInjector;
     private contexts;
     /** @nodoc */
-    constructor(parentInjector: EnvironmentInjector);
+    constructor(rootInjector: EnvironmentInjector);
     /** Called when a `RouterOutlet` directive is instantiated */
     onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
     /**
@@ -1172,8 +1172,9 @@ declare namespace i3 {
 
 declare namespace i4 {
     export {
-        ɵEmptyOutletComponent,
-        ɵEmptyOutletComponent as EmptyOutletComponent
+        standardizeConfig,
+        ɵEmptyOutletComponent as EmptyOutletComponent,
+        ɵEmptyOutletComponent
     }
 }
 
@@ -1917,12 +1918,14 @@ export declare type OnSameUrlNavigation = 'reload' | 'ignore';
  * @publicApi
  */
 export declare class OutletContext {
-    injector: EnvironmentInjector;
+    private readonly rootInjector;
     outlet: RouterOutletContract | null;
     route: ActivatedRoute | null;
     children: ChildrenOutletContexts;
     attachRef: ComponentRef<any> | null;
-    constructor(injector: EnvironmentInjector);
+    get injector(): EnvironmentInjector;
+    set injector(_: EnvironmentInjector);
+    constructor(rootInjector: EnvironmentInjector);
 }
 
 /**
@@ -4126,6 +4129,11 @@ export declare class Scroll {
     anchor: string | null);
     toString(): string;
 }
+
+/**
+ * Makes a copy of the config and adds any default required properties.
+ */
+declare function standardizeConfig(r: Route): Route;
 
 /**
  * Provides a strategy for setting the page title after a router navigation.
