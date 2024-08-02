@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.0-next.3+sha-2a915d1
+ * @license Angular v18.2.0-next.3+sha-6c76c91
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2119,13 +2119,14 @@ export declare function provideRoutes(routes: Routes): Provider[];
  * One of:
  * - `"merge"` : Merge new parameters with current parameters.
  * - `"preserve"` : Preserve current parameters.
- * - `""` : Replace current parameters with new parameters. This is the default behavior.
+ * - `"replace"` : Replace current parameters with new parameters. This is the default behavior.
+ * - `""` : For legacy reasons, the same as `'replace'`.
  *
  * @see {@link UrlCreationOptions#queryParamsHandling}
  * @see {@link RouterLink}
  * @publicApi
  */
-export declare type QueryParamsHandling = 'merge' | 'preserve' | '';
+export declare type QueryParamsHandling = 'merge' | 'preserve' | 'replace' | '';
 
 /**
  * Can be returned by a `Router` guard to instruct the `Router` to redirect rather than continue
@@ -3246,6 +3247,19 @@ export declare interface RouterConfigOptions {
      * showing an error message with the URL that failed.
      */
     urlUpdateStrategy?: 'deferred' | 'eager';
+    /**
+     * The default strategy to use for handling query params in `Router.createUrlTree` when one is not provided.
+     *
+     * The `createUrlTree` method is used internally by `Router.navigate` and `RouterLink`.
+     * Note that `QueryParamsHandling` does not apply to `Router.navigateByUrl`.
+     *
+     * When neither the default nor the queryParamsHandling option is specified in the call to `createUrlTree`,
+     * the current parameters will be replaced by new parameters.
+     *
+     * @see {@link Router#createUrlTree}
+     * @see {@link QueryParamsHandling}
+     */
+    defaultQueryParamsHandling?: QueryParamsHandling;
     /**
      * When `true`, the `Promise` will instead resolve with `false`, as it does with other failed
      * navigations (for example, when guards are rejected).
