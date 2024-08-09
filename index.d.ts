@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.3.0-next.0+sha-769b6e1
+ * @license Angular v19.0.0-next.0+sha-f271021
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -16,6 +16,7 @@ import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
+import { InputSignal } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { ModuleWithProviders } from '@angular/core';
 import { NgModuleFactory } from '@angular/core';
@@ -28,6 +29,7 @@ import { ProviderToken } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { RouterState as RouterState_2 } from '@angular/router';
+import { Signal } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Type } from '@angular/core';
@@ -1151,6 +1153,7 @@ export declare class GuardsCheckStart extends RouterEvent {
 
 declare namespace i1 {
     export {
+        ROUTER_OUTLET_DATA,
         RouterOutletContract,
         RouterOutlet,
         INPUT_BINDER,
@@ -3175,6 +3178,28 @@ export declare const ROUTER_CONFIGURATION: InjectionToken<ExtraOptions>;
  */
 export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
+/**
+ * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
+ * input.
+ *
+ * When unset, this value is `null` by default.
+ *
+ * @usageNotes
+ *
+ * To set the data from the template of the component with `router-outlet`:
+ * ```
+ * <router-outlet [routerOutletData]="{name: 'Angular'}" />
+ * ```
+ *
+ * To read the data in the routed component:
+ * ```
+ * data = inject(ROUTER_OUTLET_DATA) as Signal<{name: string}>;
+ * ```
+ *
+ * @publicApi
+ */
+export declare const ROUTER_OUTLET_DATA: InjectionToken<Signal<unknown>>;
+
 declare class RouterConfigLoader {
     private componentLoaders;
     private childrenLoaders;
@@ -3880,6 +3905,12 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
      * subtree.
      */
     detachEvents: EventEmitter<unknown>;
+    /**
+     * Data that will be provided to the child injector through the `ROUTER_OUTLET_DATA` token.
+     *
+     * When unset, the value of the token is `undefined` by default.
+     */
+    readonly routerOutletData: InputSignal<unknown>;
     private parentContexts;
     private location;
     private changeDetector;
@@ -3913,7 +3944,7 @@ export declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletCont
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; "routerOutletData": { "alias": "routerOutletData"; "required": false; "isSignal": true; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
 }
 
 /**

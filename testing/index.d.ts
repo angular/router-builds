@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.3.0-next.0+sha-769b6e1
+ * @license Angular v19.0.0-next.0+sha-f271021
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -13,6 +13,7 @@ import * as i1 from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { Routes } from '@angular/router';
 import { Type } from '@angular/core';
+import { WritableSignal } from '@angular/core';
 
 /**
  * A testing harness for the `Router` to reduce the boilerplate needed to test routes and routed
@@ -36,7 +37,9 @@ export declare class RouterTestingHarness {
     /**
      * Fixture of the root component of the RouterTestingHarness
      */
-    readonly fixture: ComponentFixture<unknown>;
+    readonly fixture: ComponentFixture<{
+        routerOutletData: WritableSignal<unknown>;
+    }>;
     /** Instructs the root fixture to run change detection. */
     detectChanges(): void;
     /** The `DebugElement` of the `RouterOutlet` component. `null` if the outlet is not activated. */
