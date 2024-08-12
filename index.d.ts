@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.0-next.0+sha-37bf7de
+ * @license Angular v19.0.0-next.0+sha-b279081
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1066,13 +1066,9 @@ export declare interface ExtraOptions extends InMemoryScrollingOptions, RouterCo
      * If the handler returns a value, the navigation Promise is resolved with this value.
      * If the handler throws an exception, the navigation Promise is rejected with the exception.
      *
-     * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
-     *   If the ErrorHandler is used to prevent unhandled promise rejections when navigation
-     *   errors occur, use the `resolveNavigationPromiseOnError` option instead.
-     *
      * @see RouterConfigOptions
      */
-    errorHandler?: (error: any) => any;
+    errorHandler?: (error: any) => RedirectCommand | any;
     /**
      * Configures a preloading strategy.
      * One of `PreloadAllModules` or `NoPreloading` (the default).
@@ -2281,7 +2277,7 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  * @see {@link ResolveFn}
  */
 export declare interface Resolve<T> {
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<T>;
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<T | RedirectCommand>;
 }
 
 /**
@@ -2940,14 +2936,6 @@ export declare class Router {
      * The current state of routing in this NgModule.
      */
     get routerState(): RouterState_2;
-    /**
-     * A handler for navigation errors in this NgModule.
-     *
-     * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
-     *   `provideRouter` has the `withNavigationErrorHandler` feature to make this easier.
-     * @see {@link withNavigationErrorHandler}
-     */
-    errorHandler: (error: any) => any;
     /**
      * True if at least one navigation event has occurred,
      * false otherwise.
