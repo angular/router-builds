@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "19.0.0-next.1+sha-226a67d",
+  "version": "19.0.0-next.1+sha-774d983",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "19.0.0-next.1+sha-226a67d",
-    "@angular/common": "19.0.0-next.1+sha-226a67d",
-    "@angular/platform-browser": "19.0.0-next.1+sha-226a67d",
+    "@angular/core": "19.0.0-next.1+sha-774d983",
+    "@angular/common": "19.0.0-next.1+sha-774d983",
+    "@angular/platform-browser": "19.0.0-next.1+sha-774d983",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
@@ -59,20 +59,14 @@
     },
     ".": {
       "types": "./index.d.ts",
-      "esm2022": "./esm2022/router.mjs",
-      "esm": "./esm2022/router.mjs",
       "default": "./fesm2022/router.mjs"
     },
     "./testing": {
       "types": "./testing/index.d.ts",
-      "esm2022": "./esm2022/testing/testing.mjs",
-      "esm": "./esm2022/testing/testing.mjs",
       "default": "./fesm2022/testing.mjs"
     },
     "./upgrade": {
       "types": "./upgrade/index.d.ts",
-      "esm2022": "./esm2022/upgrade/upgrade.mjs",
-      "esm": "./esm2022/upgrade/upgrade.mjs",
       "default": "./fesm2022/upgrade.mjs"
     }
   }
