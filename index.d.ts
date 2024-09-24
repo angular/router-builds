@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.0-next.6+sha-5a04837
+ * @license Angular v19.0.0-next.6+sha-48216a2
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4937,7 +4937,7 @@ export declare function withRouterConfig(options: RouterConfigOptions): RouterCo
  * @returns A set of providers for use with `provideRouter`.
  * @see https://developer.chrome.com/docs/web-platform/view-transitions/
  * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
- * @experimental
+ * @developerPreview
  */
 export declare function withViewTransitions(options?: ViewTransitionsFeatureOptions): ViewTransitionsFeature;
 
