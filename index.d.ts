@@ -1,5 +1,5 @@
 /**
- * @license Angular v18.2.6+sha-b84e2d3
+ * @license Angular v18.2.6+sha-0e62b30
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4660,6 +4660,24 @@ export declare interface ViewTransitionsFeatureOptions {
  * );
  * ```
  *
+ * The router bindings information from any of the following sources:
+ *
+ *  - query parameters
+ *  - path and matrix parameters
+ *  - static route data
+ *  - data from resolvers
+ *
+ * Duplicate keys are resolved in the same order from above, from least to greatest,
+ * meaning that resolvers have the highest precedence and override any of the other information
+ * from the route.
+ *
+ * Importantly, when an input does not have an item in the route data with a matching key, this
+ * input is set to `undefined`. This prevents previous information from being
+ * retained if the data got removed from the route (i.e. if a query parameter is removed).
+ * Default values can be provided with a resolver on the route to ensure the value is always present
+ * or an input and use an input transform in the component.
+ *
+ * @see {@link guide/components/inputs#input-transforms input transforms}
  * @returns A set of providers for use with `provideRouter`.
  */
 export declare function withComponentInputBinding(): ComponentInputBindingFeature;
