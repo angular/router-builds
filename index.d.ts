@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.0-next.11+sha-f418b49
+ * @license Angular v19.0.0-next.11+sha-aadcfda
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -661,6 +661,9 @@ export declare interface CanMatch {
  * current user has permission to access the team page.
  *
  * {@example router/route_functional_guards.ts region="CanMatchFn"}
+ *
+ * @param route The route configuration.
+ * @param segments The URL segments that have not been consumed by previous parent route evaluations.
  *
  * @publicApi
  * @see {@link Route}
