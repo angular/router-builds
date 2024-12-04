@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.0-next.1+sha-dc7d555
+ * @license Angular v19.1.0-next.1+sha-0513fbc
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -109,7 +109,7 @@ export declare class ActivatedRoute {
  * The following example initializes a component with route information extracted
  * from the snapshot of the root node at the time of creation.
  *
- * ```
+ * ```ts
  * @Component({templateUrl:'./my-component.html'})
  * class MyComponent {
  *   constructor(route: ActivatedRoute) {
@@ -260,7 +260,7 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * The following example implements a `CanActivate` function that checks whether the
  * current user has permission to activate the requested route.
  *
- * ```
+ * ```ts
  * class UserToken {}
  * class Permissions {
  *   canActivate(): boolean {
@@ -284,7 +284,7 @@ export declare abstract class BaseRouteReuseStrategy implements RouteReuseStrate
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
+ * ```ts
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -317,7 +317,7 @@ export declare interface CanActivate {
  * The following example implements a `CanActivateChild` function that checks whether the
  * current user has permission to activate the requested child route.
  *
- * ```
+ * ```ts
  * class UserToken {}
  * class Permissions {
  *   canActivate(user: UserToken, id: string): boolean {
@@ -341,7 +341,7 @@ export declare interface CanActivate {
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
+ * ```ts
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -450,7 +450,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * The following example implements a `CanDeactivate` function that checks whether the
  * current user has permission to deactivate the requested route.
  *
- * ```
+ * ```ts
  * class UserToken {}
  * class Permissions {
  *   canDeactivate(user: UserToken, id: string): boolean {
@@ -528,7 +528,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * current user has permission to load requested child routes.
  *
  *
- * ```
+ * ```ts
  * class UserToken {}
  * class Permissions {
  *   canLoadChildren(user: UserToken, id: string, segments: UrlSegment[]): boolean {
@@ -597,7 +597,7 @@ export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => MaybeA
  * current user has permission to access the users page.
  *
  *
- * ```
+ * ```ts
  * class UserToken {}
  * class Permissions {
  *   canAccess(user: UserToken, route: Route, segments: UrlSegment[]): boolean {
@@ -771,7 +771,7 @@ export declare function convertToParamMap(params: Params): ParamMap;
  *
  * @usageNotes
  *
- * ```
+ * ```ts
  * // create /team/33/user/11
  * createUrlTreeFromSnapshot(snapshot, ['/team', 33, 'user', 11]);
  *
@@ -1252,7 +1252,7 @@ export declare interface InMemoryScrollingOptions {
      * You can implement custom scroll restoration behavior by adapting the enabled behavior as
      * in the following example.
      *
-     * ```typescript
+     * ```ts
      * class AppComponent {
      *   movieData: any;
      *
@@ -1346,14 +1346,14 @@ export declare type LoadChildren = LoadChildrenCallback;
  *
  * For example:
  *
- * ```
+ * ```ts
  * [{
  *   path: 'lazy',
  *   loadChildren: () => import('./lazy-route/lazy.module').then(mod => mod.LazyModule),
  * }];
  * ```
  * or
- * ```
+ * ```ts
  * [{
  *   path: 'lazy',
  *   loadChildren: () => import('./lazy-route/lazy.routes').then(mod => mod.ROUTES),
@@ -1361,7 +1361,7 @@ export declare type LoadChildren = LoadChildrenCallback;
  * ```
  *
  * If the lazy-loaded routes are exported via a `default` export, the `.then` can be omitted:
- * ```
+ * ```ts
  * [{
  *   path: 'lazy',
  *   loadChildren: () => import('./lazy-route/lazy.routes'),
@@ -2018,7 +2018,7 @@ export declare type Params = {
  *
  * Provides a preloading strategy that preloads all modules as quickly as possible.
  *
- * ```
+ * ```ts
  * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
@@ -2066,7 +2066,7 @@ export declare const PRIMARY_OUTLET = "primary";
  * @usageNotes
  *
  * Basic example of how you can add a Router to your application:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent, {
  *   providers: [provideRouter(appRoutes)]
@@ -2075,7 +2075,7 @@ export declare const PRIMARY_OUTLET = "primary";
  *
  * You can also enable optional features in the Router by adding functions from the `RouterFeatures`
  * type:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -2103,7 +2103,7 @@ export declare function provideRouter(routes: Routes, ...features: RouterFeature
  *
  * @usageNotes
  *
- * ```
+ * ```ts
  * @NgModule({
  *   providers: [provideRoutes(ROUTES)]
  * })
@@ -2196,7 +2196,7 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  * The following example implements a `resolve()` method that retrieves the data
  * needed to activate the requested route.
  *
- * ```
+ * ```ts
  * @Injectable({ providedIn: 'root' })
  * export class HeroResolver implements Resolve<Hero> {
  *   constructor(private service: HeroService) {}
@@ -2234,7 +2234,7 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  *
  * And you can access to your resolved data from `HeroComponent`:
  *
- * ```
+ * ```ts
  * @Component({
  *  selector: "app-hero",
  *  templateUrl: "hero.component.html",
@@ -2258,7 +2258,7 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  * all guards have run and succeeded.
  * For example, consider the following route configuration:
  *
- * ```
+ * ```ts
  * {
  *  path: 'base'
  *  canActivate: [BaseGuard],
@@ -2405,7 +2405,7 @@ export declare class ResolveEnd extends RouterEvent {
  * all guards have run and succeeded.
  * For example, consider the following route configuration:
  *
- * ```
+ * ```ts
  * {
  *  path: 'base'
  *  canActivate: [baseGuard],
@@ -2474,7 +2474,7 @@ export declare class ResolveStart extends RouterEvent {
  * `/team/11/user/bob`, the router creates the 'Team' component
  * with the 'User' child component in it.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'team/:id',
  *  component: Team,
@@ -2491,7 +2491,7 @@ export declare class ResolveStart extends RouterEvent {
  * When navigating to `/team/11(aux:chat/jim)`, the router creates the 'Team' component next to
  * the 'Chat' component. The 'Chat' component is placed into the 'aux' outlet.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'team/:id',
  *   component: Team
@@ -2507,7 +2507,7 @@ export declare class ResolveStart extends RouterEvent {
  * The following route uses wild-card notation to specify a component
  * that is always instantiated regardless of where you navigate to.
  *
- * ```
+ * ```ts
  * [{
  *   path: '**',
  *   component: WildcardComponent
@@ -2523,7 +2523,7 @@ export declare class ResolveStart extends RouterEvent {
  * '/team/11/legacy/user/jim' to '/team/11/user/jim', and then instantiates
  * the Team component with the User child component in it.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'team/:id',
  *   component: Team,
@@ -2549,7 +2549,7 @@ export declare class ResolveStart extends RouterEvent {
  * In the following configuration, when navigating to
  * `/team/11`, the router instantiates the 'AllUsers' component.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'team/:id',
  *   component: Team,
@@ -2569,7 +2569,7 @@ export declare class ResolveStart extends RouterEvent {
  *
  * Note that an empty path route inherits its parent's parameters and data.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'team/:id',
  *   component: Team,
@@ -2590,7 +2590,7 @@ export declare class ResolveStart extends RouterEvent {
  * checks URL elements from the left to see if the URL matches a specified path.
  * For example, '/team/11/user' matches 'team/:id'.
  *
- * ```
+ * ```ts
  * [{
  *   path: '',
  *   pathMatch: 'prefix', //default
@@ -2610,7 +2610,7 @@ export declare class ResolveStart extends RouterEvent {
  * In the following example, supplying the 'full' `pathMatch` strategy ensures
  * that the router applies the redirect if and only if navigating to '/'.
  *
- * ```
+ * ```ts
  * [{
  *   path: '',
  *   pathMatch: 'full',
@@ -2633,7 +2633,7 @@ export declare class ResolveStart extends RouterEvent {
  * the main child and aux child components next to each other.
  * For this to work, the application component must have the primary and aux outlets defined.
  *
- * ```
+ * ```ts
  * [{
  *    path: 'parent/:id',
  *    children: [
@@ -2651,7 +2651,7 @@ export declare class ResolveStart extends RouterEvent {
  * With this configuration, navigating to '/parent/10' creates
  * the main child and aux components.
  *
- * ```
+ * ```ts
  * [{
  *    path: 'parent/:id',
  *    children: [
@@ -2671,7 +2671,7 @@ export declare class ResolveStart extends RouterEvent {
  * Given the following example route, the router will lazy load
  * the associated module on demand using the browser native import system.
  *
- * ```
+ * ```ts
  * [{
  *   path: 'lazy',
  *   loadChildren: () => import('./lazy-route/lazy.module').then(mod => mod.LazyModule),
@@ -3177,12 +3177,12 @@ export declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<a
  * @usageNotes
  *
  * To set the data from the template of the component with `router-outlet`:
- * ```
+ * ```html
  * <router-outlet [routerOutletData]="{name: 'Angular'}" />
  * ```
  *
  * To read the data in the routed component:
- * ```
+ * ```ts
  * data = inject(ROUTER_OUTLET_DATA) as Signal<{name: string}>;
  * ```
  *
@@ -3451,7 +3451,7 @@ export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.
  *
  * The following link adds a query parameter and a fragment to the generated URL:
  *
- * ```
+ * ```html
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
  *   link to user component
  * </a>
@@ -3468,7 +3468,7 @@ export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.
  *
  * For example:
  *
- * ```
+ * ```html
  * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
  *   link to user component
  * </a>
@@ -3485,7 +3485,7 @@ export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.
  * [`History.state` property](https://developer.mozilla.org/en-US/docs/Web/API/History#Properties).
  * For example:
  *
- * ```
+ * ```html
  * <a [routerLink]="['/user/bob']" [state]="{tracingId: 123}">
  *   link to user component
  * </a>
@@ -3495,7 +3495,7 @@ export declare type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.
  * navigation-state value. For example, to capture the `tracingId` during the `NavigationStart`
  * event:
  *
- * ```
+ * ```ts
  * // Get NavigationStart events
  * router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(e => {
  *   const navigation = router.getCurrentNavigation();
@@ -3642,7 +3642,7 @@ export { RouterLink as RouterLinkWithHref }
  * For example, the following code highlights the word "Bob" when the router
  * activates the associated route:
  *
- * ```
+ * ```html
  * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
  * ```
  *
@@ -3652,14 +3652,14 @@ export { RouterLink as RouterLinkWithHref }
  * You can set more than one class using a space-separated string or an array.
  * For example:
  *
- * ```
+ * ```html
  * <a routerLink="/user/bob" routerLinkActive="class1 class2">Bob</a>
  * <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
  * ```
  *
  * To add the classes only when the URL matches the link exactly, add the option `exact: true`:
  *
- * ```
+ * ```html
  * <a routerLink="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
  * true}">Bob</a>
  * ```
@@ -3668,7 +3668,7 @@ export { RouterLink as RouterLinkWithHref }
  * instance to a template variable.
  * For example, the following checks the status without assigning any CSS classes:
  *
- * ```
+ * ```html
  * <a routerLink="/user/bob" routerLinkActive #rla="routerLinkActive">
  *   Bob {{ rla.isActive ? '(already open)' : ''}}
  * </a>
@@ -3678,7 +3678,7 @@ export { RouterLink as RouterLinkWithHref }
  * For example, the following sets the active-link class on the `<div>`  parent tag
  * when the URL is either '/user/jim' or '/user/bob'.
  *
- * ```
+ * ```html
  * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
  *   <a routerLink="/user/jim">Jim</a>
  *   <a routerLink="/user/bob">Bob</a>
@@ -3691,7 +3691,7 @@ export { RouterLink as RouterLinkWithHref }
  * For example, the following code adds the 'active' class to the Home Page link when it is
  * indeed active and in such case also sets its aria-current attribute to 'page':
  *
- * ```
+ * ```html
  * <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home Page</a>
  * ```
  *
@@ -3834,7 +3834,7 @@ export declare class RouterModule {
  * Each outlet can have a unique name, determined by the optional `name` attribute.
  * The name cannot be set or changed dynamically. If not set, default value is "primary".
  *
- * ```
+ * ```html
  * <router-outlet></router-outlet>
  * <router-outlet name='left'></router-outlet>
  * <router-outlet name='right'></router-outlet>
@@ -3861,7 +3861,7 @@ export declare class RouterModule {
  * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
  * detach the subtree.
  *
- * ```
+ * ```html
  * <router-outlet
  *   (activate)='onActivate($event)'
  *   (deactivate)='onDeactivate($event)'
@@ -4060,7 +4060,7 @@ export declare class RouterPreloader implements OnDestroy {
  * The following fragment shows how a component gets the root node
  * of the current state to establish its own route tree:
  *
- * ```
+ * ```ts
  * @Component({templateUrl:'template.html'})
  * class MyComponent {
  *   constructor(router: Router) {
@@ -4095,7 +4095,7 @@ export declare class RouterState extends Tree<ActivatedRoute> {
  * The following example shows how a component is initialized with information
  * from the snapshot of the root node's state at the time of creation.
  *
- * ```
+ * ```ts
  * @Component({templateUrl:'template.html'})
  * class MyComponent {
  *   constructor(router: Router) {
@@ -4219,7 +4219,7 @@ declare function standardizeConfig(r: Route): Route;
  * The built-in implementation traverses the router state snapshot and finds the deepest primary
  * outlet with `title` property. Given the `Routes` below, navigating to
  * `/base/child(popup:aux)` would result in the document title being set to "child".
- * ```
+ * ```ts
  * [
  *   {path: 'base', title: 'base', children: [
  *     {path: 'child', title: 'child'},
@@ -4411,7 +4411,7 @@ export declare abstract class UrlHandlingStrategy {
  *
  * The following example implementation matches HTML files.
  *
- * ```
+ * ```ts
  * export function htmlFiles(url: UrlSegment[]) {
  *   return url.length === 1 && url[0].path.endsWith('.html') ? ({consumed: url}) : null;
  * }
@@ -4450,7 +4450,7 @@ export declare type UrlMatchResult = {
  * @usageNotes
  * ### Example
  *
- * ```
+ * ```ts
  * @Component({templateUrl:'template.html'})
  * class MyComponent {
  *   constructor(router: Router) {
@@ -4550,7 +4550,7 @@ export declare abstract class UrlSerializer {
  * @usageNotes
  * ### Example
  *
- * ```
+ * ```ts
  * @Component({templateUrl:'template.html'})
  * class MyComponent {
  *   constructor(router: Router) {
@@ -4670,7 +4670,7 @@ export declare interface ViewTransitionsFeatureOptions {
  * @usageNotes
  *
  * Basic example of how you can enable the feature:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4710,7 +4710,7 @@ export declare function withComponentInputBinding(): ComponentInputBindingFeatur
  * @usageNotes
  *
  * Basic example of how you can enable debug tracing:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4738,7 +4738,7 @@ export declare function withDebugTracing(): DebugTracingFeature;
  * @usageNotes
  *
  * Basic example of how you can disable initial navigation:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4767,7 +4767,7 @@ export declare function withDisabledInitialNavigation(): DisabledInitialNavigati
  * @usageNotes
  *
  * Basic example of how you can enable this navigation behavior:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4791,7 +4791,7 @@ export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingI
  * @usageNotes
  *
  * Basic example of how you can use the hash location option:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4817,7 +4817,7 @@ export declare function withHashLocation(): RouterHashLocationFeature;
  * @usageNotes
  *
  * Basic example of how you can enable scrolling feature:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4853,7 +4853,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  * @usageNotes
  *
  * Basic example of how you can use the error handler option:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4882,7 +4882,7 @@ export declare function withNavigationErrorHandler(handler: (error: NavigationEr
  * @usageNotes
  *
  * Basic example of how you can configure preloading:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4909,7 +4909,7 @@ export declare function withPreloading(preloadingStrategy: Type<PreloadingStrate
  * @usageNotes
  *
  * Basic example of how you can provide extra configuration options:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
@@ -4943,7 +4943,7 @@ export declare function withRouterConfig(options: RouterConfigOptions): RouterCo
  * @usageNotes
  *
  * Basic example of how you can enable the feature:
- * ```
+ * ```ts
  * const appRoutes: Routes = [];
  * bootstrapApplication(AppComponent,
  *   {
