@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.2+sha-6ae3ce7
+ * @license Angular v19.0.2+sha-5f3ba06
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -97,7 +97,7 @@ export declare class RouterTestingHarness {
  * @usageNotes
  * ### Example
  *
- * ```
+ * ```ts
  * beforeEach(() => {
  *   TestBed.configureTestingModule({
  *     imports: [
