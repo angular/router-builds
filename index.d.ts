@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.5+sha-d7a34dc
+ * @license Angular v19.0.5+sha-144bccb
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4985,7 +4985,7 @@ export declare function ɵafterNextNavigation(router: {
  */
 export declare class ɵEmptyOutletComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<ɵEmptyOutletComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", never, {}, {}, never, never, true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<ɵEmptyOutletComponent, "ng-component", ["emptyRouterOutlet"], {}, {}, never, never, true, never>;
 }
 
 /**
