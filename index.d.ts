@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.0.6+sha-e44bf24
+ * @license Angular v19.0.6+sha-5a2d0ed
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -131,7 +131,7 @@ export declare class ActivatedRouteSnapshot {
      *  You can compute all params (or data) in the router state or to get params outside
      *  of an activated component by traversing the `RouterState` tree as in the following
      *  example:
-     *  ```
+     *  ```ts
      *  collectRouteParams(router: Router) {
      *    let params = {};
      *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
@@ -462,8 +462,7 @@ export declare type CanActivateFn = (route: ActivatedRouteSnapshot, state: Route
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
- *
+ * ```ts
  * @Injectable()
  * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
  *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
@@ -549,8 +548,7 @@ export declare type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedR
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
- *
+ * ```ts
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -618,8 +616,7 @@ export declare type CanLoadFn = (route: Route, segments: UrlSegment[]) => MaybeA
  * Here, the defined guard function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
- *
+ * ```ts
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -1600,7 +1597,7 @@ export declare interface NavigationBehaviorOptions {
      * This feature is useful for redirects, such as redirecting to an error page, without changing
      * the value that will be displayed in the browser's address bar.
      *
-     * ```
+     * ```ts
      * const canActivate: CanActivateFn = (route: ActivatedRouteSnapshot) => {
      *   const userService = inject(UserService);
      *   const router = inject(Router);
@@ -2213,8 +2210,7 @@ export declare type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapsho
  * Here, the defined `resolve()` function is provided as part of the `Route` object
  * in the router configuration:
  *
- * ```
-
+ * ```ts
  * @NgModule({
  *   imports: [
  *     RouterModule.forRoot([
@@ -3008,7 +3004,7 @@ export declare class Router {
      *
      * @usageNotes
      *
-     * ```
+     * ```ts
      * router.resetConfig([
      *  { path: 'team/:id', component: TeamCmp, children: [
      *    { path: 'simple', component: SimpleCmp },
@@ -3085,7 +3081,7 @@ export declare class Router {
      *
      * The following calls request navigation to an absolute path.
      *
-     * ```
+     * ```ts
      * router.navigateByUrl("/team/33/user/11");
      *
      * // Navigate without updating the URL
@@ -3116,7 +3112,7 @@ export declare class Router {
      *
      * The following calls request navigation to a dynamic route path relative to the current URL.
      *
-     * ```
+     * ```ts
      * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
      *
      * // Navigate without updating the URL, overriding the default behavior
@@ -3738,7 +3734,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
      * true  -> Route is active
      * false -> Route is inactive
      *
-     * ```
+     * ```html
      * <a
      *  routerLink="/user/bob"
      *  routerLinkActive="active-link"
@@ -3791,7 +3787,7 @@ export declare class RouterModule {
      *
      * When registering the NgModule at the root, import as follows:
      *
-     * ```
+     * ```ts
      * @NgModule({
      *   imports: [RouterModule.forRoot(ROUTES)]
      * })
@@ -3809,7 +3805,7 @@ export declare class RouterModule {
      * without creating a new Router service.
      * When registering for submodules and lazy-loaded submodules, create the NgModule as follows:
      *
-     * ```
+     * ```ts
      * @NgModule({
      *   imports: [RouterModule.forChild(ROUTES)]
      * })
@@ -4302,7 +4298,7 @@ export declare interface UrlCreationOptions {
      * The following `go()` function navigates to the `list` route by
      * interpreting the destination URI as relative to the activated `child`  route
      *
-     * ```
+     * ```ts
      *  @Component({...})
      *  class ChildComponent {
      *    constructor(private router: Router, private route: ActivatedRoute) {}
