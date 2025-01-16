@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.0-next.0+sha-b76be83
+ * @license Angular v19.2.0-next.0+sha-f6e9776
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3780,7 +3780,7 @@ export declare class RouterLinkActive implements OnChanges, OnDestroy, AfterCont
  * @publicApi
  */
 export declare class RouterModule {
-    constructor(guard: any);
+    constructor();
     /**
      * Creates and configures a module with all the router providers and directives.
      * Optionally sets up an application listener to perform an initial navigation.
@@ -3817,7 +3817,7 @@ export declare class RouterModule {
      *
      */
     static forChild(routes: Routes): ModuleWithProviders<RouterModule>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, [{ optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterModule, never>;
     static ɵmod: i0.ɵɵNgModuleDeclaration<RouterModule, never, [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent], [typeof i1.RouterOutlet, typeof i2.RouterLink, typeof i3.RouterLinkActive, typeof i4.ɵEmptyOutletComponent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterModule>;
 }
