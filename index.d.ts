@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.1.1+sha-5497102
+ * @license Angular v19.1.1+sha-70c4b83
  * (c) 2010-2024 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -902,7 +902,7 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
 
 /**
  * The `InjectionToken` and `@Injectable` classes for guards and resolvers are deprecated in favor
- * of plain JavaScript functions instead.. Dependency injection can still be achieved using the
+ * of plain JavaScript functions instead. Dependency injection can still be achieved using the
  * [`inject`](api/core/inject) function from `@angular/core` and an injectable class can be used as
  * a functional guard using [`inject`](api/core/inject): `canActivate: [() =>
  * inject(myGuard).canActivate()]`.
@@ -1924,19 +1924,19 @@ export declare class NoPreloading implements PreloadingStrategy {
 /**
  * How to handle a navigation request to the current URL. One of:
  *
- * - `'ignore'` :  The router ignores the request it is the same as the current state.
+ * - `'ignore'` : The router ignores the request if it is the same as the current state.
  * - `'reload'` : The router processes the URL even if it is not different from the current state.
- * One example of when you might want this option is if a `canMatch` guard depends on
+ * One example of when you might want to use this option is if a `canMatch` guard depends on the
  * application state and initially rejects navigation to a route. After fixing the state, you want
- * to re-navigate to the same URL so the route with the `canMatch` guard can activate.
+ * to re-navigate to the same URL so that the route with the `canMatch` guard can activate.
  *
- * Note that this only configures whether the Route reprocesses the URL and triggers related
- * action and events like redirects, guards, and resolvers. By default, the router re-uses a
+ * Note that this only configures whether or not the Route reprocesses the URL and triggers related
+ * actions and events like redirects, guards, and resolvers. By default, the router re-uses a
  * component instance when it re-navigates to the same component type without visiting a different
  * component first. This behavior is configured by the `RouteReuseStrategy`. In order to reload
  * routed components on same url navigation, you need to set `onSameUrlNavigation` to `'reload'`
  * _and_ provide a `RouteReuseStrategy` which returns `false` for `shouldReuseRoute`. Additionally,
- * resolvers and most guards for routes do not run unless the path or path params changed
+ * resolvers and most guards for routes do not run unless the path or path params have changed
  * (configured by `runGuardsAndResolvers`).
  *
  * @publicApi
