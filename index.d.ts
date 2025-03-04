@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.0+sha-26b3a8f
+ * @license Angular v19.2.0+sha-31bbbe9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -914,7 +914,7 @@ export declare class DefaultUrlSerializer implements UrlSerializer {
  * @see {@link CanActivateChildFn}
  * @see {@link CanDeactivateFn}
  * @see {@link ResolveFn}
- * @see {@link core/inject}
+ * @see {@link /api/core/inject inject}
  * @publicApi
  */
 export declare type DeprecatedGuard = ProviderToken<any> | any;
@@ -1018,7 +1018,7 @@ export declare enum EventType {
  * A set of configuration options for a router module, provided in the
  * `forRoot()` method.
  *
- * @see {@link forRoot()}
+ * @see {@link /api/router/routerModule#forRoot forRoot}
  *
  *
  * @publicApi
@@ -1194,7 +1194,7 @@ declare namespace i4 {
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
  *
- * @see {@link forRoot()}
+ * @see {@link /api/router/routerModule#forRoot forRoot}
  *
  * @publicApi
  */
@@ -4694,7 +4694,7 @@ export declare interface ViewTransitionsFeatureOptions {
  * Default values can be provided with a resolver on the route to ensure the value is always present
  * or an input and use an input transform in the component.
  *
- * @see {@link guide/components/inputs#input-transforms input transforms}
+ * @see {@link /guide/components/inputs#input-transforms Input Transforms}
  * @returns A set of providers for use with `provideRouter`.
  */
 export declare function withComponentInputBinding(): ComponentInputBindingFeature;
@@ -4799,7 +4799,7 @@ export declare function withEnabledBlockingInitialNavigation(): EnabledBlockingI
  * ```
  *
  * @see {@link provideRouter}
- * @see {@link HashLocationStrategy}
+ * @see {@link /api/common/HashLocationStrategy HashLocationStrategy}
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -4862,7 +4862,7 @@ export declare function withInMemoryScrolling(options?: InMemoryScrollingOptions
  * ```
  *
  * @see {@link NavigationError}
- * @see {@link core/inject}
+ * @see {@link /api/core/inject inject}
  * @see {@link runInInjectionContext}
  *
  * @returns A set of providers for use with `provideRouter`.
