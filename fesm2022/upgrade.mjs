@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.0+sha-bb14fe8
+ * @license Angular v20.0.0-next.0+sha-286e4da
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -53,8 +53,8 @@ function locationSyncBootstrapListener(ngUpgrade) {
  *
  * @param ngUpgrade The upgrade NgModule.
  * @param urlType The location strategy.
- * @see {@link HashLocationStrategy}
- * @see {@link PathLocationStrategy}
+ * @see {@link /api/common/HashLocationStrategy HashLocationStrategy}
+ * @see {@link /api/common/PathLocationStrategy PathLocationStrategy}
  *
  * @publicApi
  */
