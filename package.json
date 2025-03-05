@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "20.0.0-next.1+sha-ac94604",
+  "version": "20.0.0-next.1+sha-a8ec7be",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "20.0.0-next.1+sha-ac94604",
-    "@angular/common": "20.0.0-next.1+sha-ac94604",
-    "@angular/platform-browser": "20.0.0-next.1+sha-ac94604",
+    "@angular/core": "20.0.0-next.1+sha-a8ec7be",
+    "@angular/common": "20.0.0-next.1+sha-a8ec7be",
+    "@angular/platform-browser": "20.0.0-next.1+sha-a8ec7be",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
