@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.1+sha-81fe053
+ * @license Angular v20.0.0-next.1+sha-1b91de3
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -125,19 +125,6 @@ function resolveUrl(url) {
         hash: anchor.hash,
     };
 }
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-// This file only reexports content of the `src` folder. Keep it that way.
-
-// This file is not used to build this module. It is only used during editing
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
 //# sourceMappingURL=upgrade.mjs.map
