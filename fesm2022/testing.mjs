@@ -1,14 +1,14 @@
 /**
- * @license Angular v19.2.1+sha-dad02c6
+ * @license Angular v19.2.1+sha-48dc0d6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { provideLocationMocks } from '@angular/common/testing';
 import * as i0 from '@angular/core';
 import { NgModule, Injectable, signal, Component, ViewChild } from '@angular/core';
-import { ROUTES, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, withPreloading, NoPreloading, RouterOutlet, Router, ɵafterNextNavigation } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
+import { ROUTES, ROUTER_CONFIGURATION, RouterModule, ɵROUTER_PROVIDERS, withPreloading, NoPreloading, RouterOutlet, Router, ɵafterNextNavigation } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
 
 /**
  * @description
@@ -50,16 +50,16 @@ class RouterTestingModule {
             ],
         };
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RouterTestingModule, providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RouterTestingModule, providers: [
             ɵROUTER_PROVIDERS,
             provideLocationMocks(),
             withPreloading(NoPreloading).ɵproviders,
             { provide: ROUTES, multi: true, useValue: [] },
         ], imports: [RouterModule] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -90,20 +90,20 @@ class RootFixtureService {
         this.fixture.detectChanges();
         return this.fixture;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RootFixtureService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RootFixtureService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RootFixtureService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RootFixtureService, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 class RootCmp {
     outlet;
     routerOutletData = signal(undefined);
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.1+sha-dad02c6", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name", "routerOutletData"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.1+sha-48dc0d6", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name", "routerOutletData"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-dad02c6", ngImport: i0, type: RootCmp, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.1+sha-48dc0d6", ngImport: i0, type: RootCmp, decorators: [{
             type: Component,
             args: [{
                     template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>',
@@ -191,25 +191,6 @@ class RouterTestingHarness {
         }
     }
 }
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of the router/testing package.
- */
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-// This file only reexports content of the `src` folder. Keep it that way.
-
-// This file is not used to build this module. It is only used during editing
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { RouterTestingHarness, RouterTestingModule };
 //# sourceMappingURL=testing.mjs.map
