@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.1+sha-cae1fe5
+ * @license Angular v20.0.0-next.1+sha-2668bd9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2920,6 +2920,7 @@ export declare class Router {
     private readonly urlSerializer;
     private readonly location;
     private readonly urlHandlingStrategy;
+    private readonly injector;
     /**
      * The private `Subject` type for the public events exposed in the getter. This is used internally
      * to push events to. The separate field allows us to expose separate types in the public API
@@ -3570,6 +3571,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
     /** Whether a host element is an `<a>` tag. */
     private isAnchorElement;
     private subscription?;
+    private readonly applicationErrorHandler;
     constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef, locationStrategy?: LocationStrategy | undefined);
     /**
      * Passed to {@link Router#createUrlTree} as part of the
