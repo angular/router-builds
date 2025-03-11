@@ -1,12 +1,10 @@
 /**
- * @license Angular v20.0.0-next.1+sha-8be6e38
+ * @license Angular v20.0.0-next.1+sha-4fa5d18
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-
-import { ComponentRef } from '@angular/core';
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, ComponentRef } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
@@ -32,13 +30,12 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * @publicApi
  */
-export declare const RouterUpgradeInitializer: {
+declare const RouterUpgradeInitializer: {
     provide: InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useFactory: (ngUpgrade: UpgradeModule) => () => void;
     deps: (typeof UpgradeModule)[];
 };
-
 /**
  * Sets up a location change listener to trigger `history.pushState`.
  * Works around the problem that `onPopState` does not trigger `history.pushState`.
@@ -51,6 +48,6 @@ export declare const RouterUpgradeInitializer: {
  *
  * @publicApi
  */
-export declare function setUpLocationSync(ngUpgrade: UpgradeModule, urlType?: 'path' | 'hash'): void;
+declare function setUpLocationSync(ngUpgrade: UpgradeModule, urlType?: 'path' | 'hash'): void;
 
-export { }
+export { RouterUpgradeInitializer, setUpLocationSync };
