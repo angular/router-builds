@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.1+sha-c73520b
+ * @license Angular v20.0.0-next.1+sha-90165b1
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -1194,7 +1194,7 @@ declare namespace i4 {
  * more control over when the router starts its initial navigation due to some complex
  * initialization logic.
  *
- * @see {@link /api/router/routerModule#forRoot forRoot}
+ * @see {@link /api/router/RouterModule#forRoot forRoot}
  *
  * @publicApi
  */
