@@ -1,5 +1,5 @@
 /**
- * @license Angular v19.2.4+sha-f4c4b10
+ * @license Angular v19.2.4+sha-958e98e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3731,6 +3731,11 @@ interface ViewTransitionInfo {
          * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/skipTransition
          */
         skipTransition(): void;
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition#browser_compatibility
+         * @see https://developer.chrome.com/docs/web-platform/view-transitions/same-document#default_style_and_transition_reference
+         */
+        readonly types: Set<string>;
     };
     /**
      * The `ActivatedRouteSnapshot` that the navigation is transitioning from.
