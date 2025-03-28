@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.4+sha-0fedf2c
+ * @license Angular v20.0.0-next.4+sha-1226eaa
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -330,7 +330,7 @@ declare class DefaultUrlSerializer implements UrlSerializer {
  */
 type OnSameUrlNavigation = 'reload' | 'ignore';
 /**
- * The `InjectionToken` and `@Injectable` classes for guards and resolvers are deprecated in favor
+ * The `InjectionToken` and `@Injectable` classes for guards are deprecated in favor
  * of plain JavaScript functions instead. Dependency injection can still be achieved using the
  * [`inject`](api/core/inject) function from `@angular/core` and an injectable class can be used as
  * a functional guard using [`inject`](api/core/inject): `canActivate: [() =>
@@ -342,11 +342,22 @@ type OnSameUrlNavigation = 'reload' | 'ignore';
  * @see {@link CanActivateFn}
  * @see {@link CanActivateChildFn}
  * @see {@link CanDeactivateFn}
+ * @see {@link /api/core/inject inject}
+ * @publicApi
+ */
+type DeprecatedGuard = ProviderToken<any> | string;
+/**
+ * The `InjectionToken` and `@Injectable` classes for resolvers are deprecated in favor
+ * of plain JavaScript functions instead. Dependency injection can still be achieved using the
+ * [`inject`](api/core/inject) function from `@angular/core` and an injectable class can be used as
+ * a functional guard using [`inject`](api/core/inject): `myResolvedData: () => inject(MyResolver).resolve()`.
+ *
+ * @deprecated
  * @see {@link ResolveFn}
  * @see {@link /api/core/inject inject}
  * @publicApi
  */
-type DeprecatedGuard = ProviderToken<any> | any;
+type DeprecatedResolve = DeprecatedGuard | any;
 /**
  * The supported types that can be returned from a `Router` guard.
  *
@@ -470,7 +481,7 @@ type Data = {
  * @publicApi
  */
 type ResolveData = {
-    [key: string | symbol]: ResolveFn<unknown> | DeprecatedGuard;
+    [key: string | symbol]: ResolveFn<unknown> | DeprecatedResolve;
 };
 /**
  * An ES Module object with a default export of the given type.
@@ -3733,6 +3744,11 @@ interface ViewTransitionInfo {
          * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/skipTransition
          */
         skipTransition(): void;
+        /**
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition#browser_compatibility
+         * @see https://developer.chrome.com/docs/web-platform/view-transitions/same-document#default_style_and_transition_reference
+         */
+        readonly types: Set<string>;
     };
     /**
      * The `ActivatedRouteSnapshot` that the navigation is transitioning from.
@@ -4807,4 +4823,4 @@ declare function afterNextNavigation(router: {
 }, action: () => void): void;
 
 export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, NoPreloading, OutletContext, PRIMARY_OUTLET, PreloadAllModules, PreloadingStrategy, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterPreloader, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VERSION, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
-export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, ComponentInputBindingFeature, Data, DebugTracingFeature, DefaultExport, DeprecatedGuard, DetachedRouteHandle, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, Event, ExtraOptions, GuardResult, InMemoryScrollingFeature, InMemoryScrollingOptions, InitialNavigation, InitialNavigationFeature, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationErrorHandlerFeature, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PreloadingFeature, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, Route, RouterConfigOptions, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions, RestoredState as ɵRestoredState };
+export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, ComponentInputBindingFeature, Data, DebugTracingFeature, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, Event, ExtraOptions, GuardResult, InMemoryScrollingFeature, InMemoryScrollingOptions, InitialNavigation, InitialNavigationFeature, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationErrorHandlerFeature, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PreloadingFeature, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, Route, RouterConfigOptions, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions, RestoredState as ɵRestoredState };
