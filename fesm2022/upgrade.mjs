@@ -1,13 +1,16 @@
 /**
- * @license Angular v19.2.4+sha-bd1a755
+ * @license Angular v19.2.4+sha-d0c979e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location } from '@angular/common';
 import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { t as Router } from './router-LSBBtrLI.mjs';
+import 'rxjs';
+import 'rxjs/operators';
+import '@angular/platform-browser';
 
 /**
  * Creates an initializer that sets up `ngRoute` integration
