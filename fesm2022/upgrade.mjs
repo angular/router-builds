@@ -1,13 +1,16 @@
 /**
- * @license Angular v20.0.0-next.4+sha-5db7e4c
+ * @license Angular v20.0.0-next.4+sha-eb97303
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location } from '@angular/common';
 import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { t as Router } from './router-8RAZmfSO.mjs';
+import 'rxjs';
+import 'rxjs/operators';
+import '@angular/platform-browser';
 
 /**
  * Creates an initializer that sets up `ngRoute` integration

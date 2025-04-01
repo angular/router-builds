@@ -1,14 +1,17 @@
 /**
- * @license Angular v20.0.0-next.4+sha-5db7e4c
+ * @license Angular v20.0.0-next.4+sha-eb97303
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { ModuleWithProviders, WritableSignal, DebugElement, Type } from '@angular/core';
-import * as _angular_router from '@angular/router';
-import { Routes, ExtraOptions } from '@angular/router';
+import { e as Routes, ah as ExtraOptions, al as RouterModule } from '../router_module.d-DYN7Vo-M.js';
+export { ɵ as ɵɵEmptyOutletComponent, q as ɵɵRouterLink, r as ɵɵRouterLinkActive, s as ɵɵRouterOutlet } from '../router_module.d-DYN7Vo-M.js';
 import { ComponentFixture } from '@angular/core/testing';
+import 'rxjs';
+import '@angular/common';
+import '@angular/router';
 
 /**
  * @description
@@ -43,7 +46,7 @@ import { ComponentFixture } from '@angular/core/testing';
 declare class RouterTestingModule {
     static withRoutes(routes: Routes, config?: ExtraOptions): ModuleWithProviders<RouterTestingModule>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterTestingModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterTestingModule, never, never, [typeof _angular_router.RouterModule]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<RouterTestingModule, never, never, [typeof RouterModule]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<RouterTestingModule>;
 }
 
