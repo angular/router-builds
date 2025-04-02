@@ -1,13 +1,13 @@
 /**
- * @license Angular v20.0.0-next.4+sha-84ca0ef
+ * @license Angular v20.0.0-next.4+sha-0bb4bd6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { ModuleWithProviders, WritableSignal, DebugElement, Type } from '@angular/core';
-import { e as Routes, ah as ExtraOptions, al as RouterModule } from '../router_module.d-DYN7Vo-M.js';
-export { ɵ as ɵɵEmptyOutletComponent, q as ɵɵRouterLink, r as ɵɵRouterLinkActive, s as ɵɵRouterOutlet } from '../router_module.d-DYN7Vo-M.js';
+import { e as Routes, ah as ExtraOptions, al as RouterModule } from '../router_module.d-DqODy4g9.js';
+export { ɵ as ɵɵEmptyOutletComponent, q as ɵɵRouterLink, r as ɵɵRouterLinkActive, s as ɵɵRouterOutlet } from '../router_module.d-DqODy4g9.js';
 import { ComponentFixture } from '@angular/core/testing';
 import 'rxjs';
 import '@angular/common';

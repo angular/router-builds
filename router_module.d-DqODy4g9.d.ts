@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.4+sha-84ca0ef
+ * @license Angular v20.0.0-next.4+sha-0bb4bd6
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2087,7 +2087,13 @@ declare enum NavigationCancellationCode {
     /**
      * A navigation failed because a guard returned `false`.
      */
-    GuardRejected = 3
+    GuardRejected = 3,
+    /**
+     * A navigation was aborted by the `Navigation.abort` function.
+     *
+     * @see {@link Navigation}
+     */
+    Aborted = 4
 }
 /**
  * A code for the `NavigationSkipped` event of the `Router` to indicate the
@@ -2983,6 +2989,11 @@ interface Navigation {
      * for its own `previousNavigation`.
      */
     previousNavigation: Navigation | null;
+    /**
+     * Aborts the navigation if it has not yet been completed or reached the point where routes are being activated.
+     * This function is a no-op if the navigation is beyond the point where it can be aborted.
+     */
+    readonly abort: () => void;
 }
 
 /**
