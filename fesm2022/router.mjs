@@ -1,11 +1,11 @@
 /**
- * @license Angular v19.2.5+sha-1b36f6e
+ * @license Angular v19.2.5+sha-e9a719e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-export { x as ActivatedRoute, y as ActivatedRouteSnapshot, A as ActivationEnd, b as ActivationStart, B as BaseRouteReuseStrategy, C as ChildActivationEnd, d as ChildActivationStart, w as ChildrenOutletContexts, D as DefaultTitleStrategy, J as DefaultUrlSerializer, E as EventType, G as GuardsCheckEnd, e as GuardsCheckStart, N as NavigationCancel, f as NavigationCancellationCode, g as NavigationEnd, h as NavigationError, i as NavigationSkipped, j as NavigationSkippedCode, k as NavigationStart, O as OutletContext, P as PRIMARY_OUTLET, u as ROUTER_CONFIGURATION, a as ROUTER_OUTLET_DATA, v as ROUTES, r as RedirectCommand, l as ResolveEnd, m as ResolveStart, n as RouteConfigLoadEnd, o as RouteConfigLoadStart, s as RouteReuseStrategy, t as Router, p as RouterEvent, R as RouterOutlet, z as RouterState, F as RouterStateSnapshot, q as RoutesRecognized, S as Scroll, T as TitleStrategy, U as UrlHandlingStrategy, K as UrlSegment, L as UrlSegmentGroup, M as UrlSerializer, Q as UrlTree, H as convertToParamMap, c as createUrlTreeFromSnapshot, I as defaultUrlMatcher, ɵ as ɵEmptyOutletComponent, W as ɵafterNextNavigation, V as ɵloadChildren } from './router-LSBBtrLI.mjs';
-export { N as NoPreloading, P as PreloadAllModules, n as PreloadingStrategy, l as ROUTER_INITIALIZER, R as RouterLink, a as RouterLinkActive, R as RouterLinkWithHref, m as RouterModule, o as RouterPreloader, p as provideRouter, b as provideRoutes, c as withComponentInputBinding, d as withDebugTracing, e as withDisabledInitialNavigation, f as withEnabledBlockingInitialNavigation, g as withHashLocation, h as withInMemoryScrolling, i as withNavigationErrorHandler, j as withPreloading, k as withRouterConfig, w as withViewTransitions, q as ɵROUTER_PROVIDERS } from './router_module-C0FJ-J6L.mjs';
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, ɵEmptyOutletComponent, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren } from './router-B-Y85L0c.mjs';
+export { NoPreloading, PreloadAllModules, PreloadingStrategy, ROUTER_INITIALIZER, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterPreloader, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS } from './router_module-Pc3LC1gn.mjs';
 import { inject, Version } from '@angular/core';
 import '@angular/common';
 import 'rxjs';
@@ -81,7 +81,7 @@ function mapToResolve(provider) {
 /**
  * @publicApi
  */
-const VERSION = new Version('19.2.5+sha-1b36f6e');
+const VERSION = new Version('19.2.5+sha-e9a719e');
 
 export { VERSION, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve };
 //# sourceMappingURL=router.mjs.map

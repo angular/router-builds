@@ -1,13 +1,13 @@
 /**
- * @license Angular v19.2.5+sha-1b36f6e
+ * @license Angular v19.2.5+sha-e9a719e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { ModuleWithProviders, WritableSignal, DebugElement, Type } from '@angular/core';
-import { e as Routes, ah as ExtraOptions, al as RouterModule } from '../router_module.d-6zbCxc1T.js';
-export { ɵ as ɵɵEmptyOutletComponent, q as ɵɵRouterLink, r as ɵɵRouterLinkActive, s as ɵɵRouterOutlet } from '../router_module.d-6zbCxc1T.js';
+import { Routes, ExtraOptions, RouterModule } from '../router_module.d-BivBj8FC.js';
+export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent, RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive, RouterOutlet as ɵɵRouterOutlet } from '../router_module.d-BivBj8FC.js';
 import { ComponentFixture } from '@angular/core/testing';
 import 'rxjs';
 import '@angular/common';
