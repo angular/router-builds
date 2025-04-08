@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.5+sha-6fa8d44
+ * @license Angular v20.0.0-next.5+sha-ba79f23
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -142,29 +142,7 @@ interface ViewTransitionInfo {
      * The `ViewTransition` returned by the call to `startViewTransition`.
      * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition
      */
-    transition: {
-        /**
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/finished
-         */
-        finished: Promise<void>;
-        /**
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/ready
-         */
-        ready: Promise<void>;
-        /**
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/updateCallbackDone
-         */
-        updateCallbackDone: Promise<void>;
-        /**
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition/skipTransition
-         */
-        skipTransition(): void;
-        /**
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/ViewTransition#browser_compatibility
-         * @see https://developer.chrome.com/docs/web-platform/view-transitions/same-document#default_style_and_transition_reference
-         */
-        readonly types: Set<string>;
-    };
+    transition: ViewTransition;
     /**
      * The `ActivatedRouteSnapshot` that the navigation is transitioning from.
      */

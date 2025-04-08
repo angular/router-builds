@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.5+sha-6fa8d44
+ * @license Angular v20.0.0-next.5+sha-ba79f23
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { Location } from '@angular/common';
 import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { Router } from './router-C_AxDGlU.mjs';
+import { Router } from './router-Dq3SgjMt.mjs';
 import 'rxjs';
 import 'rxjs/operators';
 import '@angular/platform-browser';
