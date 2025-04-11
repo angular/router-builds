@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.6+sha-1522e6c
+ * @license Angular v20.0.0-next.6+sha-72dd133
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2972,12 +2972,8 @@ interface Navigation {
     finalUrl?: UrlTree;
     /**
      * Identifies how this navigation was triggered.
-     *
-     * * 'imperative'--Triggered by `router.navigateByUrl` or `router.navigate`.
-     * * 'popstate'--Triggered by a popstate event.
-     * * 'hashchange'--Triggered by a hashchange event.
      */
-    trigger: 'imperative' | 'popstate' | 'hashchange';
+    trigger: NavigationTrigger;
     /**
      * Options that controlled the strategy used for this navigation.
      * See `NavigationExtras`.
