@@ -1,11 +1,11 @@
 /**
- * @license Angular v20.0.0-next.7+sha-5d9a678
+ * @license Angular v20.0.0-next.7+sha-2e87130
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { ActivatedRouteSnapshot, Params, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './router_module.d-ktU8Dnrg.js';
-export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DefaultUrlSerializer, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './router_module.d-ktU8Dnrg.js';
+import { ActivatedRouteSnapshot, Params, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './router_module.d-BFPyiLx0.js';
+export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DefaultUrlSerializer, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './router_module.d-BFPyiLx0.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
 import { EnvironmentInjector, ComponentRef, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, Version } from '@angular/core';
@@ -64,7 +64,7 @@ import '@angular/router';
  * createUrlTreeFromSnapshot(snapshot, ['../../team/44/user/22']);
  * ```
  */
-declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: any[], queryParams?: Params | null, fragment?: string | null): UrlTree;
+declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: readonly any[], queryParams?: Params | null, fragment?: string | null): UrlTree;
 
 /**
  * Store contextual information about a `RouterOutlet`

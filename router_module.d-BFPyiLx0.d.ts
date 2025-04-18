@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.7+sha-5d9a678
+ * @license Angular v20.0.0-next.7+sha-2e87130
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3167,7 +3167,7 @@ declare class Router {
      * tree should be created relative to the root.
      * ```
      */
-    createUrlTree(commands: any[], navigationExtras?: UrlCreationOptions): UrlTree;
+    createUrlTree(commands: readonly any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
      * Navigates to a view using an absolute route path.
      *
@@ -3223,7 +3223,7 @@ declare class Router {
      * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
      *
      */
-    navigate(commands: any[], extras?: NavigationExtras): Promise<boolean>;
+    navigate(commands: readonly any[], extras?: NavigationExtras): Promise<boolean>;
     /** Serializes a `UrlTree` into a string */
     serializeUrl(url: UrlTree): string;
     /** Parses a string into a `UrlTree` */
@@ -3465,7 +3465,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
      *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree}
      */
-    set routerLink(commandsOrUrlTree: any[] | string | UrlTree | null | undefined);
+    set routerLink(commandsOrUrlTree: readonly any[] | string | UrlTree | null | undefined);
     /** @nodoc */
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     /** @nodoc */
