@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.7+sha-b43fe29
+ * @license Angular v20.0.0-next.7+sha-e53a374
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -18,7 +18,15 @@ import '@angular/platform-browser';
  *
  * @usageNotes
  *
- * <code-example language="typescript">
+ * For standalone applications:
+ * ```ts
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [RouterUpgradeInitializer],
+ * };
+ * ```
+ *
+ * For NgModule based applications:
+ * ```ts
  * @NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
@@ -31,7 +39,7 @@ import '@angular/platform-browser';
  * export class AppModule {
  *   ngDoBootstrap() {}
  * }
- * </code-example>
+ * ```
  *
  * @publicApi
  */
