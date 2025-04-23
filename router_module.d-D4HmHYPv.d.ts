@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.7+sha-953c4b2
+ * @license Angular v20.0.0-next.7+sha-62de7d9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -570,7 +570,7 @@ type QueryParamsHandling = 'merge' | 'preserve' | 'replace' | '';
  * @see {@link Route#redirectTo}
  * @publicApi
  */
-type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapshot, 'routeConfig' | 'url' | 'params' | 'queryParams' | 'fragment' | 'data' | 'outlet' | 'title'>) => string | UrlTree;
+type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapshot, 'routeConfig' | 'url' | 'params' | 'queryParams' | 'fragment' | 'data' | 'outlet' | 'title'>) => MaybeAsync<string | UrlTree>;
 /**
  * A policy for when to run guards and resolvers on a route.
  *
