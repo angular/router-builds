@@ -1,12 +1,10 @@
 /**
- * @license Angular v18.1.0-next.0+sha-87c5f3c
- * (c) 2010-2024 Google LLC. https://angular.io/
+ * @license Angular v20.0.0-next.9+sha-f4d60ff
+ * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-
-import { ComponentRef } from '@angular/core';
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, ComponentRef } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
@@ -15,7 +13,15 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * @usageNotes
  *
- * <code-example language="typescript">
+ * For standalone applications:
+ * ```ts
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [RouterUpgradeInitializer],
+ * };
+ * ```
+ *
+ * For NgModule based applications:
+ * ```ts
  * @NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
@@ -28,17 +34,16 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * export class AppModule {
  *   ngDoBootstrap() {}
  * }
- * </code-example>
+ * ```
  *
  * @publicApi
  */
-export declare const RouterUpgradeInitializer: {
+declare const RouterUpgradeInitializer: {
     provide: InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
     useFactory: (ngUpgrade: UpgradeModule) => () => void;
     deps: (typeof UpgradeModule)[];
 };
-
 /**
  * Sets up a location change listener to trigger `history.pushState`.
  * Works around the problem that `onPopState` does not trigger `history.pushState`.
@@ -46,11 +51,11 @@ export declare const RouterUpgradeInitializer: {
  *
  * @param ngUpgrade The upgrade NgModule.
  * @param urlType The location strategy.
- * @see {@link HashLocationStrategy}
- * @see {@link PathLocationStrategy}
+ * @see {@link /api/common/HashLocationStrategy HashLocationStrategy}
+ * @see {@link /api/common/PathLocationStrategy PathLocationStrategy}
  *
  * @publicApi
  */
-export declare function setUpLocationSync(ngUpgrade: UpgradeModule, urlType?: 'path' | 'hash'): void;
+declare function setUpLocationSync(ngUpgrade: UpgradeModule, urlType?: 'path' | 'hash'): void;
 
-export { }
+export { RouterUpgradeInitializer, setUpLocationSync };

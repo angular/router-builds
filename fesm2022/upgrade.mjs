@@ -1,13 +1,16 @@
 /**
- * @license Angular v18.1.0-next.0+sha-87c5f3c
- * (c) 2010-2024 Google LLC. https://angular.io/
+ * @license Angular v20.0.0-next.9+sha-f4d60ff
+ * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location } from '@angular/common';
 import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { Router } from '@angular/router';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { Router } from './router-BxrGTdzL.mjs';
+import 'rxjs';
+import 'rxjs/operators';
+import '@angular/platform-browser';
 
 /**
  * Creates an initializer that sets up `ngRoute` integration
@@ -15,7 +18,15 @@ import { UpgradeModule } from '@angular/upgrade/static';
  *
  * @usageNotes
  *
- * <code-example language="typescript">
+ * For standalone applications:
+ * ```ts
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [RouterUpgradeInitializer],
+ * };
+ * ```
+ *
+ * For NgModule based applications:
+ * ```ts
  * @NgModule({
  *  imports: [
  *   RouterModule.forRoot(SOME_ROUTES),
@@ -28,7 +39,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * export class AppModule {
  *   ngDoBootstrap() {}
  * }
- * </code-example>
+ * ```
  *
  * @publicApi
  */
@@ -53,8 +64,8 @@ function locationSyncBootstrapListener(ngUpgrade) {
  *
  * @param ngUpgrade The upgrade NgModule.
  * @param urlType The location strategy.
- * @see {@link HashLocationStrategy}
- * @see {@link PathLocationStrategy}
+ * @see {@link /api/common/HashLocationStrategy HashLocationStrategy}
+ * @see {@link /api/common/PathLocationStrategy PathLocationStrategy}
  *
  * @publicApi
  */
@@ -125,19 +136,6 @@ function resolveUrl(url) {
         hash: anchor.hash,
     };
 }
-
-/**
- * @module
- * @description
- * Entry point for all public APIs of this package.
- */
-// This file only reexports content of the `src` folder. Keep it that way.
-
-// This file is not used to build this module. It is only used during editing
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { RouterUpgradeInitializer, locationSyncBootstrapListener, setUpLocationSync };
 //# sourceMappingURL=upgrade.mjs.map
