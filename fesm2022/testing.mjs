@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-8828a84
+ * @license Angular v20.1.0-next.0+sha-5fe726d
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -9,8 +9,8 @@ import { NgModule, signal, Injectable, ViewChild, Component } from '@angular/cor
 import { TestBed } from '@angular/core/testing';
 import { ROUTES, ROUTER_CONFIGURATION, Router, afterNextNavigation, RouterOutlet } from './router-hGOpcLrC.mjs';
 export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent } from './router-hGOpcLrC.mjs';
-import { RouterModule, ROUTER_PROVIDERS, withPreloading, NoPreloading } from './router_module-OgGB9GnM.mjs';
-export { RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive } from './router_module-OgGB9GnM.mjs';
+import { RouterModule, ROUTER_PROVIDERS, withPreloading, NoPreloading } from './router_module-B2uKltaf.mjs';
+export { RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive } from './router_module-B2uKltaf.mjs';
 import { provideLocationMocks } from '@angular/common/testing';
 import '@angular/common';
 import 'rxjs';
@@ -57,16 +57,16 @@ class RouterTestingModule {
             ],
         };
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RouterTestingModule, providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RouterTestingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RouterTestingModule, exports: [RouterModule] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RouterTestingModule, providers: [
             ROUTER_PROVIDERS,
             provideLocationMocks(),
             withPreloading(NoPreloading).ɵproviders,
             { provide: ROUTES, multi: true, useValue: [] },
         ], imports: [RouterModule] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RouterTestingModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RouterTestingModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [RouterModule],
@@ -97,20 +97,20 @@ class RootFixtureService {
         this.fixture.detectChanges();
         return this.fixture;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RootFixtureService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RootFixtureService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RootFixtureService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RootFixtureService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RootFixtureService, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 class RootCmp {
     outlet;
     routerOutletData = signal(undefined);
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.1.0-next.0+sha-8828a84", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name", "routerOutletData"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RootCmp, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.1.0-next.0+sha-5fe726d", type: RootCmp, isStandalone: true, selector: "ng-component", viewQueries: [{ propertyName: "outlet", first: true, predicate: RouterOutlet, descendants: true }], ngImport: i0, template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>', isInline: true, dependencies: [{ kind: "directive", type: RouterOutlet, selector: "router-outlet", inputs: ["name", "routerOutletData"], outputs: ["activate", "deactivate", "attach", "detach"], exportAs: ["outlet"] }] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-8828a84", ngImport: i0, type: RootCmp, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0-next.0+sha-5fe726d", ngImport: i0, type: RootCmp, decorators: [{
             type: Component,
             args: [{
                     template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>',
