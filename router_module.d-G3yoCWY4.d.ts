@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-next.9+sha-bbdb166
+ * @license Angular v20.0.0-next.9+sha-782c6e1
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3812,7 +3812,7 @@ interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOptions {
      *
      * @see https://developer.chrome.com/docs/web-platform/view-transitions/
      * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
-     * @experimental
+     * @experimental 17.0
      */
     enableViewTransitions?: boolean;
     /**
