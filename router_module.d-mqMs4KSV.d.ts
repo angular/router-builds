@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-340728c
+ * @license Angular v20.1.0-next.0+sha-ce5a943
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3363,12 +3363,16 @@ declare class RouterLink implements OnChanges, OnDestroy {
     private readonly renderer;
     private readonly el;
     private locationStrategy?;
+    /** @nodoc */
+    protected readonly reactiveHref: i0.WritableSignal<string | null>;
     /**
      * Represents an `href` attribute value applied to a host element,
      * when a host element is an `<a>`/`<area>` tag or a compatible custom element.
      * For other tags, the value is `null`.
      */
-    href: string | null;
+    get href(): string | null;
+    /** @deprecated */
+    set href(value: string | null);
     /**
      * Represents the `target` attribute on a host element.
      * This is only used when the host element is
@@ -3426,7 +3430,9 @@ declare class RouterLink implements OnChanges, OnDestroy {
     private isAnchorElement;
     private subscription?;
     private readonly applicationErrorHandler;
+    private readonly options;
     constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef, locationStrategy?: LocationStrategy | undefined);
+    private subscribeToNavigationEventsIfNecessary;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
