@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-12a5b7b
+ * @license Angular v20.1.0-next.0+sha-3c9b8d9
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -2768,14 +2768,14 @@ declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     private location;
     private changeDetector;
     private inputBinder;
-    /** @nodoc */
+    /** @docs-private */
     readonly supportsBindingToComponentInputs = true;
-    /** @nodoc */
+    /** @docs-private */
     ngOnChanges(changes: SimpleChanges): void;
-    /** @nodoc */
+    /** @docs-private */
     ngOnDestroy(): void;
     private isTrackedInParentContexts;
-    /** @nodoc */
+    /** @docs-private */
     ngOnInit(): void;
     private initializeOutletWithName;
     get isActivated(): boolean;
@@ -3115,7 +3115,7 @@ declare class Router {
      * ```
      */
     resetConfig(config: Routes): void;
-    /** @nodoc */
+    /** @docs-private */
     ngOnDestroy(): void;
     /** Disposes of the router. */
     dispose(): void;
@@ -3459,7 +3459,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * instantiation.
      */
     private setTabIndexIfNotOnNativeEl;
-    /** @nodoc */
+    /** @docs-private */
     ngOnChanges(changes?: SimpleChanges): void;
     private routerLinkInput;
     /**
@@ -3472,9 +3472,9 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * @see {@link Router#createUrlTree}
      */
     set routerLink(commandsOrUrlTree: readonly any[] | string | UrlTree | null | undefined);
-    /** @nodoc */
+    /** @docs-private */
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
-    /** @nodoc */
+    /** @docs-private */
     ngOnDestroy(): any;
     private updateHref;
     private applyAttributeValue;
@@ -3603,13 +3603,13 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
      */
     readonly isActiveChange: EventEmitter<boolean>;
     constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined);
-    /** @nodoc */
+    /** @docs-private */
     ngAfterContentInit(): void;
     private subscribeToEachLinkOnChanges;
     set routerLinkActive(data: string[] | string);
-    /** @nodoc */
+    /** @docs-private */
     ngOnChanges(changes: SimpleChanges): void;
-    /** @nodoc */
+    /** @docs-private */
     ngOnDestroy(): void;
     private update;
     private isLinkActive;
