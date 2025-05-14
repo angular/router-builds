@@ -1,11 +1,11 @@
 /**
- * @license Angular v19.2.10+sha-c92c34d
+ * @license Angular v19.2.10+sha-42f203e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { ActivatedRouteSnapshot, Params, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './router_module.d-BivBj8FC.js';
-export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DefaultUrlSerializer, DeprecatedGuard, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './router_module.d-BivBj8FC.js';
+import { ActivatedRouteSnapshot, Params, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './router_module.d-DIceKvcB.js';
+export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DefaultUrlSerializer, DeprecatedGuard, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './router_module.d-DIceKvcB.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
 import { EnvironmentInjector, ComponentRef, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, Version } from '@angular/core';
@@ -88,7 +88,7 @@ declare class OutletContext {
 declare class ChildrenOutletContexts {
     private rootInjector;
     private contexts;
-    /** @nodoc */
+    /** @docs-private */
     constructor(rootInjector: EnvironmentInjector);
     /** Called when a `RouterOutlet` directive is instantiated */
     onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
@@ -322,7 +322,7 @@ declare class RouterPreloader implements OnDestroy {
     constructor(router: Router, injector: EnvironmentInjector, preloadingStrategy: PreloadingStrategy, loader: RouterConfigLoader);
     setUpPreloading(): void;
     preload(): Observable<any>;
-    /** @nodoc */
+    /** @docs-private */
     ngOnDestroy(): void;
     private processRoutes;
     private preloadConfig;
