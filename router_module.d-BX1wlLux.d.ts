@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-rc.0+sha-d7dbabe
+ * @license Angular v20.0.0-rc.0+sha-f7bfdc7
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -8,7 +8,6 @@ import * as i0 from '@angular/core';
 import { Type, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, EnvironmentInjector, OnDestroy, OnInit, ComponentRef, EventEmitter, SimpleChanges, InjectionToken, Signal, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
-import * as _angular_router from '@angular/router';
 
 /**
  * The primary routing outlet.
@@ -3034,7 +3033,7 @@ declare class Router {
     /**
      * The current state of routing in this NgModule.
      */
-    get routerState(): _angular_router.RouterState;
+    get routerState(): RouterState;
     /**
      * True if at least one navigation event has occurred,
      * false otherwise.
