@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.0.0-rc.0+sha-a21de80
+ * @license Angular v20.0.0-rc.1+sha-bc2cab7
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -81,7 +81,7 @@ function mapToResolve(provider) {
 /**
  * @publicApi
  */
-const VERSION = new Version('20.0.0-rc.0+sha-a21de80');
+const VERSION = new Version('20.0.0-rc.1+sha-bc2cab7');
 
 export { VERSION, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve };
 //# sourceMappingURL=router.mjs.map
