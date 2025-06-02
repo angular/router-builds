@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.0+sha-5a76826
+ * @license Angular v20.1.0-next.0+sha-0e58e1f
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -112,7 +112,7 @@ declare class ChildrenOutletContexts {
 /**
  * Options to configure the View Transitions integration in the Router.
  *
- * @experimental 17.0
+ * @developerPreview 20.0
  * @see withViewTransitions
  */
 interface ViewTransitionsFeatureOptions {
@@ -132,7 +132,7 @@ interface ViewTransitionsFeatureOptions {
  * The information passed to the `onViewTransitionCreated` function provided in the
  * `withViewTransitions` feature options.
  *
- * @experimental 17.0
+ * @developerPreview 20.0
  */
 interface ViewTransitionInfo {
     /**
