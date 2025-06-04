@@ -1,11 +1,11 @@
 /**
- * @license Angular v20.1.0-next.0+sha-4178e82
+ * @license Angular v20.1.0-next.0+sha-b839d08
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { Type, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, EnvironmentInjector, OnDestroy, OnInit, ComponentRef, EventEmitter, SimpleChanges, InjectionToken, Signal, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { ProviderToken, Type, NgModuleFactory, Provider, EnvironmentProviders, EnvironmentInjector, InjectionToken, Signal, ComponentRef, EventEmitter, OnDestroy, OnInit, SimpleChanges, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
