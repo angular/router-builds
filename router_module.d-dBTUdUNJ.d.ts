@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.1.0-next.1+sha-3a0cfd5
+ * @license Angular v20.1.0-next.1+sha-5f6e336
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -557,7 +557,7 @@ type QueryParamsHandling = 'merge' | 'preserve' | 'replace' | '';
 /**
  * The type for the function that can be used to handle redirects when the path matches a `Route` config.
  *
- * The `RedirectFunction` does have access to the full
+ * The `RedirectFunction` does _not_ have access to the full
  * `ActivatedRouteSnapshot` interface. Some data are not accurately known
  * at the route matching phase. For example, resolvers are not run until
  * later, so any resolved title would not be populated. The same goes for lazy
