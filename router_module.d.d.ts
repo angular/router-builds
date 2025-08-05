@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.2.0-next.3+sha-5802f80
+ * @license Angular v20.2.0-next.3+sha-ddf779e
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3063,12 +3063,6 @@ declare class Router {
      * `bindToComponentInputs` in the `ExtraOptions` of `RouterModule.forRoot`.
      */
     readonly componentInputBindingEnabled: boolean;
-    /**
-     * Signal of the current `Navigation` object when the router is navigating, and `null` when idle.
-     *
-     * Note: The current navigation becomes to null after the NavigationEnd event is emitted.
-     */
-    readonly currentNavigation: i0.Signal<Navigation | null>;
     constructor();
     private eventsSubscription;
     private subscribeToNavigationEvents;
@@ -3095,8 +3089,6 @@ declare class Router {
     /**
      * Returns the current `Navigation` object when the router is navigating,
      * and `null` when idle.
-     *
-     * @deprecated 20.2 Use the `currentNavigation` signal instead.
      */
     getCurrentNavigation(): Navigation | null;
     /**
