@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.0+sha-55cd8c2
+ * @license Angular v21.0.0-next.0+sha-4e0fc81
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3068,7 +3068,7 @@ declare class Router {
      *
      * Note: The current navigation becomes to null after the NavigationEnd event is emitted.
      */
-    readonly currentNavigation: i0.Signal<Navigation | null>;
+    readonly currentNavigation: Signal<Navigation | null>;
     constructor();
     private eventsSubscription;
     private subscribeToNavigationEvents;
@@ -3103,7 +3103,7 @@ declare class Router {
      * The `Navigation` object of the most recent navigation to succeed and `null` if there
      *     has not been a successful navigation yet.
      */
-    get lastSuccessfulNavigation(): Navigation | null;
+    get lastSuccessfulNavigation(): Signal<Navigation | null>;
     /**
      * Resets the route configuration used for navigation and generating links.
      *
