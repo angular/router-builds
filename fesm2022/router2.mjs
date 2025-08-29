@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.1+sha-6e1599d
+ * @license Angular v21.0.0-next.1+sha-bbb46e5
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3733,6 +3733,16 @@ function runCanMatchGuards(injector, route, segments, urlSerializer, abortSignal
     return of(canMatchObservables).pipe(prioritizedGuardValue(), redirectIfUrlTree(urlSerializer));
 }
 
+/** replacement for firstValueFrom in rxjs 7. We must support rxjs v6 so we cannot use it */
+function firstValueFrom(source) {
+    return new Promise((resolve, reject) => {
+        source.pipe(first()).subscribe({
+            next: (value) => resolve(value),
+            error: (err) => reject(err),
+        });
+    });
+}
+
 const NO_MATCH_ERROR_NAME = 'ɵNoMatch';
 let NoMatch$1 = class NoMatch extends Error {
     name = NO_MATCH_ERROR_NAME;
@@ -3847,7 +3857,7 @@ function getRedirectResult$1(redirectTo, currentSnapshot, injector) {
     }
     const redirectToFn = redirectTo;
     const { queryParams, fragment, routeConfig, url, outlet, params, data, title } = currentSnapshot;
-    return wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn({ params, data, queryParams, fragment, routeConfig, url, outlet, title }))).toPromise();
+    return firstValueFrom(wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn({ params, data, queryParams, fragment, routeConfig, url, outlet, title }))));
 }
 
 const noMatch$1 = {
@@ -4156,7 +4166,7 @@ let Recognizer$1 = class Recognizer {
         if (this.abortSignal.aborted) {
             throw new Error(this.abortSignal.reason);
         }
-        const result = await matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, this.abortSignal).toPromise();
+        const result = await firstValueFrom(matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, this.abortSignal));
         if (route.path === '**') {
             // Prior versions of the route matching algorithm would stop matching at the wildcard route.
             // We should investigate a better strategy for any existing children. Otherwise, these
@@ -4209,9 +4219,9 @@ let Recognizer$1 = class Recognizer {
             if (this.abortSignal.aborted) {
                 throw new Error(this.abortSignal.reason);
             }
-            const shouldLoadResult = await runCanLoadGuards(injector, route, segments, this.urlSerializer, this.abortSignal).toPromise();
+            const shouldLoadResult = await firstValueFrom(runCanLoadGuards(injector, route, segments, this.urlSerializer, this.abortSignal));
             if (shouldLoadResult) {
-                const cfg = await this.configLoader.loadChildren(injector, route).toPromise();
+                const cfg = await firstValueFrom(this.configLoader.loadChildren(injector, route));
                 if (!cfg) {
                     throw canLoadFails$1(route);
                 }
