@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.1+sha-92e09ad
+ * @license Angular v21.0.0-next.1+sha-4c36659
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -4099,7 +4099,7 @@ let Recognizer$1 = class Recognizer {
                 return await this.processSegmentAgainstRoute(r._injector ?? injector, routes, r, segmentGroup, segments, outlet, allowRedirects, parentRoute);
             }
             catch (e) {
-                if (e?.name === NO_MATCH_ERROR_NAME) {
+                if (e?.name === NO_MATCH_ERROR_NAME || isEmptyError(e)) {
                     continue;
                 }
                 throw e;
