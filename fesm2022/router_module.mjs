@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.1+sha-475ed59
+ * @license Angular v21.0.0-next.1+sha-d006721
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import * as i3 from '@angular/common';
 import { LOCATION_INITIALIZED, ViewportScroller, LocationStrategy, HashLocationStrategy, Location, PathLocationStrategy } from '@angular/common';
 import * as i0 from '@angular/core';
-import { signal, untracked, inject, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, HostAttributeToken, ɵRuntimeError as _RuntimeError, booleanAttribute, Directive, Attribute, HostBinding, Input, HostListener, EventEmitter, Optional, ContentChildren, Output, Injectable, createEnvironmentInjector, InjectionToken, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, Injector, ApplicationRef, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, provideAppInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ENVIRONMENT_INITIALIZER, NgZone, SkipSelf, NgModule } from '@angular/core';
+import { signal, untracked, inject, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, HostAttributeToken, ɵRuntimeError as _RuntimeError, booleanAttribute, Directive, Attribute, HostBinding, Input, HostListener, EventEmitter, Optional, ContentChildren, Output, Injectable, createEnvironmentInjector, InjectionToken, ɵpublishExternalGlobalUtil as _publishExternalGlobalUtil, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, Injector, ApplicationRef, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, provideAppInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ENVIRONMENT_INITIALIZER, NgZone, SkipSelf, NgModule } from '@angular/core';
 import { ROUTER_CONFIGURATION, NavigationEnd, isUrlTree, Router, ActivatedRoute, RouterConfigLoader, IMPERATIVE_NAVIGATION, NavigationStart, NavigationSkipped, NavigationSkippedCode, Scroll, UrlSerializer, NavigationTransitions, ROUTES, afterNextNavigation, stringifyEvent, NAVIGATION_ERROR_HANDLER, RoutedComponentInputBinder, INPUT_BINDER, CREATE_VIEW_TRANSITION, createViewTransition, VIEW_TRANSITION_OPTIONS, DefaultUrlSerializer, ChildrenOutletContexts, RouterOutlet, ɵEmptyOutletComponent as _EmptyOutletComponent } from './router2.mjs';
 import { Subject, of, from } from 'rxjs';
 import { mergeAll, catchError, filter, concatMap, mergeMap } from 'rxjs/operators';
@@ -939,6 +939,29 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
         }], ctorParameters: () => [{ type: UrlSerializer }, { type: NavigationTransitions }, { type: i3.ViewportScroller }, { type: i0.NgZone }, { type: undefined }] });
 
 /**
+ * Returns the loaded routes for a given route.
+ */
+function getLoadedRoutes(route) {
+    return route._loadedRoutes;
+}
+/**
+ * Returns the Router instance from the given injector, or null if not available.
+ */
+function getRouterInstance(injector) {
+    return injector.get(Router, null, { optional: true });
+}
+/**
+ * Navigates the given router to the specified URL.
+ * Throws if the provided router is not an Angular Router.
+ */
+function navigateByUrl(router, url) {
+    if (!(router instanceof Router)) {
+        throw new Error('The provided router is not an Angular Router.');
+    }
+    return router.navigateByUrl(url);
+}
+
+/**
  * Sets up providers necessary to enable `Router` functionality for the application.
  * Allows to configure a set of routes as well as extra features that should be enabled.
  *
@@ -975,6 +998,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
  * @returns A set of providers to setup a Router.
  */
 function provideRouter(routes, ...features) {
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+        // Publish this util when the router is provided so that the devtools can use it.
+        _publishExternalGlobalUtil('ɵgetLoadedRoutes', getLoadedRoutes);
+        _publishExternalGlobalUtil('ɵgetRouterInstance', getRouterInstance);
+        _publishExternalGlobalUtil('ɵnavigateByUrl', navigateByUrl);
+    }
     return makeEnvironmentProviders([
         { provide: ROUTES, multi: true, useValue: routes },
         typeof ngDevMode === 'undefined' || ngDevMode
