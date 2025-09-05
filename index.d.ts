@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.2+sha-8401f89
+ * @license Angular v20.3.0-next.0+sha-11a54d1
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -893,10 +893,5 @@ declare function afterNextNavigation(router: {
     events: Observable<Event>;
 }, action: () => void): void;
 
-/**
- * Provides a way to use the synchronous version of the recognize function using rxjs.
- */
-declare function provideSometimesSyncRecognize(): EnvironmentProviders;
-
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
 export type { ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
