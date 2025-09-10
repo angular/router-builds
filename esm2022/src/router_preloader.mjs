@@ -38,10 +38,10 @@ export class PreloadAllModules {
     preload(route, fn) {
         return fn().pipe(catchError(() => of(null)));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: PreloadAllModules, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: PreloadAllModules, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: PreloadAllModules, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: PreloadAllModules, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -58,10 +58,10 @@ export class NoPreloading {
     preload(route, fn) {
         return of(null);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: NoPreloading, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: NoPreloading, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: NoPreloading, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: NoPreloading, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -152,10 +152,10 @@ export class RouterPreloader {
             }
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: RouterPreloader, deps: [{ token: i1.Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: i2.RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: RouterPreloader, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: RouterPreloader, deps: [{ token: i1.Router }, { token: i0.Compiler }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: i2.RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: RouterPreloader, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-32512de", ngImport: i0, type: RouterPreloader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.13+sha-08f01ac", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i1.Router }, { type: i0.Compiler }, { type: i0.EnvironmentInjector }, { type: PreloadingStrategy }, { type: i2.RouterConfigLoader }] });
