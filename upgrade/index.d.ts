@@ -1,10 +1,11 @@
 /**
- * @license Angular v21.0.0-next.3+sha-d53ac26
+ * @license Angular v21.0.0-next.3+sha-6d5c45d
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-import { InjectionToken, ComponentRef } from '@angular/core';
+import * as i0 from '@angular/core';
+import { ComponentRef } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 
 /**
@@ -39,10 +40,9 @@ import { UpgradeModule } from '@angular/upgrade/static';
  * @publicApi
  */
 declare const RouterUpgradeInitializer: {
-    provide: InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
+    provide: i0.InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
     multi: boolean;
-    useFactory: (ngUpgrade: UpgradeModule) => () => void;
-    deps: (typeof UpgradeModule)[];
+    useFactory: () => () => void;
 };
 /**
  * Sets up a location change listener to trigger `history.pushState`.

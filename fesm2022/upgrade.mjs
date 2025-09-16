@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.3+sha-d53ac26
+ * @license Angular v21.0.0-next.3+sha-6d5c45d
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import { Location } from '@angular/common';
-import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, inject } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { Router } from './router2.mjs';
 import 'rxjs';
@@ -47,12 +47,12 @@ const RouterUpgradeInitializer = {
     provide: APP_BOOTSTRAP_LISTENER,
     multi: true,
     useFactory: locationSyncBootstrapListener,
-    deps: [UpgradeModule],
 };
 /**
  * @internal
  */
-function locationSyncBootstrapListener(ngUpgrade) {
+function locationSyncBootstrapListener() {
+    const ngUpgrade = inject(UpgradeModule);
     return () => {
         setUpLocationSync(ngUpgrade);
     };
