@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.0+sha-27b2a4a
+ * @license Angular v20.3.0+sha-444fd01
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
@@ -3556,6 +3556,9 @@ declare class RouterLink implements OnChanges, OnDestroy {
  * ```html
  * <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home Page</a>
  * ```
+ *
+ * NOTE: RouterLinkActive is a `ContentChildren` query.
+ * Content children queries do not retrieve elements or directives that are in other components' templates, since a component's template is always a black box to its ancestors.
  *
  * @ngModule RouterModule
  *
