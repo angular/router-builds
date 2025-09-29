@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "21.0.0-next.5+sha-377d1a0",
+  "version": "21.0.0-next.5+sha-fc643c9",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -24,9 +24,9 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/core": "21.0.0-next.5+sha-377d1a0",
-    "@angular/common": "21.0.0-next.5+sha-377d1a0",
-    "@angular/platform-browser": "21.0.0-next.5+sha-377d1a0",
+    "@angular/core": "21.0.0-next.5+sha-fc643c9",
+    "@angular/common": "21.0.0-next.5+sha-fc643c9",
+    "@angular/platform-browser": "21.0.0-next.5+sha-fc643c9",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
@@ -51,22 +51,22 @@
   },
   "sideEffects": false,
   "module": "./fesm2022/router.mjs",
-  "typings": "./index.d.ts",
+  "typings": "./types/router.d.ts",
   "type": "module",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.ts",
+      "types": "./types/router.d.ts",
       "default": "./fesm2022/router.mjs"
     },
     "./testing": {
-      "types": "./testing/index.d.ts",
+      "types": "./types/testing.d.ts",
       "default": "./fesm2022/testing.mjs"
     },
     "./upgrade": {
-      "types": "./upgrade/index.d.ts",
+      "types": "./types/upgrade.d.ts",
       "default": "./fesm2022/upgrade.mjs"
     }
   }
