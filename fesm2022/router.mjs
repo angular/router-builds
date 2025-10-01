@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.5+sha-51a0b59
+ * @license Angular v21.0.0-next.5+sha-2f6caef
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, ɵEmptyOutletComponent, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize } from './router-CKTHXVmD.mjs';
-export { NoPreloading, PreloadAllModules, PreloadingStrategy, ROUTER_INITIALIZER, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterPreloader, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS } from './router_module-AcKn3Rik.mjs';
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, createUrlTreeFromSnapshot, defaultUrlMatcher, ɵEmptyOutletComponent, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize } from './_router-chunk.mjs';
+export { NoPreloading, PreloadAllModules, PreloadingStrategy, ROUTER_INITIALIZER, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterPreloader, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS } from './_router_module-chunk.mjs';
 import { inject, Version } from '@angular/core';
 import '@angular/common';
 import 'rxjs';
@@ -81,7 +81,7 @@ function mapToResolve(provider) {
 /**
  * @publicApi
  */
-const VERSION = new Version('21.0.0-next.5+sha-51a0b59');
+const VERSION = new Version('21.0.0-next.5+sha-2f6caef');
 
 export { VERSION, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve };
 //# sourceMappingURL=router.mjs.map

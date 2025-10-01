@@ -1,13 +1,13 @@
 /**
- * @license Angular v21.0.0-next.5+sha-51a0b59
+ * @license Angular v21.0.0-next.5+sha-2f6caef
  * (c) 2010-2025 Google LLC. https://angular.io/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { ModuleWithProviders, WritableSignal, DebugElement, Type } from '@angular/core';
-import { Routes, ExtraOptions, RouterModule } from './router_module.d-DnJ6pu4n.js';
-export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent, RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive, RouterOutlet as ɵɵRouterOutlet } from './router_module.d-DnJ6pu4n.js';
+import { Routes, ExtraOptions, RouterModule } from './_router_module-chunk.js';
+export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent, RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive, RouterOutlet as ɵɵRouterOutlet } from './_router_module-chunk.js';
 import { ComponentFixture } from '@angular/core/testing';
 import 'rxjs';
 import '@angular/common';
