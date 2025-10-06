@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.3+sha-8528bb5
+ * @license Angular v20.3.3+sha-9be76ad
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2605,6 +2605,7 @@ declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
  * ```
  *
  * @publicApi
+ * @see [Page routerOutletData](guide/routing/show-routes-with-outlets#passing-contextual-data-to-routed-components)
  */
 declare const ROUTER_OUTLET_DATA: InjectionToken<Signal<unknown>>;
 /**

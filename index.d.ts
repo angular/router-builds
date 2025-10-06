@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.3+sha-8528bb5
+ * @license Angular v20.3.3+sha-9be76ad
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -171,7 +171,7 @@ interface ViewTransitionInfo {
  * incorporate titles in named outlets.
  *
  * @publicApi
- * @see [Page title guide](guide/routing/common-router-tasks#setting-the-page-title)
+ * @see [Page title guide](guide/routing/define-routes#using-titlestrategy-for-page-titles)
  */
 declare abstract class TitleStrategy {
     /** Performs the application title update. */
