@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.7+sha-09a927a
+ * @license Angular v21.0.0-next.7+sha-eee8eab
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -221,8 +221,8 @@ declare class RouterConfigLoader {
     onLoadStartListener?: (r: Route) => void;
     onLoadEndListener?: (r: Route) => void;
     private readonly compiler;
-    loadComponent(injector: EnvironmentInjector, route: Route): Observable<Type<unknown>>;
-    loadChildren(parentInjector: Injector, route: Route): Observable<LoadedRouterConfig>;
+    loadComponent(injector: EnvironmentInjector, route: Route): Promise<Type<unknown>>;
+    loadChildren(parentInjector: Injector, route: Route): Promise<LoadedRouterConfig>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
 }
@@ -234,7 +234,7 @@ declare class RouterConfigLoader {
  * in @angular-devkit/build-angular. If there are any updates to the contract here, it will require
  * an update to the extractor.
  */
-declare function loadChildren(route: Route, compiler: Compiler, parentInjector: Injector, onLoadEndListener?: (r: Route) => void): Observable<LoadedRouterConfig>;
+declare function loadChildren(route: Route, compiler: Compiler, parentInjector: Injector, onLoadEndListener?: (r: Route) => void): Promise<LoadedRouterConfig>;
 
 /**
  * @description
