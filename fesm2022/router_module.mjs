@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.4+sha-5f4f624
+ * @license Angular v20.3.4+sha-07d8c60
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import * as i3 from '@angular/common';
 import { LOCATION_INITIALIZED, ViewportScroller, LocationStrategy, HashLocationStrategy, Location, PathLocationStrategy } from '@angular/common';
 import * as i0 from '@angular/core';
-import { signal, untracked, inject, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, HostAttributeToken, ɵRuntimeError as _RuntimeError, booleanAttribute, Directive, Attribute, HostBinding, Input, HostListener, EventEmitter, Optional, ContentChildren, Output, Injectable, createEnvironmentInjector, InjectionToken, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, Injector, ApplicationRef, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, provideAppInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ENVIRONMENT_INITIALIZER, NgZone, SkipSelf, NgModule } from '@angular/core';
+import { signal, untracked, inject, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, HostAttributeToken, ɵRuntimeError as _RuntimeError, booleanAttribute, Directive, Attribute, HostBinding, Input, HostListener, EventEmitter, Optional, ContentChildren, Output, Injectable, createEnvironmentInjector, InjectionToken, ɵpublishExternalGlobalUtil as _publishExternalGlobalUtil, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, Injector, ApplicationRef, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, provideAppInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ENVIRONMENT_INITIALIZER, NgZone, SkipSelf, NgModule } from '@angular/core';
 import { ROUTER_CONFIGURATION, NavigationEnd, isUrlTree, Router, ActivatedRoute, RouterConfigLoader, IMPERATIVE_NAVIGATION, NavigationStart, NavigationSkipped, NavigationSkippedCode, Scroll, UrlSerializer, NavigationTransitions, ROUTES, afterNextNavigation, stringifyEvent, NAVIGATION_ERROR_HANDLER, RoutedComponentInputBinder, INPUT_BINDER, CREATE_VIEW_TRANSITION, createViewTransition, VIEW_TRANSITION_OPTIONS, DefaultUrlSerializer, ChildrenOutletContexts, RouterOutlet, ɵEmptyOutletComponent as _EmptyOutletComponent } from './router2.mjs';
 import { Subject, of, from } from 'rxjs';
 import { mergeAll, catchError, filter, concatMap, mergeMap } from 'rxjs/operators';
@@ -387,10 +387,10 @@ class RouterLink {
             preserveFragment: this.preserveFragment,
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.3.4+sha-5f4f624", type: RouterLink, isStandalone: true, selector: "[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", info: "info", relativeTo: "relativeTo", preserveFragment: ["preserveFragment", "preserveFragment", booleanAttribute], skipLocationChange: ["skipLocationChange", "skipLocationChange", booleanAttribute], replaceUrl: ["replaceUrl", "replaceUrl", booleanAttribute], routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.href": "reactiveHref()", "attr.target": "this.target" } }, usesOnChanges: true, ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterLink, deps: [{ token: Router }, { token: ActivatedRoute }, { token: 'tabindex', attribute: true }, { token: i0.Renderer2 }, { token: i0.ElementRef }, { token: i3.LocationStrategy }], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.3.4+sha-07d8c60", type: RouterLink, isStandalone: true, selector: "[routerLink]", inputs: { target: "target", queryParams: "queryParams", fragment: "fragment", queryParamsHandling: "queryParamsHandling", state: "state", info: "info", relativeTo: "relativeTo", preserveFragment: ["preserveFragment", "preserveFragment", booleanAttribute], skipLocationChange: ["skipLocationChange", "skipLocationChange", booleanAttribute], replaceUrl: ["replaceUrl", "replaceUrl", booleanAttribute], routerLink: "routerLink" }, host: { listeners: { "click": "onClick($event.button,$event.ctrlKey,$event.shiftKey,$event.altKey,$event.metaKey)" }, properties: { "attr.href": "reactiveHref()", "attr.target": "this.target" } }, usesOnChanges: true, ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterLink, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterLink, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLink]',
@@ -649,10 +649,10 @@ class RouterLinkActive {
         const isActiveCheckFn = this.isLinkActive(this.router);
         return (this.link && isActiveCheckFn(this.link)) || this.links.some(isActiveCheckFn);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.3.4+sha-5f4f624", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterLinkActive, deps: [{ token: Router }, { token: i0.ElementRef }, { token: i0.Renderer2 }, { token: i0.ChangeDetectorRef }, { token: RouterLink, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.3.4+sha-07d8c60", type: RouterLinkActive, isStandalone: true, selector: "[routerLinkActive]", inputs: { routerLinkActiveOptions: "routerLinkActiveOptions", ariaCurrentWhenActive: "ariaCurrentWhenActive", routerLinkActive: "routerLinkActive" }, outputs: { isActiveChange: "isActiveChange" }, queries: [{ propertyName: "links", predicate: RouterLink, descendants: true }], exportAs: ["routerLinkActive"], usesOnChanges: true, ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterLinkActive, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterLinkActive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[routerLinkActive]',
@@ -703,10 +703,10 @@ class PreloadAllModules {
     preload(route, fn) {
         return fn().pipe(catchError(() => of(null)));
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: PreloadAllModules, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: PreloadAllModules, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: PreloadAllModules, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: PreloadAllModules, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -723,10 +723,10 @@ class NoPreloading {
     preload(route, fn) {
         return of(null);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: NoPreloading, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: NoPreloading, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: NoPreloading, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: NoPreloading, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: NoPreloading, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -822,10 +822,10 @@ class RouterPreloader {
             }
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterPreloader, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterPreloader, deps: [{ token: Router }, { token: i0.EnvironmentInjector }, { token: PreloadingStrategy }, { token: RouterConfigLoader }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterPreloader, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterPreloader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterPreloader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: Router }, { type: i0.EnvironmentInjector }, { type: PreloadingStrategy }, { type: RouterConfigLoader }] });
@@ -935,12 +935,35 @@ class RouterScroller {
         this.routerEventsSubscription?.unsubscribe();
         this.scrollEventsSubscription?.unsubscribe();
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterScroller });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterScroller, deps: "invalid", target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterScroller });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterScroller, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterScroller, decorators: [{
             type: Injectable
         }], ctorParameters: () => [{ type: UrlSerializer }, { type: NavigationTransitions }, { type: i3.ViewportScroller }, { type: i0.NgZone }, { type: undefined }] });
+
+/**
+ * Returns the loaded routes for a given route.
+ */
+function getLoadedRoutes(route) {
+    return route._loadedRoutes;
+}
+/**
+ * Returns the Router instance from the given injector, or null if not available.
+ */
+function getRouterInstance(injector) {
+    return injector.get(Router, null, { optional: true });
+}
+/**
+ * Navigates the given router to the specified URL.
+ * Throws if the provided router is not an Angular Router.
+ */
+function navigateByUrl(router, url) {
+    if (!(router instanceof Router)) {
+        throw new Error('The provided router is not an Angular Router.');
+    }
+    return router.navigateByUrl(url);
+}
 
 /**
  * Sets up providers necessary to enable `Router` functionality for the application.
@@ -979,6 +1002,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f6
  * @returns A set of providers to setup a Router.
  */
 function provideRouter(routes, ...features) {
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+        // Publish this util when the router is provided so that the devtools can use it.
+        _publishExternalGlobalUtil('ɵgetLoadedRoutes', getLoadedRoutes);
+        _publishExternalGlobalUtil('ɵgetRouterInstance', getRouterInstance);
+        _publishExternalGlobalUtil('ɵnavigateByUrl', navigateByUrl);
+    }
     return makeEnvironmentProviders([
         { provide: ROUTES, multi: true, useValue: routes },
         typeof ngDevMode === 'undefined' || ngDevMode
@@ -1603,11 +1632,11 @@ class RouterModule {
             providers: [{ provide: ROUTES, multi: true, useValue: routes }],
         };
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterModule, imports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent], exports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-5f4f624", ngImport: i0, type: RouterModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.4+sha-07d8c60", ngImport: i0, type: RouterModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: ROUTER_DIRECTIVES,
