@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.8+sha-013effd
+ * @license Angular v21.0.0-next.8+sha-3e8e48c
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -861,6 +861,9 @@ interface Route {
     component?: Type<any>;
     /**
      * An object specifying a lazy-loaded component.
+     *
+     * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+     *
      */
     loadComponent?: () => Type<unknown> | Observable<Type<unknown> | DefaultExport<Type<unknown>>> | Promise<Type<unknown> | DefaultExport<Type<unknown>>>;
     /**
@@ -942,6 +945,9 @@ interface Route {
     children?: Routes;
     /**
      * An object specifying lazy-loaded child routes.
+     *
+     * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+     *
      */
     loadChildren?: LoadChildren;
     /**
