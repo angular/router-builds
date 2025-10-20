@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.0.0-next.8+sha-7fb7511
+ * @license Angular v21.0.0-next.8+sha-f6a73f1
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import { ActivatedRouteSnapshot, Params, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
-export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DefaultUrlSerializer, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
+import { ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
+export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
 import { ComponentRef, EnvironmentInjector, InjectionToken, Compiler, Injector, Type, OnDestroy, EnvironmentProviders, Provider, Version } from '@angular/core';
@@ -26,6 +26,9 @@ import '@angular/common';
  * @param queryParams The query parameters for the `UrlTree`. `null` if the `UrlTree` does not have
  *     any query parameters.
  * @param fragment The fragment for the `UrlTree`. `null` if the `UrlTree` does not have a fragment.
+ * @param urlSerializer The `UrlSerializer` to use for handling query parameter normalization.
+ * You should provide your application's custom `UrlSerializer` if one is configured to parse and
+ * serialize query parameter values to and from objects other than strings/string arrays.
  *
  * @usageNotes
  *
@@ -63,7 +66,7 @@ import '@angular/common';
  * createUrlTreeFromSnapshot(snapshot, ['../../team/44/user/22']);
  * ```
  */
-declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: readonly any[], queryParams?: Params | null, fragment?: string | null): UrlTree;
+declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: readonly any[], queryParams?: Params | null, fragment?: string | null, urlSerializer?: DefaultUrlSerializer): UrlTree;
 
 /**
  * Store contextual information about a `RouterOutlet`
@@ -898,5 +901,5 @@ declare function afterNextNavigation(router: {
  */
 declare function provideSometimesSyncRecognize(): EnvironmentProviders;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize };
 export type { ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
