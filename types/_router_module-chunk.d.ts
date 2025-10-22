@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.8+sha-9fef846
+ * @license Angular v21.0.0-next.8+sha-9d48e53
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2802,7 +2802,7 @@ declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     deactivate(): void;
     activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet, ng-container[routerOutlet]", ["outlet"], { "name": { "alias": "name"; "required": false; }; "routerOutletData": { "alias": "routerOutletData"; "required": false; "isSignal": true; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; "routerOutletData": { "alias": "routerOutletData"; "required": false; "isSignal": true; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
 }
 
 /**
