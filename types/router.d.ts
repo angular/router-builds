@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-next.9+sha-9e8b4eb
+ * @license Angular v21.0.0-next.9+sha-a1b4e38
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -408,6 +408,32 @@ type InMemoryScrollingFeature = RouterFeature<RouterFeatureKind.InMemoryScrollin
  * @returns A set of providers for use with `provideRouter`.
  */
 declare function withInMemoryScrolling(options?: InMemoryScrollingOptions): InMemoryScrollingFeature;
+/**
+ * Enables the use of the browser's `History` API for navigation.
+ *
+ * @description
+ * This function provides a `Location` strategy that uses the browser's `History` API.
+ * It is required when using features that rely on `history.state`. For example, the
+ * `state` object in `NavigationExtras` is passed to `history.pushState` or
+ * `history.replaceState`.
+ *
+ * @usageNotes
+ *
+ * ```typescript
+ * const appRoutes: Routes = [
+ *   { path: 'page', component: PageComponent },
+ * ];
+ *
+ * bootstrapApplication(AppComponent, {
+ *   providers: [
+ *     provideRouter(appRoutes, withPlatformNavigation())
+ *   ]
+ * });
+ * ```
+ *
+ * @returns A `RouterFeature` that enables the platform navigation.
+ */
+declare function withPlatformNavigation(): RouterFeature<RouterFeatureKind.InMemoryScrollingFeature>;
 /**
  * A type alias for providers returned by `withEnabledBlockingInitialNavigation` for use with
  * `provideRouter`.
@@ -902,5 +928,5 @@ declare function afterNextNavigation(router: {
  */
 declare function provideSometimesSyncRecognize(): EnvironmentProviders;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, provideSometimesSyncRecognize as ɵprovideSometimesSyncRecognize, withPlatformNavigation as ɵwithPlatformNavigation };
 export type { ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
