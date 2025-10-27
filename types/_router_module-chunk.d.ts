@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-b5f8d0b
+ * @license Angular v21.1.0-next.0+sha-25e8bcb
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1707,6 +1707,19 @@ interface NavigationBehaviorOptions {
      * state, such as `skipLocationChange`.
      */
     readonly browserUrl?: UrlTree | string;
+    /**
+     * Configures how scrolling is handled for an individual navigation when scroll restoration
+     * is enabled in the router.
+     *
+     * - When 'manual', the router will not perform scrolling when the navigation is complete,
+     * even if scroll restoration is enabled.
+     * - When 'after-transition', scrolling will be performed after the `NavigationEnd` event,
+     * according to the behavior configured in the router scrolling feature.
+     *
+     * @see withInMemoryRouterScroller
+     * @see InMemoryScrollingOptions
+     */
+    readonly scroll?: 'manual' | 'after-transition';
 }
 
 declare class Tree<T> {
@@ -2472,6 +2485,8 @@ declare class Scroll {
     readonly position: [number, number] | null;
     /** @docsNotRequired */
     readonly anchor: string | null;
+    /** @docsNotRequired */
+    readonly scrollBehavior?: "manual" | "after-transition" | undefined;
     readonly type = EventType.Scroll;
     constructor(
     /** @docsNotRequired */
@@ -2479,7 +2494,9 @@ declare class Scroll {
     /** @docsNotRequired */
     position: [number, number] | null, 
     /** @docsNotRequired */
-    anchor: string | null);
+    anchor: string | null, 
+    /** @docsNotRequired */
+    scrollBehavior?: "manual" | "after-transition" | undefined);
     toString(): string;
 }
 /**
@@ -3757,9 +3774,11 @@ interface RouterConfigOptions {
 }
 /**
  * Configuration options for the scrolling feature which can be used with `withInMemoryScrolling`
- * function.
+ * function or `RouterModule.forRoot`.
  *
  * @publicApi
+ * @see withInMemoryScrolling
+ * @see RouterModule#forRoot
  */
 interface InMemoryScrollingOptions {
     /**
