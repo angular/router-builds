@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-050c475
+ * @license Angular v21.1.0-next.0+sha-cfb26f5
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -3593,7 +3593,6 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
     private element;
     private renderer;
     private readonly cdr;
-    private link?;
     links: QueryList<RouterLink>;
     private classes;
     private routerEventsSubscription;
@@ -3635,7 +3634,8 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
      * ```
      */
     readonly isActiveChange: EventEmitter<boolean>;
-    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef, link?: RouterLink | undefined);
+    private link;
+    constructor(router: Router, element: ElementRef, renderer: Renderer2, cdr: ChangeDetectorRef);
     /** @docs-private */
     ngAfterContentInit(): void;
     private subscribeToEachLinkOnChanges;
@@ -3647,7 +3647,7 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
     private update;
     private isLinkActive;
     private hasActiveLinks;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, [null, null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterLinkActive, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLinkActive, "[routerLinkActive]", ["routerLinkActive"], { "routerLinkActiveOptions": { "alias": "routerLinkActiveOptions"; "required": false; }; "ariaCurrentWhenActive": { "alias": "ariaCurrentWhenActive"; "required": false; }; "routerLinkActive": { "alias": "routerLinkActive"; "required": false; }; }, { "isActiveChange": "isActiveChange"; }, ["links"], never, true, never>;
 }
 
