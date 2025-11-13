@@ -1,5 +1,5 @@
 /**
- * @license Angular v20.3.11+sha-3a8fb09
+ * @license Angular v20.3.11+sha-06bc146
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -558,6 +558,8 @@ type PreloadingFeature = RouterFeature<RouterFeatureKind.PreloadingFeature>;
  *     should be used.
  * @returns A set of providers for use with `provideRouter`.
  *
+ * @see [Preloading strategy](guide/routing/customizing-route-behavior#preloading-strategy)
+ *
  * @publicApi
  */
 declare function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature;
@@ -594,6 +596,8 @@ type RouterConfigurationFeature = RouterFeature<RouterFeatureKind.RouterConfigur
  * @param options A set of parameters to configure Router, see `RouterConfigOptions` for
  *     additional information.
  * @returns A set of providers for use with `provideRouter`.
+ *
+ * @see [Router configuration options](guide/routing/customizing-route-behavior#router-configuration-options)
  *
  * @publicApi
  */
@@ -671,6 +675,7 @@ type NavigationErrorHandlerFeature = RouterFeature<RouterFeatureKind.NavigationE
  * @see {@link NavigationError}
  * @see {@link /api/core/inject inject}
  * @see {@link runInInjectionContext}
+ * @see [Centralize error handling in withNavigationErrorHandler](guide/routing/data-resolvers#centralize-error-handling-in-withnavigationerrorhandler)
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -759,6 +764,7 @@ declare function withComponentInputBinding(): ComponentInputBindingFeature;
  * @returns A set of providers for use with `provideRouter`.
  * @see https://developer.chrome.com/docs/web-platform/view-transitions/
  * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+ * @see [Route transition animations](guide/routing/route-transition-animations)
  * @developerPreview 19.0
  */
 declare function withViewTransitions(options?: ViewTransitionsFeatureOptions): ViewTransitionsFeature;
