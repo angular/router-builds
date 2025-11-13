@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0-rc.2+sha-2406172
+ * @license Angular v21.0.0-rc.2+sha-16d51f6
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -451,6 +451,7 @@ type UrlMatchResult = {
  * export const routes = [{ matcher: htmlFiles, component: AnyComponent }];
  * ```
  *
+ * @see [Creating custom route matches](guide/routing/routing-with-urlmatcher)
  * @publicApi
  */
 type UrlMatcher = (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => UrlMatchResult | null;
@@ -586,6 +587,7 @@ type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapshot, 'routeConfig
  * change or query params have changed. This does not include matrix parameters.
  *
  * @see {@link Route#runGuardsAndResolvers}
+ * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
  * @publicApi
  */
 type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always' | ((from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean);
@@ -820,6 +822,7 @@ interface Route {
      * implements `Resolve`.
      *
      * @see {@link TitleStrategy}
+     * @see [Page titles](guide/routing/define-routes#page-titles)
      */
     title?: string | Type<Resolve<string>> | ResolveFn<string>;
     /**
@@ -848,10 +851,15 @@ interface Route {
      * the router would apply the redirect even when navigating
      * to the redirect destination, creating an endless loop.
      *
+     * @see [Redirecting Routes](guide/routing/redirecting-routes)
+     *
      */
     pathMatch?: 'prefix' | 'full';
     /**
      * A custom URL-matching function. Cannot be used together with `path`.
+     *
+     * @see [Creating custom route matches](guide/routing/routing-with-urlmatcher)
+     *
      */
     matcher?: UrlMatcher;
     /**
@@ -876,11 +884,16 @@ interface Route {
      * required dependencies.
      *
      * When not present, router does not redirect.
+     *
+     * @see [Conditional redirects](guide/routing/redirecting-routes#conditional-redirects)
      */
     redirectTo?: string | RedirectFunction;
     /**
      * Name of a `RouterOutlet` object where the component can be placed
      * when the path matches.
+     *
+     * @see [Show routes with outlets](guide/routing/show-routes-with-outlets)
+     *
      */
     outlet?: string;
     /**
@@ -890,6 +903,9 @@ interface Route {
      *
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
+     *
+     * @see [CanActivate](guide/routing/route-guards#canactivate)
+     *
      */
     canActivate?: Array<CanActivateFn | DeprecatedGuard>;
     /**
@@ -899,6 +915,9 @@ interface Route {
      *
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
+     *
+     * @see [CanMatch](guide/routing/route-guards#canmatch)
+     *
      */
     canMatch?: Array<CanMatchFn | DeprecatedGuard>;
     /**
@@ -908,6 +927,9 @@ interface Route {
      *
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
+     *
+     * @see [CanActivateChild](guide/routing/route-guards#canactivatechild)
+     *
      */
     canActivateChild?: Array<CanActivateChildFn | DeprecatedGuard>;
     /**
@@ -917,6 +939,9 @@ interface Route {
      *
      * When using a function rather than DI tokens, the function can call `inject` to get any required
      * dependencies. This `inject` call must be done in a synchronous context.
+     *
+     * @see [CanDeactivate](guide/routing/route-guards#candeactivate)
+     *
      */
     canDeactivate?: Array<CanDeactivateFn<any> | DeprecatedGuard>;
     /**
@@ -936,6 +961,8 @@ interface Route {
     data?: Data;
     /**
      * A map of DI tokens used to look up data resolvers. See `Resolve`.
+     *
+     * @see [Resolve](guide/routing/data-resolvers#what-are-data-resolvers)
      */
     resolve?: ResolveData;
     /**
@@ -966,6 +993,7 @@ interface Route {
      * change or query params have changed. This does not include matrix parameters.
      *
      * @see {@link RunGuardsAndResolvers}
+     * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
     /**
@@ -975,6 +1003,7 @@ interface Route {
      * `Route` and use it for this `Route` and its `children`. If this
      * route also has a `loadChildren` function which returns an `NgModuleRef`, this injector will be
      * used as the parent of the lazy loaded module.
+     * @see [Route providers](guide/di/defining-dependency-providers#route-providers)
      */
     providers?: Array<Provider | EnvironmentProviders>;
 }
@@ -1033,6 +1062,9 @@ interface LoadedRouterConfig {
  * class AppModule {}
  * ```
  *
+ * @see [CanActivate](guide/routing/route-guards#canactivate)
+ *
+ *
  * @publicApi
  */
 interface CanActivate {
@@ -1089,6 +1121,7 @@ interface CanActivate {
  *
  * @publicApi
  * @see {@link Route}
+ * @see [CanActivate](guide/routing/route-guards#canactivate)
  */
 type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => MaybeAsync<GuardResult>;
 /**
@@ -1146,7 +1179,7 @@ type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
  * })
  * class AppModule {}
  * ```
- *
+ * @see [CanActivateChild](guide/routing/route-guards#canactivatechild)
  * @publicApi
  */
 interface CanActivateChild {
@@ -1166,6 +1199,7 @@ interface CanActivateChild {
  *
  * @publicApi
  * @see {@link Route}
+ * @see [CanActivateChild](guide/routing/route-guards#canactivatechild)
  */
 type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) => MaybeAsync<GuardResult>;
 /**
@@ -1220,7 +1254,7 @@ type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStat
  * })
  * class AppModule {}
  * ```
- *
+ * @see [CanDeactivate](guide/routing/route-guards#candeactivate)
  * @publicApi
  */
 interface CanDeactivate<T> {
@@ -1240,6 +1274,7 @@ interface CanDeactivate<T> {
  *
  * @publicApi
  * @see {@link Route}
+ * @see [CanDeactivate](guide/routing/route-guards#candeactivate)
  */
 type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) => MaybeAsync<GuardResult>;
 /**
@@ -1301,6 +1336,7 @@ type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, c
  * could not be used for a URL match but the catch-all `**` `Route` did instead.
  *
  * @publicApi
+ * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
 interface CanMatch {
     canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>;
@@ -1322,6 +1358,7 @@ interface CanMatch {
  *
  * @publicApi
  * @see {@link Route}
+ * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
 type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<GuardResult>;
 /**
@@ -1415,6 +1452,7 @@ type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<GuardResu
  *
  * @publicApi
  * @see {@link ResolveFn}
+ * @see [Data resolvers](guide/routing/data-resolvers)
  */
 interface Resolve<T> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<T | RedirectCommand>;
@@ -1520,6 +1558,7 @@ interface Resolve<T> {
  *
  * @publicApi
  * @see {@link Route}
+ * @see [Data resolvers](guide/routing/data-resolvers)
  */
 type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => MaybeAsync<T | RedirectCommand>;
 /**
@@ -1839,6 +1878,8 @@ declare class ActivatedRoute {
  * }
  * ```
  *
+ * @see [Understanding route snapshots](guide/routing/read-route-state#understanding-route-snapshots)
+ *
  * @publicApi
  */
 declare class ActivatedRouteSnapshot {
@@ -1937,6 +1978,8 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
 type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
 /**
  * Identifies the type of a router event.
+ *
+ * @see [Router Lifecycle and Events](guide/routing/lifecycle-and-events)
  *
  * @publicApi
  */
@@ -3568,6 +3611,8 @@ declare class RouterLink implements OnChanges, OnDestroy {
  * Content children queries do not retrieve elements or directives that are in other components' templates, since a component's template is always a black box to its ancestors.
  *
  * @ngModule RouterModule
+ *
+ * @see [Detect active current route with RouterLinkActive](guide/routing/read-route-state#detect-active-current-route-with-routerlinkactive)
  *
  * @publicApi
  */
