@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-22ad71d
+ * @license Angular v21.1.0-next.0+sha-e9ba63a
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1820,7 +1820,7 @@ declare class RouterState extends Tree<ActivatedRoute> {
  * on shallow equality. For example, changing deeply nested properties in resolved `data` will not
  * cause the `ActivatedRoute.data` `Observable` to emit a new value.
  *
- * {@example router/activated-route/module.ts region="activated-route"}
+ * {@example router/activated-route/activated_route_component.ts region="activated-route"}
  *
  * @see [Getting route information](guide/routing/common-router-tasks#getting-route-information)
  *
