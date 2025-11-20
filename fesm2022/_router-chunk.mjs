@@ -1,12 +1,12 @@
 /**
- * @license Angular v21.1.0-next.0+sha-2ecdb22
+ * @license Angular v21.1.0-next.0+sha-1ab461c
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
-import { ɵisPromise as _isPromise, ɵRuntimeError as _RuntimeError, Injectable, ɵisNgModule as _isNgModule, isStandalone, createEnvironmentInjector, InjectionToken, EventEmitter, input, inject, ViewContainerRef, ChangeDetectorRef, Directive, Input, Output, reflectComponentType, Component, ɵisInjectable as _isInjectable, runInInjectionContext, makeEnvironmentProviders, Compiler, NgModuleFactory, ɵresolveComponentResources as _resolveComponentResources, afterNextRender, signal, EnvironmentInjector, DestroyRef, untracked, ɵConsole as _Console, ɵPendingTasksInternal as _PendingTasksInternal, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, ɵformatRuntimeError as _formatRuntimeError } from '@angular/core';
+import { ɵisPromise as _isPromise, ɵRuntimeError as _RuntimeError, Injectable, InjectionToken, EventEmitter, input, inject, ViewContainerRef, ChangeDetectorRef, Directive, Input, Output, reflectComponentType, Component, runInInjectionContext, ɵisInjectable as _isInjectable, ɵisNgModule as _isNgModule, isStandalone, createEnvironmentInjector, makeEnvironmentProviders, Compiler, NgModuleFactory, ɵresolveComponentResources as _resolveComponentResources, afterNextRender, signal, EnvironmentInjector, DestroyRef, untracked, ɵConsole as _Console, ɵPendingTasksInternal as _PendingTasksInternal, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, ɵformatRuntimeError as _formatRuntimeError } from '@angular/core';
 import { isObservable, from, of, BehaviorSubject, combineLatest, EmptyError, Observable, concat, defer, pipe, throwError, EMPTY, Subject, Subscription } from 'rxjs';
 import { first, map, switchMap, take, startWith, filter, takeUntil, mergeMap, concatMap, tap, catchError, scan, defaultIfEmpty, last as last$1, takeLast, finalize } from 'rxjs/operators';
 import * as i1 from '@angular/platform-browser';
@@ -308,7 +308,7 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: UrlSerializer,
     deps: [],
@@ -316,7 +316,7 @@ class UrlSerializer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: UrlSerializer,
     providedIn: 'root',
@@ -325,7 +325,7 @@ class UrlSerializer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: UrlSerializer,
   decorators: [{
@@ -1222,126 +1222,6 @@ function stringifyEvent(routerEvent) {
   }
 }
 
-function getOrCreateRouteInjectorIfNeeded(route, currentInjector) {
-  if (route.providers && !route._injector) {
-    route._injector = createEnvironmentInjector(route.providers, currentInjector, `Route: ${route.path}`);
-  }
-  return route._injector ?? currentInjector;
-}
-function validateConfig(config, parentPath = '', requireStandaloneComponents = false) {
-  for (let i = 0; i < config.length; i++) {
-    const route = config[i];
-    const fullPath = getFullPath(parentPath, route);
-    validateNode(route, fullPath, requireStandaloneComponents);
-  }
-}
-function assertStandalone(fullPath, component) {
-  if (component && _isNgModule(component)) {
-    throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. You are using 'loadComponent' with a module, ` + `but it must be used with standalone components. Use 'loadChildren' instead.`);
-  } else if (component && !isStandalone(component)) {
-    throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. The component must be standalone.`);
-  }
-}
-function validateNode(route, fullPath, requireStandaloneComponents) {
-  if (typeof ngDevMode === 'undefined' || ngDevMode) {
-    if (!route) {
-      throw new _RuntimeError(4014, `
-      Invalid configuration of route '${fullPath}': Encountered undefined route.
-      The reason might be an extra comma.
-
-      Example:
-      const routes: Routes = [
-        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        { path: 'dashboard',  component: DashboardComponent },, << two commas
-        { path: 'detail/:id', component: HeroDetailComponent }
-      ];
-    `);
-    }
-    if (Array.isArray(route)) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': Array cannot be specified`);
-    }
-    if (!route.redirectTo && !route.component && !route.loadComponent && !route.children && !route.loadChildren && route.outlet && route.outlet !== PRIMARY_OUTLET) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
-    }
-    if (route.redirectTo && route.children) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
-    }
-    if (route.redirectTo && route.loadChildren) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
-    }
-    if (route.children && route.loadChildren) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
-    }
-    if (route.component && route.loadComponent) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': component and loadComponent cannot be used together`);
-    }
-    if (route.redirectTo) {
-      if (route.component || route.loadComponent) {
-        throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and component/loadComponent cannot be used together`);
-      }
-      if (route.canMatch || route.canActivate) {
-        throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and ${route.canMatch ? 'canMatch' : 'canActivate'} cannot be used together.` + `Redirects happen before guards are executed.`);
-      }
-    }
-    if (route.path && route.matcher) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
-    }
-    if (route.redirectTo === void 0 && !route.component && !route.loadComponent && !route.children && !route.loadChildren) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren`);
-    }
-    if (route.path === void 0 && route.matcher === void 0) {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
-    }
-    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
-      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': path cannot start with a slash`);
-    }
-    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
-      const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
-      throw new _RuntimeError(4014, `Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
-    }
-    if (requireStandaloneComponents) {
-      assertStandalone(fullPath, route.component);
-    }
-  }
-  if (route.children) {
-    validateConfig(route.children, fullPath, requireStandaloneComponents);
-  }
-}
-function getFullPath(parentPath, currentRoute) {
-  if (!currentRoute) {
-    return parentPath;
-  }
-  if (!parentPath && !currentRoute.path) {
-    return '';
-  } else if (parentPath && !currentRoute.path) {
-    return `${parentPath}/`;
-  } else if (!parentPath && currentRoute.path) {
-    return currentRoute.path;
-  } else {
-    return `${parentPath}/${currentRoute.path}`;
-  }
-}
-function getOutlet(route) {
-  return route.outlet || PRIMARY_OUTLET;
-}
-function sortByMatchingOutlets(routes, outletName) {
-  const sortedConfig = routes.filter(r => getOutlet(r) === outletName);
-  sortedConfig.push(...routes.filter(r => getOutlet(r) !== outletName));
-  return sortedConfig;
-}
-function getClosestRouteInjector(snapshot) {
-  if (!snapshot) return null;
-  if (snapshot.routeConfig?._injector) {
-    return snapshot.routeConfig._injector;
-  }
-  for (let s = snapshot.parent; s; s = s.parent) {
-    const route = s.routeConfig;
-    if (route?._loadedInjector) return route._loadedInjector;
-    if (route?._injector) return route._injector;
-  }
-  return null;
-}
-
 class OutletContext {
   rootInjector;
   outlet = null;
@@ -1349,7 +1229,7 @@ class OutletContext {
   children;
   attachRef = null;
   get injector() {
-    return getClosestRouteInjector(this.route?.snapshot) ?? this.rootInjector;
+    return this.route?.snapshot._environmentInjector ?? this.rootInjector;
   }
   constructor(rootInjector) {
     this.rootInjector = rootInjector;
@@ -1395,7 +1275,7 @@ class ChildrenOutletContexts {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: ChildrenOutletContexts,
     deps: [{
@@ -1405,7 +1285,7 @@ class ChildrenOutletContexts {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: ChildrenOutletContexts,
     providedIn: 'root'
@@ -1413,7 +1293,7 @@ class ChildrenOutletContexts {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: ChildrenOutletContexts,
   decorators: [{
@@ -1506,8 +1386,8 @@ class RouterState extends Tree {
     return this.snapshot.toString();
   }
 }
-function createEmptyState(rootComponent) {
-  const snapshot = createEmptyStateSnapshot(rootComponent);
+function createEmptyState(rootComponent, injector) {
+  const snapshot = createEmptyStateSnapshot(rootComponent, injector);
   const emptyUrl = new BehaviorSubject([new UrlSegment('', {})]);
   const emptyParams = new BehaviorSubject({});
   const emptyData = new BehaviorSubject({});
@@ -1517,12 +1397,12 @@ function createEmptyState(rootComponent) {
   activated.snapshot = snapshot.root;
   return new RouterState(new TreeNode(activated, []), snapshot);
 }
-function createEmptyStateSnapshot(rootComponent) {
+function createEmptyStateSnapshot(rootComponent, injector) {
   const emptyParams = {};
   const emptyData = {};
   const emptyQueryParams = {};
   const fragment = '';
-  const activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, {});
+  const activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, {}, injector);
   return new RouterStateSnapshot('', new TreeNode(activated, []));
 }
 class ActivatedRoute {
@@ -1645,10 +1525,11 @@ class ActivatedRouteSnapshot {
   _routerState;
   _paramMap;
   _queryParamMap;
+  _environmentInjector;
   get title() {
     return this.data?.[RouteTitleKey];
   }
-  constructor(url, params, queryParams, fragment, data, outlet, component, routeConfig, resolve) {
+  constructor(url, params, queryParams, fragment, data, outlet, component, routeConfig, resolve, environmentInjector) {
     this.url = url;
     this.params = params;
     this.queryParams = queryParams;
@@ -1658,6 +1539,7 @@ class ActivatedRouteSnapshot {
     this.component = component;
     this.routeConfig = routeConfig;
     this._resolve = resolve;
+    this._environmentInjector = environmentInjector;
   }
   get root() {
     return this._routerState.root;
@@ -1868,7 +1750,7 @@ class RouterOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RouterOutlet,
     deps: [],
@@ -1876,7 +1758,7 @@ class RouterOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "17.1.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     type: RouterOutlet,
     isStandalone: true,
     selector: "router-outlet",
@@ -1909,7 +1791,7 @@ class RouterOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: RouterOutlet,
   decorators: [{
@@ -2018,7 +1900,7 @@ class RoutedComponentInputBinder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RoutedComponentInputBinder,
     deps: [],
@@ -2026,14 +1908,14 @@ class RoutedComponentInputBinder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RoutedComponentInputBinder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: RoutedComponentInputBinder,
   decorators: [{
@@ -2044,7 +1926,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ɵEmptyOutletComponent {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: ɵEmptyOutletComponent,
     deps: [],
@@ -2052,7 +1934,7 @@ class ɵEmptyOutletComponent {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     type: ɵEmptyOutletComponent,
     isStandalone: true,
     selector: "ng-component",
@@ -2072,7 +1954,7 @@ class ɵEmptyOutletComponent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: ɵEmptyOutletComponent,
   decorators: [{
@@ -2416,7 +2298,7 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
 }
 function shouldRunGuardsAndResolvers(curr, future, mode) {
   if (typeof mode === 'function') {
-    return mode(curr, future);
+    return runInInjectionContext(future._environmentInjector, () => mode(curr, future));
   }
   switch (mode) {
     case 'pathParamsChange':
@@ -2516,7 +2398,7 @@ function takeUntilAbort(signal) {
   return takeUntil(abortSignalToObservable(signal));
 }
 
-function checkGuards(injector, forwardEvent) {
+function checkGuards(forwardEvent) {
   return mergeMap(t => {
     const {
       targetSnapshot,
@@ -2532,22 +2414,22 @@ function checkGuards(injector, forwardEvent) {
         guardsResult: true
       });
     }
-    return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot, injector).pipe(mergeMap(canDeactivate => {
-      return canDeactivate && isBoolean(canDeactivate) ? runCanActivateChecks(targetSnapshot, canActivateChecks, injector, forwardEvent) : of(canDeactivate);
+    return runCanDeactivateChecks(canDeactivateChecks, targetSnapshot, currentSnapshot).pipe(mergeMap(canDeactivate => {
+      return canDeactivate && isBoolean(canDeactivate) ? runCanActivateChecks(targetSnapshot, canActivateChecks, forwardEvent) : of(canDeactivate);
     }), map(guardsResult => ({
       ...t,
       guardsResult
     })));
   });
 }
-function runCanDeactivateChecks(checks, futureRSS, currRSS, injector) {
-  return from(checks).pipe(mergeMap(check => runCanDeactivate(check.component, check.route, currRSS, futureRSS, injector)), first(result => {
+function runCanDeactivateChecks(checks, futureRSS, currRSS) {
+  return from(checks).pipe(mergeMap(check => runCanDeactivate(check.component, check.route, currRSS, futureRSS)), first(result => {
     return result !== true;
   }, true));
 }
-function runCanActivateChecks(futureSnapshot, checks, injector, forwardEvent) {
+function runCanActivateChecks(futureSnapshot, checks, forwardEvent) {
   return from(checks).pipe(concatMap(check => {
-    return concat(fireChildActivationStart(check.route.parent, forwardEvent), fireActivationStart(check.route, forwardEvent), runCanActivateChild(futureSnapshot, check.path, injector), runCanActivate(futureSnapshot, check.route, injector));
+    return concat(fireChildActivationStart(check.route.parent, forwardEvent), fireActivationStart(check.route, forwardEvent), runCanActivateChild(futureSnapshot, check.path), runCanActivate(futureSnapshot, check.route));
   }), first(result => {
     return result !== true;
   }, true));
@@ -2564,12 +2446,12 @@ function fireChildActivationStart(snapshot, forwardEvent) {
   }
   return of(true);
 }
-function runCanActivate(futureRSS, futureARS, injector) {
+function runCanActivate(futureRSS, futureARS) {
   const canActivate = futureARS.routeConfig ? futureARS.routeConfig.canActivate : null;
   if (!canActivate || canActivate.length === 0) return of(true);
   const canActivateObservables = canActivate.map(canActivate => {
     return defer(() => {
-      const closestInjector = getClosestRouteInjector(futureARS) ?? injector;
+      const closestInjector = futureARS._environmentInjector;
       const guard = getTokenOrFunctionIdentity(canActivate, closestInjector);
       const guardVal = isCanActivate(guard) ? guard.canActivate(futureARS, futureRSS) : runInInjectionContext(closestInjector, () => guard(futureARS, futureRSS));
       return wrapIntoObservable(guardVal).pipe(first());
@@ -2577,13 +2459,13 @@ function runCanActivate(futureRSS, futureARS, injector) {
   });
   return of(canActivateObservables).pipe(prioritizedGuardValue());
 }
-function runCanActivateChild(futureRSS, path, injector) {
+function runCanActivateChild(futureRSS, path) {
   const futureARS = path[path.length - 1];
   const canActivateChildGuards = path.slice(0, path.length - 1).reverse().map(p => getCanActivateChild(p)).filter(_ => _ !== null);
   const canActivateChildGuardsMapped = canActivateChildGuards.map(d => {
     return defer(() => {
       const guardsMapped = d.guards.map(canActivateChild => {
-        const closestInjector = getClosestRouteInjector(d.node) ?? injector;
+        const closestInjector = d.node._environmentInjector;
         const guard = getTokenOrFunctionIdentity(canActivateChild, closestInjector);
         const guardVal = isCanActivateChild(guard) ? guard.canActivateChild(futureARS, futureRSS) : runInInjectionContext(closestInjector, () => guard(futureARS, futureRSS));
         return wrapIntoObservable(guardVal).pipe(first());
@@ -2593,11 +2475,11 @@ function runCanActivateChild(futureRSS, path, injector) {
   });
   return of(canActivateChildGuardsMapped).pipe(prioritizedGuardValue());
 }
-function runCanDeactivate(component, currARS, currRSS, futureRSS, injector) {
+function runCanDeactivate(component, currARS, currRSS, futureRSS) {
   const canDeactivate = currARS && currARS.routeConfig ? currARS.routeConfig.canDeactivate : null;
   if (!canDeactivate || canDeactivate.length === 0) return of(true);
   const canDeactivateObservables = canDeactivate.map(c => {
-    const closestInjector = getClosestRouteInjector(currARS) ?? injector;
+    const closestInjector = currARS._environmentInjector;
     const guard = getTokenOrFunctionIdentity(c, closestInjector);
     const guardVal = isCanDeactivate(guard) ? guard.canDeactivate(component, currARS, currRSS, futureRSS) : runInInjectionContext(closestInjector, () => guard(component, currARS, currRSS, futureRSS));
     return wrapIntoObservable(guardVal).pipe(first());
@@ -2759,6 +2641,114 @@ function getRedirectResult$1(redirectTo, currentSnapshot, injector) {
     outlet,
     title
   }))));
+}
+
+function getOrCreateRouteInjectorIfNeeded(route, currentInjector) {
+  if (route.providers && !route._injector) {
+    route._injector = createEnvironmentInjector(route.providers, currentInjector, `Route: ${route.path}`);
+  }
+  return route._injector ?? currentInjector;
+}
+function validateConfig(config, parentPath = '', requireStandaloneComponents = false) {
+  for (let i = 0; i < config.length; i++) {
+    const route = config[i];
+    const fullPath = getFullPath(parentPath, route);
+    validateNode(route, fullPath, requireStandaloneComponents);
+  }
+}
+function assertStandalone(fullPath, component) {
+  if (component && _isNgModule(component)) {
+    throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. You are using 'loadComponent' with a module, ` + `but it must be used with standalone components. Use 'loadChildren' instead.`);
+  } else if (component && !isStandalone(component)) {
+    throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. The component must be standalone.`);
+  }
+}
+function validateNode(route, fullPath, requireStandaloneComponents) {
+  if (typeof ngDevMode === 'undefined' || ngDevMode) {
+    if (!route) {
+      throw new _RuntimeError(4014, `
+      Invalid configuration of route '${fullPath}': Encountered undefined route.
+      The reason might be an extra comma.
+
+      Example:
+      const routes: Routes = [
+        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+        { path: 'dashboard',  component: DashboardComponent },, << two commas
+        { path: 'detail/:id', component: HeroDetailComponent }
+      ];
+    `);
+    }
+    if (Array.isArray(route)) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': Array cannot be specified`);
+    }
+    if (!route.redirectTo && !route.component && !route.loadComponent && !route.children && !route.loadChildren && route.outlet && route.outlet !== PRIMARY_OUTLET) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': a componentless route without children or loadChildren cannot have a named outlet set`);
+    }
+    if (route.redirectTo && route.children) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and children cannot be used together`);
+    }
+    if (route.redirectTo && route.loadChildren) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and loadChildren cannot be used together`);
+    }
+    if (route.children && route.loadChildren) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': children and loadChildren cannot be used together`);
+    }
+    if (route.component && route.loadComponent) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': component and loadComponent cannot be used together`);
+    }
+    if (route.redirectTo) {
+      if (route.component || route.loadComponent) {
+        throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and component/loadComponent cannot be used together`);
+      }
+      if (route.canMatch || route.canActivate) {
+        throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': redirectTo and ${route.canMatch ? 'canMatch' : 'canActivate'} cannot be used together.` + `Redirects happen before guards are executed.`);
+      }
+    }
+    if (route.path && route.matcher) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': path and matcher cannot be used together`);
+    }
+    if (route.redirectTo === void 0 && !route.component && !route.loadComponent && !route.children && !route.loadChildren) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}'. One of the following must be provided: component, loadComponent, redirectTo, children or loadChildren`);
+    }
+    if (route.path === void 0 && route.matcher === void 0) {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': routes must have either a path or a matcher specified`);
+    }
+    if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+      throw new _RuntimeError(4014, `Invalid configuration of route '${fullPath}': path cannot start with a slash`);
+    }
+    if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+      const exp = `The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.`;
+      throw new _RuntimeError(4014, `Invalid configuration of route '{path: "${fullPath}", redirectTo: "${route.redirectTo}"}': please provide 'pathMatch'. ${exp}`);
+    }
+    if (requireStandaloneComponents) {
+      assertStandalone(fullPath, route.component);
+    }
+  }
+  if (route.children) {
+    validateConfig(route.children, fullPath, requireStandaloneComponents);
+  }
+}
+function getFullPath(parentPath, currentRoute) {
+  if (!currentRoute) {
+    return parentPath;
+  }
+  if (!parentPath && !currentRoute.path) {
+    return '';
+  } else if (parentPath && !currentRoute.path) {
+    return `${parentPath}/`;
+  } else if (!parentPath && currentRoute.path) {
+    return currentRoute.path;
+  } else {
+    return `${parentPath}/${currentRoute.path}`;
+  }
+}
+function getOutlet(route) {
+  return route.outlet || PRIMARY_OUTLET;
+}
+function sortByMatchingOutlets(routes, outletName) {
+  const sortedConfig = routes.filter(r => getOutlet(r) === outletName);
+  sortedConfig.push(...routes.filter(r => getOutlet(r) !== outletName));
+  return sortedConfig;
 }
 
 const noMatch$1 = {
@@ -2925,7 +2915,7 @@ let Recognizer$1 = class Recognizer {
   async match(rootSegmentGroup) {
     const rootSnapshot = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze({
       ...this.urlTree.queryParams
-    }), this.urlTree.fragment, Object.freeze({}), PRIMARY_OUTLET, this.rootComponentType, null, {});
+    }), this.urlTree.fragment, Object.freeze({}), PRIMARY_OUTLET, this.rootComponentType, null, {}, this.injector);
     try {
       const children = await this.processSegmentGroup(this.injector, this.config, rootSegmentGroup, PRIMARY_OUTLET, rootSnapshot);
       return {
@@ -3021,7 +3011,7 @@ let Recognizer$1 = class Recognizer {
     }
     const currentSnapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze({
       ...this.urlTree.queryParams
-    }), this.urlTree.fragment, getData$1(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve$1(route));
+    }), this.urlTree.fragment, getData$1(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve$1(route), injector);
     const inherited = getInherited(currentSnapshot, parentRoute, this.paramsInheritanceStrategy);
     currentSnapshot.params = Object.freeze(inherited.params);
     currentSnapshot.data = Object.freeze(inherited.data);
@@ -3055,7 +3045,7 @@ let Recognizer$1 = class Recognizer {
     } = result;
     const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze({
       ...this.urlTree.queryParams
-    }), this.urlTree.fragment, getData$1(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve$1(route));
+    }), this.urlTree.fragment, getData$1(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve$1(route), injector);
     const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
     snapshot.params = Object.freeze(inherited.params);
     snapshot.data = Object.freeze(inherited.data);
@@ -3334,7 +3324,7 @@ class Recognizer {
   match(rootSegmentGroup) {
     const rootSnapshot = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze({
       ...this.urlTree.queryParams
-    }), this.urlTree.fragment, Object.freeze({}), PRIMARY_OUTLET, this.rootComponentType, null, {});
+    }), this.urlTree.fragment, Object.freeze({}), PRIMARY_OUTLET, this.rootComponentType, null, {}, this.injector);
     return this.processSegmentGroup(this.injector, this.config, rootSegmentGroup, PRIMARY_OUTLET, rootSnapshot).pipe(map(children => {
       return {
         children,
@@ -3433,7 +3423,7 @@ class Recognizer {
     }
     const currentSnapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze({
       ...this.urlTree.queryParams
-    }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route));
+    }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
     const inherited = getInherited(currentSnapshot, parentRoute, this.paramsInheritanceStrategy);
     currentSnapshot.params = Object.freeze(inherited.params);
     currentSnapshot.data = Object.freeze(inherited.data);
@@ -3463,7 +3453,7 @@ class Recognizer {
         } = result;
         const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze({
           ...this.urlTree.queryParams
-        }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route));
+        }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
         const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
         snapshot.params = Object.freeze(inherited.params);
         snapshot.data = Object.freeze(inherited.data);
@@ -3593,7 +3583,7 @@ function recognize(injector, configLoader, rootComponentType, config, serializer
   })));
 }
 
-function resolveData(paramsInheritanceStrategy, injector) {
+function resolveData(paramsInheritanceStrategy) {
   return mergeMap(t => {
     const {
       targetSnapshot,
@@ -3617,7 +3607,7 @@ function resolveData(paramsInheritanceStrategy, injector) {
     let routesProcessed = 0;
     return from(routesNeedingDataUpdates).pipe(concatMap(route => {
       if (routesWithResolversToRun.has(route)) {
-        return runResolve(route, targetSnapshot, paramsInheritanceStrategy, injector);
+        return runResolve(route, targetSnapshot, paramsInheritanceStrategy);
       } else {
         route.data = getInherited(route, route.parent, paramsInheritanceStrategy).resolve;
         return of(void 0);
@@ -3629,7 +3619,7 @@ function flattenRouteTree(route) {
   const descendants = route.children.map(child => flattenRouteTree(child)).flat();
   return [route, ...descendants];
 }
-function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, injector) {
+function runResolve(futureARS, futureRSS, paramsInheritanceStrategy) {
   const config = futureARS.routeConfig;
   const resolve = futureARS._resolve;
   if (config?.title !== undefined && !hasStaticTitle(config)) {
@@ -3637,7 +3627,7 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, injector) {
   }
   return defer(() => {
     futureARS.data = getInherited(futureARS, futureARS.parent, paramsInheritanceStrategy).resolve;
-    return resolveNode(resolve, futureARS, futureRSS, injector).pipe(map(resolvedData => {
+    return resolveNode(resolve, futureARS, futureRSS).pipe(map(resolvedData => {
       futureARS._resolvedData = resolvedData;
       futureARS.data = {
         ...futureARS.data,
@@ -3647,21 +3637,21 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, injector) {
     }));
   });
 }
-function resolveNode(resolve, futureARS, futureRSS, injector) {
+function resolveNode(resolve, futureARS, futureRSS) {
   const keys = getDataKeys(resolve);
   if (keys.length === 0) {
     return of({});
   }
   const data = {};
-  return from(keys).pipe(mergeMap(key => getResolver(resolve[key], futureARS, futureRSS, injector).pipe(first(), tap(value => {
+  return from(keys).pipe(mergeMap(key => getResolver(resolve[key], futureARS, futureRSS).pipe(first(), tap(value => {
     if (value instanceof RedirectCommand) {
       throw redirectingNavigationError(new DefaultUrlSerializer(), value);
     }
     data[key] = value;
   }))), takeLast(1), map(() => data), catchError(e => isEmptyError(e) ? EMPTY : throwError(e)));
 }
-function getResolver(injectionToken, futureARS, futureRSS, injector) {
-  const closestInjector = getClosestRouteInjector(futureARS) ?? injector;
+function getResolver(injectionToken, futureARS, futureRSS) {
+  const closestInjector = futureARS._environmentInjector;
   const resolver = getTokenOrFunctionIdentity(injectionToken, closestInjector);
   const resolverValue = resolver.resolve ? resolver.resolve(futureARS, futureRSS) : runInInjectionContext(closestInjector, () => resolver(futureARS, futureRSS));
   return wrapIntoObservable(resolverValue);
@@ -3692,7 +3682,7 @@ class TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: TitleStrategy,
     deps: [],
@@ -3700,7 +3690,7 @@ class TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: TitleStrategy,
     providedIn: 'root',
@@ -3709,7 +3699,7 @@ class TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: TitleStrategy,
   decorators: [{
@@ -3734,7 +3724,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultTitleStrategy,
     deps: [{
@@ -3744,7 +3734,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultTitleStrategy,
     providedIn: 'root'
@@ -3752,7 +3742,7 @@ class DefaultTitleStrategy extends TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: DefaultTitleStrategy,
   decorators: [{
@@ -3830,7 +3820,7 @@ class RouterConfigLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RouterConfigLoader,
     deps: [],
@@ -3838,7 +3828,7 @@ class RouterConfigLoader {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RouterConfigLoader,
     providedIn: 'root'
@@ -3846,7 +3836,7 @@ class RouterConfigLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: RouterConfigLoader,
   decorators: [{
@@ -3908,7 +3898,7 @@ async function maybeResolveResources(value) {
 class UrlHandlingStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: UrlHandlingStrategy,
     deps: [],
@@ -3916,7 +3906,7 @@ class UrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: UrlHandlingStrategy,
     providedIn: 'root',
@@ -3925,7 +3915,7 @@ class UrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: UrlHandlingStrategy,
   decorators: [{
@@ -3948,7 +3938,7 @@ class DefaultUrlHandlingStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     deps: [],
@@ -3956,7 +3946,7 @@ class DefaultUrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     providedIn: 'root'
@@ -3964,7 +3954,7 @@ class DefaultUrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: DefaultUrlHandlingStrategy,
   decorators: [{
@@ -4156,7 +4146,7 @@ class NavigationTransitions {
           } = t;
           const navStart = new NavigationStart(id, this.urlSerializer.serialize(extractedUrl), source, restoredState);
           this.events.next(navStart);
-          const targetSnapshot = createEmptyState(this.rootComponentType).snapshot;
+          const targetSnapshot = createEmptyState(this.rootComponentType, this.environmentInjector).snapshot;
           this.currentTransition = overallTransitionState = {
             ...t,
             targetSnapshot,
@@ -4186,7 +4176,7 @@ class NavigationTransitions {
           guards: getAllRouteGuards(t.targetSnapshot, t.currentSnapshot, this.rootContexts)
         };
         return overallTransitionState;
-      }), checkGuards(this.environmentInjector, evt => this.events.next(evt)), switchMap(t => {
+      }), checkGuards(evt => this.events.next(evt)), switchMap(t => {
         overallTransitionState.guardsResult = t.guardsResult;
         if (t.guardsResult && typeof t.guardsResult !== 'boolean') {
           throw redirectingNavigationError(this.urlSerializer, t.guardsResult);
@@ -4209,7 +4199,7 @@ class NavigationTransitions {
           return EMPTY;
         }
         let dataResolved = false;
-        return of(t).pipe(resolveData(this.paramsInheritanceStrategy, this.environmentInjector), tap({
+        return of(t).pipe(resolveData(this.paramsInheritanceStrategy), tap({
           next: () => {
             dataResolved = true;
             const resolveEnd = new ResolveEnd(t.id, this.urlSerializer.serialize(t.extractedUrl), this.urlSerializer.serialize(t.urlAfterRedirects), t.targetSnapshot);
@@ -4227,7 +4217,7 @@ class NavigationTransitions {
           if (route.routeConfig?._loadedComponent) {
             route.component = route.routeConfig?._loadedComponent;
           } else if (route.routeConfig?.loadComponent) {
-            const injector = getClosestRouteInjector(route) ?? this.environmentInjector;
+            const injector = route._environmentInjector;
             loaders.push(this.configLoader.loadComponent(injector, route.routeConfig).then(loadedComponent => {
               route.component = loadedComponent;
             }));
@@ -4344,7 +4334,7 @@ class NavigationTransitions {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: NavigationTransitions,
     deps: [],
@@ -4352,7 +4342,7 @@ class NavigationTransitions {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: NavigationTransitions,
     providedIn: 'root'
@@ -4360,7 +4350,7 @@ class NavigationTransitions {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: NavigationTransitions,
   decorators: [{
@@ -4378,7 +4368,7 @@ function isBrowserTriggeredNavigation(source) {
 class RouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RouteReuseStrategy,
     deps: [],
@@ -4386,7 +4376,7 @@ class RouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: RouteReuseStrategy,
     providedIn: 'root',
@@ -4395,7 +4385,7 @@ class RouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: RouteReuseStrategy,
   decorators: [{
@@ -4424,7 +4414,7 @@ class BaseRouteReuseStrategy {
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     deps: null,
@@ -4432,7 +4422,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     providedIn: 'root'
@@ -4440,7 +4430,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: DefaultRouteReuseStrategy,
   decorators: [{
@@ -4491,7 +4481,7 @@ class StateManager {
       this.rawUrlTree = initialUrl;
     }
   }
-  routerState = createEmptyState(null);
+  routerState = createEmptyState(null, inject(EnvironmentInjector));
   getRouterState() {
     return this.routerState;
   }
@@ -4514,7 +4504,7 @@ class StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: StateManager,
     deps: [],
@@ -4522,7 +4512,7 @@ class StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: StateManager,
     providedIn: 'root',
@@ -4531,7 +4521,7 @@ class StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: StateManager,
   decorators: [{
@@ -4648,7 +4638,7 @@ class HistoryStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: HistoryStateManager,
     deps: null,
@@ -4656,7 +4646,7 @@ class HistoryStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: HistoryStateManager,
     providedIn: 'root'
@@ -4664,7 +4654,7 @@ class HistoryStateManager extends StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: HistoryStateManager,
   decorators: [{
@@ -4979,7 +4969,7 @@ class Router {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: Router,
     deps: [],
@@ -4987,7 +4977,7 @@ class Router {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-2ecdb22",
+    version: "21.1.0-next.0+sha-1ab461c",
     ngImport: i0,
     type: Router,
     providedIn: 'root'
@@ -4995,7 +4985,7 @@ class Router {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-2ecdb22",
+  version: "21.1.0-next.0+sha-1ab461c",
   ngImport: i0,
   type: Router,
   decorators: [{
