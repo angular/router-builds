@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-a4f50bd
+ * @license Angular v21.1.0-next.0+sha-2ac8268
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -244,6 +244,7 @@ declare function loadChildren(route: Route, compiler: Compiler, parentInjector: 
  *
  * Provides a preloading strategy.
  *
+ * @see [Preloading strategy](guide/routing/customizing-route-behavior#preloading-strategy)
  * @publicApi
  */
 declare abstract class PreloadingStrategy {
@@ -258,6 +259,20 @@ declare abstract class PreloadingStrategy {
  * RouterModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
  * ```
  *
+ * ```ts
+ * export const appConfig: ApplicationConfig = {
+ * providers: [
+ *   provideRouter(
+ *     routes,
+ *     withPreloading(PreloadAllModules)
+ *   )
+ * ]
+ * };
+ * ```
+ *
+ *
+ * @see [Preloading strategy](guide/routing/customizing-route-behavior#preloading-strategy)
+ *
  * @publicApi
  */
 declare class PreloadAllModules implements PreloadingStrategy {
@@ -271,6 +286,8 @@ declare class PreloadAllModules implements PreloadingStrategy {
  * Provides a preloading strategy that does not preload any modules.
  *
  * This strategy is enabled by default.
+ *
+ * @see [Preloading strategy](guide/routing/customizing-route-behavior#preloading-strategy)
  *
  * @publicApi
  */
@@ -828,6 +845,8 @@ declare const enum RouterFeatureKind {
  * @description
  *
  * Provides a way to migrate AngularJS applications to Angular.
+ *
+ * @see [URL handling strategy](guide/routing/customizing-route-behavior#built-in-preloading-strategies)
  *
  * @publicApi
  */
