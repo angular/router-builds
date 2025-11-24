@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.0+sha-f394215
+ * @license Angular v21.0.0+sha-a62162d
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1654,7 +1654,7 @@ interface NavigationBehaviorOptions {
     /**
      * When true, navigates without pushing a new state into history.
      *
-     * ```
+     * ```ts
      * // Navigate silently to /view
      * this.router.navigate(['/view'], { skipLocationChange: true });
      * ```
@@ -1663,7 +1663,7 @@ interface NavigationBehaviorOptions {
     /**
      * When true, navigates while replacing the current state in history.
      *
-     * ```
+     * ```ts
      * // Navigate to /view
      * this.router.navigate(['/view'], { replaceUrl: true });
      * ```
@@ -2782,6 +2782,7 @@ interface RouterOutletContract {
  *
  * @see {@link RouterLink}
  * @see {@link Route}
+ * @see [Show routes with outlets](guide/routing/show-routes-with-outlets)
  * @ngModule RouterModule
  *
  * @publicApi
@@ -2868,7 +2869,7 @@ interface UrlCreationOptions {
      * For example, consider the following route configuration where the parent route
      * has two children.
      *
-     * ```
+     * ```ts
      * [{
      *   path: 'parent',
      *   component: ParentComponent,
@@ -2903,7 +2904,7 @@ interface UrlCreationOptions {
     /**
      * Sets query parameters to the URL.
      *
-     * ```
+     * ```ts
      * // Navigate to /results?page=1
      * router.navigate(['/results'], { queryParams: { page: 1 } });
      * ```
@@ -2912,7 +2913,7 @@ interface UrlCreationOptions {
     /**
      * Sets the hash fragment for the URL.
      *
-     * ```
+     * ```ts
      * // Navigate to /results#top
      * router.navigate(['/results'], { fragment: 'top' });
      * ```
@@ -2925,13 +2926,13 @@ interface UrlCreationOptions {
      * * `merge` : Merge new with current parameters.
      *
      * The "preserve" option discards any new query params:
-     * ```
+     * ```ts
      * // from /view1?page=1 to/view2?page=1
      * router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
      * });
      * ```
      * The "merge" option appends new query params to the params from the current URL:
-     * ```
+     * ```ts
      * // from /view1?page=1 to/view2?page=1&otherKey=2
      * router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
      * });
@@ -2944,7 +2945,7 @@ interface UrlCreationOptions {
     /**
      * When true, preserves the URL fragment for the next navigation
      *
-     * ```
+     * ```ts
      * // Preserve fragment from /results#top to /view#top
      * router.navigate(['/view'], { preserveFragment: true });
      * ```
@@ -3188,7 +3189,7 @@ declare class Router {
      *
      * @usageNotes
      *
-     * ```
+     * ```ts
      * // create /team/33/user/11
      * router.createUrlTree(['/team', 33, 'user', 11]);
      *
@@ -3218,10 +3219,10 @@ declare class Router {
      *
      * // navigate to /team/44/user/22
      * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
-     *
+     * ```
      * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
      * tree should be created relative to the root.
-     * ```
+     *
      */
     createUrlTree(commands: readonly any[], navigationExtras?: UrlCreationOptions): UrlTree;
     /**
