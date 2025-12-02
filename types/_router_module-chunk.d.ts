@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-c5a3bbb
+ * @license Angular v21.1.0-next.0+sha-a784995
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2995,7 +2995,7 @@ type RestoredState = {
 /**
  * Information about a navigation operation.
  * Retrieve the most recent navigation object with the
- * [Router.getCurrentNavigation() method](api/router/Router#getcurrentnavigation) .
+ * [Router.currentNavigation() method](api/router/Router#currentNavigation) .
  *
  * * *id* : The unique identifier of the current navigation.
  * * *initialUrl* : The target URL passed into the `Router#navigateByUrl()` call before navigation.
