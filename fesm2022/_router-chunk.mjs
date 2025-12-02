@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.0+sha-e30e61b
+ * @license Angular v21.1.0-next.0+sha-a0ad5d4
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -308,7 +308,7 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: UrlSerializer,
     deps: [],
@@ -316,7 +316,7 @@ class UrlSerializer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: UrlSerializer,
     providedIn: 'root',
@@ -325,7 +325,7 @@ class UrlSerializer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: UrlSerializer,
   decorators: [{
@@ -999,6 +999,9 @@ class NavigationCancel extends RouterEvent {
     return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
   }
 }
+function isRedirectingEvent(event) {
+  return event instanceof NavigationCancel && (event.code === NavigationCancellationCode.Redirect || event.code === NavigationCancellationCode.SupersededByNewNavigation);
+}
 class NavigationSkipped extends RouterEvent {
   reason;
   code;
@@ -1275,7 +1278,7 @@ class ChildrenOutletContexts {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: ChildrenOutletContexts,
     deps: [{
@@ -1285,7 +1288,7 @@ class ChildrenOutletContexts {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: ChildrenOutletContexts,
     providedIn: 'root'
@@ -1293,7 +1296,7 @@ class ChildrenOutletContexts {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: ChildrenOutletContexts,
   decorators: [{
@@ -1750,7 +1753,7 @@ class RouterOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RouterOutlet,
     deps: [],
@@ -1758,7 +1761,7 @@ class RouterOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "17.1.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     type: RouterOutlet,
     isStandalone: true,
     selector: "router-outlet",
@@ -1791,7 +1794,7 @@ class RouterOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: RouterOutlet,
   decorators: [{
@@ -1900,7 +1903,7 @@ class RoutedComponentInputBinder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RoutedComponentInputBinder,
     deps: [],
@@ -1908,14 +1911,14 @@ class RoutedComponentInputBinder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RoutedComponentInputBinder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: RoutedComponentInputBinder,
   decorators: [{
@@ -1926,7 +1929,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ɵEmptyOutletComponent {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: ɵEmptyOutletComponent,
     deps: [],
@@ -1934,7 +1937,7 @@ class ɵEmptyOutletComponent {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     type: ɵEmptyOutletComponent,
     isStandalone: true,
     selector: "ng-component",
@@ -1954,7 +1957,7 @@ class ɵEmptyOutletComponent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: ɵEmptyOutletComponent,
   decorators: [{
@@ -2056,10 +2059,6 @@ function isNavigationCancelingError(error) {
 }
 
 let warnedAboutUnsupportedInputBinding = false;
-const activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent, inputBindingEnabled) => map(t => {
-  new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent, inputBindingEnabled).activate(rootContexts);
-  return t;
-});
 class ActivateRoutes {
   routeReuseStrategy;
   futureState;
@@ -3682,7 +3681,7 @@ class TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: TitleStrategy,
     deps: [],
@@ -3690,7 +3689,7 @@ class TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: TitleStrategy,
     providedIn: 'root',
@@ -3699,7 +3698,7 @@ class TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: TitleStrategy,
   decorators: [{
@@ -3724,7 +3723,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultTitleStrategy,
     deps: [{
@@ -3734,7 +3733,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultTitleStrategy,
     providedIn: 'root'
@@ -3742,7 +3741,7 @@ class DefaultTitleStrategy extends TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: DefaultTitleStrategy,
   decorators: [{
@@ -3820,7 +3819,7 @@ class RouterConfigLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RouterConfigLoader,
     deps: [],
@@ -3828,7 +3827,7 @@ class RouterConfigLoader {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RouterConfigLoader,
     providedIn: 'root'
@@ -3836,7 +3835,7 @@ class RouterConfigLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: RouterConfigLoader,
   decorators: [{
@@ -3898,7 +3897,7 @@ async function maybeResolveResources(value) {
 class UrlHandlingStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: UrlHandlingStrategy,
     deps: [],
@@ -3906,7 +3905,7 @@ class UrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: UrlHandlingStrategy,
     providedIn: 'root',
@@ -3915,7 +3914,7 @@ class UrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: UrlHandlingStrategy,
   decorators: [{
@@ -3938,7 +3937,7 @@ class DefaultUrlHandlingStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     deps: [],
@@ -3946,7 +3945,7 @@ class DefaultUrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     providedIn: 'root'
@@ -3954,7 +3953,7 @@ class DefaultUrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: DefaultUrlHandlingStrategy,
   decorators: [{
@@ -4236,9 +4235,9 @@ class NavigationTransitions {
         } = overallTransitionState;
         const viewTransitionStarted = this.createViewTransition?.(this.environmentInjector, currentSnapshot.root, targetSnapshot.root);
         return viewTransitionStarted ? from(viewTransitionStarted).pipe(map(() => overallTransitionState)) : of(overallTransitionState);
-      }), map(t => {
+      }), take(1), map(t => {
         const targetRouterState = createRouterState(router.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
-        this.currentTransition = overallTransitionState = {
+        this.currentTransition = overallTransitionState = t = {
           ...t,
           targetRouterState
         };
@@ -4246,23 +4245,26 @@ class NavigationTransitions {
           nav.targetRouterState = targetRouterState;
           return nav;
         });
-        return overallTransitionState;
-      }), tap(() => {
         this.events.next(new BeforeActivateRoutes());
-      }), activateRoutes(this.rootContexts, router.routeReuseStrategy, evt => this.events.next(evt), this.inputBindingEnabled), take(1), takeUntil(abortSignalToObservable(abortController.signal).pipe(filter(() => !completedOrAborted && !overallTransitionState.targetRouterState), tap(() => {
+        if (!shouldContinueNavigation()) {
+          return;
+        }
+        new ActivateRoutes(router.routeReuseStrategy, overallTransitionState.targetRouterState, overallTransitionState.currentRouterState, evt => this.events.next(evt), this.inputBindingEnabled).activate(this.rootContexts);
+        if (!shouldContinueNavigation()) {
+          return;
+        }
+        completedOrAborted = true;
+        this.currentNavigation.update(nav => {
+          nav.abort = noop;
+          return nav;
+        });
+        this.lastSuccessfulNavigation.set(untracked(this.currentNavigation));
+        this.events.next(new NavigationEnd(t.id, this.urlSerializer.serialize(t.extractedUrl), this.urlSerializer.serialize(t.urlAfterRedirects)));
+        this.titleStrategy?.updateTitle(t.targetRouterState.snapshot);
+        t.resolve(true);
+      }), takeUntil(abortSignalToObservable(abortController.signal).pipe(filter(() => !completedOrAborted && !overallTransitionState.targetRouterState), tap(() => {
         this.cancelNavigationTransition(overallTransitionState, abortController.signal.reason + '', NavigationCancellationCode.Aborted);
       }))), tap({
-        next: t => {
-          completedOrAborted = true;
-          this.currentNavigation.update(nav => {
-            nav.abort = noop;
-            return nav;
-          });
-          this.lastSuccessfulNavigation.set(untracked(this.currentNavigation));
-          this.events.next(new NavigationEnd(t.id, this.urlSerializer.serialize(t.extractedUrl), this.urlSerializer.serialize(t.urlAfterRedirects)));
-          this.titleStrategy?.updateTitle(t.targetRouterState.snapshot);
-          t.resolve(true);
-        },
         complete: () => {
           completedOrAborted = true;
         }
@@ -4279,11 +4281,11 @@ class NavigationTransitions {
           this.currentTransition = null;
         }
       }), catchError(e => {
+        completedOrAborted = true;
         if (this.destroyed) {
           overallTransitionState.resolve(false);
           return EMPTY;
         }
-        completedOrAborted = true;
         if (isNavigationCancelingError(e)) {
           this.events.next(new NavigationCancel(overallTransitionState.id, this.urlSerializer.serialize(overallTransitionState.extractedUrl), e.message, e.cancellationCode));
           if (!isRedirectingNavigationCancelingError(e)) {
@@ -4334,7 +4336,7 @@ class NavigationTransitions {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: NavigationTransitions,
     deps: [],
@@ -4342,7 +4344,7 @@ class NavigationTransitions {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: NavigationTransitions,
     providedIn: 'root'
@@ -4350,7 +4352,7 @@ class NavigationTransitions {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: NavigationTransitions,
   decorators: [{
@@ -4368,7 +4370,7 @@ function isBrowserTriggeredNavigation(source) {
 class RouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RouteReuseStrategy,
     deps: [],
@@ -4376,7 +4378,7 @@ class RouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: RouteReuseStrategy,
     providedIn: 'root',
@@ -4385,7 +4387,7 @@ class RouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: RouteReuseStrategy,
   decorators: [{
@@ -4414,7 +4416,7 @@ class BaseRouteReuseStrategy {
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     deps: null,
@@ -4422,7 +4424,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     providedIn: 'root'
@@ -4430,7 +4432,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: DefaultRouteReuseStrategy,
   decorators: [{
@@ -4504,7 +4506,7 @@ class StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: StateManager,
     deps: [],
@@ -4512,7 +4514,7 @@ class StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: StateManager,
     providedIn: 'root',
@@ -4521,7 +4523,7 @@ class StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: StateManager,
   decorators: [{
@@ -4566,7 +4568,7 @@ class HistoryStateManager extends StateManager {
       if (this.urlUpdateStrategy === 'deferred' && !currentTransition.extras.skipLocationChange) {
         this.setBrowserUrl(this.createBrowserPath(currentTransition), currentTransition);
       }
-    } else if (e instanceof NavigationCancel && e.code !== NavigationCancellationCode.SupersededByNewNavigation && e.code !== NavigationCancellationCode.Redirect) {
+    } else if (e instanceof NavigationCancel && !isRedirectingEvent(e)) {
       this.restoreHistory(currentTransition);
     } else if (e instanceof NavigationError) {
       this.restoreHistory(currentTransition, true);
@@ -4638,7 +4640,7 @@ class HistoryStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: HistoryStateManager,
     deps: null,
@@ -4646,7 +4648,7 @@ class HistoryStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: HistoryStateManager,
     providedIn: 'root'
@@ -4654,7 +4656,7 @@ class HistoryStateManager extends StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: HistoryStateManager,
   decorators: [{
@@ -4969,7 +4971,7 @@ class Router {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: Router,
     deps: [],
@@ -4977,7 +4979,7 @@ class Router {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.1.0-next.0+sha-e30e61b",
+    version: "21.1.0-next.0+sha-a0ad5d4",
     ngImport: i0,
     type: Router,
     providedIn: 'root'
@@ -4985,7 +4987,7 @@ class Router {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.1.0-next.0+sha-e30e61b",
+  version: "21.1.0-next.0+sha-a0ad5d4",
   ngImport: i0,
   type: Router,
   decorators: [{
@@ -5005,5 +5007,5 @@ function validateCommands(commands) {
   }
 }
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, BeforeActivateRoutes, CREATE_VIEW_TRANSITION, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, IMPERATIVE_NAVIGATION, INPUT_BINDER, NAVIGATION_ERROR_HANDLER, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, NavigationTransitions, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RoutedComponentInputBinder, Router, RouterConfigLoader, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, StateManager, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VIEW_TRANSITION_OPTIONS, afterNextNavigation, convertToParamMap, createUrlTreeFromSnapshot, createViewTransition, defaultUrlMatcher, isUrlTree, loadChildren, provideSometimesSyncRecognize, stringifyEvent, ɵEmptyOutletComponent };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, BeforeActivateRoutes, CREATE_VIEW_TRANSITION, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, IMPERATIVE_NAVIGATION, INPUT_BINDER, NAVIGATION_ERROR_HANDLER, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, NavigationTransitions, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RoutedComponentInputBinder, Router, RouterConfigLoader, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, StateManager, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VIEW_TRANSITION_OPTIONS, afterNextNavigation, convertToParamMap, createUrlTreeFromSnapshot, createViewTransition, defaultUrlMatcher, isRedirectingEvent, isUrlTree, loadChildren, provideSometimesSyncRecognize, stringifyEvent, ɵEmptyOutletComponent };
 //# sourceMappingURL=_router-chunk.mjs.map
