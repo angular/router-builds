@@ -1,3 +1,4 @@
+javascript
 /**
  * @license Angular v21.1.0-next.3+sha-23547f0
  * (c) 2010-2025 Google LLC. https://angular.dev/
@@ -61,7 +62,7 @@ class RouterLink {
     }
   }
   subscribeToNavigationEventsIfNecessary() {
-    if (this.subscription !== undefined || !this.isAnchorElement) {
+    if (this.subscription !== undefined) {
       return;
     }
     let createSubcription = this.preserveFragment;
@@ -90,10 +91,8 @@ class RouterLink {
     if (ngDevMode && isUrlTree(this.routerLinkInput) && (this.fragment !== undefined || this.queryParams || this.queryParamsHandling || this.preserveFragment || this.relativeTo)) {
       throw new _RuntimeError(4017, 'Cannot configure queryParams or fragment when using a UrlTree as the routerLink input value.');
     }
-    if (this.isAnchorElement) {
-      this.updateHref();
-      this.subscribeToNavigationEventsIfNecessary();
-    }
+    this.updateHref();
+    this.subscribeToNavigationEventsIfNecessary();
     this.onChanges.next(this);
   }
   routerLinkInput = null;
@@ -592,7 +591,7 @@ class RouterPreloader {
       } else {
         loadedChildren$ = of(null);
       }
-      const recursiveLoadChildren$ = loadedChildren$.pipe(mergeMap(config => {
+      const recursiveLoadChildren$ = loadedChildren_.pipe(mergeMap(config => {
         if (config === null) {
           return of(void 0);
         }
@@ -1056,7 +1055,7 @@ function routerFeature(kind, providers) {
     ɵproviders: providers
   };
 }
-const ROUTER_IS_PROVIDED = new InjectionToken(typeof ngDevMode !== 'undefined' && ngDevMode ? 'Router is provided' : '', {
+const ROUTER_IS_PROVIDED = new InjectionToken(typeof ngDevMode === 'undefined' || ngDevMode ? 'Router is provided' : '', {
   factory: () => false
 });
 const routerIsProvidedDevModeCheck = {
