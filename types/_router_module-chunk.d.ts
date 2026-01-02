@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.6+sha-069974a
+ * @license Angular v21.0.6+sha-d370c4b
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1672,8 +1672,8 @@ interface NavigationBehaviorOptions {
     /**
      * Developer-defined state that can be passed to any navigation.
      * Access this value through the `Navigation.extras` object
-     * returned from the [Router.getCurrentNavigation()
-     * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
+     * returned from the [Router.currentNavigation()
+     * method](api/router/Router#currentNavigation) while a navigation is executing.
      *
      * After a navigation completes, the router writes an object containing this
      * value together with a `navigationId` to `history.state`.
@@ -1727,7 +1727,7 @@ interface NavigationBehaviorOptions {
      *   const userService = inject(UserService);
      *   const router = inject(Router);
      *   if (!userService.isLoggedIn()) {
-     *     const targetOfCurrentNavigation = router.getCurrentNavigation()?.finalUrl;
+     *     const targetOfCurrentNavigation = router.currentNavigation()?.finalUrl;
      *     const redirect = router.parseUrl('/404');
      *     return new RedirectCommand(redirect, {browserUrl: targetOfCurrentNavigation});
      *   }
@@ -3391,14 +3391,14 @@ declare class Router {
  * </a>
  * ```
  *
- * Use {@link Router#getCurrentNavigation} to retrieve a saved
+ * Use {@link Router#currentNavigation} to retrieve a saved Signal
  * navigation-state value. For example, to capture the `tracingId` during the `NavigationStart`
  * event:
  *
  * ```ts
  * // Get NavigationStart events
  * router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(e => {
- *   const navigation = router.getCurrentNavigation();
+ *   const navigation = router.currentNavigation();
  *   tracingService.trace({id: navigation.extras.state.tracingId});
  * });
  * ```
