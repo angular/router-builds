@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.6+sha-1748c89
+ * @license Angular v21.0.6+sha-8f26a52
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
