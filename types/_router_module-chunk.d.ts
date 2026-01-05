@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.4+sha-e6631f0
+ * @license Angular v21.1.0-next.4+sha-5edceff
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1010,6 +1010,7 @@ interface Route {
 interface LoadedRouterConfig {
     routes: Route[];
     injector: EnvironmentInjector | undefined;
+    factory?: NgModuleFactory<unknown>;
 }
 /**
  * @description
@@ -2578,81 +2579,6 @@ declare class Scroll {
 type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
 
 /**
- * @description
- *
- * Represents the detached route tree.
- *
- * This is an opaque value the router will give to a custom route reuse strategy
- * to store and retrieve later on.
- *
- * @publicApi
- */
-type DetachedRouteHandle = {};
-/**
- * @description
- *
- * Provides a way to customize when activated routes get reused.
- *
- * @publicApi
- */
-declare abstract class RouteReuseStrategy {
-    /** Determines if this route (and its subtree) should be detached to be reused later */
-    abstract shouldDetach(route: ActivatedRouteSnapshot): boolean;
-    /**
-     * Stores the detached route.
-     *
-     * Storing a `null` value should erase the previously stored value.
-     */
-    abstract store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void;
-    /** Determines if this route (and its subtree) should be reattached */
-    abstract shouldAttach(route: ActivatedRouteSnapshot): boolean;
-    /** Retrieves the previously stored route */
-    abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
-    /** Determines if a route should be reused */
-    abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
-}
-/**
- * @description
- *
- * This base route reuse strategy only reuses routes when the matched router configs are
- * identical. This prevents components from being destroyed and recreated
- * when just the route parameters, query parameters or fragment change
- * (that is, the existing component is _reused_).
- *
- * This strategy does not store any routes for later reuse.
- *
- * Angular uses this strategy by default.
- *
- *
- * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
- * class that extends the `BaseRouteReuseStrategy` one.
- * @publicApi
- */
-declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
-    /**
-     * Whether the given route should detach for later reuse.
-     * Always returns false for `BaseRouteReuseStrategy`.
-     * */
-    shouldDetach(route: ActivatedRouteSnapshot): boolean;
-    /**
-     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
-     */
-    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
-    /** Returns `false`, meaning the route (and its subtree) is never reattached */
-    shouldAttach(route: ActivatedRouteSnapshot): boolean;
-    /** Returns `null` because this strategy does not store routes for later re-use. */
-    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
-    /**
-     * Determines if a route should be reused.
-     * This strategy returns `true` when the future route config and current route config are
-     * identical.
-     */
-    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
-}
-
-/**
  * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
  * input.
  *
@@ -3056,6 +2982,105 @@ interface Navigation {
      * This function is a no-op if the navigation is beyond the point where it can be aborted.
      */
     readonly abort: () => void;
+}
+
+/**
+ * @description
+ *
+ * Represents the detached route tree.
+ *
+ * This is an opaque value the router will give to a custom route reuse strategy
+ * to store and retrieve later on.
+ *
+ * @publicApi
+ */
+type DetachedRouteHandle = {};
+/**
+ * @description
+ *
+ * Destroys the component associated with a `DetachedRouteHandle`.
+ *
+ * This function should be used when a `RouteReuseStrategy` decides to drop a stored handle
+ * and wants to ensure that the component is destroyed.
+ *
+ * @param handle The detached route handle to destroy.
+ *
+ * @publicApi
+ * @see [Manually destroying detached route handles](guide/routing/customizing-route-behavior#manually-destroying-detached-route-handles)
+ */
+declare function destroyDetachedRouteHandle(handle: DetachedRouteHandle): void;
+/**
+ * @description
+ *
+ * Provides a way to customize when activated routes get reused.
+ *
+ * @publicApi
+ */
+declare abstract class RouteReuseStrategy {
+    /** Determines if this route (and its subtree) should be detached to be reused later */
+    abstract shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    /**
+     * Stores the detached route.
+     *
+     * Storing a `null` value should erase the previously stored value.
+     */
+    abstract store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void;
+    /** Determines if this route (and its subtree) should be reattached */
+    abstract shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    /** Retrieves the previously stored route */
+    abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    /** Determines if a route should be reused */
+    abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
+}
+/**
+ * @description
+ *
+ * This base route reuse strategy only reuses routes when the matched router configs are
+ * identical. This prevents components from being destroyed and recreated
+ * when just the route parameters, query parameters or fragment change
+ * (that is, the existing component is _reused_).
+ *
+ * This strategy does not store any routes for later reuse.
+ *
+ * Angular uses this strategy by default.
+ *
+ *
+ * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+ * class that extends the `BaseRouteReuseStrategy` one.
+ * @publicApi
+ */
+declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
+    /**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for `BaseRouteReuseStrategy`.
+     * */
+    shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    /**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
+    /** Returns `false`, meaning the route (and its subtree) is never reattached */
+    shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    /** Returns `null` because this strategy does not store routes for later re-use. */
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    /**
+     * Determines if a route should be reused.
+     * This strategy returns `true` when the future route config and current route config are
+     * identical.
+     */
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    /**
+     * Determines if the injector for the given route should be destroyed.
+     *
+     * This method is called by the router when the `RouteReuseStrategy` is destroyed.
+     * If this method returns `true`, the router will destroy the injector for the given route.
+     *
+     * @see {@link withExperimentalAutoCleanupInjectors}
+     * @xperimental 21.1
+     */
+    shouldDestroyInjector(route: Route): boolean;
 }
 
 /**
@@ -4034,5 +4059,5 @@ declare class RouterModule {
  */
 declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, ɵEmptyOutletComponent };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, ɵEmptyOutletComponent };
 export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
