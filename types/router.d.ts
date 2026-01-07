@@ -1,16 +1,60 @@
 /**
- * @license Angular v21.1.0-next.4+sha-f811c6c
+ * @license Angular v21.1.0-next.4+sha-640693d
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import { ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterOutletContract, ActivatedRoute, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
-export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
+import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
+export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
 import { ComponentRef, EnvironmentInjector, InjectionToken, Compiler, Injector, Type, OnDestroy, EnvironmentProviders, Provider, Version } from '@angular/core';
 import { Observable } from 'rxjs';
 import '@angular/common';
+
+/**
+ * Store contextual information about a `RouterOutlet`
+ *
+ * @publicApi
+ */
+declare class OutletContext {
+    private readonly rootInjector;
+    outlet: RouterOutletContract | null;
+    route: ActivatedRoute | null;
+    children: ChildrenOutletContexts;
+    attachRef: ComponentRef<any> | null;
+    get injector(): EnvironmentInjector;
+    constructor(rootInjector: EnvironmentInjector);
+}
+/**
+ * Store contextual information about the children (= nested) `RouterOutlet`
+ *
+ * @publicApi
+ */
+declare class ChildrenOutletContexts {
+    private rootInjector;
+    private contexts;
+    /** @docs-private */
+    constructor(rootInjector: EnvironmentInjector);
+    /** Called when a `RouterOutlet` directive is instantiated */
+    onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
+    /**
+     * Called when a `RouterOutlet` directive is destroyed.
+     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
+     * re-created later.
+     */
+    onChildOutletDestroyed(childName: string): void;
+    /**
+     * Called when the corresponding route is deactivated during navigation.
+     * Because the component get destroyed, all children outlet are destroyed.
+     */
+    onOutletDeactivated(): Map<string, OutletContext>;
+    onOutletReAttached(contexts: Map<string, OutletContext>): void;
+    getOrCreateContext(childName: string): OutletContext;
+    getContext(childName: string): OutletContext | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
+}
 
 /**
  * Creates a `UrlTree` relative to an `ActivatedRouteSnapshot`.
@@ -67,50 +111,6 @@ import '@angular/common';
  * ```
  */
 declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: readonly any[], queryParams?: Params | null, fragment?: string | null, urlSerializer?: DefaultUrlSerializer): UrlTree;
-
-/**
- * Store contextual information about a `RouterOutlet`
- *
- * @publicApi
- */
-declare class OutletContext {
-    private readonly rootInjector;
-    outlet: RouterOutletContract | null;
-    route: ActivatedRoute | null;
-    children: ChildrenOutletContexts;
-    attachRef: ComponentRef<any> | null;
-    get injector(): EnvironmentInjector;
-    constructor(rootInjector: EnvironmentInjector);
-}
-/**
- * Store contextual information about the children (= nested) `RouterOutlet`
- *
- * @publicApi
- */
-declare class ChildrenOutletContexts {
-    private rootInjector;
-    private contexts;
-    /** @docs-private */
-    constructor(rootInjector: EnvironmentInjector);
-    /** Called when a `RouterOutlet` directive is instantiated */
-    onChildOutletCreated(childName: string, outlet: RouterOutletContract): void;
-    /**
-     * Called when a `RouterOutlet` directive is destroyed.
-     * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
-     * re-created later.
-     */
-    onChildOutletDestroyed(childName: string): void;
-    /**
-     * Called when the corresponding route is deactivated during navigation.
-     * Because the component get destroyed, all children outlet are destroyed.
-     */
-    onOutletDeactivated(): Map<string, OutletContext>;
-    onOutletReAttached(contexts: Map<string, OutletContext>): void;
-    getOrCreateContext(childName: string): OutletContext;
-    getContext(childName: string): OutletContext | null;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
-}
 
 /**
  * Options to configure the View Transitions integration in the Router.

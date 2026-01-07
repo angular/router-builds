@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.1.0-next.4+sha-f811c6c
+ * @license Angular v21.1.0-next.4+sha-640693d
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { ProviderToken, Type, NgModuleFactory, Provider, EnvironmentProviders, EnvironmentInjector, InjectionToken, Signal, ComponentRef, EventEmitter, OnDestroy, OnInit, SimpleChanges, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, Signal, EnvironmentInjector, ComponentRef, EventEmitter, OnDestroy, OnInit, SimpleChanges, ProviderToken, Type, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
@@ -87,6 +87,1377 @@ declare function convertToParamMap(params: Params): ParamMap;
 declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
 
 /**
+ * Identifies the call or event that triggered a navigation.
+ *
+ * * 'imperative': Triggered by `router.navigateByUrl()` or `router.navigate()`.
+ * * 'popstate' : Triggered by a `popstate` event.
+ * * 'hashchange'-: Triggered by a `hashchange` event.
+ *
+ * @publicApi
+ */
+type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
+/**
+ * Identifies the type of a router event.
+ *
+ * @see [Router Lifecycle and Events](guide/routing/lifecycle-and-events)
+ *
+ * @publicApi
+ */
+declare enum EventType {
+    NavigationStart = 0,
+    NavigationEnd = 1,
+    NavigationCancel = 2,
+    NavigationError = 3,
+    RoutesRecognized = 4,
+    ResolveStart = 5,
+    ResolveEnd = 6,
+    GuardsCheckStart = 7,
+    GuardsCheckEnd = 8,
+    RouteConfigLoadStart = 9,
+    RouteConfigLoadEnd = 10,
+    ChildActivationStart = 11,
+    ChildActivationEnd = 12,
+    ActivationStart = 13,
+    ActivationEnd = 14,
+    Scroll = 15,
+    NavigationSkipped = 16
+}
+/**
+ * Base for events the router goes through, as opposed to events tied to a specific
+ * route. Fired one time for any given navigation.
+ *
+ * The following code shows how a class subscribes to router events.
+ *
+ * ```ts
+ * import {Event, RouterEvent, Router} from '@angular/router';
+ *
+ * class MyService {
+ *   constructor(public router: Router) {
+ *     router.events.pipe(
+ *        filter((e: Event | RouterEvent): e is RouterEvent => e instanceof RouterEvent)
+ *     ).subscribe((e: RouterEvent) => {
+ *       // Do something
+ *     });
+ *   }
+ * }
+ * ```
+ *
+ * @see {@link Event}
+ * @see [Router events summary](guide/routing/router-reference#router-events)
+ * @publicApi
+ */
+declare class RouterEvent {
+    /** A unique ID that the router assigns to every router navigation. */
+    id: number;
+    /** The URL that is the destination for this navigation. */
+    url: string;
+    constructor(
+    /** A unique ID that the router assigns to every router navigation. */
+    id: number, 
+    /** The URL that is the destination for this navigation. */
+    url: string);
+}
+/**
+ * An event triggered when a navigation starts.
+ *
+ * @publicApi
+ */
+declare class NavigationStart extends RouterEvent {
+    readonly type = EventType.NavigationStart;
+    /**
+     * Identifies the call or event that triggered the navigation.
+     * An `imperative` trigger is a call to `router.navigateByUrl()` or `router.navigate()`.
+     *
+     * @see {@link NavigationEnd}
+     * @see {@link NavigationCancel}
+     * @see {@link NavigationError}
+     */
+    navigationTrigger?: NavigationTrigger;
+    /**
+     * The navigation state that was previously supplied to the `pushState` call,
+     * when the navigation is triggered by a `popstate` event. Otherwise null.
+     *
+     * The state object is defined by `NavigationExtras`, and contains any
+     * developer-defined state value, as well as a unique ID that
+     * the router assigns to every router transition/navigation.
+     *
+     * From the perspective of the router, the router never "goes back".
+     * When the user clicks on the back button in the browser,
+     * a new navigation ID is created.
+     *
+     * Use the ID in this previous-state object to differentiate between a newly created
+     * state and one returned to by a `popstate` event, so that you can restore some
+     * remembered state, such as scroll position.
+     *
+     */
+    restoredState?: {
+        [k: string]: any;
+        navigationId: number;
+    } | null;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    navigationTrigger?: NavigationTrigger, 
+    /** @docsNotRequired */
+    restoredState?: {
+        [k: string]: any;
+        navigationId: number;
+    } | null);
+    /** @docsNotRequired */
+    toString(): string;
+}
+/**
+ * An event triggered when a navigation ends successfully.
+ *
+ * @see {@link NavigationStart}
+ * @see {@link NavigationCancel}
+ * @see {@link NavigationError}
+ *
+ * @publicApi
+ */
+declare class NavigationEnd extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    readonly type = EventType.NavigationEnd;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string);
+    /** @docsNotRequired */
+    toString(): string;
+}
+/**
+ * A code for the `NavigationCancel` event of the `Router` to indicate the
+ * reason a navigation failed.
+ *
+ * @publicApi
+ */
+declare enum NavigationCancellationCode {
+    /**
+     * A navigation failed because a guard returned a `UrlTree` to redirect.
+     */
+    Redirect = 0,
+    /**
+     * A navigation failed because a more recent navigation started.
+     */
+    SupersededByNewNavigation = 1,
+    /**
+     * A navigation failed because one of the resolvers completed without emitting a value.
+     */
+    NoDataFromResolver = 2,
+    /**
+     * A navigation failed because a guard returned `false`.
+     */
+    GuardRejected = 3,
+    /**
+     * A navigation was aborted by the `Navigation.abort` function.
+     *
+     * @see {@link Navigation}
+     */
+    Aborted = 4
+}
+/**
+ * A code for the `NavigationSkipped` event of the `Router` to indicate the
+ * reason a navigation was skipped.
+ *
+ * @publicApi
+ */
+declare enum NavigationSkippedCode {
+    /**
+     * A navigation was skipped because the navigation URL was the same as the current Router URL.
+     */
+    IgnoredSameUrlNavigation = 0,
+    /**
+     * A navigation was skipped because the configured `UrlHandlingStrategy` return `false` for both
+     * the current Router URL and the target of the navigation.
+     *
+     * @see {@link UrlHandlingStrategy}
+     */
+    IgnoredByUrlHandlingStrategy = 1
+}
+/**
+ * An event triggered when a navigation is canceled, directly or indirectly.
+ * This can happen for several reasons including when a route guard
+ * returns `false` or initiates a redirect by returning a `UrlTree`.
+ *
+ * @see {@link NavigationStart}
+ * @see {@link NavigationEnd}
+ * @see {@link NavigationError}
+ *
+ * @publicApi
+ */
+declare class NavigationCancel extends RouterEvent {
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
+    reason: string;
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    readonly code?: NavigationCancellationCode | undefined;
+    readonly type = EventType.NavigationCancel;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /**
+     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
+     * instead for a stable cancellation reason that can be used in production.
+     */
+    reason: string, 
+    /**
+     * A code to indicate why the navigation was canceled. This cancellation code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    code?: NavigationCancellationCode | undefined);
+    /** @docsNotRequired */
+    toString(): string;
+}
+/**
+ * An event triggered when a navigation is skipped.
+ * This can happen for a couple reasons including onSameUrlHandling
+ * is set to `ignore` and the navigation URL is not different than the
+ * current state.
+ *
+ * @publicApi
+ */
+declare class NavigationSkipped extends RouterEvent {
+    /**
+     * A description of why the navigation was skipped. For debug purposes only. Use `code`
+     * instead for a stable skipped reason that can be used in production.
+     */
+    reason: string;
+    /**
+     * A code to indicate why the navigation was skipped. This code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    readonly code?: NavigationSkippedCode | undefined;
+    readonly type = EventType.NavigationSkipped;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /**
+     * A description of why the navigation was skipped. For debug purposes only. Use `code`
+     * instead for a stable skipped reason that can be used in production.
+     */
+    reason: string, 
+    /**
+     * A code to indicate why the navigation was skipped. This code is stable for
+     * the reason and can be relied on whereas the `reason` string could change and should not be
+     * used in production.
+     */
+    code?: NavigationSkippedCode | undefined);
+}
+/**
+ * An event triggered when a navigation fails due to an unexpected error.
+ *
+ * @see {@link NavigationStart}
+ * @see {@link NavigationEnd}
+ * @see {@link NavigationCancel}
+ *
+ * @publicApi
+ */
+declare class NavigationError extends RouterEvent {
+    /** @docsNotRequired */
+    error: any;
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    readonly target?: RouterStateSnapshot | undefined;
+    readonly type = EventType.NavigationError;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    error: any, 
+    /**
+     * The target of the navigation when the error occurred.
+     *
+     * Note that this can be `undefined` because an error could have occurred before the
+     * `RouterStateSnapshot` was created for the navigation.
+     */
+    target?: RouterStateSnapshot | undefined);
+    /** @docsNotRequired */
+    toString(): string;
+}
+/**
+ * An event triggered when routes are recognized.
+ *
+ * @publicApi
+ */
+declare class RoutesRecognized extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    /** @docsNotRequired */
+    state: RouterStateSnapshot;
+    readonly type = EventType.RoutesRecognized;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
+    /** @docsNotRequired */
+    toString(): string;
+}
+/**
+ * An event triggered at the start of the Guard phase of routing.
+ *
+ * @see {@link GuardsCheckEnd}
+ *
+ * @publicApi
+ */
+declare class GuardsCheckStart extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    /** @docsNotRequired */
+    state: RouterStateSnapshot;
+    readonly type = EventType.GuardsCheckStart;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered at the end of the Guard phase of routing.
+ *
+ * @see {@link GuardsCheckStart}
+ *
+ * @publicApi
+ */
+declare class GuardsCheckEnd extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    /** @docsNotRequired */
+    state: RouterStateSnapshot;
+    /** @docsNotRequired */
+    shouldActivate: boolean;
+    readonly type = EventType.GuardsCheckEnd;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot, 
+    /** @docsNotRequired */
+    shouldActivate: boolean);
+    toString(): string;
+}
+/**
+ * An event triggered at the start of the Resolve phase of routing.
+ *
+ * Runs in the "resolve" phase whether or not there is anything to resolve.
+ * In future, may change to only run when there are things to be resolved.
+ *
+ * @see {@link ResolveEnd}
+ *
+ * @publicApi
+ */
+declare class ResolveStart extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    /** @docsNotRequired */
+    state: RouterStateSnapshot;
+    readonly type = EventType.ResolveStart;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered at the end of the Resolve phase of routing.
+ * @see {@link ResolveStart}
+ *
+ * @publicApi
+ */
+declare class ResolveEnd extends RouterEvent {
+    /** @docsNotRequired */
+    urlAfterRedirects: string;
+    /** @docsNotRequired */
+    state: RouterStateSnapshot;
+    readonly type = EventType.ResolveEnd;
+    constructor(
+    /** @docsNotRequired */
+    id: number, 
+    /** @docsNotRequired */
+    url: string, 
+    /** @docsNotRequired */
+    urlAfterRedirects: string, 
+    /** @docsNotRequired */
+    state: RouterStateSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered before lazy loading a route configuration.
+ *
+ * @see {@link RouteConfigLoadEnd}
+ *
+ * @publicApi
+ */
+declare class RouteConfigLoadStart {
+    /** @docsNotRequired */
+    route: Route;
+    readonly type = EventType.RouteConfigLoadStart;
+    constructor(
+    /** @docsNotRequired */
+    route: Route);
+    toString(): string;
+}
+/**
+ * An event triggered when a route has been lazy loaded.
+ *
+ * @see {@link RouteConfigLoadStart}
+ *
+ * @publicApi
+ */
+declare class RouteConfigLoadEnd {
+    /** @docsNotRequired */
+    route: Route;
+    readonly type = EventType.RouteConfigLoadEnd;
+    constructor(
+    /** @docsNotRequired */
+    route: Route);
+    toString(): string;
+}
+/**
+ * An event triggered at the start of the child-activation
+ * part of the Resolve phase of routing.
+ * @see {@link ChildActivationEnd}
+ * @see {@link ResolveStart}
+ *
+ * @publicApi
+ */
+declare class ChildActivationStart {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ChildActivationStart;
+    constructor(
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered at the end of the child-activation part
+ * of the Resolve phase of routing.
+ * @see {@link ChildActivationStart}
+ * @see {@link ResolveStart}
+ * @publicApi
+ */
+declare class ChildActivationEnd {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ChildActivationEnd;
+    constructor(
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered at the start of the activation part
+ * of the Resolve phase of routing.
+ * @see {@link ActivationEnd}
+ * @see {@link ResolveStart}
+ *
+ * @publicApi
+ */
+declare class ActivationStart {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ActivationStart;
+    constructor(
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered at the end of the activation part
+ * of the Resolve phase of routing.
+ * @see {@link ActivationStart}
+ * @see {@link ResolveStart}
+ *
+ * @publicApi
+ */
+declare class ActivationEnd {
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot;
+    readonly type = EventType.ActivationEnd;
+    constructor(
+    /** @docsNotRequired */
+    snapshot: ActivatedRouteSnapshot);
+    toString(): string;
+}
+/**
+ * An event triggered by scrolling.
+ *
+ * @publicApi
+ */
+declare class Scroll {
+    /** @docsNotRequired */
+    readonly routerEvent: NavigationEnd | NavigationSkipped;
+    /** @docsNotRequired */
+    readonly position: [number, number] | null;
+    /** @docsNotRequired */
+    readonly anchor: string | null;
+    /** @docsNotRequired */
+    readonly scrollBehavior?: "manual" | "after-transition" | undefined;
+    readonly type = EventType.Scroll;
+    constructor(
+    /** @docsNotRequired */
+    routerEvent: NavigationEnd | NavigationSkipped, 
+    /** @docsNotRequired */
+    position: [number, number] | null, 
+    /** @docsNotRequired */
+    anchor: string | null, 
+    /** @docsNotRequired */
+    scrollBehavior?: "manual" | "after-transition" | undefined);
+    toString(): string;
+}
+/**
+ * Router events that allow you to track the lifecycle of the router.
+ *
+ * The events occur in the following sequence:
+ *
+ * * [NavigationStart](api/router/NavigationStart): Navigation starts.
+ * * [RouteConfigLoadStart](api/router/RouteConfigLoadStart): Before
+ * the router [lazy loads](guide/routing/common-router-tasks#lazy-loading) a route configuration.
+ * * [RouteConfigLoadEnd](api/router/RouteConfigLoadEnd): After a route has been lazy loaded.
+ * * [RoutesRecognized](api/router/RoutesRecognized): When the router parses the URL
+ * and the routes are recognized.
+ * * [GuardsCheckStart](api/router/GuardsCheckStart): When the router begins the *guards*
+ * phase of routing.
+ * * [ChildActivationStart](api/router/ChildActivationStart): When the router
+ * begins activating a route's children.
+ * * [ActivationStart](api/router/ActivationStart): When the router begins activating a route.
+ * * [GuardsCheckEnd](api/router/GuardsCheckEnd): When the router finishes the *guards*
+ * phase of routing successfully.
+ * * [ResolveStart](api/router/ResolveStart): When the router begins the *resolve*
+ * phase of routing.
+ * * [ResolveEnd](api/router/ResolveEnd): When the router finishes the *resolve*
+ * phase of routing successfully.
+ * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
+ * activating a route's children.
+ * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.
+ * * [NavigationEnd](api/router/NavigationEnd): When navigation ends successfully.
+ * * [NavigationCancel](api/router/NavigationCancel): When navigation is canceled.
+ * * [NavigationError](api/router/NavigationError): When navigation fails
+ * due to an unexpected error.
+ * * [Scroll](api/router/Scroll): When the user scrolls.
+ *
+ * @publicApi
+ */
+type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
+
+/**
+ * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
+ * input.
+ *
+ * When unset, this value is `null` by default.
+ *
+ * @usageNotes
+ *
+ * To set the data from the template of the component with `router-outlet`:
+ * ```html
+ * <router-outlet [routerOutletData]="{name: 'Angular'}" />
+ * ```
+ *
+ * To read the data in the routed component:
+ * ```ts
+ * data = inject(ROUTER_OUTLET_DATA) as Signal<{name: string}>;
+ * ```
+ *
+ * @publicApi
+ * @see [Page routerOutletData](guide/routing/show-routes-with-outlets#passing-contextual-data-to-routed-components)
+ */
+declare const ROUTER_OUTLET_DATA: InjectionToken<Signal<unknown>>;
+/**
+ * An interface that defines the contract for developing a component outlet for the `Router`.
+ *
+ * An outlet acts as a placeholder that Angular dynamically fills based on the current router state.
+ *
+ * A router outlet should register itself with the `Router` via
+ * `ChildrenOutletContexts#onChildOutletCreated` and unregister with
+ * `ChildrenOutletContexts#onChildOutletDestroyed`. When the `Router` identifies a matched `Route`,
+ * it looks for a registered outlet in the `ChildrenOutletContexts` and activates it.
+ *
+ * @see {@link ChildrenOutletContexts}
+ * @publicApi
+ */
+interface RouterOutletContract {
+    /**
+     * Whether the given outlet is activated.
+     *
+     * An outlet is considered "activated" if it has an active component.
+     */
+    isActivated: boolean;
+    /** The instance of the activated component or `null` if the outlet is not activated. */
+    component: Object | null;
+    /**
+     * The `Data` of the `ActivatedRoute` snapshot.
+     */
+    activatedRouteData: Data;
+    /**
+     * The `ActivatedRoute` for the outlet or `null` if the outlet is not activated.
+     */
+    activatedRoute: ActivatedRoute | null;
+    /**
+     * Called by the `Router` when the outlet should activate (create a component).
+     */
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
+    /**
+     * A request to destroy the currently activated component.
+     *
+     * When a `RouteReuseStrategy` indicates that an `ActivatedRoute` should be removed but stored for
+     * later re-use rather than destroyed, the `Router` will call `detach` instead.
+     */
+    deactivate(): void;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree.
+     *
+     * This is similar to `deactivate`, but the activated component should _not_ be destroyed.
+     * Instead, it is returned so that it can be reattached later via the `attach` method.
+     */
+    detach(): ComponentRef<unknown>;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree.
+     */
+    attach(ref: ComponentRef<unknown>, activatedRoute: ActivatedRoute): void;
+    /**
+     * Emits an activate event when a new component is instantiated
+     **/
+    activateEvents?: EventEmitter<unknown>;
+    /**
+     * Emits a deactivate event when a component is destroyed.
+     */
+    deactivateEvents?: EventEmitter<unknown>;
+    /**
+     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+     * previously detached subtree.
+     **/
+    attachEvents?: EventEmitter<unknown>;
+    /**
+     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+     * subtree.
+     */
+    detachEvents?: EventEmitter<unknown>;
+    /**
+     * Used to indicate that the outlet is able to bind data from the `Router` to the outlet
+     * component's inputs.
+     *
+     * When this is `undefined` or `false` and the developer has opted in to the
+     * feature using `withComponentInputBinding`, a warning will be logged in dev mode if this outlet
+     * is used in the application.
+     */
+    readonly supportsBindingToComponentInputs?: true;
+}
+/**
+ * @description
+ *
+ * Acts as a placeholder that Angular dynamically fills based on the current router state.
+ *
+ * Each outlet can have a unique name, determined by the optional `name` attribute.
+ * The name cannot be set or changed dynamically. If not set, default value is "primary".
+ *
+ * ```html
+ * <router-outlet></router-outlet>
+ * <router-outlet name='left'></router-outlet>
+ * <router-outlet name='right'></router-outlet>
+ * ```
+ *
+ * Named outlets can be the targets of secondary routes.
+ * The `Route` object for a secondary route has an `outlet` property to identify the target outlet:
+ *
+ * `{path: <base-path>, component: <component>, outlet: <target_outlet_name>}`
+ *
+ * Using named outlets and secondary routes, you can target multiple outlets in
+ * the same `RouterLink` directive.
+ *
+ * The router keeps track of separate branches in a navigation tree for each named outlet and
+ * generates a representation of that tree in the URL.
+ * The URL for a secondary route uses the following syntax to specify both the primary and secondary
+ * routes at the same time:
+ *
+ * `http://base-path/primary-route-path(outlet-name:route-path)`
+ *
+ * A router outlet emits an activate event when a new component is instantiated,
+ * deactivate event when a component is destroyed.
+ * An attached event emits when the `RouteReuseStrategy` instructs the outlet to reattach the
+ * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
+ * detach the subtree.
+ *
+ * ```html
+ * <router-outlet
+ *   (activate)='onActivate($event)'
+ *   (deactivate)='onDeactivate($event)'
+ *   (attach)='onAttach($event)'
+ *   (detach)='onDetach($event)'></router-outlet>
+ * ```
+ *
+ * @see {@link RouterLink}
+ * @see {@link Route}
+ * @see [Show routes with outlets](guide/routing/show-routes-with-outlets)
+ * @ngModule RouterModule
+ *
+ * @publicApi
+ */
+declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
+    private activated;
+    private _activatedRoute;
+    /**
+     * The name of the outlet
+     *
+     */
+    name: string;
+    activateEvents: EventEmitter<any>;
+    deactivateEvents: EventEmitter<any>;
+    /**
+     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
+     * previously detached subtree.
+     **/
+    attachEvents: EventEmitter<unknown>;
+    /**
+     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
+     * subtree.
+     */
+    detachEvents: EventEmitter<unknown>;
+    /**
+     * Data that will be provided to the child injector through the `ROUTER_OUTLET_DATA` token.
+     *
+     * When unset, the value of the token is `undefined` by default.
+     */
+    readonly routerOutletData: i0.InputSignal<unknown>;
+    private parentContexts;
+    private location;
+    private changeDetector;
+    private inputBinder;
+    /** @docs-private */
+    readonly supportsBindingToComponentInputs = true;
+    /** @docs-private */
+    ngOnChanges(changes: SimpleChanges): void;
+    /** @docs-private */
+    ngOnDestroy(): void;
+    private isTrackedInParentContexts;
+    /** @docs-private */
+    ngOnInit(): void;
+    private initializeOutletWithName;
+    get isActivated(): boolean;
+    /**
+     * @returns The currently activated component instance.
+     * @throws An error if the outlet is not activated.
+     */
+    get component(): Object;
+    get activatedRoute(): ActivatedRoute;
+    get activatedRouteData(): Data;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to detach the subtree
+     */
+    detach(): ComponentRef<any>;
+    /**
+     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
+     */
+    attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
+    deactivate(): void;
+    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; "routerOutletData": { "alias": "routerOutletData"; "required": false; "isSignal": true; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
+}
+
+/**
+ * @description
+ *
+ * Options that modify the `Router` URL.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed.
+ *
+ * @see {@link Router#navigate}
+ * @see {@link Router#createUrlTree}
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
+ *
+ * @publicApi
+ */
+interface UrlCreationOptions {
+    /**
+     * Specifies a root URI to use for relative navigation.
+     *
+     * For example, consider the following route configuration where the parent route
+     * has two children.
+     *
+     * ```ts
+     * [{
+     *   path: 'parent',
+     *   component: ParentComponent,
+     *   children: [{
+     *     path: 'list',
+     *     component: ListComponent
+     *   },{
+     *     path: 'child',
+     *     component: ChildComponent
+     *   }]
+     * }]
+     * ```
+     *
+     * The following `go()` function navigates to the `list` route by
+     * interpreting the destination URI as relative to the activated `child`  route
+     *
+     * ```ts
+     *  @Component({...})
+     *  class ChildComponent {
+     *    constructor(private router: Router, private route: ActivatedRoute) {}
+     *
+     *    go() {
+     *      router.navigate(['../list'], { relativeTo: this.route });
+     *    }
+     *  }
+     * ```
+     *
+     * A value of `null` or `undefined` indicates that the navigation commands should be applied
+     * relative to the root.
+     */
+    relativeTo?: ActivatedRoute | null;
+    /**
+     * Sets query parameters to the URL.
+     *
+     * ```ts
+     * // Navigate to /results?page=1
+     * router.navigate(['/results'], { queryParams: { page: 1 } });
+     * ```
+     */
+    queryParams?: Params | null;
+    /**
+     * Sets the hash fragment for the URL.
+     *
+     * ```ts
+     * // Navigate to /results#top
+     * router.navigate(['/results'], { fragment: 'top' });
+     * ```
+     */
+    fragment?: string;
+    /**
+     * How to handle query parameters in the router link for the next navigation.
+     * One of:
+     * * `preserve` : Preserve current parameters.
+     * * `merge` : Merge new with current parameters.
+     *
+     * The "preserve" option discards any new query params:
+     * ```ts
+     * // from /view1?page=1 to/view2?page=1
+     * router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
+     * });
+     * ```
+     * The "merge" option appends new query params to the params from the current URL:
+     * ```ts
+     * // from /view1?page=1 to/view2?page=1&otherKey=2
+     * router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
+     * });
+     * ```
+     * In case of a key collision between current parameters and those in the `queryParams` object,
+     * the new value is used.
+     *
+     */
+    queryParamsHandling?: QueryParamsHandling | null;
+    /**
+     * When true, preserves the URL fragment for the next navigation
+     *
+     * ```ts
+     * // Preserve fragment from /results#top to /view#top
+     * router.navigate(['/view'], { preserveFragment: true });
+     * ```
+     */
+    preserveFragment?: boolean;
+}
+/**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the target URL should be constructed or interpreted.
+ *
+ * @see {@link Router#navigate}
+ * @see {@link Router#navigateByUrl}
+ * @see {@link Router#createurltree}
+ * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
+ * @see {@link UrlCreationOptions}
+ * @see {@link NavigationBehaviorOptions}
+ *
+ * @publicApi
+ */
+interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
+}
+type RestoredState = {
+    [k: string]: any;
+    navigationId: number;
+    ɵrouterPageId?: number;
+};
+/**
+ * Information about a navigation operation.
+ * Retrieve the most recent navigation object with the
+ * [Router.currentNavigation() method](api/router/Router#currentNavigation) .
+ *
+ * * *id* : The unique identifier of the current navigation.
+ * * *initialUrl* : The target URL passed into the `Router#navigateByUrl()` call before navigation.
+ * This is the value before the router has parsed or applied redirects to it.
+ * * *extractedUrl* : The initial target URL after being parsed with `UrlSerializer.extract()`.
+ * * *finalUrl* : The extracted URL after redirects have been applied.
+ * This URL may not be available immediately, therefore this property can be `undefined`.
+ * It is guaranteed to be set after the `RoutesRecognized` event fires.
+ * * *trigger* : Identifies how this navigation was triggered.
+ * -- 'imperative'--Triggered by `router.navigateByUrl` or `router.navigate`.
+ * -- 'popstate'--Triggered by a popstate event.
+ * -- 'hashchange'--Triggered by a hashchange event.
+ * * *extras* : A `NavigationExtras` options object that controlled the strategy used for this
+ * navigation.
+ * * *previousNavigation* : The previously successful `Navigation` object. Only one previous
+ * navigation is available, therefore this previous `Navigation` object has a `null` value for its
+ * own `previousNavigation`.
+ *
+ * @publicApi
+ */
+interface Navigation {
+    /**
+     * The unique identifier of the current navigation.
+     */
+    id: number;
+    /**
+     * The target URL passed into the `Router#navigateByUrl()` call before navigation. This is
+     * the value before the router has parsed or applied redirects to it.
+     */
+    initialUrl: UrlTree;
+    /**
+     * The initial target URL after being parsed with `UrlHandlingStrategy.extract()`.
+     */
+    extractedUrl: UrlTree;
+    /**
+     * The extracted URL after redirects have been applied.
+     * This URL may not be available immediately, therefore this property can be `undefined`.
+     * It is guaranteed to be set after the `RoutesRecognized` event fires.
+     */
+    finalUrl?: UrlTree;
+    /**
+     * Identifies how this navigation was triggered.
+     */
+    trigger: NavigationTrigger;
+    /**
+     * Options that controlled the strategy used for this navigation.
+     * See `NavigationExtras`.
+     */
+    extras: NavigationExtras;
+    /**
+     * The previously successful `Navigation` object. Only one previous navigation
+     * is available, therefore this previous `Navigation` object has a `null` value
+     * for its own `previousNavigation`.
+     */
+    previousNavigation: Navigation | null;
+    /**
+     * Aborts the navigation if it has not yet been completed or reached the point where routes are being activated.
+     * This function is a no-op if the navigation is beyond the point where it can be aborted.
+     */
+    readonly abort: () => void;
+}
+
+/**
+ * @description
+ *
+ * Represents the detached route tree.
+ *
+ * This is an opaque value the router will give to a custom route reuse strategy
+ * to store and retrieve later on.
+ *
+ * @publicApi
+ */
+type DetachedRouteHandle = {};
+/**
+ * @description
+ *
+ * Destroys the component associated with a `DetachedRouteHandle`.
+ *
+ * This function should be used when a `RouteReuseStrategy` decides to drop a stored handle
+ * and wants to ensure that the component is destroyed.
+ *
+ * @param handle The detached route handle to destroy.
+ *
+ * @publicApi
+ * @see [Manually destroying detached route handles](guide/routing/customizing-route-behavior#manually-destroying-detached-route-handles)
+ */
+declare function destroyDetachedRouteHandle(handle: DetachedRouteHandle): void;
+/**
+ * @description
+ *
+ * Provides a way to customize when activated routes get reused.
+ *
+ * @publicApi
+ */
+declare abstract class RouteReuseStrategy {
+    /** Determines if this route (and its subtree) should be detached to be reused later */
+    abstract shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    /**
+     * Stores the detached route.
+     *
+     * Storing a `null` value should erase the previously stored value.
+     */
+    abstract store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void;
+    /** Determines if this route (and its subtree) should be reattached */
+    abstract shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    /** Retrieves the previously stored route */
+    abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    /** Determines if a route should be reused */
+    abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
+}
+/**
+ * @description
+ *
+ * This base route reuse strategy only reuses routes when the matched router configs are
+ * identical. This prevents components from being destroyed and recreated
+ * when just the route parameters, query parameters or fragment change
+ * (that is, the existing component is _reused_).
+ *
+ * This strategy does not store any routes for later reuse.
+ *
+ * Angular uses this strategy by default.
+ *
+ *
+ * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
+ * class that extends the `BaseRouteReuseStrategy` one.
+ * @publicApi
+ */
+declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
+    /**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for `BaseRouteReuseStrategy`.
+     * */
+    shouldDetach(route: ActivatedRouteSnapshot): boolean;
+    /**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
+    /** Returns `false`, meaning the route (and its subtree) is never reattached */
+    shouldAttach(route: ActivatedRouteSnapshot): boolean;
+    /** Returns `null` because this strategy does not store routes for later re-use. */
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
+    /**
+     * Determines if a route should be reused.
+     * This strategy returns `true` when the future route config and current route config are
+     * identical.
+     */
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    /**
+     * Determines if the injector for the given route should be destroyed.
+     *
+     * This method is called by the router when the `RouteReuseStrategy` is destroyed.
+     * If this method returns `true`, the router will destroy the injector for the given route.
+     *
+     * @see {@link withExperimentalAutoCleanupInjectors}
+     * @xperimental 21.1
+     */
+    shouldDestroyInjector(route: Route): boolean;
+}
+
+/**
+ * @description
+ *
+ * A service that facilitates navigation among views and URL manipulation capabilities.
+ * This service is provided in the root scope and configured with [provideRouter](api/router/provideRouter).
+ *
+ * @see {@link Route}
+ * @see {@link provideRouter}
+ * @see [Routing and Navigation Guide](guide/routing/common-router-tasks).
+ *
+ * @ngModule RouterModule
+ *
+ * @publicApi
+ */
+declare class Router {
+    private get currentUrlTree();
+    private get rawUrlTree();
+    private disposed;
+    private nonRouterCurrentEntryChangeSubscription?;
+    private readonly console;
+    private readonly stateManager;
+    private readonly options;
+    private readonly pendingTasks;
+    private readonly urlUpdateStrategy;
+    private readonly navigationTransitions;
+    private readonly urlSerializer;
+    private readonly location;
+    private readonly urlHandlingStrategy;
+    private readonly injector;
+    /**
+     * The private `Subject` type for the public events exposed in the getter. This is used internally
+     * to push events to. The separate field allows us to expose separate types in the public API
+     * (i.e., an Observable rather than the Subject).
+     */
+    private _events;
+    /**
+     * An event stream for routing events.
+     */
+    get events(): Observable<Event>;
+    /**
+     * The current state of routing in this NgModule.
+     */
+    get routerState(): RouterState;
+    /**
+     * True if at least one navigation event has occurred,
+     * false otherwise.
+     */
+    navigated: boolean;
+    /**
+     * A strategy for re-using routes.
+     *
+     * @deprecated Configure using `providers` instead:
+     *   `{provide: RouteReuseStrategy, useClass: MyStrategy}`.
+     */
+    routeReuseStrategy: RouteReuseStrategy;
+    /**
+     * How to handle a navigation request to the current URL.
+     *
+     *
+     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
+     * @see {@link withRouterConfig}
+     * @see {@link provideRouter}
+     * @see {@link RouterModule}
+     */
+    onSameUrlNavigation: OnSameUrlNavigation;
+    config: Routes;
+    /**
+     * Indicates whether the application has opted in to binding Router data to component inputs.
+     *
+     * This option is enabled by the `withComponentInputBinding` feature of `provideRouter` or
+     * `bindToComponentInputs` in the `ExtraOptions` of `RouterModule.forRoot`.
+     */
+    readonly componentInputBindingEnabled: boolean;
+    /**
+     * Signal of the current `Navigation` object when the router is navigating, and `null` when idle.
+     *
+     * Note: The current navigation becomes to null after the NavigationEnd event is emitted.
+     */
+    readonly currentNavigation: Signal<Navigation | null>;
+    constructor();
+    private eventsSubscription;
+    private subscribeToNavigationEvents;
+    /**
+     * Sets up the location change listener and performs the initial navigation.
+     */
+    initialNavigation(): void;
+    /**
+     * Sets up the location change listener. This listener detects navigations triggered from outside
+     * the Router (the browser back/forward buttons, for example) and schedules a corresponding Router
+     * navigation so that the correct events, guards, etc. are triggered.
+     */
+    setUpLocationChangeListener(): void;
+    /**
+     * Schedules a router navigation to synchronize Router state with the browser state.
+     *
+     * This is done as a response to a popstate event and the initial navigation. These
+     * two scenarios represent times when the browser URL/state has been updated and
+     * the Router needs to respond to ensure its internal state matches.
+     */
+    private navigateToSyncWithBrowser;
+    /** The current URL. */
+    get url(): string;
+    /**
+     * Returns the current `Navigation` object when the router is navigating,
+     * and `null` when idle.
+     *
+     * @deprecated 20.2 Use the `currentNavigation` signal instead.
+     */
+    getCurrentNavigation(): Navigation | null;
+    /**
+     * The `Navigation` object of the most recent navigation to succeed and `null` if there
+     *     has not been a successful navigation yet.
+     */
+    get lastSuccessfulNavigation(): Signal<Navigation | null>;
+    /**
+     * Resets the route configuration used for navigation and generating links.
+     *
+     * @param config The route array for the new configuration.
+     *
+     * @usageNotes
+     *
+     * ```ts
+     * router.resetConfig([
+     *  { path: 'team/:id', component: TeamCmp, children: [
+     *    { path: 'simple', component: SimpleCmp },
+     *    { path: 'user/:name', component: UserCmp }
+     *  ]}
+     * ]);
+     * ```
+     */
+    resetConfig(config: Routes): void;
+    /** @docs-private */
+    ngOnDestroy(): void;
+    /** Disposes of the router. */
+    dispose(): void;
+    /**
+     * Appends URL segments to the current URL tree to create a new URL tree.
+     *
+     * @param commands An array of URL fragments with which to construct the new URL tree.
+     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+     * segments, followed by the parameters for each segment.
+     * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
+     * property of the options object, if supplied.
+     * @param navigationExtras Options that control the navigation strategy.
+     * @returns The new URL tree.
+     *
+     * @usageNotes
+     *
+     * ```ts
+     * // create /team/33/user/11
+     * router.createUrlTree(['/team', 33, 'user', 11]);
+     *
+     * // create /team/33;expand=true/user/11
+     * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
+     *
+     * // you can collapse static segments like this (this works only with the first passed-in value):
+     * router.createUrlTree(['/team/33/user', userId]);
+     *
+     * // If the first segment can contain slashes, and you do not want the router to split it,
+     * // you can do the following:
+     * router.createUrlTree([{segmentPath: '/one/two'}]);
+     *
+     * // create /team/33/(user/11//right:chat)
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
+     *
+     * // remove the right secondary node
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+     *
+     * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
+     *
+     * // navigate to /team/33/user/11/details
+     * router.createUrlTree(['details'], {relativeTo: route});
+     *
+     * // navigate to /team/33/user/22
+     * router.createUrlTree(['../22'], {relativeTo: route});
+     *
+     * // navigate to /team/44/user/22
+     * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     * ```
+     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+     * tree should be created relative to the root.
+     *
+     */
+    createUrlTree(commands: readonly any[], navigationExtras?: UrlCreationOptions): UrlTree;
+    /**
+     * Navigates to a view using an absolute route path.
+     *
+     * @param url An absolute path for a defined route. The function does not apply any delta to the
+     *     current URL.
+     * @param extras An object containing properties that modify the navigation strategy.
+     *
+     * @returns A Promise that resolves to 'true' when navigation succeeds,
+     * to 'false' when navigation fails, or is rejected on error.
+     *
+     * @usageNotes
+     *
+     * The following calls request navigation to an absolute path.
+     *
+     * ```ts
+     * router.navigateByUrl("/team/33/user/11");
+     *
+     * // Navigate without updating the URL
+     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
+     * ```
+     *
+     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
+     *
+     */
+    navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
+    /**
+     * Navigate based on the provided array of commands and a starting point.
+     * If no starting route is provided, the navigation is absolute.
+     *
+     * @param commands An array of URL fragments with which to construct the target URL.
+     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
+     * segments, followed by the parameters for each segment.
+     * The fragments are applied to the current URL or the one provided  in the `relativeTo` property
+     * of the options object, if supplied.
+     * @param extras An options object that determines how the URL should be constructed or
+     *     interpreted.
+     *
+     * @returns A Promise that resolves to `true` when navigation succeeds, or `false` when navigation
+     *     fails. The Promise is rejected when an error occurs if `resolveNavigationPromiseOnError` is
+     * not `true`.
+     *
+     * @usageNotes
+     *
+     * The following calls request navigation to a dynamic route path relative to the current URL.
+     *
+     * ```ts
+     * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
+     *
+     * // Navigate without updating the URL, overriding the default behavior
+     * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
+     * ```
+     *
+     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
+     *
+     */
+    navigate(commands: readonly any[], extras?: NavigationExtras): Promise<boolean>;
+    /** Serializes a `UrlTree` into a string */
+    serializeUrl(url: UrlTree): string;
+    /** Parses a string into a `UrlTree` */
+    parseUrl(url: string): UrlTree;
+    /**
+     * Returns whether the url is activated.
+     *
+     * @deprecated
+     * Use `IsActiveMatchOptions` instead.
+     *
+     * - The equivalent `IsActiveMatchOptions` for `true` is
+     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+     * - The equivalent for `false` is
+     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+     */
+    isActive(url: string | UrlTree, exact: boolean): boolean;
+    /**
+     * Returns whether the url is activated.
+     * @deprecated 21.1 - Use the `isActive` function instead.
+     * @see {@link isActive}
+     */
+    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
+    private removeEmptyProps;
+    private scheduleNavigation;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
+}
+
+/**
  * A set of options which specify how to determine if a `UrlTree` is active, given the `UrlTree`
  * for the current router state.
  *
@@ -133,6 +1504,13 @@ interface IsActiveMatchOptions {
      */
     fragment: 'exact' | 'ignored';
 }
+/**
+ * Returns a computed signal of whether the given url is activated in the Router.
+ *
+ * As the router state changes, the signal will update to reflect whether the url is active.
+ * @publicApi 21.1
+ */
+declare function isActive(url: string | UrlTree, router: Router, matchOptions: IsActiveMatchOptions): Signal<boolean>;
 /**
  * @description
  *
@@ -1981,1375 +3359,6 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
 }
 
 /**
- * Identifies the call or event that triggered a navigation.
- *
- * * 'imperative': Triggered by `router.navigateByUrl()` or `router.navigate()`.
- * * 'popstate' : Triggered by a `popstate` event.
- * * 'hashchange'-: Triggered by a `hashchange` event.
- *
- * @publicApi
- */
-type NavigationTrigger = 'imperative' | 'popstate' | 'hashchange';
-/**
- * Identifies the type of a router event.
- *
- * @see [Router Lifecycle and Events](guide/routing/lifecycle-and-events)
- *
- * @publicApi
- */
-declare enum EventType {
-    NavigationStart = 0,
-    NavigationEnd = 1,
-    NavigationCancel = 2,
-    NavigationError = 3,
-    RoutesRecognized = 4,
-    ResolveStart = 5,
-    ResolveEnd = 6,
-    GuardsCheckStart = 7,
-    GuardsCheckEnd = 8,
-    RouteConfigLoadStart = 9,
-    RouteConfigLoadEnd = 10,
-    ChildActivationStart = 11,
-    ChildActivationEnd = 12,
-    ActivationStart = 13,
-    ActivationEnd = 14,
-    Scroll = 15,
-    NavigationSkipped = 16
-}
-/**
- * Base for events the router goes through, as opposed to events tied to a specific
- * route. Fired one time for any given navigation.
- *
- * The following code shows how a class subscribes to router events.
- *
- * ```ts
- * import {Event, RouterEvent, Router} from '@angular/router';
- *
- * class MyService {
- *   constructor(public router: Router) {
- *     router.events.pipe(
- *        filter((e: Event | RouterEvent): e is RouterEvent => e instanceof RouterEvent)
- *     ).subscribe((e: RouterEvent) => {
- *       // Do something
- *     });
- *   }
- * }
- * ```
- *
- * @see {@link Event}
- * @see [Router events summary](guide/routing/router-reference#router-events)
- * @publicApi
- */
-declare class RouterEvent {
-    /** A unique ID that the router assigns to every router navigation. */
-    id: number;
-    /** The URL that is the destination for this navigation. */
-    url: string;
-    constructor(
-    /** A unique ID that the router assigns to every router navigation. */
-    id: number, 
-    /** The URL that is the destination for this navigation. */
-    url: string);
-}
-/**
- * An event triggered when a navigation starts.
- *
- * @publicApi
- */
-declare class NavigationStart extends RouterEvent {
-    readonly type = EventType.NavigationStart;
-    /**
-     * Identifies the call or event that triggered the navigation.
-     * An `imperative` trigger is a call to `router.navigateByUrl()` or `router.navigate()`.
-     *
-     * @see {@link NavigationEnd}
-     * @see {@link NavigationCancel}
-     * @see {@link NavigationError}
-     */
-    navigationTrigger?: NavigationTrigger;
-    /**
-     * The navigation state that was previously supplied to the `pushState` call,
-     * when the navigation is triggered by a `popstate` event. Otherwise null.
-     *
-     * The state object is defined by `NavigationExtras`, and contains any
-     * developer-defined state value, as well as a unique ID that
-     * the router assigns to every router transition/navigation.
-     *
-     * From the perspective of the router, the router never "goes back".
-     * When the user clicks on the back button in the browser,
-     * a new navigation ID is created.
-     *
-     * Use the ID in this previous-state object to differentiate between a newly created
-     * state and one returned to by a `popstate` event, so that you can restore some
-     * remembered state, such as scroll position.
-     *
-     */
-    restoredState?: {
-        [k: string]: any;
-        navigationId: number;
-    } | null;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    navigationTrigger?: NavigationTrigger, 
-    /** @docsNotRequired */
-    restoredState?: {
-        [k: string]: any;
-        navigationId: number;
-    } | null);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * An event triggered when a navigation ends successfully.
- *
- * @see {@link NavigationStart}
- * @see {@link NavigationCancel}
- * @see {@link NavigationError}
- *
- * @publicApi
- */
-declare class NavigationEnd extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    readonly type = EventType.NavigationEnd;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * A code for the `NavigationCancel` event of the `Router` to indicate the
- * reason a navigation failed.
- *
- * @publicApi
- */
-declare enum NavigationCancellationCode {
-    /**
-     * A navigation failed because a guard returned a `UrlTree` to redirect.
-     */
-    Redirect = 0,
-    /**
-     * A navigation failed because a more recent navigation started.
-     */
-    SupersededByNewNavigation = 1,
-    /**
-     * A navigation failed because one of the resolvers completed without emitting a value.
-     */
-    NoDataFromResolver = 2,
-    /**
-     * A navigation failed because a guard returned `false`.
-     */
-    GuardRejected = 3,
-    /**
-     * A navigation was aborted by the `Navigation.abort` function.
-     *
-     * @see {@link Navigation}
-     */
-    Aborted = 4
-}
-/**
- * A code for the `NavigationSkipped` event of the `Router` to indicate the
- * reason a navigation was skipped.
- *
- * @publicApi
- */
-declare enum NavigationSkippedCode {
-    /**
-     * A navigation was skipped because the navigation URL was the same as the current Router URL.
-     */
-    IgnoredSameUrlNavigation = 0,
-    /**
-     * A navigation was skipped because the configured `UrlHandlingStrategy` return `false` for both
-     * the current Router URL and the target of the navigation.
-     *
-     * @see {@link UrlHandlingStrategy}
-     */
-    IgnoredByUrlHandlingStrategy = 1
-}
-/**
- * An event triggered when a navigation is canceled, directly or indirectly.
- * This can happen for several reasons including when a route guard
- * returns `false` or initiates a redirect by returning a `UrlTree`.
- *
- * @see {@link NavigationStart}
- * @see {@link NavigationEnd}
- * @see {@link NavigationError}
- *
- * @publicApi
- */
-declare class NavigationCancel extends RouterEvent {
-    /**
-     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
-     * instead for a stable cancellation reason that can be used in production.
-     */
-    reason: string;
-    /**
-     * A code to indicate why the navigation was canceled. This cancellation code is stable for
-     * the reason and can be relied on whereas the `reason` string could change and should not be
-     * used in production.
-     */
-    readonly code?: NavigationCancellationCode | undefined;
-    readonly type = EventType.NavigationCancel;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /**
-     * A description of why the navigation was cancelled. For debug purposes only. Use `code`
-     * instead for a stable cancellation reason that can be used in production.
-     */
-    reason: string, 
-    /**
-     * A code to indicate why the navigation was canceled. This cancellation code is stable for
-     * the reason and can be relied on whereas the `reason` string could change and should not be
-     * used in production.
-     */
-    code?: NavigationCancellationCode | undefined);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * An event triggered when a navigation is skipped.
- * This can happen for a couple reasons including onSameUrlHandling
- * is set to `ignore` and the navigation URL is not different than the
- * current state.
- *
- * @publicApi
- */
-declare class NavigationSkipped extends RouterEvent {
-    /**
-     * A description of why the navigation was skipped. For debug purposes only. Use `code`
-     * instead for a stable skipped reason that can be used in production.
-     */
-    reason: string;
-    /**
-     * A code to indicate why the navigation was skipped. This code is stable for
-     * the reason and can be relied on whereas the `reason` string could change and should not be
-     * used in production.
-     */
-    readonly code?: NavigationSkippedCode | undefined;
-    readonly type = EventType.NavigationSkipped;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /**
-     * A description of why the navigation was skipped. For debug purposes only. Use `code`
-     * instead for a stable skipped reason that can be used in production.
-     */
-    reason: string, 
-    /**
-     * A code to indicate why the navigation was skipped. This code is stable for
-     * the reason and can be relied on whereas the `reason` string could change and should not be
-     * used in production.
-     */
-    code?: NavigationSkippedCode | undefined);
-}
-/**
- * An event triggered when a navigation fails due to an unexpected error.
- *
- * @see {@link NavigationStart}
- * @see {@link NavigationEnd}
- * @see {@link NavigationCancel}
- *
- * @publicApi
- */
-declare class NavigationError extends RouterEvent {
-    /** @docsNotRequired */
-    error: any;
-    /**
-     * The target of the navigation when the error occurred.
-     *
-     * Note that this can be `undefined` because an error could have occurred before the
-     * `RouterStateSnapshot` was created for the navigation.
-     */
-    readonly target?: RouterStateSnapshot | undefined;
-    readonly type = EventType.NavigationError;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    error: any, 
-    /**
-     * The target of the navigation when the error occurred.
-     *
-     * Note that this can be `undefined` because an error could have occurred before the
-     * `RouterStateSnapshot` was created for the navigation.
-     */
-    target?: RouterStateSnapshot | undefined);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * An event triggered when routes are recognized.
- *
- * @publicApi
- */
-declare class RoutesRecognized extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    readonly type = EventType.RoutesRecognized;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string, 
-    /** @docsNotRequired */
-    state: RouterStateSnapshot);
-    /** @docsNotRequired */
-    toString(): string;
-}
-/**
- * An event triggered at the start of the Guard phase of routing.
- *
- * @see {@link GuardsCheckEnd}
- *
- * @publicApi
- */
-declare class GuardsCheckStart extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    readonly type = EventType.GuardsCheckStart;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string, 
-    /** @docsNotRequired */
-    state: RouterStateSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered at the end of the Guard phase of routing.
- *
- * @see {@link GuardsCheckStart}
- *
- * @publicApi
- */
-declare class GuardsCheckEnd extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    /** @docsNotRequired */
-    shouldActivate: boolean;
-    readonly type = EventType.GuardsCheckEnd;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string, 
-    /** @docsNotRequired */
-    state: RouterStateSnapshot, 
-    /** @docsNotRequired */
-    shouldActivate: boolean);
-    toString(): string;
-}
-/**
- * An event triggered at the start of the Resolve phase of routing.
- *
- * Runs in the "resolve" phase whether or not there is anything to resolve.
- * In future, may change to only run when there are things to be resolved.
- *
- * @see {@link ResolveEnd}
- *
- * @publicApi
- */
-declare class ResolveStart extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    readonly type = EventType.ResolveStart;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string, 
-    /** @docsNotRequired */
-    state: RouterStateSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered at the end of the Resolve phase of routing.
- * @see {@link ResolveStart}
- *
- * @publicApi
- */
-declare class ResolveEnd extends RouterEvent {
-    /** @docsNotRequired */
-    urlAfterRedirects: string;
-    /** @docsNotRequired */
-    state: RouterStateSnapshot;
-    readonly type = EventType.ResolveEnd;
-    constructor(
-    /** @docsNotRequired */
-    id: number, 
-    /** @docsNotRequired */
-    url: string, 
-    /** @docsNotRequired */
-    urlAfterRedirects: string, 
-    /** @docsNotRequired */
-    state: RouterStateSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered before lazy loading a route configuration.
- *
- * @see {@link RouteConfigLoadEnd}
- *
- * @publicApi
- */
-declare class RouteConfigLoadStart {
-    /** @docsNotRequired */
-    route: Route;
-    readonly type = EventType.RouteConfigLoadStart;
-    constructor(
-    /** @docsNotRequired */
-    route: Route);
-    toString(): string;
-}
-/**
- * An event triggered when a route has been lazy loaded.
- *
- * @see {@link RouteConfigLoadStart}
- *
- * @publicApi
- */
-declare class RouteConfigLoadEnd {
-    /** @docsNotRequired */
-    route: Route;
-    readonly type = EventType.RouteConfigLoadEnd;
-    constructor(
-    /** @docsNotRequired */
-    route: Route);
-    toString(): string;
-}
-/**
- * An event triggered at the start of the child-activation
- * part of the Resolve phase of routing.
- * @see {@link ChildActivationEnd}
- * @see {@link ResolveStart}
- *
- * @publicApi
- */
-declare class ChildActivationStart {
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot;
-    readonly type = EventType.ChildActivationStart;
-    constructor(
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered at the end of the child-activation part
- * of the Resolve phase of routing.
- * @see {@link ChildActivationStart}
- * @see {@link ResolveStart}
- * @publicApi
- */
-declare class ChildActivationEnd {
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot;
-    readonly type = EventType.ChildActivationEnd;
-    constructor(
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered at the start of the activation part
- * of the Resolve phase of routing.
- * @see {@link ActivationEnd}
- * @see {@link ResolveStart}
- *
- * @publicApi
- */
-declare class ActivationStart {
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot;
-    readonly type = EventType.ActivationStart;
-    constructor(
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered at the end of the activation part
- * of the Resolve phase of routing.
- * @see {@link ActivationStart}
- * @see {@link ResolveStart}
- *
- * @publicApi
- */
-declare class ActivationEnd {
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot;
-    readonly type = EventType.ActivationEnd;
-    constructor(
-    /** @docsNotRequired */
-    snapshot: ActivatedRouteSnapshot);
-    toString(): string;
-}
-/**
- * An event triggered by scrolling.
- *
- * @publicApi
- */
-declare class Scroll {
-    /** @docsNotRequired */
-    readonly routerEvent: NavigationEnd | NavigationSkipped;
-    /** @docsNotRequired */
-    readonly position: [number, number] | null;
-    /** @docsNotRequired */
-    readonly anchor: string | null;
-    /** @docsNotRequired */
-    readonly scrollBehavior?: "manual" | "after-transition" | undefined;
-    readonly type = EventType.Scroll;
-    constructor(
-    /** @docsNotRequired */
-    routerEvent: NavigationEnd | NavigationSkipped, 
-    /** @docsNotRequired */
-    position: [number, number] | null, 
-    /** @docsNotRequired */
-    anchor: string | null, 
-    /** @docsNotRequired */
-    scrollBehavior?: "manual" | "after-transition" | undefined);
-    toString(): string;
-}
-/**
- * Router events that allow you to track the lifecycle of the router.
- *
- * The events occur in the following sequence:
- *
- * * [NavigationStart](api/router/NavigationStart): Navigation starts.
- * * [RouteConfigLoadStart](api/router/RouteConfigLoadStart): Before
- * the router [lazy loads](guide/routing/common-router-tasks#lazy-loading) a route configuration.
- * * [RouteConfigLoadEnd](api/router/RouteConfigLoadEnd): After a route has been lazy loaded.
- * * [RoutesRecognized](api/router/RoutesRecognized): When the router parses the URL
- * and the routes are recognized.
- * * [GuardsCheckStart](api/router/GuardsCheckStart): When the router begins the *guards*
- * phase of routing.
- * * [ChildActivationStart](api/router/ChildActivationStart): When the router
- * begins activating a route's children.
- * * [ActivationStart](api/router/ActivationStart): When the router begins activating a route.
- * * [GuardsCheckEnd](api/router/GuardsCheckEnd): When the router finishes the *guards*
- * phase of routing successfully.
- * * [ResolveStart](api/router/ResolveStart): When the router begins the *resolve*
- * phase of routing.
- * * [ResolveEnd](api/router/ResolveEnd): When the router finishes the *resolve*
- * phase of routing successfully.
- * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
- * activating a route's children.
- * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.
- * * [NavigationEnd](api/router/NavigationEnd): When navigation ends successfully.
- * * [NavigationCancel](api/router/NavigationCancel): When navigation is canceled.
- * * [NavigationError](api/router/NavigationError): When navigation fails
- * due to an unexpected error.
- * * [Scroll](api/router/Scroll): When the user scrolls.
- *
- * @publicApi
- */
-type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
-
-/**
- * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
- * input.
- *
- * When unset, this value is `null` by default.
- *
- * @usageNotes
- *
- * To set the data from the template of the component with `router-outlet`:
- * ```html
- * <router-outlet [routerOutletData]="{name: 'Angular'}" />
- * ```
- *
- * To read the data in the routed component:
- * ```ts
- * data = inject(ROUTER_OUTLET_DATA) as Signal<{name: string}>;
- * ```
- *
- * @publicApi
- * @see [Page routerOutletData](guide/routing/show-routes-with-outlets#passing-contextual-data-to-routed-components)
- */
-declare const ROUTER_OUTLET_DATA: InjectionToken<Signal<unknown>>;
-/**
- * An interface that defines the contract for developing a component outlet for the `Router`.
- *
- * An outlet acts as a placeholder that Angular dynamically fills based on the current router state.
- *
- * A router outlet should register itself with the `Router` via
- * `ChildrenOutletContexts#onChildOutletCreated` and unregister with
- * `ChildrenOutletContexts#onChildOutletDestroyed`. When the `Router` identifies a matched `Route`,
- * it looks for a registered outlet in the `ChildrenOutletContexts` and activates it.
- *
- * @see {@link ChildrenOutletContexts}
- * @publicApi
- */
-interface RouterOutletContract {
-    /**
-     * Whether the given outlet is activated.
-     *
-     * An outlet is considered "activated" if it has an active component.
-     */
-    isActivated: boolean;
-    /** The instance of the activated component or `null` if the outlet is not activated. */
-    component: Object | null;
-    /**
-     * The `Data` of the `ActivatedRoute` snapshot.
-     */
-    activatedRouteData: Data;
-    /**
-     * The `ActivatedRoute` for the outlet or `null` if the outlet is not activated.
-     */
-    activatedRoute: ActivatedRoute | null;
-    /**
-     * Called by the `Router` when the outlet should activate (create a component).
-     */
-    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
-    /**
-     * A request to destroy the currently activated component.
-     *
-     * When a `RouteReuseStrategy` indicates that an `ActivatedRoute` should be removed but stored for
-     * later re-use rather than destroyed, the `Router` will call `detach` instead.
-     */
-    deactivate(): void;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to detach the subtree.
-     *
-     * This is similar to `deactivate`, but the activated component should _not_ be destroyed.
-     * Instead, it is returned so that it can be reattached later via the `attach` method.
-     */
-    detach(): ComponentRef<unknown>;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree.
-     */
-    attach(ref: ComponentRef<unknown>, activatedRoute: ActivatedRoute): void;
-    /**
-     * Emits an activate event when a new component is instantiated
-     **/
-    activateEvents?: EventEmitter<unknown>;
-    /**
-     * Emits a deactivate event when a component is destroyed.
-     */
-    deactivateEvents?: EventEmitter<unknown>;
-    /**
-     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
-     * previously detached subtree.
-     **/
-    attachEvents?: EventEmitter<unknown>;
-    /**
-     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
-     * subtree.
-     */
-    detachEvents?: EventEmitter<unknown>;
-    /**
-     * Used to indicate that the outlet is able to bind data from the `Router` to the outlet
-     * component's inputs.
-     *
-     * When this is `undefined` or `false` and the developer has opted in to the
-     * feature using `withComponentInputBinding`, a warning will be logged in dev mode if this outlet
-     * is used in the application.
-     */
-    readonly supportsBindingToComponentInputs?: true;
-}
-/**
- * @description
- *
- * Acts as a placeholder that Angular dynamically fills based on the current router state.
- *
- * Each outlet can have a unique name, determined by the optional `name` attribute.
- * The name cannot be set or changed dynamically. If not set, default value is "primary".
- *
- * ```html
- * <router-outlet></router-outlet>
- * <router-outlet name='left'></router-outlet>
- * <router-outlet name='right'></router-outlet>
- * ```
- *
- * Named outlets can be the targets of secondary routes.
- * The `Route` object for a secondary route has an `outlet` property to identify the target outlet:
- *
- * `{path: <base-path>, component: <component>, outlet: <target_outlet_name>}`
- *
- * Using named outlets and secondary routes, you can target multiple outlets in
- * the same `RouterLink` directive.
- *
- * The router keeps track of separate branches in a navigation tree for each named outlet and
- * generates a representation of that tree in the URL.
- * The URL for a secondary route uses the following syntax to specify both the primary and secondary
- * routes at the same time:
- *
- * `http://base-path/primary-route-path(outlet-name:route-path)`
- *
- * A router outlet emits an activate event when a new component is instantiated,
- * deactivate event when a component is destroyed.
- * An attached event emits when the `RouteReuseStrategy` instructs the outlet to reattach the
- * subtree, and the detached event emits when the `RouteReuseStrategy` instructs the outlet to
- * detach the subtree.
- *
- * ```html
- * <router-outlet
- *   (activate)='onActivate($event)'
- *   (deactivate)='onDeactivate($event)'
- *   (attach)='onAttach($event)'
- *   (detach)='onDetach($event)'></router-outlet>
- * ```
- *
- * @see {@link RouterLink}
- * @see {@link Route}
- * @see [Show routes with outlets](guide/routing/show-routes-with-outlets)
- * @ngModule RouterModule
- *
- * @publicApi
- */
-declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
-    private activated;
-    private _activatedRoute;
-    /**
-     * The name of the outlet
-     *
-     */
-    name: string;
-    activateEvents: EventEmitter<any>;
-    deactivateEvents: EventEmitter<any>;
-    /**
-     * Emits an attached component instance when the `RouteReuseStrategy` instructs to re-attach a
-     * previously detached subtree.
-     **/
-    attachEvents: EventEmitter<unknown>;
-    /**
-     * Emits a detached component instance when the `RouteReuseStrategy` instructs to detach the
-     * subtree.
-     */
-    detachEvents: EventEmitter<unknown>;
-    /**
-     * Data that will be provided to the child injector through the `ROUTER_OUTLET_DATA` token.
-     *
-     * When unset, the value of the token is `undefined` by default.
-     */
-    readonly routerOutletData: i0.InputSignal<unknown>;
-    private parentContexts;
-    private location;
-    private changeDetector;
-    private inputBinder;
-    /** @docs-private */
-    readonly supportsBindingToComponentInputs = true;
-    /** @docs-private */
-    ngOnChanges(changes: SimpleChanges): void;
-    /** @docs-private */
-    ngOnDestroy(): void;
-    private isTrackedInParentContexts;
-    /** @docs-private */
-    ngOnInit(): void;
-    private initializeOutletWithName;
-    get isActivated(): boolean;
-    /**
-     * @returns The currently activated component instance.
-     * @throws An error if the outlet is not activated.
-     */
-    get component(): Object;
-    get activatedRoute(): ActivatedRoute;
-    get activatedRouteData(): Data;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to detach the subtree
-     */
-    detach(): ComponentRef<any>;
-    /**
-     * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
-     */
-    attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void;
-    deactivate(): void;
-    activateWith(activatedRoute: ActivatedRoute, environmentInjector: EnvironmentInjector): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouterOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterOutlet, "router-outlet", ["outlet"], { "name": { "alias": "name"; "required": false; }; "routerOutletData": { "alias": "routerOutletData"; "required": false; "isSignal": true; }; }, { "activateEvents": "activate"; "deactivateEvents": "deactivate"; "attachEvents": "attach"; "detachEvents": "detach"; }, never, never, true, never>;
-}
-
-/**
- * @description
- *
- * Options that modify the `Router` URL.
- * Supply an object containing any of these properties to a `Router` navigation function to
- * control how the target URL should be constructed.
- *
- * @see {@link Router#navigate}
- * @see {@link Router#createUrlTree}
- * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
- *
- * @publicApi
- */
-interface UrlCreationOptions {
-    /**
-     * Specifies a root URI to use for relative navigation.
-     *
-     * For example, consider the following route configuration where the parent route
-     * has two children.
-     *
-     * ```ts
-     * [{
-     *   path: 'parent',
-     *   component: ParentComponent,
-     *   children: [{
-     *     path: 'list',
-     *     component: ListComponent
-     *   },{
-     *     path: 'child',
-     *     component: ChildComponent
-     *   }]
-     * }]
-     * ```
-     *
-     * The following `go()` function navigates to the `list` route by
-     * interpreting the destination URI as relative to the activated `child`  route
-     *
-     * ```ts
-     *  @Component({...})
-     *  class ChildComponent {
-     *    constructor(private router: Router, private route: ActivatedRoute) {}
-     *
-     *    go() {
-     *      router.navigate(['../list'], { relativeTo: this.route });
-     *    }
-     *  }
-     * ```
-     *
-     * A value of `null` or `undefined` indicates that the navigation commands should be applied
-     * relative to the root.
-     */
-    relativeTo?: ActivatedRoute | null;
-    /**
-     * Sets query parameters to the URL.
-     *
-     * ```ts
-     * // Navigate to /results?page=1
-     * router.navigate(['/results'], { queryParams: { page: 1 } });
-     * ```
-     */
-    queryParams?: Params | null;
-    /**
-     * Sets the hash fragment for the URL.
-     *
-     * ```ts
-     * // Navigate to /results#top
-     * router.navigate(['/results'], { fragment: 'top' });
-     * ```
-     */
-    fragment?: string;
-    /**
-     * How to handle query parameters in the router link for the next navigation.
-     * One of:
-     * * `preserve` : Preserve current parameters.
-     * * `merge` : Merge new with current parameters.
-     *
-     * The "preserve" option discards any new query params:
-     * ```ts
-     * // from /view1?page=1 to/view2?page=1
-     * router.navigate(['/view2'], { queryParams: { page: 2 },  queryParamsHandling: "preserve"
-     * });
-     * ```
-     * The "merge" option appends new query params to the params from the current URL:
-     * ```ts
-     * // from /view1?page=1 to/view2?page=1&otherKey=2
-     * router.navigate(['/view2'], { queryParams: { otherKey: 2 },  queryParamsHandling: "merge"
-     * });
-     * ```
-     * In case of a key collision between current parameters and those in the `queryParams` object,
-     * the new value is used.
-     *
-     */
-    queryParamsHandling?: QueryParamsHandling | null;
-    /**
-     * When true, preserves the URL fragment for the next navigation
-     *
-     * ```ts
-     * // Preserve fragment from /results#top to /view#top
-     * router.navigate(['/view'], { preserveFragment: true });
-     * ```
-     */
-    preserveFragment?: boolean;
-}
-/**
- * @description
- *
- * Options that modify the `Router` navigation strategy.
- * Supply an object containing any of these properties to a `Router` navigation function to
- * control how the target URL should be constructed or interpreted.
- *
- * @see {@link Router#navigate}
- * @see {@link Router#navigateByUrl}
- * @see {@link Router#createurltree}
- * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
- * @see {@link UrlCreationOptions}
- * @see {@link NavigationBehaviorOptions}
- *
- * @publicApi
- */
-interface NavigationExtras extends UrlCreationOptions, NavigationBehaviorOptions {
-}
-type RestoredState = {
-    [k: string]: any;
-    navigationId: number;
-    ɵrouterPageId?: number;
-};
-/**
- * Information about a navigation operation.
- * Retrieve the most recent navigation object with the
- * [Router.currentNavigation() method](api/router/Router#currentNavigation) .
- *
- * * *id* : The unique identifier of the current navigation.
- * * *initialUrl* : The target URL passed into the `Router#navigateByUrl()` call before navigation.
- * This is the value before the router has parsed or applied redirects to it.
- * * *extractedUrl* : The initial target URL after being parsed with `UrlSerializer.extract()`.
- * * *finalUrl* : The extracted URL after redirects have been applied.
- * This URL may not be available immediately, therefore this property can be `undefined`.
- * It is guaranteed to be set after the `RoutesRecognized` event fires.
- * * *trigger* : Identifies how this navigation was triggered.
- * -- 'imperative'--Triggered by `router.navigateByUrl` or `router.navigate`.
- * -- 'popstate'--Triggered by a popstate event.
- * -- 'hashchange'--Triggered by a hashchange event.
- * * *extras* : A `NavigationExtras` options object that controlled the strategy used for this
- * navigation.
- * * *previousNavigation* : The previously successful `Navigation` object. Only one previous
- * navigation is available, therefore this previous `Navigation` object has a `null` value for its
- * own `previousNavigation`.
- *
- * @publicApi
- */
-interface Navigation {
-    /**
-     * The unique identifier of the current navigation.
-     */
-    id: number;
-    /**
-     * The target URL passed into the `Router#navigateByUrl()` call before navigation. This is
-     * the value before the router has parsed or applied redirects to it.
-     */
-    initialUrl: UrlTree;
-    /**
-     * The initial target URL after being parsed with `UrlHandlingStrategy.extract()`.
-     */
-    extractedUrl: UrlTree;
-    /**
-     * The extracted URL after redirects have been applied.
-     * This URL may not be available immediately, therefore this property can be `undefined`.
-     * It is guaranteed to be set after the `RoutesRecognized` event fires.
-     */
-    finalUrl?: UrlTree;
-    /**
-     * Identifies how this navigation was triggered.
-     */
-    trigger: NavigationTrigger;
-    /**
-     * Options that controlled the strategy used for this navigation.
-     * See `NavigationExtras`.
-     */
-    extras: NavigationExtras;
-    /**
-     * The previously successful `Navigation` object. Only one previous navigation
-     * is available, therefore this previous `Navigation` object has a `null` value
-     * for its own `previousNavigation`.
-     */
-    previousNavigation: Navigation | null;
-    /**
-     * Aborts the navigation if it has not yet been completed or reached the point where routes are being activated.
-     * This function is a no-op if the navigation is beyond the point where it can be aborted.
-     */
-    readonly abort: () => void;
-}
-
-/**
- * @description
- *
- * Represents the detached route tree.
- *
- * This is an opaque value the router will give to a custom route reuse strategy
- * to store and retrieve later on.
- *
- * @publicApi
- */
-type DetachedRouteHandle = {};
-/**
- * @description
- *
- * Destroys the component associated with a `DetachedRouteHandle`.
- *
- * This function should be used when a `RouteReuseStrategy` decides to drop a stored handle
- * and wants to ensure that the component is destroyed.
- *
- * @param handle The detached route handle to destroy.
- *
- * @publicApi
- * @see [Manually destroying detached route handles](guide/routing/customizing-route-behavior#manually-destroying-detached-route-handles)
- */
-declare function destroyDetachedRouteHandle(handle: DetachedRouteHandle): void;
-/**
- * @description
- *
- * Provides a way to customize when activated routes get reused.
- *
- * @publicApi
- */
-declare abstract class RouteReuseStrategy {
-    /** Determines if this route (and its subtree) should be detached to be reused later */
-    abstract shouldDetach(route: ActivatedRouteSnapshot): boolean;
-    /**
-     * Stores the detached route.
-     *
-     * Storing a `null` value should erase the previously stored value.
-     */
-    abstract store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void;
-    /** Determines if this route (and its subtree) should be reattached */
-    abstract shouldAttach(route: ActivatedRouteSnapshot): boolean;
-    /** Retrieves the previously stored route */
-    abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
-    /** Determines if a route should be reused */
-    abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
-    static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
-}
-/**
- * @description
- *
- * This base route reuse strategy only reuses routes when the matched router configs are
- * identical. This prevents components from being destroyed and recreated
- * when just the route parameters, query parameters or fragment change
- * (that is, the existing component is _reused_).
- *
- * This strategy does not store any routes for later reuse.
- *
- * Angular uses this strategy by default.
- *
- *
- * It can be used as a base class for custom route reuse strategies, i.e. you can create your own
- * class that extends the `BaseRouteReuseStrategy` one.
- * @publicApi
- */
-declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
-    /**
-     * Whether the given route should detach for later reuse.
-     * Always returns false for `BaseRouteReuseStrategy`.
-     * */
-    shouldDetach(route: ActivatedRouteSnapshot): boolean;
-    /**
-     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
-     */
-    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void;
-    /** Returns `false`, meaning the route (and its subtree) is never reattached */
-    shouldAttach(route: ActivatedRouteSnapshot): boolean;
-    /** Returns `null` because this strategy does not store routes for later re-use. */
-    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
-    /**
-     * Determines if a route should be reused.
-     * This strategy returns `true` when the future route config and current route config are
-     * identical.
-     */
-    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
-    /**
-     * Determines if the injector for the given route should be destroyed.
-     *
-     * This method is called by the router when the `RouteReuseStrategy` is destroyed.
-     * If this method returns `true`, the router will destroy the injector for the given route.
-     *
-     * @see {@link withExperimentalAutoCleanupInjectors}
-     * @xperimental 21.1
-     */
-    shouldDestroyInjector(route: Route): boolean;
-}
-
-/**
- * @description
- *
- * A service that facilitates navigation among views and URL manipulation capabilities.
- * This service is provided in the root scope and configured with [provideRouter](api/router/provideRouter).
- *
- * @see {@link Route}
- * @see {@link provideRouter}
- * @see [Routing and Navigation Guide](guide/routing/common-router-tasks).
- *
- * @ngModule RouterModule
- *
- * @publicApi
- */
-declare class Router {
-    private get currentUrlTree();
-    private get rawUrlTree();
-    private disposed;
-    private nonRouterCurrentEntryChangeSubscription?;
-    private readonly console;
-    private readonly stateManager;
-    private readonly options;
-    private readonly pendingTasks;
-    private readonly urlUpdateStrategy;
-    private readonly navigationTransitions;
-    private readonly urlSerializer;
-    private readonly location;
-    private readonly urlHandlingStrategy;
-    private readonly injector;
-    /**
-     * The private `Subject` type for the public events exposed in the getter. This is used internally
-     * to push events to. The separate field allows us to expose separate types in the public API
-     * (i.e., an Observable rather than the Subject).
-     */
-    private _events;
-    /**
-     * An event stream for routing events.
-     */
-    get events(): Observable<Event>;
-    /**
-     * The current state of routing in this NgModule.
-     */
-    get routerState(): RouterState;
-    /**
-     * True if at least one navigation event has occurred,
-     * false otherwise.
-     */
-    navigated: boolean;
-    /**
-     * A strategy for re-using routes.
-     *
-     * @deprecated Configure using `providers` instead:
-     *   `{provide: RouteReuseStrategy, useClass: MyStrategy}`.
-     */
-    routeReuseStrategy: RouteReuseStrategy;
-    /**
-     * How to handle a navigation request to the current URL.
-     *
-     *
-     * @deprecated Configure this through `provideRouter` or `RouterModule.forRoot` instead.
-     * @see {@link withRouterConfig}
-     * @see {@link provideRouter}
-     * @see {@link RouterModule}
-     */
-    onSameUrlNavigation: OnSameUrlNavigation;
-    config: Routes;
-    /**
-     * Indicates whether the application has opted in to binding Router data to component inputs.
-     *
-     * This option is enabled by the `withComponentInputBinding` feature of `provideRouter` or
-     * `bindToComponentInputs` in the `ExtraOptions` of `RouterModule.forRoot`.
-     */
-    readonly componentInputBindingEnabled: boolean;
-    /**
-     * Signal of the current `Navigation` object when the router is navigating, and `null` when idle.
-     *
-     * Note: The current navigation becomes to null after the NavigationEnd event is emitted.
-     */
-    readonly currentNavigation: Signal<Navigation | null>;
-    constructor();
-    private eventsSubscription;
-    private subscribeToNavigationEvents;
-    /**
-     * Sets up the location change listener and performs the initial navigation.
-     */
-    initialNavigation(): void;
-    /**
-     * Sets up the location change listener. This listener detects navigations triggered from outside
-     * the Router (the browser back/forward buttons, for example) and schedules a corresponding Router
-     * navigation so that the correct events, guards, etc. are triggered.
-     */
-    setUpLocationChangeListener(): void;
-    /**
-     * Schedules a router navigation to synchronize Router state with the browser state.
-     *
-     * This is done as a response to a popstate event and the initial navigation. These
-     * two scenarios represent times when the browser URL/state has been updated and
-     * the Router needs to respond to ensure its internal state matches.
-     */
-    private navigateToSyncWithBrowser;
-    /** The current URL. */
-    get url(): string;
-    /**
-     * Returns the current `Navigation` object when the router is navigating,
-     * and `null` when idle.
-     *
-     * @deprecated 20.2 Use the `currentNavigation` signal instead.
-     */
-    getCurrentNavigation(): Navigation | null;
-    /**
-     * The `Navigation` object of the most recent navigation to succeed and `null` if there
-     *     has not been a successful navigation yet.
-     */
-    get lastSuccessfulNavigation(): Signal<Navigation | null>;
-    /**
-     * Resets the route configuration used for navigation and generating links.
-     *
-     * @param config The route array for the new configuration.
-     *
-     * @usageNotes
-     *
-     * ```ts
-     * router.resetConfig([
-     *  { path: 'team/:id', component: TeamCmp, children: [
-     *    { path: 'simple', component: SimpleCmp },
-     *    { path: 'user/:name', component: UserCmp }
-     *  ]}
-     * ]);
-     * ```
-     */
-    resetConfig(config: Routes): void;
-    /** @docs-private */
-    ngOnDestroy(): void;
-    /** Disposes of the router. */
-    dispose(): void;
-    /**
-     * Appends URL segments to the current URL tree to create a new URL tree.
-     *
-     * @param commands An array of URL fragments with which to construct the new URL tree.
-     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
-     * segments, followed by the parameters for each segment.
-     * The fragments are applied to the current URL tree or the one provided  in the `relativeTo`
-     * property of the options object, if supplied.
-     * @param navigationExtras Options that control the navigation strategy.
-     * @returns The new URL tree.
-     *
-     * @usageNotes
-     *
-     * ```ts
-     * // create /team/33/user/11
-     * router.createUrlTree(['/team', 33, 'user', 11]);
-     *
-     * // create /team/33;expand=true/user/11
-     * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
-     *
-     * // you can collapse static segments like this (this works only with the first passed-in value):
-     * router.createUrlTree(['/team/33/user', userId]);
-     *
-     * // If the first segment can contain slashes, and you do not want the router to split it,
-     * // you can do the following:
-     * router.createUrlTree([{segmentPath: '/one/two'}]);
-     *
-     * // create /team/33/(user/11//right:chat)
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
-     *
-     * // remove the right secondary node
-     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
-     *
-     * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
-     *
-     * // navigate to /team/33/user/11/details
-     * router.createUrlTree(['details'], {relativeTo: route});
-     *
-     * // navigate to /team/33/user/22
-     * router.createUrlTree(['../22'], {relativeTo: route});
-     *
-     * // navigate to /team/44/user/22
-     * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
-     * ```
-     * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
-     * tree should be created relative to the root.
-     *
-     */
-    createUrlTree(commands: readonly any[], navigationExtras?: UrlCreationOptions): UrlTree;
-    /**
-     * Navigates to a view using an absolute route path.
-     *
-     * @param url An absolute path for a defined route. The function does not apply any delta to the
-     *     current URL.
-     * @param extras An object containing properties that modify the navigation strategy.
-     *
-     * @returns A Promise that resolves to 'true' when navigation succeeds,
-     * to 'false' when navigation fails, or is rejected on error.
-     *
-     * @usageNotes
-     *
-     * The following calls request navigation to an absolute path.
-     *
-     * ```ts
-     * router.navigateByUrl("/team/33/user/11");
-     *
-     * // Navigate without updating the URL
-     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
-     * ```
-     *
-     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
-     *
-     */
-    navigateByUrl(url: string | UrlTree, extras?: NavigationBehaviorOptions): Promise<boolean>;
-    /**
-     * Navigate based on the provided array of commands and a starting point.
-     * If no starting route is provided, the navigation is absolute.
-     *
-     * @param commands An array of URL fragments with which to construct the target URL.
-     * If the path is static, can be the literal URL string. For a dynamic path, pass an array of path
-     * segments, followed by the parameters for each segment.
-     * The fragments are applied to the current URL or the one provided  in the `relativeTo` property
-     * of the options object, if supplied.
-     * @param extras An options object that determines how the URL should be constructed or
-     *     interpreted.
-     *
-     * @returns A Promise that resolves to `true` when navigation succeeds, or `false` when navigation
-     *     fails. The Promise is rejected when an error occurs if `resolveNavigationPromiseOnError` is
-     * not `true`.
-     *
-     * @usageNotes
-     *
-     * The following calls request navigation to a dynamic route path relative to the current URL.
-     *
-     * ```ts
-     * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
-     *
-     * // Navigate without updating the URL, overriding the default behavior
-     * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
-     * ```
-     *
-     * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
-     *
-     */
-    navigate(commands: readonly any[], extras?: NavigationExtras): Promise<boolean>;
-    /** Serializes a `UrlTree` into a string */
-    serializeUrl(url: UrlTree): string;
-    /** Parses a string into a `UrlTree` */
-    parseUrl(url: string): UrlTree;
-    /**
-     * Returns whether the url is activated.
-     *
-     * @deprecated
-     * Use `IsActiveMatchOptions` instead.
-     *
-     * - The equivalent `IsActiveMatchOptions` for `true` is
-     * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
-     * - The equivalent for `false` is
-     * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
-     */
-    isActive(url: string | UrlTree, exact: boolean): boolean;
-    /**
-     * Returns whether the url is activated.
-     */
-    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
-    private removeEmptyProps;
-    private scheduleNavigation;
-    static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
-}
-
-/**
  * @description
  *
  * When applied to an element in a template, makes that element a link
@@ -4059,5 +4068,5 @@ declare class RouterModule {
  */
 declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, ɵEmptyOutletComponent };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent };
 export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
