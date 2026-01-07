@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.0.6+sha-61370dc
+ * @license Angular v21.0.6+sha-c3adc5a
  * (c) 2010-2025 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -54,21 +54,13 @@ class RouterLink {
     }));
     const tagName = el.nativeElement.tagName?.toLowerCase();
     this.isAnchorElement = tagName === 'a' || tagName === 'area' || !!(typeof customElements === 'object' && customElements.get(tagName)?.observedAttributes?.includes?.('href'));
-    if (!this.isAnchorElement) {
-      this.subscribeToNavigationEventsIfNecessary();
-    } else {
+    if (this.isAnchorElement) {
       this.setTabIndexIfNotOnNativeEl('0');
+      this.subscribeToNavigationEventsIfNecessary();
     }
   }
   subscribeToNavigationEventsIfNecessary() {
-    if (this.subscription !== undefined || !this.isAnchorElement) {
-      return;
-    }
-    let createSubcription = this.preserveFragment;
-    const dependsOnRouterState = handling => handling === 'merge' || handling === 'preserve';
-    createSubcription ||= dependsOnRouterState(this.queryParamsHandling);
-    createSubcription ||= !this.queryParamsHandling && !dependsOnRouterState(this.options?.defaultQueryParamsHandling);
-    if (!createSubcription) {
+    if (this.subscription !== undefined) {
       return;
     }
     this.subscription = this.router.events.subscribe(s => {
@@ -92,7 +84,6 @@ class RouterLink {
     }
     if (this.isAnchorElement) {
       this.updateHref();
-      this.subscribeToNavigationEventsIfNecessary();
     }
     this.onChanges.next(this);
   }
@@ -166,7 +157,7 @@ class RouterLink {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterLink,
     deps: [{
@@ -187,7 +178,7 @@ class RouterLink {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     type: RouterLink,
     isStandalone: true,
     selector: "[routerLink]",
@@ -219,7 +210,7 @@ class RouterLink {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: RouterLink,
   decorators: [{
@@ -395,7 +386,7 @@ class RouterLinkActive {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterLinkActive,
     deps: [{
@@ -411,7 +402,7 @@ class RouterLinkActive {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     type: RouterLinkActive,
     isStandalone: true,
     selector: "[routerLinkActive]",
@@ -435,7 +426,7 @@ class RouterLinkActive {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: RouterLinkActive,
   decorators: [{
@@ -486,7 +477,7 @@ class PreloadAllModules {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: PreloadAllModules,
     deps: [],
@@ -494,7 +485,7 @@ class PreloadAllModules {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: PreloadAllModules,
     providedIn: 'root'
@@ -502,7 +493,7 @@ class PreloadAllModules {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: PreloadAllModules,
   decorators: [{
@@ -518,7 +509,7 @@ class NoPreloading {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: NoPreloading,
     deps: [],
@@ -526,7 +517,7 @@ class NoPreloading {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: NoPreloading,
     providedIn: 'root'
@@ -534,7 +525,7 @@ class NoPreloading {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: NoPreloading,
   decorators: [{
@@ -608,7 +599,7 @@ class RouterPreloader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterPreloader,
     deps: [{
@@ -624,7 +615,7 @@ class RouterPreloader {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterPreloader,
     providedIn: 'root'
@@ -632,7 +623,7 @@ class RouterPreloader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: RouterPreloader,
   decorators: [{
@@ -737,7 +728,7 @@ class RouterScroller {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterScroller,
     deps: "invalid",
@@ -745,14 +736,14 @@ class RouterScroller {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterScroller
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: RouterScroller,
   decorators: [{
@@ -798,7 +789,7 @@ class NavigationStateManager extends HistoryStateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: NavigationStateManager,
     deps: null,
@@ -806,7 +797,7 @@ class NavigationStateManager extends HistoryStateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: NavigationStateManager,
     providedIn: 'root'
@@ -814,7 +805,7 @@ class NavigationStateManager extends HistoryStateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: NavigationStateManager,
   decorators: [{
@@ -1107,7 +1098,7 @@ class RouterModule {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterModule,
     deps: [],
@@ -1115,7 +1106,7 @@ class RouterModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterModule,
     imports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent],
@@ -1123,14 +1114,14 @@ class RouterModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.0.6+sha-61370dc",
+    version: "21.0.6+sha-c3adc5a",
     ngImport: i0,
     type: RouterModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.6+sha-61370dc",
+  version: "21.0.6+sha-c3adc5a",
   ngImport: i0,
   type: RouterModule,
   decorators: [{
