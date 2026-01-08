@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-next.4+sha-86dc128
+ * @license Angular v21.1.0-next.4+sha-a2b9429
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1674,15 +1674,6 @@ declare abstract class UrlSerializer {
  * @publicApi
  */
 declare class DefaultUrlSerializer implements UrlSerializer {
-    /**
-     * Configures how to handle trailing slashes in URLs.
-     *
-     * - 'always': Forces a trailing slash on all URLs.
-     * - 'never': Removes trailing slashes from all URLs.
-     * - 'preserve': Keeps the trailing slash if present, and omits it if not.
-     */
-    private readonly trailingSlash?;
-    constructor();
     /** Parses a url into a `UrlTree` */
     parse(url: string): UrlTree;
     /** Converts a `UrlTree` into a url */
@@ -3835,17 +3826,6 @@ interface RouterConfigOptions {
      *
      */
     urlUpdateStrategy?: 'deferred' | 'eager';
-    /**
-     * Configures how the `DefaultUrlSerializer` and `Location` service handle trailing slashes in URLs.
-     *
-     * - 'always': Forces a trailing slash on all URLs.
-     * - 'never': Removes trailing slashes from all URLs.
-     * - 'preserve': Keeps the trailing slash if present, and omits it if not.
-     *
-     * Note: By default, the `DefaultUrlSerializer` preserves trailing slashes, but `Location.path()`
-     * and `Location.normalize()` strip them.
-     */
-    trailingSlash?: 'always' | 'never' | 'preserve';
     /**
      * The default strategy to use for handling query params in `Router.createUrlTree` when one is not provided.
      *
