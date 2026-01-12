@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.0+sha-405b056
+ * @license Angular v21.2.0-next.0+sha-89d47d8
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -3362,8 +3362,8 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * @description
  *
  * When applied to an element in a template, makes that element a link
- * that initiates navigation to a route. Navigation opens one or more routed components
- * in one or more `<router-outlet>` locations on the page.
+ * that initiates navigation to a route. Navigation opens one or more routed
+ * components in one or more `<router-outlet>` locations on the page.
  *
  * Given a route configuration `[{ path: 'user/:name', component: UserCmp }]`,
  * the following creates a static link to the route:
@@ -3375,12 +3375,12 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * For example, `['/team', teamId, 'user', userName, {details: true}]`
  * generates a link to `/team/11/user/bob;details=true`.
  *
- * Multiple static segments can be merged into one term and combined with dynamic segments.
- * For example, `['/team/11/user', userName, {details: true}]`
+ * Multiple static segments can be merged into one term and combined with
+ * dynamic segments. For example, `['/team/11/user', userName, {details: true}]`
  *
- * The input that you provide to the link is treated as a delta to the current URL.
- * For instance, suppose the current URL is `/user/(box//aux:team)`.
- * The link `<a [routerLink]="['/user/jim']">Jim</a>` creates the URL
+ * The input that you provide to the link is treated as a delta to the current
+ * URL. For instance, suppose the current URL is `/user/(box//aux:team)`. The
+ * link `<a [routerLink]="['/user/jim']">Jim</a>` creates the URL
  * `/user/(jim//aux:team)`.
  * See {@link Router#createUrlTree} for more information.
  *
@@ -3392,23 +3392,25 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * ### Relative link paths
  *
  * The first segment name can be prepended with `/`, `./`, or `../`.
- * * If the first segment begins with `/`, the router looks up the route from the root of the
- *   app.
- * * If the first segment begins with `./`, or doesn't begin with a slash, the router
- *   looks in the children of the current activated route.
- * * If the first segment begins with `../`, the router goes up one level in the route tree.
+ * * If the first segment begins with `/`, the router looks up the route from
+ * the root of the app.
+ * * If the first segment begins with `./`, or doesn't begin with a slash, the
+ * router looks in the children of the current activated route.
+ * * If the first segment begins with `../`, the router goes up one level in the
+ * route tree.
  *
  * ### Setting and handling query params and fragments
  *
- * The following link adds a query parameter and a fragment to the generated URL:
+ * The following link adds a query parameter and a fragment to the generated
+ * URL:
  *
  * ```html
- * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
- *   link to user component
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}"
+ * fragment="education"> link to user component
  * </a>
  * ```
- * By default, the directive constructs the new URL using the given query parameters.
- * The example generates the link: `/user/bob?debug=true#education`.
+ * By default, the directive constructs the new URL using the given query
+ * parameters. The example generates the link: `/user/bob?debug=true#education`.
  *
  * You can instruct the directive to handle query parameters differently
  * by specifying the `queryParamsHandling` option in the link.
@@ -3420,20 +3422,21 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * For example:
  *
  * ```html
- * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" queryParamsHandling="merge">
- *   link to user component
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}"
+ * queryParamsHandling="merge"> link to user component
  * </a>
  * ```
  *
- * `queryParams`, `fragment`, `queryParamsHandling`, `preserveFragment`, and `relativeTo`
- * cannot be used when the `routerLink` input is a `UrlTree`.
+ * `queryParams`, `fragment`, `queryParamsHandling`, `preserveFragment`, and
+ * `relativeTo` cannot be used when the `routerLink` input is a `UrlTree`.
  *
  * See {@link UrlCreationOptions#queryParamsHandling}.
  *
  * ### Preserving navigation history
  *
  * You can provide a `state` value to be persisted to the browser's
- * [`History.state` property](https://developer.mozilla.org/en-US/docs/Web/API/History#Properties).
+ * [`History.state`
+ * property](https://developer.mozilla.org/en-US/docs/Web/API/History#Properties).
  * For example:
  *
  * ```html
@@ -3456,9 +3459,9 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  *
  * ### RouterLink compatible custom elements
  *
- * In order to make a custom element work with routerLink, the corresponding custom
- * element must implement the `href` attribute and must list `href` in the array of
- * the static property/getter `observedAttributes`.
+ * In order to make a custom element work with routerLink, the corresponding
+ * custom element must implement the `href` attribute and must list `href` in
+ * the array of the static property/getter `observedAttributes`.
  *
  * @ngModule RouterModule
  *
@@ -3471,12 +3474,13 @@ declare class RouterLink implements OnChanges, OnDestroy {
     private readonly renderer;
     private readonly el;
     private locationStrategy?;
-    /** @nodoc */
+    private hrefAttributeValue;
+    /** @docs-private */
     protected readonly reactiveHref: i0.WritableSignal<string | null>;
     /**
      * Represents an `href` attribute value applied to a host element,
-     * when a host element is an `<a>`/`<area>` tag or a compatible custom element.
-     * For other tags, the value is `null`.
+     * when a host element is an `<a>`/`<area>` tag or a compatible custom
+     * element. For other tags, the value is `null`.
      */
     get href(): string | null;
     /** @deprecated */
@@ -3486,44 +3490,57 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * This is only used when the host element is
      * an `<a>`/`<area>` tag or a compatible custom element.
      */
-    target?: string;
+    set target(value: string | undefined);
+    get target(): string | undefined;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#queryParams}
      * @see {@link Router#createUrlTree}
      */
-    queryParams?: Params | null;
+    set queryParams(value: Params | null | undefined);
+    get queryParams(): Params | null | undefined;
+    private _queryParams;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#fragment}
      * @see {@link Router#createUrlTree}
      */
-    fragment?: string;
+    set fragment(value: string | undefined);
+    get fragment(): string | undefined;
+    private _fragment;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#queryParamsHandling}
      * @see {@link Router#createUrlTree}
      */
-    queryParamsHandling?: QueryParamsHandling | null;
+    set queryParamsHandling(value: QueryParamsHandling | null | undefined);
+    get queryParamsHandling(): QueryParamsHandling | null | undefined;
+    private _queryParamsHandling;
     /**
      * Passed to {@link Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#state}
      * @see {@link Router#navigateByUrl}
      */
-    state?: {
+    set state(value: {
         [k: string]: any;
-    };
+    } | undefined);
+    get state(): {
+        [k: string]: any;
+    } | undefined;
+    private _state;
     /**
      * Passed to {@link Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#info}
      * @see {@link Router#navigateByUrl}
      */
-    info?: unknown;
+    set info(value: unknown);
+    get info(): unknown;
+    private _info;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
@@ -3533,38 +3550,48 @@ declare class RouterLink implements OnChanges, OnDestroy {
      * @see {@link UrlCreationOptions#relativeTo}
      * @see {@link Router#createUrlTree}
      */
-    relativeTo?: ActivatedRoute | null;
-    /** Whether a host element is an `<a>`/`<area>` tag or a compatible custom element. */
-    private isAnchorElement;
-    private subscription?;
-    private readonly applicationErrorHandler;
-    private readonly options;
-    constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef, locationStrategy?: LocationStrategy | undefined);
-    private subscribeToNavigationEventsIfNecessary;
+    set relativeTo(value: ActivatedRoute | null | undefined);
+    get relativeTo(): ActivatedRoute | null | undefined;
+    private _relativeTo;
     /**
      * Passed to {@link Router#createUrlTree} as part of the
      * `UrlCreationOptions`.
      * @see {@link UrlCreationOptions#preserveFragment}
      * @see {@link Router#createUrlTree}
      */
-    preserveFragment: boolean;
+    set preserveFragment(value: boolean);
+    get preserveFragment(): boolean;
+    private _preserveFragment;
     /**
      * Passed to {@link Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#skipLocationChange}
      * @see {@link Router#navigateByUrl}
      */
-    skipLocationChange: boolean;
+    set skipLocationChange(value: boolean);
+    get skipLocationChange(): boolean;
+    private _skipLocationChange;
     /**
      * Passed to {@link Router#navigateByUrl} as part of the
      * `NavigationBehaviorOptions`.
      * @see {@link NavigationBehaviorOptions#replaceUrl}
      * @see {@link Router#navigateByUrl}
      */
-    replaceUrl: boolean;
+    set replaceUrl(value: boolean);
+    get replaceUrl(): boolean;
+    private _replaceUrl;
     /**
-     * Modifies the tab index if there was not a tabindex attribute on the element during
-     * instantiation.
+     * Whether a host element is an `<a>`/`<area>` tag or a compatible custom
+     * element.
+     */
+    private readonly isAnchorElement;
+    private readonly applicationErrorHandler;
+    private readonly options;
+    private readonly reactiveRouterState;
+    constructor(router: Router, route: ActivatedRoute, tabIndexAttribute: string | null | undefined, renderer: Renderer2, el: ElementRef, locationStrategy?: LocationStrategy | undefined);
+    /**
+     * Modifies the tab index if there was not a tabindex attribute on the element
+     * during instantiation.
      */
     private setTabIndexIfNotOnNativeEl;
     /** @docs-private */
@@ -3573,9 +3600,11 @@ declare class RouterLink implements OnChanges, OnDestroy {
     /**
      * Commands to pass to {@link Router#createUrlTree} or a `UrlTree`.
      *   - **array**: commands to pass to {@link Router#createUrlTree}.
-     *   - **string**: shorthand for array of commands with just the string, i.e. `['/route']`
-     *   - **UrlTree**: a `UrlTree` for this link rather than creating one from the commands
-     *     and other inputs that correspond to properties of `UrlCreationOptions`.
+     *   - **string**: shorthand for array of commands with just the string, i.e.
+     * `['/route']`
+     *   - **UrlTree**: a `UrlTree` for this link rather than creating one from
+     * the commands and other inputs that correspond to properties of
+     * `UrlCreationOptions`.
      *   - **null|undefined**: effectively disables the `routerLink`
      * @see {@link Router#createUrlTree}
      */
@@ -3584,9 +3613,9 @@ declare class RouterLink implements OnChanges, OnDestroy {
     onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean): boolean;
     /** @docs-private */
     ngOnDestroy(): any;
-    private updateHref;
     private applyAttributeValue;
     get urlTree(): UrlTree | null;
+    private computeHref;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "info": { "alias": "info"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_preserveFragment: unknown;
