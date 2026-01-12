@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0-rc.0+sha-5326333
+ * @license Angular v21.1.0-rc.0+sha-40864e8
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1462,7 +1462,7 @@ declare class Router {
  * for the current router state.
  *
  * @publicApi
- * @see {@link Router#isActive}
+ * @see {@link isActive}
  */
 interface IsActiveMatchOptions {
     /**
@@ -1508,6 +1508,8 @@ interface IsActiveMatchOptions {
  * Returns a computed signal of whether the given url is activated in the Router.
  *
  * As the router state changes, the signal will update to reflect whether the url is active.
+ *
+ * @see [Check if a URL is active](guide/routing/read-route-state#check-if-a-url-is-active)
  * @publicApi 21.1
  */
 declare function isActive(url: string | UrlTree, router: Router, matchOptions: IsActiveMatchOptions): Signal<boolean>;
@@ -3682,9 +3684,9 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
     /**
      * Options to configure how to determine if the router link is active.
      *
-     * These options are passed to the `Router.isActive()` function.
+     * These options are passed to the `isActive()` function.
      *
-     * @see {@link Router#isActive}
+     * @see {@link isActive}
      */
     routerLinkActiveOptions: {
         exact: boolean;
