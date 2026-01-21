@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.0+sha-223ff74
+ * @license Angular v21.1.0+sha-1884226
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -469,9 +469,9 @@ type ExperimentalPlatformNavigationFeature = RouterFeature<RouterFeatureKind.Exp
  * });
  * ```
  *
- * @see https://github.com/WICG/navigation-api?tab=readme-ov-file#problem-statement
- * @see https://developer.chrome.com/docs/web-platform/navigation-api/
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API
+ * @see [Navigation API on WICG](https://github.com/WICG/navigation-api?tab=readme-ov-file#problem-statement)
+ * @see [Navigation API on Chrome from developers](https://developer.chrome.com/docs/web-platform/navigation-api/)
+ * @see [Navigation API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API)
  *
  * @experimental 21.1
  * @returns A `RouterFeature` that enables the platform navigation.
@@ -858,8 +858,8 @@ declare function withComponentInputBinding(): ComponentInputBindingFeature;
  * ```
  *
  * @returns A set of providers for use with `provideRouter`.
- * @see https://developer.chrome.com/docs/web-platform/view-transitions/
- * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+ * @see [View Transitions on MDN](https://developer.chrome.com/docs/web-platform/view-transitions/)
+ * @see [View Transitions API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)
  * @see [Route transition animations](guide/routing/route-transition-animations)
  * @developerPreview 19.0
  */
