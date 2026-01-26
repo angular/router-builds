@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.0+sha-899df39
+ * @license Angular v21.2.0-next.0+sha-b51bab5
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1938,19 +1938,15 @@ type QueryParamsHandling = 'merge' | 'preserve' | 'replace' | '';
 /**
  * The type for the function that can be used to handle redirects when the path matches a `Route` config.
  *
- * The `RedirectFunction` does _not_ have access to the full
- * `ActivatedRouteSnapshot` interface. Some data are not accurately known
- * at the route matching phase. For example, resolvers are not run until
- * later, so any resolved title would not be populated. The same goes for lazy
- * loaded components. This is also true for all the snapshots up to the
- * root, so properties that include parents (root, parent, pathFromRoot)
- * are also excluded. And naturally, the full route matching hasn't yet
- * happened so firstChild and children are not available either.
+ * The `RedirectFunction` does not have access to the full
+ * `ActivatedRouteSnapshot` interface because Route matching has not
+ * yet completed when the function is called. See {@link PartialMatchRouteSnapshot}
+ * for more information.
  *
  * @see {@link Route#redirectTo}
  * @publicApi
  */
-type RedirectFunction = (redirectData: Pick<ActivatedRouteSnapshot, 'routeConfig' | 'url' | 'params' | 'queryParams' | 'fragment' | 'data' | 'outlet' | 'title' | 'paramMap' | 'queryParamMap'>) => MaybeAsync<string | UrlTree>;
+type RedirectFunction = (redirectData: PartialMatchRouteSnapshot) => MaybeAsync<string | UrlTree>;
 /**
  * A policy for when to run guards and resolvers on a route.
  *
@@ -2720,7 +2716,7 @@ type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, c
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
 interface CanMatch {
-    canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>;
+    canMatch(route: Route, segments: UrlSegment[], currentSnapshot?: PartialMatchRouteSnapshot): MaybeAsync<GuardResult>;
 }
 /**
  * The signature of a function used as a `canMatch` guard on a `Route`.
@@ -2736,12 +2732,28 @@ interface CanMatch {
  *
  * @param route The route configuration.
  * @param segments The URL segments that have not been consumed by previous parent route evaluations.
+ * @param currentSnapshot The current route snapshot up to this point in the matching process. While this parameter is optional,
+ * it will always be defined when called by the Router. It is only optional for backwards compatibility with functions defined prior
+ * to the introduction of this parameter.
  *
  * @publicApi
  * @see {@link Route}
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
-type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<GuardResult>;
+type CanMatchFn = (route: Route, segments: UrlSegment[], currentSnapshot?: PartialMatchRouteSnapshot) => MaybeAsync<GuardResult>;
+/**
+ * A subset of the `ActivatedRouteSnapshot` interface that includes only the known data
+ * up to the route matching phase. Some data are not accurately known
+ * at in this phase. For example, resolvers are not run until
+ * later, so any resolved title would not be populated. The same goes for lazy
+ * loaded components. This is also true for all the snapshots up to the
+ * root, so properties that include parents (root, parent, pathFromRoot)
+ * are also excluded. And naturally, the full route matching hasn't yet
+ * happened so firstChild and children are not available either.
+ *
+ * @publicApi
+ */
+type PartialMatchRouteSnapshot = Pick<ActivatedRouteSnapshot, 'routeConfig' | 'url' | 'params' | 'queryParams' | 'fragment' | 'data' | 'outlet' | 'title' | 'paramMap' | 'queryParamMap'>;
 /**
  * @description
  *
@@ -4100,4 +4112,4 @@ declare class RouterModule {
 declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
 export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent };
-export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
+export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PartialMatchRouteSnapshot, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };

@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.0+sha-899df39
+ * @license Angular v21.2.0-next.0+sha-b51bab5
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -312,7 +312,7 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: UrlSerializer,
     deps: [],
@@ -320,7 +320,7 @@ class UrlSerializer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: UrlSerializer,
     providedIn: 'root',
@@ -329,7 +329,7 @@ class UrlSerializer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: UrlSerializer,
   decorators: [{
@@ -1283,7 +1283,7 @@ class ChildrenOutletContexts {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: ChildrenOutletContexts,
     deps: [{
@@ -1293,7 +1293,7 @@ class ChildrenOutletContexts {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: ChildrenOutletContexts,
     providedIn: 'root'
@@ -1301,7 +1301,7 @@ class ChildrenOutletContexts {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: ChildrenOutletContexts,
   decorators: [{
@@ -1758,7 +1758,7 @@ class RouterOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RouterOutlet,
     deps: [],
@@ -1766,7 +1766,7 @@ class RouterOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "17.1.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     type: RouterOutlet,
     isStandalone: true,
     selector: "router-outlet",
@@ -1799,7 +1799,7 @@ class RouterOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: RouterOutlet,
   decorators: [{
@@ -1908,7 +1908,7 @@ class RoutedComponentInputBinder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RoutedComponentInputBinder,
     deps: [],
@@ -1916,14 +1916,14 @@ class RoutedComponentInputBinder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RoutedComponentInputBinder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: RoutedComponentInputBinder,
   decorators: [{
@@ -1934,7 +1934,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ɵEmptyOutletComponent {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: ɵEmptyOutletComponent,
     deps: [],
@@ -1942,7 +1942,7 @@ class ɵEmptyOutletComponent {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     type: ɵEmptyOutletComponent,
     isStandalone: true,
     selector: "ng-component",
@@ -1962,7 +1962,7 @@ class ɵEmptyOutletComponent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: ɵEmptyOutletComponent,
   decorators: [{
@@ -2509,12 +2509,12 @@ function redirectIfUrlTree(urlSerializer) {
     throw redirectingNavigationError(urlSerializer, result);
   }), map(result => result === true));
 }
-function runCanMatchGuards(injector, route, segments, urlSerializer, abortSignal) {
+function runCanMatchGuards(injector, route, segments, urlSerializer, currentSnapshot, abortSignal) {
   const canMatch = route.canMatch;
   if (!canMatch || canMatch.length === 0) return of(true);
   const canMatchObservables = canMatch.map(injectionToken => {
     const guard = getTokenOrFunctionIdentity(injectionToken, injector);
-    const guardVal = isCanMatch(guard) ? guard.canMatch(route, segments) : runInInjectionContext(injector, () => guard(route, segments));
+    const guardVal = isCanMatch(guard) ? guard.canMatch(route, segments, currentSnapshot) : runInInjectionContext(injector, () => guard(route, segments, currentSnapshot));
     return wrapIntoObservable(guardVal).pipe(takeUntilAbort(abortSignal));
   });
   return of(canMatchObservables).pipe(prioritizedGuardValue(), redirectIfUrlTree(urlSerializer));
@@ -2624,30 +2624,7 @@ function getRedirectResult(redirectTo, currentSnapshot, injector) {
     return Promise.resolve(redirectTo);
   }
   const redirectToFn = redirectTo;
-  const {
-    queryParams,
-    fragment,
-    routeConfig,
-    url,
-    outlet,
-    params,
-    data,
-    title,
-    paramMap,
-    queryParamMap
-  } = currentSnapshot;
-  return firstValueFrom(wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn({
-    params,
-    data,
-    queryParams,
-    fragment,
-    routeConfig,
-    url,
-    outlet,
-    title,
-    paramMap,
-    queryParamMap
-  }))));
+  return firstValueFrom(wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn(currentSnapshot))));
 }
 
 function getOrCreateRouteInjectorIfNeeded(route, currentInjector) {
@@ -2765,13 +2742,28 @@ const noMatch = {
   parameters: {},
   positionalParamSegments: {}
 };
-function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer, abortSignal) {
+function createPreMatchRouteSnapshot(snapshot) {
+  return {
+    routeConfig: snapshot.routeConfig,
+    url: snapshot.url,
+    params: snapshot.params,
+    queryParams: snapshot.queryParams,
+    fragment: snapshot.fragment,
+    data: snapshot.data,
+    outlet: snapshot.outlet,
+    title: snapshot.title,
+    paramMap: snapshot.paramMap,
+    queryParamMap: snapshot.queryParamMap
+  };
+}
+function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer, createSnapshot, abortSignal) {
   const result = match(segmentGroup, route, segments);
   if (!result.matched) {
     return of(result);
   }
+  const currentSnapshot = createPreMatchRouteSnapshot(createSnapshot(result));
   injector = getOrCreateRouteInjectorIfNeeded(route, injector);
-  return runCanMatchGuards(injector, route, segments, urlSerializer, abortSignal).pipe(map(v => v === true ? result : {
+  return runCanMatchGuards(injector, route, segments, urlSerializer, currentSnapshot, abortSignal).pipe(map(v => v === true ? result : {
     ...noMatch
   }));
 }
@@ -3016,24 +3008,29 @@ class Recognizer {
         this.allowRedirects = false;
       }
     }
-    const currentSnapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze({
-      ...this.urlTree.queryParams
-    }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
-    const inherited = getInherited(currentSnapshot, parentRoute, this.paramsInheritanceStrategy);
-    currentSnapshot.params = Object.freeze(inherited.params);
-    currentSnapshot.data = Object.freeze(inherited.data);
+    const currentSnapshot = this.createSnapshot(injector, route, segments, parameters, parentRoute);
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
-    const newTree = await this.applyRedirects.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments, currentSnapshot, injector);
+    const newTree = await this.applyRedirects.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments, createPreMatchRouteSnapshot(currentSnapshot), injector);
     const newSegments = await this.applyRedirects.lineralizeSegments(route, newTree);
     return this.processSegment(injector, routes, segmentGroup, newSegments.concat(remainingSegments), outlet, false, parentRoute);
+  }
+  createSnapshot(injector, route, segments, parameters, parentRoute) {
+    const snapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze({
+      ...this.urlTree.queryParams
+    }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
+    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
+    snapshot.params = Object.freeze(inherited.params);
+    snapshot.data = Object.freeze(inherited.data);
+    return snapshot;
   }
   async matchSegmentAgainstRoute(injector, rawSegment, route, segments, outlet, parentRoute) {
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
-    const result = await firstValueFrom(matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, this.abortSignal));
+    const createSnapshot = result => this.createSnapshot(injector, route, result.consumedSegments, result.parameters, parentRoute);
+    const result = await firstValueFrom(matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, createSnapshot, this.abortSignal));
     if (route.path === '**') {
       rawSegment.children = {};
     }
@@ -3050,12 +3047,7 @@ class Recognizer {
       consumedSegments,
       remainingSegments
     } = result;
-    const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze({
-      ...this.urlTree.queryParams
-    }), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
-    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
-    snapshot.params = Object.freeze(inherited.params);
-    snapshot.data = Object.freeze(inherited.data);
+    const snapshot = this.createSnapshot(injector, route, consumedSegments, parameters, parentRoute);
     const {
       segmentGroup,
       slicedSegments
@@ -3273,7 +3265,7 @@ class TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: TitleStrategy,
     deps: [],
@@ -3281,7 +3273,7 @@ class TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: TitleStrategy,
     providedIn: 'root',
@@ -3290,7 +3282,7 @@ class TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: TitleStrategy,
   decorators: [{
@@ -3315,7 +3307,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultTitleStrategy,
     deps: [{
@@ -3325,7 +3317,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultTitleStrategy,
     providedIn: 'root'
@@ -3333,7 +3325,7 @@ class DefaultTitleStrategy extends TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: DefaultTitleStrategy,
   decorators: [{
@@ -3412,7 +3404,7 @@ class RouterConfigLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RouterConfigLoader,
     deps: [],
@@ -3420,7 +3412,7 @@ class RouterConfigLoader {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RouterConfigLoader,
     providedIn: 'root'
@@ -3428,7 +3420,7 @@ class RouterConfigLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: RouterConfigLoader,
   decorators: [{
@@ -3493,7 +3485,7 @@ async function maybeResolveResources(value) {
 class UrlHandlingStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: UrlHandlingStrategy,
     deps: [],
@@ -3501,7 +3493,7 @@ class UrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: UrlHandlingStrategy,
     providedIn: 'root',
@@ -3510,7 +3502,7 @@ class UrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: UrlHandlingStrategy,
   decorators: [{
@@ -3533,7 +3525,7 @@ class DefaultUrlHandlingStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     deps: [],
@@ -3541,7 +3533,7 @@ class DefaultUrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     providedIn: 'root'
@@ -3549,7 +3541,7 @@ class DefaultUrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: DefaultUrlHandlingStrategy,
   decorators: [{
@@ -3948,7 +3940,7 @@ class NavigationTransitions {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: NavigationTransitions,
     deps: [],
@@ -3956,7 +3948,7 @@ class NavigationTransitions {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: NavigationTransitions,
     providedIn: 'root'
@@ -3964,7 +3956,7 @@ class NavigationTransitions {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: NavigationTransitions,
   decorators: [{
@@ -4037,7 +4029,7 @@ function destroyDetachedRouteHandle(handle) {
 class RouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RouteReuseStrategy,
     deps: [],
@@ -4045,7 +4037,7 @@ class RouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: RouteReuseStrategy,
     providedIn: 'root',
@@ -4054,7 +4046,7 @@ class RouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: RouteReuseStrategy,
   decorators: [{
@@ -4086,7 +4078,7 @@ class BaseRouteReuseStrategy {
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     deps: null,
@@ -4094,7 +4086,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     providedIn: 'root'
@@ -4102,7 +4094,7 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: DefaultRouteReuseStrategy,
   decorators: [{
@@ -4176,7 +4168,7 @@ class StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: StateManager,
     deps: [],
@@ -4184,7 +4176,7 @@ class StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: StateManager,
     providedIn: 'root',
@@ -4193,7 +4185,7 @@ class StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: StateManager,
   decorators: [{
@@ -4312,7 +4304,7 @@ class HistoryStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: HistoryStateManager,
     deps: null,
@@ -4320,7 +4312,7 @@ class HistoryStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: HistoryStateManager,
     providedIn: 'root'
@@ -4328,7 +4320,7 @@ class HistoryStateManager extends StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: HistoryStateManager,
   decorators: [{
@@ -4642,7 +4634,7 @@ class Router {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: Router,
     deps: [],
@@ -4650,7 +4642,7 @@ class Router {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.0-next.0+sha-899df39",
+    version: "21.2.0-next.0+sha-b51bab5",
     ngImport: i0,
     type: Router,
     providedIn: 'root'
@@ -4658,7 +4650,7 @@ class Router {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.0-next.0+sha-899df39",
+  version: "21.2.0-next.0+sha-b51bab5",
   ngImport: i0,
   type: Router,
   decorators: [{
