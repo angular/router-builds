@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.1+sha-0e04233
+ * @license Angular v21.2.0-next.1+sha-6990f88
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1446,11 +1446,10 @@ declare class Router {
      */
     isActive(url: string | UrlTree, exact: boolean): boolean;
     /**
-     * Returns whether the url is activated.
-     * @deprecated 21.1 - Use the `isActive` function instead.
      * @see {@link isActive}
+     * @deprecated 21.1 - Use the `isActive` function instead.
      */
-    isActive(url: string | UrlTree, matchOptions: IsActiveMatchOptions): boolean;
+    isActive(url: string | UrlTree, matchOptions: Partial<IsActiveMatchOptions>): boolean;
     private removeEmptyProps;
     private scheduleNavigation;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
@@ -1509,10 +1508,16 @@ interface IsActiveMatchOptions {
  *
  * As the router state changes, the signal will update to reflect whether the url is active.
  *
+ * When using the `matchOptions` argument, any missing properties fall back to the following defaults:
+ * - `paths`: 'subset'
+ * - `queryParams`: 'subset'
+ * - `matrixParams`: 'ignored'
+ * - `fragment`: 'ignored'
+ *
  * @see [Check if a URL is active](guide/routing/read-route-state#check-if-a-url-is-active)
  * @publicApi 21.1
  */
-declare function isActive(url: string | UrlTree, router: Router, matchOptions: IsActiveMatchOptions): Signal<boolean>;
+declare function isActive(url: string | UrlTree, router: Router, matchOptions?: Partial<IsActiveMatchOptions>): Signal<boolean>;
 /**
  * @description
  *
@@ -3731,7 +3736,7 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
      */
     routerLinkActiveOptions: {
         exact: boolean;
-    } | IsActiveMatchOptions;
+    } | Partial<IsActiveMatchOptions>;
     /**
      * Aria-current attribute to apply when the router link is active.
      *
