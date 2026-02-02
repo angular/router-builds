@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.2.0-next.1+sha-a64a90d
+ * @license Angular v21.2.0-next.1+sha-8ab433a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -3600,6 +3600,13 @@ declare class RouterLink implements OnChanges, OnDestroy {
     get replaceUrl(): boolean;
     private _replaceUrl;
     /**
+     * Passed to {@link Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#browserUrl}
+     * @see {@link Router#navigateByUrl}
+     */
+    browserUrl: i0.InputSignal<string | UrlTree | undefined>;
+    /**
      * Whether a host element is an `<a>`/`<area>` tag or a compatible custom
      * element.
      */
@@ -3636,7 +3643,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
     get urlTree(): UrlTree | null;
     private computeHref;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "info": { "alias": "info"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "info": { "alias": "info"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "browserUrl": { "alias": "browserUrl"; "required": false; "isSignal": true; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_preserveFragment: unknown;
     static ngAcceptInputType_skipLocationChange: unknown;
     static ngAcceptInputType_replaceUrl: unknown;
