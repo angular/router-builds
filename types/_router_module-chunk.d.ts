@@ -1,5 +1,5 @@
 /**
- * @license Angular v21.1.5+sha-64b1a79
+ * @license Angular v21.1.5+sha-24b578c
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -8,83 +8,6 @@ import * as i0 from '@angular/core';
 import { InjectionToken, Signal, EnvironmentInjector, ComponentRef, EventEmitter, OnDestroy, OnInit, SimpleChanges, ProviderToken, Type, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
-
-/**
- * The primary routing outlet.
- *
- * @publicApi
- */
-declare const PRIMARY_OUTLET = "primary";
-/**
- * A collection of matrix and query URL parameters.
- * @see {@link convertToParamMap}
- * @see {@link ParamMap}
- *
- * @publicApi
- */
-type Params = {
-    [key: string]: any;
-};
-/**
- * A map that provides access to the required and optional parameters
- * specific to a route.
- * The map supports retrieving a single value with `get()`
- * or multiple values with `getAll()`.
- *
- * @see [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
- *
- * @publicApi
- */
-interface ParamMap {
-    /**
-     * Reports whether the map contains a given parameter.
-     * @param name The parameter name.
-     * @returns True if the map contains the given parameter, false otherwise.
-     */
-    has(name: string): boolean;
-    /**
-     * Retrieves a single value for a parameter.
-     * @param name The parameter name.
-     * @return The parameter's single value,
-     * or the first value if the parameter has multiple values,
-     * or `null` when there is no such parameter.
-     */
-    get(name: string): string | null;
-    /**
-     * Retrieves multiple values for a parameter.
-     * @param name The parameter name.
-     * @return An array containing one or more values,
-     * or an empty array if there is no such parameter.
-     *
-     */
-    getAll(name: string): string[];
-    /** Names of the parameters in the map. */
-    readonly keys: string[];
-}
-/**
- * Converts a `Params` instance to a `ParamMap`.
- * @param params The instance to convert.
- * @returns The new map instance.
- *
- * @publicApi
- */
-declare function convertToParamMap(params: Params): ParamMap;
-/**
- * Matches the route configuration (`route`) against the actual URL (`segments`).
- *
- * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
- *
- * @param segments The remaining unmatched segments in the current navigation
- * @param segmentGroup The current segment group being matched
- * @param route The `Route` to match against.
- *
- * @see {@link UrlMatchResult}
- * @see {@link Route}
- *
- * @returns The resulting match information or `null` if the `route` should not match.
- * @publicApi
- */
-declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
 
 /**
  * Identifies the call or event that triggered a navigation.
@@ -206,7 +129,7 @@ declare class NavigationStart extends RouterEvent {
         [k: string]: any;
         navigationId: number;
     } | null);
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -229,7 +152,7 @@ declare class NavigationEnd extends RouterEvent {
     url: string, 
     /** @docsNotRequired */
     urlAfterRedirects: string);
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -321,7 +244,7 @@ declare class NavigationCancel extends RouterEvent {
      * used in production.
      */
     code?: NavigationCancellationCode | undefined);
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -396,7 +319,7 @@ declare class NavigationError extends RouterEvent {
      * `RouterStateSnapshot` was created for the navigation.
      */
     target?: RouterStateSnapshot | undefined);
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -419,7 +342,7 @@ declare class RoutesRecognized extends RouterEvent {
     urlAfterRedirects: string, 
     /** @docsNotRequired */
     state: RouterStateSnapshot);
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -444,6 +367,7 @@ declare class GuardsCheckStart extends RouterEvent {
     urlAfterRedirects: string, 
     /** @docsNotRequired */
     state: RouterStateSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -472,6 +396,7 @@ declare class GuardsCheckEnd extends RouterEvent {
     state: RouterStateSnapshot, 
     /** @docsNotRequired */
     shouldActivate: boolean);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -499,6 +424,7 @@ declare class ResolveStart extends RouterEvent {
     urlAfterRedirects: string, 
     /** @docsNotRequired */
     state: RouterStateSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -522,6 +448,7 @@ declare class ResolveEnd extends RouterEvent {
     urlAfterRedirects: string, 
     /** @docsNotRequired */
     state: RouterStateSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -538,6 +465,7 @@ declare class RouteConfigLoadStart {
     constructor(
     /** @docsNotRequired */
     route: Route);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -554,6 +482,7 @@ declare class RouteConfigLoadEnd {
     constructor(
     /** @docsNotRequired */
     route: Route);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -571,6 +500,7 @@ declare class ChildActivationStart {
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -587,6 +517,7 @@ declare class ChildActivationEnd {
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -604,6 +535,7 @@ declare class ActivationStart {
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -621,6 +553,7 @@ declare class ActivationEnd {
     constructor(
     /** @docsNotRequired */
     snapshot: ActivatedRouteSnapshot);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -647,6 +580,7 @@ declare class Scroll {
     anchor: string | null, 
     /** @docsNotRequired */
     scrollBehavior?: "manual" | "after-transition" | undefined);
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -683,6 +617,83 @@ declare class Scroll {
  * @publicApi
  */
 type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
+
+/**
+ * The primary routing outlet.
+ *
+ * @publicApi
+ */
+declare const PRIMARY_OUTLET = "primary";
+/**
+ * A collection of matrix and query URL parameters.
+ * @see {@link convertToParamMap}
+ * @see {@link ParamMap}
+ *
+ * @publicApi
+ */
+type Params = {
+    [key: string]: any;
+};
+/**
+ * A map that provides access to the required and optional parameters
+ * specific to a route.
+ * The map supports retrieving a single value with `get()`
+ * or multiple values with `getAll()`.
+ *
+ * @see [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+ *
+ * @publicApi
+ */
+interface ParamMap {
+    /**
+     * Reports whether the map contains a given parameter.
+     * @param name The parameter name.
+     * @returns True if the map contains the given parameter, false otherwise.
+     */
+    has(name: string): boolean;
+    /**
+     * Retrieves a single value for a parameter.
+     * @param name The parameter name.
+     * @return The parameter's single value,
+     * or the first value if the parameter has multiple values,
+     * or `null` when there is no such parameter.
+     */
+    get(name: string): string | null;
+    /**
+     * Retrieves multiple values for a parameter.
+     * @param name The parameter name.
+     * @return An array containing one or more values,
+     * or an empty array if there is no such parameter.
+     *
+     */
+    getAll(name: string): string[];
+    /** Names of the parameters in the map. */
+    readonly keys: string[];
+}
+/**
+ * Converts a `Params` instance to a `ParamMap`.
+ * @param params The instance to convert.
+ * @returns The new map instance.
+ *
+ * @publicApi
+ */
+declare function convertToParamMap(params: Params): ParamMap;
+/**
+ * Matches the route configuration (`route`) against the actual URL (`segments`).
+ *
+ * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
+ *
+ * @param segments The remaining unmatched segments in the current navigation
+ * @param segmentGroup The current segment group being matched
+ * @param route The `Route` to match against.
+ *
+ * @see {@link UrlMatchResult}
+ * @see {@link Route}
+ *
+ * @returns The resulting match information or `null` if the `route` should not match.
+ * @publicApi
+ */
+declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
 
 /**
  * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
@@ -1558,7 +1569,7 @@ declare class UrlTree {
     /** The fragment of the URL */
     fragment?: string | null);
     get queryParamMap(): ParamMap;
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -1590,7 +1601,7 @@ declare class UrlSegmentGroup {
     hasChildren(): boolean;
     /** Number of child segments */
     get numberOfChildren(): number;
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
@@ -1634,7 +1645,7 @@ declare class UrlSegment {
         [name: string]: string;
     });
     get parameterMap(): ParamMap;
-    /** @docsNotRequired */
+    /** @docs-private */
     toString(): string;
 }
 /**
