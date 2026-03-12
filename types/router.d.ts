@@ -1,10 +1,10 @@
 /**
- * @license Angular v22.0.0-next.3+sha-8edcf41
+ * @license Angular v22.0.0-next.3+sha-89c9a4d
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
+import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, RouterConfigOptions, NavigationError, RedirectCommand, ComponentInputBindingOptions, CanMatch, CanMatchFn, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
 export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, PartialMatchRouteSnapshot, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
@@ -780,7 +780,8 @@ type ComponentInputBindingFeature = RouterFeature<RouterFeatureKind.ComponentInp
 type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
 /**
  * Enables binding information from the `Router` state directly to the inputs of the component in
- * `Route` configurations.
+ * `Route` configurations. Can also accept an `ComponentInputBindingOptions` object to set which
+ * sources are allowed to bind.
  *
  * @usageNotes
  *
@@ -813,10 +814,23 @@ type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFea
  * Default values can be provided with a resolver on the route to ensure the value is always present
  * or an input and use an input transform in the component.
  *
+ * Advanced example of how you can disable binding from certain sources:
+ * ```ts
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withComponentInputBinding({queryParams: false}))
+ *     ]
+ *   }
+ * );
+ * ```
+ *
  * @see {@link /guide/components/inputs#input-transforms Input Transforms}
+ * @see {@link ComponentInputBindingOptions}
  * @returns A set of providers for use with `provideRouter`.
  */
-declare function withComponentInputBinding(): ComponentInputBindingFeature;
+declare function withComponentInputBinding(options?: ComponentInputBindingOptions): ComponentInputBindingFeature;
 /**
  * Enables view transitions in the Router by running the route activation and deactivation inside of
  * `document.startViewTransition`.
