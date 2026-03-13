@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.0.0-next.3+sha-412788f
+ * @license Angular v22.0.0-next.3+sha-e127927
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { InjectionToken, Signal, EnvironmentInjector, ComponentRef, EventEmitter, OnDestroy, OnInit, SimpleChanges, ProviderToken, Type, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
