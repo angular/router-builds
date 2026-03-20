@@ -1,11 +1,11 @@
 /**
- * @license Angular v21.2.5+sha-7aaa8b9
+ * @license Angular v21.2.5+sha-a21be36
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { NgModule, signal, Injectable, ViewChild, Component } from '@angular/core';
+import { NgModule, signal, Injectable, ViewChild, ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ROUTES, ROUTER_CONFIGURATION, Router, afterNextNavigation, RouterOutlet } from './_router-chunk.mjs';
 export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent } from './_router-chunk.mjs';
@@ -33,7 +33,7 @@ class RouterTestingModule {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RouterTestingModule,
     deps: [],
@@ -41,14 +41,14 @@ class RouterTestingModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RouterTestingModule,
     exports: [RouterModule]
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RouterTestingModule,
     providers: [ROUTER_PROVIDERS, provideLocationMocks(), withPreloading(NoPreloading).ɵproviders, {
@@ -61,7 +61,7 @@ class RouterTestingModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.5+sha-7aaa8b9",
+  version: "21.2.5+sha-a21be36",
   ngImport: i0,
   type: RouterTestingModule,
   decorators: [{
@@ -97,7 +97,7 @@ class RootFixtureService {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RootFixtureService,
     deps: [],
@@ -105,7 +105,7 @@ class RootFixtureService {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RootFixtureService,
     providedIn: 'root'
@@ -113,7 +113,7 @@ class RootFixtureService {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.5+sha-7aaa8b9",
+  version: "21.2.5+sha-a21be36",
   ngImport: i0,
   type: RootFixtureService,
   decorators: [{
@@ -130,7 +130,7 @@ class RootCmp {
   }] : []));
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     ngImport: i0,
     type: RootCmp,
     deps: [],
@@ -138,7 +138,7 @@ class RootCmp {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.2.5+sha-7aaa8b9",
+    version: "21.2.5+sha-a21be36",
     type: RootCmp,
     isStandalone: true,
     selector: "ng-component",
@@ -158,19 +158,21 @@ class RootCmp {
       inputs: ["name", "routerOutletData"],
       outputs: ["activate", "deactivate", "attach", "detach"],
       exportAs: ["outlet"]
-    }]
+    }],
+    changeDetection: i0.ChangeDetectionStrategy.Eager
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.2.5+sha-7aaa8b9",
+  version: "21.2.5+sha-a21be36",
   ngImport: i0,
   type: RootCmp,
   decorators: [{
     type: Component,
     args: [{
       template: '<router-outlet [routerOutletData]="routerOutletData()"></router-outlet>',
-      imports: [RouterOutlet]
+      imports: [RouterOutlet],
+      changeDetection: ChangeDetectionStrategy.Eager
     }]
   }],
   propDecorators: {
