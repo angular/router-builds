@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.4+sha-0eeb1b5
+ * @license Angular v22.0.0-next.4+sha-ee8d209
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -876,6 +876,7 @@ interface InMemoryScrollingOptions {
  * @publicApi
  * @see withComponentInputBinding
  * @see RouterModule#forRoot
+ * @see [Disable query parameter binding](guide/routing/common-router-tasks#disable-query-parameter-binding)
  */
 interface ComponentInputBindingOptions {
     /**
