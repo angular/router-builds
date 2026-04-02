@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.6+sha-7f94502
+ * @license Angular v22.0.0-next.6+sha-8216d34
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2962,7 +2962,11 @@ type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, c
  * class CanMatchTeamSection implements CanMatch {
  *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
  *
- *   canMatch(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *   canMatch(
+ *     route: Route,
+ *     segments: UrlSegment[],
+ *     currentSnapshot: PartialMatchRouteSnapshot,
+ *   ): Observable<boolean> | Promise<boolean> | boolean {
  *     return this.permissions.canAccess(this.currentUser, route, segments);
  *   }
  * }
@@ -3000,7 +3004,7 @@ type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, c
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
 interface CanMatch {
-    canMatch(route: Route, segments: UrlSegment[], currentSnapshot?: PartialMatchRouteSnapshot): MaybeAsync<GuardResult>;
+    canMatch(route: Route, segments: UrlSegment[], currentSnapshot: PartialMatchRouteSnapshot): MaybeAsync<GuardResult>;
 }
 /**
  * The signature of a function used as a `canMatch` guard on a `Route`.
@@ -3016,15 +3020,13 @@ interface CanMatch {
  *
  * @param route The route configuration.
  * @param segments The URL segments that have not been consumed by previous parent route evaluations.
- * @param currentSnapshot The current route snapshot up to this point in the matching process. While this parameter is optional,
- * it will always be defined when called by the Router. It is only optional for backwards compatibility with functions defined prior
- * to the introduction of this parameter.
+ * @param currentSnapshot The current route snapshot up to this point in the matching process.
  *
  * @publicApi
  * @see {@link Route}
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
-type CanMatchFn = (route: Route, segments: UrlSegment[], currentSnapshot?: PartialMatchRouteSnapshot) => MaybeAsync<GuardResult>;
+type CanMatchFn = (route: Route, segments: UrlSegment[], currentSnapshot: PartialMatchRouteSnapshot) => MaybeAsync<GuardResult>;
 /**
  * A subset of the `ActivatedRouteSnapshot` interface that includes only the known data
  * up to the route matching phase. Some data are not accurately known
