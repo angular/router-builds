@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.8+sha-c326548
+ * @license Angular v21.3.0-next.0+sha-4835277
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import * as i3 from '@angular/common';
 import { ViewportScroller, PlatformNavigation, PlatformLocation, ɵPRECOMMIT_HANDLER_SUPPORTED as _PRECOMMIT_HANDLER_SUPPORTED, LOCATION_INITIALIZED, Location, ɵNavigationAdapterForLocation as _NavigationAdapterForLocation, HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, HostAttributeToken, linkedSignal, untracked, signal, input, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, effect, ɵRuntimeError as _RuntimeError, computed, booleanAttribute, Injectable, HostListener, Input, Attribute, Directive, EventEmitter, Output, ContentChildren, createEnvironmentInjector, InjectionToken, NgZone, EnvironmentInjector, DestroyRef, afterNextRender, ɵpromiseWithResolvers as _promiseWithResolvers, ɵpublishExternalGlobalUtil as _publishExternalGlobalUtil, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, provideAppInitializer, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, Injector, provideEnvironmentInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ApplicationRef, ENVIRONMENT_INITIALIZER, NgModule } from '@angular/core';
+import { inject, HostAttributeToken, linkedSignal, untracked, signal, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, effect, ɵRuntimeError as _RuntimeError, computed, booleanAttribute, Injectable, HostListener, Input, Attribute, Directive, EventEmitter, Output, ContentChildren, createEnvironmentInjector, InjectionToken, NgZone, EnvironmentInjector, DestroyRef, afterNextRender, ɵpromiseWithResolvers as _promiseWithResolvers, ɵpublishExternalGlobalUtil as _publishExternalGlobalUtil, makeEnvironmentProviders, APP_BOOTSTRAP_LISTENER, ENVIRONMENT_INITIALIZER, provideAppInitializer, ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as _IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, Injector, provideEnvironmentInitializer, ɵperformanceMarkFeature as _performanceMarkFeature, ApplicationRef, NgModule } from '@angular/core';
 import { ROUTER_CONFIGURATION, isUrlTree, Router, ActivatedRoute, StateManager, UrlSerializer, NavigationEnd, UrlTree, isActive, exactMatchOptions, subsetMatchOptions, RouterConfigLoader, IMPERATIVE_NAVIGATION, NavigationTransitions, NavigationStart, NavigationSkipped, NavigationSkippedCode, Scroll, BeforeRoutesRecognized, BeforeActivateRoutes, NavigationCancel, NavigationError, isRedirectingEvent, NavigationCancellationCode, ROUTES, afterNextNavigation, NAVIGATION_ERROR_HANDLER, routeInjectorCleanup, ROUTE_INJECTOR_CLEANUP, RoutedComponentInputBinder, INPUT_BINDER, createViewTransition, CREATE_VIEW_TRANSITION, VIEW_TRANSITION_OPTIONS, stringifyEvent, DefaultUrlSerializer, ChildrenOutletContexts, RouterOutlet, ɵEmptyOutletComponent as _EmptyOutletComponent } from './_router-chunk.mjs';
 import { Subject, of, from } from 'rxjs';
 import { mergeAll, catchError, filter, concatMap, mergeMap } from 'rxjs/operators';
@@ -45,7 +45,7 @@ class ReactiveRouterState {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: ReactiveRouterState,
     deps: [],
@@ -53,7 +53,7 @@ class ReactiveRouterState {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: ReactiveRouterState,
     providedIn: 'root'
@@ -61,7 +61,7 @@ class ReactiveRouterState {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: ReactiveRouterState,
   decorators: [{
@@ -195,9 +195,6 @@ class RouterLink {
   _replaceUrl = signal(false, ...(ngDevMode ? [{
     debugName: "_replaceUrl"
   }] : []));
-  browserUrl = input(undefined, ...(ngDevMode ? [{
-    debugName: "browserUrl"
-  }] : []));
   isAnchorElement;
   onChanges = new Subject();
   applicationErrorHandler = inject(_INTERNAL_APPLICATION_ERROR_HANDLER);
@@ -260,15 +257,11 @@ class RouterLink {
         return true;
       }
     }
-    const browserUrl = this.browserUrl();
     const extras = {
       skipLocationChange: this.skipLocationChange,
       replaceUrl: this.replaceUrl,
       state: this.state,
-      info: this.info,
-      ...(browserUrl !== undefined && {
-        browserUrl
-      })
+      info: this.info
     };
     this.router.navigateByUrl(urlTree, extras)?.catch(e => {
       this.applicationErrorHandler(e);
@@ -321,7 +314,7 @@ class RouterLink {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterLink,
     deps: [{
@@ -341,96 +334,23 @@ class RouterLink {
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
-    minVersion: "17.1.0",
-    version: "22.0.0-next.8+sha-c326548",
+    minVersion: "16.1.0",
+    version: "21.3.0-next.0+sha-4835277",
     type: RouterLink,
     isStandalone: true,
     selector: "[routerLink]",
     inputs: {
-      target: {
-        classPropertyName: "target",
-        publicName: "target",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      queryParams: {
-        classPropertyName: "queryParams",
-        publicName: "queryParams",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      fragment: {
-        classPropertyName: "fragment",
-        publicName: "fragment",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      queryParamsHandling: {
-        classPropertyName: "queryParamsHandling",
-        publicName: "queryParamsHandling",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      state: {
-        classPropertyName: "state",
-        publicName: "state",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      info: {
-        classPropertyName: "info",
-        publicName: "info",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      relativeTo: {
-        classPropertyName: "relativeTo",
-        publicName: "relativeTo",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      },
-      preserveFragment: {
-        classPropertyName: "preserveFragment",
-        publicName: "preserveFragment",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: booleanAttribute
-      },
-      skipLocationChange: {
-        classPropertyName: "skipLocationChange",
-        publicName: "skipLocationChange",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: booleanAttribute
-      },
-      replaceUrl: {
-        classPropertyName: "replaceUrl",
-        publicName: "replaceUrl",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: booleanAttribute
-      },
-      browserUrl: {
-        classPropertyName: "browserUrl",
-        publicName: "browserUrl",
-        isSignal: true,
-        isRequired: false,
-        transformFunction: null
-      },
-      routerLink: {
-        classPropertyName: "routerLink",
-        publicName: "routerLink",
-        isSignal: false,
-        isRequired: false,
-        transformFunction: null
-      }
+      target: "target",
+      queryParams: "queryParams",
+      fragment: "fragment",
+      queryParamsHandling: "queryParamsHandling",
+      state: "state",
+      info: "info",
+      relativeTo: "relativeTo",
+      preserveFragment: ["preserveFragment", "preserveFragment", booleanAttribute],
+      skipLocationChange: ["skipLocationChange", "skipLocationChange", booleanAttribute],
+      replaceUrl: ["replaceUrl", "replaceUrl", booleanAttribute],
+      routerLink: "routerLink"
     },
     host: {
       listeners: {
@@ -447,7 +367,7 @@ class RouterLink {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: RouterLink,
   decorators: [{
@@ -515,14 +435,6 @@ i0.ɵɵngDeclareClassMetadata({
       type: Input,
       args: [{
         transform: booleanAttribute
-      }]
-    }],
-    browserUrl: [{
-      type: i0.Input,
-      args: [{
-        isSignal: true,
-        alias: "browserUrl",
-        required: false
       }]
     }],
     routerLink: [{
@@ -633,7 +545,7 @@ class RouterLinkActive {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterLinkActive,
     deps: [{
@@ -649,7 +561,7 @@ class RouterLinkActive {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     type: RouterLinkActive,
     isStandalone: true,
     selector: "[routerLinkActive]",
@@ -673,7 +585,7 @@ class RouterLinkActive {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: RouterLinkActive,
   decorators: [{
@@ -725,7 +637,7 @@ class PreloadAllModules {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: PreloadAllModules,
     deps: [],
@@ -733,7 +645,7 @@ class PreloadAllModules {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: PreloadAllModules,
     providedIn: 'root'
@@ -741,7 +653,7 @@ class PreloadAllModules {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: PreloadAllModules,
   decorators: [{
@@ -757,7 +669,7 @@ class NoPreloading {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: NoPreloading,
     deps: [],
@@ -765,7 +677,7 @@ class NoPreloading {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: NoPreloading,
     providedIn: 'root'
@@ -773,7 +685,7 @@ class NoPreloading {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: NoPreloading,
   decorators: [{
@@ -854,7 +766,7 @@ class RouterPreloader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterPreloader,
     deps: [{
@@ -870,7 +782,7 @@ class RouterPreloader {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterPreloader,
     providedIn: 'root'
@@ -878,7 +790,7 @@ class RouterPreloader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: RouterPreloader,
   decorators: [{
@@ -980,7 +892,7 @@ class RouterScroller {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterScroller,
     deps: "invalid",
@@ -988,14 +900,14 @@ class RouterScroller {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterScroller
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: RouterScroller,
   decorators: [{
@@ -1305,7 +1217,7 @@ class NavigationStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: NavigationStateManager,
     deps: [],
@@ -1313,7 +1225,7 @@ class NavigationStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: NavigationStateManager,
     providedIn: 'root'
@@ -1321,7 +1233,7 @@ class NavigationStateManager extends StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: NavigationStateManager,
   decorators: [{
@@ -1348,7 +1260,10 @@ function provideRouter(routes, ...features) {
     provide: ROUTES,
     multi: true,
     useValue: routes
-  }, {
+  }, typeof ngDevMode === 'undefined' || ngDevMode ? {
+    provide: ROUTER_IS_PROVIDED,
+    useValue: true
+  } : [], {
     provide: ActivatedRoute,
     useFactory: rootRoute
   }, {
@@ -1365,6 +1280,27 @@ function routerFeature(kind, providers) {
     ɵkind: kind,
     ɵproviders: providers
   };
+}
+const ROUTER_IS_PROVIDED = new InjectionToken(typeof ngDevMode !== 'undefined' && ngDevMode ? 'Router is provided' : '', {
+  factory: () => false
+});
+const routerIsProvidedDevModeCheck = {
+  provide: ENVIRONMENT_INITIALIZER,
+  multi: true,
+  useFactory() {
+    return () => {
+      if (!inject(ROUTER_IS_PROVIDED)) {
+        console.warn('`provideRoutes` was called without `provideRouter` or `RouterModule.forRoot`. ' + 'This is likely a mistake.');
+      }
+    };
+  }
+};
+function provideRoutes(routes) {
+  return [{
+    provide: ROUTES,
+    multi: true,
+    useValue: routes
+  }, typeof ngDevMode === 'undefined' || ngDevMode ? routerIsProvidedDevModeCheck : []];
 }
 function withInMemoryScrolling(options = {}) {
   const providers = [{
@@ -1523,10 +1459,10 @@ function withExperimentalAutoCleanupInjectors() {
     useValue: routeInjectorCleanup
   }]);
 }
-function withComponentInputBinding(options = {}) {
-  const providers = [{
+function withComponentInputBinding() {
+  const providers = [RoutedComponentInputBinder, {
     provide: INPUT_BINDER,
-    useFactory: () => new RoutedComponentInputBinder(options)
+    useExisting: RoutedComponentInputBinder
   }];
   return routerFeature(8, providers);
 }
@@ -1553,7 +1489,10 @@ const ROUTER_PROVIDERS = [Location, {
 }, Router, ChildrenOutletContexts, {
   provide: ActivatedRoute,
   useFactory: rootRoute
-}, RouterConfigLoader];
+}, RouterConfigLoader, typeof ngDevMode === 'undefined' || ngDevMode ? {
+  provide: ROUTER_IS_PROVIDED,
+  useValue: true
+} : []];
 class RouterModule {
   constructor() {
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
@@ -1578,7 +1517,7 @@ class RouterModule {
       } : [], {
         provide: ROUTER_CONFIGURATION,
         useValue: config ? config : {}
-      }, config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(), provideRouterScroller(), config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [], config?.initialNavigation ? provideInitialNavigation(config) : [], config?.bindToComponentInputs ? withComponentInputBinding(typeof config.bindToComponentInputs === 'object' ? config.bindToComponentInputs : {}).ɵproviders : [], config?.enableViewTransitions ? withViewTransitions().ɵproviders : [], provideRouterInitializer()]
+      }, config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(), provideRouterScroller(), config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [], config?.initialNavigation ? provideInitialNavigation(config) : [], config?.bindToComponentInputs ? withComponentInputBinding().ɵproviders : [], config?.enableViewTransitions ? withViewTransitions().ɵproviders : [], provideRouterInitializer()]
     };
   }
   static forChild(routes) {
@@ -1593,7 +1532,7 @@ class RouterModule {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterModule,
     deps: [],
@@ -1601,7 +1540,7 @@ class RouterModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterModule,
     imports: [RouterOutlet, RouterLink, RouterLinkActive, _EmptyOutletComponent],
@@ -1609,14 +1548,14 @@ class RouterModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8+sha-c326548",
+    version: "21.3.0-next.0+sha-4835277",
     ngImport: i0,
     type: RouterModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8+sha-c326548",
+  version: "21.3.0-next.0+sha-4835277",
   ngImport: i0,
   type: RouterModule,
   decorators: [{
@@ -1678,5 +1617,5 @@ function provideRouterInitializer() {
   }];
 }
 
-export { NoPreloading, PreloadAllModules, PreloadingStrategy, ROUTER_INITIALIZER, ROUTER_PROVIDERS, RouterLink, RouterLinkActive, RouterModule, RouterPreloader, provideRouter, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions };
+export { NoPreloading, PreloadAllModules, PreloadingStrategy, ROUTER_INITIALIZER, ROUTER_PROVIDERS, RouterLink, RouterLinkActive, RouterModule, RouterPreloader, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions };
 //# sourceMappingURL=_router_module-chunk.mjs.map

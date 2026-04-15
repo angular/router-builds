@@ -1,10 +1,10 @@
 /**
- * @license Angular v22.0.0-next.8+sha-c326548
+ * @license Angular v21.3.0-next.0+sha-4835277
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
-import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, ComponentInputBindingOptions, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
+import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
 export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DefaultExport, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, PartialMatchRouteSnapshot, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import { Title } from '@angular/platform-browser';
 import * as i0 from '@angular/core';
@@ -372,6 +372,24 @@ interface RouterFeature<FeatureKind extends RouterFeatureKind> {
     ɵkind: FeatureKind;
     ɵproviders: Array<Provider | EnvironmentProviders>;
 }
+/**
+ * Registers a DI provider for a set of routes.
+ * @param routes The route configuration to provide.
+ *
+ * @usageNotes
+ *
+ * ```ts
+ * @NgModule({
+ *   providers: [provideRoutes(ROUTES)]
+ * })
+ * class LazyLoadedChildModule {}
+ * ```
+ *
+ * @deprecated If necessary, provide routes using the `ROUTES` `InjectionToken`.
+ * @see {@link ROUTES}
+ * @publicApi
+ */
+declare function provideRoutes(routes: Routes): Provider[];
 /**
  * A type alias for providers returned by `withInMemoryScrolling` for use with `provideRouter`.
  *
@@ -780,8 +798,7 @@ type ComponentInputBindingFeature = RouterFeature<RouterFeatureKind.ComponentInp
 type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
 /**
  * Enables binding information from the `Router` state directly to the inputs of the component in
- * `Route` configurations. Can also accept an `ComponentInputBindingOptions` object to set which
- * sources are allowed to bind.
+ * `Route` configurations.
  *
  * @usageNotes
  *
@@ -814,23 +831,10 @@ type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFea
  * Default values can be provided with a resolver on the route to ensure the value is always present
  * or an input and use an input transform in the component.
  *
- * Advanced example of how you can disable binding from certain sources:
- * ```ts
- * const appRoutes: Routes = [];
- * bootstrapApplication(AppComponent,
- *   {
- *     providers: [
- *       provideRouter(appRoutes, withComponentInputBinding({queryParams: false}))
- *     ]
- *   }
- * );
- * ```
- *
  * @see {@link /guide/components/inputs#input-transforms Input Transforms}
- * @see {@link ComponentInputBindingOptions}
  * @returns A set of providers for use with `provideRouter`.
  */
-declare function withComponentInputBinding(options?: ComponentInputBindingOptions): ComponentInputBindingFeature;
+declare function withComponentInputBinding(): ComponentInputBindingFeature;
 /**
  * Enables view transitions in the Router by running the route activation and deactivation inside of
  * `document.startViewTransition`.
@@ -996,5 +1000,5 @@ declare function afterNextNavigation(router: {
     events: Observable<Event>;
 }, action: () => void): void;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, provideRoutes, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
 export type { ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
