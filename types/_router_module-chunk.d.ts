@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.8+sha-67e4d19
+ * @license Angular v22.0.0-next.8+sha-d771a65
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -763,11 +763,11 @@ interface RouterConfigOptions {
      * Defines how the router merges parameters, data, and resolved data from parent to child
      * routes.
      *
-     * By default ('emptyOnly'), a route inherits the parent route's parameters when the route itself
-     * has an empty path (meaning its configured with path: '') or when the parent route doesn't have
-     * any component set.
+     * By default ('always'), a route inherits all parameters from its parent routes.
      *
-     * Set to 'always' to enable unconditional inheritance of parent parameters.
+     * Set to 'emptyOnly' to preserve the legacy behavior where a route only inherits the parent
+     * route's parameters when the route itself has an empty path or when the parent route doesn't
+     * have any component set.
      *
      * Note that when dealing with matrix parameters, "parent" refers to the parent `Route`
      * config which does not necessarily mean the "URL segment to the left". When the `Route` `path`
