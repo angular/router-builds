@@ -1,6 +1,6 @@
 {
   "name": "@angular/router",
-  "version": "21.2.9+sha-580212c",
+  "version": "21.2.9+sha-751e4af",
   "description": "Angular - the routing library",
   "keywords": [
     "angular",
@@ -27,9 +27,9 @@
     "@types/dom-navigation": "^1.0.5"
   },
   "peerDependencies": {
-    "@angular/core": "21.2.9+sha-580212c",
-    "@angular/common": "21.2.9+sha-580212c",
-    "@angular/platform-browser": "21.2.9+sha-580212c",
+    "@angular/core": "21.2.9+sha-751e4af",
+    "@angular/common": "21.2.9+sha-751e4af",
+    "@angular/platform-browser": "21.2.9+sha-751e4af",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "ng-update": {
