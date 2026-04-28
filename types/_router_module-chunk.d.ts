@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.9+sha-357cb15
+ * @license Angular v22.0.0-next.9+sha-c8aad6a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -889,7 +889,7 @@ interface ComponentInputBindingOptions {
  * A set of configuration options for a router module, provided in the
  * `forRoot()` method.
  *
- * @see {@link /api/router/routerModule#forRoot forRoot}
+ * @see {@link /api/router/RouterModule#forRoot forRoot}
  *
  *
  * @publicApi
@@ -2694,7 +2694,8 @@ interface LoadedRouterConfig {
  *
  * @Injectable()
  * class CanActivateTeam implements CanActivate {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canActivate(
  *     route: ActivatedRouteSnapshot,
@@ -2807,7 +2808,8 @@ type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
  *
  * @Injectable()
  * class CanActivateTeam implements CanActivateChild {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canActivateChild(
  *     route: ActivatedRouteSnapshot,
@@ -2890,7 +2892,8 @@ type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStat
  * ```ts
  * @Injectable()
  * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canDeactivate(
  *     component: TeamComponent,
@@ -2961,7 +2964,8 @@ type CanDeactivateFn<T> = (component: T, currentRoute: ActivatedRouteSnapshot, c
  *
  * @Injectable()
  * class CanMatchTeamSection implements CanMatch {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canMatch(
  *     route: Route,
@@ -3055,7 +3059,7 @@ type PartialMatchRouteSnapshot = Pick<ActivatedRouteSnapshot, 'routeConfig' | 'u
  * ```ts
  * @Injectable({ providedIn: 'root' })
  * export class HeroResolver implements Resolve<Hero> {
- *   constructor(private service: HeroService) {}
+ *   private readonly service = inject(HeroService);
  *
  *   resolve(
  *     route: ActivatedRouteSnapshot,
@@ -3096,7 +3100,7 @@ type PartialMatchRouteSnapshot = Pick<ActivatedRouteSnapshot, 'routeConfig' | 'u
  * })
  * export class HeroComponent {
  *
- *  constructor(private activatedRoute: ActivatedRoute) {}
+ *   private readonly activatedRoute = inject(ActivatedRoute);
  *
  *  ngOnInit() {
  *    this.activatedRoute.data.subscribe(({ hero }) => {
@@ -3263,7 +3267,8 @@ type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) 
  *
  * @Injectable()
  * class CanLoadTeamSection implements CanLoad {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
  *     return this.permissions.canLoadChildren(this.currentUser, route, segments);

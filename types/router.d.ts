@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.9+sha-357cb15
+ * @license Angular v22.0.0-next.9+sha-c8aad6a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -755,7 +755,8 @@ type ExperimentalAutoCleanupInjectorsFeature = RouterFeature<RouterFeatureKind.E
  *
  * This feature is opt-in and requires `RouteReuseStrategy.shouldDestroyInjector` to return `true`
  * for the routes that should be destroyed. If the `RouteReuseStrategy` uses stored handles, it
- * should also implement `retrieveStoredHandle` to ensure we don't destroy injectors for handles that will be reattached.
+ * should also implement `retrieveStoredRouteHandles` to ensure injectors for handles that will be
+ * reattached are not destroyed.
  *
  * @experimental 21.1
  */
