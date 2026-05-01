@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.0.0-next.10+sha-a4145de
+ * @license Angular v22.0.0-next.10+sha-c84642a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -884,6 +884,16 @@ interface ComponentInputBindingOptions {
      * inputs.
      */
     queryParams?: boolean;
+    /**
+     * Configures the behavior when an input is not matched by any key in the router data.
+     *
+     * - `'alwaysUndefined'`: (Default) Binds `undefined` to the input. This ensures that stale data
+     *   is not retained.
+     * - `'undefinedIfStale'`: Binds `undefined` only if the input was previously available
+     *   in the router data during the lifetime of the active route in this outlet. This avoids
+     *   setting `undefined` for inputs that were never expected to be set by the router.
+     */
+    unmatchedInputBehavior?: 'alwaysUndefined' | 'undefinedIfStale';
 }
 /**
  * A set of configuration options for a router module, provided in the
