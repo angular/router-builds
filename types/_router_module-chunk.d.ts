@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.1+sha-12fcec8
+ * @license Angular v22.1.0-next.1+sha-2d33fd5
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -4021,11 +4021,14 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
      *
      * These options are passed to the `isActive()` function.
      *
+     * When `undefined`, the default subset match behavior is used.
+     * When `null`, the link is never considered active regardless of the current URL.
+     *
      * @see {@link isActive}
      */
     routerLinkActiveOptions: {
         exact: boolean;
-    } | Partial<IsActiveMatchOptions>;
+    } | Partial<IsActiveMatchOptions> | null | undefined;
     /**
      * Aria-current attribute to apply when the router link is active.
      *
@@ -4056,7 +4059,7 @@ declare class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit
     /** @docs-private */
     ngAfterContentInit(): void;
     private subscribeToEachLinkOnChanges;
-    set routerLinkActive(data: string[] | string);
+    set routerLinkActive(data: string[] | string | null | undefined);
     /** @docs-private */
     ngOnChanges(changes: SimpleChanges): void;
     /** @docs-private */
