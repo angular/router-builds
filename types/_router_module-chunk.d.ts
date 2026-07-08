@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.4+sha-42862f7
+ * @license Angular v22.1.0-next.4+sha-c1829f6
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -590,7 +590,7 @@ declare class Scroll {
  *
  * * [NavigationStart](api/router/NavigationStart): Navigation starts.
  * * [RouteConfigLoadStart](api/router/RouteConfigLoadStart): Before
- * the router [lazy loads](guide/routing/common-router-tasks#lazy-loading) a route configuration.
+ * the router [lazy loads](guide/routing/loading-strategies) a route configuration.
  * * [RouteConfigLoadEnd](api/router/RouteConfigLoadEnd): After a route has been lazy loaded.
  * * [RoutesRecognized](api/router/RoutesRecognized): When the router parses the URL
  * and the routes are recognized.
@@ -2034,7 +2034,7 @@ type DeprecatedResolve = DeprecatedGuard | any;
 /**
  * The supported types that can be returned from a `Router` guard.
  *
- * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
+ * @see [Routing guide](guide/routing/route-guards)
  * @publicApi
  */
 type GuardResult = boolean | UrlTree | RedirectCommand;
@@ -2065,7 +2065,7 @@ type GuardResult = boolean | UrlTree | RedirectCommand;
  *   ],
  * };
  * ```
- * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
+ * @see [Routing guide](guide/routing/route-guards)
  *
  * @publicApi
  */
@@ -2087,7 +2087,7 @@ type MaybeAsync<T> = T | Observable<T> | Promise<T>;
  *
  * @see {@link Route}
  * @see {@link Router}
- * @see [Router configuration guide](guide/routing/router-reference#configuration)
+ * @see [Router configuration guide](guide/routing/router-reference)
  * @publicApi
  */
 type Routes = Route[];
@@ -2243,7 +2243,7 @@ type RedirectFunction = (redirectData: PartialMatchRouteSnapshot) => MaybeAsync<
  * change or query params have changed. This does not include matrix parameters.
  *
  * @see {@link Route#runGuardsAndResolvers}
- * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
+ * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior)
  * @publicApi
  */
 type RunGuardsAndResolvers = 'pathParamsChange' | 'pathParamsOrQueryParamsChange' | 'paramsChange' | 'paramsOrQueryParamsChange' | 'always' | ((from: ActivatedRouteSnapshot, to: ActivatedRouteSnapshot) => boolean);
@@ -2526,7 +2526,7 @@ interface Route {
     /**
      * An object specifying a lazy-loaded component.
      *
-     * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+     * @see [Injection context lazy loading](guide/routing/loading-strategies)
      *
      */
     loadComponent?: () => Type<unknown> | Observable<Type<unknown> | DefaultExport<Type<unknown>>> | Promise<Type<unknown> | DefaultExport<Type<unknown>>>;
@@ -2629,7 +2629,7 @@ interface Route {
     /**
      * An object specifying lazy-loaded child routes.
      *
-     * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+     * @see [Injection context lazy loading](guide/routing/loading-strategies)
      *
      */
     loadChildren?: LoadChildren;
@@ -2649,7 +2649,7 @@ interface Route {
      * change or query params have changed. This does not include matrix parameters.
      *
      * @see {@link RunGuardsAndResolvers}
-     * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
+     * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior)
      */
     runGuardsAndResolvers?: RunGuardsAndResolvers;
     /**
