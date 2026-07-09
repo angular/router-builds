@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.5+sha-2a4f582
+ * @license Angular v22.1.0-next.5+sha-b178e83
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
