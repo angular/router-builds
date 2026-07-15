@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.0-next.5+sha-0ae6d81
+ * @license Angular v22.1.0-next.5+sha-d7a13b9
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -28,7 +28,7 @@ function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
 
-const VERSION = /* @__PURE__ */new Version('22.1.0-next.5+sha-0ae6d81');
+const VERSION = /* @__PURE__ */new Version('22.1.0-next.5+sha-d7a13b9');
 
 export { VERSION, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve };
 //# sourceMappingURL=router.mjs.map
