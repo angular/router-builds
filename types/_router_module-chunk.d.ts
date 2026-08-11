@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.1+sha-8925a4e
+ * @license Angular v22.2.0-next.1+sha-b65dea4
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2069,7 +2069,7 @@ type GuardResult = boolean | UrlTree | RedirectCommand;
  *
  * @publicApi
  */
-declare class RedirectCommand {
+declare class RedirectCommand extends Error {
     readonly redirectTo: UrlTree;
     readonly navigationBehaviorOptions?: NavigationBehaviorOptions | undefined;
     constructor(redirectTo: UrlTree, navigationBehaviorOptions?: NavigationBehaviorOptions | undefined);
