@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.2+sha-d364c83
+ * @license Angular v22.2.0-next.2+sha-2720362
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1808,6 +1808,20 @@ interface IsActiveMatchOptions {
  * @publicApi 21.1
  */
 declare function isActive(url: string | UrlTree, router: Router, matchOptions?: Partial<IsActiveMatchOptions>): Signal<boolean>;
+/**
+ * Determines if a `UrlTree` is contained within another `UrlTree` based on the provided matching options.
+ *
+ * @param container The outer or reference `UrlTree`.
+ * @param containee The target `UrlTree` to test against the container.
+ * @param options Optional, matching options:
+ * - `paths`: Defines how to compare URL segments ('exact' or 'subset'). Defaults to 'subset'.
+ * - `matrixParams`: Defines how to compare matrix parameters ('exact', 'subset', or 'ignored'). Defaults to 'ignored'.
+ * - `queryParams`: Defines how to compare query parameters ('exact', 'subset', or 'ignored'). Defaults to 'subset'.
+ * - `fragment`: Defines how to compare URL fragments ('exact' or 'ignored'). Defaults to 'ignored'.
+ *
+ * @publicApi
+ */
+declare function containsTree(container: UrlTree, containee: UrlTree, options?: Partial<IsActiveMatchOptions>): boolean;
 /**
  * @description
  *
@@ -4157,5 +4171,5 @@ declare class RouterModule {
  */
 declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, containsTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent };
 export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, ComponentInputBindingOptions, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PartialMatchRouteSnapshot, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
