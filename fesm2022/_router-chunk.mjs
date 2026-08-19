@@ -1,12 +1,12 @@
 /**
- * @license Angular v22.2.0-next.2+sha-c819880
+ * @license Angular v22.2.0-next.2+sha-80a04eb
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
-import { ɵisPromise as _isPromise, ɵRuntimeError as _RuntimeError, computed, Service, Injectable, InjectionToken, EventEmitter, input, inject, ViewContainerRef, ChangeDetectorRef, Output, Input, Directive, reflectComponentType, ChangeDetectionStrategy, Component, runInInjectionContext, ɵisInjectable as _isInjectable, ɵisNgModule as _isNgModule, isStandalone, createEnvironmentInjector, Compiler, ɵmaybeUnwrapDefaultExport as _maybeUnwrapDefaultExport, NgModuleFactory, ɵresolveComponentResources as _resolveComponentResources, afterNextRender, signal, EnvironmentInjector, DestroyRef, untracked, ɵConsole as _Console, ɵPendingTasksInternal as _PendingTasksInternal, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, ɵformatRuntimeError as _formatRuntimeError } from '@angular/core';
+import { ɵisPromise as _isPromise, ɵRuntimeError as _RuntimeError, computed, Service, Injectable, signal, InjectionToken, EventEmitter, input, inject, ViewContainerRef, ChangeDetectorRef, Output, Input, Directive, reflectComponentType, ChangeDetectionStrategy, Component, runInInjectionContext, ɵisInjectable as _isInjectable, ɵisNgModule as _isNgModule, isStandalone, createEnvironmentInjector, Compiler, ɵmaybeUnwrapDefaultExport as _maybeUnwrapDefaultExport, NgModuleFactory, ɵresolveComponentResources as _resolveComponentResources, afterNextRender, EnvironmentInjector, DestroyRef, untracked, ɵConsole as _Console, ɵPendingTasksInternal as _PendingTasksInternal, ɵINTERNAL_APPLICATION_ERROR_HANDLER as _INTERNAL_APPLICATION_ERROR_HANDLER, ɵformatRuntimeError as _formatRuntimeError } from '@angular/core';
 import { isObservable, from, of, BehaviorSubject, combineLatest, EmptyError, Observable, concat, defer, pipe, EMPTY, throwError, Subject, Subscription } from 'rxjs';
 import { first, map, switchMap, take, startWith, filter, takeUntil, mergeMap, concatMap, tap, takeLast, catchError, finalize } from 'rxjs/operators';
 import * as i1 from '@angular/platform-browser';
@@ -328,7 +328,7 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: UrlSerializer,
     deps: [],
@@ -336,7 +336,7 @@ class UrlSerializer {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: UrlSerializer,
     factory: () => new DefaultUrlSerializer()
@@ -344,7 +344,7 @@ class UrlSerializer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: UrlSerializer,
   decorators: [{
@@ -1300,7 +1300,7 @@ class ChildrenOutletContexts {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: ChildrenOutletContexts,
     deps: [{
@@ -1310,7 +1310,7 @@ class ChildrenOutletContexts {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: ChildrenOutletContexts,
     providedIn: 'root'
@@ -1318,7 +1318,7 @@ class ChildrenOutletContexts {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: ChildrenOutletContexts,
   decorators: [{
@@ -1449,7 +1449,15 @@ class ActivatedRoute {
   queryParams;
   fragment;
   data;
+  resources;
   _localInjector;
+  pending;
+  paramsSignal;
+  queryParamsSignal;
+  paramMapSignal;
+  queryParamMapSignal;
+  fragmentSignal;
+  dataSignal;
   constructor(urlSubject, paramsSubject, queryParamsSubject, fragmentSubject, dataSubject, outlet, component, futureSnapshot) {
     this.urlSubject = urlSubject;
     this.paramsSubject = paramsSubject;
@@ -1494,6 +1502,10 @@ class ActivatedRoute {
   }
   toString() {
     return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
+  }
+  _setPending(snapshot) {
+    this._futureSnapshot = snapshot;
+    this.pending?.set(true);
   }
 }
 const DEFAULT_PARAMS_INHERITANCE_STRATEGY = 'always';
@@ -1553,6 +1565,7 @@ class ActivatedRouteSnapshot {
   _paramMap;
   _queryParamMap;
   _environmentInjector;
+  resources;
   get title() {
     return this.data?.[RouteTitleKey];
   }
@@ -1640,6 +1653,38 @@ function advanceActivatedRoute(route) {
     route.snapshot = route._futureSnapshot;
     route.dataSubject.next(route._futureSnapshot.data);
   }
+}
+function initializeActivatedRoute(route) {
+  if (route.paramsSignal !== undefined) {
+    return;
+  }
+  const writableRoute = route;
+  const pendingSignal = signal(false, ...(ngDevMode ? [{
+    debugName: "pendingSignal"
+  }] : []));
+  writableRoute.pending = pendingSignal;
+  writableRoute.paramsSignal = computed(() => pendingSignal() || !route.snapshot ? route._futureSnapshot.params : route.snapshot.params, ...(ngDevMode ? [{
+    debugName: "paramsSignal"
+  }] : []));
+  writableRoute.queryParamsSignal = computed(() => pendingSignal() || !route.snapshot ? route._futureSnapshot.queryParams : route.snapshot.queryParams, ...(ngDevMode ? [{
+    debugName: "queryParamsSignal"
+  }] : []));
+  writableRoute.paramMapSignal = computed(() => convertToParamMap(route.paramsSignal()), ...(ngDevMode ? [{
+    debugName: "paramMapSignal"
+  }] : []));
+  writableRoute.queryParamMapSignal = computed(() => convertToParamMap(route.queryParamsSignal()), ...(ngDevMode ? [{
+    debugName: "queryParamMapSignal"
+  }] : []));
+  writableRoute.fragmentSignal = computed(() => pendingSignal() || !route.snapshot ? route._futureSnapshot.fragment : route.snapshot.fragment, ...(ngDevMode ? [{
+    debugName: "fragmentSignal"
+  }] : []));
+  writableRoute.dataSignal = computed(() => pendingSignal() || !route.snapshot ? route._futureSnapshot.data : route.snapshot.data, ...(ngDevMode ? [{
+    debugName: "dataSignal"
+  }] : []));
+  writableRoute._setPending = snapshot => {
+    route._futureSnapshot = snapshot;
+    pendingSignal.set(true);
+  };
 }
 function equalParamsAndUrlSegments(a, b) {
   const equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
@@ -1777,7 +1822,7 @@ class RouterOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RouterOutlet,
     deps: [],
@@ -1785,7 +1830,7 @@ class RouterOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "17.1.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     type: RouterOutlet,
     isStandalone: true,
     selector: "router-outlet",
@@ -1818,7 +1863,7 @@ class RouterOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: RouterOutlet,
   decorators: [{
@@ -1946,7 +1991,7 @@ class RoutedComponentInputBinder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RoutedComponentInputBinder,
     deps: "invalid",
@@ -1954,14 +1999,14 @@ class RoutedComponentInputBinder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RoutedComponentInputBinder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: RoutedComponentInputBinder,
   decorators: [{
@@ -1975,7 +2020,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ɵEmptyOutletComponent {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: ɵEmptyOutletComponent,
     deps: [],
@@ -1983,7 +2028,7 @@ class ɵEmptyOutletComponent {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     type: ɵEmptyOutletComponent,
     isStandalone: true,
     selector: "ng-component",
@@ -2004,7 +2049,7 @@ class ɵEmptyOutletComponent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: ɵEmptyOutletComponent,
   decorators: [{
@@ -2042,7 +2087,7 @@ function createRouterState(routeReuseStrategy, curr, prevState) {
 function createNode(routeReuseStrategy, curr, prevState, newlyCreatedRoutes) {
   if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
     const value = prevState.value;
-    value._futureSnapshot = curr.value;
+    value._setPending(curr.value);
     const children = createOrReuseChildren(routeReuseStrategy, curr, prevState, newlyCreatedRoutes);
     return new TreeNode(value, children);
   } else {
@@ -2050,12 +2095,13 @@ function createNode(routeReuseStrategy, curr, prevState, newlyCreatedRoutes) {
       const detachedRouteHandle = routeReuseStrategy.retrieve(curr.value);
       if (detachedRouteHandle !== null) {
         const tree = detachedRouteHandle.route;
-        tree.value._futureSnapshot = curr.value;
+        tree.value._setPending(curr.value);
         tree.children = curr.children.map(c => createNode(routeReuseStrategy, c, undefined, newlyCreatedRoutes));
         return tree;
       }
     }
     const value = createActivatedRoute(curr.value);
+    value._setPending(curr.value);
     newlyCreatedRoutes.add(value);
     const children = curr.children.map(c => createNode(routeReuseStrategy, c, undefined, newlyCreatedRoutes));
     return new TreeNode(value, children);
@@ -3298,6 +3344,8 @@ function getResolver(injectionToken, futureARS, futureRSS) {
   return wrapIntoObservable(resolverValue);
 }
 
+const ROUTER_RESOURCES_FEATURE = new InjectionToken(typeof ngDevMode === 'undefined' || ngDevMode ? 'Router Resources Feature' : '');
+
 function switchTap(next) {
   return switchMap(v => {
     const nextResult = next(v);
@@ -3323,7 +3371,7 @@ class TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: TitleStrategy,
     deps: [],
@@ -3331,7 +3379,7 @@ class TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: TitleStrategy,
     factory: () => inject(DefaultTitleStrategy)
@@ -3339,7 +3387,7 @@ class TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: TitleStrategy,
   decorators: [{
@@ -3363,7 +3411,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultTitleStrategy,
     deps: [{
@@ -3373,7 +3421,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultTitleStrategy,
     providedIn: 'root'
@@ -3381,7 +3429,7 @@ class DefaultTitleStrategy extends TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: DefaultTitleStrategy,
   decorators: [{
@@ -3460,7 +3508,7 @@ class RouterConfigLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RouterConfigLoader,
     deps: [],
@@ -3468,14 +3516,14 @@ class RouterConfigLoader {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RouterConfigLoader
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: RouterConfigLoader,
   decorators: [{
@@ -3531,7 +3579,7 @@ async function maybeResolveResources(value) {
 class UrlHandlingStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: UrlHandlingStrategy,
     deps: [],
@@ -3539,7 +3587,7 @@ class UrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: UrlHandlingStrategy,
     factory: () => inject(DefaultUrlHandlingStrategy)
@@ -3547,7 +3595,7 @@ class UrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: UrlHandlingStrategy,
   decorators: [{
@@ -3569,7 +3617,7 @@ class DefaultUrlHandlingStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     deps: [],
@@ -3577,14 +3625,14 @@ class DefaultUrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: DefaultUrlHandlingStrategy,
   decorators: [{
@@ -3646,8 +3694,6 @@ function createRenderPromise(injector) {
   });
 }
 
-const ACTIVATED_ROUTE_INJECTOR_FEATURE = new InjectionToken(typeof ngDevMode === 'undefined' || ngDevMode ? 'ActivatedRoute injector feature' : '');
-
 const noop = () => {};
 const NAVIGATION_ERROR_HANDLER = new InjectionToken(typeof ngDevMode === 'undefined' || ngDevMode ? 'navigation error handler' : '');
 class NavigationTransitions {
@@ -3684,7 +3730,7 @@ class NavigationTransitions {
   navigationErrorHandler = inject(NAVIGATION_ERROR_HANDLER, {
     optional: true
   });
-  activatedRouteInjectorFeature = inject(ACTIVATED_ROUTE_INJECTOR_FEATURE, {
+  routerResourcesFeature = inject(ROUTER_RESOURCES_FEATURE, {
     optional: true
   });
   navigationId = 0;
@@ -3893,7 +3939,7 @@ class NavigationTransitions {
           return nav;
         });
         return of(t);
-      }), this.activatedRouteInjectorFeature?.operator() ?? (t => t), switchTap(() => this.afterPreactivation()), switchMap(() => {
+      }), this.routerResourcesFeature?.setupAndRunResources(abortController.signal) ?? (t => t), switchTap(() => this.afterPreactivation()), switchMap(() => {
         const {
           currentSnapshot,
           targetSnapshot
@@ -3911,6 +3957,7 @@ class NavigationTransitions {
         if (!shouldContinueNavigation()) {
           return;
         }
+        resetPendingRoutes(t.targetRouterState);
         completedOrAborted = true;
         this.currentNavigation.update(nav => {
           nav.abort = noop;
@@ -3940,7 +3987,7 @@ class NavigationTransitions {
         }
       }), catchError(e => {
         completedOrAborted = true;
-        discardNewActivatedRoutes(overallTransitionState);
+        rollbackState(overallTransitionState);
         if (this.destroyed) {
           overallTransitionState.resolve(false);
           return EMPTY;
@@ -3983,7 +4030,7 @@ class NavigationTransitions {
     }));
   }
   cancelNavigationTransition(t, reason, code) {
-    discardNewActivatedRoutes(t);
+    rollbackState(t);
     const navCancel = new NavigationCancel(t.id, this.urlSerializer.serialize(t.extractedUrl), reason, code);
     this.events.next(navCancel);
     t.resolve(false);
@@ -3999,7 +4046,7 @@ class NavigationTransitions {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: NavigationTransitions,
     deps: [],
@@ -4007,14 +4054,14 @@ class NavigationTransitions {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: NavigationTransitions
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: NavigationTransitions,
   decorators: [{
@@ -4025,13 +4072,22 @@ i0.ɵɵngDeclareClassMetadata({
 function isBrowserTriggeredNavigation(source) {
   return source !== IMPERATIVE_NAVIGATION;
 }
-function discardNewActivatedRoutes(t) {
-  if (!t.newlyCreatedRoutes) {
+function rollbackState(t) {
+  for (const r of t.newlyCreatedRoutes ?? []) {
+    r._localInjector?.destroy();
+    r._localInjector = undefined;
+  }
+  resetPendingRoutes(t.targetRouterState);
+}
+function resetPendingRoutes(targetRouterState) {
+  if (!targetRouterState) {
     return;
   }
-  for (const r of t.newlyCreatedRoutes) {
-    r._localInjector?.destroy();
-  }
+  const traverse = node => {
+    node.value.pending?.set(false);
+    node.children.forEach(traverse);
+  };
+  traverse(targetRouterState._root);
 }
 
 const ROUTE_INJECTOR_CLEANUP = new InjectionToken(typeof ngDevMode === 'undefined' || ngDevMode ? 'RouteInjectorCleanup' : '');
@@ -4093,7 +4149,7 @@ function destroyDetachedRouteHandle(handle) {
 class RouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RouteReuseStrategy,
     deps: [],
@@ -4101,7 +4157,7 @@ class RouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: RouteReuseStrategy,
     factory: () => inject(DefaultRouteReuseStrategy)
@@ -4109,7 +4165,7 @@ class RouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: RouteReuseStrategy,
   decorators: [{
@@ -4140,7 +4196,7 @@ class BaseRouteReuseStrategy {
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     deps: [],
@@ -4148,14 +4204,14 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: DefaultRouteReuseStrategy
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: DefaultRouteReuseStrategy,
   decorators: [{
@@ -4234,7 +4290,7 @@ class StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: StateManager,
     deps: [],
@@ -4242,7 +4298,7 @@ class StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: StateManager,
     factory: () => inject(HistoryStateManager)
@@ -4250,7 +4306,7 @@ class StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: StateManager,
   decorators: [{
@@ -4371,7 +4427,7 @@ class HistoryStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: HistoryStateManager,
     deps: [],
@@ -4379,14 +4435,14 @@ class HistoryStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: HistoryStateManager
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: HistoryStateManager,
   decorators: [{
@@ -4694,7 +4750,7 @@ class Router {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: Router,
     deps: [],
@@ -4702,14 +4758,14 @@ class Router {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.2+sha-c819880",
+    version: "22.2.0-next.2+sha-80a04eb",
     ngImport: i0,
     type: Router
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.2+sha-c819880",
+  version: "22.2.0-next.2+sha-80a04eb",
   ngImport: i0,
   type: Router,
   decorators: [{
@@ -4726,5 +4782,5 @@ function validateCommands(commands) {
   }
 }
 
-export { ACTIVATED_ROUTE_INJECTOR_FEATURE, ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, BeforeActivateRoutes, BeforeRoutesRecognized, CREATE_VIEW_TRANSITION, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, IMPERATIVE_NAVIGATION, INPUT_BINDER, NAVIGATION_ERROR_HANDLER, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, NavigationTransitions, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTES, ROUTE_INJECTOR_CLEANUP, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RoutedComponentInputBinder, Router, RouterConfigLoader, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, StateManager, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VIEW_TRANSITION_OPTIONS, afterNextNavigation, containsTree, convertToParamMap, createUrlTreeFromSnapshot, createViewTransition, defaultUrlMatcher, destroyDetachedRouteHandle, exactMatchOptions, isActive, isRedirectingEvent, isUrlTree, loadChildren, routeInjectorCleanup, stringifyEvent, subsetMatchOptions, ɵEmptyOutletComponent };
+export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, BeforeActivateRoutes, BeforeRoutesRecognized, CREATE_VIEW_TRANSITION, ChildActivationEnd, ChildActivationStart, ChildrenOutletContexts, DefaultTitleStrategy, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, IMPERATIVE_NAVIGATION, INPUT_BINDER, NAVIGATION_ERROR_HANDLER, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, NavigationTransitions, OutletContext, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_OUTLET_DATA, ROUTER_RESOURCES_FEATURE, ROUTES, ROUTE_INJECTOR_CLEANUP, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RoutedComponentInputBinder, Router, RouterConfigLoader, RouterEvent, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, StateManager, TitleStrategy, UrlHandlingStrategy, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, VIEW_TRANSITION_OPTIONS, afterNextNavigation, containsTree, convertToParamMap, createUrlTreeFromSnapshot, createViewTransition, defaultUrlMatcher, destroyDetachedRouteHandle, exactMatchOptions, initializeActivatedRoute, isActive, isRedirectingEvent, isUrlTree, loadChildren, routeInjectorCleanup, stringifyEvent, subsetMatchOptions, switchTap, ɵEmptyOutletComponent };
 //# sourceMappingURL=_router-chunk.mjs.map

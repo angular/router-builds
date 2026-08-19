@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.2.0-next.2+sha-c819880
+ * @license Angular v22.2.0-next.2+sha-80a04eb
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, Resource, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
@@ -617,83 +617,6 @@ declare class Scroll {
  * @publicApi
  */
 type Event = NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd | NavigationSkipped;
-
-/**
- * The primary routing outlet.
- *
- * @publicApi
- */
-declare const PRIMARY_OUTLET = "primary";
-/**
- * A collection of matrix and query URL parameters.
- * @see {@link convertToParamMap}
- * @see {@link ParamMap}
- *
- * @publicApi
- */
-type Params = {
-    [key: string]: any;
-};
-/**
- * A map that provides access to the required and optional parameters
- * specific to a route.
- * The map supports retrieving a single value with `get()`
- * or multiple values with `getAll()`.
- *
- * @see [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
- *
- * @publicApi
- */
-interface ParamMap {
-    /**
-     * Reports whether the map contains a given parameter.
-     * @param name The parameter name.
-     * @returns True if the map contains the given parameter, false otherwise.
-     */
-    has(name: string): boolean;
-    /**
-     * Retrieves a single value for a parameter.
-     * @param name The parameter name.
-     * @return The parameter's single value,
-     * or the first value if the parameter has multiple values,
-     * or `null` when there is no such parameter.
-     */
-    get(name: string): string | null;
-    /**
-     * Retrieves multiple values for a parameter.
-     * @param name The parameter name.
-     * @return An array containing one or more values,
-     * or an empty array if there is no such parameter.
-     *
-     */
-    getAll(name: string): string[];
-    /** Names of the parameters in the map. */
-    readonly keys: string[];
-}
-/**
- * Converts a `Params` instance to a `ParamMap`.
- * @param params The instance to convert.
- * @returns The new map instance.
- *
- * @publicApi
- */
-declare function convertToParamMap(params: Params): ParamMap;
-/**
- * Matches the route configuration (`route`) against the actual URL (`segments`).
- *
- * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
- *
- * @param segments The remaining unmatched segments in the current navigation
- * @param segmentGroup The current segment group being matched
- * @param route The `Route` to match against.
- *
- * @see {@link UrlMatchResult}
- * @see {@link Route}
- *
- * @returns The resulting match information or `null` if the `route` should not match.
- * @publicApi
- */
-declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
 
 /**
  * Allowed values in an `ExtraOptions` object that configure
@@ -1991,6 +1914,124 @@ declare class DefaultUrlSerializer implements UrlSerializer {
     serialize(tree: UrlTree): string;
 }
 
+/**
+ * The primary routing outlet.
+ *
+ * @publicApi
+ */
+declare const PRIMARY_OUTLET = "primary";
+/**
+ * A collection of matrix and query URL parameters.
+ * @see {@link convertToParamMap}
+ * @see {@link ParamMap}
+ *
+ * @publicApi
+ */
+type Params = {
+    [key: string]: any;
+};
+/**
+ * A map that provides access to the required and optional parameters
+ * specific to a route.
+ * The map supports retrieving a single value with `get()`
+ * or multiple values with `getAll()`.
+ *
+ * @see [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+ *
+ * @publicApi
+ */
+interface ParamMap {
+    /**
+     * Reports whether the map contains a given parameter.
+     * @param name The parameter name.
+     * @returns True if the map contains the given parameter, false otherwise.
+     */
+    has(name: string): boolean;
+    /**
+     * Retrieves a single value for a parameter.
+     * @param name The parameter name.
+     * @return The parameter's single value,
+     * or the first value if the parameter has multiple values,
+     * or `null` when there is no such parameter.
+     */
+    get(name: string): string | null;
+    /**
+     * Retrieves multiple values for a parameter.
+     * @param name The parameter name.
+     * @return An array containing one or more values,
+     * or an empty array if there is no such parameter.
+     *
+     */
+    getAll(name: string): string[];
+    /** Names of the parameters in the map. */
+    readonly keys: string[];
+}
+/**
+ * Converts a `Params` instance to a `ParamMap`.
+ * @param params The instance to convert.
+ * @returns The new map instance.
+ *
+ * @publicApi
+ */
+declare function convertToParamMap(params: Params): ParamMap;
+/**
+ * Matches the route configuration (`route`) against the actual URL (`segments`).
+ *
+ * When no matcher is defined on a `Route`, this is the matcher used by the Router by default.
+ *
+ * @param segments The remaining unmatched segments in the current navigation
+ * @param segmentGroup The current segment group being matched
+ * @param route The `Route` to match against.
+ *
+ * @see {@link UrlMatchResult}
+ * @see {@link Route}
+ *
+ * @returns The resulting match information or `null` if the `route` should not match.
+ * @publicApi
+ */
+declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegmentGroup, route: Route): UrlMatchResult | null;
+
+/**
+ * The expected return type of a `resources` function.
+ * @experimental
+ */
+type ResourceResult = Record<string, Resource<unknown>>;
+/**
+ * The contextual information provided to a `resources` function.
+ * @experimental
+ */
+interface ResourceContext {
+    /**
+     * The matrix parameters of the route.
+     *
+     * @experimental
+     */
+    params: Signal<Params>;
+    /**
+     * The query parameters of the route.
+     *
+     * @experimental
+     */
+    queryParams: Signal<Params>;
+    /**
+     * The URL fragment.
+     * @experimental
+     */
+    fragment: Signal<string | null>;
+    /**
+     * Data provided in the route configuration.
+     *
+     * @experimental
+     */
+    data: Signal<Record<string, any>>;
+    /**
+     * The static activated route snapshot for this navigation.
+     * Useful for reading initial static configuration statically without
+     * reacting to future parameter changes on reused routes.
+     * @experimental
+     */
+    snapshot: ActivatedRouteSnapshot;
+}
 /**
  * How to handle a navigation request to the current URL. One of:
  *
@@ -4172,4 +4213,4 @@ declare class RouterModule {
 declare const ROUTER_INITIALIZER: InjectionToken<(compRef: ComponentRef<any>) => void>;
 
 export { ActivatedRoute, ActivatedRouteSnapshot, ActivationEnd, ActivationStart, BaseRouteReuseStrategy, ChildActivationEnd, ChildActivationStart, DefaultUrlSerializer, EventType, GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationError, NavigationSkipped, NavigationSkippedCode, NavigationStart, PRIMARY_OUTLET, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, ROUTER_PROVIDERS, RedirectCommand, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, Router, RouterEvent, RouterLink, RouterLinkActive, RouterModule, RouterOutlet, RouterState, RouterStateSnapshot, RoutesRecognized, Scroll, UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree, containsTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent };
-export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, ComponentInputBindingOptions, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PartialMatchRouteSnapshot, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
+export type { CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanLoad, CanLoadFn, CanMatch, CanMatchFn, ComponentInputBindingOptions, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, Event, ExtraOptions, GuardResult, InMemoryScrollingOptions, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, LoadedRouterConfig, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationExtras, OnSameUrlNavigation, ParamMap, Params, PartialMatchRouteSnapshot, QueryParamsHandling, RedirectFunction, Resolve, ResolveData, ResolveFn, ResourceContext, ResourceResult, RestoredState, Route, RouterConfigOptions, RouterOutletContract, Routes, RunGuardsAndResolvers, UrlCreationOptions, UrlMatchResult, UrlMatcher };
