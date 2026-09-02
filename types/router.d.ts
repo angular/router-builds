@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.4+sha-a66fd64
+ * @license Angular v22.2.0-next.4+sha-69c8730
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -738,14 +738,14 @@ type NavigationErrorHandlerFeature = RouterFeature<RouterFeatureKind.NavigationE
  */
 declare function withNavigationErrorHandler(handler: (error: NavigationError) => unknown | RedirectCommand): NavigationErrorHandlerFeature;
 /**
- * A type alias for providers returned by `withExperimentalAutoCleanupInjectors` for use with `provideRouter`.
+ * A type alias for providers returned by `withAutoCleanupInjectors` for use with `provideRouter`.
  *
- * @see {@link withExperimentalAutoCleanupInjectors}
+ * @see {@link withAutoCleanupInjectors}
  * @see {@link provideRouter}
  *
- * @experimental 21.1
+ * @publicApi 22.2
  */
-type ExperimentalAutoCleanupInjectorsFeature = RouterFeature<RouterFeatureKind.ExperimentalAutoCleanupInjectorsFeature>;
+type AutoCleanupInjectorsFeature = RouterFeature<RouterFeatureKind.AutoCleanupInjectorsFeature>;
 /**
  * Enables automatic destruction of unused route injectors.
  *
@@ -759,9 +759,17 @@ type ExperimentalAutoCleanupInjectorsFeature = RouterFeature<RouterFeatureKind.E
  * should also implement `retrieveStoredRouteHandles` to ensure injectors for handles that will be
  * reattached are not destroyed.
  *
- * @experimental 21.1
+ * @publicApi 22.2
  */
-declare function withExperimentalAutoCleanupInjectors(): ExperimentalAutoCleanupInjectorsFeature;
+declare function withAutoCleanupInjectors(): AutoCleanupInjectorsFeature;
+/**
+ * Enables automatic destruction of unused route injectors.
+ *
+ * @deprecated Use `withAutoCleanupInjectors` instead.
+ * @see {@link withAutoCleanupInjectors}
+ * @publicApi
+ */
+declare function withExperimentalAutoCleanupInjectors(): AutoCleanupInjectorsFeature;
 /**
  * A type alias for providers returned by `withComponentInputBinding` for use with `provideRouter`.
  *
@@ -902,7 +910,7 @@ declare function withRouterResources(): RouterResourcesFeature;
  *
  * @publicApi
  */
-type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | ExperimentalAutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature;
+type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | AutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature;
 /**
  * The list of features as an enum to uniquely type each feature.
  */
@@ -917,7 +925,7 @@ declare const enum RouterFeatureKind {
     NavigationErrorHandlerFeature = 7,
     ComponentInputBindingFeature = 8,
     ViewTransitionsFeature = 9,
-    ExperimentalAutoCleanupInjectorsFeature = 10,
+    AutoCleanupInjectorsFeature = 10,
     ExperimentalPlatformNavigationFeature = 11
 }
 
@@ -1035,5 +1043,5 @@ declare function afterNextNavigation(router: {
  */
 declare function nonBlocking<T, R extends Resource<T>>(res: R): R;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, nonBlocking as ɵnonBlocking, withRouterResources as ɵwithRouterResources };
-export type { ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, withAutoCleanupInjectors, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, nonBlocking as ɵnonBlocking, withRouterResources as ɵwithRouterResources };
+export type { AutoCleanupInjectorsFeature, ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };

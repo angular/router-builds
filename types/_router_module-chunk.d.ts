@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.4+sha-a66fd64
+ * @license Angular v22.2.0-next.4+sha-69c8730
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1324,7 +1324,7 @@ type DetachedRouteHandle = {};
  *
  * @param handle The detached route handle to destroy.
  *
- * @publicApi
+ * @publicApi 22.2
  * @see [Manually destroying detached route handles](guide/routing/customizing-route-behavior#manually-destroying-detached-route-handles)
  */
 declare function destroyDetachedRouteHandle(handle: DetachedRouteHandle): void;
@@ -1350,6 +1350,23 @@ declare abstract class RouteReuseStrategy {
     abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
     /** Determines if a route should be reused */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
+    /**
+     * Returns a list of all currently stored `DetachedRouteHandle`s.
+     *
+     * This method is called by the router after navigations to identify which injectors
+     * are still needed by detached routes.
+     *
+     * @see {@link withAutoCleanupInjectors}
+     */
+    retrieveStoredRouteHandles?(): Array<DetachedRouteHandle>;
+    /**
+     * Determines if the injector for the given route should be destroyed.
+     *
+     * If this method returns `true`, the router will destroy the injector for the given route.
+     *
+     * @see {@link withAutoCleanupInjectors}
+     */
+    shouldDestroyInjector?(route: Route): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
 }
@@ -1393,11 +1410,10 @@ declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
     /**
      * Determines if the injector for the given route should be destroyed.
      *
-     * This method is called by the router when the `RouteReuseStrategy` is destroyed.
+     * This method is called by the router after navigations.
      * If this method returns `true`, the router will destroy the injector for the given route.
      *
-     * @see {@link withExperimentalAutoCleanupInjectors}
-     * @xperimental 21.1
+     * @see {@link withAutoCleanupInjectors}
      */
     shouldDestroyInjector(route: Route): boolean;
 }
