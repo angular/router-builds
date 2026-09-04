@@ -1,15 +1,15 @@
 /**
- * @license Angular v22.2.0-next.5+sha-81c3f3a
+ * @license Angular v22.2.0-next.5+sha-74c1716
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, ComponentInputBindingOptions, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
-export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, PartialMatchRouteSnapshot, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, containsTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, ResourceContext as ɵResourceContext, ResourceResult as ɵResourceResult, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
-import { Title } from '@angular/platform-browser';
+export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, PartialMatchRouteSnapshot, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, ResourceContext, ResourceResult, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, containsTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import * as i0 from '@angular/core';
-import { EnvironmentInjector, ComponentRef, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, Version, Resource } from '@angular/core';
+import { EnvironmentInjector, ComponentRef, Resource, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, Version } from '@angular/core';
 export { DefaultExport } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import '@angular/common';
 
@@ -54,7 +54,7 @@ declare class ChildrenOutletContexts {
     getOrCreateContext(childName: string): OutletContext;
     getContext(childName: string): OutletContext | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -112,6 +112,13 @@ declare class ChildrenOutletContexts {
  * ```
  */
 declare function createUrlTreeFromSnapshot(relativeTo: ActivatedRouteSnapshot, commands: readonly any[], queryParams?: Params | null, fragment?: string | null, urlSerializer?: DefaultUrlSerializer): UrlTree;
+
+/**
+ * Marks a resource as non-blocking. The Router will NOT wait for this resource to resolve
+ * before completing the navigation.
+ * @developerPreview 22.2
+ */
+declare function nonBlocking<T, R extends Resource<T>>(res: R): R;
 
 /**
  * Options to configure the View Transitions integration in the Router.
@@ -190,7 +197,7 @@ declare abstract class TitleStrategy {
      */
     getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): string | undefined;
     static ɵfac: i0.ɵɵFactoryDeclaration<TitleStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<TitleStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * The default `TitleStrategy` used by the router that updates the title using the `Title` service.
@@ -205,7 +212,7 @@ declare class DefaultTitleStrategy extends TitleStrategy {
      */
     updateTitle(snapshot: RouterStateSnapshot): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DefaultTitleStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<DefaultTitleStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -228,7 +235,7 @@ declare class RouterConfigLoader {
     loadComponent(injector: EnvironmentInjector, route: Route): Promise<Type<unknown>>;
     loadChildren(parentInjector: Injector, route: Route): Promise<LoadedRouterConfig>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * Executes a `route.loadChildren` callback and converts the result to an array of child routes and
@@ -279,7 +286,7 @@ declare abstract class PreloadingStrategy {
 declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<PreloadAllModules, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<PreloadAllModules>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description
@@ -295,7 +302,7 @@ declare class PreloadAllModules implements PreloadingStrategy {
 declare class NoPreloading implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<NoPreloading, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<NoPreloading>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * The preloader optimistically loads all router configurations to
@@ -323,7 +330,7 @@ declare class RouterPreloader implements OnDestroy {
     private processRoutes;
     private preloadConfig;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterPreloader, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouterPreloader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -876,9 +883,9 @@ declare function withViewTransitions(options?: ViewTransitionsFeatureOptions): V
  * @see {@link withRouterResources}
  * @see {@link provideRouter}
  *
- * @experimental
+ * @developerPreview 22.2
  */
-type RouterResourcesFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
+type RouterResourcesFeature = RouterFeature<RouterFeatureKind.RouterResourcesFeature>;
 /**
  * Enables `resources` capabilities for Route definitions.
  *
@@ -896,7 +903,7 @@ type RouterResourcesFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFea
  * );
  * ```
  *
- * @experimental
+ * @developerPreview 22.2
  * @returns A set of providers for use with `provideRouter`.
  */
 declare function withRouterResources(): RouterResourcesFeature;
@@ -910,7 +917,7 @@ declare function withRouterResources(): RouterResourcesFeature;
  *
  * @publicApi
  */
-type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | AutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature;
+type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | AutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature | RouterResourcesFeature;
 /**
  * The list of features as an enum to uniquely type each feature.
  */
@@ -926,7 +933,8 @@ declare const enum RouterFeatureKind {
     ComponentInputBindingFeature = 8,
     ViewTransitionsFeature = 9,
     AutoCleanupInjectorsFeature = 10,
-    ExperimentalPlatformNavigationFeature = 11
+    ExperimentalPlatformNavigationFeature = 11,
+    RouterResourcesFeature = 12
 }
 
 /**
@@ -958,7 +966,7 @@ declare abstract class UrlHandlingStrategy {
      */
     abstract merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree;
     static ɵfac: i0.ɵɵFactoryDeclaration<UrlHandlingStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<UrlHandlingStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -1036,12 +1044,5 @@ declare function afterNextNavigation(router: {
     events: Observable<Event>;
 }, action: () => void): void;
 
-/**
- * Marks a resource as non-blocking. The Router will NOT wait for this resource to resolve
- * before completing the navigation.
- * @experimental
- */
-declare function nonBlocking<T, R extends Resource<T>>(res: R): R;
-
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, provideRouter, withAutoCleanupInjectors, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren, nonBlocking as ɵnonBlocking, withRouterResources as ɵwithRouterResources };
-export type { AutoCleanupInjectorsFeature, ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, nonBlocking, provideRouter, withAutoCleanupInjectors, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withRouterResources, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
+export type { AutoCleanupInjectorsFeature, ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, RouterResourcesFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };

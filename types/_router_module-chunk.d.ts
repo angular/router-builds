@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.2.0-next.5+sha-81c3f3a
+ * @license Angular v22.2.0-next.5+sha-74c1716
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, NgModuleFactory, Provider, EnvironmentProviders, Resource, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, Resource, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
@@ -1368,7 +1368,7 @@ declare abstract class RouteReuseStrategy {
      */
     shouldDestroyInjector?(route: Route): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description
@@ -1682,7 +1682,7 @@ declare class Router {
     private removeEmptyProps;
     private scheduleNavigation;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -1903,7 +1903,7 @@ declare abstract class UrlSerializer {
     /** Converts a `UrlTree` into a url */
     abstract serialize(tree: UrlTree): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<UrlSerializer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<UrlSerializer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description
@@ -2009,42 +2009,42 @@ declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegm
 
 /**
  * The expected return type of a `resources` function.
- * @experimental
+ * @developerPreview 22.2
  */
 type ResourceResult = Record<string, Resource<unknown>>;
 /**
  * The contextual information provided to a `resources` function.
- * @experimental
+ * @developerPreview 22.2
  */
 interface ResourceContext {
     /**
      * The matrix parameters of the route.
      *
-     * @experimental
+     * @developerPreview 22.2
      */
     params: Signal<Params>;
     /**
      * The query parameters of the route.
      *
-     * @experimental
+     * @developerPreview 22.2
      */
     queryParams: Signal<Params>;
     /**
      * The URL fragment.
-     * @experimental
+     * @developerPreview 22.2
      */
     fragment: Signal<string | null>;
     /**
      * Data provided in the route configuration.
      *
-     * @experimental
+     * @developerPreview 22.2
      */
     data: Signal<Record<string, any>>;
     /**
      * The static activated route snapshot for this navigation.
      * Useful for reading initial static configuration statically without
      * reacting to future parameter changes on reused routes.
-     * @experimental
+     * @developerPreview 22.2
      */
     snapshot: ActivatedRouteSnapshot;
 }
@@ -2692,6 +2692,12 @@ interface Route {
      * @see [Resolve](guide/routing/data-resolvers#what-are-data-resolvers)
      */
     resolve?: ResolveData;
+    /**
+     * A function that returns a record of resources.
+     * This function is executed during the Main Loading Phase of a navigation.
+     * @developerPreview 22.2
+     */
+    resources?: (ctx: ResourceContext) => ResourceResult | Promise<ResourceResult>;
     /**
      * An array of child `Route` objects that specifies a nested route
      * configuration.
@@ -3596,6 +3602,12 @@ declare class ActivatedRoute {
     fragment: Observable<string | null>;
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
+    /**
+     * A map of resources for this route.
+     *
+     * @developerPreview 22.2
+     */
+    resources?: ResourceResult;
     /** The configuration used to match this route. */
     get routeConfig(): Route | null;
     /** The root of the router state. */
@@ -3681,6 +3693,11 @@ declare class ActivatedRouteSnapshot {
     component: Type<any> | null;
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
+    /**
+     * The result of running the route's resources function.
+     * @developerPreview 22.2
+     */
+    resources?: ResourceResult;
     /** The resolved route title */
     get title(): string | undefined;
     /** The root of the router state */

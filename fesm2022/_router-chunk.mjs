@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-81c3f3a
+ * @license Angular v22.2.0-next.5+sha-74c1716
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -328,7 +328,7 @@ function mapChildrenIntoArray(segment, fn) {
 class UrlSerializer {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: UrlSerializer,
     deps: [],
@@ -336,7 +336,7 @@ class UrlSerializer {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: UrlSerializer,
     factory: () => new DefaultUrlSerializer()
@@ -344,7 +344,7 @@ class UrlSerializer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: UrlSerializer,
   decorators: [{
@@ -941,312 +941,6 @@ function compare(path, params, segment) {
   return path == segment.path && shallowEqual(params, segment.parameters);
 }
 
-const IMPERATIVE_NAVIGATION = 'imperative';
-var EventType;
-(function (EventType) {
-  EventType[EventType["NavigationStart"] = 0] = "NavigationStart";
-  EventType[EventType["NavigationEnd"] = 1] = "NavigationEnd";
-  EventType[EventType["NavigationCancel"] = 2] = "NavigationCancel";
-  EventType[EventType["NavigationError"] = 3] = "NavigationError";
-  EventType[EventType["RoutesRecognized"] = 4] = "RoutesRecognized";
-  EventType[EventType["ResolveStart"] = 5] = "ResolveStart";
-  EventType[EventType["ResolveEnd"] = 6] = "ResolveEnd";
-  EventType[EventType["GuardsCheckStart"] = 7] = "GuardsCheckStart";
-  EventType[EventType["GuardsCheckEnd"] = 8] = "GuardsCheckEnd";
-  EventType[EventType["RouteConfigLoadStart"] = 9] = "RouteConfigLoadStart";
-  EventType[EventType["RouteConfigLoadEnd"] = 10] = "RouteConfigLoadEnd";
-  EventType[EventType["ChildActivationStart"] = 11] = "ChildActivationStart";
-  EventType[EventType["ChildActivationEnd"] = 12] = "ChildActivationEnd";
-  EventType[EventType["ActivationStart"] = 13] = "ActivationStart";
-  EventType[EventType["ActivationEnd"] = 14] = "ActivationEnd";
-  EventType[EventType["Scroll"] = 15] = "Scroll";
-  EventType[EventType["NavigationSkipped"] = 16] = "NavigationSkipped";
-})(EventType || (EventType = {}));
-class RouterEvent {
-  id;
-  url;
-  constructor(id, url) {
-    this.id = id;
-    this.url = url;
-  }
-}
-class NavigationStart extends RouterEvent {
-  type = EventType.NavigationStart;
-  navigationTrigger;
-  restoredState;
-  constructor(id, url, navigationTrigger = 'imperative', restoredState = null) {
-    super(id, url);
-    this.navigationTrigger = navigationTrigger;
-    this.restoredState = restoredState;
-  }
-  toString() {
-    return `NavigationStart(id: ${this.id}, url: '${this.url}')`;
-  }
-}
-class NavigationEnd extends RouterEvent {
-  urlAfterRedirects;
-  type = EventType.NavigationEnd;
-  constructor(id, url, urlAfterRedirects) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-  }
-  toString() {
-    return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
-  }
-}
-var NavigationCancellationCode;
-(function (NavigationCancellationCode) {
-  NavigationCancellationCode[NavigationCancellationCode["Redirect"] = 0] = "Redirect";
-  NavigationCancellationCode[NavigationCancellationCode["SupersededByNewNavigation"] = 1] = "SupersededByNewNavigation";
-  NavigationCancellationCode[NavigationCancellationCode["NoDataFromResolver"] = 2] = "NoDataFromResolver";
-  NavigationCancellationCode[NavigationCancellationCode["GuardRejected"] = 3] = "GuardRejected";
-  NavigationCancellationCode[NavigationCancellationCode["Aborted"] = 4] = "Aborted";
-})(NavigationCancellationCode || (NavigationCancellationCode = {}));
-var NavigationSkippedCode;
-(function (NavigationSkippedCode) {
-  NavigationSkippedCode[NavigationSkippedCode["IgnoredSameUrlNavigation"] = 0] = "IgnoredSameUrlNavigation";
-  NavigationSkippedCode[NavigationSkippedCode["IgnoredByUrlHandlingStrategy"] = 1] = "IgnoredByUrlHandlingStrategy";
-})(NavigationSkippedCode || (NavigationSkippedCode = {}));
-class NavigationCancel extends RouterEvent {
-  reason;
-  code;
-  type = EventType.NavigationCancel;
-  constructor(id, url, reason, code) {
-    super(id, url);
-    this.reason = reason;
-    this.code = code;
-  }
-  toString() {
-    return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
-  }
-}
-function isRedirectingEvent(event) {
-  return event instanceof NavigationCancel && (event.code === NavigationCancellationCode.Redirect || event.code === NavigationCancellationCode.SupersededByNewNavigation);
-}
-class NavigationSkipped extends RouterEvent {
-  reason;
-  code;
-  type = EventType.NavigationSkipped;
-  constructor(id, url, reason, code) {
-    super(id, url);
-    this.reason = reason;
-    this.code = code;
-  }
-}
-class NavigationError extends RouterEvent {
-  error;
-  target;
-  type = EventType.NavigationError;
-  constructor(id, url, error, target) {
-    super(id, url);
-    this.error = error;
-    this.target = target;
-  }
-  toString() {
-    return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
-  }
-}
-class RoutesRecognized extends RouterEvent {
-  urlAfterRedirects;
-  state;
-  type = EventType.RoutesRecognized;
-  constructor(id, url, urlAfterRedirects, state) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-    this.state = state;
-  }
-  toString() {
-    return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
-  }
-}
-class GuardsCheckStart extends RouterEvent {
-  urlAfterRedirects;
-  state;
-  type = EventType.GuardsCheckStart;
-  constructor(id, url, urlAfterRedirects, state) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-    this.state = state;
-  }
-  toString() {
-    return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
-  }
-}
-class GuardsCheckEnd extends RouterEvent {
-  urlAfterRedirects;
-  state;
-  shouldActivate;
-  type = EventType.GuardsCheckEnd;
-  constructor(id, url, urlAfterRedirects, state, shouldActivate) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-    this.state = state;
-    this.shouldActivate = shouldActivate;
-  }
-  toString() {
-    return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
-  }
-}
-class ResolveStart extends RouterEvent {
-  urlAfterRedirects;
-  state;
-  type = EventType.ResolveStart;
-  constructor(id, url, urlAfterRedirects, state) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-    this.state = state;
-  }
-  toString() {
-    return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
-  }
-}
-class ResolveEnd extends RouterEvent {
-  urlAfterRedirects;
-  state;
-  type = EventType.ResolveEnd;
-  constructor(id, url, urlAfterRedirects, state) {
-    super(id, url);
-    this.urlAfterRedirects = urlAfterRedirects;
-    this.state = state;
-  }
-  toString() {
-    return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
-  }
-}
-class RouteConfigLoadStart {
-  route;
-  type = EventType.RouteConfigLoadStart;
-  constructor(route) {
-    this.route = route;
-  }
-  toString() {
-    return `RouteConfigLoadStart(path: ${this.route.path})`;
-  }
-}
-class RouteConfigLoadEnd {
-  route;
-  type = EventType.RouteConfigLoadEnd;
-  constructor(route) {
-    this.route = route;
-  }
-  toString() {
-    return `RouteConfigLoadEnd(path: ${this.route.path})`;
-  }
-}
-class ChildActivationStart {
-  snapshot;
-  type = EventType.ChildActivationStart;
-  constructor(snapshot) {
-    this.snapshot = snapshot;
-  }
-  toString() {
-    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-    return `ChildActivationStart(path: '${path}')`;
-  }
-}
-class ChildActivationEnd {
-  snapshot;
-  type = EventType.ChildActivationEnd;
-  constructor(snapshot) {
-    this.snapshot = snapshot;
-  }
-  toString() {
-    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-    return `ChildActivationEnd(path: '${path}')`;
-  }
-}
-class ActivationStart {
-  snapshot;
-  type = EventType.ActivationStart;
-  constructor(snapshot) {
-    this.snapshot = snapshot;
-  }
-  toString() {
-    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-    return `ActivationStart(path: '${path}')`;
-  }
-}
-class ActivationEnd {
-  snapshot;
-  type = EventType.ActivationEnd;
-  constructor(snapshot) {
-    this.snapshot = snapshot;
-  }
-  toString() {
-    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
-    return `ActivationEnd(path: '${path}')`;
-  }
-}
-class Scroll {
-  routerEvent;
-  position;
-  anchor;
-  scrollBehavior;
-  type = EventType.Scroll;
-  constructor(routerEvent, position, anchor, scrollBehavior) {
-    this.routerEvent = routerEvent;
-    this.position = position;
-    this.anchor = anchor;
-    this.scrollBehavior = scrollBehavior;
-  }
-  toString() {
-    const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
-    return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
-  }
-}
-class BeforeActivateRoutes {}
-class BeforeRoutesRecognized {}
-class RedirectRequest {
-  url;
-  navigationBehaviorOptions;
-  constructor(url, navigationBehaviorOptions) {
-    this.url = url;
-    this.navigationBehaviorOptions = navigationBehaviorOptions;
-  }
-}
-function isPublicRouterEvent(e) {
-  return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest) && !(e instanceof BeforeRoutesRecognized);
-}
-function stringifyEvent(routerEvent) {
-  switch (routerEvent.type) {
-    case EventType.ActivationEnd:
-      return `ActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
-    case EventType.ActivationStart:
-      return `ActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
-    case EventType.ChildActivationEnd:
-      return `ChildActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
-    case EventType.ChildActivationStart:
-      return `ChildActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
-    case EventType.GuardsCheckEnd:
-      return `GuardsCheckEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state}, shouldActivate: ${routerEvent.shouldActivate})`;
-    case EventType.GuardsCheckStart:
-      return `GuardsCheckStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case EventType.NavigationCancel:
-      return `NavigationCancel(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case EventType.NavigationSkipped:
-      return `NavigationSkipped(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case EventType.NavigationEnd:
-      return `NavigationEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}')`;
-    case EventType.NavigationError:
-      return `NavigationError(id: ${routerEvent.id}, url: '${routerEvent.url}', error: ${routerEvent.error})`;
-    case EventType.NavigationStart:
-      return `NavigationStart(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case EventType.ResolveEnd:
-      return `ResolveEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case EventType.ResolveStart:
-      return `ResolveStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case EventType.RouteConfigLoadEnd:
-      return `RouteConfigLoadEnd(path: ${routerEvent.route.path})`;
-    case EventType.RouteConfigLoadStart:
-      return `RouteConfigLoadStart(path: ${routerEvent.route.path})`;
-    case EventType.RoutesRecognized:
-      return `RoutesRecognized(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case EventType.Scroll:
-      const pos = routerEvent.position ? `${routerEvent.position[0]}, ${routerEvent.position[1]}` : null;
-      return `Scroll(anchor: '${routerEvent.anchor}', position: '${pos}')`;
-  }
-}
-
 class OutletContext {
   rootInjector;
   outlet = null;
@@ -1300,7 +994,7 @@ class ChildrenOutletContexts {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: ChildrenOutletContexts,
     deps: [{
@@ -1310,7 +1004,7 @@ class ChildrenOutletContexts {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: ChildrenOutletContexts,
     providedIn: 'root'
@@ -1318,7 +1012,7 @@ class ChildrenOutletContexts {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: ChildrenOutletContexts,
   decorators: [{
@@ -1822,7 +1516,7 @@ class RouterOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RouterOutlet,
     deps: [],
@@ -1830,7 +1524,7 @@ class RouterOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "17.1.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     type: RouterOutlet,
     isStandalone: true,
     selector: "router-outlet",
@@ -1863,7 +1557,7 @@ class RouterOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: RouterOutlet,
   decorators: [{
@@ -1960,7 +1654,7 @@ class RoutedComponentInputBinder {
       const {
         handledKeys,
         createdEffects
-      } = this.feature.createResourceOutletBindingEffects(outlet.activatedComponentRef, activatedRoute, injector);
+      } = this.feature.createResourceOutletBindingEffects(outlet.activatedComponentRef, activatedRoute);
       effects.push(...createdEffects);
       keysBoundToBlockingResources = handledKeys;
     }
@@ -2013,7 +1707,7 @@ class RoutedComponentInputBinder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RoutedComponentInputBinder,
     deps: "invalid",
@@ -2021,14 +1715,14 @@ class RoutedComponentInputBinder {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RoutedComponentInputBinder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: RoutedComponentInputBinder,
   decorators: [{
@@ -2044,7 +1738,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ɵEmptyOutletComponent {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: ɵEmptyOutletComponent,
     deps: [],
@@ -2052,7 +1746,7 @@ class ɵEmptyOutletComponent {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     type: ɵEmptyOutletComponent,
     isStandalone: true,
     selector: "ng-component",
@@ -2073,7 +1767,7 @@ class ɵEmptyOutletComponent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: ɵEmptyOutletComponent,
   decorators: [{
@@ -2098,6 +1792,312 @@ function standardizeConfig(r) {
     c.component = ɵEmptyOutletComponent;
   }
   return c;
+}
+
+const IMPERATIVE_NAVIGATION = 'imperative';
+var EventType;
+(function (EventType) {
+  EventType[EventType["NavigationStart"] = 0] = "NavigationStart";
+  EventType[EventType["NavigationEnd"] = 1] = "NavigationEnd";
+  EventType[EventType["NavigationCancel"] = 2] = "NavigationCancel";
+  EventType[EventType["NavigationError"] = 3] = "NavigationError";
+  EventType[EventType["RoutesRecognized"] = 4] = "RoutesRecognized";
+  EventType[EventType["ResolveStart"] = 5] = "ResolveStart";
+  EventType[EventType["ResolveEnd"] = 6] = "ResolveEnd";
+  EventType[EventType["GuardsCheckStart"] = 7] = "GuardsCheckStart";
+  EventType[EventType["GuardsCheckEnd"] = 8] = "GuardsCheckEnd";
+  EventType[EventType["RouteConfigLoadStart"] = 9] = "RouteConfigLoadStart";
+  EventType[EventType["RouteConfigLoadEnd"] = 10] = "RouteConfigLoadEnd";
+  EventType[EventType["ChildActivationStart"] = 11] = "ChildActivationStart";
+  EventType[EventType["ChildActivationEnd"] = 12] = "ChildActivationEnd";
+  EventType[EventType["ActivationStart"] = 13] = "ActivationStart";
+  EventType[EventType["ActivationEnd"] = 14] = "ActivationEnd";
+  EventType[EventType["Scroll"] = 15] = "Scroll";
+  EventType[EventType["NavigationSkipped"] = 16] = "NavigationSkipped";
+})(EventType || (EventType = {}));
+class RouterEvent {
+  id;
+  url;
+  constructor(id, url) {
+    this.id = id;
+    this.url = url;
+  }
+}
+class NavigationStart extends RouterEvent {
+  type = EventType.NavigationStart;
+  navigationTrigger;
+  restoredState;
+  constructor(id, url, navigationTrigger = 'imperative', restoredState = null) {
+    super(id, url);
+    this.navigationTrigger = navigationTrigger;
+    this.restoredState = restoredState;
+  }
+  toString() {
+    return `NavigationStart(id: ${this.id}, url: '${this.url}')`;
+  }
+}
+class NavigationEnd extends RouterEvent {
+  urlAfterRedirects;
+  type = EventType.NavigationEnd;
+  constructor(id, url, urlAfterRedirects) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+  }
+  toString() {
+    return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
+  }
+}
+var NavigationCancellationCode;
+(function (NavigationCancellationCode) {
+  NavigationCancellationCode[NavigationCancellationCode["Redirect"] = 0] = "Redirect";
+  NavigationCancellationCode[NavigationCancellationCode["SupersededByNewNavigation"] = 1] = "SupersededByNewNavigation";
+  NavigationCancellationCode[NavigationCancellationCode["NoDataFromResolver"] = 2] = "NoDataFromResolver";
+  NavigationCancellationCode[NavigationCancellationCode["GuardRejected"] = 3] = "GuardRejected";
+  NavigationCancellationCode[NavigationCancellationCode["Aborted"] = 4] = "Aborted";
+})(NavigationCancellationCode || (NavigationCancellationCode = {}));
+var NavigationSkippedCode;
+(function (NavigationSkippedCode) {
+  NavigationSkippedCode[NavigationSkippedCode["IgnoredSameUrlNavigation"] = 0] = "IgnoredSameUrlNavigation";
+  NavigationSkippedCode[NavigationSkippedCode["IgnoredByUrlHandlingStrategy"] = 1] = "IgnoredByUrlHandlingStrategy";
+})(NavigationSkippedCode || (NavigationSkippedCode = {}));
+class NavigationCancel extends RouterEvent {
+  reason;
+  code;
+  type = EventType.NavigationCancel;
+  constructor(id, url, reason, code) {
+    super(id, url);
+    this.reason = reason;
+    this.code = code;
+  }
+  toString() {
+    return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
+  }
+}
+function isRedirectingEvent(event) {
+  return event instanceof NavigationCancel && (event.code === NavigationCancellationCode.Redirect || event.code === NavigationCancellationCode.SupersededByNewNavigation);
+}
+class NavigationSkipped extends RouterEvent {
+  reason;
+  code;
+  type = EventType.NavigationSkipped;
+  constructor(id, url, reason, code) {
+    super(id, url);
+    this.reason = reason;
+    this.code = code;
+  }
+}
+class NavigationError extends RouterEvent {
+  error;
+  target;
+  type = EventType.NavigationError;
+  constructor(id, url, error, target) {
+    super(id, url);
+    this.error = error;
+    this.target = target;
+  }
+  toString() {
+    return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
+  }
+}
+class RoutesRecognized extends RouterEvent {
+  urlAfterRedirects;
+  state;
+  type = EventType.RoutesRecognized;
+  constructor(id, url, urlAfterRedirects, state) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+    this.state = state;
+  }
+  toString() {
+    return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
+  }
+}
+class GuardsCheckStart extends RouterEvent {
+  urlAfterRedirects;
+  state;
+  type = EventType.GuardsCheckStart;
+  constructor(id, url, urlAfterRedirects, state) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+    this.state = state;
+  }
+  toString() {
+    return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
+  }
+}
+class GuardsCheckEnd extends RouterEvent {
+  urlAfterRedirects;
+  state;
+  shouldActivate;
+  type = EventType.GuardsCheckEnd;
+  constructor(id, url, urlAfterRedirects, state, shouldActivate) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+    this.state = state;
+    this.shouldActivate = shouldActivate;
+  }
+  toString() {
+    return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
+  }
+}
+class ResolveStart extends RouterEvent {
+  urlAfterRedirects;
+  state;
+  type = EventType.ResolveStart;
+  constructor(id, url, urlAfterRedirects, state) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+    this.state = state;
+  }
+  toString() {
+    return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
+  }
+}
+class ResolveEnd extends RouterEvent {
+  urlAfterRedirects;
+  state;
+  type = EventType.ResolveEnd;
+  constructor(id, url, urlAfterRedirects, state) {
+    super(id, url);
+    this.urlAfterRedirects = urlAfterRedirects;
+    this.state = state;
+  }
+  toString() {
+    return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
+  }
+}
+class RouteConfigLoadStart {
+  route;
+  type = EventType.RouteConfigLoadStart;
+  constructor(route) {
+    this.route = route;
+  }
+  toString() {
+    return `RouteConfigLoadStart(path: ${this.route.path})`;
+  }
+}
+class RouteConfigLoadEnd {
+  route;
+  type = EventType.RouteConfigLoadEnd;
+  constructor(route) {
+    this.route = route;
+  }
+  toString() {
+    return `RouteConfigLoadEnd(path: ${this.route.path})`;
+  }
+}
+class ChildActivationStart {
+  snapshot;
+  type = EventType.ChildActivationStart;
+  constructor(snapshot) {
+    this.snapshot = snapshot;
+  }
+  toString() {
+    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+    return `ChildActivationStart(path: '${path}')`;
+  }
+}
+class ChildActivationEnd {
+  snapshot;
+  type = EventType.ChildActivationEnd;
+  constructor(snapshot) {
+    this.snapshot = snapshot;
+  }
+  toString() {
+    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+    return `ChildActivationEnd(path: '${path}')`;
+  }
+}
+class ActivationStart {
+  snapshot;
+  type = EventType.ActivationStart;
+  constructor(snapshot) {
+    this.snapshot = snapshot;
+  }
+  toString() {
+    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+    return `ActivationStart(path: '${path}')`;
+  }
+}
+class ActivationEnd {
+  snapshot;
+  type = EventType.ActivationEnd;
+  constructor(snapshot) {
+    this.snapshot = snapshot;
+  }
+  toString() {
+    const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || '';
+    return `ActivationEnd(path: '${path}')`;
+  }
+}
+class Scroll {
+  routerEvent;
+  position;
+  anchor;
+  scrollBehavior;
+  type = EventType.Scroll;
+  constructor(routerEvent, position, anchor, scrollBehavior) {
+    this.routerEvent = routerEvent;
+    this.position = position;
+    this.anchor = anchor;
+    this.scrollBehavior = scrollBehavior;
+  }
+  toString() {
+    const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
+    return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
+  }
+}
+class BeforeActivateRoutes {}
+class BeforeRoutesRecognized {}
+class RedirectRequest {
+  url;
+  navigationBehaviorOptions;
+  constructor(url, navigationBehaviorOptions) {
+    this.url = url;
+    this.navigationBehaviorOptions = navigationBehaviorOptions;
+  }
+}
+function isPublicRouterEvent(e) {
+  return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest) && !(e instanceof BeforeRoutesRecognized);
+}
+function stringifyEvent(routerEvent) {
+  switch (routerEvent.type) {
+    case EventType.ActivationEnd:
+      return `ActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
+    case EventType.ActivationStart:
+      return `ActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
+    case EventType.ChildActivationEnd:
+      return `ChildActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
+    case EventType.ChildActivationStart:
+      return `ChildActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ''}')`;
+    case EventType.GuardsCheckEnd:
+      return `GuardsCheckEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state}, shouldActivate: ${routerEvent.shouldActivate})`;
+    case EventType.GuardsCheckStart:
+      return `GuardsCheckStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
+    case EventType.NavigationCancel:
+      return `NavigationCancel(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
+    case EventType.NavigationSkipped:
+      return `NavigationSkipped(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
+    case EventType.NavigationEnd:
+      return `NavigationEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}')`;
+    case EventType.NavigationError:
+      return `NavigationError(id: ${routerEvent.id}, url: '${routerEvent.url}', error: ${routerEvent.error})`;
+    case EventType.NavigationStart:
+      return `NavigationStart(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
+    case EventType.ResolveEnd:
+      return `ResolveEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
+    case EventType.ResolveStart:
+      return `ResolveStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
+    case EventType.RouteConfigLoadEnd:
+      return `RouteConfigLoadEnd(path: ${routerEvent.route.path})`;
+    case EventType.RouteConfigLoadStart:
+      return `RouteConfigLoadStart(path: ${routerEvent.route.path})`;
+    case EventType.RoutesRecognized:
+      return `RoutesRecognized(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
+    case EventType.Scroll:
+      const pos = routerEvent.position ? `${routerEvent.position[0]}, ${routerEvent.position[1]}` : null;
+      return `Scroll(anchor: '${routerEvent.anchor}', position: '${pos}')`;
+  }
 }
 
 function createRouterState(routeReuseStrategy, curr, prevState) {
@@ -3395,7 +3395,7 @@ class TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: TitleStrategy,
     deps: [],
@@ -3403,7 +3403,7 @@ class TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: TitleStrategy,
     factory: () => inject(DefaultTitleStrategy)
@@ -3411,7 +3411,7 @@ class TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: TitleStrategy,
   decorators: [{
@@ -3435,7 +3435,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultTitleStrategy,
     deps: [{
@@ -3445,7 +3445,7 @@ class DefaultTitleStrategy extends TitleStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultTitleStrategy,
     providedIn: 'root'
@@ -3453,7 +3453,7 @@ class DefaultTitleStrategy extends TitleStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: DefaultTitleStrategy,
   decorators: [{
@@ -3532,7 +3532,7 @@ class RouterConfigLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RouterConfigLoader,
     deps: [],
@@ -3540,14 +3540,14 @@ class RouterConfigLoader {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RouterConfigLoader
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: RouterConfigLoader,
   decorators: [{
@@ -3603,7 +3603,7 @@ async function maybeResolveResources(value) {
 class UrlHandlingStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: UrlHandlingStrategy,
     deps: [],
@@ -3611,7 +3611,7 @@ class UrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: UrlHandlingStrategy,
     factory: () => inject(DefaultUrlHandlingStrategy)
@@ -3619,7 +3619,7 @@ class UrlHandlingStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: UrlHandlingStrategy,
   decorators: [{
@@ -3641,7 +3641,7 @@ class DefaultUrlHandlingStrategy {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy,
     deps: [],
@@ -3649,14 +3649,14 @@ class DefaultUrlHandlingStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultUrlHandlingStrategy
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: DefaultUrlHandlingStrategy,
   decorators: [{
@@ -4074,7 +4074,7 @@ class NavigationTransitions {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: NavigationTransitions,
     deps: [],
@@ -4082,14 +4082,14 @@ class NavigationTransitions {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: NavigationTransitions
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: NavigationTransitions,
   decorators: [{
@@ -4177,7 +4177,7 @@ function destroyDetachedRouteHandle(handle) {
 class RouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RouteReuseStrategy,
     deps: [],
@@ -4185,7 +4185,7 @@ class RouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: RouteReuseStrategy,
     factory: () => inject(DefaultRouteReuseStrategy)
@@ -4193,7 +4193,7 @@ class RouteReuseStrategy {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: RouteReuseStrategy,
   decorators: [{
@@ -4224,7 +4224,7 @@ class BaseRouteReuseStrategy {
 class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultRouteReuseStrategy,
     deps: [],
@@ -4232,14 +4232,14 @@ class DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: DefaultRouteReuseStrategy
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: DefaultRouteReuseStrategy,
   decorators: [{
@@ -4318,7 +4318,7 @@ class StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: StateManager,
     deps: [],
@@ -4326,7 +4326,7 @@ class StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: StateManager,
     factory: () => inject(HistoryStateManager)
@@ -4334,7 +4334,7 @@ class StateManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: StateManager,
   decorators: [{
@@ -4455,7 +4455,7 @@ class HistoryStateManager extends StateManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: HistoryStateManager,
     deps: [],
@@ -4463,14 +4463,14 @@ class HistoryStateManager extends StateManager {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: HistoryStateManager
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: HistoryStateManager,
   decorators: [{
@@ -4779,7 +4779,7 @@ class Router {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: Router,
     deps: [],
@@ -4787,14 +4787,14 @@ class Router {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0-next.5+sha-81c3f3a",
+    version: "22.2.0-next.5+sha-74c1716",
     ngImport: i0,
     type: Router
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0-next.5+sha-81c3f3a",
+  version: "22.2.0-next.5+sha-74c1716",
   ngImport: i0,
   type: Router,
   decorators: [{
