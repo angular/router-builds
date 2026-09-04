@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.5+sha-468b65b
+ * @license Angular v22.1.5+sha-dfe7be4
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1351,7 +1351,7 @@ declare abstract class RouteReuseStrategy {
     /** Determines if a route should be reused */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouteReuseStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouteReuseStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description
@@ -1666,7 +1666,7 @@ declare class Router {
     private removeEmptyProps;
     private scheduleNavigation;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Router>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -1873,7 +1873,7 @@ declare abstract class UrlSerializer {
     /** Converts a `UrlTree` into a url */
     abstract serialize(tree: UrlTree): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<UrlSerializer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<UrlSerializer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description

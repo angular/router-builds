@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.5+sha-468b65b
+ * @license Angular v22.1.5+sha-dfe7be4
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -54,7 +54,7 @@ declare class ChildrenOutletContexts {
     getOrCreateContext(childName: string): OutletContext;
     getContext(childName: string): OutletContext | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<ChildrenOutletContexts, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ChildrenOutletContexts>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -190,7 +190,7 @@ declare abstract class TitleStrategy {
      */
     getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): string | undefined;
     static ɵfac: i0.ɵɵFactoryDeclaration<TitleStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<TitleStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * The default `TitleStrategy` used by the router that updates the title using the `Title` service.
@@ -205,7 +205,7 @@ declare class DefaultTitleStrategy extends TitleStrategy {
      */
     updateTitle(snapshot: RouterStateSnapshot): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DefaultTitleStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<DefaultTitleStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -228,7 +228,7 @@ declare class RouterConfigLoader {
     loadComponent(injector: EnvironmentInjector, route: Route): Promise<Type<unknown>>;
     loadChildren(parentInjector: Injector, route: Route): Promise<LoadedRouterConfig>;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterConfigLoader, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouterConfigLoader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * Executes a `route.loadChildren` callback and converts the result to an array of child routes and
@@ -279,7 +279,7 @@ declare abstract class PreloadingStrategy {
 declare class PreloadAllModules implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<PreloadAllModules, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<PreloadAllModules>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * @description
@@ -295,7 +295,7 @@ declare class PreloadAllModules implements PreloadingStrategy {
 declare class NoPreloading implements PreloadingStrategy {
     preload(route: Route, fn: () => Observable<any>): Observable<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<NoPreloading, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<NoPreloading>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * The preloader optimistically loads all router configurations to
@@ -323,7 +323,7 @@ declare class RouterPreloader implements OnDestroy {
     private processRoutes;
     private preloadConfig;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterPreloader, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<RouterPreloader>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -950,7 +950,7 @@ declare abstract class UrlHandlingStrategy {
      */
     abstract merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree;
     static ɵfac: i0.ɵɵFactoryDeclaration<UrlHandlingStrategy, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<UrlHandlingStrategy>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
