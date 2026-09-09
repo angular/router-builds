@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-9a58353
+ * @license Angular v22.2.0-next.5+sha-5afdd98
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -34,7 +34,6 @@ declare class OutletContext {
  */
 declare class ChildrenOutletContexts {
     private rootInjector;
-    private contexts;
     /** @docs-private */
     constructor(rootInjector: EnvironmentInjector);
     /** Called when a `RouterOutlet` directive is instantiated */
