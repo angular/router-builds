@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-next.5+sha-25228d0
+ * @license Angular v22.2.0-next.5+sha-679c50d
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2040,13 +2040,6 @@ interface ResourceContext {
      * @developerPreview 22.2
      */
     data: Signal<Record<string, any>>;
-    /**
-     * The static activated route snapshot for this navigation.
-     * Useful for reading initial static configuration statically without
-     * reacting to future parameter changes on reused routes.
-     * @developerPreview 22.2
-     */
-    snapshot: ActivatedRouteSnapshot;
 }
 /**
  * How to handle a navigation request to the current URL. One of:
