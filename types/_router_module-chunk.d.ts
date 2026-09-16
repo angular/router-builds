@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.6+sha-24ca9d4
+ * @license Angular v22.1.6+sha-f73f059
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1222,7 +1222,7 @@ interface UrlCreationOptions {
  *
  * @see {@link Router#navigate}
  * @see {@link Router#navigateByUrl}
- * @see {@link Router#createurltree}
+ * @see {@link Router#createUrlTree}
  * @see [Routing and Navigation guide](guide/routing/common-router-tasks)
  * @see {@link UrlCreationOptions}
  * @see {@link NavigationBehaviorOptions}
