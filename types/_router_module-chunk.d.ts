@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.1.7+sha-7bf58f9
+ * @license Angular v22.1.7+sha-c08ba52
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1245,7 +1245,7 @@ type RestoredState = {
  * * *id* : The unique identifier of the current navigation.
  * * *initialUrl* : The target URL passed into the `Router#navigateByUrl()` call before navigation.
  * This is the value before the router has parsed or applied redirects to it.
- * * *extractedUrl* : The initial target URL after being parsed with `UrlSerializer.extract()`.
+ * * *extractedUrl* : The initial target URL after being parsed with `UrlHandlingStrategy.extract()`.
  * * *finalUrl* : The extracted URL after redirects have been applied.
  * This URL may not be available immediately, therefore this property can be `undefined`.
  * It is guaranteed to be set after the `RoutesRecognized` event fires.
