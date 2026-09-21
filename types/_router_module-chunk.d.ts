@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.3.0-next.0+sha-34c84cd
+ * @license Angular v22.3.0-next.0+sha-e048e75-with-local-changes
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, Resource, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, Resource, WritableResource, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
@@ -2011,14 +2011,14 @@ declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegm
  * The expected return type of a `resources` function.
  * @developerPreview 22.2
  */
-type ResourceResult = Record<string, Resource<unknown>>;
+type ResourceResult = Record<string, Resource<unknown> & Pick<WritableResource<unknown>, 'reload'>>;
 /**
  * The contextual information provided to a `resources` function.
  * @developerPreview 22.2
  */
 interface ResourceContext {
     /**
-     * The matrix parameters of the route.
+     * The path and matrix parameters available to the route.
      *
      * @developerPreview 22.2
      */
