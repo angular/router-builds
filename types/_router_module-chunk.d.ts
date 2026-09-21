@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0-rc.0+sha-adea161
+ * @license Angular v22.2.0-rc.0+sha-51f056f
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2018,7 +2018,7 @@ type ResourceResult = Record<string, Resource<unknown>>;
  */
 interface ResourceContext {
     /**
-     * The matrix parameters of the route.
+     * The path and matrix parameters available to the route.
      *
      * @developerPreview 22.2
      */
