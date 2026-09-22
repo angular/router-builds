@@ -1,11 +1,11 @@
 /**
- * @license Angular v22.2.0-rc.0+sha-5c927fb
+ * @license Angular v22.2.0-rc.0+sha-ad15967
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
-import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, Resource, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, EnvironmentInjector, ComponentRef, EventEmitter, Signal, OnDestroy, OnInit, SimpleChanges, Type, DefaultExport, ProviderToken, Resource, WritableResource, NgModuleFactory, Provider, EnvironmentProviders, OnChanges, Renderer2, ElementRef, AfterContentInit, QueryList, ChangeDetectorRef, ModuleWithProviders } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 
@@ -2011,7 +2011,7 @@ declare function defaultUrlMatcher(segments: UrlSegment[], segmentGroup: UrlSegm
  * The expected return type of a `resources` function.
  * @developerPreview 22.2
  */
-type ResourceResult = Record<string, Resource<unknown>>;
+type ResourceResult = Record<string, Resource<unknown> & Pick<WritableResource<unknown>, 'reload'>>;
 /**
  * The contextual information provided to a `resources` function.
  * @developerPreview 22.2
