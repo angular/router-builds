@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.0+sha-756e8c4
+ * @license Angular v22.2.0+sha-b9a8605
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -941,7 +941,7 @@ declare const enum RouterFeatureKind {
  *
  * Provides a way to migrate AngularJS applications to Angular.
  *
- * @see [URL handling strategy](guide/routing/customizing-route-behavior#built-in-preloading-strategies)
+ * @see [URL handling strategy](guide/routing/customizing-route-behavior#url-handling-strategy)
  *
  * @publicApi
  */
