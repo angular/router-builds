@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.0+sha-deade10
+ * @license Angular v22.3.0-next.0+sha-319a3c4
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -4003,6 +4003,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
     /** @docs-private */
     ngOnDestroy(): any;
     private applyAttributeValue;
+    private createUrlTree;
     get urlTree(): UrlTree | null;
     private computeHref;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
