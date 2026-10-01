@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.0+sha-0898844
+ * @license Angular v22.3.0-next.0+sha-8608325
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1348,7 +1348,15 @@ declare abstract class RouteReuseStrategy {
     abstract shouldAttach(route: ActivatedRouteSnapshot): boolean;
     /** Retrieves the previously stored route */
     abstract retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null;
-    /** Determines if a route should be reused */
+    /**
+     * Determines if a route should be reused.
+     *
+     * Note: Recreating a component by returning `false` does not automatically rerun guards or
+     * resolvers; rerun behavior for an unchanged route configuration is controlled by
+     * {@link RunGuardsAndResolvers}.
+     *
+     * @see {@link RunGuardsAndResolvers}
+     */
     abstract shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean;
     /**
      * Returns a list of all currently stored `DetachedRouteHandle`s.
