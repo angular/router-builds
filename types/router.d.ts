@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.2+sha-fafec77
+ * @license Angular v22.2.2+sha-f6e7755
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -205,9 +205,9 @@ declare class DefaultTitleStrategy extends TitleStrategy {
     readonly title: Title;
     constructor(title: Title);
     /**
-     * Sets the title of the browser to the given value.
+     * Sets the title of the browser to the title built from the given router state.
      *
-     * @param title The `pageTitle` from the deepest primary route.
+     * @param snapshot The current router state. The title is taken from the deepest primary route.
      */
     updateTitle(snapshot: RouterStateSnapshot): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DefaultTitleStrategy, never>;
