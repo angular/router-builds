@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.2+sha-ec9bcab
+ * @license Angular v22.3.0-next.2+sha-3320da9
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -122,7 +122,7 @@ declare function nonBlocking<T, R extends Resource<T>>(res: R): R;
 /**
  * Options to configure the View Transitions integration in the Router.
  *
- * @developerPreview 20.0
+ * @publicApi 22.3
  * @see withViewTransitions
  */
 interface ViewTransitionsFeatureOptions {
@@ -142,7 +142,7 @@ interface ViewTransitionsFeatureOptions {
  * The information passed to the `onViewTransitionCreated` function provided in the
  * `withViewTransitions` feature options.
  *
- * @developerPreview 20.0
+ * @publicApi 22.3
  */
 interface ViewTransitionInfo {
     /**
@@ -791,7 +791,7 @@ type ComponentInputBindingFeature = RouterFeature<RouterFeatureKind.ComponentInp
  * @see {@link withViewTransitions}
  * @see {@link provideRouter}
  *
- * @publicApi
+ * @publicApi 22.3
  */
 type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
 /**
@@ -873,7 +873,7 @@ declare function withComponentInputBinding(options?: ComponentInputBindingOption
  * @see [View Transitions on MDN](https://developer.chrome.com/docs/web-platform/view-transitions/)
  * @see [View Transitions API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)
  * @see [Route transition animations](guide/routing/route-transition-animations)
- * @developerPreview 19.0
+ * @publicApi 22.3
  */
 declare function withViewTransitions(options?: ViewTransitionsFeatureOptions): ViewTransitionsFeature;
 /**
