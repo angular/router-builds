@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.2+sha-feafef8
+ * @license Angular v22.3.0-next.2+sha-e09bbed
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2047,6 +2047,16 @@ interface ResourceContext {
      * @developerPreview 22.2
      */
     data: Signal<Record<string, any>>;
+    /**
+     * Resources inherited from ancestor routes, keyed by name.
+     *
+     * Read this signal inside a reactive context such as a resource's `params` function (for example,
+     * with `chain(ctx.resources()['user'])`) rather than synchronously in the `resources` function
+     * body, as ancestor `resources` functions may still be initializing asynchronously.
+     *
+     * @developerPreview 22.2
+     */
+    resources: Signal<ResourceResult>;
 }
 /**
  * How to handle a navigation request to the current URL. One of:
@@ -3603,7 +3613,7 @@ declare class ActivatedRoute {
     /** An observable of the static and resolved data of this route. */
     data: Observable<Data>;
     /**
-     * A map of resources for this route.
+     * A map of resources for this route, including resources inherited from ancestor routes.
      *
      * @developerPreview 22.2
      */
@@ -3694,7 +3704,8 @@ declare class ActivatedRouteSnapshot {
     /** The configuration used to match this route **/
     readonly routeConfig: Route | null;
     /**
-     * The result of running the route's resources function.
+     * The result of running the route's resources function, including resources
+     * inherited from ancestor routes.
      * @developerPreview 22.2
      */
     resources?: ResourceResult;
