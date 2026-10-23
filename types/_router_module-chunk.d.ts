@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.2+sha-945816d
+ * @license Angular v22.3.0-next.2+sha-34ea592
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -3846,6 +3846,16 @@ declare class RouterStateSnapshot extends Tree<ActivatedRouteSnapshot> {
  * });
  * ```
  *
+ * ### Controlling scrolling
+ *
+ * When scroll restoration is enabled with `withInMemoryScrolling`, every navigation scrolls, even
+ * one that only changes a query param. Set `scroll` to `'manual'` to opt a link out, for example
+ * for tabs further down the page:
+ *
+ * ```html
+ * <a routerLink="/products/42" [queryParams]="{tab: 'reviews'}" scroll="manual">Reviews</a>
+ * ```
+ *
  * ### RouterLink compatible custom elements
  *
  * In order to make a custom element work with routerLink, the corresponding
@@ -3977,6 +3987,13 @@ declare class RouterLink implements OnChanges, OnDestroy {
      */
     browserUrl: i0.InputSignal<string | UrlTree | undefined>;
     /**
+     * Passed to {@link Router#navigateByUrl} as part of the
+     * `NavigationBehaviorOptions`.
+     * @see {@link NavigationBehaviorOptions#scroll}
+     * @see {@link Router#navigateByUrl}
+     */
+    readonly scroll: i0.InputSignal<"after-transition" | "manual" | undefined>;
+    /**
      * Whether a host element is an `<a>`/`<area>` tag or a compatible custom
      * element.
      */
@@ -4014,7 +4031,7 @@ declare class RouterLink implements OnChanges, OnDestroy {
     get urlTree(): UrlTree | null;
     private computeHref;
     static ɵfac: i0.ɵɵFactoryDeclaration<RouterLink, [null, null, { attribute: "tabindex"; }, null, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "info": { "alias": "info"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "browserUrl": { "alias": "browserUrl"; "required": false; "isSignal": true; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<RouterLink, "[routerLink]", never, { "target": { "alias": "target"; "required": false; }; "queryParams": { "alias": "queryParams"; "required": false; }; "fragment": { "alias": "fragment"; "required": false; }; "queryParamsHandling": { "alias": "queryParamsHandling"; "required": false; }; "state": { "alias": "state"; "required": false; }; "info": { "alias": "info"; "required": false; }; "relativeTo": { "alias": "relativeTo"; "required": false; }; "preserveFragment": { "alias": "preserveFragment"; "required": false; }; "skipLocationChange": { "alias": "skipLocationChange"; "required": false; }; "replaceUrl": { "alias": "replaceUrl"; "required": false; }; "browserUrl": { "alias": "browserUrl"; "required": false; "isSignal": true; }; "scroll": { "alias": "scroll"; "required": false; "isSignal": true; }; "routerLink": { "alias": "routerLink"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_preserveFragment: unknown;
     static ngAcceptInputType_skipLocationChange: unknown;
     static ngAcceptInputType_replaceUrl: unknown;
