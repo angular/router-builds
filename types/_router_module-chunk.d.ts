@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.3+sha-997fbb1
+ * @license Angular v22.2.3+sha-d1da1a7
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1687,7 +1687,6 @@ declare class Router {
      * @deprecated 21.1 - Use the `isActive` function instead.
      */
     isActive(url: string | UrlTree, matchOptions: Partial<IsActiveMatchOptions>): boolean;
-    private removeEmptyProps;
     private scheduleNavigation;
     static ɵfac: i0.ɵɵFactoryDeclaration<Router, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<any>;
