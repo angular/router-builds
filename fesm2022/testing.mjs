@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.2+sha-38afab7
+ * @license Angular v22.3.0-next.2+sha-9e99093
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -33,7 +33,7 @@ class RouterTestingModule {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RouterTestingModule,
     deps: [],
@@ -41,14 +41,14 @@ class RouterTestingModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RouterTestingModule,
     exports: [RouterModule]
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RouterTestingModule,
     providers: [ROUTER_PROVIDERS, provideLocationMocks(), withPreloading(NoPreloading).ɵproviders, {
@@ -61,7 +61,7 @@ class RouterTestingModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0-next.2+sha-38afab7",
+  version: "22.3.0-next.2+sha-9e99093",
   ngImport: i0,
   type: RouterTestingModule,
   decorators: [{
@@ -97,7 +97,7 @@ class RootFixtureService {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RootFixtureService,
     deps: [],
@@ -105,14 +105,14 @@ class RootFixtureService {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RootFixtureService
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0-next.2+sha-38afab7",
+  version: "22.3.0-next.2+sha-9e99093",
   ngImport: i0,
   type: RootFixtureService,
   decorators: [{
@@ -126,7 +126,7 @@ class RootCmp {
   }] : []));
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     ngImport: i0,
     type: RootCmp,
     deps: [],
@@ -134,7 +134,7 @@ class RootCmp {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.3.0-next.2+sha-38afab7",
+    version: "22.3.0-next.2+sha-9e99093",
     type: RootCmp,
     isStandalone: true,
     selector: "ng-component",
@@ -160,7 +160,7 @@ class RootCmp {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.3.0-next.2+sha-38afab7",
+  version: "22.3.0-next.2+sha-9e99093",
   ngImport: i0,
   type: RootCmp,
   decorators: [{
@@ -204,13 +204,30 @@ class RouterTestingHarness {
     return this.routeDebugElement?.nativeElement ?? null;
   }
   async navigateByUrl(url, requiredRoutedComponentType) {
+    return this.runNavigation(router => router.navigateByUrl(url), requiredRoutedComponentType);
+  }
+  async navigate(commands, extrasOrComponent, requiredRoutedComponentType) {
+    let extras;
+    let componentType;
+    if (typeof extrasOrComponent === 'function') {
+      if (requiredRoutedComponentType !== undefined) {
+        throw new Error('Navigation extras must be provided before the required component type.');
+      }
+      componentType = extrasOrComponent;
+    } else {
+      extras = extrasOrComponent;
+      componentType = requiredRoutedComponentType;
+    }
+    return this.runNavigation(router => router.navigate(commands, extras), componentType);
+  }
+  async runNavigation(startNavigation, requiredRoutedComponentType) {
     const router = TestBed.inject(Router);
     let resolveFn;
     const redirectTrackingPromise = new Promise(resolve => {
       resolveFn = resolve;
     });
-    afterNextNavigation(TestBed.inject(Router), resolveFn);
-    await router.navigateByUrl(url);
+    afterNextNavigation(router, resolveFn);
+    await startNavigation(router);
     await redirectTrackingPromise;
     this.fixture.detectChanges();
     const outlet = this.fixture.componentInstance.outlet;

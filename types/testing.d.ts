@@ -1,12 +1,12 @@
 /**
- * @license Angular v22.3.0-next.2+sha-38afab7
+ * @license Angular v22.3.0-next.2+sha-9e99093
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
 
 import * as i0 from '@angular/core';
 import { ModuleWithProviders, WritableSignal, DebugElement, Type } from '@angular/core';
-import { Routes, ExtraOptions, RouterModule } from './router.js';
+import { Routes, ExtraOptions, RouterModule, NavigationExtras } from './router.js';
 export { ɵEmptyOutletComponent as ɵɵEmptyOutletComponent, RouterLink as ɵɵRouterLink, RouterLinkActive as ɵɵRouterLinkActive, RouterOutlet as ɵɵRouterOutlet } from './_router_module-chunk.js';
 import { ComponentFixture } from '@angular/core/testing';
 import 'rxjs';
@@ -118,6 +118,53 @@ declare class RouterTestingHarness {
      * @returns The activated component instance of the `RouterOutlet` after navigation completes.
      */
     navigateByUrl<T>(url: string, requiredRoutedComponentType: Type<T>): Promise<T>;
+    /**
+     * Triggers a `Router` navigation using commands and waits for it to complete.
+     *
+     * @param commands The commands passed to `Router.navigate`.
+     * @param extras Navigation extras, such as `queryParams` and `fragment`.
+     * @returns The activated component instance of the `RouterOutlet` after navigation completes
+     *     (`null` if the outlet does not get activated).
+     */
+    navigate(commands: readonly any[], extras?: NavigationExtras): Promise<null | {}>;
+    /**
+     * Triggers a `Router` navigation using commands and waits for it to complete.
+     *
+     * @param commands The commands passed to `Router.navigate`.
+     * @param requiredRoutedComponentType After navigation completes, the required type for the
+     *     activated component of the `RouterOutlet`. If the outlet is not activated or a different
+     *     component is activated, this function will throw an error.
+     * @returns The activated component instance of the `RouterOutlet` after navigation completes.
+     */
+    navigate<T>(commands: readonly any[], requiredRoutedComponentType: Type<T>): Promise<T>;
+    /**
+     * Triggers a `Router` navigation using commands and waits for it to complete.
+     *
+     * @param commands The commands passed to `Router.navigate`.
+     * @param extras Navigation extras, such as `queryParams` and `fragment`.
+     * @param requiredRoutedComponentType After navigation completes, the required type for the
+     *     activated component of the `RouterOutlet`. If the outlet is not activated or a different
+     *     component is activated, this function will throw an error.
+     * @returns The activated component instance of the `RouterOutlet` after navigation completes.
+     */
+    navigate<T>(commands: readonly any[], extras: NavigationExtras, requiredRoutedComponentType: Type<T>): Promise<T>;
+    /**
+     * Shared implementation of `navigateByUrl` and `navigate`.
+     *
+     * Starts a navigation, waits for it (including any redirects) to complete, runs change
+     * detection, and returns the component currently rendered in the root `RouterOutlet`.
+     *
+     * If a guard cancels the navigation, the outlet keeps its current component, so that component is
+     * returned (or checked against `requiredRoutedComponentType`) rather than `null`. This lets tests
+     * verify that the user stayed on the current page. `navigate` and `navigateByUrl` behave the same.
+     *
+     * @param startNavigation Callback that triggers the navigation on the given `Router` (e.g., `router.navigateByUrl('/path')` or `router.navigate(['/path'])`).
+     * @param requiredRoutedComponentType If provided, the activated component must be an instance
+     *     of this type, otherwise an error is thrown.
+     * @returns The component instance rendered in the outlet, or `null` if the outlet has nothing
+     *     rendered.
+     */
+    private runNavigation;
 }
 
 export { RouterTestingHarness, RouterTestingModule };
