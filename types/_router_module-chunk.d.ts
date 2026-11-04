@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.2.4+sha-11e7670
+ * @license Angular v22.2.4+sha-7b62cb8
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1004,7 +1004,9 @@ interface RouterOutletContract {
  * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * Each outlet can have a unique name, determined by the optional `name` attribute.
- * The name cannot be set or changed dynamically. If not set, default value is "primary".
+ * You can bind the name to a value. When the value changes, the outlet destroys its current
+ * component and renders the route for the new name, if one matches. If not set, default value is
+ * "primary".
  *
  * ```html
  * <router-outlet></router-outlet>
