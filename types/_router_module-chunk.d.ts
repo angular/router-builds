@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.3+sha-37563fc-with-local-changes
+ * @license Angular v22.3.0-next.3+sha-2af465b-with-local-changes
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -1003,7 +1003,9 @@ interface RouterOutletContract {
  * Acts as a placeholder that Angular dynamically fills based on the current router state.
  *
  * Each outlet can have a unique name, determined by the optional `name` attribute.
- * The name cannot be set or changed dynamically. If not set, default value is "primary".
+ * You can bind the name to a value. When the value changes, the outlet destroys its current
+ * component and renders the route for the new name, if one matches. If not set, default value is
+ * "primary".
  *
  * ```html
  * <router-outlet></router-outlet>
@@ -2053,7 +2055,7 @@ interface ResourceContext {
      * with `chain(ctx.resources()['user'])`) rather than synchronously in the `resources` function
      * body, as ancestor `resources` functions may still be initializing asynchronously.
      *
-     * @developerPreview 22.2
+     * @developerPreview 22.3
      */
     resources: Signal<ResourceResult>;
 }
