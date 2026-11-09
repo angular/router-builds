@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.4+sha-77a5094
+ * @license Angular v22.3.0-next.4+sha-ef4f80a
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -4249,7 +4249,7 @@ declare class RouterModule {
      *
      * ```ts
      * @NgModule({
-     *   imports: [RouterModule.forRoot(ROUTES)]
+     *   imports: [RouterModule.forRoot(routes)]
      * })
      * class MyNgModule {}
      * ```
@@ -4267,7 +4267,7 @@ declare class RouterModule {
      *
      * ```ts
      * @NgModule({
-     *   imports: [RouterModule.forChild(ROUTES)]
+     *   imports: [RouterModule.forChild(routes)]
      * })
      * class MyNgModule {}
      * ```
