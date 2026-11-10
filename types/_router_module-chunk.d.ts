@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.4+sha-5b3ea8a
+ * @license Angular v22.3.0-next.4+sha-262417f
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -937,6 +937,12 @@ interface RouterOutletContract {
      * An outlet is considered "activated" if it has an active component.
      */
     isActivated: boolean;
+    /**
+     * Whether the given outlet is currently rendering an error component instead of the primary component.
+     *
+     * @developerPreview 22.3
+     */
+    isErrorComponentActive?: boolean;
     /** The instance of the activated component or `null` if the outlet is not activated. */
     component: Object | null;
     /**
@@ -1079,6 +1085,7 @@ declare class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
     private location;
     private changeDetector;
     private inputBinder;
+    private errorBoundaryHandler;
     /** @docs-private */
     readonly supportsBindingToComponentInputs = true;
     /** @docs-private */
@@ -2605,6 +2612,14 @@ interface Route {
      * Can be empty if child routes specify components.
      */
     component?: Type<any>;
+    /**
+     * The component to instantiate when an error occurs in this route.
+     *
+     * Requires the error boundary feature to be enabled with `withErrorBoundaries`.
+     *
+     * @developerPreview 22.3
+     */
+    errorComponent?: Type<unknown>;
     /**
      * An object specifying a lazy-loaded component.
      *

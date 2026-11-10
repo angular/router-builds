@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-next.4+sha-5b3ea8a
+ * @license Angular v22.3.0-next.4+sha-262417f
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -7,7 +7,7 @@
 import { RouterOutletContract, ActivatedRoute, ActivatedRouteSnapshot, Params, DefaultUrlSerializer, UrlTree, RouterStateSnapshot, Route, LoadedRouterConfig, Router, Routes, ComponentInputBindingOptions, InMemoryScrollingOptions, NavigationError, RedirectCommand, RouterConfigOptions, CanActivate, CanActivateFn, CanActivateChild, CanActivateChildFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, Resolve, ResolveFn, Event } from './_router_module-chunk.js';
 export { ActivationEnd, ActivationStart, BaseRouteReuseStrategy, CanLoad, CanLoadFn, ChildActivationEnd, ChildActivationStart, Data, DeprecatedGuard, DeprecatedResolve, DetachedRouteHandle, EventType, ExtraOptions, GuardResult, GuardsCheckEnd, GuardsCheckStart, InitialNavigation, IsActiveMatchOptions, LoadChildren, LoadChildrenCallback, MaybeAsync, Navigation, NavigationBehaviorOptions, NavigationCancel, NavigationCancellationCode, NavigationEnd, NavigationExtras, NavigationSkipped, NavigationSkippedCode, NavigationStart, OnSameUrlNavigation, PRIMARY_OUTLET, ParamMap, PartialMatchRouteSnapshot, QueryParamsHandling, ROUTER_CONFIGURATION, ROUTER_INITIALIZER, ROUTER_OUTLET_DATA, RedirectFunction, ResolveData, ResolveEnd, ResolveStart, ResourceContext, ResourceResult, RouteConfigLoadEnd, RouteConfigLoadStart, RouteReuseStrategy, RouterEvent, RouterLink, RouterLinkActive, RouterLink as RouterLinkWithHref, RouterModule, RouterOutlet, RouterState, RoutesRecognized, RunGuardsAndResolvers, Scroll, UrlCreationOptions, UrlMatchResult, UrlMatcher, UrlSegment, UrlSegmentGroup, UrlSerializer, containsTree, convertToParamMap, defaultUrlMatcher, destroyDetachedRouteHandle, isActive, ɵEmptyOutletComponent, ROUTER_PROVIDERS as ɵROUTER_PROVIDERS, RestoredState as ɵRestoredState } from './_router_module-chunk.js';
 import * as i0 from '@angular/core';
-import { EnvironmentInjector, ComponentRef, Resource, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, Version } from '@angular/core';
+import { EnvironmentInjector, ComponentRef, Resource, InjectionToken, Type, Injector, Compiler, OnDestroy, Provider, EnvironmentProviders, ErrorDetails, Version } from '@angular/core';
 export { DefaultExport } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
@@ -907,6 +907,60 @@ type RouterResourcesFeature = RouterFeature<RouterFeatureKind.RouterResourcesFea
  */
 declare function withRouterResources(): RouterResourcesFeature;
 /**
+ * Options to configure router error boundary behavior when using `withErrorBoundaries`.
+ *
+ * @developerPreview 22.3
+ */
+interface ErrorBoundaryOptions {
+    /**
+     * Default component to render when an error occurs in a route that does not specify its own `errorComponent`.
+     */
+    defaultErrorComponent?: Type<unknown>;
+    /**
+     * Optional global callback invoked when any route-level error is caught by the router error
+     * boundaries.
+     *
+     * The callback runs in the root injection context, so it can use `inject` to retrieve providers
+     * available at the root of the application.
+     */
+    onError?: (error: Error, details?: ErrorDetails) => void;
+}
+/**
+ * A type alias for providers returned by `withErrorBoundaries` for use with `provideRouter`.
+ *
+ * @see {@link withErrorBoundaries}
+ * @see {@link provideRouter}
+ *
+ * @developerPreview 22.3
+ */
+type ErrorBoundariesFeature = RouterFeature<RouterFeatureKind.ErrorBoundariesFeature>;
+/**
+ * Enables error boundary support in the Router.
+ *
+ * When enabled, errors thrown within routed components (lifecycle hooks, template bindings,
+ * resource loaders, and event handlers) are caught by the `RouterOutlet`. If the route or
+ * feature defines an `errorComponent`, it is rendered in place of the failed component,
+ * receiving the caught error through an `error` input.
+ *
+ * @usageNotes
+ *
+ * ```ts
+ * bootstrapApplication(AppComponent, {
+ *   providers: [
+ *     provideRouter(
+ *       appRoutes,
+ *       withErrorBoundaries({
+ *         defaultErrorComponent: GlobalErrorComponent,
+ *       }),
+ *     ),
+ *   ],
+ * });
+ * ```
+ *
+ * @developerPreview 22.3
+ */
+declare function withErrorBoundaries(options?: ErrorBoundaryOptions): ErrorBoundariesFeature;
+/**
  * A type alias that represents all Router features available for use with `provideRouter`.
  * Features can be enabled by adding special functions to the `provideRouter` call.
  * See documentation for each symbol to find corresponding function name. See also `provideRouter`
@@ -916,7 +970,7 @@ declare function withRouterResources(): RouterResourcesFeature;
  *
  * @publicApi
  */
-type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | AutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature | RouterResourcesFeature;
+type RouterFeatures = PreloadingFeature | DebugTracingFeature | InitialNavigationFeature | InMemoryScrollingFeature | RouterConfigurationFeature | NavigationErrorHandlerFeature | ComponentInputBindingFeature | ViewTransitionsFeature | AutoCleanupInjectorsFeature | RouterHashLocationFeature | ExperimentalPlatformNavigationFeature | RouterResourcesFeature | ErrorBoundariesFeature;
 /**
  * The list of features as an enum to uniquely type each feature.
  */
@@ -933,7 +987,8 @@ declare const enum RouterFeatureKind {
     ViewTransitionsFeature = 9,
     AutoCleanupInjectorsFeature = 10,
     ExperimentalPlatformNavigationFeature = 11,
-    RouterResourcesFeature = 12
+    RouterResourcesFeature = 12,
+    ErrorBoundariesFeature = 13
 }
 
 /**
@@ -1043,5 +1098,5 @@ declare function afterNextNavigation(router: {
     events: Observable<Event>;
 }, action: () => void): void;
 
-export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, nonBlocking, provideRouter, withAutoCleanupInjectors, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withRouterResources, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
-export type { AutoCleanupInjectorsFeature, ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, RouterResourcesFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
+export { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanActivateChildFn, CanActivateFn, CanDeactivate, CanDeactivateFn, CanMatch, CanMatchFn, ChildrenOutletContexts, ComponentInputBindingOptions, DefaultTitleStrategy, DefaultUrlSerializer, Event, InMemoryScrollingOptions, NavigationError, NoPreloading, OutletContext, Params, PreloadAllModules, PreloadingStrategy, ROUTES, RedirectCommand, Resolve, ResolveFn, Route, Router, RouterConfigOptions, RouterOutletContract, RouterPreloader, RouterStateSnapshot, Routes, TitleStrategy, UrlHandlingStrategy, UrlTree, VERSION, createUrlTreeFromSnapshot, mapToCanActivate, mapToCanActivateChild, mapToCanDeactivate, mapToCanMatch, mapToResolve, nonBlocking, provideRouter, withAutoCleanupInjectors, withComponentInputBinding, withDebugTracing, withDisabledInitialNavigation, withEnabledBlockingInitialNavigation, withErrorBoundaries, withExperimentalAutoCleanupInjectors, withExperimentalPlatformNavigation, withHashLocation, withInMemoryScrolling, withNavigationErrorHandler, withPreloading, withRouterConfig, withRouterResources, withViewTransitions, afterNextNavigation as ɵafterNextNavigation, loadChildren as ɵloadChildren };
+export type { AutoCleanupInjectorsFeature, ComponentInputBindingFeature, DebugTracingFeature, DisabledInitialNavigationFeature, EnabledBlockingInitialNavigationFeature, ErrorBoundariesFeature, ErrorBoundaryOptions, InMemoryScrollingFeature, InitialNavigationFeature, NavigationErrorHandlerFeature, PreloadingFeature, RouterConfigurationFeature, RouterFeature, RouterFeatures, RouterHashLocationFeature, RouterResourcesFeature, ViewTransitionInfo, ViewTransitionsFeature, ViewTransitionsFeatureOptions };
