@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-rc.0+sha-cb7b7a4
+ * @license Angular v22.3.0-rc.0+sha-4e927d8
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -2617,6 +2617,7 @@ interface Route {
      *
      * Requires the error boundary feature to be enabled with `withErrorBoundaries`.
      *
+     * @see [Error boundaries](guide/routing/error-boundaries)
      * @developerPreview 22.3
      */
     errorComponent?: Type<unknown>;

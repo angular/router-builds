@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.3.0-rc.0+sha-cb7b7a4
+ * @license Angular v22.3.0-rc.0+sha-4e927d8
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -909,6 +909,7 @@ declare function withRouterResources(): RouterResourcesFeature;
 /**
  * Options to configure router error boundary behavior when using `withErrorBoundaries`.
  *
+ * @see [Global error boundary configuration](guide/routing/error-boundaries#global-error-boundary-configuration)
  * @developerPreview 22.3
  */
 interface ErrorBoundaryOptions {
@@ -930,6 +931,7 @@ interface ErrorBoundaryOptions {
  *
  * @see {@link withErrorBoundaries}
  * @see {@link provideRouter}
+ * @see [Global error boundary configuration](guide/routing/error-boundaries#global-error-boundary-configuration)
  *
  * @developerPreview 22.3
  */
@@ -957,6 +959,7 @@ type ErrorBoundariesFeature = RouterFeature<RouterFeatureKind.ErrorBoundariesFea
  * });
  * ```
  *
+ * @see [Global error boundary configuration](guide/routing/error-boundaries#global-error-boundary-configuration)
  * @developerPreview 22.3
  */
 declare function withErrorBoundaries(options?: ErrorBoundaryOptions): ErrorBoundariesFeature;
