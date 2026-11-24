@@ -1,5 +1,5 @@
 /**
- * @license Angular v22.4.0-next.0+sha-0d3c8e2
+ * @license Angular v22.4.0-next.0+sha-3aa24d2
  * (c) 2010-2026 Google LLC. https://angular.dev/
  * License: MIT
  */
@@ -939,10 +939,9 @@ type ErrorBoundariesFeature = RouterFeature<RouterFeatureKind.ErrorBoundariesFea
 /**
  * Enables error boundary support in the Router.
  *
- * When enabled, errors thrown within routed components (lifecycle hooks, template bindings,
- * resource loaders, and event handlers) are caught by the `RouterOutlet`. If the route or
- * feature defines an `errorComponent`, it is rendered in place of the failed component,
- * receiving the caught error through an `error` input.
+ * When enabled, router outlets become error boundaries. If the route or feature defines an
+ * `errorComponent`, it is rendered in place of the failed component, receiving the caught error
+ * through an `error` input.
  *
  * @usageNotes
  *
